@@ -1,0 +1,66 @@
+# --- Private working folder: never pushed ---
+nopush/
+no-push/
+
+# --- Local assistant / editor configuration ---
+.claude/
+CLAUDE.local.md
+.mcp.json
+.vscode/
+.idea/
+
+# --- Secrets: never commit ---
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+.streamlit/secrets.toml
+
+# --- Data and generated artefacts (rebuilt by the documented fetch/build commands) ---
+data/*
+!data/README.md
+!data/.gitkeep
+outputs/
+artifacts/
+models/
+checkpoints/
+*.parquet
+*.geoparquet
+*.gpkg
+*.gdb/
+*.shp
+*.shx
+*.dbf
+*.prj
+*.tif
+*.tiff
+*.zip
+*.duckdb
+*.sqlite
+
+# --- Python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.hypothesis/
+.coverage
+coverage.xml
+htmlcov/
+*.egg-info/
+build/
+dist/
+.ipynb_checkpoints/
+
+# --- Node (only if a web front end is added) ---
+node_modules/
+.vite/
+web/vendor/
+
+# --- OS noise ---
+.DS_Store
+Thumbs.db

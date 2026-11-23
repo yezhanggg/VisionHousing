@@ -37,7 +37,8 @@ ES modules. There is **no build step and no Node**: the browser loads the files 
 | `js/state/store.js` | Signals for the route and scenario; navigation; the toast |
 | `js/content/*.js` | Words only: reform names, state names, glossary, the placeholder slide spec |
 | `js/ui/*.js` | Top bar and Export menu, popovers (glossary and Explain), map, small parts, icons |
-| `js/screens/*.js` | State, Reform, Compare, Method & data, Slides |
+| `js/screens/*.js` | State, Reform, Compare, Place, Method & data, Slides |
+| `css/place-print.css` | US Letter portrait page for printing a place profile; added only while the Place screen is open |
 
 ## Routes and the scenario in the address
 

@@ -54,6 +54,7 @@ One plain-language note per part of the code. Each note says what the module doe
 | [Sensitivity](sensitivity.md) | `src/visionhousing/sensitivity/` | Which assumptions move each answer most, by tornado and by rank correlation |
 | [Explanations](explain.md) | `src/visionhousing/explain/`, `assumptions/limits.yaml` | The one sentence and three numbers, verdict words, funnels, drivers, the waterfall, limits, "explain this number" and the slide spec, every number cited |
 | [Report writer](report.md) | `src/visionhousing/report/`, `visionhousing report` | The brief as Markdown and print-ready HTML, CSV tables and JSON, stamped with the three hashes |
+| [Place profiles](profile.md) | `src/visionhousing/profile/`, `visionhousing profile` | Plain, sourced facts about one county or tract (people, homes, permits, transit, data quality) for market research |
 
 ## Web
 

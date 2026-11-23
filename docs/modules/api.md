@@ -29,6 +29,8 @@ All under `/api/v1`. Errors are JSON: `{"error": code, "message": plain text}`.
 | `GET /provenance` | One row per registered source: version, access date, licence, terms, cleaning, limits. With `state=`, also the pack's file list and hash |
 | `GET /validation` | The baseline backtest skill table for `state` (default `TL`): each candidate rule's error and 80% interval coverage, and the rule chosen |
 | `GET /export/{fmt}` | The scenario in the query as a file: `csv` (state and county records, every row stamped with the three hashes), `json` (the same as `POST /run`) or `html` (the print-ready brief from the report writer) |
+| `GET /places/{st}` | Place search: counties (or tracts with `level=tract`) whose name or code contains `q`, sorted by name, at most `limit` (1-500, default 25) |
+| `GET /profile/{st}/{geoid}` | The place profile of a county (5 digits) or tract (11 digits), exactly as `visionhousing.profile.build_profile` makes it. `format=json` (default), or `md`, `html`, `csv` as a download. See [profile.md](profile.md) |
 
 ### The run body (`POST /run`, `POST /compare`)
 

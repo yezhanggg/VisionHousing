@@ -1,0 +1,5 @@
+Survey,FIPS,Region,Division,State,,1-unit,,,2-units,,,3-4 units,,,5+ units,,,1-unit rep,,,2-units rep,,,3-4 units rep,,,5+ units rep
+Date,State,Code,Code,Name,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value
+
+9099,01,3,6,Alabama,8817,8817,578194,80,160,4726,49,188,5946,253,3360,93840,8660,8660,569763,79,158,4636,49,188,5946,250,3306,92410
+9099,42,1,2,Pennsylvania,31037,31037,2640272,287,574,25026,188,722,28807,357,4871,201570,29321,29321,2540327,277,554,24276,182,702,27982,348,4788,198125

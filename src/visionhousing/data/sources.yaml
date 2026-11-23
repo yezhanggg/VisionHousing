@@ -1,0 +1,426 @@
+# VisionHousing source registry. One entry per data source.
+#
+# Fields (all checked by src/visionhousing/data/registry.py; unknown fields are rejected):
+#   id            short lower-case name used in code and in data/manifest.json
+#   name          plain-language name of the dataset
+#   publisher     the agency or body that publishes it
+#   url_pattern   https URL; {braces} are filled at fetch time (year, state_fips, table, ...)
+#   vintage       the edition used (survey years, release, or "current")
+#   geography     the geographic levels the source covers
+#   licence       the licence or legal status of the data
+#   terms_url     where the publisher states its terms
+#   expected_size approximate bytes for one file (null for API answers and web pages)
+#   parser        module.function that reads it (written in the source's own task)
+#   limits        what the data cannot tell us, in plain words
+#   tier          0 = every state, 1 = many states, 2 = local refinement only
+#   access        file | api | range | feature_service | page
+#   member        for access: range, the file inside the remote zip to read
+#   cleaning      the cleaning steps applied (shown in the provenance table)
+#   checked_on    the date the URL was last confirmed to answer
+#
+# No data is stored in the repository: `make data` fetches every file listed here.
+
+sources:
+  - id: bps_county_annual
+    name: Building Permits Survey, county annual files
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/econ/bps/County/co{year}a.txt
+    vintage: 1990-2025 annual files (the 2025 file is the latest published)
+    geography: [county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/about/policies/open-gov/open-data.html
+    expected_size: 375000
+    parser: bps.parse_county_annual
+    limits: >-
+      Counts units authorized by permit, not units started or finished. Some counties
+      are imputed rather than reported; the file flags which. Places without permit
+      offices are not covered.
+    tier: 0
+    access: file
+    cleaning: >-
+      Two header rows are joined and columns are read by name, not position. Reported
+      and imputed figures are kept apart. County FIPS codes are zero-padded to five digits.
+    checked_on: 2026-11-22
+
+  - id: acs5_summary_file
+    name: American Community Survey 5-year table-based summary files (2020-2024)
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/data/5YRData/acsdt5y2024-{table}.dat  # secret-scan: allow (a public URL path, not a key)
+    vintage: 2020-2024 5-year estimates
+    geography: [state, county, tract, block group]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/programs-surveys/acs/data/summary-file.html
+    expected_size: 47866463
+    parser: acs.parse_summary_table
+    limits: >-
+      Estimates are survey averages over five years with margins of error; small tracts
+      often have wide margins. One national pipe-delimited file per table (about 48 MB
+      for B25024). Negative values are missing-value codes, not data.
+    tier: 0
+    access: file
+    cleaning: >-
+      Rows are filtered to the state's tracts by GEO_ID prefix. Negative missing-value
+      codes become blanks. Estimates (E) and margins of error (M) are both kept.
+    checked_on: 2026-11-22
+    notes: The default ACS path. No key needed. {table} is lower case, for example b25024.
+
+  - id: acs5_api
+    name: American Community Survey 5-year estimates via the Census Data API (2020-2024)
+    publisher: U.S. Census Bureau
+    url_pattern: https://api.census.gov/data/2024/acs/acs5
+    vintage: 2020-2024 5-year estimates
+    geography: [state, county, tract, block group]
+    licence: Public domain (U.S. government work); API terms of service apply
+    terms_url: https://www.census.gov/data/developers/about/terms-of-service.html
+    parser: acs.parse_api_rows
+    limits: >-
+      At most 50 variables per call. On 2026-11-22 a call without a key was answered
+      with a "Missing Key" page, so this path needs CENSUS_API_KEY; the summary-file
+      path above needs no key and gives the same estimates.
+    tier: 0
+    access: api
+    cleaning: >-
+      Same as the summary files. Variable labels are checked against the vintage's
+      variable list before use.
+    checked_on: 2026-11-22
+    notes: Optional faster path. The key is read from the CENSUS_API_KEY environment variable.
+
+  - id: cb_2020_tract
+    name: Cartographic boundary file, census tracts, 2020, 1:500,000
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_{state_fips}_tract_500k.zip
+    vintage: "2020"
+    geography: [tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
+    expected_size: 1938860
+    parser: boundaries.read_tracts
+    limits: >-
+      Generalized (simplified) shapes for maps, not for measuring land area or for
+      parcel work. 2020 tracts match the 2020-2024 ACS.
+    tier: 0
+    access: file
+    cleaning: Shapes are simplified further and written as small GeoJSON files per county.
+    checked_on: 2026-11-22
+    notes: Checked for Pennsylvania (state_fips 42).
+
+  - id: cb_2020_county
+    name: Cartographic boundary file, counties, 2020, 1:500,000
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/geo/tiger/GENZ2020/shp/cb_2020_us_county_500k.zip  # secret-scan: allow (a public URL path, not a key)
+    vintage: "2020"
+    geography: [county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
+    expected_size: 12587934
+    parser: boundaries.read_counties
+    limits: One national file; generalized shapes for maps only.
+    tier: 0
+    access: file
+    cleaning: Filtered to the state, simplified, written as GeoJSON.
+    checked_on: 2026-11-22
+
+  - id: tiger_2020_tabblock
+    name: TIGER/Line 2020 tabulation blocks (attribute table only)
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/geo/tiger/TIGER2020/TABBLOCK20/tl_2020_{state_fips}_tabblock20.zip  # secret-scan: allow (a public URL path, not a key)
+    member: tl_2020_{state_fips}_tabblock20.dbf
+    vintage: 2020 Census
+    geography: [block]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/geographies/mapping-files/time-series/geo/tiger-line-file.html
+    expected_size: 46167523
+    parser: blocks.read_block_table
+    limits: >-
+      Housing units and population are 2020 counts, not current. Internal points are a
+      point inside each block, not its centre of population. Only the attribute table
+      (the .dbf, about 46 MB of the 409 MB Pennsylvania zip) is read, by HTTP range
+      requests; block shapes are never downloaded.
+    tier: 0
+    access: range
+    cleaning: Keeps GEOID20, HOUSING20, POP20, ALAND20, AWATER20 and the internal point.
+    checked_on: 2026-11-22
+    notes: >-
+      Range reading confirmed live on 2026-11-22: the zip's index lists the .dbf, and
+      the server answers range requests.
+
+  - id: fhfa_hpi_county
+    name: FHFA House Price Index, annual, counties
+    publisher: Federal Housing Finance Agency
+    url_pattern: https://www.fhfa.gov/hpi/download/annual/hpi_at_county.xlsx
+    vintage: Annual developmental index, latest release
+    geography: [county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.fhfa.gov/data/hpi/datasets
+    expected_size: 5334194
+    parser: prices.read_hpi_county
+    limits: >-
+      Repeat-sales index built from mortgages bought or guaranteed by Fannie Mae and
+      Freddie Mac; thin in rural counties, where years can be missing. Published as a
+      spreadsheet (read with the standard library's zip and XML tools).
+    tier: 0
+    access: file
+    cleaning: Converted to long form (county, year, index, annual change). Missing years stay missing.
+    checked_on: 2026-11-22
+
+  - id: fhfa_hpi_tract
+    name: FHFA House Price Index, annual, census tracts
+    publisher: Federal Housing Finance Agency
+    url_pattern: https://www.fhfa.gov/hpi/download/annual/hpi_at_tract.csv
+    vintage: Annual developmental index, latest release
+    geography: [tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.fhfa.gov/data/hpi/datasets
+    expected_size: 89893919
+    parser: prices.read_hpi_tract
+    limits: >-
+      Experimental tract-level index; many tracts have too few repeat sales and are
+      blank. Check which tract vintage (2010 or 2020) each release uses before joining.
+    tier: 0
+    access: file
+    cleaning: Filtered to the state's tracts. Missing values stay missing.
+    checked_on: 2026-11-22
+
+  - id: freddie_pmms
+    name: Primary Mortgage Market Survey, weekly rate history
+    publisher: Freddie Mac
+    url_pattern: https://www.freddiemac.com/pmms/docs/PMMS_history.csv
+    vintage: Weekly, 1971 to the latest week
+    geography: [nation]
+    licence: Published freely by Freddie Mac; use under its website terms, with attribution
+    terms_url: https://www.freddiemac.com/terms
+    expected_size: 97674
+    parser: prices.read_pmms
+    limits: >-
+      National average offered rates for prime borrowers, not the rate a given
+      household or builder pays. The value used in the model is a ledger parameter
+      with a range.
+    tier: 0
+    access: file
+    cleaning: Weekly 30-year and 15-year fixed rates; an annual average is computed.
+    checked_on: 2026-11-22
+    notes: Not a U.S. government work. Terms re-checked before each release (plan 5.1 "check terms").
+
+  - id: hud_fmr_county
+    name: HUD Fair Market Rents, county and metro area file
+    publisher: U.S. Department of Housing and Urban Development
+    url_pattern: https://www.huduser.gov/portal/datasets/fmr/fmr{fiscal_year}/FY{fy2}_FMRs.xlsx
+    vintage: Fiscal year 2026
+    geography: [county, metro area]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.huduser.gov/portal/datasets/fmr.html
+    expected_size: null
+    parser: prices.read_fmr
+    limits: >-
+      Fair Market Rents are the 40th percentile of recent movers' gross rents, set for
+      voucher payments; they are a cross-check, not a market rent. The direct file is
+      used, never the token-gated API.
+    tier: 0
+    access: file
+    cleaning: Rents by bedroom count per county; metro-wide values are applied to member counties.
+    notes: >-
+      Not confirmed live: on 2026-11-22 the HUD site answered scripted requests with
+      status 202 and an empty body (a bot check). The pattern follows HUD's published
+      file names (fmr2026 / FY26); confirm by hand before the first fetch.
+
+  - id: ntm_stops
+    name: National Transit Map, stops
+    publisher: U.S. Department of Transportation, Bureau of Transportation Statistics
+    url_pattern: https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/NTAD_National_Transit_Map_Stops/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: National Transportation Atlas Database release compiled 2026-09-23
+    geography: [point]
+    licence: Public domain (U.S. government work)
+    terms_url: https://geodata.bts.gov/datasets/usdot::national-transit-map-stops
+    parser: transit.read_ntm_stops
+    limits: >-
+      Stops as reported by agencies in their schedule feeds; some agencies are missing
+      or out of date. Gives stop locations, not service frequency (frequency comes from
+      the agency schedule feeds). About 673,000 stops nationally; queried by state
+      bounding box in pages of at most 2,000.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      Keeps stop id, name, latitude, longitude, stop type and feed id. Stops with no
+      pickup are excluded later, using the agency feeds.
+    checked_on: 2026-11-22
+
+  - id: pa_hb2186
+    name: Pennsylvania House Bill 2186 (accessory dwelling units), bill page and text
+    publisher: Pennsylvania General Assembly
+    url_pattern: https://www.palegis.us/legislation/bills/2025/hb2186
+    vintage: 2025-2026 regular session; text Printer's Number 3373
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://www.palegis.us/legislation/bills/2025/hb2186
+    parser: legislation.read_bill_status
+    limits: >-
+      A proposed bill, not law, unless enacted; it lapses at the end of the session.
+      Status is re-checked after November 30.
+    tier: 0
+    access: page
+    cleaning: Only status, dates and cited sections are recorded, in a hand-checked rule file.
+    checked_on: 2026-11-22
+    notes: Bill text https://www.palegis.us/legislation/bills/text/HTM/2025/0/HB2186/PN3373  # secret-scan: allow (a public URL path, not a key)
+
+  - id: pa_sb1346
+    name: Pennsylvania Senate Bill 1346 (accessory dwelling units), bill page and text
+    publisher: Pennsylvania General Assembly
+    url_pattern: https://www.palegis.us/legislation/bills/2025/sb1346
+    vintage: 2025-2026 regular session; text Printer's Number 1747
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://www.palegis.us/legislation/bills/2025/sb1346
+    parser: legislation.read_bill_status
+    limits: >-
+      A proposed bill, not law, unless enacted. Applies only to municipalities under
+      the Municipalities Planning Code, so not to Philadelphia or Pittsburgh.
+    tier: 0
+    access: page
+    cleaning: Only status, dates and cited sections are recorded, in a hand-checked rule file.
+    checked_on: 2026-11-22
+    notes: Bill text https://www.palegis.us/legislation/bills/text/HTM/2025/0/SB1346/PN1747  # secret-scan: allow (a public URL path, not a key)
+
+  - id: bps_state_annual
+    name: Building Permits Survey, state annual files
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/econ/bps/State/st{year}a.txt
+    vintage: 1990-2025 annual files (the 2025 file is the latest published)
+    geography: [state]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/about/policies/open-gov/open-data.html
+    expected_size: 15000
+    parser: bps.parse_state_annual
+    limits: >-
+      State totals of units authorized by permit, including the Bureau's imputation for
+      offices that did not report. Construction value is in thousands of dollars.
+    tier: 0
+    access: file
+    cleaning: >-
+      Same header rules as the county files. Region, division and U.S. total rows are
+      dropped. Value is converted to dollars.
+    checked_on: 2026-11-22
+    notes: Used to check that county rows add up to the published state totals.
+
+  - id: acs5_geos
+    name: American Community Survey 5-year summary file geography list (2020-2024)
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/documentation/Geos20245YR.txt  # secret-scan: allow (a public URL path, not a key)
+    vintage: 2020-2024 5-year estimates
+    geography: [state, county, tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/programs-surveys/acs/data/summary-file.html
+    expected_size: 90707242
+    parser: acs.parse_geos
+    limits: >-
+      One national pipe-delimited file (about 91 MB) that names every geography in the
+      summary files. Tracts are 2020 census tracts.
+    tier: 0
+    access: file
+    cleaning: >-
+      Streamed; only the state's state, county and tract rows are written to disk. The
+      national file is never stored.
+    checked_on: 2026-11-22
+
+  - id: acs5_table_shells
+    name: American Community Survey 5-year table shells (2020-2024)
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/documentation/ACS20245YR_Table_Shells.txt  # secret-scan: allow (a public URL path, not a key)
+    vintage: 2020-2024 5-year estimates
+    geography: [nation]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/programs-surveys/acs/data/summary-file.html
+    expected_size: 5622840
+    parser: acs.parse_table_shells
+    limits: The label of every table cell for this vintage; it holds no estimates.
+    tier: 0
+    access: file
+    cleaning: Streamed; only the rows of the tables used are written to disk.
+    checked_on: 2026-11-22
+
+  - id: bls_qcew_construction
+    name: Quarterly Census of Employment and Wages, annual averages, construction (NAICS 23)
+    publisher: U.S. Bureau of Labor Statistics
+    url_pattern: https://data.bls.gov/cew/data/api/{year}/a/industry/23.csv
+    vintage: 2025 annual averages
+    geography: [nation, state, county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.bls.gov/cew/additional-resources/open-data/
+    expected_size: 967029
+    parser: costs.read_qcew
+    limits: >-
+      Average pay of construction jobs at private employers, by where the employer
+      reports, not where it builds. A wage index is a proxy for local building costs;
+      materials, land and fees are not in it. BLS withholds county figures that would
+      reveal one employer; those counties take the state value.
+    tier: 0
+    access: file
+    cleaning: >-
+      Streamed; only the state's rows and the national row are written to disk. Private
+      ownership (code 5) at nation, state and county level is kept. County pay is divided
+      by state pay to give a county wage index.
+    checked_on: 2026-11-22
+    notes: >-
+      Chosen over BEA regional price parities, which also answer without a key but exist
+      only for states and metro areas and measure consumer prices.
+
+  - id: ntm_agencies
+    name: National Transit Map, agencies
+    publisher: U.S. Department of Transportation, Bureau of Transportation Statistics
+    url_pattern: https://services.arcgis.com/xOi1kZaI0eWDREZv/arcgis/rest/services/NTAD_National_Transit_Map_Agencies/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: National Transportation Atlas Database release compiled 2026-09-23
+    geography: [point]
+    licence: Public domain (U.S. government work)
+    terms_url: https://geodata.bts.gov/datasets/usdot::national-transit-map-agencies
+    parser: transit.fetch_ntm_agencies
+    limits: Agency names and addresses only; used to label the transit coverage table.
+    tier: 0
+    access: feature_service
+    cleaning: Keeps the National Transit Database id and agency name of the agencies with stops in the state's bounding box.
+    checked_on: 2026-11-22
+
+  - id: mdb_catalog
+    name: Mobility Database catalog of transit schedule feeds
+    publisher: MobilityData
+    url_pattern: https://storage.googleapis.com/storage/v1/b/mdb-csv/o/sources.csv?alt=media
+    vintage: current
+    geography: [state]
+    licence: Catalog published openly by MobilityData; each listed feed keeps its agency's own terms
+    terms_url: https://mobilitydatabase.org/
+    expected_size: 1221361
+    parser: transit.select_feeds
+    limits: >-
+      A volunteer-maintained list; some agencies are missing, listed under another state,
+      or listed only with an old (deprecated) feed. Feeds that need a key or log-in are
+      not used.
+    tier: 0
+    access: file
+    cleaning: >-
+      Keeps the state's schedule (GTFS) feeds. A deprecated feed is used only when the
+      same provider has no active one.
+    checked_on: 2026-11-22
+
+  - id: gtfs_agency_feeds
+    name: Transit agency schedule feeds (GTFS), via their published addresses or the catalog mirror
+    publisher: Each transit agency (copies mirrored by MobilityData)
+    url_pattern: https://storage.googleapis.com/storage/v1/b/mdb-latest/o/{feed_file}?alt=media
+    vintage: The schedule current when fetched; the representative date is recorded per feed
+    geography: [point]
+    licence: Each agency's own open-data terms (for example SEPTA and Pittsburgh Regional Transit developer terms)
+    terms_url: https://mobilitydatabase.org/
+    parser: transit.read_gtfs
+    limits: >-
+      Scheduled, not actual, service. One representative weekday per feed. Only feeds
+      that download without a key are used; bus stops of other agencies are marked
+      frequency unknown. Agencies change stop ids between schedules, so a few stops
+      may not match the National Transit Map.
+    tier: 1
+    access: range
+    member: stop_times.txt
+    cleaning: >-
+      Reads stops, routes, trips, stop times, calendars and frequencies (never shapes).
+      Counts boarding calls per stop on the busiest Tuesday to Thursday; a trip's last
+      stop and no-pickup calls are left out. Only the per-stop counts are stored.
+    checked_on: 2026-11-22
+    notes: >-
+      The agency address listed in the catalog is tried first (http upgraded to https);
+      the catalog's mirror copy is the fallback.

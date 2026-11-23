@@ -1,0 +1,145 @@
+Table ID|Line|Indent|Unique ID|Label|Title|Universe|Type
+B01001|1.0|0|B01001_001|Total:|Sex by Age|Total population|int
+B01001|2.0|1|B01001_002|Male:|Sex by Age|Total population|int
+B01001|3.0|2|B01001_003|Under 5 years|Sex by Age|Total population|int
+B01001|4.0|2|B01001_004|5 to 9 years|Sex by Age|Total population|int
+B01001|5.0|2|B01001_005|10 to 14 years|Sex by Age|Total population|int
+B01001|6.0|2|B01001_006|15 to 17 years|Sex by Age|Total population|int
+B01001|7.0|2|B01001_007|18 and 19 years|Sex by Age|Total population|int
+B01001|8.0|2|B01001_008|20 years|Sex by Age|Total population|int
+B01001|9.0|2|B01001_009|21 years|Sex by Age|Total population|int
+B01001|10.0|2|B01001_010|22 to 24 years|Sex by Age|Total population|int
+B01001|11.0|2|B01001_011|25 to 29 years|Sex by Age|Total population|int
+B01001|12.0|2|B01001_012|30 to 34 years|Sex by Age|Total population|int
+B01001|13.0|2|B01001_013|35 to 39 years|Sex by Age|Total population|int
+B01001|14.0|2|B01001_014|40 to 44 years|Sex by Age|Total population|int
+B01001|15.0|2|B01001_015|45 to 49 years|Sex by Age|Total population|int
+B01001|16.0|2|B01001_016|50 to 54 years|Sex by Age|Total population|int
+B01001|17.0|2|B01001_017|55 to 59 years|Sex by Age|Total population|int
+B01001|18.0|2|B01001_018|60 and 61 years|Sex by Age|Total population|int
+B01001|19.0|2|B01001_019|62 to 64 years|Sex by Age|Total population|int
+B01001|20.0|2|B01001_020|65 and 66 years|Sex by Age|Total population|int
+B01001|21.0|2|B01001_021|67 to 69 years|Sex by Age|Total population|int
+B01001|22.0|2|B01001_022|70 to 74 years|Sex by Age|Total population|int
+B01001|23.0|2|B01001_023|75 to 79 years|Sex by Age|Total population|int
+B01001|24.0|2|B01001_024|80 to 84 years|Sex by Age|Total population|int
+B01001|25.0|2|B01001_025|85 years and over|Sex by Age|Total population|int
+B01001|26.0|1|B01001_026|Female:|Sex by Age|Total population|int
+B01001|27.0|2|B01001_027|Under 5 years|Sex by Age|Total population|int
+B01001|28.0|2|B01001_028|5 to 9 years|Sex by Age|Total population|int
+B01001|29.0|2|B01001_029|10 to 14 years|Sex by Age|Total population|int
+B01001|30.0|2|B01001_030|15 to 17 years|Sex by Age|Total population|int
+B01001|31.0|2|B01001_031|18 and 19 years|Sex by Age|Total population|int
+B01001|32.0|2|B01001_032|20 years|Sex by Age|Total population|int
+B01001|33.0|2|B01001_033|21 years|Sex by Age|Total population|int
+B01001|34.0|2|B01001_034|22 to 24 years|Sex by Age|Total population|int
+B01001|35.0|2|B01001_035|25 to 29 years|Sex by Age|Total population|int
+B01001|36.0|2|B01001_036|30 to 34 years|Sex by Age|Total population|int
+B01001|37.0|2|B01001_037|35 to 39 years|Sex by Age|Total population|int
+B01001|38.0|2|B01001_038|40 to 44 years|Sex by Age|Total population|int
+B01001|39.0|2|B01001_039|45 to 49 years|Sex by Age|Total population|int
+B01001|40.0|2|B01001_040|50 to 54 years|Sex by Age|Total population|int
+B01001|41.0|2|B01001_041|55 to 59 years|Sex by Age|Total population|int
+B01001|42.0|2|B01001_042|60 and 61 years|Sex by Age|Total population|int
+B01001|43.0|2|B01001_043|62 to 64 years|Sex by Age|Total population|int
+B01001|44.0|2|B01001_044|65 and 66 years|Sex by Age|Total population|int
+B01001|45.0|2|B01001_045|67 to 69 years|Sex by Age|Total population|int
+B01001|46.0|2|B01001_046|70 to 74 years|Sex by Age|Total population|int
+B01001|47.0|2|B01001_047|75 to 79 years|Sex by Age|Total population|int
+B01001|48.0|2|B01001_048|80 to 84 years|Sex by Age|Total population|int
+B01001|49.0|2|B01001_049|85 years and over|Sex by Age|Total population|int
+B01003|1.0|0|B01003_001|Total|Total Population|Total population|int
+B19013|1.0|0|B19013_001|Median household income in the past 12 months (in 2024 inflation-adjusted dollars)|Median Household Income in the Past 12 Months (in 2024 Inflation-Adjusted Dollars)|Households|int
+B25001|1.0|0|B25001_001|Total|Housing Units|Housing units|int
+B25002|1.0|0|B25002_001|Total:|Occupancy Status|Housing units|int
+B25002|2.0|1|B25002_002|Occupied|Occupancy Status|Housing units|int
+B25002|3.0|1|B25002_003|Vacant|Occupancy Status|Housing units|int
+B25003|1.0|0|B25003_001|Total:|Tenure|Occupied housing units|int
+B25003|2.0|1|B25003_002|Owner occupied|Tenure|Occupied housing units|int
+B25003|3.0|1|B25003_003|Renter occupied|Tenure|Occupied housing units|int
+B25024|1.0|0|B25024_001|Total:|Units in Structure|Housing units|int
+B25024|2.0|1|B25024_002|1, detached|Units in Structure|Housing units|int
+B25024|3.0|1|B25024_003|1, attached|Units in Structure|Housing units|int
+B25024|4.0|1|B25024_004|2|Units in Structure|Housing units|int
+B25024|5.0|1|B25024_005|3 or 4|Units in Structure|Housing units|int
+B25024|6.0|1|B25024_006|5 to 9|Units in Structure|Housing units|int
+B25024|7.0|1|B25024_007|10 to 19|Units in Structure|Housing units|int
+B25024|8.0|1|B25024_008|20 to 49|Units in Structure|Housing units|int
+B25024|9.0|1|B25024_009|50 or more|Units in Structure|Housing units|int
+B25024|10.0|1|B25024_010|Mobile home|Units in Structure|Housing units|int
+B25024|11.0|1|B25024_011|Boat, RV, van, etc.|Units in Structure|Housing units|int
+B25031|0.5|0||Median gross rent --|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25031|1.0|1|B25031_001|Total:|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25031|2.0|2|B25031_002|No bedroom|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25031|3.0|2|B25031_003|1 bedroom|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25031|4.0|2|B25031_004|2 bedrooms|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25031|5.0|2|B25031_005|3 bedrooms|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25031|6.0|2|B25031_006|4 bedrooms|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25031|7.0|2|B25031_007|5 or more bedrooms|Median Gross Rent by Bedrooms|Renter-occupied housing units paying cash rent|int
+B25034|1.0|0|B25034_001|Total:|Year Structure Built|Housing units|int
+B25034|2.0|1|B25034_002|Built 2020 or later|Year Structure Built|Housing units|int
+B25034|3.0|1|B25034_003|Built 2010 to 2019|Year Structure Built|Housing units|int
+B25034|4.0|1|B25034_004|Built 2000 to 2009|Year Structure Built|Housing units|int
+B25034|5.0|1|B25034_005|Built 1990 to 1999|Year Structure Built|Housing units|int
+B25034|6.0|1|B25034_006|Built 1980 to 1989|Year Structure Built|Housing units|int
+B25034|7.0|1|B25034_007|Built 1970 to 1979|Year Structure Built|Housing units|int
+B25034|8.0|1|B25034_008|Built 1960 to 1969|Year Structure Built|Housing units|int
+B25034|9.0|1|B25034_009|Built 1950 to 1959|Year Structure Built|Housing units|int
+B25034|10.0|1|B25034_010|Built 1940 to 1949|Year Structure Built|Housing units|int
+B25034|11.0|1|B25034_011|Built 1939 or earlier|Year Structure Built|Housing units|int
+B25063|1.0|0|B25063_001|Total:|Gross Rent|Renter-occupied housing units|int
+B25063|2.0|1|B25063_002|With cash rent:|Gross Rent|Renter-occupied housing units|int
+B25063|3.0|2|B25063_003|Less than $100|Gross Rent|Renter-occupied housing units|int
+B25063|4.0|2|B25063_004|$100 to $149|Gross Rent|Renter-occupied housing units|int
+B25063|5.0|2|B25063_005|$150 to $199|Gross Rent|Renter-occupied housing units|int
+B25063|6.0|2|B25063_006|$200 to $249|Gross Rent|Renter-occupied housing units|int
+B25063|7.0|2|B25063_007|$250 to $299|Gross Rent|Renter-occupied housing units|int
+B25063|8.0|2|B25063_008|$300 to $349|Gross Rent|Renter-occupied housing units|int
+B25063|9.0|2|B25063_009|$350 to $399|Gross Rent|Renter-occupied housing units|int
+B25063|10.0|2|B25063_010|$400 to $449|Gross Rent|Renter-occupied housing units|int
+B25063|11.0|2|B25063_011|$450 to $499|Gross Rent|Renter-occupied housing units|int
+B25063|12.0|2|B25063_012|$500 to $549|Gross Rent|Renter-occupied housing units|int
+B25063|13.0|2|B25063_013|$550 to $599|Gross Rent|Renter-occupied housing units|int
+B25063|14.0|2|B25063_014|$600 to $649|Gross Rent|Renter-occupied housing units|int
+B25063|15.0|2|B25063_015|$650 to $699|Gross Rent|Renter-occupied housing units|int
+B25063|16.0|2|B25063_016|$700 to $749|Gross Rent|Renter-occupied housing units|int
+B25063|17.0|2|B25063_017|$750 to $799|Gross Rent|Renter-occupied housing units|int
+B25063|18.0|2|B25063_018|$800 to $899|Gross Rent|Renter-occupied housing units|int
+B25063|19.0|2|B25063_019|$900 to $999|Gross Rent|Renter-occupied housing units|int
+B25063|20.0|2|B25063_020|$1,000 to $1,249|Gross Rent|Renter-occupied housing units|int
+B25063|21.0|2|B25063_021|$1,250 to $1,499|Gross Rent|Renter-occupied housing units|int
+B25063|22.0|2|B25063_022|$1,500 to $1,999|Gross Rent|Renter-occupied housing units|int
+B25063|23.0|2|B25063_023|$2,000 to $2,499|Gross Rent|Renter-occupied housing units|int
+B25063|24.0|2|B25063_024|$2,500 to $2,999|Gross Rent|Renter-occupied housing units|int
+B25063|25.0|2|B25063_025|$3,000 to $3,499|Gross Rent|Renter-occupied housing units|int
+B25063|26.0|2|B25063_026|$3,500 or more|Gross Rent|Renter-occupied housing units|int
+B25063|27.0|1|B25063_027|No cash rent|Gross Rent|Renter-occupied housing units|int
+B25064|1.0|0|B25064_001|Median gross rent|Median Gross Rent (Dollars)|Renter-occupied housing units paying cash rent|int
+B25075|1.0|0|B25075_001|Total:|Value|Owner-occupied housing units|int
+B25075|2.0|1|B25075_002|Less than $10,000|Value|Owner-occupied housing units|int
+B25075|3.0|1|B25075_003|$10,000 to $14,999|Value|Owner-occupied housing units|int
+B25075|4.0|1|B25075_004|$15,000 to $19,999|Value|Owner-occupied housing units|int
+B25075|5.0|1|B25075_005|$20,000 to $24,999|Value|Owner-occupied housing units|int
+B25075|6.0|1|B25075_006|$25,000 to $29,999|Value|Owner-occupied housing units|int
+B25075|7.0|1|B25075_007|$30,000 to $34,999|Value|Owner-occupied housing units|int
+B25075|8.0|1|B25075_008|$35,000 to $39,999|Value|Owner-occupied housing units|int
+B25075|9.0|1|B25075_009|$40,000 to $49,999|Value|Owner-occupied housing units|int
+B25075|10.0|1|B25075_010|$50,000 to $59,999|Value|Owner-occupied housing units|int
+B25075|11.0|1|B25075_011|$60,000 to $69,999|Value|Owner-occupied housing units|int
+B25075|12.0|1|B25075_012|$70,000 to $79,999|Value|Owner-occupied housing units|int
+B25075|13.0|1|B25075_013|$80,000 to $89,999|Value|Owner-occupied housing units|int
+B25075|14.0|1|B25075_014|$90,000 to $99,999|Value|Owner-occupied housing units|int
+B25075|15.0|1|B25075_015|$100,000 to $124,999|Value|Owner-occupied housing units|int
+B25075|16.0|1|B25075_016|$125,000 to $149,999|Value|Owner-occupied housing units|int
+B25075|17.0|1|B25075_017|$150,000 to $174,999|Value|Owner-occupied housing units|int
+B25075|18.0|1|B25075_018|$175,000 to $199,999|Value|Owner-occupied housing units|int
+B25075|19.0|1|B25075_019|$200,000 to $249,999|Value|Owner-occupied housing units|int
+B25075|20.0|1|B25075_020|$250,000 to $299,999|Value|Owner-occupied housing units|int
+B25075|21.0|1|B25075_021|$300,000 to $399,999|Value|Owner-occupied housing units|int
+B25075|22.0|1|B25075_022|$400,000 to $499,999|Value|Owner-occupied housing units|int
+B25075|23.0|1|B25075_023|$500,000 to $749,999|Value|Owner-occupied housing units|int
+B25075|24.0|1|B25075_024|$750,000 to $999,999|Value|Owner-occupied housing units|int
+B25075|25.0|1|B25075_025|$1,000,000 to $1,499,999|Value|Owner-occupied housing units|int
+B25075|26.0|1|B25075_026|$1,500,000 to $1,999,999|Value|Owner-occupied housing units|int
+B25075|27.0|1|B25075_027|$2,000,000 or more|Value|Owner-occupied housing units|int
+B25077|1.0|0|B25077_001|Median value (dollars)|Median Value (Dollars)|Owner-occupied housing units|int

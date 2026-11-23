@@ -1,0 +1,116 @@
+/*
+ * Design tokens: every colour, size and timing the interface uses.
+ * Contrast (WCAG 2.1): text on surface 16:1, muted text 7.9:1, quiet text 5.7:1,
+ * accent on white 6.2:1, white on accent 6.2:1. UI borders that carry meaning 3:1.
+ */
+:root {
+  /* Type: system fonts only. */
+  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  --font-mono: ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --text-xs: 12px;
+  --text-sm: 13px;
+  --text-md: 14px;
+  --text-lg: 16px;
+  --text-xl: 20px;
+  --text-2xl: 26px;
+  --text-3xl: 34px;
+  --leading-tight: 1.2;
+  --leading: 1.5;
+  --weight-regular: 400;
+  --weight-medium: 550;
+  --weight-bold: 680;
+
+  /* Neutrals: cool greys. */
+  --page: #f3f5f6;
+  --surface: #ffffff;
+  --surface-2: #f7f8f9;
+  --surface-3: #eef1f3;
+  --line: #e1e5e8;
+  --line-strong: #8a959e;
+  --text: #17212b;
+  --text-muted: #46535f;
+  --text-quiet: #5b6873;
+
+  /* The one accent: deep teal. */
+  --accent: #0d6b73;
+  --accent-hover: #0a5a61;
+  --accent-strong: #0a4f55;
+  --accent-soft: #e3f1f1;
+  --accent-ring: #0d6b73;
+  --on-accent: #ffffff;
+
+  /* Status surfaces. */
+  --notice-bg: #fdf3df;
+  --notice-text: #7a4a00;
+  --notice-line: #f0d59c;
+
+  /* Map: one sequential "more" ramp, light to dark, colour-blind safe (lightness rises monotonically). */
+  --seq-1: #f2f4d8;
+  --seq-2: #cde6b6;
+  --seq-3: #8fcdb1;
+  --seq-4: #4ea8ae;
+  --seq-5: #2c7aa1;
+  --seq-6: #243f78;
+  /* "No data" and "Not modelled" are grey and never count as a result. */
+  --no-data: #c9cfd4;
+  --not-modelled: #e7eaed;
+  --map-surface: #e8edef;
+  --map-dot: #cfd7db;
+
+  /* Spacing (4 px grid). */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 20px;
+  --space-6: 24px;
+  --space-8: 32px;
+  --space-10: 40px;
+  --space-12: 48px;
+
+  /* Shape and depth. */
+  --radius-sm: 6px;
+  --radius: 10px;
+  --radius-lg: 14px;
+  --radius-pill: 999px;
+  --shadow-1: 0 1px 2px rgb(23 33 43 / 0.06), 0 1px 1px rgb(23 33 43 / 0.04);
+  --shadow-2: 0 8px 24px -8px rgb(23 33 43 / 0.18), 0 2px 6px rgb(23 33 43 / 0.06);
+  --shadow-3: 0 18px 48px -12px rgb(23 33 43 / 0.28), 0 4px 12px rgb(23 33 43 / 0.08);
+
+  /* Focus: always visible, 2 px ring with a 2 px gap. */
+  --focus-ring: 0 0 0 2px var(--surface), 0 0 0 4px var(--accent-ring);
+
+  /* Layout. */
+  --bar-h: 60px;
+  --gutter: max(16px, env(safe-area-inset-left), env(safe-area-inset-right));
+  --card-w: 352px;
+  --page-max: 1180px;
+
+  /* Motion: short and calm; switched off for people who ask for less motion. */
+  --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --dur-fast: 120ms;
+  --dur: 200ms;
+  --dur-slow: 320ms;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --bar-h: 56px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    --dur-fast: 0ms;
+    --dur: 0ms;
+    --dur-slow: 0ms;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

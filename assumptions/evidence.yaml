@@ -1,0 +1,1148 @@
+# VisionHousing evidence library.
+#
+# One entry per real-world reform or published study the model leans on: where and
+# when a rule changed, what changed, what was permitted before and after (years and
+# units), where every figure was read, and how far it carries over to Pennsylvania.
+#
+# Each figure names the source it was read from. Each source has a web address,
+# the date it was read, where in the document the figure is, and a verification
+# level (strongest first):
+#   primary_document  read in the publisher's own report, page or law text
+#   primary_data      computed here from the publisher's own data file
+#   abstract_only     read in the published abstract, not the full paper
+#   secondary_summary read in another author's account of the original
+#   excerpt_only      seen only as a short excerpt; treat as unconfirmed
+# An entry's own "verification" is its weakest source.
+#
+# used_for: calibration (sets a ledger range), hindcast (job T4 compares the model
+# with what happened), evidence_card (shown on a reform page as context).
+#
+# Ledger parameters cite an entry with a source id equal to the entry id ("ev.").
+# Checked by visionhousing.ledger.evidence; see docs/methods/evidence.md.
+
+version: 1
+
+entries:
+
+  # ================================================================= ADU (benchmark 1)
+
+  ev.adu.seattle_2019:
+    place: "Seattle, Washington (city)"
+    reform: adu
+    entry_type: outcome
+    date_of_change: 2019-08
+    what_changed: >-
+      Ordinance 125984 (in effect August 2019) removed the off-street parking and
+      owner-occupancy requirements, allowed two ADUs on a lot, cut the minimum lot
+      for a detached ADU to 3,200 sq ft, and set a new limit on the size of
+      single-family houses. Attached ADUs had been legal citywide since the mid-1990s
+      and detached ADUs since 2010.
+    before:
+      - measure: "ADUs permitted, yearly average"
+        value: 263.5
+        unit: "permits per year"
+        period: "2016-2019"
+        source: seattle_2024
+        note: "Mean of 274, 252, 245 and 283; 2019 includes months before the reform."
+      - measure: "ADUs permitted, yearly average"
+        value: 136
+        unit: "permits per year"
+        period: "2010-2015"
+        source: seattle_2024
+        note: "Mean of 144, 107, 115, 125, 155 and 190 (135.8, rounded)."
+      - measure: "ADU permit applications"
+        value: 357
+        unit: "applications per year"
+        period: "2019"
+        source: seattle_2023
+      - measure: "Share of single-family lots with an ADU"
+        value: 0.02
+        unit: "share"
+        period: "2015"
+        source: seattle_2022
+        note: "The report says that in 2015, 98 percent of single-family lots had no ADU."
+    after:
+      - measure: "ADUs permitted"
+        value: 476
+        unit: "permits per year"
+        period: "2020"
+        source: seattle_2024
+        note: "First full year after the reform."
+      - measure: "ADUs permitted"
+        value: 762
+        unit: "permits per year"
+        period: "2021"
+        source: seattle_2024
+      - measure: "ADUs permitted"
+        value: 924
+        unit: "permits per year"
+        period: "2022"
+        source: seattle_2024
+        note: "The 2022 report printed 988 for this year; the 2024 report revised the series."
+      - measure: "ADUs permitted"
+        value: 905
+        unit: "permits per year"
+        period: "2023"
+        source: seattle_2024
+        note: "The 2023 report printed 987 for this year; the 2024 report revised the series."
+      - measure: "ADUs permitted"
+        value: 913
+        unit: "permits per year"
+        period: "2024"
+        source: seattle_2024
+      - measure: "ADU permit applications"
+        value: 1004
+        unit: "applications per year"
+        period: "2022"
+        source: seattle_2023
+      - measure: "ADU permit applications"
+        value: 780
+        unit: "applications per year"
+        period: "2023"
+        source: seattle_2023
+        note: "The report links the fall to higher interest rates."
+      - measure: "Share of ADU owners who used a loan for part of the cost"
+        value: 0.62
+        unit: "share"
+        period: "2022"
+        source: seattle_2023
+        note: "From the city's 2022 survey of ADU owners."
+    sources:
+      - id: seattle_2024
+        citation: >-
+          City of Seattle, Office of Planning and Community Development, "2024 ADU
+          Annual Report"
+        url: https://www.seattle.gov/documents/Departments/OPCD/OngoingInitiatives/EncouragingBackyardCottages/OPCD-ADUAnnualReport2024.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Exhibit 2, ADUs permitted since 2005 (page 6), and the text above it"
+        verification: primary_document
+      - id: seattle_2023
+        citation: >-
+          City of Seattle, Office of Planning and Community Development, "2023
+          Accessory Dwelling Unit Report"
+        url: https://www.seattle.gov/documents/Departments/OPCD/OngoingInitiatives/EncouragingBackyardCottages/OPCD-ADU-Report-2023.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "ADU Production, pages 11-12"
+        verification: primary_document
+      - id: seattle_2022
+        citation: >-
+          City of Seattle, Office of Planning and Community Development, "2022 ADU
+          Annual Report"
+        url: https://www.seattle.gov/documents/Departments/OPCD/OngoingInitiatives/EncouragingBackyardCottages/OPCD-ADUAnnualReport2022.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Introduction (pages 6-7) and Exhibit 1 (page 8)"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      One table is used for the whole series: Exhibit 2 of the 2024 report, which
+      revised earlier years (the 2022 and 2023 reports print 988 and 987). Permits
+      roughly 3.5 times the pre-reform plateau, reached in about three years, then
+      flat near 900-950 a year. Seattle is a high-rent, high-price city with strong
+      builder demand: a large share of ADUs come with full-site rebuilds, so the
+      rate overstates what owner-built ADUs would do in Pennsylvania. Applications
+      fell when interest rates rose, so take-up is rate-sensitive.
+    used_for: [calibration, hindcast, evidence_card]
+
+  ev.adu.massachusetts_2025:
+    place: "Massachusetts (statewide)"
+    reform: adu
+    entry_type: outcome
+    date_of_change: 2025-02
+    what_changed: >-
+      The Affordable Homes Act made ADUs of up to 900 sq ft (or less than half the
+      living area of the main home) allowed by right in single-family zoning
+      districts statewide. Before it there was no statewide standard.
+    before_note: >-
+      No statewide count of ADU permits exists before the law; the state began
+      surveying building officials in July 2025.
+    after:
+      - measure: "ADUs permitted or approved by cities and towns"
+        value: 1224
+        unit: "units"
+        period: "2025"
+        source: mass_release
+        note: "In 217 communities; the release calls it an initial snapshot."
+      - measure: "ADUs approved (building permits issued)"
+        value: 2084
+        unit: "units"
+        period: "2025-01 to 2026-06"
+        source: mass_tracker
+        note: "Cumulative; 2026 part from 265 survey responses."
+      - measure: "ADU building-permit applications submitted"
+        value: 2824
+        unit: "applications"
+        period: "2025-01 to 2026-06"
+        source: mass_tracker
+      - measure: "Municipalities reporting at least one approved ADU"
+        value: 246
+        unit: "municipalities"
+        period: "2025-01 to 2026-06"
+        source: mass_tracker
+      - measure: "Share of approvals that were detached ADUs"
+        value: 0.50
+        unit: "share"
+        period: "2025-01 to 2026-06"
+        source: mass_tracker
+    sources:
+      - id: mass_release
+        citation: >-
+          Commonwealth of Massachusetts, Executive Office of Housing and Livable
+          Communities, press release "Governor Healey Announces More Than 1,200
+          ADUs Approved in First Year with More to Come", February 5, 2026
+        url: https://www.mass.gov/news/governor-healey-announces-more-than-1200-adus-approved-in-first-year-with-more-to-come  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "First paragraph; 'A clearer standard' section"
+        verification: primary_document
+      - id: mass_tracker
+        citation: >-
+          Commonwealth of Massachusetts, Executive Office of Housing and Livable
+          Communities, "Accessory Dwelling Unit Tracker" (last updated August 12, 2026)
+        url: https://www.mass.gov/info-details/accessory-dwelling-unit-tracker
+        accessed: 2026-11-22
+        locator: "'ADU Activity since January 2025' and 'Where have ADUs been built?'"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      The closest analogue to a Pennsylvania statewide by-right law: a northeastern
+      state with old housing, high construction costs and town-level zoning. Counts
+      come from voluntary surveys of building officials (293 of 351 municipalities
+      answered one or both 2025 surveys), so they are a floor. The pages were read in
+      a browser because the site refuses scripted requests. A state projection of
+      8,000-10,000 ADUs over five years appears in secondary accounts but was not
+      found on an official page, so it is left out.
+    used_for: [hindcast, evidence_card]
+
+  ev.adu.california_apr:
+    place: "California (all reporting cities and counties)"
+    reform: adu
+    entry_type: outcome
+    date_of_change: 2017-01
+    what_changed: >-
+      State ADU laws effective January 2017, amended in 2020, 2023 and 2024, require
+      localities to allow ADUs on single-family lots with limits on parking,
+      owner-occupancy, fees and review time.
+    before_note: >-
+      The jurisdiction-level Table A2 data start with reporting year 2018, after the
+      2017 law took effect, so there is no pre-reform count in this file.
+    after:
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 8915
+        unit: "units per year"
+        period: "2018"
+        source: hcd_apr_a2
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 12706
+        unit: "units per year"
+        period: "2019"
+        source: hcd_apr_a2
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 12775
+        unit: "units per year"
+        period: "2020"
+        source: hcd_apr_a2
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 20622
+        unit: "units per year"
+        period: "2021"
+        source: hcd_apr_a2
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 25482
+        unit: "units per year"
+        period: "2022"
+        source: hcd_apr_a2
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 28413
+        unit: "units per year"
+        period: "2023"
+        source: hcd_apr_a2
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 30605
+        unit: "units per year"
+        period: "2024"
+        source: hcd_apr_a2
+      - measure: "ADU units with a building permit issued in the reporting year"
+        value: 32442
+        unit: "units per year"
+        period: "2025"
+        source: hcd_apr_a2
+      - measure: "ADU units on all Table A2 rows with a permit count, any issue date"
+        value: 41977
+        unit: "units per year"
+        period: "2025"
+        source: hcd_apr_a2
+        note: "Includes rows whose permit date falls outside the reporting year."
+    sources:
+      - id: hcd_apr_a2
+        citation: >-
+          California Department of Housing and Community Development, "Housing
+          Element Annual Progress Report (APR) Data by Jurisdiction and Year",
+          Table A2 CSV, California Open Data Portal (dataset updated November 20, 2026)
+        url: https://data.ca.gov/dataset/housing-element-annual-progress-report-apr-data-by-jurisdiction-and-year
+        accessed: 2026-11-22
+        locator: >-
+          Table A2; sum of NO_BUILDING_PERMITS where UNIT_CAT = ADU, by YEAR, keeping
+          rows whose BP_ISSUE_DT1 falls in YEAR (500-506 jurisdictions a year)
+        verification: primary_data
+    verification: primary_data
+    comparability: >-
+      Computed here by streaming the published file; nothing was stored. Two
+      counting rules give different totals (32,442 vs 41,977 for 2025), so the rule
+      is stated; the issue-date rule is the one closest to counts the department has
+      published. Jurisdictions revise past reports, so a later download will differ
+      slightly. California pairs a strong state law with very high rents, so its
+      per-capita rate is far above what Pennsylvania should expect; this is the panel
+      for job T2, not a target.
+    used_for: [calibration, evidence_card]
+
+  ev.adu.pew_national_2025:
+    place: "United States (346 cities of 100,000 or more)"
+    reform: adu
+    entry_type: cross_section
+    date_of_change: 2026-04
+    what_changed: >-
+      Not one reform: the study codes every large city's ADU rules as of April 2026
+      (permissive, restrictive or none) and compares 2025 ADU permits.
+    findings:
+      - measure: "ADU permits nationwide"
+        value: 4962
+        unit: "permits per year"
+        period: "2016"
+        source: pew
+      - measure: "ADU permits nationwide"
+        value: 61655
+        unit: "permits per year"
+        period: "2025"
+        source: pew
+      - measure: "ADU permits per 100,000 residents, cities with permissive ordinances"
+        value: 81
+        unit: "permits per 100k people per year"
+        period: "2025"
+        source: pew
+      - measure: "ADU permits per 100,000 residents, cities with restrictive ordinances"
+        value: 7
+        unit: "permits per 100k people per year"
+        period: "2025"
+        source: pew
+      - measure: "ADU permits per 100,000 residents, cities with no ordinance"
+        value: 1
+        unit: "permits per 100k people per year"
+        period: "2025"
+        source: pew
+      - measure: "ADU permits per 100,000 residents, permissive cities outside California"
+        value: 26
+        unit: "permits per 100k people per year"
+        period: "2025"
+        source: pew
+      - measure: "ADUs as a share of all units permitted, permissive cities"
+        value: 0.19
+        unit: "share"
+        period: "2025"
+        source: pew
+      - measure: "ADUs as a share of all units permitted, permissive cities outside California"
+        value: 0.045
+        unit: "share"
+        period: "2025"
+        source: pew
+      - measure: "ADUs as a share of all units permitted, restrictive cities"
+        value: 0.017
+        unit: "share"
+        period: "2025"
+        source: pew
+      - measure: "States with ADU preemption laws"
+        value: 22
+        unit: "states"
+        period: "2026-08"
+        source: pew
+      - measure: "Large cities with permissive ordinances, states without a preemption law"
+        value: 25
+        unit: "cities of 196"
+        period: "2026-04"
+        source: pew
+        note: "Table 1; 103 restrictive and 68 with no ordinance."
+    sources:
+      - id: pew
+        citation: >-
+          The Pew Charitable Trusts (October 21, 2026), "Accessory Dwelling Units Can
+          Meaningfully Boost Housing Supply", with Lehigh University's Small Cities Lab
+        url: https://www.pew.org/en/research-and-analysis/reports/2026/10/accessory-dwelling-units-can-meaningfully-boost-housing-supply  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Key findings; Table 1; Figure 6; Figure 7; Table 2"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Read on the report page itself, in a browser (the site refuses scripted
+      requests). Permit counts come from a commercial permit-record vendor, not
+      public data, and 40 of the 346 cities had none. A cross-section, not a
+      before-and-after test: permissive places differ in other ways. The 26 per
+      100,000 outside California is the closest per-capita anchor for Pennsylvania's
+      large places; small towns are likely lower.
+    used_for: [calibration, evidence_card]
+
+  ev.adu.terner_california_rules:
+    place: "California (252 cities, survey of 2017-2018)"
+    reform: adu
+    entry_type: cross_section
+    date_of_change: 2017-01
+    what_changed: >-
+      Not one reform: compares local ADU rules and how often localities received ADU
+      applications soon after the 2017 state law.
+    findings:
+      - measure: "Typical ADU fee"
+        value: 9250
+        unit: "$/ADU"
+        period: "2017-2018"
+        source: terner
+        note: "One off-street space was also typically required."
+      - measure: "Average ADU fee, localities with at least monthly applications"
+        value: 6782
+        unit: "$/ADU"
+        period: "2017-2018"
+        source: terner
+      - measure: "Average ADU fee, localities with less frequent applications"
+        value: 10208
+        unit: "$/ADU"
+        period: "2017-2018"
+        source: terner
+      - measure: "Rise in odds of frequent applications, restrictive to permissive quartile"
+        value: 0.67
+        unit: "share"
+        period: "2017-2018"
+        source: terner
+      - measure: "Share with frequent applications, localities over 20% seniors"
+        value: 0.45
+        unit: "share"
+        period: "2017-2018"
+        source: terner
+      - measure: "Share with frequent applications, localities under 10% seniors"
+        value: 0.14
+        unit: "share"
+        period: "2017-2018"
+        source: terner
+    sources:
+      - id: terner
+        citation: >-
+          Deirdre Pfeiffer (2023), "Regulating ADUs in California: Local Approaches &
+          Outcomes", Terner Center for Housing Innovation, UC Berkeley
+        url: https://ternercenter.berkeley.edu/wp-content/uploads/2023/04/Pfeiffer_Regulating_ADUs_in_California.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Rules overview, Table 7 text, Table 9 text"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Measures how often applications arrive, not units built. Shows that lower fees,
+      no parking rule and an older population go with more ADU interest; the senior
+      link matters for Pennsylvania, one of the older states.
+    used_for: [calibration, evidence_card]
+
+  ev.adu.portland_sdc_waiver_2010:
+    place: "Portland, Oregon (city)"
+    reform: adu
+    entry_type: outcome
+    date_of_change: 2010
+    what_changed: >-
+      The city waived system development charges (infrastructure fees) for ADUs,
+      saving builders on average $8,000 to $11,000 a project.
+    before_note: >-
+      The report shows Portland's 2000-2015 ADU permits as a chart without printed
+      values, so only its stated growth multiple is recorded.
+    after:
+      - measure: "ADUs built, as a multiple of the 2010 level"
+        value: 10
+        unit: "multiple of 2010"
+        period: "2016"
+        source: orange_splot_2016
+        note: "The report says ADU building grew ten times in the six years after the waiver."
+    sources:
+      - id: orange_splot_2016
+        citation: >-
+          Eli Spevak and Madeline Kovacs (May 2016), "Character-Compatible,
+          Space-Efficient Housing Options for Single-Dwelling Neighborhoods", report
+          funded by the Oregon Department of Environmental Quality for the state
+          Transportation and Growth Management Program
+        url: https://efiles.portlandoregon.gov/record/13647455/file/document
+        accessed: 2026-11-22
+        locator: "Recommendations (2), page 47, and the chart 'City of Portland ADU permits 2000-2015'"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      A fee cut, not a legalization: ADUs were already allowed. Evidence that fees
+      bind for ADUs, relevant to the utility-connection and permit-fee lines. Other
+      things changed over the same years (rents, the wider economy), so not all of
+      the rise is the waiver.
+    used_for: [evidence_card]
+
+  ev.adu.portland_use_survey_2013:
+    place: "Portland, Oregon (city)"
+    reform: adu
+    entry_type: cross_section
+    date_of_change: 2010
+    what_changed: >-
+      Not a reform: a 2013 survey of Portland ADU owners, interpreted by the state
+      environmental agency, on how ADUs are used.
+    findings:
+      - measure: "Share of ADUs in use or on the market as long-term residences"
+        value: 0.80
+        unit: "share"
+        period: "2013"
+        source: deq_2014
+      - measure: "Share of properties with an ADU occupied by their owner"
+        value: 0.64
+        unit: "share"
+        period: "2013"
+        source: deq_2014
+        note: "Portland had no owner-occupancy requirement."
+    sources:
+      - id: deq_2014
+        citation: >-
+          Oregon Department of Environmental Quality (June 2014), "Accessory dwelling
+          units in Portland, Oregon: Evaluation and interpretation of a survey of ADU
+          owners"
+        url: https://www.oregon.gov/deq/FilterDocs/ADU-surveyinterpret.pdf
+        accessed: 2026-11-22
+        locator: "Summary, points 1-2; Exhibit A"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      About one ADU in five is not a separate home at any one time (office, guest
+      space, short-term rental). Supports a net-new share below one per ADU built
+      and the family-use share. One city, older survey.
+    used_for: [calibration, evidence_card]
+
+  ev.adu.oregon_sb1051_2017:
+    place: "Oregon (statewide)"
+    reform: adu
+    entry_type: rule
+    date_of_change: 2018-07-01
+    what_changed: >-
+      Senate Bill 1051 (2017, chapter 745) bars cities over 2,500 people and counties
+      over 15,000 from prohibiting an ADU in areas zoned for single-family homes.
+    rule_summary: >-
+      A city over 2,500 people or a county over 15,000 may not prohibit building an
+      ADU in an area zoned for single-family dwellings. The ADU provision becomes
+      operative July 1, 2018; the act took effect on passage.
+    sources:
+      - id: or_sb1051
+        citation: >-
+          Oregon Legislative Assembly, 2017 Regular Session, SB 1051, measure overview
+        url: https://apps.oregonlegislature.gov/liz/2017R1/Measures/Overview/SB1051
+        accessed: 2026-11-22
+        locator: "Measure summary and chapter number"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      A population threshold like this one would leave many small Pennsylvania
+      boroughs and townships out. No statewide count of ADU permits since 2018 was
+      found on an official page, so this entry has no outcome.
+    used_for: [evidence_card]
+
+  # ================================================================= missing middle (benchmark 2)
+
+  ev.missing_middle.minneapolis_2040:
+    place: "Minneapolis, Minnesota (city)"
+    reform: missing_middle
+    entry_type: outcome
+    date_of_change: 2020
+    what_changed: >-
+      The Minneapolis 2040 Plan allowed duplexes and triplexes in areas previously
+      zoned for single-family housing only.
+    before:
+      - measure: "Units permitted in buildings of five or more units"
+        value: 4646
+        unit: "units per year"
+        period: "2019"
+        source: mpls_fed_2026
+        note: "Peak year; more than 3,000 a year in 2018 and 2020-2022."
+    before_note: "The article gives no yearly count of 2-4 unit permits before 2020."
+    after:
+      - measure: "Units permitted in duplexes, triplexes and fourplexes"
+        value: 317
+        unit: "units"
+        period: "2020-2025"
+        source: mpls_fed_2026
+        note: "In 106 buildings; 47 of the buildings are on formerly single-family-only parcels."
+      - measure: "Units permitted in buildings of five or more units"
+        value: 12335
+        unit: "units"
+        period: "2020-2025"
+        source: mpls_fed_2026
+      - measure: "Units permitted in buildings of five or more units"
+        value: 300
+        unit: "units per year"
+        period: "2025"
+        source: mpls_fed_2026
+        note: "351 in 2024 and 1,043 in 2023."
+    sources:
+      - id: mpls_fed_2026
+        citation: >-
+          Ben Horowitz, Libby Starling and Maxine Xu, Federal Reserve Bank of
+          Minneapolis (October 7, 2026), "Minneapolis 2040 plan indicators point to
+          stable rents, stalled development"
+        url: https://www.minneapolisfed.org/article/2026/minneapolis-2040-plan-indicators-point-to-stable-rents-stalled-development  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Text on 2-4 unit permits and multifamily permits"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      The clearest case that legalizing 2-3 units on single-family lots yields very
+      little in the first years: about 50 units a year in 2-4 unit buildings, 2% of
+      the units permitted in larger buildings over the same years, and fewer than
+      half of those buildings on formerly single-family-only parcels. Multifamily
+      permits also collapsed after 2022, so the market, not only the rule, shaped
+      the result. A hindcast target for the low end of the missing-middle range.
+    used_for: [hindcast, evidence_card]
+
+  ev.missing_middle.portland_rip_2021:
+    place: "Portland, Oregon (single-dwelling zones R2.5, R5, R7)"
+    reform: missing_middle
+    entry_type: outcome
+    date_of_change: 2021-08-01
+    what_changed: >-
+      The Residential Infill Project set new limits on building size, allowed middle
+      housing (duplexes, triplexes, fourplexes and sixplexes) in single-dwelling
+      zones, and expanded ADU allowances (two ADUs with a house, one with a duplex).
+    before_note: >-
+      The city's study compares with the four years before the change, but its page
+      gives no before counts; the full study was not read.
+    after:
+      - measure: "Middle-housing units permitted in single-dwelling zones"
+        value: 271
+        unit: "units"
+        period: "2021-08 to 2022-07"
+        source: pdx_rip_2023
+        note: "Against 102 new single houses; fourplexes were 76% of middle-housing units."
+      - measure: "Middle housing share of units permitted, excluding ADUs"
+        value: 0.73
+        unit: "share"
+        period: "2021-08 to 2022-07"
+        source: pdx_rip_2023
+      - measure: "ADU share of units permitted in single-dwelling zones"
+        value: 0.42
+        unit: "share"
+        period: "2021-08 to 2022-07"
+        source: pdx_rip_2023
+        note: "Middle housing also 42%, single houses 16%; sample of 646 units."
+      - measure: "ADUs and middle-housing units permitted in single-dwelling zones"
+        value: 1400
+        unit: "units (more than)"
+        period: "2021-08 to 2024-06"
+        source: pdx_rip_2025
+    sources:
+      - id: pdx_rip_2023
+        citation: >-
+          City of Portland, Bureau of Planning and Sustainability (July 5, 2023), "New
+          study shows promising housing production results from Residential Infill
+          Project"
+        url: https://www.portland.gov/bps/planning/rip/news/2023/7/5/new-study-shows-promising-housing-production-results-residential  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "'RIP year-one results'"
+        verification: primary_document
+      - id: pdx_rip_2025
+        citation: >-
+          City of Portland, Bureau of Planning and Sustainability (February 4, 2025),
+          "Portland sees significant production of middle housing resulting from
+          Residential Infill Project"
+        url: https://www.portland.gov/bps/planning/rip2/news/2025/2/4/portland-sees-significant-production-middle-housing-resulting-0  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Opening paragraph"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Allowed fourplexes (not only triplexes) and capped house size, which tilted
+      builders toward fourplexes; the year-one sample is small and fell in the
+      pandemic, and the full study was not read. Read together with Minneapolis:
+      rules that let a fourplex pencil matter more than the label.
+    used_for: [hindcast, evidence_card]
+
+  ev.missing_middle.houston_lot_size_1998:
+    place: "Houston, Texas (city)"
+    reform: missing_middle
+    entry_type: outcome
+    date_of_change: 1998
+    what_changed: >-
+      Cut the by-right minimum lot inside the I-610 Loop from 5,000 to 3,500 sq ft,
+      with lots averaging 1,400 sq ft allowed under open-space or performance
+      standards; extended citywide (where sewer service exists) in 2013.
+    before_note: >-
+      The brief shows small-lot construction from 1990 in charts only; it notes
+      small-lot building had begun through variances before 1998.
+    after:
+      - measure: "Houses built on small lots made possible by the lot-size reforms"
+        value: 80000
+        unit: "houses (nearly)"
+        period: "1998-2023"
+        source: mercatus_2023
+        note: "Cumulative; the method sits in the brief's endnotes, which were not read."
+    sources:
+      - id: mercatus_2023
+        citation: >-
+          Emily Hamilton (April 11, 2023), "Learning from Houston's Townhouse Reforms",
+          Mercatus Center policy brief
+        url: https://www.mercatus.org/research/policy-briefs/learning-houstons-townhouse-reforms
+        accessed: 2026-11-22
+        locator: "Introduction; 'Houston's minimum lot size reforms'"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Houston has no use zoning, so duplexes were always legal; the reform was about
+      lot size and fee-simple townhouses, over 25 years. Shows the long-run ceiling
+      of small-lot infill, not a five-year response. Two parking spaces per house
+      still applied.
+    used_for: [evidence_card]
+
+  ev.missing_middle.california_sb9_2022:
+    place: "California (13 jurisdictions surveyed)"
+    reform: missing_middle
+    entry_type: outcome
+    date_of_change: 2022-01-01
+    what_changed: >-
+      Senate Bill 9 (the HOME Act) lets owners split a single-family lot in two and
+      build up to two homes on each, by right, statewide.
+    before_note: "The law created a new permit type, so there is no earlier count."
+    after:
+      - measure: "Applications for SB 9 units"
+        value: 282
+        unit: "applications"
+        period: "2022-01 to 2022-11"
+        source: terner_sb9
+        note: "Sum over the 13 jurisdictions in the table; Los Angeles alone filed 211."
+      - measure: "Applications for SB 9 units approved"
+        value: 53
+        unit: "applications"
+        period: "2022-01 to 2022-11"
+        source: terner_sb9
+      - measure: "Applications for SB 9 lot splits"
+        value: 100
+        unit: "applications"
+        period: "2022-01 to 2022-11"
+        source: terner_sb9
+      - measure: "Lot splits approved"
+        value: 28
+        unit: "lot splits"
+        period: "2022-01 to 2022-11"
+        source: terner_sb9
+    sources:
+      - id: terner_sb9
+        citation: >-
+          David Garcia and Muhammad Alameldin (January 18, 2023), "California's HOME
+          Act Turns One: Data and Insights from the First Year of Senate Bill 9",
+          Terner Center for Housing Innovation, UC Berkeley
+        url: https://ternercenter.berkeley.edu/research-and-policy/sb-9-turns-one-applications/
+        accessed: 2026-11-22
+        locator: "Table 'SB 9 Applications Received and Approved through November, 2022'"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Totals summed here from the table's 13 rows. Very low early take-up: Los
+      Angeles permitted just under 20,000 homes in 2021 but saw 211 SB 9 unit
+      applications. The authors point to the time and cost of an SB 9 project and to
+      ADUs being easier. A hindcast target for the low end.
+    used_for: [hindcast, evidence_card]
+
+  ev.missing_middle.auckland_aup_2016:
+    place: "Auckland, New Zealand (metropolitan area)"
+    reform: missing_middle
+    entry_type: outcome
+    date_of_change: 2016-11
+    what_changed: >-
+      The Auckland Unitary Plan upzoned about three-quarters of residential land,
+      mostly to medium-density zones allowing up to three dwellings per parcel or
+      terraced housing and apartments.
+    before:
+      - measure: "Dwellings consented, whole region"
+        value: 9200
+        unit: "dwellings per year (about)"
+        period: "2015"
+        source: gmj_2023
+      - measure: "Dwellings consented in areas upzoned in 2016"
+        value: 4700
+        unit: "dwellings per year (about)"
+        period: "2015"
+        source: gmj_2023
+      - measure: "Dwellings consented in areas not upzoned"
+        value: 4500
+        unit: "dwellings per year (about)"
+        period: "2015"
+        source: gmj_2023
+    after:
+      - measure: "Dwellings consented, whole region"
+        value: 21000
+        unit: "dwellings per year (about)"
+        period: "2022"
+        source: gmj_2023
+      - measure: "Dwellings consented in upzoned areas"
+        value: 16600
+        unit: "dwellings per year (about)"
+        period: "2022"
+        source: gmj_2023
+      - measure: "Dwellings consented in areas not upzoned"
+        value: 4700
+        unit: "dwellings per year (about)"
+        period: "2022"
+        source: gmj_2023
+    sources:
+      - id: gmj_2023
+        citation: >-
+          Ryan Greenaway-McGrevy and James Allan Jones (December 2023), "Can zoning
+          reform change urban development patterns? Evidence from Auckland",
+          University of Auckland Economic Policy Centre Working Paper 012
+        url: https://www.auckland.ac.nz/assets/business/012WP.pdf
+        accessed: 2026-11-22
+        locator: "Section 4.2 'Consents' and Figure 3"
+        verification: primary_document
+      - id: gmp_2023
+        citation: >-
+          Ryan Greenaway-McGrevy and Peter C. B. Phillips (2023), "The impact of
+          upzoning on housing construction in Auckland", Journal of Urban Economics
+          136, 103555
+        url: https://doi.org/10.1016/j.jue.2023.103555
+        accessed: 2026-11-22
+        locator: "Abstract (read through the publisher's metadata)"
+        verification: abstract_only
+    verification: abstract_only
+    comparability: >-
+      The best-identified large upzoning: the published paper finds strong evidence
+      that upzoning raised construction, robust to large spillovers. But it is a
+      country with different building and finance rules, an active regional council,
+      and a construction boom. Counts are building consents (starts), close to U.S.
+      permits. A 21,800-dwelling figure seen in council summaries was not checked
+      against the paper and is left out.
+    used_for: [evidence_card]
+
+  # ================================================================= transit-oriented density (benchmark 3)
+
+  ev.tod.chicago_freemark:
+    place: "Chicago, Illinois (station areas)"
+    reform: tod
+    entry_type: outcome
+    date_of_change: 2013
+    what_changed: >-
+      City upzonings near transit raised allowed densities and cut parking
+      requirements (the transit-oriented development ordinances of 2013 and 2015).
+    before_note: >-
+      The study is a difference-in-differences test; the abstract reports effects,
+      not counts.
+    after:
+      - measure: "Effect on newly permitted dwellings over five years"
+        value: 0
+        unit: "units (no detectable effect)"
+        period: "about 2013-2018"
+        source: freemark_2020
+        note: "Property values on upzoned parcels and condo prices rose."
+    sources:
+      - id: freemark_2020
+        citation: >-
+          Yonah Freemark (2020), "Upzoning Chicago: Impacts of a Zoning Reform on
+          Property Values and Housing Construction", Urban Affairs Review 56(3), 758-789
+        url: https://doi.org/10.1177/1078087418824672
+        accessed: 2026-11-22
+        locator: "Abstract (read through the publisher's metadata)"
+        verification: abstract_only
+    verification: abstract_only
+    comparability: >-
+      Short-run, parcel-level effect: land prices respond before construction does.
+      Supports a slow ramp and a low share of upzoned capacity used within five
+      years. The ordinance years come from the paper's framing and were not checked
+      against the ordinance text.
+    used_for: [calibration, evidence_card]
+
+  ev.tod.california_sb79_2025:
+    place: "California (statewide)"
+    reform: tod
+    entry_type: rule
+    date_of_change: 2026-07-01
+    what_changed: >-
+      Senate Bill 79 (2025, chapter 512) makes housing of at least five units an
+      allowed use near transit-oriented development stops, with state floors on
+      height, density and floor area.
+    rule_summary: >-
+      A transit-oriented development stop is a major transit stop (Public Resources
+      Code 21064.3) served by heavy rail, commuter rail, light rail or bus rapid
+      transit-standard bus service in a county with more than 15 rail stations. The
+      zone is within one-half mile. Tier 1 (heavy rail or 72+ commuter trains a day):
+      no height limit under 75 ft and no density cap under 120 homes per acre within
+      one-quarter mile; 65 ft and 100 per acre from one-quarter to one-half mile.
+      Tier 2 (light rail, other commuter rail, qualifying bus): 65 ft and 100 per acre
+      within one-quarter mile; 55 ft and 80 per acre to one-half mile. The outer
+      ring applies in cities of at least 35,000 people. Projects need at least five
+      homes and 30 homes per acre. Major transit
+      stop, under 21064.3 as amended by AB 2553 (2024): an existing rail or bus rapid
+      transit station, a ferry terminal served by bus or rail, or the intersection
+      of two or more major bus routes every 20 minutes or less in the morning and
+      afternoon peaks.
+    sources:
+      - id: sb79
+        citation: >-
+          California Senate Bill 79 (Wiener), Chapter 512, Statutes of 2025, as
+          chaptered (copy published by the City of Pasadena with its May 18, 2026
+          agenda)
+        url: https://ww2.cityofpasadena.net/2026%20Agendas/May_18_26/AR%2014%20Attachment%20B%20-%20Adopted%20SB%2079%20bill%20text.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Government Code 65912.156 (m)-(r) and 65912.157(a)"
+        verification: primary_document
+      - id: hcd_ab2097
+        citation: >-
+          California Department of Housing and Community Development, "AB 2097
+          Technical Advisory" (quotes Public Resources Code 21064.3 after AB 2553)
+        url: https://www.hcd.ca.gov/sites/default/files/docs/policy-and-research/ab-2097-ta.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Section 2, table rows 3-4"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Justifies a half-mile rail standard with a quarter-mile inner ring, and a bus
+      threshold set by peak frequency. The bill text was read in a city-hosted copy
+      of the chaptered law because the legislature's site blocks scripted access.
+      The 2018 bill SB 827 used similar half-mile and quarter-mile rings but was not
+      re-read here.
+    used_for: [evidence_card]
+
+  # ================================================================= parking (benchmark 4)
+
+  ev.parking.buffalo_2017:
+    place: "Buffalo, New York (city)"
+    reform: parking
+    entry_type: outcome
+    date_of_change: 2017
+    what_changed: >-
+      The Green Code zoning reform removed minimum parking requirements citywide.
+    before_note: >-
+      The counterfactual is what the old minimums would have required for the same
+      36 projects.
+    after:
+      - measure: "Share of major developments with fewer spaces than the old minimum"
+        value: 0.47
+        unit: "share"
+        period: "2017-2019"
+        source: hess_rehler
+        note: "36 major developments in the first two years."
+      - measure: "Parking in mixed-use developments, below the old minimum"
+        value: 0.53
+        unit: "share fewer spaces"
+        period: "2017-2019"
+        source: hess_rehler
+        note: "Single-use projects in total built more than the old minimum."
+    sources:
+      - id: hess_rehler
+        citation: >-
+          Daniel Baldwin Hess and Jeffrey Rehler (2021), "Minus Minimums: Development
+          Response to the Removal of Minimum Parking Requirements in Buffalo (NY)",
+          Journal of the American Planning Association 87(3), 396-408
+        url: https://doi.org/10.1080/01944363.2020.1864225
+        accessed: 2026-11-22
+        locator: "Abstract (as listed on the RePEc record of the article)"
+        verification: abstract_only
+    verification: abstract_only
+    comparability: >-
+      A shrinking, low-rent city like many in Pennsylvania. Developers still built a
+      lot of parking: about half kept to the old minimum or above. Supports a high
+      "share still built" outside transit-rich places.
+    used_for: [calibration, evidence_card]
+
+  ev.parking.seattle_2012:
+    place: "Seattle, Washington (urban centers, urban villages, frequent-transit corridors)"
+    reform: parking
+    entry_type: outcome
+    date_of_change: 2012
+    what_changed: >-
+      Removed multifamily parking minimums in urban centers and in urban villages
+      within a quarter mile of frequent transit, and halved them along frequent
+      transit corridors.
+    before_note: >-
+      The counterfactual is the pre-2012 rule of at least one space per home for the
+      same projects.
+    after:
+      - measure: "Parking built, below what the old rules required"
+        value: 0.40
+        unit: "share fewer spaces"
+        period: "2012-06 to 2017-10"
+        source: gabbe_2020
+        note: "In the reformed areas; 868 developments with 60,361 homes."
+      - measure: "Parking spaces not built"
+        value: 18000
+        unit: "spaces (almost)"
+        period: "2012-06 to 2017-10"
+        source: gabbe_2020
+        note: "Across 26,300 homes in the reformed areas."
+      - measure: "Parking per home, areas with no requirement"
+        value: 0.49
+        unit: "spaces per unit"
+        period: "2012-06 to 2017-10"
+        source: gabbe_2020
+      - measure: "Parking per home, areas with reduced requirements"
+        value: 0.91
+        unit: "spaces per unit"
+        period: "2012-06 to 2017-10"
+        source: gabbe_2020
+      - measure: "Construction cost avoided"
+        value: 537000000
+        unit: "$ (at $30,000 per space)"
+        period: "2012-06 to 2017-10"
+        source: gabbe_2020
+    sources:
+      - id: gabbe_2020
+        citation: >-
+          C.J. Gabbe, Gregory Pierce and Gordon Clowers (2020), "Parking policy: The
+          effects of residential minimum parking requirements in Seattle", Land Use
+          Policy 91, 104053; and the authors' summary "How Developers Respond to
+          Parking Reform", Transfers Magazine, Fall 2020
+        url: https://transfersmagazine.org/magazine-article/issue-6/how-developers-respond-to-parking-reform/
+        accessed: 2026-11-22
+        locator: "'Quantifying Effects of Parking Requirements'; matches the paper's abstract"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Large multifamily projects in a high-demand, transit-rich city. Even where no
+      parking was required, 70% of projects built some. The best anchor for the share
+      still built in transit-rich places; probably too low for car-dependent places.
+    used_for: [calibration, evidence_card]
+
+  ev.parking.california_ab2097_2023:
+    place: "California (statewide)"
+    reform: parking
+    entry_type: rule
+    date_of_change: 2023-01-01
+    what_changed: >-
+      Assembly Bill 2097 (2022) bars public agencies from imposing minimum parking
+      requirements on most development within one-half mile of a major transit stop.
+    rule_summary: >-
+      No minimum parking for residential, commercial or other development within
+      one-half mile of a major transit stop, with listed exceptions. AB 2553 (2024)
+      widened "major transit stop" to bus intersections served every 20 minutes or
+      less at peak, from January 1, 2025.
+    sources:
+      - id: hcd_ab2097
+        citation: >-
+          California Department of Housing and Community Development, "AB 2097
+          Technical Advisory"
+        url: https://www.hcd.ca.gov/sites/default/files/docs/policy-and-research/ab-2097-ta.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Section 1 and Section 2, table rows 1-4"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      A statewide half-mile rule tied to transit, the same distance the model uses
+      for transit-rich places. No outcome count is recorded.
+    used_for: [evidence_card]
+
+  ev.parking.ucla_cost_per_space_2026:
+    place: "United States (17 cities)"
+    reform: parking
+    entry_type: cross_section
+    date_of_change: 2026-02
+    what_changed: >-
+      Not a reform: construction cost per structured parking space from 2025 cost
+      data, excluding land.
+    findings:
+      - measure: "Construction cost per underground space, average"
+        value: 73000
+        unit: "$/space (2025, excluding land)"
+        period: "2025"
+        source: ucla_its
+        note: "Range $40,000 (Washington, D.C.) to $111,000 (Portland, Oregon)."
+      - measure: "Construction cost per above-ground structured space, average"
+        value: 52000
+        unit: "$/space (2025, excluding land)"
+        period: "2025"
+        source: ucla_its
+        note: "Range $29,000 (Phoenix; Washington, D.C.) to $99,000 (Portland, Oregon)."
+      - measure: "Parking cost added per apartment by required parking"
+        value: 50000
+        unit: "$/unit (low end of $50,000-$100,000)"
+        period: "2025"
+        source: ucla_its
+    sources:
+      - id: ucla_its
+        citation: >-
+          UCLA Institute of Transportation Studies (February 19, 2026), "New report:
+          No such thing as free parking", using Rider Levett Bucknall 2025 cost data
+        url: https://www.its.ucla.edu/2026/02/19/no-such-thing-as-free-parking  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "Key Findings"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Big-city construction costs; Pennsylvania's are likely lower, and the 17 cities
+      include none in Pennsylvania. Surface parking is not covered.
+    used_for: [calibration]
+
+  # ================================================================= fees (benchmark 5)
+
+  ev.fees.florida_incidence:
+    place: "Florida (Dade County; 61 counties)"
+    reform: fees
+    entry_type: cross_section
+    date_of_change: 1985
+    what_changed: >-
+      Not one reform: county impact fees introduced and raised over time, used to
+      measure who bears them.
+    findings:
+      - measure: "Impact fee for a typical single-family home, Dade County"
+        value: 5239
+        unit: "$/home"
+        period: "2000"
+        source: burge_2012
+        note: "Rose from $0 in 1985 through eight increases (as reported by Burge)."
+      - measure: "Fall in residential lot price per $1,000 of impact fee, Dade County"
+        value: 1000
+        unit: "$ per $1,000 of fee"
+        period: "1985-2000"
+        source: burge_2012
+        note: "Land fell by about the size of the fee, while new and existing home prices rose by more than the fee."
+      - measure: "Fall in residential lot price per $1,000 of impact fee, 43 Texas cities"
+        value: 114
+        unit: "$ per $1,000 of fee"
+        period: "cross-section"
+        source: burge_2012
+    sources:
+      - id: burge_2012
+        citation: >-
+          Gregory S. Burge (2012), "The Capitalization Effects of Development Impact
+          Fees: Commercial and Residential Land Values", Lincoln Institute of Land
+          Policy Working Paper WP12GB1; reviews Ihlanfeldt and Shaughnessy (2004),
+          Regional Science and Urban Economics 34(6), 639-661, and Evans-Cowley et al.
+          (2005)
+        url: https://www.lincolninst.edu/app/uploads/2024/04/2134_1456_Burge_WP12GB1.pdf  # secret-scan: allow (public web address)
+        accessed: 2026-11-22
+        locator: "'Impact Fees and Land Prices: Current Evidence', pages 5-6; Conclusion"
+        verification: secondary_summary
+    verification: secondary_summary
+    comparability: >-
+      The Dade County and Texas figures are as reported by Burge; the original papers
+      were not read. Burge's own 61-county panel finds the land-price effect only in
+      within-place changes over time, mainly for water and sewer fees and in rural
+      areas, and not for residential fees in metropolitan areas. The evidence is
+      mixed, which is why the fee pass-through range stays wide.
+    used_for: [calibration, evidence_card]
+
+  ev.fees.pa_mpc_article_va:
+    place: "Pennsylvania (municipalities other than counties)"
+    reform: fees
+    entry_type: rule
+    date_of_change: 1990-12-19
+    what_changed: >-
+      Act 209 of 1990 added Article V-A (Municipal Capital Improvement) to the
+      Municipalities Planning Code.
+    rule_summary: >-
+      A municipality with a comprehensive plan, subdivision ordinance and zoning
+      ordinance may adopt an impact-fee ordinance, but only for offsite public
+      transportation capital improvements. Section 503-A(b) bars any other offsite
+      improvement, exaction, connection, tapping or similar fee as a condition of
+      approval unless an act authorizes it. Fees may be credited up to 100% for
+      affordable housing.
+    sources:
+      - id: pa_mpc
+        citation: >-
+          Pennsylvania Municipalities Planning Code, Act of July 31, 1968, P.L. 805,
+          No. 247, as amended; Article V-A, Sections 501-A and 503-A (official text,
+          Pennsylvania General Assembly)
+        url: https://www.legis.state.pa.us/WU01/LI/LI/US/PDF/1968/0/0247..PDF
+        accessed: 2026-11-22
+        locator: "Article V-A, Sections 501-A and 503-A"
+        verification: primary_document
+    verification: primary_document
+    comparability: >-
+      Pennsylvania's general impact-fee power covers roads only, so the Handbook's
+      $50,000 per unit is far above what most Pennsylvania towns can charge as impact
+      fees. Tapping and connection fees set under other laws, and park fees in lieu
+      under the code's subdivision article, were not reviewed here.
+    used_for: [evidence_card]

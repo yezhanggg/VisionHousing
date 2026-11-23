@@ -1,0 +1,190 @@
+# VisionHousing scenarios.
+#
+# The baseline and the five benchmark reforms use the Challenge Handbook's exact
+# wording ("handbook_text"). Two Pennsylvania scenarios model bills before the
+# General Assembly. "overrides" changes ledger values (assumptions/parameters.yaml)
+# for that scenario only; every id is checked against the ledger on load.
+#
+# building_types names the kinds of existing lots a reform reaches:
+#   sf_detached   single-family detached home
+#   sf_attached   semi-detached or row (townhouse) home
+#   two_to_four   building with two to four homes
+#   five_plus     building with five or more homes
+
+_sources:
+  - &handbook
+    id: handbook_benchmarks
+    citation: >-
+      Housing Data and Technology Innovation Challenge, Participant Handbook,
+      "Benchmark Policy Scenarios" and "The five scenarios"
+    url: https://housingchallenge.turnout.rocks/handbook.html
+    accessed: 2026-11-22
+  - &hb2186
+    id: pa_hb2186_pn3373
+    citation: >-
+      Pennsylvania House Bill 2186 of the 2025-2026 session, printer's number 3373
+      (adds 53 Pa.C.S. Chapter 63, accessory dwelling units), sections 6302 and 6305;
+      passed the House 139-62 on June 1, 2026; referred to Senate Urban Affairs and
+      Housing on June 5, 2026
+    url: https://www.palegis.us/legislation/bills/2025/hb2186
+    accessed: 2026-11-22
+  - &hb2186_text
+    id: pa_hb2186_pn3373_text
+    citation: "Text of House Bill 2186, printer's number 3373"
+    url: https://www.palegis.us/legislation/bills/text/HTM/2025/0/HB2186/PN3373  # secret-scan: allow (public web address)
+    accessed: 2026-11-22
+  - &sb1346
+    id: pa_sb1346_pn1747
+    citation: >-
+      Pennsylvania Senate Bill 1346 of the 2025-2026 session, printer's number 1747
+      (amends the Municipalities Planning Code, adds section 603.2); referred May 26,
+      2026; reported as committed July 12, 2026; laid on the table Nov 17, 2026
+    url: https://www.palegis.us/legislation/bills/2025/sb1346
+    accessed: 2026-11-22
+  - &sb1346_text
+    id: pa_sb1346_pn1747_text
+    citation: "Text of Senate Bill 1346, printer's number 1747, section 603.2(a) and (k)"
+    url: https://www.palegis.us/legislation/bills/text/HTM/2025/0/SB1346/PN1747  # secret-scan: allow (public web address)
+    accessed: 2026-11-22
+  - &mpc_scope
+    id: pa_mpc_section_107
+    citation: >-
+      Pennsylvania Municipalities Planning Code, Act of July 31, 1968, P.L. 805,
+      No. 247, section 107 (definition of "municipality"), which does not include
+      cities of the first class (Philadelphia) or second class (Pittsburgh)
+
+scenarios:
+
+  baseline:
+    title: "Baseline"
+    kind: baseline
+    priority: must
+    handbook_text: >-
+      Housing production under the current regulatory and economic environment,
+      with no policy changes.
+    description: "Today's rules and economics, projected from recent building permits."
+    reforms: []
+    source: [*handbook]
+
+  adu:
+    title: "Accessory dwelling units"
+    kind: benchmark
+    priority: must
+    handbook_text: >-
+      Model the effect of allowing one ADU on parcels with existing single-family
+      buildings. Assume detached and semi-detached ADUs of at least 600 square feet
+      are allowed, and no additional parking is required.
+    description: >-
+      One ADU of at least 600 sq ft on every lot with a single-family home, with no
+      added parking.
+    reforms: [adu]
+    building_types: [sf_detached, sf_attached]
+    source: [*handbook]
+    notes:
+      - "Attached single-family lots are included at a much lower physical fit."
+
+  missing_middle:
+    title: "Missing middle"
+    kind: benchmark
+    priority: should
+    handbook_text: >-
+      Model the effect of allowing 2–6 dwelling units on parcels currently
+      restricted to single-family use, with building heights up to three stories.
+      This scenario reflects the “gentle density” reforms (e.g., townhouses,
+      2–6-unit multifamily buildings) advancing across states and cities
+      nationwide. Teams may assume that setback and lot coverage requirements do
+      not constrain the development of 2–6 units on a parcel currently restricted
+      to single-family use.
+    description: "Two to six homes, up to three storeys, on lots now zoned for one home."
+    reforms: [missing_middle]
+    building_types: [sf_detached]
+    source: [*handbook]
+    notes:
+      - "Setbacks and lot coverage are assumed not to bind, as the Handbook allows."
+
+  tod:
+    title: "Transit-oriented density"
+    kind: benchmark
+    priority: could
+    handbook_text: >-
+      Model the effect of increasing allowable residential density near major
+      transit stops through higher building heights and/or increased floor area
+      ratios. Teams should define major transit stops and justify their transit
+      proximity threshold. Teams may assume that parking requirements are reduced
+      or eliminated.
+    description: >-
+      More height and floor area near major transit stops (decision D-07 defines the
+      stops and distances), with reduced parking.
+    reforms: [tod, parking]
+    source: [*handbook]
+    notes:
+      - "Transit-specific ledger entries are added when this scenario is built."
+
+  parking:
+    title: "Parking requirement reduction"
+    kind: benchmark
+    priority: must
+    handbook_text: >-
+      Model the effects of reducing or eliminating minimum parking requirements for
+      new residential development. Specify assumptions about developer-provided
+      parking in the absence of mandates.
+    description: >-
+      Residential parking minimums removed. Developers still build about 60% of
+      the old requirement near frequent transit and 85-100% elsewhere.
+    reforms: [parking]
+    source: [*handbook]
+
+  fees:
+    title: "Development fee reduction"
+    kind: benchmark
+    priority: must
+    handbook_text: >-
+      Model the effect of reducing total development fees (planning, environmental
+      review, building, and impact fees) by 50% across all major fee categories. For
+      comparability across submissions, Teams should assume development fees total
+      $50,000 per unit across all major fee categories.
+    description: "Fees cut by half, from $50,000 to $25,000 per unit."
+    reforms: [fees]
+    source: [*handbook]
+
+  pa_hb2186:
+    title: "Pennsylvania HB 2186: one ADU by right on any residential lot"
+    kind: state
+    priority: should
+    description: >-
+      One ADU by right on every lot where a residential building is permitted, in
+      every municipality with zoning, including Philadelphia and Pittsburgh. No
+      added parking; towns may not require owner occupancy.
+    reforms: [adu]
+    building_types: [sf_detached, sf_attached, two_to_four]
+    source: [*hb2186, *hb2186_text]
+    notes:
+      - "Section 6302: permitted use by right, one ADU per lot or parcel, wherever a residential building is permitted."
+      - "Section 6305: towns may not require more than 200 sq ft minimum, nor cap size below the lesser of 850 sq ft or 50% of the house."
+      - "Lots with five or more homes are left out; an ADU rarely fits on them."
+      - "The modelled ADU keeps the benchmark size, so the gap to the benchmark comes from eligibility."
+      - "Not law. Re-check the bill's status after the session ends on Nov 30, 2026."
+
+  pa_sb1346:
+    title: "Pennsylvania SB 1346: ADUs on single-family detached lots outside Philadelphia and Pittsburgh"
+    kind: state
+    priority: should
+    description: >-
+      Every municipality under the Municipalities Planning Code must permit at
+      least one ADU for each single-family detached home. The Code does not reach
+      Philadelphia or Pittsburgh, so both keep today's rules. An ADU may not be
+      treated as a new use for utility connection fees.
+    reforms: [adu]
+    building_types: [sf_detached]
+    excluded_places:
+      - name: "Philadelphia"
+        reason: "City of the first class; outside the Municipalities Planning Code."
+      - name: "Pittsburgh"
+        reason: "City of the second class; outside the Municipalities Planning Code."
+    overrides:
+      adu.utility_connection_fee: 0
+    source: [*sb1346, *sb1346_text, *mpc_scope]
+    notes:
+      - "Section 603.2(a): at least one ADU for each single-family detached dwelling unit."
+      - "Section 603.2(k): an ADU is not a new residential use for connection fees or capacity charges."
+      - "Not law. Laid on the table on Nov 17, 2026; re-check after the session ends on Nov 30, 2026."

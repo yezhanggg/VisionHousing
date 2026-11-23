@@ -1,0 +1,12 @@
+VisionHousing
+Copyright 2026 The VisionHousing team
+
+This product is licensed under the Apache License, Version 2.0 (see LICENSE).
+
+Third-party software is used only as declared dependencies, each under a
+permissive licence. They are listed, with their licences, by
+`scripts/licence_audit.py`. No third-party source code is included in this
+repository.
+
+Data used by the tool is fetched at run time from its official public source
+and is not redistributed in this repository.

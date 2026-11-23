@@ -1,0 +1,91 @@
+# What this cannot tell you.
+#
+# Plain statements of what each estimate leaves out, shown on the Reform screen,
+# in the brief and on the closing slide. Read by visionhousing.explain.limits.
+#
+# Rules for this file:
+#   - Plain words, short sentences, one idea per line.
+#   - No figures: every number a reader sees comes from the engine. A test fails
+#     if a digit appears here.
+#   - "extends" repeats another entry's lines first (the Pennsylvania bills are
+#     ADU reforms, so they carry the ADU limits too).
+#
+# Keys are reform keys from the engine registry, plus "baseline", "package" and
+# "general" (shown once per brief).
+
+version: 1
+
+limits:
+
+  general:
+    title: "What these estimates cannot tell you"
+    items:
+      - "These are likely ranges of building permits, not a forecast of homes finished."
+      - "They describe the whole state. They do not say which lots, streets or owners would build."
+      - "They do not say who would live in the new homes or what they would pay."
+      - "They assume every town follows the new rule from the first day and approves permits at today's pace."
+      - "They say nothing about years after the five-year period."
+
+  baseline:
+    title: "The baseline"
+    items:
+      - "The baseline repeats recent permit trends under today's rules. It does not predict a recession or a boom."
+      - "Counties without a permit office, or with imputed permit counts, carry the Census Bureau's estimates."
+
+  package:
+    title: "Reforms together"
+    items:
+      - "A lot is counted once. When two reforms could use the same lot, the overlap is taken out."
+      - "Savings from one reform that feed another are added; the small cross effect between the fee cut and parking reform is left out."
+
+  adu:
+    title: "Accessory dwelling units"
+    items:
+      - "Whether an ADU fits on a given lot: the fit test is a share for each census tract, not a site plan."
+      - "Septic limits, steep slopes, flood zones, historic districts and private deed rules, none of which are in the fit test."
+      - "Whether towns slow approvals or add new hurdles."
+      - "How quickly owners take up the new right. This is the widest assumption and is not yet checked against places like this state."
+
+  missing_middle:
+    title: "Missing middle"
+    items:
+      - "For-sale townhouses and condominiums: every new building is valued as a rental."
+      - "Which lots sit side by side, or which owners would sell."
+      - "The real price of a house bought to be torn down; census home values are owners' own estimates."
+      - "Local zoning detail: the share of lots zoned for one home only is a statewide range."
+      - "Lending and building-code rules for the larger buildings in this range."
+
+  parking:
+    title: "Parking requirement reduction"
+    items:
+      - "Whether lenders in a given market would finance buildings with fewer spaces."
+      - "Effects on street parking and on neighbours."
+      - "Whether land freed from parking becomes homes or something else."
+      - "Savings on townhouses, which the permit data count together with detached homes."
+
+  fees:
+    title: "Development fee reduction"
+    items:
+      - "Whether towns would replace lost fee revenue with other charges."
+      - "Whether roads, pipes or schools paid for by fees would be delayed, which could slow building."
+      - "How the saving is shared between landowners, builders and buyers in any one place."
+
+  tod:
+    title: "Transit-oriented density"
+    items:
+      - "Whether transit service near the stops will keep its current frequency."
+      - "Which station areas have land that could be rebuilt."
+
+  pa_hb2186:
+    title: "The Pennsylvania House ADU bill"
+    extends: adu
+    items:
+      - "The bill is not law. The estimate assumes it passes as written and applies from the start of the period."
+      - "Whether owners of two- to four-home buildings would add a unit as often as owners of single-family homes."
+
+  pa_sb1346:
+    title: "The Pennsylvania Senate ADU bill"
+    extends: adu
+    items:
+      - "The bill is not law. The estimate assumes it passes as written and applies from the start of the period."
+      - "Philadelphia and Pittsburgh are outside the Municipalities Planning Code, so the bill leaves their rules as they are."

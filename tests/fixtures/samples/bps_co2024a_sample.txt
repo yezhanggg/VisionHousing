@@ -1,0 +1,6 @@
+Survey,FIPS,FIPS,Region,Division,County,,1-unit,,,2-units,,,3-4 units,,,5+ units,,,1-unit rep,,,2-units rep,,,3-4 units rep,,, 5+units rep
+Date,State,County,Code,Code,Name,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value,Bldgs,Units,Value
+ 
+2024,01,001,3,6,Autauga County                ,221,221,82537210,0,0,0,0,0,0,0,0,0,221,221,82537210,0,0,0,0,0,0,0,0,0
+2024,42,001,1,2,Adams County                  ,403,403,135442780,0,0,0,0,0,0,0,0,0,403,403,135442780,0,0,0,0,0,0,0,0,0
+2024,42,003,1,2,Allegheny County              ,1356,1356,462467874,9,18,3183700,6,22,3893463,16,1603,145750839,1110,1110,375561499,9,18,3183700,6,22,3893463,15,1580,143087681

@@ -1,0 +1,16 @@
+version: 2
+updates:
+  - package-ecosystem: pip   # reads pyproject.toml and uv.lock
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: npm   # browser libraries pinned in web/package.json + lockfile
+    directory: "/web"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly

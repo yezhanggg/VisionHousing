@@ -1,0 +1,150 @@
+# Calibration table: physical fit share f for the ADU reform.
+#
+# The share of existing lots with room for one 600 sq ft detached ADU, by the
+# kind of home already on the lot and by the tract's area type. This file holds
+# aggregated shares only. No lot-level data, imagery or image model is part of
+# the product (decision D-19).
+#
+# Each cell has a central value, a likely low and high, and a "basis":
+#   measured          read directly from the lot samples described below
+#   partly_measured   measured in a few places, stretched to the whole class
+#   extrapolated      not measured; reasoned from the measured cells
+#
+# The engine draws one "position in the range" per Monte Carlo draw (ledger
+# parameter adu.fit_range_position, -1 = every cell at its low, 0 = central,
+# +1 = high) and applies it to every cell. Cells move together, which keeps the
+# statewide range honest rather than letting tract errors cancel out.
+#
+# Read by visionhousing.scenarios.adu.load_fit_table; see docs/methods/adu.md.
+
+version: 1
+id: adu_fit_pa_2026_11
+label: "Share of lots with room for a 600 sq ft detached ADU"
+unit: share
+footprint: "600 sq ft, tested as a 20 x 30 ft rectangle"
+setbacks: "4 ft from side and rear lot lines, 10 ft from the house, 5 ft from garages"
+
+provenance:
+  summary: >-
+    Measured on samples of single-family lots in two Pennsylvania counties from
+    2022 USDA NAIP aerial imagery, Microsoft building footprints, and county
+    parcel layers; method: open-space test for a 20 x 30 ft footprint after
+    setbacks.
+  samples:
+    - place: "Philadelphia (Philadelphia County)"
+      lots: 459998
+      note: "Every 1-4 unit lot in the city; mostly rowhouses."
+    - place: "Pittsburgh (Allegheny County)"
+      lots: 92081
+      note: "Every 1-4 unit lot in the city; mostly detached homes."
+    - place: "Towns in Lehigh, Montgomery, Chester and Centre counties"
+      lots: 73608
+      note: >-
+        Allentown and nine smaller boroughs and townships. Results are for all
+        1-4 unit lots together (mostly detached), not split by building type.
+  method: >-
+    For each lot, the lot outline (from the parcel layer) and the building
+    outlines (from the footprint layer) are combined. The side and rear setbacks
+    and the distances from the house and garages are removed. The lot counts as
+    a fit when the remaining open ground holds a 20 x 30 ft rectangle. The fit
+    test itself uses lot lines and building outlines; the 2022 aerial imagery
+    was used only to review results. Only the shares by building type and place
+    are kept.
+  sources:
+    - id: usda_naip_2022
+      citation: "U.S. Department of Agriculture, National Agriculture Imagery Program (NAIP), Pennsylvania, 2022"
+      url: https://naip-usdaonline.hub.arcgis.com/
+      licence: "Public domain (U.S. government work)"
+    - id: microsoft_building_footprints
+      citation: "Microsoft, US Building Footprints"
+      url: https://github.com/microsoft/USBuildingFootprints
+      licence: "ODbL 1.0; the shares here are a produced work and are attributed"
+    - id: county_parcel_layers
+      citation: "Parcel layers published by the City of Philadelphia, Allegheny County and four further Pennsylvania counties"
+      licence: "Varies by county; several state no licence. Only aggregate shares are used."
+  measured_on: 2026-11-18
+  limits:
+    - "No hand-checked accuracy yet: a 250-lot check was drawn and not yet labelled."
+    - "About 1 lot in 10 has low-confidence lot lines."
+    - "Footprints miss small sheds (under about 400 sq ft), which slightly overstates fit."
+    - "Suburban and rural cells are mostly extrapolation from city neighbourhoods and a few towns."
+    - "Slope, flood zones, septic fields and trees do not change the fit answer."
+
+# Building types follow assumptions/scenarios.yaml:
+#   sf_detached   single-family detached home (ACS B25024 "1, detached")
+#   sf_attached   semi-detached or row home (ACS B25024 "1, attached")
+#   two_to_four   building with 2 to 4 homes (ACS B25024 "2" and "3 or 4")
+cells:
+  sf_detached:
+    urban:
+      central: 0.54
+      low: 0.45
+      high: 0.62
+      basis: measured
+      evidence: >-
+        0.536 in both measured cities (26,949 detached lots in Philadelphia,
+        64,578 in Pittsburgh). The range allows for the missing accuracy check
+        and low-confidence lot lines.
+    suburban:
+      central: 0.75
+      low: 0.55
+      high: 0.90
+      basis: partly_measured
+      evidence: >-
+        The town samples, mostly detached homes, give 0.59 to 0.87 by county
+        group (0.41 to 0.90 by town) with all 1-4 unit lots pooled. Suburban
+        lots are larger than city lots. Stretched to every suburban tract.
+    rural:
+      central: 0.75
+      low: 0.50
+      high: 0.95
+      basis: extrapolated
+      evidence: >-
+        Not measured. Rural lots are larger still, but driveways, wells, septic
+        fields and slopes take room the test cannot see. Widest range in the table.
+  sf_attached:
+    urban:
+      central: 0.08
+      low: 0.03
+      high: 0.20
+      basis: measured
+      evidence: >-
+        Semi-detached and row lots pooled: 0.043 in Philadelphia (semi 0.18 on
+        65,806 lots, row 0.016 on 329,279) and 0.19 in Pittsburgh (semi 0.29 on
+        5,976, row 0.14 on 10,825). The range spans the two cities.
+    suburban:
+      central: 0.10
+      low: 0.02
+      high: 0.30
+      basis: extrapolated
+      evidence: >-
+        Not measured. Suburban townhouse lots have short rear yards, often under
+        shared rules; set near the urban value with a wider range.
+    rural:
+      central: 0.15
+      low: 0.03
+      high: 0.35
+      basis: extrapolated
+      evidence: "Not measured. Few attached homes; larger yards assumed; wide range."
+  two_to_four:
+    urban:
+      central: 0.15
+      low: 0.08
+      high: 0.42
+      basis: measured
+      evidence: >-
+        0.087 in Philadelphia (37,964 lots) and 0.41 in Pittsburgh (two-, three-
+        and four-family lots pooled, 10,702 lots). Central weighted toward the
+        larger sample; the range spans both cities.
+    suburban:
+      central: 0.30
+      low: 0.10
+      high: 0.55
+      basis: extrapolated
+      evidence: "Not measured. Suburban converted houses sit on larger lots than city ones."
+    rural:
+      central: 0.35
+      low: 0.10
+      high: 0.60
+      basis: extrapolated
+      evidence: "Not measured. Few such buildings; wide range."

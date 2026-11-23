@@ -1,0 +1,119 @@
+# Calibration table: share of Pennsylvania lots where an ADU is already
+# effectively legal today, and the place scope of the Pennsylvania bills.
+#
+# Lots where an ADU is already allowed by right add nothing under a reform, so
+# the eligible count E is reduced by this share. It is measured as a share of
+# residents, because town ADU rules were read town by town and weighted by the
+# 2020 Census population. About half of the state's residents live in places
+# whose rule has not been read; that unknown half sets the range.
+#
+# The engine turns this into an override of the ledger parameter
+# adu.already_legal_share for Pennsylvania runs
+# (visionhousing.scenarios.adu.legal_share_override). Other states keep the
+# ledger's national default.
+#
+# Read by visionhousing.scenarios.adu.load_legal_share; see docs/methods/adu.md.
+
+version: 1
+id: adu_legal_share_pa_2026_11
+state: PA
+parameter: adu.already_legal_share
+unit: "share of residents"
+
+provenance:
+  summary: >-
+    ADU status read from the zoning ordinances of 221 Pennsylvania towns and the
+    two large cities (each with its code section and the date it was read),
+    weighted by 2020 Census population; places without zoning from the
+    Pennsylvania DCED Municipal Statistics filing.
+  read_between: "2026-11-10 to 2026-11-22"
+  sources:
+    - id: pa_town_zoning_codes
+      citation: >-
+        Zoning ordinances of 221 Pennsylvania municipalities, accessory-dwelling
+        sections, read from each municipality's published code
+    - id: pittsburgh_ord_31_2026
+      citation: >-
+        City of Pittsburgh, Ordinance 31 of 2026 (Bill 2025-1545), signed
+        Oct 29, 2026: accessory dwelling units by right citywide
+    - id: philadelphia_code_14_604
+      citation: "Philadelphia Code section 14-604(11), accessory dwelling units"
+    - id: pa_dced_munstats
+      citation: >-
+        Pennsylvania Department of Community and Economic Development,
+        Municipal Statistics, land-use ordinance fields (municipalities with no
+        zoning ordinance)
+      url: https://apps.dced.pa.gov/Munstats-public/
+    - id: census_2020_pl
+      citation: "U.S. Census Bureau, 2020 Census Redistricting Data (P.L. 94-171), population by municipality"
+      url: https://www.census.gov/programs-surveys/decennial-census/about/rdo/summary-files.html
+
+# Population counts, 2020 Census.
+population:
+  pennsylvania: 13002700
+  read_places: 6568132          # 221 towns plus the two cities: 50.5% of residents
+  philadelphia: 1603797         # ADU legal on about 1% of lots, never a new detached unit
+  pittsburgh: 302971            # by right citywide since Oct 29, 2026
+
+# Residents of the 221 read towns (cities excluded), by status of the ADU rule.
+read_towns_by_status:
+  not_addressed: 1840732
+  family_only: 1466653
+  by_right: 846653
+  special_exception: 215156
+  conversion_only: 117124
+  conditional_use: 59552
+  prohibited: 95112
+
+shares:
+  known_by_right: 0.088         # (846,653 + 302,971) / 13,002,700
+  no_zoning: 0.050              # residents of the 527 places with no zoning ordinance
+  unknown: 0.445                # not read and not a no-zoning place
+  by_right_rate_in_read_towns: 0.182   # 846,653 / 4,661,364 residents of the read towns
+
+# The range written into the ledger for Pennsylvania.
+range:
+  low: 0.09
+  central: 0.15
+  high: 0.22
+  shape: pert
+  how:
+    low: >-
+      Only the places read as by right count (0.088, rounded up). No-zoning
+      places and the unknown half are assumed to have no effectively legal ADUs.
+    central: >-
+      Known by right (0.088), plus half of the no-zoning places (0.025: no zoning
+      ordinance bars an ADU, but sewage and building rules still can), plus the
+      unknown residents at half the by-right rate seen in read towns
+      (0.445 x 0.182 / 2 = 0.040). The read towns are larger and have newer
+      codes, so the unknown places are assumed to be less permissive.
+      0.088 + 0.025 + 0.040 = 0.153, rounded to 0.15.
+    high: >-
+      Known by right (0.088), plus every no-zoning place (0.050), plus the
+      unknown residents at the full read-town rate (0.445 x 0.182 = 0.081).
+      0.088 + 0.050 + 0.081 = 0.219, rounded to 0.22.
+
+limits:
+  - "77 of the 221 town readings are drafts not yet checked by a second reading."
+  - "A share of residents is used as a share of lots; towns with larger lots are under-weighted."
+  - "One statewide share is applied to every tract. A place-by-place mask needs the tract-to-municipality split (task P4-08)."
+  - "Philadelphia and Pittsburgh are inside the share; the SB 1346 exclusion of both is applied separately (place_scope below)."
+
+# Places the Pennsylvania bills treat differently, mapped to tracts.
+# A county code with tract_share 1.0 means every tract in that county.
+# A tract_share_parameter names the ledger entry giving the share of the
+# county's eligible lots that lie inside the place.
+place_scope:
+  Philadelphia:
+    county: "42101"
+    tract_share: 1.0
+    note: "The city and the county are the same area."
+  Pittsburgh:
+    county: "42003"
+    tract_share_parameter: adu.pittsburgh_share_of_allegheny_lots
+    note: >-
+      FLAGGED STUB. Pittsburgh is a city inside Allegheny County, not a county.
+      Until the tract-to-municipality split is built from the Census block
+      assignment file (task P4-08), the exclusion removes a documented share of
+      every Allegheny County tract's eligible lots instead of the city's own
+      tracts.

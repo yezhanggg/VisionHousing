@@ -1,0 +1,79 @@
+[project]
+name = "visionhousing"
+version = "0.1.0"
+description = "Open-source tool that estimates how state housing-policy reforms change five-year housing production, shown as likely ranges."
+readme = "README.md"
+license = "Apache-2.0"
+license-files = ["LICENSE", "NOTICE"]
+requires-python = ">=3.12,<3.13"
+authors = [{ name = "VisionHousing team" }]
+# Run-time dependencies (ULTIMATE_PLAN 6.4 "Run time"). Core installs only, no extras.
+dependencies = [
+    "numpy>=2.1",
+    "pandas>=2.2",
+    "pyyaml>=6.0",
+    "pydantic>=2.9",
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+    "truststore>=0.10",
+]
+
+[project.scripts]
+visionhousing = "visionhousing.cli:main"
+
+[dependency-groups]
+# Data build: pure-Python shapefile reader.
+build = ["pyshp>=2.3"]
+# Development. The licence lister is scripts/licence_audit.py (standard library only).
+dev = ["pytest>=8.3", "ruff>=0.8", "playwright>=1.48"]
+
+[tool.uv]
+default-groups = ["build", "dev"]
+
+[build-system]
+requires = ["uv_build>=0.8.17,<0.9"]
+build-backend = "uv_build"
+
+[tool.uv.build-backend]
+module-name = "visionhousing"
+module-root = "src"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["scripts"]
+addopts = "-ra --strict-markers"
+markers = ["realdata: runs against the live published files; excluded from make test, run with make test-realdata"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py312"
+src = ["src", "scripts", "tests"]
+
+[tool.ruff.lint]
+select = [
+    "E", "W", "F",  # pycodestyle and pyflakes
+    "I",            # import order
+    "B",            # likely bugs
+    "UP",           # modern syntax
+    "S",            # security (bandit rules)
+    "D",            # docstrings
+    "N",            # naming
+    "SIM",          # simplifications
+    "RUF",          # ruff-specific checks
+]
+ignore = [
+    "D105",  # magic methods explain themselves
+    "D107",  # __init__ is documented on the class
+]
+
+[tool.ruff.lint.pydocstyle]
+convention = "google"
+
+[tool.ruff.lint.per-file-ignores]
+# Tests: plain asserts are the point; test names are their own documentation.
+"tests/**" = ["S101", "D100", "D101", "D102", "D103", "D104"]
+# Developer scripts call fixed local tools (git, make, uv) with argument lists, never a shell.
+"scripts/**" = ["S603", "S607"]
+
+[tool.ruff.format]
+quote-style = "double"

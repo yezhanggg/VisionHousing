@@ -7,6 +7,7 @@ import { stateName } from "./content/states.js";
 import { html, render, useEffect } from "./lib/html.js";
 import { CompareScreen } from "./screens/compare.js";
 import { MethodScreen } from "./screens/method.js";
+import { PlaceScreen } from "./screens/place.js";
 import { ReformScreen } from "./screens/reform.js";
 import { SlidesScreen } from "./screens/slides.js";
 import { StateScreen } from "./screens/state.js";
@@ -18,6 +19,7 @@ const SCREENS = {
   state: [StateScreen, "State"],
   reform: [ReformScreen, "Reform"],
   compare: [CompareScreen, "Compare"],
+  place: [PlaceScreen, "Place"],
   method: [MethodScreen, "Method & data"],
   slides: [SlidesScreen, "Slides"],
 };

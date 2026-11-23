@@ -1,7 +1,7 @@
 /**
  * The one top bar, the same on every screen.
  *   left:   the product name (goes to the State screen)
- *   centre: State · Reform · Compare · Method & data
+ *   centre: State · Reform · Compare · Place · Method & data
  *   right:  Slides · Export ▾ · Share link
  * Under 768 px wide the tabs and the buttons fold into a labelled "Menu".
  */
@@ -13,6 +13,7 @@ export const TABS = [
   { name: "state", label: "State" },
   { name: "reform", label: "Reform" },
   { name: "compare", label: "Compare" },
+  { name: "place", label: "Place" },
   { name: "method", label: "Method & data" },
 ];
 

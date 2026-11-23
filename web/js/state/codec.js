@@ -139,8 +139,11 @@ export function encodeScenario(scenario, known) {
   return parts.join("&");
 }
 
-/** The five screens plus the slides view. Anything else falls back to the State screen. */
-export const ROUTES = ["state", "reform", "compare", "method", "slides"];
+/** The screens plus the slides view. Anything else falls back to the State screen. */
+export const ROUTES = ["state", "reform", "compare", "place", "method", "slides"];
+
+/** A place in the address: a 5-digit county or an 11-digit tract code, e.g. `#/place/42003`. */
+const PLACE = /^(?:\d{5}|\d{11})$/;
 
 /**
  * Split an address hash such as `#/reform/adu?v=1&s=PA` into a route.
@@ -153,9 +156,12 @@ export function parseRoute(hash) {
   const query = q < 0 ? "" : raw.slice(q + 1);
   const [name = "", param = ""] = path.replace(/^\/+/, "").split("/");
   const known = ROUTES.includes(name);
+  let kept = "";
+  if (known && name === "reform") kept = param.slice(0, 32);
+  if (known && name === "place" && PLACE.test(param)) kept = param;
   return {
     name: known ? name : "state",
-    param: known && name === "reform" ? param.slice(0, 32) : "",
+    param: kept,
     query,
     known,
   };

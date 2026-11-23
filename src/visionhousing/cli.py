@@ -2,8 +2,8 @@
 
 One entry point for every task: check the machine (``doctor``), fetch data
 (``fetch``), build a state data pack (``build``), run reforms (``run``), write a
-report (``report``) and serve the interface (``serve``). ``doctor``, ``fetch``,
-``build``, ``report`` and ``serve`` work today; ``run`` says what it will do once built.
+report (``report``), write a place profile (``profile``) and serve the interface
+(``serve``). All work today except ``run``, which says what it will do once built.
 
 It uses the standard library's ``argparse`` so it adds no dependency.
 """
@@ -190,6 +190,38 @@ def report(
     return 0
 
 
+def profile(state: str, county: str | None, tract: str | None, fmt: str, out: Path | None) -> int:
+    """Write a place profile (a county, or a tract with ``--tract``) as md, html, csv or json.
+
+    Without ``--out`` the profile is printed. See ``docs/modules/profile.md``.
+    """
+    from visionhousing.profile import PlaceNotFoundError, build_profile, render
+
+    if not county and not tract:
+        print("profile: give --county (5 digits) or --tract (11 digits)", file=sys.stderr)
+        return 2
+    if county and tract and not tract.startswith(county):
+        print(f"profile: tract {tract} is not in county {county}", file=sys.stderr)
+        return 2
+    geoid = tract or county or ""
+    try:
+        place = build_profile(state, geoid)
+    except FileNotFoundError as err:
+        print(f"profile: {err}", file=sys.stderr)
+        return 1
+    except PlaceNotFoundError:
+        print(f"profile: no county or tract {geoid} in {state.upper()}", file=sys.stderr)
+        return 1
+    text = render(place, fmt)
+    if out is None:
+        sys.stdout.write(text)
+        return 0
+    out.parent.mkdir(parents=True, exist_ok=True)
+    out.write_text(text, encoding="utf-8")
+    print(f"profile: wrote {out}")
+    return 0
+
+
 def _run_date(text: str) -> str | None:
     """Check a ``--date`` value: ``YYYY-MM-DD``, ``today`` or ``none``."""
     import datetime as dt
@@ -261,6 +293,15 @@ def build_parser() -> argparse.ArgumentParser:
         "--date", dest="run_date", type=_run_date, default="today",
         help="run date in the stamp: YYYY-MM-DD, 'today' (default) or 'none'",
     )  # fmt: skip
+    pro = sub.add_parser("profile", help="Write a place profile for a county or tract")
+    pro.add_argument("--state", default="PA", help="two-letter state code (default PA)")
+    pro.add_argument("--county", default=None, help="county code, 5 digits (for example 42003)")
+    pro.add_argument("--tract", default=None, help="tract code, 11 digits (optional)")
+    pro.add_argument(
+        "--format", dest="fmt", choices=["md", "html", "csv", "json"], default="md",
+        help="output format (default md)",
+    )  # fmt: skip
+    pro.add_argument("--out", type=Path, default=None, help="file to write (default: print)")
     srv = sub.add_parser("serve", help="Serve the interactive tool on this computer")
     srv.add_argument("--host", default="127.0.0.1", help="address to listen on (default 127.0.0.1)")
     srv.add_argument("--port", type=int, default=8000, help="port (default 8000)")
@@ -285,6 +326,8 @@ def main(argv: list[str] | None = None) -> int:
         return build(args.state, args.raw, args.out)
     if args.command == "serve":
         return serve(args.host, args.port, args.timeout)
+    if args.command == "profile":
+        return profile(args.state, args.county, args.tract, args.fmt, args.out)
     if args.command == "report":
         return report(
             args.state,

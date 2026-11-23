@@ -1,0 +1,72 @@
+# Who owns single-family homes: the rules behind the "owners" profile section.
+#
+# Read by visionhousing.features.owners and the Philadelphia and Allegheny
+# source readers. Owner names are tested against these patterns on the
+# publisher's server; only counts come back. No owner name is ever stored or
+# shown.
+#
+# An "entity" is any owner whose name contains one of the words below. An
+# entity is not the same as an institutional investor: it includes small
+# landlords' one-home companies, nonprofits, churches and estate-planning
+# trusts.
+
+version: 1
+
+# Whole words (matched case-insensitively, at word boundaries) that mark an
+# owner or deed grantee as an entity rather than a person.
+entity_words:
+  - LLC
+  - L L C
+  - INC
+  - INCORPORATED
+  - CORP
+  - CORPORATION
+  - CO
+  - COMPANY
+  - LP
+  - L P
+  - LLP
+  - LTD
+  - LIMITED
+  - TRUST
+  - TRUSTEE
+  - TRUSTEES
+  - HOLDINGS
+  - HOLDING
+  - PROPERTIES
+  - PROPERTY
+  - REALTY
+  - INVESTMENTS
+  - INVESTMENT
+  - INVESTORS
+  - CAPITAL
+  - PARTNERS
+  - PARTNERSHIP
+  - VENTURES
+  - ENTERPRISES
+  - GROUP
+  - FUND
+  - ASSOCIATES
+  - ASSOCIATION
+  - REIT
+  - BANK
+  - MORTGAGE
+  - HOMES
+  - DEVELOPMENT
+
+# The home state: a tax-bill mailing address outside it counts as out of state.
+home_state: PA
+
+# Philadelphia deed flow (Real Estate Transfer Tax records, rtt_summary).
+philadelphia_deeds:
+  # Document types counted as a sale of the whole property.
+  document_types: ["DEED"]
+  # Deeds below this total consideration are not arm's-length sales.
+  min_consideration: 10000
+  # Only deeds for one property (multi-parcel deeds split one price over many).
+  max_property_count: 1
+  first_year: 2015
+
+# Allegheny: the assessment office's own owner type that marks companies.
+allegheny:
+  entity_owner_types: ["CORPORATION"]

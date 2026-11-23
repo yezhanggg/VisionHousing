@@ -1525,3 +1525,253 @@ kbd {
     gap: 2px;
   }
 }
+
+/* ---------- Place screen ---------- */
+.place-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.place-tools {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.place-search {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.place-hint {
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+
+.place-matches {
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  overflow: hidden;
+}
+
+.place-match {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  width: 100%;
+  min-height: 40px;
+  padding: var(--space-2) var(--space-3);
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: transparent;
+  border: 0;
+  border-bottom: 1px solid var(--line);
+  cursor: pointer;
+}
+
+.place-matches li:last-child .place-match {
+  border-bottom: 0;
+}
+
+.place-match:hover,
+.place-match:focus-visible {
+  background: var(--accent-soft);
+}
+
+.place-code {
+  color: var(--text-quiet);
+  font-variant-numeric: tabular-nums;
+}
+
+.place-banner {
+  padding: var(--space-3) var(--space-4);
+  border-radius: var(--radius);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+  border: 1px solid var(--notice-line);
+  font-weight: var(--weight-medium);
+}
+
+.place-profile {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-5);
+}
+
+.place-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-5);
+  align-items: start;
+}
+
+.place-summary {
+  font-size: var(--text-lg);
+  line-height: 1.45;
+  font-weight: var(--weight-medium);
+}
+
+.facts {
+  display: flex;
+  flex-direction: column;
+}
+
+.fact {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  gap: var(--space-3);
+  padding: var(--space-2) 0;
+  border-top: 1px solid var(--line);
+}
+
+.fact-label {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.fact-body {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 2px var(--space-2);
+}
+
+.fact-value {
+  font-weight: var(--weight-bold);
+  font-variant-numeric: tabular-nums;
+}
+
+.fact-src {
+  font: inherit;
+  font-size: var(--text-xs);
+  color: var(--accent);
+  background: transparent;
+  border: 0;
+  padding: 0 2px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+}
+
+.fact-src:hover,
+.fact-src[aria-expanded="true"] {
+  background: var(--accent-soft);
+}
+
+.fact-compare,
+.fact-range,
+.fact-note {
+  flex-basis: 100%;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.fact-note {
+  padding: var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+  color: var(--text);
+}
+
+.place-limits {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.place-later-list,
+.place-sources {
+  padding-left: var(--space-5);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+  overflow-wrap: anywhere;
+}
+
+.place-sources {
+  list-style: decimal;
+}
+
+.place-later-list {
+  list-style: none;
+  padding-left: 0;
+}
+
+@media (max-width: 960px) {
+  .place-tools,
+  .place-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+@media (max-width: 480px) {
+  .fact {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 2px;
+  }
+}
+
+/* Print: the place profile without the controls. Its page size (US Letter, portrait) is in
+   css/place-print.css, which the Place screen adds only while it is open, so it follows the
+   slides' landscape page in the cascade and leaves the slides untouched. */
+@media print {
+  body[data-route="place"] .topbar,
+  body[data-route="place"] .skip-link,
+  body[data-route="place"] .place-tools,
+  body[data-route="place"] .place-actions,
+  body[data-route="place"] .toast-region {
+    display: none !important;
+  }
+  body[data-route="place"] .screen {
+    padding-top: 0;
+  }
+  body[data-route="place"] .page {
+    padding: 0;
+    max-width: none;
+  }
+  body[data-route="place"] .page-title {
+    font-size: 22pt;
+  }
+  body[data-route="place"] .place-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 8pt;
+  }
+  body[data-route="place"] .place-profile {
+    gap: 8pt;
+  }
+  body[data-route="place"] .card {
+    box-shadow: none;
+    border-radius: 0;
+    border-width: 0 0 0 0;
+    border-top: 2px solid var(--accent);
+  }
+  body[data-route="place"] .card-head {
+    padding: 6pt 0 2pt;
+  }
+  body[data-route="place"] .card-body {
+    padding: 0 0 4pt;
+    gap: 4pt;
+  }
+  body[data-route="place"] .place-summary {
+    font-size: 11pt;
+    break-after: avoid;
+  }
+  body[data-route="place"] .card-head,
+  body[data-route="place"] .fact {
+    break-inside: avoid;
+  }
+  body[data-route="place"] .fact {
+    padding: 2pt 0;
+    font-size: 9pt;
+  }
+  body[data-route="place"] .fact-src::after {
+    content: "";
+  }
+}

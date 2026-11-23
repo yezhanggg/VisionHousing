@@ -36,7 +36,7 @@ ROUTES = {
     "method": "#/method",
     "slides": "#/slides",
 }
-TABS = ["State", "Reform", "Compare", "Method & data"]
+TABS = ["State", "Reform", "Compare", "Place", "Method & data"]
 BUTTONS = ["Slides", "Export", "Share link"]
 DESKTOP = {"width": 1440, "height": 900}
 PHONE = {"width": 390, "height": 844}
@@ -125,7 +125,7 @@ def test_route_loads_cleanly_on_desktop(browser, base_url, route):
     expect(tabs).to_have_text(TABS)
     for label in BUTTONS:
         expect(page.locator(".actions").get_by_text(label, exact=True)).to_be_visible()
-    current = dict(zip(ROUTES, TABS, strict=False))
+    current = dict(zip(["state", "reform", "compare", "place", "method"], TABS, strict=True))
     if route in current:
         expect(page.locator('.tab[aria-current="page"]')).to_have_text(current[route])
     # No typed numbers: every value slot is an em dash until the engine sends results.

@@ -1,0 +1,24 @@
+# Municipal zoning and planning status: how DCED records are read.
+#
+# Read by visionhousing.features.zoning_status. The source is the PA DCED
+# Municipal Statistics report "County / Municipal Planning, Zoning & Building
+# Code" (public information, cited as "PA DCED Municipal Statistics").
+
+version: 1
+
+# Who regulates zoning in a municipality, in display order, with plain labels.
+regimes:
+  own: "Its own zoning ordinance"
+  joint: "A joint (multi-municipal) zoning ordinance"
+  county: "The county's zoning ordinance"
+  none: "No zoning ordinance"
+
+# A comprehensive plan that lists at least this many municipalities is a
+# multi-municipal plan.
+multi_municipal_min_members: 2
+
+# DCED municipalities whose name is spelled differently by the Census Bureau:
+# DCED id -> Census county subdivision code (5 digits). Checked by hand
+# against both lists on 2026-11-22.
+name_overrides:
+  "541865": "79120"  # Upper Mahantango Twp (DCED) = Upper Mahantongo township (Census), Schuylkill

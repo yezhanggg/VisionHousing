@@ -16,6 +16,9 @@ browser front end) at ``/`` and these JSON endpoints under ``/api/v1``:
 ``GET  /provenance``                       where every dataset comes from
 ``GET  /validation``                       the baseline backtest skill table
 ``GET  /export/{fmt}``                     the run as ``csv``, ``json`` or ``html`` (the brief)
+``GET  /places/{st}?q=&level=``            counties (or tracts) whose name contains ``q``
+``GET  /profile/{st}/{geoid}``             a place profile (county or tract); ``format=``
+                                           ``json`` (default), ``md``, ``html`` or ``csv``
 =========================================  ==============================================
 
 Every number comes from the engine unchanged. Requests are checked (see
@@ -49,7 +52,7 @@ from visionhousing.api.models import (
     ScenarioError,
     scenario_from_query,
 )
-from visionhousing.api.runner import ContextStore, Runner, RunTimeoutError
+from visionhousing.api.runner import ContextStore, Runner, RunTimeoutError, _signature
 from visionhousing.api.security import (
     BodyLimit,
     SecurityHeaders,
@@ -142,6 +145,7 @@ def create_app(
     )
     app.state.runner = runner
     app.state.contexts = contexts
+    profile_contexts: dict[str, tuple[tuple, Any]] = {}
 
     # ------------------------------------------------------------ errors
 
@@ -365,6 +369,68 @@ def create_app(
             body = timed(Runner.key("html", key), lambda: service.export_html(result))
             return Response(body, headers=disposition, media_type="text/html; charset=utf-8")
         return Response(run_json(key, result), headers=disposition, media_type="application/json")
+
+    def profile_context(state: str):
+        """The state's profile context (small pack tables), loaded once per pack version."""
+        from visionhousing.profile import load_profile_context
+
+        code = state.upper()
+        if len(code) != 2 or not code.isalpha():
+            raise ApiError(400, "invalid_state", "state must be a two-letter code")
+        folder = contexts.folder(code)
+        if not folder.is_dir():
+            raise ApiError(
+                404, "state_not_built", f"no state pack for {code}; build it with `make data`"
+            )
+        sig = _signature(folder)
+        held = profile_contexts.get(code)
+        if held is None or held[0] != sig:
+            held = (sig, load_profile_context(code, folder=folder))
+            profile_contexts[code] = held
+        return held[1]
+
+    @app.get(f"{API}/places/{{st}}")
+    def places(st: str, q: str = "", level: str = "county", limit: int = 25) -> Response:
+        """Counties (or tracts) of a state whose name or code contains ``q``."""
+        from visionhousing.profile import list_places
+
+        if len(q) > LIMITS["search_chars"]:
+            raise ApiError(400, "query_too_long", "the search is too long")
+        if level not in ("county", "tract"):
+            raise ApiError(400, "invalid_level", "level must be county or tract")
+        if not 1 <= limit <= 500:
+            raise ApiError(400, "invalid_limit", "limit must be between 1 and 500")
+        ctx = profile_context(st)
+        return _json(
+            {"state": ctx.state, "level": level, "places": list_places(ctx, q, level=level,
+                                                                       limit=limit)}
+        )  # fmt: skip
+
+    @app.get(f"{API}/profile/{{st}}/{{geoid}}")
+    def place_profile(st: str, geoid: str, format: str = "json") -> Response:
+        """One county (5 digits) or tract (11 digits) profile, as JSON or a download."""
+        from visionhousing.profile import PlaceNotFoundError, build_profile, render
+
+        if not geoid.isdigit() or len(geoid) not in (5, 11):
+            raise ApiError(400, "invalid_place", "place must be a 5-digit county or 11-digit tract")
+        if format not in ("json", "md", "html", "csv"):
+            raise ApiError(400, "invalid_format", "format must be json, md, html or csv")
+        ctx = profile_context(st)
+        try:
+            prof = build_profile(ctx.state, geoid, ctx=ctx)
+        except PlaceNotFoundError:
+            raise ApiError(
+                404, "place_not_found", f"no county or tract {geoid} in {ctx.state}"
+            ) from None
+        if format == "json":
+            return _json(prof.to_dict())
+        media = {"md": "text/markdown", "html": "text/html", "csv": "text/csv"}[format]
+        name = f"visionhousing-profile-{ctx.state}-{geoid}.{format}"
+        return Response(
+            render(prof, format),
+            headers={"content-disposition": f'attachment; filename="{name}"'},
+            media_type=f"{media}; charset=utf-8",
+        )
 
     @app.api_route(f"{API}/{{rest:path}}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
     def api_not_found(rest: str) -> Response:

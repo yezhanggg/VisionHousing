@@ -1,0 +1,27 @@
+# Local permit pipeline: which city permits count as new homes, and the LIHTC
+# award lists. Read by visionhousing.data.sources.local_permits,
+# visionhousing.data.sources.phfa and visionhousing.features.pipeline_local.
+
+version: 1
+
+first_year: 2016
+
+# Philadelphia Licenses and Inspections building permits (Carto table "permits").
+philadelphia:
+  permit_types: ["Residential Building", "Building", "BP_NEWCNST"]
+  work_types: ["New Construction", "New Construction (Stand Alone)", "ENTIRE"]
+
+# Pittsburgh Permits, Licenses and Inspections (WPRDC). The file has no unit
+# counts, so only permits are counted.
+pittsburgh:
+  permit_types: ["BUILDING", "Building & Development Application"]
+  work_type_like: "new construction"
+  use: "Residential"
+
+# Pennsylvania Housing Finance Agency LIHTC award lists. Links are read from
+# the Multifamily Housing Programs page; a PDF with no text layer (a scan) is
+# reported and skipped.
+phfa:
+  index_url: "https://www.phfa.org/mhp/"
+  link_pattern: "lihtc-aw"
+  first_year: 2019

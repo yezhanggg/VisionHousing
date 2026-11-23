@@ -424,3 +424,261 @@ sources:
     notes: >-
       The agency address listed in the catalog is tried first (http upgraded to https);
       the catalog's mirror copy is the fallback.
+
+  # ---- Place profile: jobs, incentive areas and safety (market research sections) ----
+
+  - id: lodes_wac
+    name: LEHD Origin-Destination Employment Statistics (LODES 8), workplace area characteristics, all jobs
+    publisher: U.S. Census Bureau, Longitudinal Employer-Household Dynamics program
+    url_pattern: https://lehd.ces.census.gov/data/lodes/LODES8/{st}/wac/{st}_wac_S000_JT00_{year}.csv.gz
+    vintage: LODES 8, 2024 (files dated 2026-10-14)
+    geography: [block, tract, county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://lehd.ces.census.gov/data/
+    expected_size: null
+    parser: jobs.sum_wac_to_tracts
+    limits: >-
+      Counts jobs covered by unemployment insurance plus federal civilian jobs, by
+      where people work. Self-employed people, the military and informal work are
+      not counted. A person with two jobs counts twice. The Census Bureau adds noise
+      to block counts for privacy; tract and county sums are much steadier.
+    tier: 0
+    access: file
+    cleaning: >-
+      Block rows are summed to 2020 tracts: total jobs, three monthly-earnings bands
+      and 20 industry sectors. Only the tract sums are kept; the block file is deleted.
+    checked_on: 2026-11-22
+
+  - id: lodes_od
+    name: LEHD Origin-Destination Employment Statistics (LODES 8), home-to-work flows, all jobs
+    publisher: U.S. Census Bureau, Longitudinal Employer-Household Dynamics program
+    url_pattern: https://lehd.ces.census.gov/data/lodes/LODES8/{st}/od/{st}_od_{part}_JT00_{year}.csv.gz
+    vintage: LODES 8, 2024 (files dated 2026-10-14)
+    geography: [block, county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://lehd.ces.census.gov/data/
+    expected_size: null
+    parser: jobs.sum_od_to_counties
+    limits: >-
+      Links each job's workplace block to the worker's home block. The "main" file
+      covers jobs with both ends in the state; the "aux" file adds workers who live
+      in another state. Residents who work in another state are in that state's
+      files, which are not read, so out-commuting across the state line is not
+      counted. Same job coverage as the workplace file.
+    tier: 0
+    access: file
+    cleaning: >-
+      Streamed line by line; jobs (S000) are summed to pairs of counties (work county,
+      home county or "out_of_state"). Only the county pairs are kept.
+    checked_on: 2026-11-22
+
+  - id: cbp_county
+    name: County Business Patterns, county file
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/programs-surveys/cbp/datasets/{year}/cbp{yy}co.zip
+    vintage: 2023 (published 2025-06-26; 2024 not yet published on 2026-11-22)
+    geography: [county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/programs-surveys/cbp/technical-documentation/methodology.html
+    expected_size: 12919520
+    parser: jobs.read_cbp
+    limits: >-
+      Counts private establishments with paid employees and their mid-March
+      employment and yearly payroll. Government, self-employed and most farm work
+      are left out. Small cells carry noise; the noise flag is kept. Establishments
+      that cannot be placed in a county are left out, so counties do not add up to
+      the state total.
+    tier: 0
+    access: file
+    cleaning: >-
+      The national zip is read as a stream; the state's all-sector and two-digit NAICS
+      sector rows are kept. Payroll stays in thousands of dollars. The zip is deleted.
+    checked_on: 2026-11-22
+
+  - id: hud_qct
+    name: Low-Income Housing Tax Credit Qualified Census Tracts
+    publisher: U.S. Department of Housing and Urban Development
+    url_pattern: https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/QUALIFIED_CENSUS_TRACTS_2026/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: HUD's latest designations (map item titled 2027, updated 2026-10-28; 2020 tracts)
+    geography: [tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.huduser.gov/portal/sadda/sadda_qct.html
+    parser: incentives.read_feature_page
+    limits: >-
+      A Qualified Census Tract lets a tax-credit project claim a 30% larger basis.
+      Designations change every year; HUD's map item and layer text name different
+      years (2026 and 2027), so the edition is stated as published. Being in a QCT
+      does not mean a project will get credits.
+    tier: 0
+    access: feature_service
+    cleaning: Keeps the 11-digit tract code of every designated tract in the state (attributes only, no shapes).
+    checked_on: 2026-11-22
+
+  - id: hud_dda
+    name: Low-Income Housing Tax Credit Difficult Development Areas
+    publisher: U.S. Department of Housing and Urban Development
+    url_pattern: https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/Difficult_Development_Areas_2026/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: HUD's latest designations (map item titled 2027, updated 2026-10-28)
+    geography: [zcta, county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.huduser.gov/portal/sadda/sadda_qct.html
+    parser: incentives.read_feature_page
+    limits: >-
+      In metro areas, Difficult Development Areas are ZIP Code Tabulation Areas
+      (ZCTAs); outside them, whole counties. A tract is matched to ZCTAs by shared
+      land area, so a tract on a ZCTA edge can be partly in a DDA.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      Keeps every DDA's ZCTA or county code and type (SA = small-area metro, NM =
+      non-metro county); attributes only.
+    checked_on: 2026-11-22
+
+  - id: census_zcta_tract_rel
+    name: 2020 ZIP Code Tabulation Area to census tract relationship file
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/geo/docs/maps-data/data/rel2020/zcta520/tab20_zcta520_tract20_natl.txt
+    vintage: 2020 Census
+    geography: [zcta, tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/geographies/reference-files/time-series/geo/relationship-files.html
+    expected_size: 24334353
+    parser: incentives.read_zcta_tract
+    limits: Land area shared by each ZCTA and tract; used only to place ZCTA-based DDAs on tracts.
+    tier: 0
+    access: file
+    cleaning: Streamed; only rows whose tract is in the state are kept (ZCTA, tract, shared land area).
+    checked_on: 2026-11-22
+
+  - id: treasury_oz2027
+    name: Qualified Opportunity Zones designated for 2027 (second decennial round)
+    publisher: U.S. Department of the Treasury
+    url_pattern: https://home.treasury.gov/system/files/131/OZ2-Designations-2027-Data-Transparency-10302026.xlsx
+    vintage: Designations list dated 2026-10-30, effective 2027-01-01 (2020 tracts)
+    geography: [tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://home.treasury.gov/policy-issues/tax-policy/data-transparency/qualified-opportunity-zones
+    expected_size: 271664
+    parser: incentives.read_oz2027
+    limits: >-
+      The new round of zones starts on 2027-01-01. The first-round zones (2018, on
+      2010 tracts) end on 2026-12-31 and are not shown. Treasury says taxpayers may
+      not rely on the web list to support a tax position.
+    tier: 0
+    access: file
+    cleaning: Keeps the state's tracts and the rural flag.
+    checked_on: 2026-11-22
+
+  - id: cdfi_nmtc_lic
+    name: New Markets Tax Credit low-income community tracts (2016-2020 ACS)
+    publisher: U.S. Department of the Treasury, CDFI Fund
+    url_pattern: https://www.cdfifund.gov/system/files/2023-08/NMTC_2016-2020_ACS_LIC_Sept1_2023.xlsb
+    vintage: 2016-2020 ACS eligibility file released 2023-09-01 (required for investments closed from 2024-09-01)
+    geography: [tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.cdfifund.gov/news/537
+    expected_size: 4735457
+    parser: incentives.read_nmtc
+    limits: >-
+      Shows whether a tract meets the poverty (20% or more) or income (80% of the
+      benchmark or less) test. Other routes to eligibility (high-migration rural
+      counties, targeted populations) are not shown. The CDFI Fund does not update
+      the file every year.
+    tier: 0
+    access: file
+    cleaning: >-
+      Read with a small standard-library reader for Excel binary (.xlsb) files; keeps
+      the state's tracts, the yes/no test results, the poverty rate and the income
+      percentage. The national file is deleted.
+    checked_on: 2026-11-22
+    notes: The address listed on the CDFI Fund news page (folder 2023-09) answers 404; the same file is served from folder 2023-08.
+
+  - id: hud_lihtc
+    name: Low-Income Housing Tax Credit properties (HUD LIHTC database)
+    publisher: U.S. Department of Housing and Urban Development
+    url_pattern: https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/LIHTC/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: HUD LIHTC map service updated 2026-04-20
+    geography: [point]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.huduser.gov/portal/datasets/lihtc.html
+    parser: incentives.read_feature_page
+    limits: >-
+      Projects placed in service since 1987 as reported by state agencies; recent
+      years are incomplete and the year is unknown for some projects. A project's
+      point is the address of its largest building. Projects that left the program
+      are not removed.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      Keeps id, units, low-income units, year placed in service (8888/9999 = unknown),
+      county code and latitude/longitude. Points are placed in 2020 tracts by their
+      coordinates.
+    checked_on: 2026-11-22
+
+  - id: dced_koz_sites
+    name: Keystone Opportunity Zone (KOZ) locations, public view
+    publisher: Pennsylvania Department of Community and Economic Development
+    url_pattern: https://services6.arcgis.com/532hEgQVqKXr4LOZ/arcgis/rest/services/Keystone_Opportunity_Zone_(KOZ)_Locations_(INTERNAL)_public_view/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: current (layer last edited 2026-11)
+    geography: [point]
+    licence: Public Commonwealth map layer; no licence stated
+    terms_url: https://dced.pa.gov/programs/keystone-opportunity-zones-kozs/
+    parser: incentives.read_feature_page
+    limits: >-
+      Pennsylvania only. The sites DCED lists on its public KOZ map, with acreage and
+      expiry year; it may not hold every active KOZ parcel. Contact names on the layer
+      are not kept.
+    tier: 2
+    access: feature_service
+    cleaning: Keeps county name, acreage, developed and occupied flags, expiry year and the point; personal contact fields are dropped.
+    checked_on: 2026-11-22
+
+  - id: nps_nrhp
+    name: National Register of Historic Places, listed property points and polygons
+    publisher: U.S. Department of the Interior, National Park Service
+    url_pattern: https://mapservices.nps.gov/arcgis/rest/services/cultural_resources/nrhp_locations/MapServer/{layer}/query
+    vintage: current (NPS cultural resources map service)
+    geography: [point, polygon]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.nps.gov/subjects/nationalregister/data-downloads.htm
+    parser: incentives.read_feature_page
+    limits: >-
+      Only properties NPS has mapped and does not restrict are shown, so counts are
+      a floor. A district polygon's homes are 2020 Census block homes whose block
+      centre is inside it. Listing makes income-producing rehabilitation eligible for
+      the federal historic tax credit; it does not grant one.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      Keeps reference number, type, status and location of listed properties in the
+      state. District polygons are simplified to about 10 metres.
+    checked_on: 2026-11-22
+
+  - id: fbi_cde_agency
+    name: FBI Crime Data Explorer API, agency list and agency offense counts (summary reporting)
+    publisher: U.S. Department of Justice, Federal Bureau of Investigation
+    url_pattern: https://api.usa.gov/crime/fbi/cde/{path}
+    vintage: calendar year 2024 (agency monthly offense counts)
+    geography: [agency, county]
+    licence: Public domain (U.S. government work); the API needs a free api.data.gov key
+    terms_url: https://api.data.gov/docs/
+    parser: safety.read_agency_offenses
+    limits: >-
+      Offenses known to police, as agencies report them; not victimization. Coverage
+      depends on which agencies reported all twelve months. Pennsylvania moved to the
+      incident-based system (NIBRS) around 2021, so counts before and after the
+      change are not comparable. Agencies are placed in counties by the FBI's agency
+      list; an agency serving several counties is counted in the first one. No tract
+      figures.
+    tier: 0
+    access: api
+    cleaning: >-
+      Sums each local and State Police agency's monthly violent and property offenses
+      for the year; keeps agencies that reported all twelve months; adds them by
+      county with the populations they serve.
+    notes: >-
+      The key is read only from the API_DATA_GOV_KEY (or FBI_API_KEY) environment
+      variable and never stored. Without it the safety table is left empty. Not
+      confirmed live: no key was available when this entry was written; the reader
+      follows the published API's shape and is checked by a real-data test that
+      runs only when a key is set.

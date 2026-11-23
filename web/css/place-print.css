@@ -1,0 +1,12 @@
+/*
+ * Print page for the Place screen only. web/js/screens/place.js adds this file while the
+ * screen is open and removes it when the screen closes, so it is the last @page rule in the
+ * cascade (after slides.css) only on that screen: a place profile prints on US Letter,
+ * portrait, while the slides keep their landscape page.
+ */
+@media print {
+  @page {
+    size: letter portrait;
+    margin: 0.5in 0.55in 0.6in;
+  }
+}

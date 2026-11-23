@@ -22,8 +22,11 @@ dependencies = [
 visionhousing = "visionhousing.cli:main"
 
 [dependency-groups]
-# Data build: pure-Python shapefile reader.
-build = ["pyshp>=2.3"]
+# Data build: pure-Python shapefile reader (pyshp) and PDF text reader (pypdf, BSD-3-Clause).
+build = [
+    "pypdf>=5.0",
+    "pyshp>=2.3",
+]
 # Development. The licence lister is scripts/licence_audit.py (standard library only).
 dev = ["pytest>=8.3", "ruff>=0.8", "playwright>=1.48"]
 

@@ -8,43 +8,41 @@
  * Each section is a card: the one-sentence summary on top, the facts below. Every fact shows
  * its source on hover (title) or tap (a short note under it), and a numbered footnote that
  * matches the source list at the end. Nothing here computes a number: the text comes from
- * GET /api/v1/profile/{state}/{geoid}. "Copy share link" copies the address, which holds the
+ * the profile endpoint, through lib/api.js (the back end, or the exported files on the static
+ * site). "Copy share link" copies the address, which holds the
  * state and the place; "Print / save PDF" prints the page with the print rules in app.css.
  */
+import printCss from "../../css/place-print.css?url";
 import { stateName } from "../content/states.js";
+import { api, IS_STATIC } from "../lib/api.js";
 import { html, useEffect, useState } from "../lib/html.js";
 import { navigate, route, scenario } from "../state/store.js";
 import { Card, Empty } from "../ui/bits.js";
 import { Icon } from "../ui/icons.js";
 import { shareLink } from "../ui/topbar.js";
 
-const API = "./api/v1";
 const MAX_MATCHES = 8;
 
-async function getJson(url) {
-  const reply = await fetch(url, { headers: { accept: "application/json" } });
-  const body = await reply.json().catch(() => null);
-  if (!reply.ok) throw new Error(body?.message || `the request failed (${reply.status})`);
-  return body;
-}
-
-/** Load a list or a profile; returns {data, error, loading}. */
-function useJson(url) {
-  const [state, setState] = useState({ data: null, error: "", loading: Boolean(url) });
+/**
+ * Load a list or a profile; returns {data, error, loading}. `key` names the request (it
+ * changes when the request changes); `load` makes it. An empty key loads nothing.
+ */
+function useJson(key, load) {
+  const [state, setState] = useState({ data: null, error: "", loading: Boolean(key) });
   useEffect(() => {
-    if (!url) {
+    if (!key) {
       setState({ data: null, error: "", loading: false });
       return undefined;
     }
     let live = true;
     setState({ data: null, error: "", loading: true });
-    getJson(url)
+    load()
       .then((data) => live && setState({ data, error: "", loading: false }))
       .catch((err) => live && setState({ data: null, error: String(err.message || err), loading: false }));
     return () => {
       live = false;
     };
-  }, [url]);
+  }, [key]);
   return state;
 }
 
@@ -88,7 +86,9 @@ function PlaceSearch({ places, current }) {
 }
 
 function TractPicker({ state, county, current }) {
-  const { data } = useJson(`${API}/places/${state}?level=tract&q=${county}&limit=500`);
+  const { data } = useJson(`tracts/${state}/${county}`, async () =>
+    (await api.tractsAvailable(state)) ? api.places(state, { level: "tract", q: county, limit: 500 }) : null,
+  );
   const tracts = (data?.places || []).filter((p) => p.geoid.startsWith(county));
   if (!tracts.length) return null;
   return html`<label class="field place-tracts">
@@ -167,7 +167,7 @@ function usePrintPage() {
   useEffect(() => {
     const link = document.createElement("link");
     link.rel = "stylesheet";
-    link.href = "./css/place-print.css";
+    link.href = printCss;
     link.dataset.screen = "place";
     document.head.appendChild(link);
     return () => link.remove();
@@ -179,8 +179,8 @@ export function PlaceScreen() {
   const state = scenario.value.state;
   const geoid = route.value.param;
   const county = geoid.slice(0, 5);
-  const list = useJson(`${API}/places/${state}?level=county&limit=500`);
-  const prof = useJson(geoid ? `${API}/profile/${state}/${geoid}` : "");
+  const list = useJson(`counties/${state}`, () => api.places(state, { level: "county", limit: 500 }));
+  const prof = useJson(geoid ? `profile/${state}/${geoid}` : "", () => api.profile(state, geoid));
   const profile = prof.data;
   return html`<main id="main" class="screen screen-page" tabindex="-1">
     <div class="page">
@@ -204,8 +204,9 @@ export function PlaceScreen() {
       </header>
       <div class="place-tools">
         ${list.error
-          ? html`<${Empty} title="Place search is not available">${list.error}. Start the tool with
-              <code>visionhousing serve</code> and build the state's data pack.<//>`
+          ? html`<${Empty} title="Place search is not available">${list.error}.${IS_STATIC
+                ? " This site holds only the exported states."
+                : html` Start the tool with <code>make app</code> and build the state's data pack.`}<//>`
           : html`<${PlaceSearch} places=${list.data?.places || []} current=${geoid} />`}
         ${geoid && !list.error && html`<${TractPicker} state=${state} county=${county} current=${geoid} />`}
       </div>

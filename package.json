@@ -1,0 +1,9 @@
+{
+  "name": "visionhousing-site",
+  "private": true,
+  "description": "Only tells the static host (Vercel) which Node.js to use. The interface and its dependencies live in web/ (see web/package.json and vercel.json).",
+  "license": "Apache-2.0",
+  "engines": {
+    "node": ">=22.12.0"
+  }
+}

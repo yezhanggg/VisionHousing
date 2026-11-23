@@ -5,7 +5,9 @@
  *
  *   v  codec version (always written; links from a newer version fall back to defaults)
  *   s  state, a two-letter postal code from the known list
- *   r  reforms switched on, comma-separated known ids, written in a fixed order
+ *   r  reforms switched on, comma-separated known ids, written in a fixed order. Old ids
+ *      listed in `known.aliases` (for example `middle` for `missing_middle`) are read as
+ *      their new id, so earlier share links keep working
  *   a  assumption overrides, `ledger.id~choice`, where choice is l / c / h (low, central,
  *      high) or a plain decimal number (a custom value)
  *   p  preset name (for example a slide-deck preset)
@@ -60,7 +62,8 @@ function parsePairs(query) {
 /**
  * Read a scenario from the query part of the address.
  * @param {string} query text after "?" (without it)
- * @param {{states: string[], reforms: string[]}} known allowed state codes and reform ids
+ * @param {{states: string[], reforms: string[], aliases?: Object<string, string>}} known
+ *   allowed state codes and reform ids, and old reform ids mapped to their new id
  * @returns {{scenario: object, dropped: string[]}}
  */
 export function decodeScenario(query, known) {
@@ -85,7 +88,9 @@ export function decodeScenario(query, known) {
   const reforms = pairs.get("r");
   if (reforms) {
     const wanted = new Set();
-    for (const id of reforms.split(",").slice(0, LIMITS.reforms * 2)) {
+    const aliases = known.aliases || {};
+    for (const raw of reforms.split(",").slice(0, LIMITS.reforms * 2)) {
+      const id = Object.hasOwn(aliases, raw) ? aliases[raw] : raw;
       if (known.reforms.includes(id)) wanted.add(id);
       else if (id) dropped.push(`reform ${id.slice(0, 16)}`);
     }

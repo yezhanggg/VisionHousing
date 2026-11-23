@@ -3,17 +3,20 @@
 UV ?= $(shell command -v uv 2>/dev/null || echo $(HOME)/.local/bin/uv)
 STATE ?= PA
 RUN := $(UV) run --locked
+NPM ?= npm
+DATA_OUT ?= web/public/data
 
 .DEFAULT_GOAL := help
-.PHONY: help setup data test test-realdata lint format licence secrets verify app all clean-clone
+.PHONY: help setup data test test-realdata lint format licence secrets verify app all clean-clone \
+	web web-static dev export-static site
 
 help:  ## List the targets
 	@grep -E '^[a-z-]+:.*## ' $(MAKEFILE_LIST) | awk -F':.*## ' '{printf "  make %-12s %s\n", $$1, $$2}'
 
-setup:  ## Install Python 3.12 deps from uv.lock (all groups) and the test browser
+setup:  ## Install Python deps (uv.lock), the test browser and the web build tools (npm ci)
 	$(UV) sync --locked --all-groups
 	$(RUN) playwright install chromium
-	$(RUN) python scripts/vendor_web.py
+	cd web && $(NPM) ci
 
 data:  ## Fetch sources and build the state data pack (STATE=PA)
 	$(RUN) visionhousing fetch --state $(STATE)
@@ -42,11 +45,25 @@ secrets:  ## Fail if a key, private key or home-folder path is in a published fi
 verify: lint test licence secrets  ## Lint + tests + licence audit + secret scan docs
 	@echo "verify: all checks passed"
 
-app:  ## Serve the tool at http://localhost:8000
+app: web  ## Build the interface, then serve the tool at http://localhost:8000
 	$(RUN) visionhousing serve --host 127.0.0.1 --port 8000
 
-serve-static:  ## Serve web/ alone (no engine) at http://localhost:8001
-	$(RUN) python -m http.server 8001 --bind 127.0.0.1 --directory web
+web:  ## Build the interface into web/dist (Vite)
+	cd web && $(NPM) run build
+
+dev:  ## Live-reload interface at http://127.0.0.1:5173 plus the engine on :8000 (Ctrl-C stops both)
+	@trap 'kill 0' EXIT INT TERM; \
+	$(RUN) visionhousing serve --host 127.0.0.1 --port 8000 & \
+	cd web && $(NPM) run dev
+
+export-static:  ## Save a state's default results as JSON for the static site (STATE=PA)
+	$(RUN) visionhousing export-static --state $(STATE) --out $(DATA_OUT)
+
+web-static:  ## Build the no-server site (reads web/public/data) into web/dist
+	cd web && $(NPM) run build:static
+
+site: web-static  ## Build and preview the static site at http://127.0.0.1:4173 (no engine)
+	cd web && $(NPM) run preview
 
 all: setup data verify app  ## setup -> data -> verify -> app
 

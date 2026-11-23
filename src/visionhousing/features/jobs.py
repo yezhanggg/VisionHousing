@@ -71,17 +71,17 @@ _BAND_TEXT = {name: text for name, text in src.EARNINGS_BANDS.values()}
 
 COLUMNS: dict[tuple[str, str], tuple[str, str, str]] = {
     ("jobs_tract", "tract"): ("code", "Tract code", "lodes_wac"),
-    ("jobs_tract", "jobs"): ("jobs", "Jobs located in the tract, all jobs (LODES C000)", "lodes_wac"),
+    ("jobs_tract", "jobs"): ("jobs", "Jobs located in the tract (LODES C000)", "lodes_wac"),
     **{
         ("jobs_tract", name): ("jobs", f"Jobs paying {text}", "lodes_wac")
         for name, text in _BAND_TEXT.items()
     },
     **{
-        ("jobs_tract", f"jobs_naics_{code}"): ("jobs", f"Jobs in {name} (NAICS {code})", "lodes_wac")
+        ("jobs_tract", f"jobs_naics_{code}"): ("jobs", f"Jobs in {name} ({code})", "lodes_wac")
         for code, name in SECTOR_NAMES.items()
     },
     ("jobs_county", "county"): ("code", "County code", "lodes_wac"),
-    ("jobs_county", "jobs"): ("jobs", "Jobs located in the county (sum of its blocks)", "lodes_wac"),
+    ("jobs_county", "jobs"): ("jobs", "Jobs located in the county", "lodes_wac"),
     ("jobs_county", "live_and_work"): (
         "jobs", "Jobs in the county held by people who live in the county", "lodes_od"),
     ("jobs_county", "inflow"): (

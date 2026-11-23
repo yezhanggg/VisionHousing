@@ -7,6 +7,7 @@ number its sources do not hold.
 from __future__ import annotations
 
 import csv
+import importlib.util
 import io
 import json
 import shutil
@@ -71,8 +72,11 @@ def test_profile_has_every_section_in_order(county):
         assert county.section(key).status == "ok", key
     for key in RESERVED:
         sec = county.section(key)
-        assert sec.status == "coming_soon" and not sec.facts
-        assert "not available" in sec.summary.lower()
+        if importlib.util.find_spec(f"visionhousing.profile.sections.{key}") is None:
+            assert sec.status == "coming_soon" and not sec.facts
+            assert "not available" in sec.summary.lower()
+        else:
+            assert sec.status in ("ok", "no_data"), key
 
 
 def test_every_fact_has_a_registered_source_and_a_vintage(county, tract):
@@ -262,6 +266,7 @@ def test_missing_tables_give_no_data_sections(thin_pack):
 
 
 def test_registry_degrades_and_picks_up_new_modules(ctx, monkeypatch):
+    monkeypatch.setitem(sys.modules, "visionhousing.profile.sections.jobs", None)
     assert build_section("jobs", ctx, COUNTY).status == "coming_soon"
     fake = types.ModuleType("visionhousing.profile.sections.jobs")
     fake.build = lambda c, g: None
@@ -295,7 +300,8 @@ def test_markdown(county):
     assert md.startswith("# Harbor County")
     assert "Synthetic test state" in md
     assert "## People" in md and "## Sources" in md
-    assert "Coming soon" in md
+    # Every reserved section now has a module; on Testland they say "no data" (or "coming soon").
+    assert "Coming soon" in md or "No data for this place yet" in md
     assert "`acs5_summary_file`" in md
 
 

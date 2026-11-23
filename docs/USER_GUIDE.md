@@ -1,16 +1,26 @@
 # User guide
 
-> **Status.** The interface is being built. The screens below describe the design. Parts that do not work yet are marked **Planned**. Until the engine is connected, the screens show no results.
+> **Status.** Every screen shows the engine's results. Hindcasts of past reforms and a guided tour are not built yet.
 
-## Start the tool
+## Run it
 
-```
-make setup
-make data STATE=PA
-make app
-```
+You need Python 3.12 with [uv](https://docs.astral.sh/uv/) and Node.js 22.12 or newer (with npm).
 
-Then open `http://localhost:8000`. **Planned:** `make data` and `make app` are not built yet.
+| What you want | Command | Then open |
+|---|---|---|
+| Install everything once | `make setup` | |
+| Build a state's data | `make data STATE=PA` | |
+| Use the tool (engine and interface) | `make app` | http://localhost:8000 |
+| Change the interface with live reload | `make dev` (Ctrl-C stops both servers) | http://127.0.0.1:5173 |
+| Save results for the no-server site | `make export-static STATE=PA` | writes `web/public/data/` |
+| Build and try the no-server site | `make site` | http://127.0.0.1:4173 |
+
+- `make app` builds the interface with Vite (`cd web && npm run build`) and then starts the
+  engine's server, which also serves the built pages.
+- The no-server site is what the public web address shows. It holds the default results only.
+  Changing assumptions there shows a note: "Changing assumptions needs the local app (make app)."
+- Without the state data, try the tool on Testland, the small made-up test state: open
+  `http://localhost:8000/#/place/99001?v=1&s=TL`.
 
 ## The top bar
 
@@ -24,64 +34,90 @@ On a narrow screen the tabs and buttons fold into a menu.
 
 ## The four screens
 
+Every number on every screen comes from the engine. Click (or press Enter on) any underlined
+number to see where it comes from.
+
 ### 1. State
 
 The home screen.
 
-- **Left card:** pick a state. Turn reforms on and off. Each reform shows whether it is in force, proposed or an idea. "Back to baseline" turns them all off.
-- **Map:** counties shaded by added units per 1,000 existing homes. Colours keep the same breaks when you change the scenario, so maps can be compared.
-- **Right card:** one sentence and three numbers (baseline units, added units, percent change), each as a range. A short verdict for each reform that is on.
-
-**Planned:** results on this screen need the engine.
+- **Left card:** pick a state. Turn reforms on and off. "All five reforms" switches on the five
+  benchmark reforms together; "Back to baseline" turns everything off. In Pennsylvania two bills
+  (HB 2186 and SB 1346) are offered too. Each bill reaches the same lots as the ADU reform, so
+  switching one on switches the ADU reform off.
+- **Map:** each county is shaded by the homes the reforms add there as a share of its own
+  baseline (middle estimate): *Little effect*, *Adds some* or *Adds a lot*. The breaks are the
+  verdict thresholds of the Assumption Ledger (the map key shows them), so the colours mean the
+  same thing whatever is switched on. Grey means no data.
+- **County table:** the map's values as a table you can sort, for keyboard and screen-reader
+  use. Press a county name (or click the county on the map) to open its panel.
+- **County panel:** the county's baseline, the homes added and the change, each reform alone in
+  the county, and a small map of its census tracts shaded by the homes one reform adds in each
+  tract, with the same values in a table.
+- **Right card:** one sentence and three numbers (baseline homes, homes added, change from the
+  baseline), each a likely range, and a verdict for each reform that is on.
 
 ### 2. Reform
 
-One reform at a time.
+One reform at a time, run alone.
 
-- **The funnel:** eligible sites, then sites that fit, then sites that pay off, then units built in five years. Each step shows a range and its formula.
-- **Top drivers:** the inputs that move the result the most.
-- **Assumptions:** for each input pick Low, Central, High or your own value. Each shows its source and a reset button.
-- **Evidence:** where the reform has been tried, predicted vs. observed.
-- **What this cannot tell you.**
-
-**Planned:** results, drivers and evidence need the engine.
+- **What it adds:** the homes added and the change from the baseline, with the verdict.
+- **The funnel:** eligible lots, then lots with room, then lots where building pays, then homes
+  built in five years. Each step shows a likely range and its formula.
+- **Top drivers:** the sensitivity tornado. Each input is moved alone from its low to its high
+  value; the bar spans the homes added at each end. On a large state this takes a few minutes the
+  first time, so it loads after the rest of the page.
+- **What the model cannot tell you:** the limits of this reform and of the whole model.
+- **Assumptions:** every Assumption Ledger entry the reform uses, with its low, central and high
+  value. By default the model draws each across its range ("Range"). Pick Low, Central or High
+  to pin it, or type your own value and press "Set custom". Changed rows are marked "Yours";
+  "Reset all" undoes them. Your choices go into the share link and apply on every screen.
+  On the static website this needs the local app, and the page says so.
+- **Evidence:** places where a similar rule was tried, with what was permitted before and after
+  and how far it carries over.
 
 ### 3. Compare
 
-All reforms side by side as ranges against the baseline. A waterfall shows how a package combines: sum of parts, minus overlap, plus interaction. A table you can export.
-
-**Planned.**
+Each reform run alone, as likely-range bars on one scale (the mark is the middle estimate). The
+package card shows how the five reforms add up: each reform alone added up, minus lots counted
+twice, plus savings that feed another reform, equals all five together. The table lists the same
+numbers; "Download CSV" saves every state and county record of that run.
 
 ### 4. Method & data
 
-- A data report card for the state (what is available, used or assumed, by tier).
-- The provenance table: source, version, access date, licence, cleaning, limits.
-- The full assumption ledger, searchable.
-- Validation results.
-- The glossary.
-
-**Planned.**
+- **Data report card:** each model input, whether it is used, available, assumed or missing, its
+  tier, edition, coverage and limits.
+- **Sources:** source, version, access date, licence, cleaning and limits.
+- **Assumption Ledger:** every assumption, searchable.
+- **Validation:** the baseline backtest: each simple projection rule scored on years it did not
+  see, and the rule the baseline uses.
+- **Glossary** and **Downloads** (the results table, the brief and the data files).
 
 ## Everywhere
 
-- **Explain this number.** Click any number to see its formula, inputs, sources and range. **Planned.**
-- **Grey means no result.** "No data" and "not modelled" are shown in grey and never count as a result.
+- **Explain this number.** Every underlined number opens a panel with what it is, its likely
+  range, the formula, its inputs, the assumptions behind it and the sources.
+- **Grey means no result.** "No data" is shown in grey and never counts as a result.
 
 ## Slides
 
-The Slides button opens a 16:9 slide view of the current scenario, one slide per page. "Read as a page" shows the same content as plain text. Use your browser's print dialog to save it as a PDF.
-
-**Planned:** slide content needs the engine. The slide route and printing are being built.
+The Slides button opens a 16:9 slide view of the current scenario, written by the engine from the
+same run: a summary, one slide per reform, the top drivers (for one reform), the package waterfall
+(for several) and the limits. Every slide footer carries the run's three fingerprints (code, data,
+assumptions). "Read as page" shows the same content as plain text. "Print or PDF" prints one slide
+per page.
 
 ## Export
 
 The Export menu offers:
 
+- **Brief (PDF):** saves the engine's print-ready brief as a page; open it and print to PDF.
 - **Slides (PDF):** opens the slides and the print dialog.
-- **Brief:** a print-ready page. **Planned.**
-- **Data (CSV):** the numbers behind the current view. **Planned.**
+- **Table (CSV):** every state and county result of the current scenario with its range.
 
-Each export will carry the code version, the data manifest fingerprint and the assumption fingerprint, so anyone can rerun it. **Planned.**
+Each file carries the code, data and assumption fingerprints, so anyone can rerun it. The static
+website holds these for each reform alone, all five together and the baseline; other mixes need
+the local app (`make app`).
 
 ## Share link
 

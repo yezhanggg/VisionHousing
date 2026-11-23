@@ -62,7 +62,6 @@ from visionhousing.data import manifest as mf
 from visionhousing.data.http import USER_AGENT, HttpClient, ssl_context
 from visionhousing.data.registry import get_source
 from visionhousing.data.sources import state_fips as to_state_fips
-from visionhousing.data.sources.opendata import read_extract, save_extract
 
 __all__ = [
     "REGIMES",
@@ -155,7 +154,7 @@ def _session() -> urllib.request.OpenerDirector:
 def _download_report(timeout: float = 120.0) -> bytes:
     """Open the form, post it for all counties, and download the CSV export."""
     opener = _session()
-    with opener.open(FORM_URL, timeout=timeout) as resp:  # noqa: S310 - fixed https address
+    with opener.open(FORM_URL, timeout=timeout) as resp:
         page = resp.read().decode("utf-8", "replace")
     fields = hidden_fields(page)
     fields.update(
@@ -166,9 +165,9 @@ def _download_report(timeout: float = 120.0) -> bytes:
         }
     )
     body = urllib.parse.urlencode(fields).encode()
-    with opener.open(FORM_URL, body, timeout=timeout) as resp:  # noqa: S310
+    with opener.open(FORM_URL, body, timeout=timeout) as resp:
         report = resp.read().decode("utf-8", "replace")
-    with opener.open(export_url(report), timeout=timeout) as resp:  # noqa: S310
+    with opener.open(export_url(report), timeout=timeout) as resp:
         return resp.read()
 
 
@@ -291,14 +290,18 @@ def parse_subdivision_population(raw: bytes | str, state_fips: str = "42") -> pd
     city = city.assign(COUSUB=city["PLACE"])
     rows = pd.concat([rows, city], ignore_index=True)
     pop_col = sorted(c for c in frame.columns if c.startswith("POPESTIMATE"))[-1]
-    return pd.DataFrame(
-        {
-            "county": state_fips + rows["COUNTY"],
-            "cousub": rows["COUSUB"],
-            "name": rows["NAME"],
-            "population": pd.to_numeric(rows[pop_col], errors="coerce").astype("Int64"),
-        }
-    ).sort_values(["county", "cousub"]).reset_index(drop=True)
+    return (
+        pd.DataFrame(
+            {
+                "county": state_fips + rows["COUNTY"],
+                "cousub": rows["COUSUB"],
+                "name": rows["NAME"],
+                "population": pd.to_numeric(rows[pop_col], errors="coerce").astype("Int64"),
+            }
+        )
+        .sort_values(["county", "cousub"])
+        .reset_index(drop=True)
+    )
 
 
 def parse_block_assignment(raw: bytes | str) -> pd.DataFrame:
@@ -415,8 +418,10 @@ def fetch_munstats(
         dest.write_bytes(raw)
         if manifest is not None:
             source = get_source(SOURCE)
-            mf.record(mf.entry_for_file(SOURCE, source.url_pattern, dest, "current", root=mf.ROOT),
-                      manifest)  # fmt: skip
+            mf.record(
+                mf.entry_for_file(SOURCE, source.url_pattern, dest, "current", root=mf.ROOT),
+                manifest,
+            )
     return parse_munstats(dest.read_bytes())
 
 
@@ -435,8 +440,9 @@ def fetch_subdivision_population(
     if not dest.exists():
         (client or HttpClient()).download(url, dest)
         if manifest is not None:
-            mf.record(mf.entry_for_file(POP_SOURCE, url, dest, str(POP_YEAR), root=mf.ROOT),
-                      manifest)  # fmt: skip
+            mf.record(
+                mf.entry_for_file(POP_SOURCE, url, dest, str(POP_YEAR), root=mf.ROOT), manifest
+            )
     return parse_subdivision_population(dest.read_bytes(), fips)
 
 
@@ -470,13 +476,3 @@ def fetch_block_subdivisions(
     if manifest is not None:
         mf.record(mf.entry_for_file(BAF_SOURCE, url, dest, "2020", root=mf.ROOT), manifest)
     return table
-
-
-def read_cached_crosswalk(path: Path) -> pd.DataFrame:
-    """Read a saved crosswalk table (code columns as text)."""
-    return read_extract(path)
-
-
-def save_crosswalk(table: pd.DataFrame, path: Path) -> None:
-    """Save a crosswalk table without recording it (it is derived, not downloaded)."""
-    save_extract(table, path, source_id=SOURCE, url=FORM_URL, vintage="derived", manifest=None)

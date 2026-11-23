@@ -14,10 +14,11 @@ request and response):
   server itself is started with its banner off).
 
 The Content Security Policy (CSP) tells the browser to run only scripts from
-this site. ``web/index.html`` has one inline script, the import map that names
-the vendored libraries. Rather than allow every inline script, the policy names
-that one by its SHA-256 fingerprint, computed from the file when the app starts
-(:func:`inline_script_hashes`), so the policy follows the file if it changes.
+this site. The built page (``web/dist/index.html``, made by Vite) has no inline
+script. Should one ever be added, the policy names it by its SHA-256
+fingerprint, computed from the file when the app starts
+(:func:`inline_script_hashes`), rather than allowing every inline script.
+``vercel.json`` repeats the same headers for the static site.
 """
 
 from __future__ import annotations

@@ -1146,3 +1146,57 @@ entries:
       fees. Tapping and connection fees set under other laws, and park fees in lieu
       under the code's subdivision article, were not reviewed here.
     used_for: [evidence_card]
+
+# ================================================================= owners (profile benchmarks)
+#
+# Published figures shown next to the "owners" profile section as cited context.
+# They are not reform evidence and do not feed the ledger; the leading underscore
+# keeps them out of the reform checks. Read by visionhousing.features.owners.
+# Both describe the City of Philadelphia only.
+
+_owners:
+
+  philly_fed_2025_large_corporate:
+    registry_id: philly_fed_owners_2025  # its entry in src/visionhousing/data/sources.yaml
+    place: "Philadelphia, Pennsylvania (city)"
+    measure: "Share of single-family rental parcels owned by large corporate investors"
+    value: 0.088
+    unit: "share"
+    period: "2023"
+    definition: >-
+      Large corporate investors are business entities owning 26 or more parcels in
+      Philadelphia. The same owners hold about 2.5 percent of all single-family
+      parcels. With a 100-or-more threshold the share would be about 7.0 percent.
+    source:
+      id: philly_fed_2025
+      citation: >-
+        Lei Ding, Sisi Zhang and Mckenzie Diep, "Ownership Profile of Single-Family
+        Residence Properties in Philadelphia: A Focus on Large Corporate Investors",
+        Federal Reserve Bank of Philadelphia, February 2025
+      url: https://www.philadelphiafed.org/community-development/housing-and-neighborhoods/ownership-profile-of-single-family-residence-properties-in-philadelphia-large-corporate-investors
+      accessed: 2026-11-22
+      locator: "Page 1 summary and page 3, Finding 1 (Figure 2); footnote 2"
+      verification: primary_document
+
+  pew_2024_investor_purchases:
+    registry_id: pew_phl_home_sales_2024  # its entry in src/visionhousing/data/sources.yaml
+    place: "Philadelphia, Pennsylvania (city)"
+    measure: "Share of arm's-length single-family home sales bought by investors and corporations"
+    value: 0.32
+    unit: "share"
+    period: "2000-2021"
+    definition: >-
+      Buyers whose names include words such as LLC or realty, or a property address,
+      and individuals who bought more than two homes. Individual cash buyers are not
+      counted, so the report calls this a floor; the yearly share ranged from 28 to
+      36 percent after 2002.
+    source:
+      id: pew_2024
+      citation: >-
+        Octavia Howell, "Single-Family Home Sales in Philadelphia: What 20 years of city
+        records tell us about how the market has changed", The Pew Charitable Trusts,
+        July 2024
+      url: https://www.pew.org/en/research-and-analysis/reports/2024/07/single-family-home-sales-in-philadelphia
+      accessed: 2026-11-22
+      locator: "Overview, page 1; 'Types of homebuyers', page 5"
+      verification: primary_document

@@ -25,7 +25,14 @@ jobs:
         with:
           python-version: "3.12"
           enable-cache: true
-      - name: Set up (dependencies from uv.lock and the test browser)
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Set up (uv.lock, the test browser, web packages from package-lock.json)
         run: make setup
       - name: Verify (lint, tests, licence audit, secret scan)
         run: make verify
+      - name: Web packages have no high or critical advisories
+        run: cd web && npm audit --audit-level=high

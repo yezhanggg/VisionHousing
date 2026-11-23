@@ -331,7 +331,7 @@ def fetch_cbp(
     client: HttpClient | None = None,
     manifest: Path | None = mf.MANIFEST_PATH,
 ) -> pd.DataFrame:
-    """Download the national CBP county zip (13 MB), keep the state's sector rows, delete the zip."""
+    """Download the national CBP county zip (13 MB), keep the state's sector rows only."""
     fips = to_state_fips(state)
     dest = Path(cache) / "jobs" / f"cbp_{year}_county_{fips}.csv"
     if not dest.exists():

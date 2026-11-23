@@ -240,6 +240,7 @@ def npm_findings(root: Path) -> list[dict[str, Any]]:
         if key
     }
     direct = sorted(manifest.get("dependencies", {}))
+    dev_direct = set(manifest.get("devDependencies", {}))
     parent: dict[str, str] = {}
     for top in direct:
         todo = list(packages.get(top, {}).get("dependencies", {}))
@@ -254,7 +255,12 @@ def npm_findings(root: Path) -> list[dict[str, Any]]:
         raw = info.get("license", "")
         expression = raw.get("type", "") if isinstance(raw, dict) else str(raw)
         ok, notes = _audit.evaluate(expression) if _audit and expression else (None, [])
-        group = BROWSER if name in direct else f"{BROWSER}, inside {parent.get(name, 'a library')}"
+        if info.get("dev"):  # the build tool (Vite) and what it needs; not in the page
+            group = "web build" if name in dev_direct else "web build, inside vite"
+        else:
+            group = (
+                BROWSER if name in direct else f"{BROWSER}, inside {parent.get(name, 'a library')}"
+            )
         rows.append(
             {
                 "name": name,

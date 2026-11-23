@@ -20,7 +20,7 @@ All under `/api/v1`. Errors are JSON: `{"error": code, "message": plain text}`.
 |---|---|
 | `GET /states` | Testland (`TL`) plus every state with a built pack in `data/packs/` |
 | `GET /states/{st}/summary` | State facts, the baseline (state and each county) at the default seed and draws, the runnable reforms, the three hashes |
-| `GET /states/{st}/counties/{fips}` | One county under the scenario in the query: facts, baseline, each reform's and the package's county record, tract ids, tract outlines |
+| `GET /states/{st}/counties/{fips}` | One county under the scenario in the query: facts, baseline, each reform's and the package's county record, tract ids, tract outlines, and `tract_results`: the homes each tract-level reform (run alone) adds in every tract, with fixed class breaks for the county |
 | `GET /reforms` | Every runnable reform: key, title, family |
 | `GET /reforms/{id}` | The reform's definition from `assumptions/scenarios.yaml` (Handbook wording, sources, notes) and every ledger parameter it uses. A scenario with no engine module yet comes back with `runnable: false` |
 | `POST /run` | `Result.to_dict()` of one run, plus `explanation` and `explanation_status` |
@@ -29,6 +29,10 @@ All under `/api/v1`. Errors are JSON: `{"error": code, "message": plain text}`.
 | `GET /provenance` | One row per registered source: version, access date, licence, terms, cleaning, limits. With `state=`, also the pack's file list and hash |
 | `GET /validation` | The baseline backtest skill table for `state` (default `TL`): each candidate rule's error and 80% interval coverage, and the rule chosen |
 | `GET /export/{fmt}` | The scenario in the query as a file: `csv` (state and county records, every row stamped with the three hashes), `json` (the same as `POST /run`) or `html` (the print-ready brief from the report writer) |
+| `GET /states/{st}/map` | Each county under the scenario in the query (`r`, `a`, ...): its baseline, the homes the reforms add there, and that change as a percent of the county's own baseline (P10 / P50 / P90 of the engine's draws), each with its text form and formula, plus a map class (`little` / `some` / `a_lot` by the ledger's verdict thresholds; `none` with no reform; `nodata` with no baseline). Ids shared by every county are given once in `ids` |
+| `GET /states/{st}/outlines` | The county outlines as GeoJSON (no tracts) |
+| `GET /evidence?reform=` | The evidence library (`assumptions/evidence.yaml`): every entry, or one reform's |
+| `GET /report-card?state=` | The state's data report card (`visionhousing.data.report_card`) |
 | `GET /places/{st}` | Place search: counties (or tracts with `level=tract`) whose name or code contains `q`, sorted by name, at most `limit` (1-500, default 25) |
 | `GET /profile/{st}/{geoid}` | The place profile of a county (5 digits) or tract (11 digits), exactly as `visionhousing.profile.build_profile` makes it. `format=json` (default), or `md`, `html`, `csv` as a download. See [profile.md](profile.md) |
 
@@ -56,6 +60,11 @@ The front end's link format (`web/js/state/codec.js`): `s` state, `r` reforms (c
 | A run past the time limit (120 s by default, `--timeout` or `VISIONHOUSING_RUN_TIMEOUT`) | 504 `run_timeout`. The run keeps going and its result is cached, so asking again later is quick |
 
 Validation errors list where and what, never the input itself.
+
+`views.py` builds the map, tract, outline, evidence and report-card replies. It does no new
+arithmetic of its own: the percent change uses the engine's own rule (`100 x added / baseline` in
+each draw) and its `from_draws` summary; text forms come from the explanation layer's `show`.
+Tested in `tests/test_api_views.py`.
 
 ## Running the engine
 

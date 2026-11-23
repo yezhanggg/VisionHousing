@@ -15,10 +15,16 @@ export const STATES = [
   ["WV", "West Virginia"], ["WI", "Wisconsin"], ["WY", "Wyoming"],
 ];
 
-export const STATE_CODES = STATES.map(([code]) => code);
+/**
+ * Testland: the small synthetic state the engine ships for tests and offline demos. A link
+ * may name it (`s=TL`); it is offered in the State picker only while it is chosen.
+ */
+export const TESTLAND = ["TL", "Testland (synthetic)"];
+
+export const STATE_CODES = [...STATES.map(([code]) => code), TESTLAND[0]];
 
 /** The state's name for a postal code, or the code itself if unknown. */
 export function stateName(code) {
-  const hit = STATES.find(([c]) => c === code);
+  const hit = [...STATES, TESTLAND].find(([c]) => c === code);
   return hit ? hit[1] : code;
 }

@@ -1,8 +1,13 @@
 /**
  * Entry point. Mounts the app: the top bar, the screen for the current route and the toast.
- * No build step: the browser loads these ES modules directly, and the import map in
- * index.html points library names at web/vendor/.
+ * Vite bundles this file, everything it imports and the stylesheets below into web/dist/.
+ * The stylesheets are imported here, in this order, so the cascade is the same in
+ * `npm run dev` and in the build.
  */
+import "maplibre-gl/dist/maplibre-gl.css";
+import "../css/tokens.css";
+import "../css/app.css";
+import "../css/slides.css";
 import { stateName } from "./content/states.js";
 import { html, render, useEffect } from "./lib/html.js";
 import { CompareScreen } from "./screens/compare.js";
@@ -12,6 +17,7 @@ import { ReformScreen } from "./screens/reform.js";
 import { SlidesScreen } from "./screens/slides.js";
 import { StateScreen } from "./screens/state.js";
 import { route, scenario, startRouter } from "./state/store.js";
+import { StaticNote } from "./ui/static-note.js";
 import { Toast } from "./ui/toast.js";
 import { TopBar } from "./ui/topbar.js";
 
@@ -37,6 +43,7 @@ function App() {
       document.getElementById("main")?.focus();
     }}>Skip to content</a>
     <${TopBar} />
+    <${StaticNote} />
     <${Screen} key=${name} />
     <${Toast} />`;
 }

@@ -1,47 +1,30 @@
 /**
- * The slide spec: an ordered list of slides, each a plain object.
+ * The slide deck of a scenario, as the engine writes it.
  *
- *   { layout: "title" | "headline" | "bullets", kicker, title, subtitle?, body?,
- *     stats?: [{ label, value }], bullets?: [text], sources?: [text] }
- *
- * The engine will build this list from one run, with every value and source attached.
- * Until it is connected, `placeholderDeck` returns three slides that hold words only: every
- * value is `null` and is drawn as "—".
+ * The explanation layer builds the deck from one run (`explanation.slides`): a summary, one
+ * slide per reform, the top drivers (a reform run alone), the package waterfall (several
+ * reforms) and the limits. Each slide carries its title, a big likely range, a chart spec,
+ * body sentences and its sources; every number in them is cited to a run record. This module
+ * only turns that spec into the plain shape the Slides view draws. It adds words, no numbers.
  */
-import { reformById } from "./reforms.js";
-import { stateName } from "./states.js";
 
-export function placeholderDeck(scenario) {
-  const reforms = scenario.reforms.map((id) => reformById(id)?.name).filter(Boolean);
-  const which = reforms.length ? reforms.join(" · ") : "Baseline only: no reform switched on";
-  return [
-    {
-      layout: "title",
-      kicker: "VisionHousing",
-      title: "How state housing reforms could change homes built over five years",
-      subtitle: `${stateName(scenario.state)} · ${which}`,
-      body: "Decision support, not a forecast. Not an official state document.",
-    },
-    {
-      layout: "headline",
-      kicker: "Headline",
-      title: "What the selected reforms add",
-      stats: [
-        { label: "Baseline, five-year units", value: null },
-        { label: "Added units", value: null },
-        { label: "Change from baseline", value: null },
-      ],
-      body: "Results appear here once the engine is connected. Each number will be a likely range.",
-    },
-    {
-      layout: "bullets",
-      kicker: "Limits",
-      title: "What this cannot tell you",
-      bullets: [
-        "Where any single home will be built. Results are reported for counties and the state.",
-        "One exact number. Every result is a likely range that depends on stated assumptions.",
-        "The effect of rules this model does not cover. The full list comes with the results.",
-      ],
-    },
-  ];
+/** The stamp printed in every slide footer: the run's three fingerprints. */
+export function stampOf(run) {
+  const s = run?.explanation?.stamp || run?.hashes || {};
+  return { code: s.code || "", data: s.data || "", assumptions: s.assumptions || "", disclaimer: s.disclaimer || "" };
+}
+
+/** The deck as plain slides: {kind, kicker, title, big, chart, body[], sources[]}. */
+export function deckOf(run) {
+  return (run?.explanation?.slides || []).map((s) => ({
+    kind: s.kind,
+    kicker: s.kicker?.text || "",
+    title: s.title?.text || "",
+    big: s.big
+      ? { label: s.big.label?.text || "", text: s.big.text?.text || "", middle: s.big.middle?.text || "" }
+      : null,
+    chart: s.chart || null,
+    body: (s.body || []).map((b) => b.text),
+    sources: s.sources || [],
+  }));
 }

@@ -2,7 +2,7 @@
   "name": "visionhousing-web",
   "version": "0.1.0",
   "private": true,
-  "description": "Browser libraries for the VisionHousing interface. Manifest only: no Node is needed to run the tool. scripts/vendor_web.py downloads these exact versions and checks their integrity.",
+  "description": "VisionHousing browser interface. Vite builds it into web/dist; FastAPI serves the build, or Vercel serves it as a static site.",
   "license": "Apache-2.0",
   "type": "module",
   "dependencies": {
@@ -11,5 +11,18 @@
     "htm": "3.1.1",
     "maplibre-gl": "6.17.0",
     "preact": "11.2.0"
+  },
+  "scripts": {
+    "dev": "vite",
+    "dev:static": "vite --mode static",
+    "build": "vite build",
+    "build:static": "vite build --mode static",
+    "preview": "vite preview"
+  },
+  "devDependencies": {
+    "vite": "7.3.8"
+  },
+  "engines": {
+    "node": ">=22.12.0"
   }
 }

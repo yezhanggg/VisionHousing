@@ -2,8 +2,9 @@
 
 Plain-language summary
 ----------------------
-:func:`create_app` builds the app. It serves the files in ``web/`` (the
-browser front end) at ``/`` and these JSON endpoints under ``/api/v1``:
+:func:`create_app` builds the app. It serves the built browser front end
+(``web/dist/``, made by ``npm run build`` in ``web/``; ``make app`` does both) at
+``/`` and these JSON endpoints under ``/api/v1``:
 
 =========================================  ==============================================
 ``GET  /states``                           Testland plus every state with a built pack
@@ -16,10 +17,17 @@ browser front end) at ``/`` and these JSON endpoints under ``/api/v1``:
 ``GET  /provenance``                       where every dataset comes from
 ``GET  /validation``                       the baseline backtest skill table
 ``GET  /export/{fmt}``                     the run as ``csv``, ``json`` or ``html`` (the brief)
+``GET  /states/{st}/map``                  each county's baseline, added homes, change and map class
+``GET  /states/{st}/outlines``             the county outlines (GeoJSON)
+``GET  /evidence?reform=``                 the evidence library entries (all, or one reform's)
+``GET  /report-card?state=``               the state's data report card
 ``GET  /places/{st}?q=&level=``            counties (or tracts) whose name contains ``q``
 ``GET  /profile/{st}/{geoid}``             a place profile (county or tract); ``format=``
                                            ``json`` (default), ``md``, ``html`` or ``csv``
 =========================================  ==============================================
+
+If ``web/dist/`` has not been built, every page address answers with a short
+plain-language page that says how to build it; the JSON endpoints still work.
 
 Every number comes from the engine unchanged. Requests are checked (see
 ``api.models``); bad input gets a 400, a body over 64 KB a 413, an unknown
@@ -38,13 +46,13 @@ from typing import Any
 
 from fastapi import FastAPI, Request
 from fastapi.exceptions import RequestValidationError
-from fastapi.responses import Response
+from fastapi.responses import HTMLResponse, Response
 from pydantic import ValidationError
 from starlette.exceptions import HTTPException as StarletteHTTPException
 from starlette.staticfiles import StaticFiles
 
 from visionhousing import __version__
-from visionhousing.api import service
+from visionhousing.api import service, views
 from visionhousing.api.models import (
     LIMITS,
     CompareRequest,
@@ -67,7 +75,19 @@ from visionhousing.ledger.loader import ROOT
 __all__ = ["API", "ApiError", "create_app"]
 
 API = "/api/v1"
-WEB_DIR = ROOT / "web"
+WEB_DIR = ROOT / "web" / "dist"
+NOT_BUILT = """<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>VisionHousing: interface not built</title>
+</head><body style="font-family: system-ui, sans-serif; max-width: 36rem; margin: 15vh auto;
+padding: 0 1rem; line-height: 1.5">
+<h1>The interface is not built yet</h1>
+<p>The engine is running: its JSON interface is at <a href="/api/v1/states">/api/v1/states</a>.
+The web pages are made by a build step that has not been run on this computer.</p>
+<p>Stop this server and run <code>make app</code>. It builds the pages (Vite, in
+<code>web/</code>) and starts the tool again. Or build them by hand:
+<code>cd web &amp;&amp; npm ci &amp;&amp; npm run build</code>.</p>
+</body></html>
+"""
 DEFAULT_TIMEOUT = float(os.environ.get("VISIONHOUSING_RUN_TIMEOUT", "120"))
 LOG = logging.getLogger("visionhousing.api")
 
@@ -99,6 +119,23 @@ def _plain_errors(exc: ValidationError | RequestValidationError) -> list[dict[st
     ][:20]
 
 
+class SpaFiles(StaticFiles):
+    """The built front end. An unknown page address (no file extension) gets ``index.html``.
+
+    The screens use hash routes (``/#/place/42003``), so this is only a safety net for a
+    hand-typed address such as ``/place``; a missing file such as ``/x.js`` stays a 404.
+    """
+
+    async def get_response(self, path: str, scope: Any) -> Any:
+        """Serve the file, or the page itself for an extension-less address."""
+        try:
+            return await super().get_response(path, scope)
+        except StarletteHTTPException as exc:
+            if exc.status_code != 404 or "." in path.rsplit("/", 1)[-1]:
+                raise
+            return await super().get_response("index.html", scope)
+
+
 def create_app(
     *,
     web_dir: Path | None = None,
@@ -110,7 +147,7 @@ def create_app(
     """Build the app.
 
     Args:
-        web_dir: Folder of the front end (default ``web/``).
+        web_dir: Folder of the built front end (default ``web/dist/``).
         packs_dir: Folder of the built state packs (default ``data/packs/``).
         run_timeout: Seconds a request waits for a run (default 120, or the
             ``VISIONHOUSING_RUN_TIMEOUT`` environment variable).
@@ -280,7 +317,37 @@ def create_app(
             data = service.county_detail(ctx, contexts.folder(ctx.state), result, fips)
         except KeyError:
             raise ApiError(404, "county_not_found", f"no county {fips} in {ctx.state}") from None
+        data["tract_results"] = views.county_tracts(result, fips)
         return _json(data)
+
+    @app.get(f"{API}/states/{{st}}/map")
+    def county_map(st: str, request: Request) -> Response:
+        """Each county under the scenario in the query: baseline, added, change, map class."""
+        req = from_query(request, st)
+        key, result = execute(req)
+        ctx = context(req.state)
+        facts = service._county_facts(contexts.folder(ctx.state))
+        return _json(timed(Runner.key("map", key), lambda: views.county_map(ctx, facts, result)))
+
+    @app.get(f"{API}/states/{{st}}/outlines")
+    def outlines(st: str) -> Response:
+        """The state's county outlines as GeoJSON (empty when the pack has none)."""
+        return _json(views.county_outlines(context(st)))
+
+    @app.get(f"{API}/evidence")
+    def evidence(reform: str | None = None) -> Response:
+        """The evidence library: every entry, or one reform's."""
+        if reform is not None and (len(reform) > 32 or not reform.replace("_", "").isalnum()):
+            raise ApiError(400, "invalid_reform", "reform must be a short id")
+        return _json(views.evidence_cards(reform))
+
+    @app.get(f"{API}/report-card")
+    def report_card(state: str = "TL") -> Response:
+        """The state's data report card: each model input used, available, assumed or missing."""
+        ctx = context(state)
+        key = Runner.key("report_card", ctx.state, ctx.data_hash)
+        folder = contexts.folder(ctx.state)
+        return _json(runner.submit(key, lambda: views.pack_report_card(folder)))
 
     @app.get(f"{API}/reforms")
     def reforms() -> Response:
@@ -437,8 +504,14 @@ def create_app(
         """Unknown interface addresses get a JSON 404, never the web page."""
         raise ApiError(404, "not_found", "no such interface address")
 
-    if web.is_dir():
-        app.mount("/", StaticFiles(directory=web, html=True), name="web")
+    if (web / "index.html").is_file():
+        app.mount("/", SpaFiles(directory=web, html=True), name="web")
+    else:
+
+        @app.get("/{rest:path}", include_in_schema=False)
+        def not_built(rest: str) -> Response:
+            """No build yet: say so in plain words instead of a bare 404."""
+            return HTMLResponse(NOT_BUILT, status_code=503)
 
     csp = content_security_policy(page_hashes(web))
     wrapped = SecurityHeaders(BodyLimit(app, LIMITS["body_bytes"]), csp, api_prefix=f"{API}/")

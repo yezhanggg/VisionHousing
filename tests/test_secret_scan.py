@@ -102,3 +102,10 @@ def _no_git(*args, **kwargs):
 
 def test_real_tree_is_clean():
     assert ss.scan(ss.ROOT) == []
+
+
+def test_url_paths_pass_but_url_query_keys_are_caught():
+    path_only = f"url: https://example.gov/files/{RANDOM_TOKEN}/data.zip"
+    assert not [h for h in ss.scan_text("a.yaml", path_only, []) if "entropy" in h.kind]
+    with_query = f"url: https://example.gov/files/data.zip?key={RANDOM_TOKEN}"
+    assert [h for h in ss.scan_text("a.yaml", with_query, []) if "entropy" in h.kind]

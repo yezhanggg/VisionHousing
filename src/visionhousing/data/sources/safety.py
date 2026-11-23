@@ -51,6 +51,7 @@ from visionhousing.data.http import FetchError, HttpClient, redact
 from visionhousing.data.registry import get_source
 from visionhousing.data.sources import STATE_FIPS
 from visionhousing.data.sources import state_fips as to_state_fips
+from visionhousing.data.sources.incentives import STATE_NAMES
 
 __all__ = [
     "AGENCY_COLUMNS",
@@ -132,20 +133,24 @@ def read_agencies(data: bytes | str) -> pd.DataFrame:
     return pd.DataFrame(list(rows.values()), columns=columns).sort_values("ori", ignore_index=True)
 
 
-def _own_series(series: Mapping[str, Any], others: tuple[str, ...], suffix: str = "") -> Any:
+def _own_series(
+    series: Mapping[str, Any], others: tuple[str, ...], suffix: str = "", agency: str = ""
+) -> Any:
     """The one series that belongs to the agency (not the nation's or the state's)."""
     picked = [
         (name, values)
         for name, values in series.items()
         if name.endswith(suffix) and not any(name.startswith(o) for o in others)
     ]
+    if len(picked) > 1 and agency:
+        picked = [(n, v) for n, v in picked if n.startswith(agency)]
     if len(picked) != 1:
         return None
     return picked[0][1]
 
 
 def read_agency_offenses(
-    data: bytes | str, state_name: str = ""
+    data: bytes | str, state_name: str = "", agency_name: str = ""
 ) -> tuple[int | None, int, float | None]:
     """Read one summarized-offense answer: the year's total, months reported, population.
 
@@ -159,14 +164,14 @@ def read_agency_offenses(
     doc = json.loads(data)
     others = ("United States", state_name) if state_name else ("United States",)
     actuals = ((doc.get("offenses") or {}).get("actuals")) or {}
-    own = _own_series(actuals, others, " Offenses")
+    own = _own_series(actuals, others, " Offenses", agency_name)
     total, months = None, 0
     if isinstance(own, Mapping):
         values = [v for v in own.values() if v is not None]
         months = len(values)
         total = int(sum(float(v) for v in values)) if values else None
     pops = ((doc.get("populations") or {}).get("population")) or {}
-    own_pop = _own_series(pops, others)
+    own_pop = _own_series(pops, others, "", agency_name)
     population = None
     if isinstance(own_pop, Mapping):
         values = [float(v) for v in own_pop.values() if v is not None]
@@ -217,10 +222,10 @@ def fetch_safety(
         return None
     client = client or HttpClient()
     raw = folder / str(year)
-    agencies = read_agencies(_get(client, f"agency/byStateAbbr/{abbr}", {}, key, raw / "agencies.json"))
+    agencies = read_agencies(
+        _get(client, f"agency/byStateAbbr/{abbr}", {}, key, raw / "agencies.json")
+    )
     agencies = agencies[agencies["agency_type"].isin(AGENCY_TYPES)]
-    from visionhousing.data.sources.incentives import STATE_NAMES
-
     state_name = STATE_NAMES.get(fips, "")
     rows = []
     span = {"from": f"01-{year}", "to": f"12-{year}"}
@@ -241,7 +246,7 @@ def fetch_safety(
                 key,
                 raw / f"{a.ori}_{code}.json",
             )
-            total, months, pop = read_agency_offenses(data, state_name)
+            total, months, pop = read_agency_offenses(data, state_name, a.agency_name)
             rec[name], rec[f"{name}_months"] = total, months
             population = population if population is not None else pop
         rec["population"] = population

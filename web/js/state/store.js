@@ -4,11 +4,11 @@
  * scenario is written back to it. So a copied link always reopens the same view.
  */
 import { computed, signal } from "@preact/signals";
-import { REFORM_IDS } from "../content/reforms.js";
+import { REFORM_ALIASES, REFORM_IDS, reformById } from "../content/reforms.js";
 import { STATE_CODES } from "../content/states.js";
 import { decodeScenario, encodeScenario, parseRoute } from "./codec.js";
 
-const KNOWN = { states: STATE_CODES, reforms: REFORM_IDS };
+const KNOWN = { states: STATE_CODES, reforms: REFORM_IDS, aliases: REFORM_ALIASES };
 
 /** The raw address hash. Updated on every `hashchange`. */
 export const hash = signal(typeof location === "undefined" ? "" : location.hash);
@@ -46,12 +46,21 @@ export function updateScenario(patch) {
   replaceHash(hrefFor(route.value.name, route.value.param, next));
 }
 
-/** Switch one reform on or off. */
+/**
+ * Switch one reform on or off. Reforms of the same family reach the same lots (the ADU
+ * reform and the Pennsylvania ADU bills), so switching one on switches the others off.
+ */
 export function toggleReform(id) {
   const on = scenario.value.reforms.includes(id);
+  const family = reformById(id)?.family;
   const reforms = on
     ? scenario.value.reforms.filter((r) => r !== id)
-    : [...scenario.value.reforms, id];
+    : [...scenario.value.reforms.filter((r) => reformById(r)?.family !== family), id];
+  updateScenario({ reforms });
+}
+
+/** Set the reforms switched on (for example "all five benchmarks"). */
+export function setReforms(reforms) {
   updateScenario({ reforms });
 }
 
@@ -71,7 +80,8 @@ export function startRouter() {
 
 function canonical() {
   const r = route.value;
-  const param = r.name === "reform" && !r.param ? defaultReform() : r.param;
+  let param = r.name === "reform" && !r.param ? defaultReform() : r.param;
+  if (r.name === "reform" && REFORM_ALIASES[param]) param = REFORM_ALIASES[param];
   if (r.name !== "slides") lastScreen.value = { name: r.name, param };
   replaceHash(hrefFor(r.name, param));
 }

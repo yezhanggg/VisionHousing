@@ -29,16 +29,20 @@ import io
 import json
 import re
 from collections.abc import Iterable
+from pathlib import Path
 
 import pandas as pd
 
-from visionhousing.data.http import HttpClient
+from visionhousing.data import manifest as mf
+from visionhousing.data.http import BadRequestError, HttpClient
 
 __all__ = [
     "CARTO_URL",
     "CKAN_SQL_URL",
     "carto_sql",
     "ckan_sql",
+    "read_extract",
+    "save_extract",
     "sql_list",
     "sql_text",
     "word_regex",
@@ -46,6 +50,10 @@ __all__ = [
 
 CARTO_URL = "https://phl.carto.com/api/v2/sql"
 CKAN_SQL_URL = "https://data.wprdc.org/api/3/action/datastore_search_sql"
+BUSY_RETRIES = 3
+"""Extra attempts when Carto says the query waited too long in its queue."""
+BUSY_WAIT = 10.0
+"""Seconds waited before the first new attempt (then 20, 30)."""
 CKAN_PAGE = 30_000
 """Rows asked for per page; the WPRDC service caps one answer at 32,000 rows."""
 
@@ -81,14 +89,24 @@ def word_regex(words: Iterable[str]) -> str:
     return r"\m(" + "|".join(clean) + r")\M"
 
 
-def carto_sql(query: str, client: HttpClient | None = None, *, url: str = CARTO_URL) -> pd.DataFrame:
+def carto_sql(
+    query: str, client: HttpClient | None = None, *, url: str = CARTO_URL
+) -> pd.DataFrame:
     """Run one query on Philadelphia's Carto SQL service and return the rows.
 
     The answer is read as CSV (``format=csv``), so numbers keep full precision
     and memory stays small.
     """
     client = client or HttpClient()
-    raw = client.get_bytes(url, {"q": query, "format": "csv"})
+    for attempt in range(BUSY_RETRIES + 1):
+        try:
+            raw = client.get_bytes(url, {"q": query, "format": "csv"})
+            break
+        except BadRequestError as err:
+            # A busy server answers 400 "query_wait_timeout"; wait and ask again.
+            if "timeout" not in err.body or attempt >= BUSY_RETRIES:
+                raise
+            client.sleep(BUSY_WAIT * (attempt + 1))
     if not raw.strip():
         return pd.DataFrame()
     return pd.read_csv(io.BytesIO(raw), dtype=str, keep_default_na=False, na_values=[""])
@@ -151,10 +169,6 @@ def save_extract(
         vintage: Edition read, for example the date the records were read.
         manifest: Manifest file, or ``None`` to record nothing.
     """
-    from pathlib import Path
-
-    from visionhousing.data import manifest as mf
-
     dest = Path(dest)
     dest.parent.mkdir(parents=True, exist_ok=True)
     part = dest.with_name(dest.name + ".part")

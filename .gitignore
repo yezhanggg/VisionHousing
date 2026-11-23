@@ -56,10 +56,12 @@ build/
 dist/
 .ipynb_checkpoints/
 
-# --- Node (only if a web front end is added) ---
+# --- Node: web packages and Vite build output (rebuilt by `make setup` / `make web`) ---
+# web/public/data/ (the static-site export) is NOT ignored: it is committed for Vercel.
 node_modules/
 .vite/
-web/vendor/
+web/dist/
+.vercel/
 
 # --- OS noise ---
 .DS_Store

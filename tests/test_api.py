@@ -241,12 +241,29 @@ def test_run_without_explanation(client):
     assert r.json()["explanation"] is None and r.json()["explanation_status"] == "skipped"
 
 
-def test_web_shell_served_at_root(client):
-    r = client.get("/")
+def test_web_build_served_at_root(packs, tmp_path):
+    dist = tmp_path / "dist"
+    (dist / "assets").mkdir(parents=True)
+    (dist / "index.html").write_text('<!doctype html><script type="module" src="/assets/a.js">'
+                                     "</script>", encoding="utf-8")  # fmt: skip
+    (dist / "assets" / "a.js").write_text("export {};\n", encoding="utf-8")
+    web = AsgiClient(create_app(packs_dir=packs, web_dir=dist))
+    r = web.get("/")
     assert r.status == 200 and r.headers["content-type"].startswith("text/html")
-    assert '<script type="importmap">' in r.text
-    js = client.get("/js/main.js")
+    assert "/assets/a.js" in r.text
+    js = web.get("/assets/a.js")
     assert js.status == 200 and js.headers["content-type"].startswith("text/javascript")
+    assert web.get("/place").text == r.text  # an extension-less address gets the page
+    assert web.get("/assets/missing.js").status == 404
+    assert web.get(f"{API}/nothing").json()["error"] == "not_found"
+
+
+def test_unbuilt_web_says_how_to_build(packs, tmp_path):
+    web = AsgiClient(create_app(packs_dir=packs, web_dir=tmp_path / "nothing"))
+    r = web.get("/")
+    assert r.status == 503 and r.headers["content-type"].startswith("text/html")
+    assert "make app" in r.text and "npm run build" in r.text
+    assert web.get(f"{API}/states").status == 200
 
 
 def test_unknown_api_address_is_json_404(client):

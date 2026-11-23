@@ -79,7 +79,9 @@ def test_tables_follow_the_testland_schema(tmp_path):
         assert list(columns) == header, name  # the fixed schema is Testland's, in order
         assert list(tables[name].columns[: len(header)]) == header, name
     assert tables["transit_stops"].empty
-    assert set(tables) == set(pack.TABLES)
+    # Place-profile and local tables are built only when their inputs were fetched.
+    optional = set(pack.place_src.TABLES) | set(pack.local_src.TABLES)
+    assert set(pack.TABLES) - optional <= set(tables) <= set(pack.TABLES)
     tl = fixture_csv("tracts").set_index("geoid")
     tr = tables["tracts"].set_index("geoid")
     assert (tr["land_area_m2"] == tl["land_area_m2"].reindex(tr.index)).sum() > 0
@@ -95,7 +97,7 @@ def test_dictionary_describes_every_column_with_a_tier(tmp_path):
         assert {(name, col) for col in frame.columns} <= described
     for c in d["columns"]:
         assert c["unit"] and c["description"] and c["source"] and c["tier"] in d["tiers"]
-    assert {t["table"] for t in d["tables"]} == {*pack.TABLES, "boundaries"}
+    assert {t["table"] for t in d["tables"]} == {*tables, "boundaries"}
     assert all(t["sources"] for t in d["tables"])
 
 

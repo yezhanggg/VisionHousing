@@ -256,9 +256,9 @@ def read_nmtc(source: bytes | str | Path, state_fips: str | None = None) -> pd.D
             if len(tract) != 11 or not tract.isdigit():
                 continue
 
-            def cell(key: str) -> Any:
-                i = index[key]  # type: ignore[index]
-                return cells[i] if i < len(cells) else None
+            def cell(key: str, row=cells, at=index) -> Any:
+                i = at[key]
+                return row[i] if i < len(row) else None
 
             mfi = cell("nmtc_mfi_pct")
             rows.append(

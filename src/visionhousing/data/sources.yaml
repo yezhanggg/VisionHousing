@@ -553,7 +553,7 @@ sources:
   - id: treasury_oz2027
     name: Qualified Opportunity Zones designated for 2027 (second decennial round)
     publisher: U.S. Department of the Treasury
-    url_pattern: https://home.treasury.gov/system/files/131/OZ2-Designations-2027-Data-Transparency-10302026.xlsx
+    url_pattern: https://home.treasury.gov/system/files/131/OZ2-Designations-2027-Data-Transparency-10302026.xlsx  # secret-scan: allow (a public URL path, not a key)
     vintage: Designations list dated 2026-10-30, effective 2027-01-01 (2020 tracts)
     geography: [tract]
     licence: Public domain (U.S. government work)
@@ -572,7 +572,7 @@ sources:
   - id: cdfi_nmtc_lic
     name: New Markets Tax Credit low-income community tracts (2016-2020 ACS)
     publisher: U.S. Department of the Treasury, CDFI Fund
-    url_pattern: https://www.cdfifund.gov/system/files/2023-08/NMTC_2016-2020_ACS_LIC_Sept1_2023.xlsb
+    url_pattern: https://www.cdfifund.gov/system/files/2023-08/NMTC_2016-2020_ACS_LIC_Sept1_2023.xlsb  # secret-scan: allow (a public URL path, not a key)
     vintage: 2016-2020 ACS eligibility file released 2023-09-01 (required for investments closed from 2024-09-01)
     geography: [tract]
     licence: Public domain (U.S. government work)
@@ -597,14 +597,15 @@ sources:
     name: Low-Income Housing Tax Credit properties (HUD LIHTC database)
     publisher: U.S. Department of Housing and Urban Development
     url_pattern: https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/LIHTC/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
-    vintage: HUD LIHTC map service updated 2026-04-20
+    vintage: HUD LIHTC map service updated 2026-04-20; Pennsylvania projects placed in service through 2020
     geography: [point]
     licence: Public domain (U.S. government work)
     terms_url: https://www.huduser.gov/portal/datasets/lihtc.html
     parser: incentives.read_feature_page
     limits: >-
       Projects placed in service since 1987 as reported by state agencies; recent
-      years are incomplete and the year is unknown for some projects. A project's
+      years are incomplete (the map service's Pennsylvania records stop at 2020) and the
+      year is unknown for some projects. A project's
       point is the address of its largest building. Projects that left the program
       are not removed.
     tier: 0
@@ -682,3 +683,262 @@ sources:
       confirmed live: no key was available when this entry was written; the reader
       follows the published API's shape and is checked by a real-data test that
       runs only when a key is set.
+
+  # ---------------------------------------------------------------- local refinement (tier 2):
+  # zoning status, plans, parcels, owners, city permits, LIHTC awards (visionhousing.data.local)
+
+  - id: pa_dced_munstats
+    name: Municipal Statistics, County / Municipal Planning, Zoning & Building Code report
+    publisher: Pennsylvania Department of Community and Economic Development (DCED)
+    url_pattern: https://apps.dced.pa.gov/munstats-public/ReportInformation2.aspx?report=CountyMuniBuilding_Excel
+    vintage: current (the report is kept up to date by DCED)
+    geography: [municipality]
+    licence: Public information published by a Pennsylvania state agency; no licence stated. Cited as "PA DCED Municipal Statistics".
+    terms_url: https://dced.pa.gov/local-government/
+    expected_size: 240885
+    parser: munstats.parse_munstats
+    limits: >-
+      Self-reported by municipalities and updated when they tell DCED; some entries may
+      be out of date. Says whether an ordinance or plan exists, not what it allows or
+      when it was last revised. DCED ids are matched to Census county subdivisions by
+      name; unmatched names are listed in the build notes.
+    tier: 2
+    access: page
+    cleaning: >-
+      The ASP.NET form is posted for all counties and the report exported as CSV. County
+      government rows are dropped. Yes/no answers become 1/0; the lists of member
+      municipalities become counts. Matched to Census county subdivisions by county and
+      normalised name, with hand-checked pairs in assumptions/zoning.yaml.
+    checked_on: 2026-11-22
+
+  - id: census_subcounty_pop
+    name: City and Town Population Totals (subcounty resident population estimates)
+    publisher: U.S. Census Bureau, Population Estimates Program
+    url_pattern: https://www2.census.gov/programs-surveys/popest/datasets/2020-2024/cities/totals/sub-est2024_{fips}.csv
+    vintage: Vintage 2024 (estimates for July 1, 2020 to 2024)
+    geography: [county subdivision]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/data/datasets/time-series/demo/popest/2020s-total-cities-and-towns.html
+    expected_size: 535533
+    parser: munstats.parse_subdivision_population
+    limits: Model-based estimates, not counts; small municipalities carry wide error.
+    tier: 2
+    access: file
+    cleaning: Keeps county subdivision rows (summary level 061) and the city-county of Philadelphia; the latest year's estimate is used.
+    checked_on: 2026-11-22
+
+  - id: census_baf_2020_mcd
+    name: 2020 Census Block Assignment Files, county subdivisions
+    publisher: U.S. Census Bureau, Geography Division
+    url_pattern: https://www2.census.gov/geo/docs/maps-data/data/baf2020/BlockAssign_ST{fips}_{postal}.zip
+    vintage: "2020"
+    geography: [block]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/geographies/reference-files/time-series/geo/block-assignment-files.html
+    expected_size: 5919170
+    parser: munstats.parse_block_assignment
+    limits: Uses 2020 municipal boundaries; later annexations and mergers are not reflected.
+    tier: 2
+    access: file
+    cleaning: Only the county subdivision member is read; block and subdivision codes are kept.
+    checked_on: 2026-11-22
+
+  - id: phl_opa_properties
+    name: Philadelphia Properties and Assessment History (opa_properties_public)
+    publisher: City of Philadelphia, Office of Property Assessment (via OpenDataPhilly, Carto SQL)
+    url_pattern: https://phl.carto.com/api/v2/sql
+    vintage: Assessment file as read on the build date (tax year 2027 values at the time of writing)
+    geography: [parcel]
+    licence: City of Philadelphia open data; licence to be confirmed before release (only derived totals are kept, and the City is credited)
+    terms_url: https://opendataphilly.org/datasets/philadelphia-properties-and-assessment-history/
+    parser: phl_opa.fetch_opa_parcels
+    limits: >-
+      Assessment records, not a census of who lives where. Market values are the City's
+      mass-appraisal estimates. The last sale is the only sale on file, so repeat sales
+      in a window are undercounted. Condominium units are filed as single family and are
+      separated by building description.
+    tier: 2
+    access: api
+    cleaning: >-
+      Read in pages on the City's server. Only location (5 decimals), category, value,
+      year built, lot area, last sale and three 0/1 flags (homestead, entity-looking
+      owner name, out-of-state tax-bill address) leave the server; owner names and
+      addresses never do. Parcels are placed in 2020 tracts by outline.
+    checked_on: 2026-11-22
+
+  - id: phl_rtt_summary
+    name: Philadelphia Real Estate Transfers (rtt_summary)
+    publisher: City of Philadelphia, Department of Records (via OpenDataPhilly, Carto SQL)
+    url_pattern: https://phl.carto.com/api/v2/sql
+    vintage: Transfer records as read on the build date
+    geography: [parcel]
+    licence: City of Philadelphia open data; licence to be confirmed before release (only yearly totals are kept)
+    terms_url: https://opendataphilly.org/datasets/real-estate-transfers/
+    parser: phl_opa.fetch_deed_flow
+    limits: >-
+      Grantee names are judged entity or person by word list only. The single-family
+      test uses today's property category, not the category on the sale date.
+    tier: 2
+    access: api
+    cleaning: Counted on the City's server per year; only yearly totals are downloaded.
+    checked_on: 2026-11-22
+
+  - id: phl_li_permits
+    name: Philadelphia Licenses and Inspections building permits (permits)
+    publisher: City of Philadelphia, Department of Licenses and Inspections (via OpenDataPhilly, Carto SQL)
+    url_pattern: https://phl.carto.com/api/v2/sql
+    vintage: Permits as read on the build date, issued from 2016
+    geography: [point]
+    licence: City of Philadelphia open data; licence to be confirmed before release (only tract totals are kept)
+    terms_url: https://opendataphilly.org/datasets/licenses-and-inspections-building-and-zoning-permits/
+    parser: local_permits.fetch_phl_permits
+    limits: >-
+      Permits issued, not homes started or finished. A record-system change in 2020
+      renamed permit types; both names are counted. A 2021 rush ahead of a tax
+      abatement change inflates that year.
+    tier: 2
+    access: api
+    cleaning: New-construction building permits only (types in assumptions/pipeline_local.yaml); location, year and homes kept.
+    checked_on: 2026-11-22
+
+  - id: alle_assessments
+    name: Allegheny County Property Assessments
+    publisher: Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)
+    url_pattern: https://data.wprdc.org/api/3/action/datastore_search_sql
+    vintage: Assessment file as read on the build date (values on the county's 2012 base year)
+    geography: [parcel]
+    licence: Creative Commons CC0 (public domain dedication)
+    terms_url: https://data.wprdc.org/dataset/property-assessments
+    parser: alle_assess.fetch_single_family
+    limits: >-
+      Fair market values are 2012 base-year assessments, far below today's prices. The
+      owner type "CORPORATION" is the assessment office's code, not a name test.
+    tier: 2
+    access: api
+    cleaning: Added up per 2020 tract on WPRDC's server; no names or addresses are downloaded.
+    checked_on: 2026-11-22
+
+  - id: alle_parcel_centroids
+    name: Parcel Centroids in Allegheny County with Geographic Identifiers (March 2025)
+    publisher: Western Pennsylvania Regional Data Center
+    url_pattern: https://data.wprdc.org/api/3/action/datastore_search_sql
+    vintage: March 2025
+    geography: [parcel]
+    licence: Creative Commons CC0 (public domain dedication)
+    terms_url: https://data.wprdc.org/dataset/parcel-centroids-in-allegheny-county-with-geographic-identifiers
+    parser: alle_assess.use_counts_query
+    limits: Parcels created after March 2025 have no centre point and are counted only in the county total.
+    tier: 2
+    access: api
+    cleaning: Joined to assessments and sales on the parcel id on WPRDC's server.
+    checked_on: 2026-11-22
+
+  - id: alle_property_sales
+    name: Allegheny County Real Estate Sales
+    publisher: Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)
+    url_pattern: https://data.wprdc.org/api/3/action/datastore_search_sql
+    vintage: Sales as read on the build date
+    geography: [parcel]
+    licence: Creative Commons CC0 (public domain dedication)
+    terms_url: https://data.wprdc.org/dataset/real-estate-sales
+    parser: alle_assess.fetch_sales
+    limits: Only sales the assessment office marked valid (sale codes in assumptions/parcels.yaml) are counted.
+    tier: 2
+    access: api
+    cleaning: Valid single-family sales counted and their median price taken on WPRDC's server.
+    checked_on: 2026-11-22
+
+  - id: pgh_pli_permits
+    name: City of Pittsburgh PLI Permits
+    publisher: City of Pittsburgh, Department of Permits, Licenses and Inspections (via WPRDC)
+    url_pattern: https://data.wprdc.org/api/3/action/datastore_search_sql
+    vintage: Permits as read on the build date (the file starts in mid-2019)
+    geography: [point]
+    licence: Creative Commons Attribution 4.0 (CC BY 4.0)
+    terms_url: https://data.wprdc.org/dataset/pli-permits
+    parser: local_permits.fetch_pgh_permits
+    limits: No home counts, so only permits are counted. City of Pittsburgh only, not the rest of Allegheny County.
+    tier: 2
+    access: api
+    cleaning: Residential new-construction building permits only; location and year kept.
+    checked_on: 2026-11-22
+
+  - id: phfa_lihtc_awards
+    name: PHFA Low-Income Housing Tax Credit award lists
+    publisher: Pennsylvania Housing Finance Agency (PHFA)
+    url_pattern: https://www.phfa.org/mhp/
+    vintage: Award lists posted on the build date (from 2019; scanned lists are skipped)
+    geography: [address]
+    licence: Public information published by a Pennsylvania state agency; no licence stated
+    terms_url: https://www.phfa.org/mhp/
+    parser: phfa.parse_awards
+    limits: >-
+      Awards, not homes built: some awarded projects are delayed or dropped. Read from
+      PDFs whose layout changes yearly; a list with no text layer is skipped. Sites
+      described as intersections or scattered sites have no tract.
+    tier: 2
+    access: page
+    cleaning: >-
+      Each PDF is saved to a temporary file and read with pypdf. Name, city, ZIP, county,
+      homes and credit kept; sponsor contacts are never kept.
+    checked_on: 2026-11-22
+
+  - id: census_geocoder
+    name: Census Geocoder (geographies, one-line address)
+    publisher: U.S. Census Bureau
+    url_pattern: https://geocoding.geo.census.gov/geocoder/geographies/onelineaddress
+    vintage: Public_AR_Current benchmark, Census2020_Current vintage
+    geography: [address]
+    licence: Public domain (U.S. government service)
+    terms_url: https://geocoding.geo.census.gov/geocoder/
+    parser: phfa.geocode
+    limits: Street addresses only; intersections and scattered sites are not found.
+    tier: 2
+    access: api
+    cleaning: Only the 2020 tract code of the first match is kept.
+    checked_on: 2026-11-22
+
+  - id: county_comprehensive_plans
+    name: County comprehensive plans (citation list in assumptions/plans.yaml)
+    publisher: Pennsylvania county planning commissions
+    url_pattern: https://dced.pa.gov/local-government/
+    vintage: Plans as adopted; links read 2026-11-22
+    geography: [county]
+    licence: Public documents of each county; cited, not copied
+    terms_url: https://dced.pa.gov/local-government/
+    parser: zoning_status.read_plan_citations
+    limits: A citation list for large counties only; each county's own page is the authority.
+    tier: 2
+    access: page
+    cleaning: None; name, adoption year and link are typed from each county's page and marked verified or not.
+    checked_on: 2026-11-22
+
+  - id: philly_fed_owners_2025
+    name: "Ownership Profile of Single-Family Residence Properties in Philadelphia: A Focus on Large Corporate Investors (cited benchmark, not ingested)"
+    publisher: Federal Reserve Bank of Philadelphia
+    url_pattern: https://www.philadelphiafed.org/community-development/housing-and-neighborhoods/ownership-profile-of-single-family-residence-properties-in-philadelphia-large-corporate-investors
+    vintage: February 2025 (describes 2023)
+    geography: [county]
+    licence: Cited publication; one figure quoted with attribution, no data copied
+    terms_url: https://www.philadelphiafed.org/community-development/housing-and-neighborhoods/ownership-profile-of-single-family-residence-properties-in-philadelphia-large-corporate-investors
+    parser: owners.benchmarks
+    limits: Philadelphia only. Large corporate investors are entities with 26 or more parcels; the share is of single-family rentals, not all homes.
+    tier: 2
+    access: page
+    cleaning: None; the figure and its locator are recorded in assumptions/evidence.yaml (_owners).
+    checked_on: 2026-11-22
+
+  - id: pew_phl_home_sales_2024
+    name: "Single-Family Home Sales in Philadelphia (cited benchmark, not ingested)"
+    publisher: The Pew Charitable Trusts
+    url_pattern: https://www.pew.org/en/research-and-analysis/reports/2024/07/single-family-home-sales-in-philadelphia
+    vintage: July 2024 (describes 2000-2021)
+    geography: [county]
+    licence: Cited publication; one figure quoted with attribution, no data copied
+    terms_url: https://www.pew.org/en/research-and-analysis/reports/2024/07/single-family-home-sales-in-philadelphia
+    parser: owners.benchmarks
+    limits: Philadelphia only. Investors include named entities and individuals buying more than two homes; cash buyers are not counted, so it is a floor.
+    tier: 2
+    access: page
+    cleaning: None; the figure and its locator are recorded in assumptions/evidence.yaml (_owners).
+    checked_on: 2026-11-22

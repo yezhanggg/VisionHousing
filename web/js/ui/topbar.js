@@ -6,7 +6,8 @@
  * Under 768 px wide the tabs and the buttons fold into a labelled "Menu".
  */
 import { html, useLayoutEffect, useRef, useState } from "../lib/html.js";
-import { defaultReform, hrefFor, navigate, route, showToast } from "../state/store.js";
+import { downloadCsv, openBrief } from "../lib/exports.js";
+import { defaultReform, hrefFor, navigate, route, scenario, showToast } from "../state/store.js";
 import { Icon, Mark } from "./icons.js";
 
 export const TABS = [
@@ -48,35 +49,22 @@ export async function shareLink() {
   }
 }
 
-/** The three exports. Only the slides can be printed before the engine is connected. */
+/** The three exports. Each is made from the current scenario's engine run. */
 export const EXPORTS = [
-  {
-    id: "brief",
-    label: "Brief (PDF)",
-    hint: "Four-page summary",
-    ready: false,
-    why: "The brief needs results from the engine, which is not connected yet.",
-  },
+  { id: "brief", label: "Brief (PDF)", hint: "Print-ready page", ready: true },
   { id: "slides", label: "Slides (PDF)", hint: "One slide per page", ready: true },
-  {
-    id: "csv",
-    label: "Table (CSV)",
-    hint: "Every result with its range",
-    ready: false,
-    why: "The table needs results from the engine, which is not connected yet.",
-  },
+  { id: "csv", label: "Table (CSV)", hint: "Every result with its range", ready: true },
 ];
 
 /** Run an export. */
 export function runExport(item) {
-  if (!item.ready) {
-    showToast(item.why, 3200);
-    return;
-  }
-  if (item.id === "slides") {
+  const sc = scenario.value;
+  if (item.id === "brief") openBrief(sc);
+  else if (item.id === "csv") downloadCsv(sc);
+  else if (item.id === "slides") {
     if (route.value.name !== "slides") navigate("slides");
     // Let the slides render before the print dialog opens.
-    setTimeout(() => window.print(), 350);
+    setTimeout(() => window.print(), 600);
   }
 }
 

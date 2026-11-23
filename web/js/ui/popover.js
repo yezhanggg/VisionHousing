@@ -5,10 +5,11 @@
  *   returns focus to the button, a click outside closes it. A mouse hover also opens it,
  *   as a convenience.
  * - `Term`: a glossary word. The word is the button; the panel gives the plain definition.
- * - `Explain`: the "Explain this number" panel. It will show the formula, inputs, sources
- *   and likely range that the engine attaches to every result. Until then each row says "—".
+ * - `Explain` and `Num`: the "Explain this number" panel: the formula, inputs, assumptions,
+ *   sources and likely range the engine attaches to every result.
  */
 import { GLOSSARY } from "../content/glossary.js";
+import { lookups } from "../lib/data.js";
 import { html, useId, useLayoutEffect, useRef, useState } from "../lib/html.js";
 import { Icon } from "./icons.js";
 
@@ -53,8 +54,20 @@ export function Popover({ trigger, triggerClass, title, label, children, wide = 
     const h = el.offsetHeight;
     const start = t.left + w > window.innerWidth - margin ? t.right - w : t.left;
     const left = Math.max(margin, Math.min(start, window.innerWidth - w - margin));
-    const below = t.bottom + 8;
-    const top = below + h > window.innerHeight - margin && t.top - h - 8 > margin ? t.top - h - 8 : below;
+    // Below the trigger if it fits; else on the side with more room, kept clear of the top
+    // bar and capped to the room there (the panel scrolls inside).
+    const bar = document.querySelector(".topbar")?.getBoundingClientRect().bottom || 0;
+    const roomBelow = window.innerHeight - margin - (t.bottom + 8);
+    const roomAbove = t.top - 8 - Math.max(margin, bar + 4);
+    let top;
+    if (h <= roomBelow || roomBelow >= roomAbove) {
+      top = t.bottom + 8;
+      el.style.maxHeight = `${Math.max(120, roomBelow)}px`;
+    } else {
+      const room = Math.max(120, roomAbove);
+      el.style.maxHeight = `${room}px`;
+      top = t.top - 8 - Math.min(h, room);
+    }
     el.style.left = `${left}px`;
     el.style.top = `${top}px`;
     const away = (e) => {
@@ -109,27 +122,81 @@ export function Term({ id, children }) {
   <//>`;
 }
 
-const EXPLAIN_ROWS = ["Formula", "Inputs", "Sources", "Likely range"];
+/** "34 units to 170 units (middle 84 units)" from a payload's text forms. */
+export function rangeText(n) {
+  const sh = n?.shown;
+  if (!sh) return "";
+  if (typeof sh === "string") return sh;
+  if (sh.p10 !== undefined && sh.p90 !== undefined) {
+    return sh.p50 !== undefined ? `${sh.p10} to ${sh.p90} (middle ${sh.p50})` : `${sh.p10} to ${sh.p90}`;
+  }
+  return sh.value || "";
+}
+
+function ExplainBody({ n }) {
+  const { sources, assumptions } = lookups.value;
+  const ids = n.assumptions
+    ? n.assumptions
+    : (n.assumption_ids || []).map((id) => ({ id, label: assumptions[id]?.label || "" }));
+  const srcIds = n.source_ids || [];
+  const rows = [
+    ["What it is", n.name],
+    ["Likely range", rangeText(n)],
+    ["Formula", n.formula],
+  ];
+  return html`<dl class="explain">
+      ${rows.map(
+        ([dt, dd]) => html`<div class="explain-row">
+          <dt>${dt}</dt><dd class=${dd ? "" : "is-empty"}>${dd || "—"}</dd>
+        </div>`,
+      )}
+      ${n.inputs?.length > 0 &&
+      html`<div class="explain-row"><dt>Inputs</dt><dd><ul class="explain-list">
+        ${n.inputs.slice(0, 12).map((i) => html`<li>${i.name}: ${i.shown}</li>`)}
+        ${n.inputs.length > 12 && html`<li>and ${n.inputs.length - 12} more in the CSV export</li>`}
+      </ul></dd></div>`}
+      <div class="explain-row"><dt>Assumptions</dt><dd class=${ids.length ? "" : "is-empty"}>
+        ${ids.length
+          ? html`<ul class="explain-list">
+              ${ids.slice(0, 10).map((a) => html`<li>${a.label ? `${a.label} ` : ""}<code>${a.id}</code></li>`)}
+              ${ids.length > 10 && html`<li>and ${ids.length - 10} more (see the Assumption Ledger)</li>`}
+            </ul>`
+          : "—"}
+      </dd></div>
+      <div class="explain-row"><dt>Sources</dt><dd class=${srcIds.length ? "" : "is-empty"}>
+        ${srcIds.length
+          ? html`<ul class="explain-list">
+              ${srcIds.map((id) => html`<li>${sources[id]?.citation || id}</li>`)}
+            </ul>`
+          : "—"}
+      </dd></div>
+      ${n.tier_label && html`<div class="explain-row"><dt>Data</dt><dd>${n.tier_label}</dd></div>`}
+    </dl>`;
+}
 
 /**
- * "Explain this number". `of` names the number. `record` will be the engine's result
- * record ({formula, inputs, sources, range}); while it is missing every row shows "—".
+ * "Explain this number": a labelled button that opens the engine's explanation of one
+ * number (its formula, inputs, assumptions and sources, and its likely range). `n` is the
+ * explanation payload of the number (`explanation.numbers[ref]` in a run, or a record).
  */
-export function Explain({ of, record = null }) {
-  const fields = record || {};
-  const keys = { Formula: "formula", Inputs: "inputs", Sources: "sources", "Likely range": "range" };
+export function Explain({ of, n = null }) {
   return html`<${Popover}
       trigger=${html`<${Icon} name="info" size=${15} /><span>Explain</span>`}
       triggerClass="btn btn-ghost btn-xs explain-btn" label=${`Explain: ${of}`}
       title=${`Explain: ${of}`} wide=${true}>
-    <dl class="explain">
-      ${EXPLAIN_ROWS.map(
-        (row) => html`<div class="explain-row">
-          <dt>${row}</dt>
-          <dd class=${fields[keys[row]] ? "" : "is-empty"}>${fields[keys[row]] || "—"}</dd>
-        </div>`,
-      )}
-    </dl>
-    ${!record && html`<p class="pop-note">Filled in by the engine once it is connected.</p>`}
+    ${n ? html`<${ExplainBody} n=${n} />` : html`<p class="pop-note">The engine has not sent this number yet.</p>`}
+  <//>`;
+}
+
+/**
+ * A number that explains itself: the engine's text (for example "34 to 170 units") as a
+ * button; pressing it opens the same panel as Explain.
+ */
+export function Num({ of, n, text, size = "md" }) {
+  const shown = text ?? rangeText(n);
+  if (!n || !shown) return html`<span class=${`value value-${size} is-empty`} aria-label="Not available">—</span>`;
+  return html`<${Popover} trigger=${shown} triggerClass=${`value value-${size} num-btn`}
+      label=${`${of}: ${shown}. Explain this number`} title=${`Explain: ${of}`} wide=${true}>
+    <${ExplainBody} n=${n} />
   <//>`;
 }

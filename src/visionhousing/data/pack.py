@@ -33,7 +33,25 @@ prices_tract       tract with a published house price index              0
 hpi_county_year    county and year: the house price index series         0
 mortgage_rates_year calendar year: average offered mortgage rates        0
 costs_county       county: construction wage index                       0
+jobs_tract         tract: jobs located there, by earnings and sector     0
+jobs_county        county: jobs, commuting flows, business totals        0
+jobs_county_sector county and NAICS sector: business patterns            0
+incentives_tract   tract: tax-credit and incentive areas                 0/2
+incentives_county  county: tax-credit and incentive totals               0/2
+safety_county      county: reported offenses per 1,000 residents         0
+municipal_planning municipality part: zoning regime, plans (DCED)        2
+tract_municipalities tract piece per municipality: 2020 housing units    2
+parcels_area       tract and county: parcel attributes (42101, 42003)    2
+owners_area        tract and county: single-family owner types           2
+owners_deeds_year  year: single-family deeds to entities (42101)         2
+pipeline_tract_year tract, year: city new-home permits (Phila., Pitt.)   2
+lihtc_awards       development awarded PHFA tax credits                  2
 ================== ===================================================== ======
+
+The last six tables feed the place profile's market research sections; they
+are built only when their inputs could be fetched (see
+:mod:`visionhousing.data.sources.place`; ``safety_county`` needs an
+api.data.gov key in the environment).
 
 Determinism
 -----------
@@ -64,10 +82,12 @@ import numpy as np
 import pandas as pd
 
 from visionhousing import __version__
+from visionhousing.data import local as local_src
 from visionhousing.data import manifest as mf
 from visionhousing.data.http import HttpClient, check_free_space, sha256_file
 from visionhousing.data.registry import load_registry
 from visionhousing.data.sources import acs, blocks, boundaries, bps, costs, prices
+from visionhousing.data.sources import place as place_src
 from visionhousing.data.sources import state_fips as to_state_fips
 from visionhousing.data.sources import transit as transit_src
 from visionhousing.features import acs as fx
@@ -186,6 +206,14 @@ TABLES: dict[str, dict[str, object]] = {
 }
 """Every pack table: its key columns, source ids and a one-line description."""
 
+TABLES.update(place_src.TABLES)
+"""Plus the place-profile tables (jobs, incentive areas, safety): see
+:mod:`visionhousing.data.sources.place`. They are built only when their inputs were fetched."""
+
+TABLES.update(local_src.TABLES)
+"""Plus the local refinement tables (zoning status, plans, parcels, owners, city permits,
+LIHTC awards): see :mod:`visionhousing.data.local`."""
+
 TIERS = {
     "0": "Available for every state from national files.",
     "1": "Available for many states; filled in where published.",
@@ -218,6 +246,10 @@ class PackInputs:
     transit: transit_src.TransitInputs | None = None
     """Stops and schedule feeds; ``None`` gives empty transit tables and zero features."""
     notes: list[str] = field(default_factory=list)
+    place: place_src.PlaceInputs | None = None
+    """Place-profile inputs (jobs, incentive areas, safety); ``None`` leaves their tables out."""
+    local: local_src.LocalTables | None = None
+    """Local refinement tables (:mod:`visionhousing.data.local`); ``None`` leaves them out."""
 
 
 def _cache_files(cache: Path, fips: str) -> list[tuple[str, Path]]:
@@ -289,6 +321,17 @@ def load_inputs(
         include_state_totals=True,
         manifest=manifest,
     )
+    place = place_src.fetch_place(state, cache, client=client, manifest=manifest)
+    notes += place.notes
+    local = local_src.fetch_local_tables(
+        state,
+        cache,
+        blocks=block_table,
+        tract_shapes=tract_shapes,
+        client=client,
+        manifest=manifest,
+    )
+    notes += local.notes
     return PackInputs(
         state=state.upper(),
         fips=fips,
@@ -301,10 +344,14 @@ def load_inputs(
         hpi_tract=prices.fetch_hpi_tract(state, cache, client=client, manifest=manifest),
         pmms_weekly=prices.fetch_pmms(cache, client=client, manifest=manifest),
         qcew=costs.fetch_qcew_construction(state, cache, client=client, manifest=manifest),
-        input_files=sorted([*_cache_files(cache, fips), *transit.files]),
+        input_files=sorted(
+            [*_cache_files(cache, fips), *transit.files, *place.files, *local.files]
+        ),
         cache=cache,
         notes=notes,
         transit=transit,
+        place=place,
+        local=local,
     )
 
 
@@ -398,6 +445,10 @@ def assemble_tables(inputs: PackInputs) -> dict[str, pd.DataFrame]:
         "mortgage_rates_year": prices.pmms_annual(inputs.pmms_weekly),
         "costs_county": costs.cost_adjusters(inputs.qcew, inputs.fips, sorted(county_ids)),
     }
+    kept_shapes = [(s.geoid, s.geometry) for s in inputs.tract_shapes if s.geoid in tract_ids]
+    tables.update(place_src.place_tables(inputs.place, tracts, counties, kept_shapes, lite))
+    if inputs.local is not None:
+        tables.update(inputs.local.tables)
     note = f"tracts left out as open water: {', '.join(sorted(dropped))}"
     if dropped and note not in inputs.notes:
         inputs.notes.append(note)
@@ -597,6 +648,10 @@ _TIER_ONE_COLUMNS = {"weekday_departures", "major", "frequency"}
 
 
 def _tier(table: str, name: str) -> dict[str, str]:
+    if table in local_src.TABLES:
+        return {"tier": "2"}
+    if (table, name) in place_src.TIER_TWO:
+        return {"tier": "2"}
     if table == "transit_feeds":
         return {"tier": "1"}
     if table == "transit_stops" and name in _TIER_ONE_COLUMNS:
@@ -607,6 +662,11 @@ def _tier(table: str, name: str) -> dict[str, str]:
 
 
 def _describe(table: str, name: str) -> tuple[str, str]:
+    if table in local_src.TABLES:
+        return local_src.describe(table, name)
+    if (table, name) in place_src.COLUMNS:
+        unit, text, _ = place_src.COLUMNS[(table, name)]
+        return unit, text
     if (table, name) in _TABLE_OVERRIDES:
         return _TABLE_OVERRIDES[(table, name)]
     if name in _BASE:
@@ -665,6 +725,8 @@ def _describe(table: str, name: str) -> tuple[str, str]:
 
 def _column_sources(table: str, name: str) -> list[str]:
     srcs = list(TABLES[table]["sources"])  # type: ignore[arg-type]
+    if (table, name) in place_src.COLUMNS:
+        return [place_src.COLUMNS[(table, name)][2]]
     if table == "tracts" and name.startswith("transit_"):
         return ["ntm_stops", "gtfs_agency_feeds", "tiger_2020_tabblock"]
     if table == "transit_stops" and name in ("county", "tract"):
@@ -719,7 +781,7 @@ def build_dictionary(tables: Mapping[str, pd.DataFrame], state: str) -> dict[str
             "key": TABLES[table]["key"],
             "description": TABLES[table]["description"],
             "sources": TABLES[table]["sources"],
-            "tier": "1" if table == "transit_feeds" else "0",
+            "tier": str(TABLES[table].get("tier", "1" if table == "transit_feeds" else "0")),
             "testland_columns": list(TESTLAND_COLUMNS.get(table, ())),
         }
         for table in tables

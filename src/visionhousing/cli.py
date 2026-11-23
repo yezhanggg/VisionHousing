@@ -2,8 +2,9 @@
 
 One entry point for every task: check the machine (``doctor``), fetch data
 (``fetch``), build a state data pack (``build``), run reforms (``run``), write a
-report (``report``), write a place profile (``profile``) and serve the interface
-(``serve``). All work today except ``run``, which says what it will do once built.
+report (``report``), write a place profile (``profile``), serve the interface
+(``serve``) and save a state's default results as files for the static site
+(``export-static``). All work today except ``run``, which says what it will do once built.
 
 It uses the standard library's ``argparse`` so it adds no dependency.
 """
@@ -252,6 +253,40 @@ def serve(host: str, port: int, timeout: float | None = None) -> int:
     return 0
 
 
+def export_static_cmd(
+    state: str,
+    out: Path,
+    *,
+    seed: int,
+    draws: int | None,
+    tracts: str,
+    budget: float,
+    explain: str = "auto",
+) -> int:
+    """Save the state's default-scenario results as JSON files for the static site.
+
+    See ``visionhousing.export_static``. Returns 1 if the back end refused a
+    request or the folder ends up over the static site's size limit.
+    """
+    from visionhousing.export_static import ExportError, export_static
+
+    try:
+        rep = export_static(
+            state,
+            out,
+            seed=seed,
+            draws=draws,
+            tracts=tracts,
+            tract_budget_mb=budget,
+            explain=explain,
+        )
+    except ExportError as err:
+        print(f"export-static: {err}", file=sys.stderr)
+        return 1
+    print(rep.text())
+    return 1 if any("over the" in n and "limit" in n for n in rep.notes) else 0
+
+
 def build_parser() -> argparse.ArgumentParser:
     """Build the argument parser with one sub-command per task."""
     parser = argparse.ArgumentParser(
@@ -308,6 +343,28 @@ def build_parser() -> argparse.ArgumentParser:
     srv.add_argument(
         "--timeout", type=float, default=None, help="seconds a request may wait for a run"
     )
+    exp = sub.add_parser(
+        "export-static", help="Save a state's default results as JSON for the static site"
+    )
+    exp.add_argument("--state", default="PA", help="two-letter state code (default PA)")
+    exp.add_argument(
+        "--out", type=Path, default=Path("web/public/data"),
+        help="data folder (default web/public/data)",
+    )  # fmt: skip
+    exp.add_argument("--seed", type=int, default=0, help="random seed (default 0)")
+    exp.add_argument("--draws", type=int, default=None, help="Monte Carlo draws (default 2,000)")
+    exp.add_argument(
+        "--tracts", choices=["auto", "yes", "no"], default="auto",
+        help="tract profiles: auto keeps them only under the budget (default auto)",
+    )  # fmt: skip
+    exp.add_argument(
+        "--tract-budget-mb", type=float, default=4.0,
+        help="size budget for tract profiles with --tracts auto (default 4)",
+    )  # fmt: skip
+    exp.add_argument(
+        "--explain", choices=["auto", "yes", "no"], default="auto",
+        help="save each run's explanation; auto drops it only if over the 30 MB limit",
+    )  # fmt: skip
     return parser
 
 
@@ -326,6 +383,16 @@ def main(argv: list[str] | None = None) -> int:
         return build(args.state, args.raw, args.out)
     if args.command == "serve":
         return serve(args.host, args.port, args.timeout)
+    if args.command == "export-static":
+        return export_static_cmd(
+            args.state,
+            args.out,
+            seed=args.seed,
+            draws=args.draws,
+            tracts=args.tracts,
+            budget=args.tract_budget_mb,
+            explain=args.explain,
+        )
     if args.command == "profile":
         return profile(args.state, args.county, args.tract, args.fmt, args.out)
     if args.command == "report":

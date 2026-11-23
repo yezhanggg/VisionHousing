@@ -12,6 +12,8 @@ One plain-language note per part of the code. Each note says what the module doe
 | [Census blocks and density](blocks.md) | `src/visionhousing/data/sources/blocks.py`, `src/visionhousing/features/density.py` | Reads the block attribute table and measures tract density and a lot-size proxy |
 | [Boundaries](boundaries.md) | `src/visionhousing/data/sources/boundaries.py` | Turns the county and tract boundary files into small GeoJSON for the map |
 | [Prices, rates and costs](prices.md) | `src/visionhousing/data/sources/prices.py`, `costs.py` | House price index, mortgage rates and the county construction-pay index |
+| [Place profile data](place.md) | `src/visionhousing/data/sources/jobs.py`, `incentives.py`, `safety.py`, `xlsb.py`, `place.py`; `src/visionhousing/features/jobs.py`, `incentives.py`, `safety.py`; `profile/sections/jobs.py`, `incentives.py`, `safety.py` | Jobs, tax-credit and incentive areas, and reported offenses for the place profile |
+| [Local refinement data](local_data.md) | `src/visionhousing/data/local.py`; `src/visionhousing/data/sources/munstats.py`, `phl_opa.py`, `alle_assess.py`, `local_permits.py`, `phfa.py`, `opendata.py`; `src/visionhousing/features/zoning_status.py`, `parcels.py`, `owners.py`, `pipeline_local.py`; `profile/sections/zoning.py`, `plans.py`, `parcels.py`, `owners.py`, `pipeline_local.py` | Municipal zoning and plans (Pennsylvania), parcels and owners (Philadelphia, Allegheny), city permits and LIHTC awards for the place profile |
 | [State data pack](pack.md) | `src/visionhousing/data/pack.py`, `visionhousing fetch` and `build` | Builds one small folder per state that the engine and the interface read |
 | [Testland](testland.md) | `scripts/make_testland.py`, `tests/fixtures/testland/` | The synthetic test state the tests and the interface run on offline |
 
@@ -60,7 +62,7 @@ One plain-language note per part of the code. Each note says what the module doe
 
 | Note | Code | What it covers |
 |---|---|---|
-| [Browser interface](web.md) | `web/`, `scripts/vendor_web.py` | The screens, the slides view and how the pinned browser libraries arrive |
+| [Browser interface](web.md) | `web/`, `src/visionhousing/export_static.py`, `vercel.json` | The screens, the slides view, the Vite build, and the no-server static site |
 
 ## Method notes
 

@@ -4,7 +4,6 @@ from __future__ import annotations
 
 import base64
 import hashlib
-import re
 
 import pytest
 
@@ -13,7 +12,6 @@ from visionhousing.api import create_app
 from visionhousing.api.models import LIMITS
 from visionhousing.api.security import inline_script_hashes
 from visionhousing.ledger import load_ledger
-from visionhousing.ledger.loader import ROOT
 
 API = "/api/v1"
 
@@ -125,14 +123,8 @@ def test_small_streamed_body_still_works(tmp_path):
     assert r.status == 200 and r.json()["draws"] == 50
 
 
-def _import_map_hash() -> str:
-    html = (ROOT / "web" / "index.html").read_text(encoding="utf-8")
-    body = re.search(r'<script type="importmap">(.*?)</script>', html, re.DOTALL).group(1)
-    return "'sha256-" + base64.b64encode(hashlib.sha256(body.encode()).digest()).decode() + "'"
-
-
 @pytest.mark.parametrize(
-    "url", ["/", f"{API}/states", f"{API}/nothing", f"{API}/states/ZZ/summary", "/js/main.js"]
+    "url", ["/", f"{API}/states", f"{API}/nothing", f"{API}/states/ZZ/summary", "/assets/x.js"]
 )
 def test_security_headers_on_every_response(client, url):
     r = client.get(url)
@@ -140,7 +132,7 @@ def test_security_headers_on_every_response(client, url):
     csp = h["content-security-policy"]
     assert "frame-ancestors 'none'" in csp and "object-src 'none'" in csp
     assert "unsafe-inline" not in csp and "unsafe-eval" not in csp
-    assert _import_map_hash() in csp
+    assert "script-src 'self'" in csp
     assert h["x-content-type-options"] == "nosniff"
     assert h["referrer-policy"] == "no-referrer"
     assert h["x-frame-options"] == "DENY"

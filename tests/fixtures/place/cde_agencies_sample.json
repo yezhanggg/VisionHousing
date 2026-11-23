@@ -1,0 +1,9 @@
+{"HARBOR": [
+  {"ori": "TL0010100", "counties": "HARBOR", "is_nibrs": true, "latitude": 40.1, "longitude": -77.1, "state_abbr": "TL", "state_name": "Testland", "agency_name": "Harbor City Police", "agency_type_name": "City", "nibrs_start_date": "2021-01-01"},
+  {"ori": "TL001SP00", "counties": "HARBOR", "is_nibrs": true, "latitude": null, "longitude": null, "state_abbr": "TL", "state_name": "Testland", "agency_name": "State Police: Harbor County", "agency_type_name": "State Police", "nibrs_start_date": "2021-01-01"},
+  {"ori": "TL0010900", "counties": "HARBOR", "is_nibrs": true, "latitude": null, "longitude": null, "state_abbr": "TL", "state_name": "Testland", "agency_name": "Harbor University Police", "agency_type_name": "University or College", "nibrs_start_date": "2021-01-01"}
+],
+"MAPLE": [
+  {"ori": "TL0030100", "counties": "MAPLE, HARBOR", "is_nibrs": true, "latitude": null, "longitude": null, "state_abbr": "TL", "state_name": "Testland", "agency_name": "Maple Township Police", "agency_type_name": "City", "nibrs_start_date": "2021-01-01"},
+  {"ori": "TL0010100", "counties": "HARBOR", "is_nibrs": true, "latitude": 40.1, "longitude": -77.1, "state_abbr": "TL", "state_name": "Testland", "agency_name": "Harbor City Police", "agency_type_name": "City", "nibrs_start_date": "2021-01-01"}
+]}

@@ -142,6 +142,9 @@ def test_uv_groups_follow_the_dependency_graph():
 
 def test_long_public_addresses_are_excused_but_keys_are_not():
     url = "https://example.gov/AbCdEf0123" + "/GhIjKl4567/MnOpQr89" + "/StUvWx/Yz-_aBcD.html"
-    assert g.mark_public_urls(f"| [x]({url}) |").endswith(g.ALLOW_URL)
+    line = g.mark_public_urls(f"| [x]({url}) |")
+    assert not g._scan.scan_text("doc", line, [])  # a long address passes the scan
     key = "AKIA" + "ABCDEFGHIJKLMNOP"
-    assert g.ALLOW_URL not in g.mark_public_urls(f"| [x]({url}) | {key} |")
+    flagged = g.mark_public_urls(f"| [x]({url}) | {key} |")
+    assert g.ALLOW_URL not in flagged  # a real key is never excused
+    assert g._scan.scan_text("doc", flagged, [])

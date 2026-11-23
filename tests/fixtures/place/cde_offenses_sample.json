@@ -1,0 +1,13 @@
+{"offenses": {
+  "rates": {"Harbor City Police Offenses": {"01-2024": 10.0}},
+  "actuals": {
+    "United States Offenses": {"01-2024": 100000, "02-2024": 90000},
+    "Pennsylvania Offenses": {"01-2024": 900, "02-2024": 800},
+    "Harbor City Police Offenses": {"01-2024": 3, "02-2024": 4, "03-2024": 5, "04-2024": 2, "05-2024": 1, "06-2024": 0, "07-2024": 3, "08-2024": 4, "09-2024": 2, "10-2024": 1, "11-2024": 2, "12-2024": 3},
+    "Harbor City Police Clearances": {"01-2024": 1, "02-2024": 1}
+  }},
+ "populations": {"population": {
+    "United States": {"01-2024": 340000000},
+    "Pennsylvania": {"01-2024": 1000000},
+    "Harbor City Police": {"01-2024": 25000, "12-2024": 25000}
+ }}}

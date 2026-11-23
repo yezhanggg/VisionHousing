@@ -1,0 +1,150 @@
+# County comprehensive plans: a citation list, not data.
+#
+# Read by the "plans" profile section, which shows the county's own plan next
+# to the DCED record of which municipalities have plans. Every link was opened
+# on the date given. "verified: false" means the page could not be confirmed
+# (a site that blocks automated reading, or no adoption date on the page); the
+# profile then says so.
+#
+# Lehigh and Northampton share one regional plan; Luzerne shares a joint plan
+# with Lackawanna.
+
+version: 1
+
+plans:
+  "42101":
+    county: Philadelphia
+    name: "Philadelphia2035 (Citywide Vision and district plans)"
+    adopted: 2011
+    url: https://www.phila.gov/programs/the-comprehensive-plan/
+    accessed: 2026-11-22
+    verified: false
+    note: "The City's page says the Citywide Vision was released in June 2011; an update began in 2021."
+  "42003":
+    county: Allegheny
+    name: "Allegheny Places"
+    adopted: 2008
+    url: https://www.alleghenycounty.us/Projects-and-Initiatives/Economic-Development/Comprehensive-Plan
+    accessed: 2026-11-22
+    verified: true
+    note: "The county calls it its previous plan; its successor, Allegheny Forward, is in preparation."
+  "42091":
+    county: Montgomery
+    name: "Montco 2040: A Shared Vision"
+    adopted: 2015
+    url: https://www.montgomerycountypa.gov/departments/planning-commission/comprehensive-plans/montco-2040-comprehensive-plan/montco-2040-shared-vision
+    accessed: 2026-11-22
+    verified: true
+    note: "Updated in 2021; Montco 2050 is in draft."
+  "42017":
+    county: Bucks
+    name: "Bucks2040: Building Our Future Together"
+    adopted: 2024
+    url: https://connects.buckscounty.gov/bucks2040
+    accessed: 2026-11-22
+    verified: true
+    note: ""
+  "42045":
+    county: Delaware
+    name: "Delaware County 2035"
+    adopted: 2013
+    url: https://www.delcopa.gov/planning/delawarecounty2035
+    accessed: 2026-11-22
+    verified: true
+    note: "Land use policy framework plan; component plans followed from 2015 to 2020."
+  "42029":
+    county: Chester
+    name: "Landscapes3"
+    adopted: 2018
+    url: https://www.chescoplanning.org/Landscapes3/
+    accessed: 2026-11-22
+    verified: true
+    note: ""
+  "42071":
+    county: Lancaster
+    name: "places2040"
+    adopted: 2018
+    url: https://lancastercountyplanning.org/184/Places2040
+    accessed: 2026-11-22
+    verified: true
+    note: "An amendment is under review."
+  "42133":
+    county: York
+    name: "York County Comprehensive Plan (multi-element)"
+    adopted: 2026
+    url: https://www.ycpc.org/
+    accessed: 2026-11-22
+    verified: false
+    note: "Elements were amended in August 2026; the original adoption year is not shown on the page."
+  "42011":
+    county: Berks
+    name: "Berks County Comprehensive Plan 2030 Update"
+    adopted: 2020
+    url: https://berkspa.gov/departments/planning-commission/comp-plan-update-2030
+    accessed: 2026-11-22
+    verified: true
+    note: "Its successor, Imagine Berks, is in preparation."
+  "42077":
+    county: Lehigh
+    name: "FutureLV: The Regional Plan (Lehigh Valley Planning Commission)"
+    adopted: 2019
+    url: https://lvpc.org/comprehensive-plan
+    accessed: 2026-11-22
+    verified: true
+    note: "One regional plan for Lehigh and Northampton counties."
+  "42095":
+    county: Northampton
+    name: "FutureLV: The Regional Plan (Lehigh Valley Planning Commission)"
+    adopted: 2019
+    url: https://lvpc.org/comprehensive-plan
+    accessed: 2026-11-22
+    verified: true
+    note: "One regional plan for Lehigh and Northampton counties."
+  "42129":
+    county: Westmoreland
+    name: "Reimagining Our Westmoreland"
+    adopted: 2018
+    url: https://www.westmorelandcountypa.gov/654/Comprehensive-Plan
+    accessed: 2026-11-22
+    verified: false
+    note: "The county site refuses automated reading; the year is from the county's 2019 annual report."
+  "42079":
+    county: Luzerne
+    name: "Lackawanna-Luzerne Joint Comprehensive Plan"
+    adopted: 2021
+    url: https://www.luzernecounty.org/300/Lackawanna-Luzerne-Joint-Comprehensive-P
+    accessed: 2026-11-22
+    verified: true
+    note: "A joint plan with Lackawanna County."
+  "42049":
+    county: Erie
+    name: "Emerge 2040"
+    adopted: null
+    url: https://eriecountypa.gov/departments/planning-and-community-development/plans/emerge-2040/
+    accessed: 2026-11-22
+    verified: false
+    note: "The page does not say it is the adopted county comprehensive plan."
+  "42043":
+    county: Dauphin
+    name: "Growing Together: Dauphin County Comprehensive Plan"
+    adopted: 2017
+    url: https://www.tcrpc-pa.org/dauphin-county-comp-plan
+    accessed: 2026-11-22
+    verified: false
+    note: "Hosted by the Tri-County Regional Planning Commission; the adoption date is not on the page."
+  "42041":
+    county: Cumberland
+    name: "Cumberland County Comprehensive Plan"
+    adopted: 2024
+    url: https://www.cumberlandcountypa.gov/4888/Comprehensive-Plan
+    accessed: 2026-11-22
+    verified: true
+    note: ""
+  "42027":
+    county: Centre
+    name: "Centre County Comprehensive Plan"
+    adopted: null
+    url: https://centrecountypa.gov/212/Comprehensive-Plans
+    accessed: 2026-11-22
+    verified: false
+    note: "Phase I was completed in 2003 and chapters were updated 2016-2020; no adoption date on the page."

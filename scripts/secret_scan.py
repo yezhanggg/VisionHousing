@@ -65,6 +65,11 @@ SKIP_FILES = {".env", "CLAUDE.local.md", ".DS_Store"}
 # Lockfiles are full of published checksums, which look random but are not secrets.
 ENTROPY_EXEMPT = {"uv.lock", "package-lock.json"}
 
+# A web address's host and path (long file names, URL slugs) look random but are public.
+# Only that part is skipped by the randomness check: a query string (``?key=…``) and
+# every named key pattern are still checked.
+URL_PATH = re.compile(r"https?://[^\s'\"<>?#]+")
+
 KEY_PATTERNS: dict[str, re.Pattern[str]] = {
     "cloud access key id": re.compile(r"\b(?:AKIA|ASIA)[0-9A-Z]{16}\b"),
     "code-hosting token": re.compile(
@@ -156,7 +161,7 @@ def scan_text(path: str, text: str, names: list[str]) -> list[Hit]:
             if user.lower() not in HOME_PLACEHOLDERS:
                 hits.append(Hit(path, number, "home-folder path", m.group(0)[:7] + "…"))
         if check_entropy:
-            for m in TOKEN.finditer(line):
+            for m in TOKEN.finditer(URL_PATH.sub(" ", line)):
                 if looks_random(m.group(0)):
                     hits.append(Hit(path, number, "high-entropy token", redact(m.group(0))))
     return hits

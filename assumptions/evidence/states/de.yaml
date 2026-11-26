@@ -1,0 +1,65 @@
+# Cross-state comparison records: DE.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: de.85ch343_2026_housing_for_every_delawarean  # secret-scan: allow (public record id)
+  kind: policy
+  state: DE
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - missing_middle
+  title: 'Delaware 85 Del. Laws ch. 343 (SS 2 for SB 23): The Housing for Every Delawarean Act'
+  citation: 85 Del. Laws ch. 343 (2026) (Senate Substitute 2 for SB 23); 29 Del. C. ch. 92, subch. III
+    (9220-9224); 9 Del. C. 2660, 4960, 6960; 22 Del. C. 702
+  url: https://legis.delaware.gov/BillDetail/143471
+  session: 153rd General Assembly (2025-2026)
+  bill: SS 2 for SB 23
+  enacted_date: 2026-07-13
+  effective_dates: []
+  geographic_scope: 'All three counties and municipalities over 2,000 people that must adopt comprehensive
+    plans. Counties must rezone to match the future land use map within 12 months of plan adoption (was
+    18). Local affordable housing plans become part of comprehensive plans, aiming at 20% of homes affordable.'
+  exclusions:
+  - A jurisdiction adopting its next comprehensive plan before February 1, 2027 need not adopt its first
+    affordable housing plan until its next 5-year review
+  - Planning-board review of by-right applications is allowed if limited to objective standards; Board
+    of Adjustment appeal hearings are unchanged
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - By-right residential applications must get administrative review with no public hearing (29 Del. C.
+    9223); any public meeting is written-comment only.
+  - The affordable housing plan must include higher permitted density and a mix of housing types (duplexes,
+    triplexes, multifamily, ADUs, cottages, manufactured homes) without conditional use permits, plus a
+    review of minimum lot sizes; the tools are a menu tied to plan approval, not a statewide zoning override.
+  - First DSHA progress reports are due by May 15, 2028.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: legis.delaware.gov bill page shows 'Signed 7/13/26' for SS 2 for SB 23. The session
+    law text (Volume 85, Chapter 343) on legis.delaware.gov ends 'Approved July 13, 2026' and has no separate
+    effective-date section, so no later effective date is recorded; the amended plan-content sections
+    carry an existing '[Effective Nov. 15, 2026]' version marker from earlier law.
+  sources:
+  - label: SS 2 for SB 23 bill detail (Delaware General Assembly)
+    url: https://legis.delaware.gov/BillDetail/143471
+    official: true
+  - label: 85 Del. Laws ch. 343 session law text
+    url: https://legis.delaware.gov/json/BillDetail/GenerateHtmlDocumentSessionLaw?sessionLawId=143471&docTypeId=13&sessionLawName=chp343
+    official: true
+  discovered_via: pew_2026

@@ -12,8 +12,21 @@ What it does:
 3. Evaluates composite expressions such as ``MIT AND (Apache-2.0 OR BSD-2-Clause)``
    one component at a time: every part joined by AND must be allowed, and at least
    one branch of an OR must be allowed.
-4. Does the same for ``web/package-lock.json`` when that file exists.
-5. Prints a report and exits 1 if anything is denied, unknown or not installed.
+4. Looks inside each installed package for **bundled native code**: compiled
+   libraries shipped next to the package's own modules (``.dylib``, ``.so``,
+   ``.dll`` files that are not Python extension modules, such as the
+   ``pkg/.dylibs/libgeos.dylib`` a wheel tool copies in) and every licence file
+   in the package's ``.dist-info`` (``licenses/`` and ``LICENSE*`` / ``COPYING*``
+   / ``NOTICE*``). A package fails when such a licence file names a copyleft
+   licence for bundled code: a ``License:`` line whose expression holds a denied
+   id (GPL, LGPL, ...), or the title of a GNU licence text (``GNU LESSER GENERAL
+   PUBLIC LICENSE``). The declared licence of a wheel describes only the
+   package's own code, so this is how a BSD package that ships an LGPL library
+   inside its wheel (Shapely with GEOS, SciPy with libquadmath) is caught. The
+   GCC runtime library exception (``GPL-3.0-or-later WITH GCC-exception-3.1``)
+   stays allowed, as above.
+5. Does the same for ``web/package-lock.json`` when that file exists.
+6. Prints a report and exits 1 if anything is denied, unknown or not installed.
 
 Usage: ``uv run python scripts/licence_audit.py [--lock uv.lock] [--npm-lock PATH]``.
 """
@@ -259,6 +272,92 @@ def declared_licence(meta: metadata.PackageMetadata) -> tuple[str, str]:
     return "", "none"
 
 
+_NATIVE = re.compile(r"\.(dylib|so|dll)(\.[0-9][0-9.]*)?$", re.IGNORECASE)
+_EXTENSION = re.compile(r"(\.cpython-|\.abi3\.|\.pypy|\.cp3\d+-win|\.pyd$)", re.IGNORECASE)
+_LICENCE_FILE = re.compile(r"(^|/)(licen[cs]es?|copying|notice|authors)([^/]*)$", re.IGNORECASE)
+_LICENCE_LINE = re.compile(r"^\s*Licen[cs]e\s*:\s*(.+?)\s*$", re.IGNORECASE | re.MULTILINE)
+_GNU_TITLE = re.compile(
+    r"^\s*GNU (LESSER |LIBRARY |AFFERO )?GENERAL PUBLIC LICEN[CS]E\s*$", re.MULTILINE
+)
+_GCC_EXCEPTION = re.compile(r"GCC RUNTIME LIBRARY EXCEPTION|GCC-exception-3\.1", re.IGNORECASE)
+
+
+def bundled_native_libraries(dist: metadata.Distribution) -> list[str]:
+    """Compiled libraries a package ships besides its own Python extension modules."""
+    out = []
+    for f in dist.files or []:
+        name = str(f)
+        base = name.rsplit("/", 1)[-1]
+        if _NATIVE.search(base) and not _EXTENSION.search(base):
+            out.append(name)
+    return sorted(out)
+
+
+def licence_files(dist: metadata.Distribution) -> list[metadata.PackagePath]:
+    """The licence, copying and notice files inside a package's ``.dist-info`` folder."""
+    out = []
+    for f in dist.files or []:
+        name = str(f)
+        if ".dist-info/" not in name:
+            continue
+        inner = name.split(".dist-info/", 1)[1]
+        if inner.startswith("licenses/") or _LICENCE_FILE.search(inner):
+            out.append(f)
+    return out
+
+
+def copyleft_mentions(text: str) -> list[str]:
+    """Copyleft licences a licence file names for bundled code (empty when none).
+
+    Two signs count: a ``License: <expression>`` line (the format wheel tools
+    use to list bundled libraries) holding a denied id that is not a permitted
+    ``WITH`` exception, and the title line of a GNU licence text. A full GPL text
+    is allowed when the same file grants the GCC runtime library exception.
+    """
+    found = []
+    for expr in _LICENCE_LINE.findall(text):
+        tokens = _tokenize(expr)
+        i = 0
+        while i < len(tokens):
+            lic = canonical(tokens[i])
+            if i + 2 < len(tokens) and tokens[i + 1].upper() == "WITH":
+                if (lic, tokens[i + 2]) not in ALLOWED_WITH and is_denied(lic):
+                    found.append(f"{lic} WITH {tokens[i + 2]}")
+                i += 3
+                continue
+            if lic.upper() not in {"AND", "OR", "(", ")"} and is_denied(lic):
+                found.append(lic)
+            i += 1
+    for title in _GNU_TITLE.findall(text):
+        kind = {"LESSER ": "LGPL", "LIBRARY ": "LGPL", "AFFERO ": "AGPL"}.get(title, "GPL")
+        if kind == "GPL" and _GCC_EXCEPTION.search(text):
+            continue
+        found.append(f"{kind} (full licence text)")
+    return sorted(set(found))
+
+
+def bundled_findings(dist: metadata.Distribution) -> tuple[bool, list[str]]:
+    """Check a package's bundled native code and licence files: ``(ok, notes)``."""
+    notes = []
+    ok = True
+    libs = bundled_native_libraries(dist)
+    for f in licence_files(dist):
+        try:
+            text = Path(f.locate()).read_text(encoding="utf-8", errors="replace")
+        except (OSError, ValueError):
+            continue
+        hits = copyleft_mentions(text or "")
+        if hits:
+            ok = False
+            where = str(f).split(".dist-info/", 1)[-1]
+            notes.append(f"licence file {where} names {', '.join(hits)} for bundled code")
+    if libs:
+        shown = ", ".join(p.rsplit("/", 1)[-1] for p in libs[:3])
+        more = f" and {len(libs) - 3} more" if len(libs) > 3 else ""
+        notes.append(f"bundles native libraries: {shown}{more}")
+    return ok, notes
+
+
 def locked_python_packages(lock_path: Path) -> list[tuple[str, str]]:
     """List ``(name, version)`` for every package pinned in a uv lockfile."""
     data = tomllib.loads(lock_path.read_text(encoding="utf-8"))
@@ -299,6 +398,9 @@ def audit_python(
             continue
         expr, source = declared_licence(dist.metadata)
         ok, notes = evaluate(expr) if expr else (False, ["no licence declared"])
+        bundled_ok, bundled_notes = bundled_findings(dist)
+        ok = ok and bundled_ok
+        notes = [*notes, *bundled_notes]
         if version and dist.version != version:
             ok = False
             notes.append(f"installed {dist.version} differs from locked {version}")

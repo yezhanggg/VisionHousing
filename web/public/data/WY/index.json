@@ -1,0 +1,134 @@
+{
+ "schema_version": 2,
+ "state": "WY",
+ "seed": 0,
+ "draws": 2000,
+ "package": [
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees"
+ ],
+ "runs": [
+  "baseline",
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package"
+ ],
+ "extra_runs": [],
+ "compare": [
+  "baseline",
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package"
+ ],
+ "maps": [
+  "baseline",
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package"
+ ],
+ "tract_points": true,
+ "permit_years": true,
+ "tracts": [
+  "baseline",
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package"
+ ],
+ "tract_funnels": [
+  "adu",
+  "missing_middle",
+  "tod"
+ ],
+ "exports": [
+  "baseline",
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package"
+ ],
+ "hearing_briefs": [
+  "baseline",
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package"
+ ],
+ "baseline_card": true,
+ "explanations": true,
+ "drivers": true,
+ "counties": [
+  "56001",
+  "56003",
+  "56005",
+  "56007",
+  "56009",
+  "56011",
+  "56013",
+  "56015",
+  "56017",
+  "56019",
+  "56021",
+  "56023",
+  "56025",
+  "56027",
+  "56029",
+  "56031",
+  "56033",
+  "56035",
+  "56037",
+  "56039",
+  "56041",
+  "56043",
+  "56045"
+ ],
+ "tract_profiles": true,
+ "tract_profile_format": "compact",
+ "county_profile_format": "compact",
+ "comparisons": true,
+ "confidence": true,
+ "plausibility": true,
+ "lever": true,
+ "implementation": true,
+ "grades": true,
+ "districts": true,
+ "district_chambers": [
+  "lower",
+  "upper"
+ ],
+ "switch_ranges": [
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees"
+ ],
+ "switch_ranges_counties": true,
+ "law_changes": [
+  "adu",
+  "missing_middle",
+  "parking",
+  "fees",
+  "tod"
+ ],
+ "adu_budget_grid": false,
+ "note": "Default assumptions only. Changing assumptions needs the local app (make app)."
+}

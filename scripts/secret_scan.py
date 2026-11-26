@@ -64,6 +64,10 @@ SKIP_FILES = {".env", "CLAUDE.local.md", ".DS_Store"}
 
 # Lockfiles are full of published checksums, which look random but are not secrets.
 ENTROPY_EXEMPT = {"uv.lock", "package-lock.json"}
+# The static site's compact place profiles (``visionhousing.compact_profiles``) store one
+# character per place as an index into a short list ("0123…xyzAB…"), which looks random but is
+# engine output. Only the randomness check is skipped there; every named key pattern still runs.
+ENTROPY_EXEMPT_PATH = re.compile(r"^web/public/data/[A-Z]{2}/profiles/[^/]+\.json$")
 
 # A web address's host and path (long file names, URL slugs) look random but are public.
 # Only that part is skipped by the randomness check: a query string (``?key=…``) and
@@ -145,7 +149,9 @@ def scan_text(path: str, text: str, names: list[str]) -> list[Hit]:
         if names
         else None
     )
-    check_entropy = Path(path).name not in ENTROPY_EXEMPT
+    check_entropy = Path(path).name not in ENTROPY_EXEMPT and not ENTROPY_EXEMPT_PATH.match(
+        Path(path).as_posix()
+    )
     for number, line in enumerate(text.splitlines(), start=1):
         if ALLOW_MARKER in line:
             continue

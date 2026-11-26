@@ -96,7 +96,7 @@ range:
 limits:
   - "77 of the 221 town readings are drafts not yet checked by a second reading."
   - "A share of residents is used as a share of lots; towns with larger lots are under-weighted."
-  - "One statewide share is applied to every tract. A place-by-place mask needs the tract-to-municipality split (task P4-08)."
+  - "One statewide share is applied to every tract. A place-by-place mask needs the tract-to-municipality split."
   - "Philadelphia and Pittsburgh are inside the share; the SB 1346 exclusion of both is applied separately (place_scope below)."
 
 # Places the Pennsylvania bills treat differently, mapped to tracts.
@@ -110,10 +110,13 @@ place_scope:
     note: "The city and the county are the same area."
   Pittsburgh:
     county: "42003"
+    cousub: "61000"
     tract_share_parameter: adu.pittsburgh_share_of_allegheny_lots
     note: >-
-      FLAGGED STUB. Pittsburgh is a city inside Allegheny County, not a county.
-      Until the tract-to-municipality split is built from the Census block
-      assignment file (task P4-08), the exclusion removes a documented share of
-      every Allegheny County tract's eligible lots instead of the city's own
-      tracts.
+      Pittsburgh is a city inside Allegheny County, not a county. The exclusion
+      is measured tract by tract: county subdivision 61000 (the City of
+      Pittsburgh) in the pack's tract_municipalities table (2020 Census block
+      assignment file) gives each Allegheny tract's share of 2020 housing units
+      inside the city, and only that share of the tract's lots is left out
+      (engine.place_scope). The parameter is the fallback for a pack without
+      that table: then a flat drawn share of every Allegheny tract is removed.

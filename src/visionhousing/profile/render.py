@@ -5,11 +5,14 @@ Plain-language summary
 Every renderer shows the same facts in the same order and only formats what
 the profile holds; none computes a number.
 
-- :func:`to_markdown`: headings per section, the one-sentence summary, a table
-  of facts with the comparison and a numbered source note, the limits, and the
-  source list at the end.
+- :func:`to_markdown`: a county's ranks among the state's counties, then per
+  section the headline, the summary points, the one-sentence summary, a table
+  of facts with the comparison and a numbered source note, one small table per
+  chart (count, share, margin and the bigger area's share), the limits, and
+  the source list at the end.
 - :func:`to_html`: the same as one self-contained page (inline CSS, system
-  fonts, no scripts, no outside requests) laid out for US Letter paper.
+  fonts, no scripts, no outside requests) laid out for US Letter paper. Chart
+  tables carry a plain bar whose width is the share already in the profile.
 - :func:`to_csv`: one row per fact, with every field (value, unit, text,
   comparison, margin, range, source, vintage, year, geography, note).
 - :func:`to_json`: the whole profile as JSON.
@@ -23,7 +26,8 @@ import io
 import json
 from html import escape
 
-from visionhousing.profile.model import Fact, Profile
+from visionhousing.profile.format import fmt
+from visionhousing.profile.model import Chart, Fact, Profile, Section
 
 __all__ = ["CSV_COLUMNS", "FORMATS", "render", "to_csv", "to_html", "to_json", "to_markdown"]
 
@@ -95,6 +99,48 @@ def _cell(text: str) -> str:
     return text.replace("|", "/").replace("\n", " ")
 
 
+def _share(x: float | None) -> str:
+    return "" if x is None else fmt(x, "share")
+
+
+def _count(x: float | None) -> str:
+    return "" if x is None else fmt(x, "persons")
+
+
+def _compare_shares(chart: Chart) -> dict[str, float | None]:
+    if chart.compare is None:
+        return {}
+    return {i.key or i.label: i.share for i in chart.compare.items}
+
+
+def _headline(s: Section) -> str:
+    if s.headline is None:
+        return ""
+    words = f" ({s.headline.words})" if s.headline.words else ""
+    return f"{s.headline.label}: {s.headline.text}{words}"
+
+
+def _chart_markdown(chart: Chart, notes: dict[str, int]) -> list[str]:
+    refs = "".join(f"[{notes[x]}]" for x in chart.source_ids if x in notes)
+    other = _compare_shares(chart)
+    head = f"| {_cell(chart.title)} | Count | Share | Margin (90%) |"
+    rule = "|---|---|---|---|"
+    if chart.compare is not None:
+        head += f" {_cell(chart.compare.label)} |"
+        rule += "---|"
+    out = [f"*Chart: {chart.title}* {refs}", "", head, rule]
+    for i in chart.items:
+        row = (
+            f"| {_cell(i.label)} | {_count(i.value)} | {_share(i.share)} | "
+            f"{'' if i.moe is None else '+/- ' + _count(i.moe)} |"
+        )
+        if chart.compare is not None:
+            row += f" {_share(other.get(i.key or i.label))} |"
+        out.append(row)
+    out += ["", f"<small>{_cell(chart.note)}</small>", ""]
+    return out
+
+
 def to_markdown(profile: Profile) -> str:
     """The profile as Markdown."""
     notes = _footnotes(profile)
@@ -106,8 +152,21 @@ def to_markdown(profile: Profile) -> str:
         "compared with. A county is compared with the state; a tract with its county.",
         "",
     ]
+    if profile.ranks:
+        out += ["## Rank among the state's counties", "",
+                "| Measure | Value | Rank | In words |", "|---|---|---|---|"]  # fmt: skip
+        for r in profile.ranks:
+            out.append(
+                f"| {_cell(r.label)} | {_cell(r.text)} | {_cell(r.text_rank)} | {_cell(r.words)} |"
+            )
+        out.append("")
     for s in profile.sections:
-        out += [f"## {s.title}", "", f"**{s.summary}**", ""]
+        out += [f"## {s.title}", ""]
+        if _headline(s):
+            out += [f"### {_headline(s)}", ""]
+        if s.summary_points:
+            out += [*(f"- {p}" for p in s.summary_points), ""]
+        out += [f"**{s.summary}**", ""]
         if s.status == "ok" and s.facts:
             out += ["| Fact | Value | Compared with | Year | Source |", "|---|---|---|---|---|"]
             for f in s.facts:
@@ -116,6 +175,8 @@ def to_markdown(profile: Profile) -> str:
                     f"{_cell(_compared(f))} | {_cell(f.year)} | [{notes[f.source]}] |"
                 )
             out.append("")
+        for chart in s.charts:
+            out += _chart_markdown(chart, notes)
         if s.limits:
             out += [f"*What this cannot tell you:* {s.limits}", ""]
     out += ["## Sources", ""]
@@ -155,6 +216,12 @@ sup { font-size: .7em; color: var(--accent); }
 .limits { font-size: .8rem; color: var(--muted); margin: .2rem 0 0; }
 .coming h2 { border-top-color: var(--rule); color: var(--muted); }
 ol.sources { font-size: .8rem; color: var(--muted); padding-left: 1.4rem; }
+.headline { font-size: 1.05rem; margin: 0 0 .3rem; }
+.headline b { font-size: 1.25rem; }
+ul.points { margin: 0 0 .4rem; padding-left: 1.2rem; }
+.bar { display: inline-block; height: .6rem; background: var(--accent); vertical-align: middle; }
+.bar.o { background: var(--rule); }
+caption { text-align: left; font-weight: 600; padding: .2rem 0; }
 .stamp { margin-top: 1.5rem; font-size: .75rem; color: var(--muted); word-break: break-all; }
 @page { size: letter; margin: 0.5in 0.55in 0.6in; }
 @media print {
@@ -178,10 +245,33 @@ def to_html(profile: Profile) -> str:
         '<p class="how">Each number names its source (numbered, listed at the end), its year and '
         "the area it is compared with: a county with the state, a tract with its county.</p>"
     )
+    if profile.ranks:
+        body.append(
+            "<h2>Rank among the state's counties</h2><table><thead><tr><th>Measure</th>"
+            "<th>Value</th><th>Rank</th><th>In words</th></tr></thead><tbody>"
+        )
+        for r in profile.ranks:
+            body.append(
+                f'<tr><td>{e(r.label)}</td><td class="r">{e(r.text)}</td>'
+                f'<td class="r">{e(r.text_rank)}</td><td class="c">{e(r.words)}</td></tr>'
+            )
+        body.append("</tbody></table>")
     for s in profile.sections:
         cls = "section" if s.status == "ok" else "section coming"
         body.append(f'<section class="{cls}" id="{e(s.key)}"><h2>{e(s.title)}</h2>')
         if s.status == "ok":
+            if s.headline is not None:
+                words = f" ({s.headline.words})" if s.headline.words else ""
+                body.append(
+                    f'<p class="headline">{e(s.headline.label)}: <b>{e(s.headline.text)}</b>'
+                    f"{e(words)}</p>"
+                )
+            if s.summary_points:
+                body.append(
+                    '<ul class="points">'
+                    + "".join(f"<li>{e(p)}</li>" for p in s.summary_points)
+                    + "</ul>"
+                )
             body.append(f'<p class="summary">{e(s.summary)}</p>')
         else:
             body.append(f'<p class="status">{e(s.summary)}</p>')
@@ -199,6 +289,8 @@ def to_html(profile: Profile) -> str:
                     f'<td class="c">{e(_compared(f))}</td><td>{e(f.year)}</td></tr>'
                 )
             body.append("</tbody></table>")
+        for chart in s.charts:
+            body.append(_chart_html(chart, notes))
         if s.limits and s.status == "ok":
             body.append(f'<p class="limits">What this cannot tell you: {e(s.limits)}</p>')
         body.append("</section>")
@@ -217,6 +309,37 @@ def to_html(profile: Profile) -> str:
         '<meta name="viewport" content="width=device-width, initial-scale=1">\n'
         f"<title>{e(profile.name)} · place profile · VisionHousing</title>\n"
         f"<style>\n{CSS}\n</style>\n</head>\n<body>\n" + "\n".join(body) + "\n</body>\n</html>\n"
+    )
+
+
+def _chart_html(chart: Chart, notes: dict[str, int]) -> str:
+    e = escape
+    refs = "".join(f"[{notes[x]}]" for x in chart.source_ids if x in notes)
+    other = _compare_shares(chart)
+    head = "<th></th><th>Count</th><th>Share</th><th>Margin (90%)</th>"
+    if chart.compare is not None:
+        head += f"<th>{e(chart.compare.label)}</th>"
+    rows = []
+    for i in chart.items:
+        width = 0.0 if i.share is None else max(0.0, min(1.0, i.share)) * 100
+        cells = (
+            f'<td>{e(i.label)}</td><td class="r">{e(_count(i.value))}</td>'
+            f'<td class="r"><span class="bar" style="width:{width:.1f}px"></span> '
+            f"{e(_share(i.share))}</td>"
+            f'<td class="r">{e("" if i.moe is None else "+/- " + _count(i.moe))}</td>'
+        )
+        if chart.compare is not None:
+            o = other.get(i.key or i.label)
+            ow = 0.0 if o is None else max(0.0, min(1.0, o)) * 100
+            cells += (
+                f'<td class="r"><span class="bar o" style="width:{ow:.1f}px"></span> '
+                f"{e(_share(o))}</td>"
+            )
+        rows.append(f"<tr>{cells}</tr>")
+    return (
+        f'<table class="chart"><caption>{e(chart.title)} <sup>{e(refs)}</sup></caption>'
+        f"<thead><tr>{head}</tr></thead><tbody>{''.join(rows)}</tbody></table>"
+        f'<p class="limits">{e(chart.note)}</p>'
     )
 
 

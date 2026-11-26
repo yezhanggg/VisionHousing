@@ -67,6 +67,8 @@ def test_run_equals_engine(client, expected):
     got = r.json()
     got.pop("explanation")
     got.pop("explanation_status")
+    # The transit status as shown text (api.status_view): Testland's runs carry no status.
+    assert got.pop("status_views") == {}
     assert got == _plain(expected.to_dict())
 
 
@@ -75,6 +77,7 @@ def test_run_equals_engine_baseline_only(client):
     got = r.json()
     for k in ("explanation", "explanation_status"):
         got.pop(k)
+    assert got.pop("status_views") == {}
     assert got == _plain(_engine(draws=250, seed=2).to_dict())
 
 
@@ -83,6 +86,8 @@ def test_export_json_equals_engine(client, expected):
     got = client.get(url).json()
     got.pop("explanation")
     got.pop("explanation_status")
+    # The transit status as shown text (api.status_view): Testland's runs carry no status.
+    assert got.pop("status_views") == {}
     assert got == _plain(expected.to_dict())
 
 

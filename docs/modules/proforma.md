@@ -102,7 +102,7 @@ Fees and parking are always their own lines, so a reform changes exactly one lin
 - **Fee reform:** a scenario override halves `fees.fee_total_per_unit` (or the ADU fee
   lines).
 - **Parking reform:** a scenario override sets spaces per unit to the spaces still
-  built (decision D-08).
+  built (the benchmark parking rule).
 - **SB 1346:** `adu.utility_connection_fee` = 0.
 
 ## Formulas you can read

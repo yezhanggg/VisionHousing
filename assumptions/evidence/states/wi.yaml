@@ -1,0 +1,66 @@
+# Cross-state comparison records: WI.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: wi.act16_2023_land_use_review
+  kind: policy
+  state: WI
+  jurisdiction: statewide (cities, villages, towns and counties)
+  policy_types:
+  - permit_timing
+  title: '2023 Wisconsin Act 16 (AB 266): limits on who may sue over housing approvals, approval of compliant
+    housing, simple-majority rezonings'
+  citation: 2023 Wis. Act 16 (AB 266); Wis. Stat. 66.10015, 66.10016, 781.10, 62.23(7), 59.69, 60.61
+  url: https://docs.legis.wisconsin.gov/2023/proposals/ab266
+  session: 2023-2024 Legislature
+  bill: AB 266
+  enacted_date: 2023-06-22
+  effective_dates:
+  - date: 2023-06-24
+    applies_to: Act generally, including the new certiorari review of residential development decisions (limits
+      on who may sue, 30-day filing window)
+  - date: 2025-01-01
+    applies_to: Duty to approve complete, code-compliant residential housing permits (mandamus remedy) and
+      simple-majority vote for zoning amendments
+  geographic_scope: All local governments that issue building, zoning, driveway, stormwater or other permits
+    for residential development.
+  exclusions:
+  - Does not require a rezoning or a conditional use permit; only permits under existing requirements must
+    be granted
+  - Down-zoning two-thirds vote and airport-protest supermajority rules remain
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Objectors may sue only if they show personal, distinct damage and spoke or wrote before the decision.
+  - Repeals the rule that a 50% landowner protest forced a three-fourths vote on county and town zoning changes.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The Act 16 text on docs.legis.wisconsin.gov shows 'Date of enactment June 22, 2023'
+    and 'Date of publication June 23, 2023'. The Legislative Council act memo (docs.legis.wisconsin.gov)
+    gives effective dates June 24, 2023 (general) and January 1, 2025 (approval duty and simple majority).
+  sources:
+  - label: 2023 AB 266 history (Wisconsin Legislature)
+    url: https://docs.legis.wisconsin.gov/2023/proposals/ab266
+    official: true
+  - label: 2023 Wisconsin Act 16 text
+    url: https://docs.legis.wisconsin.gov/document/acts/2023/16.html
+    official: true
+  - label: Legislative Council Act Memo, 2023 Act 16
+    url: https://docs.legis.wisconsin.gov/document/lcactmemos/2023/REG/Act%2016.pdf
+    official: true
+  discovered_via: search

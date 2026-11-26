@@ -1,0 +1,370 @@
+# Cross-state comparison records: NH.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: nh.hb631_2025
+  kind: policy
+  state: NH
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - adaptive_reuse
+  - infrastructure_finance
+  title: 'New Hampshire HB 631: multifamily housing on commercially zoned land (RSA 674:79-80)'
+  citation: Laws 2025, ch. 201 (HB 631-FN); RSA 674:79-80; amended by Laws 2026, ch. 319:1 and ch. 329:6
+  url: https://gc.nh.gov/bill_status/billinfo.aspx?id=690&inflect=2
+  session: 2025 regular session
+  bill: HB 631
+  enacted_date: 2025-07-15
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: RSA 674:79-80 (ch. 201) and the 2026 ch. 319 amendment (effective 12:01 a.m.)
+  - date: 2026-09-13
+    applies_to: '2026 ch. 329:6: replacement para. V (as-of-right; only frontage, setback and height limits
+      equal to commercial rules in commercial districts existing, created or expanded after 2026-07-01),
+      new para. VI (conversion of nonconforming structures) and VII (attorney fees for improperly denied
+      owners)'
+  geographic_scope: All municipalities. Multifamily must be allowed on commercially zoned land where roads,
+    water and sewer are adequate or are provided by the applicant.
+  exclusions:
+  - Towns may restrict housing in industrial or manufacturing zones with incompatible impacts
+  - Towns may require ground-floor retail
+  - The planning board may deny for inadequate roads or pedestrian safety, water, or wastewater
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'The infrastructure-adequacy test is a gate: the planning board may require a traffic study and proof
+    of water and sewer connection rights.'
+  - Adaptive-reuse conversions are exempt from setback, height and frontage rules if the building envelope
+    does not change (para. V before 2026-09-13).
+  - 'The 2026 amending chapters are ch. 319 (HB 1010) and ch. 329 (HB 1588), both confirmed on the gc.nh.gov
+    2026 chaptered-laws list; ch. 329 has its own record (nh.hb1588_2026_parking_commercial).'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: gc.nh.gov bill status shows HB 631 chapter 201, signed 2025-07-15, effective 2026-07-01.
+    The RSA 674 chapter page on gc.nh.gov shows the text of 674:79-80 and the source note '2025, 201:1,
+    eff. July 1, 2026. 2026, 319:1, eff. July 1, 2026 at 12:01 a.m.; 329:6, eff. Sept. 13, 2026'.
+  sources:
+  - label: HB 631 bill status (NH General Court)
+    url: https://gc.nh.gov/bill_status/billinfo.aspx?id=690&inflect=2
+    official: true
+  - label: RSA chapter 674 (merged text)
+    url: https://gc.nh.gov/rsa/html/LXIV/674/674-mrg.htm
+    official: true
+  discovered_via: addendum
+- id: nh.hb1588_2026_parking_commercial
+  kind: policy
+  state: NH
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  - commercial_land_housing
+  - infrastructure_finance
+  title: 'New Hampshire HB 1588 (2026): no garage mandate for required parking, as-of-right multifamily
+    on commercial land, special assessment districts'
+  citation: Laws 2026, ch. 329 (HB 1588-FN); RSA 674:16, VII; RSA 674:80; new RSA 162-V (renumbered
+    by contingency)
+  url: https://gc.nh.gov/bill_status/billinfo.aspx?id=2446&inflect=2
+  session: 2026 regular session
+  bill: HB 1588
+  enacted_date: 2026-07-15
+  effective_dates:
+  - date: 2026-09-13
+    applies_to: 'Remainder of the act (60 days after passage): RSA 674:16, VII (towns may not require
+      more than one residential parking space per unit or require it to be garaged), special assessment
+      districts, expanded housing infrastructure grant program; and § 6 (RSA 674:80, V-VII), which takes
+      effect 60 days after passage because HB 1010 became law (§ 7 contingency)'
+  geographic_scope: All municipalities that zone. The commercial-land rules apply to commercial districts
+    existing, created or expanded after 2026-07-01.
+  exclusions:
+  - Towns may still impose frontage, setback and height limits on multifamily in commercial districts,
+    but no stricter than for commercial development
+  - Site plan review under RSA 674:43 is preserved; state fire, building and septic rules still apply
+  - 'Special assessment districts: only with memoranda signed by owners of 60% of properties; schools
+    and general government buildings cannot be financed'
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The one-space-per-unit cap was set by Laws 2025, ch. 258 (SB 284); HB 1588 adds the ban on requiring
+    that space to be in a garage.
+  - Owners improperly denied multifamily on commercial land may recover reasonable attorney fees.
+  - The grant program expansion carries a nominal $1 appropriation for FY 2027.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: gc.nh.gov bill status shows 'Signed by Governor Ayotte 07/15/2026; Chapter 329; eff.
+    I. Secs 2 & 6 eff as prov sec 7 II. Rem eff 09/13/2026'. The chaptered final text (gc.nh.gov) shows
+    §§ 1-9 including the § 7 HB 1010 contingency. The RSA 674 merged text shows 674:16 source note '2026,
+    329:1, eff. Sept. 13, 2026' and 674:80 note '329:6, eff. Sept. 13, 2026'.
+  sources:
+  - label: HB 1588 bill status (NH General Court)
+    url: https://gc.nh.gov/bill_status/billinfo.aspx?id=2446&inflect=2
+    official: true
+  - label: HB 1588 chaptered final version (ch. 329)
+    url: https://gc.nh.gov/bill_status/legacy/bs2016/billText.aspx?sy=2026&id=2446&txtFormat=html
+    official: true
+  - label: RSA chapter 674 (merged text)
+    url: https://gc.nh.gov/rsa/html/LXIV/674/674-mrg.htm
+    official: true
+  discovered_via: pew_2026
+- id: nh.sb284_2025_parking_cap
+  kind: policy
+  state: NH
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  title: 'New Hampshire SB 284 (2025): towns may not require more than one parking space per home'
+  citation: Laws 2025, ch. 258 (SB 284); RSA 674:16, VII
+  url: https://gc.nh.gov/bill_status/billinfo.aspx?id=1105&inflect=2
+  session: 2025 regular session
+  bill: SB 284
+  enacted_date: 2025-07-15
+  effective_dates:
+  - date: 2025-09-13
+    applies_to: RSA 674:16, VII as amended (cap of one residential parking space per unit)
+  geographic_scope: Every city, town and county (for unincorporated places) that regulates accessory
+    parking through zoning.
+  exclusions:
+  - Towns may still require up to one space per unit; developers may build more
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Replaced an earlier 1.5-space cap that applied only to small workforce units and to multifamily
+    projects of 10 or more units; the new cap applies to all residential units.
+  - Laws 2026, ch. 329 (HB 1588) later added that the required space may not have to be garaged (effective
+    2026-09-13).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: gc.nh.gov bill status shows 'Signed by the Governor on 07/15/2025; Chapter 0258;
+    Effective 09/13/2025'. The chaptered text (gc.nh.gov) shows the amended RSA 674:16, VII and 'Approved
+    July 15, 2025 Effective Date September 13, 2025'.
+  sources:
+  - label: SB 284 bill status (NH General Court)
+    url: https://gc.nh.gov/bill_status/billinfo.aspx?id=1105&inflect=2
+    official: true
+  - label: SB 284 chaptered final version (ch. 258)
+    url: https://gc.nh.gov/bill_status/legacy/bs2016/billText.aspx?id=1105&sy=2025&txtFormat=html
+    official: true
+  discovered_via: search
+- id: nh.hb577_2025_detached_adu
+  kind: policy
+  state: NH
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  title: 'New Hampshire HB 577 (2025): one attached or detached ADU by right'
+  citation: Laws 2025, ch. 197 (HB 577); RSA 674:71-73
+  url: https://gc.nh.gov/bill_status/billinfo.aspx?id=125&inflect=2
+  session: 2025 regular session
+  bill: HB 577
+  enacted_date: 2025-07-15
+  effective_dates:
+  - date: 2025-07-01
+    applies_to: Whole act (the act's own effective date precedes the signing date)
+  geographic_scope: Every municipality with a zoning ordinance, in all districts that allow single-family
+    homes. Where an ordinance is silent, one ADU is a permitted use by right.
+  exclusions:
+  - Towns need not allow more than one ADU per single-family home
+  - Towns may bar ADUs with townhouses and on rented or leased land
+  - Towns may require owner occupancy of one of the two units
+  - Condominium sale of the ADU apart from the main home is barred unless the town allows it
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'No extra lot size, setback, frontage, design review or space controls beyond those for a single-family
+    home. Size cap: 950 sq ft unless the town allows more; a town may not cap below 750 sq ft.'
+  - Where the main home must have parking, a town may require at most one more space for the ADU.
+  - Laws 2026, ch. 210 (HB 1079) later amended RSA 674:71-72 (conversion of nonconforming structures),
+    effective 2026-08-31 per the RSA source note; not reviewed as a separate record.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: gc.nh.gov bill status shows 'Signed by Governor Ayotte 07/15/2025; Chapter 197; eff.
+    07/01/2025'. The chaptered text (gc.nh.gov) shows the repealed-and-reenacted RSA 674:72 and the detached
+    ADU change to 674:73. RSA 674:71-73 source notes read '2025, 197:1-3, eff. July 1, 2025'.
+  sources:
+  - label: HB 577 bill status (NH General Court)
+    url: https://gc.nh.gov/bill_status/billinfo.aspx?id=125&inflect=2
+    official: true
+  - label: HB 577 chaptered final version (ch. 197)
+    url: https://gc.nh.gov/bill_status/legacy/bs2016/billText.aspx?id=125&sy=2025&txtFormat=html
+    official: true
+  - label: RSA chapter 674 (merged text)
+    url: https://gc.nh.gov/rsa/html/LXIV/674/674-mrg.htm
+    official: true
+  discovered_via: search
+- id: nh.sb282_2025_single_stair
+  kind: policy
+  state: NH
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'New Hampshire SB 282 (2025): one stairway allowed in residential buildings up to four floors'
+  citation: Laws 2025, ch. 257 (SB 282); RSA 155-A:2, XII
+  url: https://gc.nh.gov/bill_status/billinfo.aspx?id=1094&inflect=2
+  session: 2025 regular session
+  bill: SB 282
+  enacted_date: 2025-07-15
+  effective_dates:
+  - date: 2025-07-15
+    applies_to: Whole act (effective on passage)
+  geographic_scope: Statewide building code; residential buildings up to 4 floors above grade plane.
+  exclusions:
+  - Only under conditions set by the state building code review board
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Overrides the adopted International Building Code on stair count, but the review board's conditions
+    were not read here, so whether single-stair buildings are practically usable is not confirmed.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: gc.nh.gov bill status shows 'Signed by the Governor on 07/15/2025; Chapter 0257;
+    Effective 07/15/2025'. The chaptered text (gc.nh.gov) shows new RSA 155-A:2, XII and 'Approved July
+    15, 2025 Effective Date July 15, 2025'.
+  sources:
+  - label: SB 282 bill status (NH General Court)
+    url: https://gc.nh.gov/bill_status/billinfo.aspx?id=1094&inflect=2
+    official: true
+  - label: SB 282 chaptered final version (ch. 257)
+    url: https://gc.nh.gov/bill_status/legacy/bs2016/billText.aspx?sy=2025&id=1094&txtFormat=html
+    official: true
+  discovered_via: search
+- id: nh.sb146_2016_adu
+  kind: policy
+  state: NH
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'New Hampshire SB 146 (2016): first statewide ADU requirement (RSA 674:71-73)'
+  citation: Laws 2016, ch. 6 (SB 146, as read in the RSA source notes); RSA 674:71-73
+  url: https://gc.nh.gov/rsa/html/LXIV/674/674-mrg.htm
+  session: 2015-2016 General Court
+  bill: SB 146
+  enacted_date: null
+  effective_dates:
+  - date: 2017-06-01
+    applies_to: RSA 674:71-73 as enacted (source note '2016, 6:2, eff. June 1, 2017')
+  geographic_scope: Every municipality with a zoning ordinance; districts that allow single-family homes.
+  exclusions:
+  - As first enacted, towns were not required to allow detached ADUs (changed by Laws 2025, ch. 197)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Superseded in large part by Laws 2025, ch. 197 (HB 577), which repealed and reenacted RSA 674:72.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: The RSA 674:71-73 source notes on gc.nh.gov show '2016, 6:2, eff. June 1, 2017', and
+    gc.nh.gov holds only the 2015 Senate-amended SB 146 text (effective date then June 1, 2016). No official
+    page read ties SB 146 to 2016 chapter 6 or gives the signing date; the 2016 bill status page could
+    not be located on gc.nh.gov.
+  sources:
+  - label: RSA chapter 674 (merged text, source notes)
+    url: https://gc.nh.gov/rsa/html/LXIV/674/674-mrg.htm
+    official: true
+  - label: SB 146 (2015) as amended by the Senate
+    url: https://gc.nh.gov/legislation/2015/SB0146.html
+    official: true
+  discovered_via: search
+- id: nh.hb1540_2026_adu
+  kind: policy
+  state: NH
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'New Hampshire HB 1540 (2026): ADU and local health ordinance bill (died in conference)'
+  citation: HB 1540 (2026 session), not enacted
+  url: https://gc.nh.gov/bill_status/billinfo.aspx?id=1951&inflect=2
+  session: 2026 regular session
+  bill: HB 1540
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Would have applied to all zoning municipalities.
+  exclusions: []
+  implementation_status: lapsed
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The last amended version only let towns keep enforcing local septic and maintenance health ordinances
+    for ADUs (plus an unrelated barbershop licence change). The discovery label (ADUs by right in most
+    districts) does not match the version that reached conference.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'gc.nh.gov bill status: introduced 01/07/2026, passed House with amendment 03/11/2026,
+    Senate amendment 05/07/2026, House non-concurred and requested a committee of conference; last entry
+    ''Conference Committee Report; Not Signed Off''. General status SENATE; no chapter number. The 2026
+    session ended the biennium, so the bill died.'
+  sources:
+  - label: HB 1540 bill status (NH General Court)
+    url: https://gc.nh.gov/bill_status/billinfo.aspx?id=1951&inflect=2
+    official: true
+  - label: HB 1540 text (Senate-amended version)
+    url: https://gc.nh.gov/bill_status/legacy/bs2016/billText.aspx?sy=2026&id=1951&txtFormat=html
+    official: true
+  discovered_via: search

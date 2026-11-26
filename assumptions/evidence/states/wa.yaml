@@ -1,0 +1,754 @@
+# Cross-state comparison records: WA.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: wa.hb1110_2023
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - parking
+  title: 'Middle housing: 2 to 6 units per lot in cities over 25,000, tied to comprehensive plan update'
+  citation: E2SHB 1110, Ch. 332, Laws of 2023; RCW 36.70A.635 (as amended 2024 c 152, 2025 c 148, 2025
+    c 301); RCW 36.70A.636
+  url: https://app.leg.wa.gov/billsummary?BillNumber=1110&Year=2023
+  session: 2023 regular session
+  bill: HB 1110
+  enacted_date: 2023-05-08
+  effective_dates:
+  - date: 2023-07-23
+    applies_to: Act effective
+  - date: 2024-12-31
+    applies_to: Compliance due with periodic plan update for cities in King, Kitsap, Pierce, Snohomish
+      counties (RCW 36.70A.130(5)(a))
+  - date: 2025-12-31
+    applies_to: Periodic update due for Clallam, Clark, Island, Jefferson, Lewis, Mason, San Juan, Skagit,
+      Thurston, Whatcom county cities
+  - date: 2026-12-31
+    applies_to: Periodic update due for Benton, Chelan, Cowlitz, Douglas, Franklin, Kittitas, Skamania,
+      Spokane, Walla Walla, Yakima county cities
+  geographic_scope: 'GMA cities: 25,000-74,999 pop. at least 2 units/lot (4 near major transit stop or
+    with 1 affordable unit); 75,000+ at least 4 units/lot (6 near transit or with 2 affordable units);
+    cities under 25,000 in the contiguous UGA of the largest city in a county over 275,000 at least 2
+    units/lot. Must allow 6 of 9 middle housing types.'
+  exclusions:
+  - Critical areas and buffers (except certain aquifer recharge areas)
+  - EPA sole-source aquifers on Puget Sound islands; watersheds for impaired potable reservoirs as of
+    2023-07-23
+  - Urban separators designated as of 2023-07-23; lots created by RCW 58.17.145 lot splits
+  - Option to apply to only 75% of single-family lots, excluding specified areas
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Current RCW 36.70A.635(11): comply at the later of the next periodic update or 12 months after the
+    next implementation progress report following an OFM threshold finding. Commerce''s 2023 notice described
+    a ''six months after periodic update'' deadline from the original text; that wording is not in the
+    current statute.'
+  - If a city misses the deadline, Commerce's model ordinance supersedes conflicting local rules (RCW
+    36.70A.636(2)(b)).
+  - 'Parking caps: none within 1/2 mile of major transit; max 1 space/unit on lots <= 6,000 sq ft, 2 on
+    larger lots.'
+  - Commerce publishes model ordinances (two city-size versions) and a city-by-city deadlines PDF (Box
+    link not read).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'app.leg.wa.gov bill summary: C 332 L 23, governor signed May 8, 2023, effective
+    July 23, 2023. RCW 36.70A.635 page (current text) read for thresholds, exemptions, (11) compliance
+    timing and amending session laws; RCW 36.70A.636 for model ordinance preemption; RCW 36.70A.130(5)
+    for periodic update dates.'
+  sources:
+  - label: WA Legislature bill summary HB 1110 (2023)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=1110&Year=2023
+    official: true
+  - label: RCW 36.70A.635
+    url: https://app.leg.wa.gov/RCW/default.aspx?cite=36.70A.635
+    official: true
+  - label: RCW 36.70A.636
+    url: https://app.leg.wa.gov/RCW/default.aspx?cite=36.70A.636
+    official: true
+  - label: RCW 36.70A.130
+    url: https://app.leg.wa.gov/RCW/default.aspx?cite=36.70A.130
+    official: true
+  - label: 'Commerce: Planning for Middle Housing'
+    url: https://www.commerce.wa.gov/growth-management/housing-planning/middle-housing/
+    official: true
+  discovered_via: addendum
+- id: wa.rcw_36_70b_080_sb5290_2023
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - fees
+  title: 'Statutory permit shot clock: 65/100/170-day defaults with partial fee refunds'
+  citation: SB 5290, Ch. 338, Laws of 2023; RCW 36.70B.080 (also amended 2025 c 208, 2026 c 235)
+  url: https://app.leg.wa.gov/RCW/default.aspx?cite=36.70B.080
+  session: 2023 regular session
+  bill: SB 5290
+  enacted_date: 2023-05-08
+  effective_dates:
+  - date: 2023-07-23
+    applies_to: SB 5290 general effective date
+  - date: 2025-01-01
+    applies_to: 2023 c 338 s 7 (revised RCW 36.70B.080 incl. default time limits, application contents,
+      fee refunds)
+  - date: 2025-03-01
+    applies_to: First annual permit performance reports due to Commerce (covering 2024)
+  geographic_scope: Counties subject to RCW 36.70A.215 and cities of 20,000+ in those counties must set
+    deadlines and report; default limits apply wherever a GMA jurisdiction has not set its own
+  exclusions:
+  - Clock excludes time waiting on applicant, other agencies, EIS preparation, and appeals
+  - Up to 30 days added if applicant pauses or is unresponsive more than 60 days
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: 'Days from completeness determination to final decision: 65 (no notice), 100 (notice),
+    170 (notice and hearing)'
+  denominator: project permit applications
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Missed deadline means a 10% fee refund (delay up to 20% over the clock) or 20% (longer); jurisdictions
+    may collect only 80% of the fee up front.
+  - 'Stages touched: completeness (RCW 36.70B.070) through final land-use decision; building permits are
+    excluded from ''project permit''.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'app.leg.wa.gov bill summary for SB 5290 (2023): C 338 L 23, governor signed May
+    8, 2023, effective 7/23/2023. Current RCW 36.70B.080 page: day limits, refunds, reporting dates, note
+    that 2023 c 338 s 7 took effect Jan. 1, 2025, and amendment list incl. 2026 c 235 s 3.'
+  sources:
+  - label: WA Legislature bill summary SB 5290 (2023)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=5290&Year=2023
+    official: true
+  - label: RCW 36.70B.080
+    url: https://app.leg.wa.gov/RCW/default.aspx?cite=36.70B.080
+    official: true
+  discovered_via: addendum
+- id: wa.hb2418_2026
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - infrastructure_finance
+  title: 'Permit review process changes: utility/special district review clocks and single permit official
+    for housing'
+  citation: E2SHB 2418, Ch. 235, Laws of 2026; amends RCW 36.70B.020, .060, .070, .080, .160; new sections
+    in RCW 54.04, 57.08, 86.09, 43.21A, 43.21C
+  url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/House/2418-S2.SL.pdf
+  session: 2026 regular session
+  bill: HB 2418
+  enacted_date: 2026-03-27
+  effective_dates:
+  - date: 2026-06-11
+    applies_to: Act effective
+  - date: 2027-06-30
+    applies_to: Deadline for GMA local governments to adopt an integrated, consolidated project permit
+      process (RCW 36.70B.060 as amended), incl. a permit responsible official for residential projects
+  geographic_scope: GMA counties and cities; public utility districts, water-sewer districts, diking/drainage
+    districts, and the Department of Ecology when they charge fees to review residential project permits
+  exclusions:
+  - Building permits under building codes remain outside 'project permit'
+  - No refund duty where a district or agency charges no review fee
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'It is housing-related: it targets residential project permits. Districts get 15 days to flag an incomplete
+    civil-plan referral and 45 business days for written technical comments, total review capped at 120
+    calendar days, with a 20% fee refund if late.'
+  - Ecology must meet the local 65/100/170-day clocks for fee-based residential reviews or refund 20%.
+  - Permit responsible official for residential projects must also be the SEPA responsible official when
+    the local government is lead agency.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: app.leg.wa.gov bill summary (2025-26) shows 'Concerning permit review processes',
+    C 235 L 26, governor action Mar. 27, 2026, effective June 11, 2026. Enrolled session law PDF shows
+    Approved March 27, 2026, filed March 31, 2026, effective June 11, 2026, and the June 30, 2027 date
+    in amended RCW 36.70B.060.
+  sources:
+  - label: WA Legislature bill summary HB 2418 (2026)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=2418&Year=2026
+    official: true
+  - label: E2SHB 2418 session law (Ch. 235, Laws of 2026)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/House/2418-S2.SL.pdf
+    official: true
+  discovered_via: addendum
+- id: wa.hb1337_2023
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  title: 'ADUs: two per lot in urban growth areas, no owner-occupancy rule'
+  citation: E2SHB 1337, Ch. 334, Laws of 2023 (partial veto); RCW 36.70A.680, 36.70A.681
+  url: https://app.leg.wa.gov/billsummary?BillNumber=1337&Year=2023
+  session: 2023 regular session
+  bill: HB 1337
+  enacted_date: 2023-05-08
+  effective_dates:
+  - date: 2023-07-23
+    applies_to: Act effective
+  - date: 2024-12-31
+    applies_to: Local ADU rules must take effect with periodic plan update for King, Kitsap, Pierce, Snohomish
+      jurisdictions (RCW 36.70A.680(1)(a) with 36.70A.130(5))
+  geographic_scope: GMA cities and counties; lots in UGAs where single-family homes are allowed
+  exclusions:
+  - Lots with critical areas or buffers
+  - Watersheds serving impaired potable-water reservoirs as of 2023-07-23
+  - Parking limits do not apply near large commercial airports or where a certified study shows safety
+    harm
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Rules: at least 2 ADUs per lot (attached/detached combos); size cap may not be set below 1,000 sq
+    ft; height not below 24 ft; no owner-occupancy requirement; no parking within 1/2 mile of major transit.'
+  - Current RCW 36.70A.680(1)(a) (as amended 2025 c 148) ties the deadline to the next periodic update;
+    if a jurisdiction misses it, the state rules preempt conflicting local rules.
+  - 'Governor''s partial veto: vetoed section not identified here.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'app.leg.wa.gov bill summary: C 334 L 23 with partial veto on May 8, 2023, effective
+    July 23, 2023. RCW 36.70A.681 page for substance (added by 2023 c 334 s 4); RCW 36.70A.680 page for
+    timing (history 2025 c 148 s 4; 2023 c 334 s 3); RCW 36.70A.130(5) for update dates.'
+  sources:
+  - label: WA Legislature bill summary HB 1337 (2023)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=1337&Year=2023
+    official: true
+  - label: RCW 36.70A.681
+    url: https://app.leg.wa.gov/RCW/default.aspx?cite=36.70A.681
+    official: true
+  - label: RCW 36.70A.680
+    url: https://app.leg.wa.gov/RCW/default.aspx?cite=36.70A.680
+    official: true
+  discovered_via: addendum
+- id: wa.spokane_boca_2022
+  kind: policy
+  state: WA
+  jurisdiction: Spokane
+  policy_types:
+  - missing_middle
+  title: Spokane Building Opportunity and Choices for All interim zoning ordinance (duplex to fourplex on
+    residential lots)
+  citation: City of Spokane Ordinance C36232 (interim zoning, Building Opportunity and Choices for All)
+  url: https://my.spokanecity.org/housing/building-opportunity/
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates:
+  - date: 2022-08-27
+    applies_to: Interim ordinance effective; duplexes up to fourplexes and attached homes allowed on all residential
+      lots
+  - date: 2023-12-18
+    applies_to: Residential-zone portions of the interim ordinance expire (Center and Corridor bonus section
+      extended to 2024-06-18)
+  - date: 2024-01-01
+    applies_to: Permanent Building Opportunity for Housing code (Ordinance C36459, approved by City Council
+      2023-11-20) in effect; replaces the interim ordinance
+  - date: 2025-03-06
+    applies_to: Building Opportunity for Housing follow-up code amendments (passed 2025-01-27) in effect;
+      clarifications to the permanent code, not the permanent code itself
+  geographic_scope: Citywide residential lots
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Interim (pilot) ordinance, originally to end 2023-07-18 and later extended, then replaced by permanent
+    code; the extension ordinance's date was not read
+  - Washington's statewide middle-housing law (HB 1110) took effect 2023-07-23, inside the same window
+  - 'Date fix 2026-11-25: the record earlier gave 2025-03-06 as the permanent code''s effective date; that
+    is the follow-up amendments ordinance. The permanent code (Ord. C36459) was approved 2023-11-20 and in
+    effect 2024-01-01'
+  - City Council approved an emergency ordinance on 2023-12-14 limiting R1 and R2 zones to 4 units on a
+    temporary basis (date of effect not read)
+  retrieved: 2026-11-25
+  verified: true
+  verification_note: 'City of Spokane open-house deck (2022-08-25): effective 2022-08-27, Ord. C36232, pilot
+    ends 2023-07-18. Re-read by script 2026-11-25 (my.spokanecity.org, robots.txt allows all): BOCA page
+    says the residential portions of the interim ordinance expired 2023-12-18 and permanent code changes
+    were approved by City Council 2023-11-20; Building Opportunity for Housing page says Ord. C36459 was
+    approved 2023-11-20 and the code changes go into effect 2024-01-01; follow-up amendments page says
+    the follow-up ordinance passed 2025-01-27, effective 2025-03-06. Adoption (approval) and effective
+    dates are kept separate. The interim ordinance''s own passage date was not read on an official page,
+    so enacted_date is blank.'
+  sources:
+  - label: City of Spokane BOCA open-house deck (2022-08-25)
+    url: https://static.spokanecity.org/documents/housing/building-opportunity/boca-open-houses-2022-08-25.pdf
+    official: true
+  - label: City of Spokane Building Opportunity and Choices for All page
+    url: https://my.spokanecity.org/housing/building-opportunity/
+    official: true
+  - label: City of Spokane Building Opportunity for Housing project page (Ord. C36459)
+    url: https://my.spokanecity.org/projects/shaping-spokane-housing/building-opportunity-for-housing/
+    official: true
+  - label: City of Spokane Building Opportunity for Housing follow-up code amendments page
+    url: https://my.spokanecity.org/projects/building-opportunity-for-housing-follow-up-code-amendments/
+    official: true
+  discovered_via: search
+- id: wa.sb6026_2026_commercial_zones
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  title: 'Washington E2SSB 6026 (2026): residential development in commercial and mixed-use zones'
+  citation: E2SSB 6026, Ch. 236, Laws of 2026; new section in chapter 36.70A RCW
+  url: https://app.leg.wa.gov/billsummary?BillNumber=6026&Year=2025
+  session: 2026 regular session
+  bill: SB 6026
+  enacted_date: 2026-03-27
+  effective_dates:
+  - date: 2026-06-11
+    applies_to: Whole act
+  - date: 2027-12-11
+    applies_to: 'Computed: 18 months after the effective date. Where a city or county has not adopted
+      compliant rules, the residential-use rule applies directly and overrides conflicting local rules,
+      and ground-floor commercial mandates may not be imposed outside the excluded areas'
+  geographic_scope: Cities planning under the Growth Management Act with 30,000 or more people, and
+    planning counties that are not rural counties. They may not exclude homes from areas zoned commercial
+    or mixed use, and may require ground-floor commercial or retail, or discretionary permits for siting
+    and design, in at most 40% of that acreage (none for subsidized affordable housing).
+  exclusions:
+  - Industrial zones (including employment overlays barring homes adopted before the act)
+  - Land within 3,200 feet of an active oil or gas refinery
+  - Lots needing demolition of a locally designated historic landmark
+  - Land outside urban growth areas or in growth areas not contiguous with a covered city
+  - Areas near airports or military bases where homes are barred (RCW 36.70.547, 36.70A.530)
+  - Tax increment financing areas set up before the act
+  - Shoreline areas where the shoreline program bars multifamily or mixed use
+  - Critical areas and their buffers (with a limited aquifer-recharge exception)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Station areas and areas already zoned for 85 feet or more do not count as commercial or mixed-use
+    acreage for the 40% cap.
+  - Covered places must offer an administrative process to reduce or waive ground-floor commercial rules.
+  - Cities need not update growth assumptions until the comprehensive plan update due after 2031-01-01.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page (app.leg.wa.gov) shows 'Governor signed. Chapter 236, 2026 Laws.
+    Effective date 6/11/2026' on 2026-03-27. Session law PDF shows 'Approved March 27, 2026' and the
+    section text read for scope, exclusions and the 18-month default.
+  sources:
+  - label: SB 6026 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=6026&Year=2025
+    official: true
+  - label: E2SSB 6026 session law (Ch. 236, Laws of 2026)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/Senate/6026-S2.SL.pdf
+    official: true
+  discovered_via: pew_2026
+- id: wa.hb1345_2026_rural_dadu
+  kind: policy
+  state: WA
+  jurisdiction: statewide (counties, outside urban growth areas)
+  policy_types:
+  - adu
+  title: 'Washington EHB 1345 (2026): detached accessory dwelling units outside urban growth areas'
+  citation: EHB 1345, Ch. 231, Laws of 2026; new section in chapter 36.70A RCW; amends RCW 36.70A.696
+  url: https://app.leg.wa.gov/billsummary?BillNumber=1345&Year=2025
+  session: 2026 regular session
+  bill: HB 1345
+  enacted_date: 2026-03-27
+  effective_dates:
+  - date: 2026-06-11
+    applies_to: Whole act
+  geographic_scope: 'Optional: counties planning under the Growth Management Act may allow one detached
+    ADU per parcel outside urban growth areas if they adopt the listed limits, enforcement measures and
+    tracking.'
+  exclusions:
+  - Nonconforming lots under one acre
+  - At most one ADU (attached or detached) per parcel; no subdivision to avoid the limits
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Limits: water-supply proof and metering, septic or sewer capacity, at most 1,296 sq ft, shared driveway,
+    within 150 feet of the main home.'
+  - Counties must report detached ADU permits each year and may allocate at most 10% (rural counties)
+    or 7% (other counties) of the rural population target to them.
+  - This is permission, not a mandate, so the effect depends on county opt-in.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page shows 'Governor signed. Chapter 231, 2026 Laws. Effective date
+    6/11/2026' on 2026-03-27; session law PDF shows 'Approved March 27, 2026' and the section text.
+  sources:
+  - label: HB 1345 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=1345&Year=2025
+    official: true
+  - label: EHB 1345 session law (Ch. 231, Laws of 2026)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/House/1345.SL.pdf
+    official: true
+  discovered_via: pew_2026
+- id: wa.sb5184_2025_parking
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  title: 'Washington ESSB 5184 (2025): parking reform and modernization act (caps on parking minimums)'
+  citation: ESSB 5184, Ch. 204, Laws of 2025; new sections in chapters 35.21, 35A.21, 36.01 and 19.27
+    RCW; repeals RCW 36.70A.620
+  url: https://app.leg.wa.gov/billsummary?BillNumber=5184&Year=2025
+  session: 2025 regular session
+  bill: SB 5184
+  enacted_date: 2025-05-07
+  effective_dates:
+  - date: 2025-07-27
+    applies_to: Whole act
+  - date: 2027-01-27
+    applies_to: 'Computed: 18 months after the effective date, the deadline for cities and counties of
+      50,000 or more'
+  - date: 2028-07-27
+    applies_to: 'Computed: three years after the effective date, the deadline for cities and counties
+      of 30,000 to 50,000'
+  geographic_scope: Cities, code cities and counties over 30,000 people. They may require at most 0.5
+    space per multifamily home, one per single-family home and two per 1,000 sq ft of commercial space,
+    and no minimum for homes under 1,200 sq ft, affordable or senior housing, small commercial spaces,
+    child care, ground-floor commercial in mixed-use buildings or changes of use.
+  exclusions:
+  - Cities and counties of 30,000 people or fewer
+  - Places that show, in a study the Department of Commerce certifies, that the caps would be significantly
+    less safe
+  - Land within one mile of an airport with 9 million or more annual boardings
+  - Counties may require parking where county roads are below city street standards
+  - Parking for religious organizations and carpools may exceed the caps; accessible spaces are not affected
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Places with substantially similar rules can ask Commerce for a finding of compliance; places can ask
+    for a safety variance.
+  - These are caps on minimums; developers may still build more parking than the cap.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page shows 'Governor signed. Chapter 204, 2025 Laws. Effective date
+    7/27/2025' on 2025-05-07; session law PDF shows 'Approved May 7, 2025' and the section text. The
+    two deadline dates are computed from the act's 18-month and three-year terms.
+  sources:
+  - label: SB 5184 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=5184&Year=2025
+    official: true
+  - label: ESSB 5184 session law (Ch. 204, Laws of 2025)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/Senate/5184-S.SL.pdf
+    official: true
+  discovered_via: search
+- id: wa.hb1491_2025_tod
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - parking
+  title: 'Washington 3SHB 1491 (2025): transit-oriented housing in rail and bus rapid transit station
+    areas'
+  citation: 3SHB 1491, Ch. 267, Laws of 2025; amends RCW 36.70A.030 and others; new sections in chapter
+    36.70A RCW
+  url: https://app.leg.wa.gov/billsummary?BillNumber=1491&Year=2025
+  session: 2025 regular session
+  bill: HB 1491
+  enacted_date: 2025-05-13
+  effective_dates:
+  - date: 2025-07-27
+    applies_to: Whole act (local rules then due on the schedule below)
+  - date: 2029-12-31
+    applies_to: Latest compliance date for cities on the first comprehensive-plan schedule (RCW 36.70A.130(5)(a));
+      earlier if their first implementation progress report after 2024 comes first. Other cities must
+      comply six months after their first plan update due after 2024-12-31
+  geographic_scope: 'Cities planning under the Growth Management Act, in station areas inside urban growth
+    areas: within 1/2 mile walk of light rail, commuter rail (cities over 15,000) or rail trolley stops
+    (1/4 mile for commuter rail in smaller cities), and within 1/4 mile walk of designated bus rapid transit
+    stops. Multifamily must be allowed wherever homes are allowed, at an average floor area ratio of at
+    least 3.5 (rail) or 2.5 (bus rapid transit), with no off-street parking mandate.'
+  exclusions:
+  - Up to 25% of bus station areas may be exempted if the bus average rises to 3.0 FAR
+  - Lots where TOD density was already allowed before 2025-01-01 are exempt from the affordability set-aside
+  - Parking rule does not apply where Commerce certifies a safety study, and similar limited cases
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - New buildings in station areas must keep for 50 years at least 10% affordable units, or 10% workforce
+    units with family-size units, or 20% workforce units, unless an exemption applies.
+  - Commerce must publish a model TOD ordinance by 2027-06-30; it applies where cities miss the deadline.
+  - The act also changes multifamily tax exemptions and condominium rules (not summarised here).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page shows 'Governor signed. Chapter 267, 2025 Laws. Effective date
+    7/27/2025' on 2025-05-13; session law PDF shows 'Approved May 13, 2025' and the station-area definitions,
+    density, parking and compliance-date text.
+  sources:
+  - label: HB 1491 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=1491&Year=2025
+    official: true
+  - label: 3SHB 1491 session law (Ch. 267, Laws of 2025)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/House/1491-S3.SL.pdf
+    official: true
+  discovered_via: search
+- id: wa.hb1096_2025_lot_split
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - missing_middle
+  - permit_timing
+  title: 'Washington E2SHB 1096 (2025): administrative residential lot splits'
+  citation: E2SHB 1096, Ch. 301, Laws of 2025; new section in chapter 58.17 RCW; amends RCW 36.70A.635
+  url: https://app.leg.wa.gov/billsummary?BillNumber=1096&Year=2025
+  session: 2025 regular session
+  bill: HB 1096
+  enacted_date: 2025-05-17
+  effective_dates:
+  - date: 2025-07-27
+    applies_to: Whole act
+  - date: 2027-07-27
+    applies_to: 'Computed: two years after the effective date, the deadline for covered cities whose next
+      comprehensive plan update is not due in 2027 (those due in 2027 must adopt it in that update)'
+  geographic_scope: Cities must offer an administrative split of one residential lot into two, decided
+    by staff on clear and objective standards with no pre-decision hearing and no administrative appeal,
+    optionally combined with the building permit for middle housing or a house.
+  exclusions:
+  - Lots in exclusively nonresidential zones
+  - Lots that are not buildable (critical areas, shorelines, stormwater, coverage) or large enough for
+    ordinary subdivision
+  - A lot already created by such a split
+  - Sole-source aquifer areas on Puget Sound islands
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Both lots must meet the local minimum lot size, so the act does not itself shrink minimum lots.
+  - Water and sewer providers must certify they can serve the new lot.
+  - Review falls under the RCW 36.70B.080 permit time limits.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page shows 'Governor signed. Chapter 301, 2025 Laws. Effective date
+    7/27/2025' on 2025-05-17; session law PDF shows 'Approved May 17, 2025' and the section text. The
+    2027-07-27 date is computed from the act's two-year term.
+  sources:
+  - label: HB 1096 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=1096&Year=2025
+    official: true
+  - label: E2SHB 1096 session law (Ch. 301, Laws of 2025)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/House/1096-S2.SL.pdf
+    official: true
+  discovered_via: search
+- id: wa.sb5156_2026_small_elevators
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Washington ESSB 5156 (2026): smaller elevators in small apartment buildings'
+  citation: ESSB 5156, Ch. 145, Laws of 2026; new sections in chapter 19.27 RCW
+  url: https://app.leg.wa.gov/billsummary?BillNumber=5156&Year=2025
+  session: 2025-26 (passed in the 2026 regular session)
+  bill: SB 5156
+  enacted_date: 2026-03-23
+  effective_dates:
+  - date: 2026-06-11
+    applies_to: Whole act; the State Building Code Council must adopt the standard for the 2027 technical
+      codes
+  geographic_scope: Statewide building code. For apartment buildings of at most six storeys and 24 units,
+    cities and counties must be allowed to accept passenger elevators sized only to federal accessibility
+    minimums.
+  exclusions:
+  - Buildings over six storeys or over 24 units
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Not usable until the 2027 code cycle adopts the rule; marked enacted rather than in force for projects.
+  - A technical advisory group also reviews hoistway and emergency-communication rules for small buildings.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page shows 'Governor signed. Chapter 145, 2026 Laws. Effective date
+    6/11/2026' on 2026-03-23; session law PDF shows 'Approved by the Governor March 23, 2026' and the
+    text.
+  sources:
+  - label: SB 5156 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=5156&Initiative=false&Year=2025
+    official: true
+  - label: ESSB 5156 session law (Ch. 145, Laws of 2026)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/Senate/5156-S.SL.pdf
+    official: true
+  discovered_via: pew_2026
+- id: wa.sb6001_2026_scissor_stairs
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Washington SB 6001 (2026): scissor stairs in the state building code (died; companion HB 2228
+    enacted)'
+  citation: SB 6001, 2025-26 biennium (not enacted)
+  url: https://app.leg.wa.gov/BillSummary/?BillNumber=6001&Year=2025&Initiative=false
+  session: 2026 regular session
+  bill: SB 6001
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Would have changed the statewide building code to allow scissor stairs.
+  exclusions: []
+  implementation_status: lapsed
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The topic passed instead as companion SHB 2228 (see wa.hb2228_2026_scissor_stairs), which only sets
+    up an advisory group.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page shows the last action 'Feb 26 Senate Rules "X" file' in the 2026
+    session, the last session of the 2025-26 biennium, so the bill died.
+  sources:
+  - label: SB 6001 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/BillSummary/?BillNumber=6001&Year=2025&Initiative=false
+    official: true
+  discovered_via: pew_2026
+- id: wa.hb2228_2026_scissor_stairs
+  kind: policy
+  state: WA
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Washington SHB 2228 (2026): scissor stairs building code advisory group'
+  citation: SHB 2228, Ch. 4, Laws of 2026; new section in chapter 19.27 RCW (expires 2031-01-01)
+  url: https://app.leg.wa.gov/billsummary?BillNumber=2228&Year=2025
+  session: 2026 regular session
+  bill: HB 2228
+  enacted_date: 2026-03-09
+  effective_dates:
+  - date: 2026-06-11
+    applies_to: Whole act; recommendations due in time for the 2027 state building code update
+  geographic_scope: Statewide. The Building Code Council must convene an advisory group to recommend code
+    amendments allowing scissor stairs in residential buildings with more than two units.
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Study and recommendation only; it does not itself allow scissor stairs.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill summary page shows 'Governor signed. Chapter 4, 2026 Laws. Effective date 6/11/2026'
+    on 2026-03-09; session law PDF shows 'Approved by the Governor March 9, 2026' and the text.
+  sources:
+  - label: HB 2228 bill summary (Washington State Legislature)
+    url: https://app.leg.wa.gov/billsummary?BillNumber=2228&Year=2025
+    official: true
+  - label: SHB 2228 session law (Ch. 4, Laws of 2026)
+    url: https://lawfilesext.leg.wa.gov/biennium/2025-26/Pdf/Bills/Session%20Laws/House/2228-S.SL.pdf
+    official: true
+  discovered_via: search

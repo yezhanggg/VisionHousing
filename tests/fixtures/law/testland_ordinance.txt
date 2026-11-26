@@ -1,0 +1,36 @@
+BOROUGH OF TESTLAND
+ZONING ORDINANCE OF 2026
+A fictional ordinance written for the VisionHousing tests. No real place.
+ARTICLE I General Provisions
+Section 101. Title
+This Ordinance shall be known as the Testland Zoning Ordinance.
+Section 102. Purpose
+This Ordinance provides for residential housing of various dwelling types.
+ARTICLE III Residential Districts
+Section 301. R-1 Low Density Residential District
+A. Uses permitted by right: single-family detached dwellings; agriculture; parks.
+B. Area and bulk regulations: minimum lot area of 12,000 square feet; minimum lot
+width of 80 feet; maximum height of 35 feet.
+Section 302. R-2 Medium Density Residential District
+A. Uses permitted by right: single-family detached dwellings; two-family dwellings;
+townhouse dwellings of up to six units in a row.
+B. Area and bulk regulations: minimum lot area of 6,000 square feet per dwelling.
+Section 303. R-3 High Density Residential District
+A. Uses permitted by right: apartment buildings; townhouse dwellings.
+B. Area and bulk regulations: minimum lot size: 1 acre for each apartment building.
+ARTICLE V Supplemental Regulations
+Section 504. Accessory Dwelling Units
+A. One accessory dwelling unit is permitted by right on any lot in the R-1 and R-2
+districts that holds a single-family detached dwelling.
+B. The accessory dwelling unit may be detached from the principal dwelling or
+located within it.
+C. The owner shall reside in either the principal dwelling or the accessory unit.
+D. The accessory dwelling unit shall not exceed 800 square feet of floor area.
+ARTICLE VII Off-Street Parking
+Section 701. Off-Street Parking Requirements
+A. Single-family detached dwellings: two parking spaces per dwelling unit.
+B. Multi-family dwellings and apartment buildings: 1.5 parking spaces per dwelling unit.
+C. Accessory dwelling units: no additional off-street parking is required.
+ARTICLE IX Fees
+Section 901. Fee Schedule
+Fees for permits are set by resolution of Borough Council.

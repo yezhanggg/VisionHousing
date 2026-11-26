@@ -1,0 +1,33 @@
+# Calibration transfer: what changes when a state has no calibration of its own.
+#
+# Some ranges in the ledger were measured in one state (Pennsylvania): the ADU
+# physical-fit table was measured on Pennsylvania lots. Any other real state
+# runs on the same national (Tier 0) data, but borrows those measured ranges.
+# A borrowed range is less certain than a measured one, so for every state not
+# listed in `measured_in` the engine widens the entries below before the run.
+#
+# The widening is a ledger override, like a calibration: it shows in the
+# state's Assumption Ledger (GET /ledger?state=XX) with the reason, and the
+# user can still change the entry. The synthetic test state (Testland) is
+# never widened: it is built to match the calibration.
+#
+# Read by visionhousing.engine.context (transfer_overrides); see
+# docs/TECHNICAL_APPENDIX.md section G.2 (Vermont).
+
+version: 1
+id: calibration_transfer_2026_11
+
+rules:
+  - parameter: adu.fit_range_position
+    calibration: adu_fit_pa_2026_11
+    measured_in: [PA]
+    low: -1.5
+    high: 1.5
+    shape: pert
+    rationale: >-
+      The physical-fit table was measured on Pennsylvania lots (Philadelphia,
+      Pittsburgh and towns in four counties). In another state the lot sizes,
+      house placement and garages differ, so the measured low-to-high span is
+      stretched by half on each side (position -1.5 to +1.5 instead of -1 to
+      +1; shares are kept between 0 and 1). Team judgement: a measured lot
+      sample from the state itself replaces it.

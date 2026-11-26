@@ -124,3 +124,85 @@ def test_real_lockfile_installed_packages_pass():
     installed = [f for f in findings if f.source != "not installed"]
     assert any(f.name == "numpy" for f in installed)
     assert [f.name for f in installed if not f.ok] == []
+
+
+def plant_bundle(site: Path, name: str, files: dict[str, str], **fields: str) -> None:
+    """A fake installed package whose wheel ships extra files (listed in its RECORD)."""
+    plant(site, name, "1.0", **fields)
+    info = f"{name}-1.0.dist-info"
+    record = [f"{info}/METADATA,,"]
+    for rel, text in files.items():
+        path = site / rel
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(text, encoding="utf-8")
+        record.append(f"{rel},,")
+    (site / info / "RECORD").write_text("\n".join(record) + "\n", encoding="utf-8")
+
+
+LGPL_TEXT = "    GNU LESSER GENERAL PUBLIC LICENSE\n       Version 2.1, February 1999\n"
+GCC_TEXT = (
+    "Name: GCC runtime library\nFiles: pkg/.dylibs/libgfortran.5.dylib\n"
+    "License: GPL-3.0-or-later WITH GCC-exception-3.1\n\n"
+    "                    GNU GENERAL PUBLIC LICENSE\n\nGCC RUNTIME LIBRARY EXCEPTION\n"
+)
+PSF_TEXT = "The licences are GPL-compatible. All Python licenses, unlike the GPL, let you ...\n"
+
+
+def test_bundled_copyleft_library_fails_even_when_the_package_is_bsd(tmp_path):
+    """A BSD wheel that ships an LGPL native library (GEOS, libquadmath) fails the audit."""
+    site = tmp_path / "site"
+    plant_bundle(
+        site,
+        "geomwrap",
+        {
+            "geomwrap/.dylibs/libgeos.3.14.dylib": "binary",
+            "geomwrap/_core.cpython-312-darwin.so": "binary",
+            "geomwrap-1.0.dist-info/licenses/LICENSE_GEOS": LGPL_TEXT,
+        },
+        License_Expression="BSD-3-Clause",
+    )
+    plant_bundle(
+        site,
+        "mathwrap",
+        {
+            "mathwrap/.dylibs/libquadmath.0.dylib": "binary",
+            "mathwrap-1.0.dist-info/LICENSE.txt": (
+                "Name: libquadmath\nFiles: mathwrap/.dylibs/libquadmath*.so\n"
+                "License: LGPL-2.1-or-later\n"
+            ),
+        },
+        License_Expression="BSD-3-Clause",
+    )
+    plant_bundle(
+        site,
+        "fastnum",
+        {
+            "fastnum/.dylibs/libgfortran.5.dylib": "binary",
+            "fastnum-1.0.dist-info/licenses/LICENSE.txt": GCC_TEXT,
+            "fastnum-1.0.dist-info/licenses/PSF_LICENSE": PSF_TEXT,
+        },
+        License_Expression="BSD-3-Clause",
+    )
+    findings = {
+        f.name: f
+        for f in la.audit_python(
+            [("geomwrap", "1.0"), ("mathwrap", "1.0"), ("fastnum", "1.0")], [str(site)]
+        )
+    }
+    geo = findings["geomwrap"]
+    assert not geo.ok
+    assert any("LICENSE_GEOS" in n and "LGPL" in n for n in geo.notes)
+    assert any("libgeos.3.14.dylib" in n for n in geo.notes)
+    assert not any("_core" in n for n in geo.notes)  # own extension modules are not bundles
+    assert not findings["mathwrap"].ok
+    assert any("LGPL-2.1-or-later" in n for n in findings["mathwrap"].notes)
+    # the GCC runtime exception stays allowed; "GPL-compatible" prose is not a licence
+    assert findings["fastnum"].ok
+
+
+def test_copyleft_mentions():
+    assert la.copyleft_mentions(LGPL_TEXT) == ["LGPL (full licence text)"]
+    assert la.copyleft_mentions(GCC_TEXT) == []
+    assert la.copyleft_mentions(PSF_TEXT) == []
+    assert la.copyleft_mentions("License: MIT AND (Apache-2.0 OR MPL-2.0)") == ["MPL-2.0"]
+    assert la.copyleft_mentions("License: BSD-3-Clause-Open-MPI") == []

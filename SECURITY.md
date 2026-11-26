@@ -25,6 +25,15 @@ Only the latest commit on the `main` branch is supported.
   proposes updates weekly for Python packages, browser libraries and CI actions.
 - **Code scanning.** CodeQL scans the Python and JavaScript code on every push and
   pull request to `main`, and weekly.
+- **No path traversal.** Every request value that becomes part of a file path
+  (state codes, saved-run names) goes through `src/visionhousing/paths.py`, which
+  accepts plain names only and checks the result stays inside its data folder;
+  anything else gets a 400 reply. `tests/test_paths.py` tries `../`, `%2e%2e`,
+  absolute paths, backslashes and NUL bytes on every address that takes a state,
+  place or id. See `docs/modules/api.md`, "Input validation".
+- **Interface limits and headers.** The local interface refuses bodies over 64 KB,
+  sends a strict Content Security Policy and other safety headers, and never
+  filters user HTML with regular expressions.
 - **Security lint rules.** `ruff` runs with its security rules (`S`) in `make lint`.
 - **Least privilege in CI.** Workflows request read-only access except where code
   scanning must upload results.

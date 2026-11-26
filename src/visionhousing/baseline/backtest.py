@@ -16,15 +16,21 @@ actually permitted.
   rule was 20% too low.
 * Counties are sorted into **size classes** (terciles by their average yearly
   permits over the recent window). Small counties have larger proportional
-  errors, so each class has its own ratio distribution.
+  errors, so each class has its own ratio distribution. In the back-test a
+  county's class at an origin is worked out from the years up to that origin
+  only (:func:`origin_size_classes`), so a county is never judged by a size it
+  reached later.
 
 ``validate_baseline`` returns the **skill table**: for each rule, the mean
 absolute percentage error (MAPE), the median absolute log ratio (a symmetric
 error: 0.10 means "typically about 10% off", whether high or low), and the
 **coverage** of the 80% interval. Coverage is measured out of sample by
-geography: each county's interval is built from the other counties' ratios in
-its size class (all other counties if it is alone in its class). A well-judged
-interval contains the actual total in about 80% of cases.
+geography and by time: each case's interval is built from the other counties'
+ratios in its size class (all other counties if it is alone in its class), and
+only from cases whose five target years had all been observed by the case's
+origin (origin' <= origin - lead - horizon + 1, the same cut as the contest's
+out-of-time test). Cases with no such earlier case have no interval. A
+well-judged interval contains the actual total in about 80% of cases.
 
 ``choose_rule`` picks the simplest rule whose median absolute log ratio is
 within the ledger tolerance of the best.
@@ -32,13 +38,13 @@ within the ledger tolerance of the best.
 
 from __future__ import annotations
 
-from collections.abc import Sequence
+from collections.abc import Mapping, Sequence
 
 import numpy as np
 import pandas as pd
 
 from visionhousing.baseline.panel import Panel, to_panel
-from visionhousing.baseline.rules import Rule, project
+from visionhousing.baseline.rules import PlaceInfo, Rule, project_places
 from visionhousing.baseline.settings import INTERVAL, BaselineSettings
 
 
@@ -75,14 +81,13 @@ def backtest_origins(years: np.ndarray, lead: int, horizon: int, min_history: in
     return list(range(start, end + 1))
 
 
-def _as_series(units: np.ndarray) -> np.ndarray:
-    """Reshape (places, years, types) to (places x types, years)."""
-    places, n_years, n_types = units.shape
-    return units.transpose(0, 2, 1).reshape(places * n_types, n_years)
-
-
 def project_totals(
-    rule: Rule, years: np.ndarray, units: np.ndarray, origin: int, targets: np.ndarray
+    rule: Rule,
+    years: np.ndarray,
+    units: np.ndarray,
+    origin: int,
+    targets: np.ndarray,
+    info: PlaceInfo | None = None,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Project each place by structure type and add the target years up.
 
@@ -92,17 +97,15 @@ def project_totals(
         units: Units, shape (places, Y, types).
         origin: Last year of history used.
         targets: Target years, shape (H,).
+        info: Place types and homes (for the cross-sectional rules), or ``None``.
 
     Returns:
         ``(by_type, annual, has_history)``: five-year totals by place and type
         (places, types); annual projections (places, types, H); and whether each
         place had any data in the rule's window (places,).
     """
-    places, _, n_types = units.shape
-    proj, hist = project(rule, years, _as_series(units), origin, targets)
-    annual = proj.reshape(places, n_types, targets.size)
-    has_history = hist.reshape(places, n_types).any(axis=1)
-    return annual.sum(axis=2), annual, has_history
+    annual, hist = project_places(rule, years, units, origin, targets, info)
+    return annual.sum(axis=2), annual, hist.any(axis=1)
 
 
 def backtest_cases(
@@ -112,6 +115,7 @@ def backtest_cases(
     origins: Sequence[int],
     lead: int,
     horizon: int,
+    info: PlaceInfo | None = None,
 ) -> pd.DataFrame:
     """Apply a rule at each origin and compare with what was permitted.
 
@@ -122,6 +126,7 @@ def backtest_cases(
         origins: Origin years to test.
         lead: Years from each origin to its first target year.
         horizon: Number of target years.
+        info: Place types and homes (for the cross-sectional rules), or ``None``.
 
     Returns:
         One row per place and origin whose target years all have data:
@@ -137,7 +142,7 @@ def backtest_cases(
         cols = targets - int(years[0])
         if cols.min() < 0 or cols.max() >= years.size:
             continue
-        by_type, _, _ = project_totals(rule, years, units, origin, targets)
+        by_type, _, _ = project_totals(rule, years, units, origin, targets, info)
         projected = by_type.sum(axis=1)
         actual_years = totals[:, cols]
         complete = ~np.isnan(actual_years).any(axis=1)
@@ -148,23 +153,32 @@ def backtest_cases(
     return pd.DataFrame(rows, columns=["place", "origin", "projected", "actual", "ratio"])
 
 
-def size_classes(panel: Panel, recent_window: int, n_classes: int) -> np.ndarray:
+def size_classes(
+    panel: Panel, recent_window: int, n_classes: int, through: int | None = None
+) -> np.ndarray:
     """Sort counties into size classes by their recent average yearly permits.
 
     Counties are ranked by average yearly units (all structure types) over the
-    last ``recent_window`` years of data, smallest first, ties broken by county
-    id. With three classes the bottom third is class 0 (small), the middle third
-    class 1, the top third class 2.
+    last ``recent_window`` years of data up to ``through`` (default: the last
+    data year), smallest first, ties broken by county id. With three classes
+    the bottom third is class 0 (small), the middle third class 1, the top
+    third class 2.
 
     Args:
         panel: The permit panel.
-        recent_window: Years at the end of the data to average.
+        recent_window: Years to average, ending at ``through``.
         n_classes: Number of classes.
+        through: Last year used (a back-test origin), or ``None`` for the
+            last data year.
 
     Returns:
         Class number for each county, shape (counties,).
     """
-    totals = panel.totals()[:, -recent_window:]
+    totals = panel.totals()
+    if through is not None:
+        stop = int(through) - int(panel.years[0]) + 1
+        totals = totals[:, : max(0, min(stop, totals.shape[1]))]
+    totals = totals[:, -recent_window:]
     observed = ~np.isnan(totals)
     count = observed.sum(axis=1)
     mean = np.zeros(len(panel.counties))
@@ -175,6 +189,13 @@ def size_classes(panel: Panel, recent_window: int, n_classes: int) -> np.ndarray
     for rank, i in enumerate(order):
         classes[i] = min(n_classes - 1, rank * n_classes // n)
     return classes
+
+
+def origin_size_classes(
+    panel: Panel, origins: Sequence[int], recent_window: int, n_classes: int
+) -> dict[int, np.ndarray]:
+    """Size classes as they stood at each back-test origin (years up to the origin only)."""
+    return {int(o): size_classes(panel, recent_window, n_classes, through=int(o)) for o in origins}
 
 
 def class_label(k: int, n_classes: int) -> str:
@@ -210,35 +231,67 @@ def interval_coverage(actual: np.ndarray, low: np.ndarray, high: np.ndarray) -> 
     return float(np.mean((actual >= low) & (actual <= high)))
 
 
-def leave_one_county_out(cases: pd.DataFrame, classes: np.ndarray) -> pd.DataFrame:
-    """Give each case an 80% interval built only from other counties' ratios.
+def leave_one_county_out(
+    cases: pd.DataFrame,
+    classes: np.ndarray | Mapping[int, np.ndarray],
+    lead: int | None = None,
+    horizon: int | None = None,
+) -> pd.DataFrame:
+    """Give each case an 80% interval built only from other counties' earlier ratios.
 
-    The pool for county *c* is the other counties in *c*'s size class; if there
-    are none with a usable ratio, it is all other counties. Cases with no pool,
-    or whose projection is zero, are dropped.
+    The pool for county *c* at origin *o* is the other counties' cases made
+    while they were in the size class *c* is in at *o* (with ``classes``
+    mapping origins to classes, each case's class is the one at its own
+    origin); if none has a usable ratio, it is all other counties' cases. With ``lead`` and
+    ``horizon`` the pool holds only cases whose origin ``o'`` satisfies
+    ``o' <= o - lead - horizon + 1`` (their five target years had all been
+    observed by *o*), as in the contest's out-of-time test; without them every
+    origin is pooled (a geographic split only). Cases with no pool, or whose
+    projection is zero, are dropped.
 
     Args:
         cases: Output of ``backtest_cases`` for counties.
-        classes: Size class of each county.
+        classes: Size class of each county, or origin -> size classes at that
+            origin (:func:`origin_size_classes`).
+        lead: Years from origin to the first target year (``None``: no time cut).
+        horizon: Target years (``None``: no time cut).
 
     Returns:
-        The usable cases with added ``low`` and ``high`` columns.
+        The usable cases with added ``size_class``, ``low`` and ``high`` columns.
     """
     usable = cases[np.isfinite(cases["ratio"])].copy()
-    usable["size_class"] = classes[usable["place"].to_numpy()]
+    places = usable["place"].to_numpy(dtype=int)
+    origins = usable["origin"].to_numpy(dtype=int)
+    ratios = usable["ratio"].to_numpy(dtype=float)
+    projected = usable["projected"].to_numpy(dtype=float)
+
+    def at(o: int) -> np.ndarray:
+        return np.asarray(classes[int(o)] if isinstance(classes, Mapping) else classes)
+
+    own_class = (
+        np.array([at(o)[p] for p, o in zip(places, origins, strict=True)], dtype=int)
+        if len(usable)
+        else np.array([], dtype=int)
+    )
+    usable["size_class"] = own_class
+    cut = lead is not None and horizon is not None
     lows, highs = np.full(len(usable), np.nan), np.full(len(usable), np.nan)
-    places = usable["place"].to_numpy()
-    for place in np.unique(places):
-        mine = places == place
-        others = usable[~mine]
-        same = others[others["size_class"] == classes[place]]
-        q = ratio_quantiles(same["ratio"].to_numpy(), INTERVAL)
-        if q is None:
-            q = ratio_quantiles(others["ratio"].to_numpy(), INTERVAL)
-        if q is None:
+    for o in np.unique(origins):
+        cls = at(int(o))
+        earlier = origins <= o - lead - horizon + 1 if cut else np.ones(len(usable), bool)
+        if not earlier.any():
             continue
-        projected = usable.loc[mine, "projected"].to_numpy()
-        lows[mine], highs[mine] = projected * q[0], projected * q[1]
+        now = origins == o
+        for place in np.unique(places[now]):
+            others = earlier & (places != place)
+            same = others & (own_class == cls[place])
+            q = ratio_quantiles(ratios[same], INTERVAL)
+            if q is None:
+                q = ratio_quantiles(ratios[others], INTERVAL)
+            if q is None:
+                continue
+            mine = now & (places == place)
+            lows[mine], highs[mine] = projected[mine] * q[0], projected[mine] * q[1]
     usable["low"], usable["high"] = lows, highs
     return usable[np.isfinite(usable["low"])]
 
@@ -248,6 +301,7 @@ def validate_baseline(
     rules: Sequence[Rule],
     origins: Sequence[int] | None,
     settings: BaselineSettings,
+    info: PlaceInfo | None = None,
 ) -> pd.DataFrame:
     """Backtest each rule on every county and return the skill table.
 
@@ -257,25 +311,32 @@ def validate_baseline(
         origins: Origin years to test; ``None`` uses every usable origin
             (``backtest_origins``).
         settings: Baseline settings from the ledger.
+        info: Place types and homes (for the cross-sectional rules), or ``None``.
 
     Returns:
         One row per rule, in the order given: ``rule``, ``complexity``,
         ``cases`` (county-origins with actual and projection both above zero),
-        ``mape``, ``median_abs_log_ratio``, ``coverage_80`` and
-        ``coverage_cases`` (cases with a leave-one-county-out interval).
+        ``mape``, ``median_abs_log_ratio``, ``median_signed_log_error``
+        (median of ``log(projected / actual)``: above zero the rule ran high),
+        ``coverage_80``, ``coverage_cases`` (cases with a leave-one-county-out,
+        earlier-origins-only interval) and ``range_width`` (mean of ``(P90 - P10) / projected`` over
+        those cases).
     """
     panel = to_panel(table)
     lead = lead_years(panel, settings)
     if origins is None:
         origins = backtest_origins(panel.years, lead, settings.horizon, settings.min_history)
-    classes = size_classes(panel, settings.recent_window, settings.n_classes)
+    classes = origin_size_classes(panel, origins, settings.recent_window, settings.n_classes)
     rows = []
     for rule in rules:
-        cases = backtest_cases(rule, panel.years, panel.units, origins, lead, settings.horizon)
+        cases = backtest_cases(
+            rule, panel.years, panel.units, origins, lead, settings.horizon, info
+        )
         scored = cases[(cases["actual"] > 0) & (cases["projected"] > 0)]
         ape = (scored["actual"] - scored["projected"]).abs() / scored["actual"]
         alr = np.abs(np.log(scored["ratio"].to_numpy()))
-        covered = leave_one_county_out(cases, classes)
+        covered = leave_one_county_out(cases, classes, lead, settings.horizon)
+        width = (covered["high"] - covered["low"]) / covered["projected"]
         rows.append(
             {
                 "rule": rule.name,
@@ -283,10 +344,14 @@ def validate_baseline(
                 "cases": len(scored),
                 "mape": float(ape.mean()) if len(scored) else float("nan"),
                 "median_abs_log_ratio": float(np.median(alr)) if alr.size else float("nan"),
+                "median_signed_log_error": float(-np.median(np.log(scored["ratio"].to_numpy())))
+                if len(scored)
+                else float("nan"),
                 "coverage_80": interval_coverage(
                     covered["actual"], covered["low"], covered["high"]
                 ),
                 "coverage_cases": len(covered),
+                "range_width": float(width.mean()) if len(covered) else float("nan"),
             }
         )
     return pd.DataFrame(rows)

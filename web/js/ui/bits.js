@@ -26,24 +26,38 @@ export function Value({ text, size = "md" }) {
 /**
  * A likely-range bar: a band from P10 to P90 with a mark at P50, on a shared scale
  * (`lo` to `hi`, so bars in one chart compare). Without values it draws the track only.
- * The numbers come from the engine; this only places them.
+ * The numbers come from the engine; this only places them. Hovering the bar (or focusing
+ * it, when `focusable` is set) shows the engine's P10 / P50 / P90 text above it. The band
+ * draws in from the left when it first appears (rows one after another, by `--i`) and slides
+ * when the values change. Band and mark are placed with transform only (`--l`, `--w`, `--x`
+ * in percent of the track), so a change never lays the page out again.
  */
-export function RangeBar({ label, n = null, lo = 0, hi = 0 }) {
+export function RangeBar({ label, n = null, lo = 0, hi = 0, focusable = false }) {
   const ok = n && Number.isFinite(n.p10) && Number.isFinite(n.p90) && hi > lo;
   if (!ok) {
     return html`<div class="range" role="img" aria-label=${`${label}: range not available yet`}>
       <span class="range-track"></span>
     </div>`;
   }
-  const at = (v) => `${(100 * (Math.min(hi, Math.max(lo, v)) - lo)) / (hi - lo)}%`;
-  const left = at(Math.min(n.p10, n.p90));
-  const right = at(Math.max(n.p10, n.p90));
-  const words = n.shown ? `${n.shown.p10} to ${n.shown.p90}, middle ${n.shown.p50}` : "";
-  return html`<div class="range" role="img" aria-label=${`${label}: ${words}`}>
+  const pct = (v) => (100 * (Math.min(hi, Math.max(lo, v)) - lo)) / (hi - lo);
+  const at = (v) => `${pct(v)}%`;
+  const left = pct(Math.min(n.p10, n.p90));
+  const width = Math.max(1.5, pct(Math.max(n.p10, n.p90)) - left);
+  const sh = n.shown || {};
+  const words = n.shown ? `${sh.p10} to ${sh.p90}, middle ${sh.p50}` : "";
+  // Hover or focus shows the engine's P10 / P50 / P90 text over the bar.
+  const tip = sh.p10 !== undefined && sh.p90 !== undefined;
+  const mid = Math.min(80, Math.max(20, pct(Number.isFinite(n.p50) ? n.p50 : (n.p10 + n.p90) / 2)));
+  return html`<div class=${`range ${tip ? "has-tip" : ""}`} role="img" aria-label=${`${label}: ${words}`}
+      tabindex=${tip && focusable ? "0" : undefined}>
     <span class="range-track"></span>
-    <span class="range-band" style=${`left: ${left}; width: calc(${right} - ${left})`}></span>
-    ${Number.isFinite(n.p50) && html`<span class="range-mid" style=${`left: ${at(n.p50)}`}></span>`}
+    <span class="range-band is-tf" style=${`--l: ${left.toFixed(3)}; --w: ${width.toFixed(3)}`}></span>
+    ${Number.isFinite(n.p50) && html`<span class="range-mid is-tf" style=${`--x: ${pct(n.p50).toFixed(3)}`}></span>`}
     ${lo < 0 && hi > 0 && html`<span class="range-zero" style=${`left: ${at(0)}`}></span>`}
+    ${tip &&
+    html`<span class="range-tip" aria-hidden="true" style=${`left: ${mid}%`}>
+      <span><b>P10</b> ${sh.p10}</span>${sh.p50 !== undefined && html`<span><b>P50</b> ${sh.p50}</span>`}<span><b>P90</b> ${sh.p90}</span>
+    </span>`}
   </div>`;
 }
 
@@ -54,10 +68,18 @@ export function scaleOf(records) {
   return [Math.min(0, ...vals), Math.max(0, ...vals)];
 }
 
-/** A plain status line while something loads, or why it did not. */
-export function Status({ state, what, children }) {
+/**
+ * While something loads: a skeleton of grey bars with a light passing over them, under one
+ * line that says what is loading (that line is the live status for screen readers). After a
+ * failure: why it did not load. The skeleton waits 150 ms before it shows (CSS), so a quick
+ * reply never flashes it.
+ */
+export function Status({ state, what, children, lines = 3 }) {
   if (state.loading) {
-    return html`<p class="status-line" role="status">${children || `Loading ${what}…`}</p>`;
+    return html`<div class="skeleton" aria-busy="true">
+      <p class="status-line is-loading" role="status">${children || `Loading ${what}…`}</p>
+      ${Array.from({ length: lines }, (_, i) => html`<span class=${`skel skel-${i % 3}`} aria-hidden="true"></span>`)}
+    </div>`;
   }
   if (state.error) {
     return html`<p class=${`status-line ${state.localOnly ? "is-local" : "is-error"}`} role="note">
@@ -90,13 +112,21 @@ export function Card({ title, id, sub, action, className = "", children }) {
   </section>`;
 }
 
-/** A whole-row switch: one tab stop, `aria-pressed`, label and a one-line caption. */
-export function Switch({ on, label, caption, onToggle }) {
-  return html`<button type="button" class=${`switch ${on ? "is-on" : ""}`} aria-pressed=${on ? "true" : "false"}
-      onClick=${onToggle}>
+/**
+ * A whole-row switch: one tab stop, `aria-pressed`, label and a one-line caption. The knob
+ * springs across and widens a little while pressed (CSS). With `reason`, the switch is greyed
+ * out (`aria-disabled`, still focusable so the reason is read out) and the reason shows under
+ * the caption; pressing it does nothing.
+ */
+export function Switch({ on, label, caption, onToggle, id, reason = "" }) {
+  const rid = reason && id ? `switch-why-${id}` : undefined;
+  return html`<button type="button" class=${`switch ${on ? "is-on" : ""} ${reason ? "is-blocked" : ""}`}
+      aria-pressed=${on ? "true" : "false"} aria-disabled=${reason ? "true" : undefined} aria-describedby=${rid}
+      onClick=${reason ? undefined : onToggle} data-reform=${id}>
     <span class="switch-text">
       <span class="switch-label">${label}</span>
       ${caption && html`<span class="switch-caption">${caption}</span>`}
+      ${reason && html`<span class="switch-why" id=${rid}>${reason}</span>`}
     </span>
     <span class="switch-track" aria-hidden="true"><span class="switch-knob"></span></span>
   </button>`;

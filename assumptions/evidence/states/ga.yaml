@@ -1,0 +1,108 @@
+# Cross-state comparison records: GA.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ga.sb447_2026_permit_review
+  kind: policy
+  state: GA
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Georgia SB 447 (2026): land-disturbance permit deadlines, written denial reasons, fee refunds
+    and public permit-status sites'
+  citation: Ga. SB 447 (2026), as passed (LC 47 4324S); amends O.C.G.A. 8-2-26, 12-7-9, 12-7-11 and adds
+    36-60-34
+  url: https://gov.georgia.gov/document/2026-signed-legislation/sb-447/download
+  session: 2025-2026 regular session (2026)
+  bill: SB 447
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 'Statewide. Land-disturbance (erosion and sedimentation) permits: decided within 45
+    days of filing, completeness decided in 5 days or deemed complete, 20 days after a first resubmission
+    and 14 days after later ones, with no new unrelated comments on resubmission. Counties and cities that
+    issued more than 250 building permits the year before must run a public real-time permit-status website
+    from 2028-01-01.'
+  exclusions:
+  - Developments of regional impact are outside the resubmission deadlines
+  - Deadlines are tolled while a state agency does part of the review
+  - One county described by airport-adjacent land criteria is exempt unless a local act approved by referendum
+    applies the deadlines
+  implementation_status: unknown
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Private-provider building inspections are deemed approved unless the local authority flags deficiencies
+    within two business days.
+  - Secondary sources report signature on 2026-05-11, effect on 2026-07-01 and Act 513; none of these
+    was read on an official page.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: The as-passed text is on the Governor's 2026 Signed Legislation page (gov.georgia.gov),
+    which lists SB 447 but gives no signing date or Act number. The text has no effective-date section
+    (so the statutory default of July 1 after approval would apply). The General Assembly site (legis.ga.gov)
+    did not answer scripted requests (JavaScript app; its API needs an app-generated key; document URLs
+    returned HTTP 500), so the signing date, Act number and effective date were not read on an official
+    page.
+  sources:
+  - label: SB 447 as passed (Governor of Georgia, 2026 signed legislation)
+    url: https://gov.georgia.gov/document/2026-signed-legislation/sb-447/download
+    official: true
+  - label: 2026 Signed Legislation list (Governor of Georgia)
+    url: https://gov.georgia.gov/executive-action/legislation/signed-legislation/2026
+    official: true
+  discovered_via: search
+- id: ga.hb1166_2026_small_adu
+  kind: policy
+  state: GA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'Georgia HB 1166 (2026): one accessory dwelling of up to 400 sq ft on residential lots'
+  citation: Ga. HB 1166 (2025-2026 session), not enacted
+  url: https://www.legis.ga.gov/legislation/all
+  session: 2025-2026 regular session (2026)
+  bill: HB 1166
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Proposed statewide right to one secondary dwelling of 400 sq ft or less on residentially
+    zoned property without a zoning decision.
+  exclusions: []
+  implementation_status: lapsed
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Secondary sources report House passage on 2026-03-06 and Senate referral on 2026-03-09 with no later
+    action; the 2025-2026 biennium has ended, so an unpassed bill is dead.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: Not on the Governor's 2026 Signed Legislation list (gov.georgia.gov, all pages checked).
+    The bill's own status, text and votes were not read on an official page because legis.ga.gov did not
+    answer scripted requests (JavaScript app; API needs an app-generated key). House passage and Senate
+    referral come only from secondary sources.
+  sources:
+  - label: 2026 Signed Legislation list (Governor of Georgia)
+    url: https://gov.georgia.gov/executive-action/legislation/signed-legislation/2026
+    official: true
+  discovered_via: search

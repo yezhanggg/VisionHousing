@@ -14,7 +14,8 @@ request and response):
   server itself is started with its banner off).
 
 The Content Security Policy (CSP) tells the browser to run only scripts from
-this site. The built page (``web/dist/index.html``, made by Vite) has no inline
+this site, and to fetch only from this site plus the optional basemap host.
+The built page (``web/dist/index.html``, made by Vite) has no inline
 script. Should one ever be added, the policy names it by its SHA-256
 fingerprint, computed from the file when the app starts
 (:func:`inline_script_hashes`), rather than allowing every inline script.
@@ -26,8 +27,8 @@ from __future__ import annotations
 import base64
 import hashlib
 import json
-import re
 from collections.abc import Iterable
+from html.parser import HTMLParser
 from pathlib import Path
 from typing import Any
 
@@ -35,19 +36,53 @@ __all__ = ["BodyLimit", "SecurityHeaders", "content_security_policy", "inline_sc
 
 Scope = dict[str, Any]
 
-_INLINE = re.compile(r"<script(?P<attrs>[^>]*)>(?P<body>.*?)</script>", re.DOTALL | re.IGNORECASE)
+#: The optional basemap's tile host (OpenFreeMap: free, no key). web/js/ui/map.js uses the same.
+BASEMAP_HOST = "https://tiles.openfreemap.org"
+
+
+class _InlineScripts(HTMLParser):
+    """Collect the text of every ``<script>`` without a ``src`` attribute.
+
+    The standard library's HTML parser finds the tags the way a browser does
+    (any letter case, extra spaces, ``</script >``), so no hand-written pattern
+    has to guess at tag shapes.
+    """
+
+    def __init__(self) -> None:
+        super().__init__(convert_charrefs=False)
+        self.bodies: list[str] = []
+        self._open: list[str] | None = None
+
+    def handle_starttag(self, tag: str, attrs: list[tuple[str, str | None]]) -> None:
+        if tag == "script":
+            external = any(name == "src" for name, _ in attrs)
+            self._open = None if external else []
+
+    def handle_data(self, data: str) -> None:
+        if self._open is not None:
+            self._open.append(data)
+
+    def handle_endtag(self, tag: str) -> None:
+        if tag == "script" and self._open is not None:
+            self.bodies.append("".join(self._open))
+            self._open = None
 
 
 def inline_script_hashes(html: str) -> list[str]:
     """Return the CSP hash source (``'sha256-...'``) of every inline script in a page.
 
-    Scripts with a ``src`` attribute are skipped; they load from this site.
+    Scripts with a ``src`` attribute are skipped; they load from this site. The
+    page is read with :class:`html.parser.HTMLParser`, not a regular expression.
+    This only fingerprints our own built page for the CSP; it never cleans or
+    filters HTML from users. A script the parser did not see would get no hash,
+    so the browser would refuse to run it: a miss fails safe.
     """
+    parser = _InlineScripts()
+    parser.feed(html)
+    parser.close()
     out = []
-    for match in _INLINE.finditer(html):
-        if re.search(r"\bsrc\s*=", match.group("attrs"), re.IGNORECASE):
-            continue
-        digest = hashlib.sha256(match.group("body").encode("utf-8")).digest()
+    for body in parser.bodies:
+        digest = hashlib.sha256(body.encode("utf-8")).digest()
         out.append(f"'sha256-{base64.b64encode(digest).decode('ascii')}'")
     return out
 
@@ -56,16 +91,19 @@ def content_security_policy(script_hashes: Iterable[str] = ()) -> str:
     """Build the policy: this site only, the named inline scripts, no framing.
 
     ``blob:`` workers are allowed because the map library starts its worker from
-    a blob; ``data:`` images because the page icon is a data address.
+    a blob; ``data:`` images because the page icon is a data address. The one
+    other host is the optional basemap (:data:`BASEMAP_HOST`): the map fetches
+    its style, tiles, fonts and icons from there (``connect-src``; ``img-src``
+    for its picture tiles). Nothing else leaves this site.
     """
     scripts = " ".join(["'self'", *script_hashes])
     parts = [
         "default-src 'self'",
         f"script-src {scripts}",
         "style-src 'self'",
-        "img-src 'self' data: blob:",
+        f"img-src 'self' data: blob: {BASEMAP_HOST}",
         "font-src 'self'",
-        "connect-src 'self'",
+        f"connect-src 'self' {BASEMAP_HOST}",
         "worker-src 'self' blob:",
         "child-src 'self' blob:",
         "object-src 'none'",

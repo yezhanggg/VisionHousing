@@ -1,0 +1,123 @@
+# Water and sewer readiness: which official records are read, and how a tract's status is named.
+#
+# Read by visionhousing.features.infrastructure and features/infrastructure_build.py.
+# Method: docs/modules/infrastructure.md. Rule of the screen: a status comes only from an
+# official record (a published service-area map, a utility's own statement, a regulator's
+# order). Distance to a pipe or a treatment plant is never used, and nothing here says how
+# much capacity a system has left.
+
+version: 1
+
+homes: >-
+  Homes are 2020 Census housing units by block (all building types; the Census Bureau does
+  not place single-family homes separately). A block is inside an area when its internal
+  point is inside the area's outline.
+
+status:
+  # A tract is "verified" only when MORE than verified_min_share of its homes are verified
+  # (a majority of all its homes, not just more than any other answer). Otherwise its status
+  # is the other category holding the most homes; ties go to the first category in this list
+  # (the more cautious answer). The code keeps the same order (features/infrastructure.py
+  # STATUS_ORDER); a test checks they agree.
+  order: [constraint, unknown, outside, verified]
+  verified_min_share: 0.5
+  words:
+    verified: >-
+      verified available: more than half of the tract's homes are inside a mapped public sewer
+      service area or a utility's whole-jurisdiction service statement
+    outside: "most homes outside a mapped public sewer service area (on-lot systems expected)"
+    constraint: "documented constraint (moratorium or connection ban on an official record)"
+    unknown: "unknown: no official service-area record found"
+
+# Official mapped public sewer service areas. extent: county means the layer is a complete
+# inventory for the listed counties (homes outside every polygon are "outside"); inside_only
+# means only homes inside a polygon are known (the rest stay "unknown").
+# Left out on purpose (their terms forbid sharing anything derived from them): Chester County's
+# sewer service areas (County GIS Access Policy) and ALCOSAN's service area (Allegheny County
+# Sanitary Authority GIS disclaimer). See docs/modules/infrastructure.md.
+sewer_layers:
+  PA:
+    - id: pa_montco_sewer_service_areas
+      url: https://mapservices.pasda.psu.edu/server/rest/services/pasda/MontgomeryCounty/MapServer/18
+      name_field: Name
+      fields: [Owner]
+      counties: ["42091"]
+      extent: county
+      as_of: "2022-07"
+    - id: pa_adams_sewer_service_areas
+      url: https://mapping.adamscountypa.gov/arcgis/rest/services/AGOL/SLD_Review_Layers/MapServer/130
+      where: "Type = 'Existing'"
+      name_field: Name
+      counties: ["42001"]
+      extent: county
+      as_of: "2024-09"
+  VT:
+    - id: vt_accd_wastewater_service_areas
+      url: https://services1.arcgis.com/BkFxaEFNwHqX3tAw/arcgis/rest/services/FS_ACCD_2023_VT_HOME_Act_WM_v1/FeatureServer/20
+      name_field: sSYSNAME
+      fields: [sSYSOWNER]
+      counties: []
+      extent: inside_only
+      as_of: "2023-08"
+
+# A utility's own published statement that it serves a whole jurisdiction.
+service_records:
+  PA:
+    - id: phl_pwd_wastewater
+      counties: ["42101"]
+      name: Philadelphia Water Department
+      url: https://water.phila.gov/about-pwd/
+      checked_on: "2026-11-24"
+      quote: >-
+        The Philadelphia Water Department (PWD) supplies drinking water, wastewater, and
+        stormwater services to customers within the City of Philadelphia.
+      also: >-
+        https://water.phila.gov/wastewater/ - "We use a system of combined sewers in
+        approximately half of the city's neighborhoods and a separate sewer system in the
+        other half."
+      limits: >-
+        A whole-city statement of the utility's service territory, read by script on
+        2026-11-24, not a parcel map: a few properties on private on-lot systems would not
+        show, and it says nothing about capacity for added homes or combined-sewer overflow
+        limits.
+
+# Documented constraints: sewer connection bans, moratoria or capacity allocations, each from
+# an official record (a DEP order under 25 Pa. Code Chapter 94, a utility board resolution,
+# a state permit condition). Each entry: id, counties or tracts, kind, url, document date,
+# checked_on and a short quote. None was found in a machine-readable official list on
+# 2026-11-24; entries are added by hand only after reading the record itself.
+constraint_records:
+  PA: []
+  VT: []
+
+# Public water supplier service areas (official, statewide). extent: state means homes outside
+# every polygon are outside a mapped public water service area (self-supplied, often wells).
+water_layers:
+  PA:
+    - id: pa_dep_pws_service_areas
+      url: https://mapservices.pasda.psu.edu/server/rest/services/pasda/DEP2/MapServer/8
+      name_field: NAME
+      fields: [PWS_ID]
+      counties: []
+      extent: state
+      as_of: "2026-10"
+  VT: []
+
+# Context only: EPA's national sewersheds (mostly modelled). Never used for a status.
+context_layers:
+  - id: epa_sewersheds
+    url: https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Sewershed_Web_Map_Internal_WFL1/FeatureServer/0
+    where: "STATE_CODE = '{state}'"
+    name_field: FACILITY_NAME
+    fields: [CWNS_ID, Method]
+    extent: inside_only
+    as_of: "version 1.3 (October 2026)"
+
+# Pennsylvania DEP Act 537 official plan status (plan age per municipality).
+act537:
+  url_pattern: https://files.dep.state.pa.us/Water/BPNPSM/WastewaterManagement/Act537/PlanStatusMaps/2025/{region}_Plan_Ages_2025_TableToExcel.pdf
+  regions: [NCRO, NERO, NWRO, SCRO, SERO, SWRO]
+  as_of: "2025-05-29"
+
+# Utility contacts kept per county and kind (largest by homes first).
+contacts_per_county: 3

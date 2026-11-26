@@ -189,13 +189,15 @@ def survey_year(code: str) -> int:
 # --------------------------------------------------------------------------- parse
 
 
-def parse_annual(text: str, level: str, year: int) -> pd.DataFrame:
+def parse_annual(text: str, level: str, year: int, *, month: int | None = None) -> pd.DataFrame:
     """Read one annual county or state file into a wide table (one row per place).
 
     Args:
         text: The whole file as text.
         level: ``"county"`` or ``"state"``.
         year: The year in the file name; every row's survey date must agree.
+        month: For a monthly file (same layout, survey date ``YYYYMM``), the
+            month every row's survey date must name; ``None`` for an annual file.
 
     Returns:
         Columns ``level, geoid, state_fips, name, year`` and the 24 count columns
@@ -221,9 +223,16 @@ def parse_annual(text: str, level: str, year: int) -> pd.DataFrame:
     if not need <= set(frame.columns):
         raise ValueError(f"BPS {level} file: missing columns {sorted(need - set(frame.columns))}")
     frame = frame[frame["state_fips"].str.fullmatch(r"\d{1,2}")].copy()
-    years = {survey_year(c) for c in frame["survey_date"]}
-    if years != {year}:
-        raise ValueError(f"BPS {level} file for {year}: survey dates say {sorted(years)}")
+    if month is None:
+        years = {survey_year(c) for c in frame["survey_date"]}
+        if years != {year}:
+            raise ValueError(f"BPS {level} file for {year}: survey dates say {sorted(years)}")
+    else:
+        codes = {c.strip() for c in frame["survey_date"]}
+        if codes != {f"{year}{month:02d}"}:
+            raise ValueError(
+                f"BPS {level} file for {year}-{month:02d}: survey dates say {sorted(codes)}"
+            )
     frame["state_fips"] = frame["state_fips"].str.zfill(2)
     if level == "county":
         frame["county_fips"] = frame["county_fips"].str.zfill(3)

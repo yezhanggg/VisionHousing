@@ -195,7 +195,12 @@ def test_jobs_section_county_numbers_trace_to_the_tables(pack):
     assert sec.fact("jobs.avg_pay").value == pytest.approx(6000 / 120 * 1000)
     assert sec.fact("jobs.jobs_per_resident").comparison.against == "state"
     assert "Harbor County has 20 jobs" in sec.summary
-    assert sec.limits and set(sec.sources) <= {"lodes_wac", "lodes_od", "cbp_county"}
+    assert sec.limits and set(sec.sources) <= {
+        "lodes_wac",
+        "lodes_od",
+        "cbp_county",
+        "acs5_profile_tables",
+    }
 
 
 def test_jobs_section_tract_uses_county_for_flows(pack):

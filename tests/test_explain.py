@@ -25,7 +25,7 @@ from visionhousing.explain import (
 )
 from visionhousing.explain import wording as w
 from visionhousing.explain.numbers import count, normalise
-from visionhousing.sensitivity import drivers
+from visionhousing.sensitivity import drivers, uncertainty
 
 REFORMS = ["adu", "fees", "parking"]
 CHARTS = {"interval", "funnel", "tornado", "waterfall"}
@@ -67,6 +67,15 @@ def make_resolver(result, explanation):
             if key not in cache:
                 cache[key] = _driver_rows(result, key)
             return cache[key][int(i)][field]
+        if ref.startswith("uncertainty."):
+            _, key, i = ref.split(".")
+            n = uncertainty(result, key)
+            if i == "leftover":
+                return n.leftover.value
+            item = n.items[int(i)]
+            return {"share": item.share.value, "shrink": item.shrink.value, "label": item.label}[
+                field
+            ]
         if ref.startswith("county:"):
             geoid = ref.split(":", 1)[1]
             for f in result.run_context.state.boundaries["features"]:
@@ -150,19 +159,34 @@ def test_uncited_catches_a_typed_number():
 
 
 def test_golden_sentence_on_testland(explained):
+    """Golden text.
+
+    Updated with the outcome contract: the pre-stated bias-correction rule
+    (assumptions/backtest.yaml) dropped Testland's P50 pool-ratio correction out of
+    time, so the baseline is the rule's own projection and the fee and parking
+    reforms, which act on baseline permits, move with it. Updated again when the
+    contest's ranges began to use earlier origins only and size classes as they
+    stood at each origin: the out-of-time pools moved Testland's baseline.
+    """
     assert explained["headline"]["sentence"]["text"] == (
-        "Over 2027\u20132031, Testland would likely permit between 190 and 610 more homes "
-        "(5.7\u201315%) with accessory dwelling units (ADUs) allowed, development fees cut "
-        "in half and parking minimums removed, on top of a baseline of 1,700\u20135,400 homes "
+        "Over 2027\u20132031, Testland would likely permit between 160 and 560 more homes "
+        "(6\u201316%) with accessory dwelling units (ADUs) allowed, development fees cut "
+        "in half and parking minimums removed, on top of a baseline of 1,400\u20135,100 homes "
         "expected under today's rules."
     )
 
 
 def test_golden_verdicts_on_testland(explained):
+    """Golden verdicts.
+
+    The ADU share rose from 2.1% to 2.5% when the bias-correction rule dropped the
+    baseline's P50 correction (a smaller baseline, the same ADU permits), and
+    fell to 2.4% when the contest's ranges began to use earlier origins only.
+    """
     words = {k: v["word"] for k, v in explained["verdicts"].items()}
     assert words == {"adu": "Adds some", "fees": "Adds a lot", "parking": "Adds some"}
     assert explained["verdicts"]["adu"]["why"]["text"] == (
-        "Middle estimate: 2.1% more homes than the baseline. “Adds some” means 1% to under 5%."
+        "Middle estimate: 2.4% more homes than the baseline. “Adds some” means 1% to under 5%."
     )
 
 
@@ -205,7 +229,7 @@ def test_every_slide_number_is_in_the_result(result, explained):
 
 def test_the_check_fails_on_a_hand_typed_number(result, explained):
     sentence = dict(explained["headline"]["sentence"])
-    sentence["text"] = sentence["text"].replace("190", "200")
+    sentence["text"] = sentence["text"].replace("160", "200")
     with pytest.raises(AssertionError):
         check_cites([sentence], make_resolver(result, explained))
     bad = json.loads(json.dumps(explained["headline"]["sentence"]))

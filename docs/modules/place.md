@@ -1,5 +1,7 @@
 # Place profile data: jobs, incentive areas and safety
 
+The keyless city safety records (Philadelphia) and how the Safety section uses both sources are in [safety.md](safety.md).
+
 Code:
 
 - Sources: `src/visionhousing/data/sources/jobs.py`, `incentives.py`, `safety.py`, `xlsb.py`, and `place.py` (the one door the pack builder uses).
@@ -72,6 +74,8 @@ Each fetch keeps going when one source fails; the failure becomes a note in the 
 | `safety_county` | county | agencies, full-year agencies, population covered, violent and property offenses and rates per 1,000, coverage share |
 
 Every column is in the pack's `data_dictionary.json` with its unit, description and source id. The Keystone columns are tier 2 (one state's own source); the rest are tier 0.
+
+`make data` builds these tables with the rest of the pack. To add them (with `safety_local` and the typology tables) to a pack that is already built, from the cached files and without a full rebuild, use the same retrofit as the safety tables (`add_profile_tables` in `visionhousing.data.pack`; command in `docs/modules/safety.md`). It reads the cached job and incentive files, fetches only a file that is missing, builds the tables with the same function as the full build, and rewrites the data dictionary and the pack manifest. Pennsylvania (pack of 2026-11-23): the five tables add about 163 KB (`jobs_tract` 108 KB, `jobs_county_sector` 13 KB, `incentives_tract` 38 KB, the two county tables 4 KB); the pack was 9.43 MB of its budget, then 10 MB (now 12 MB).
 
 ## How the numbers are worked out
 

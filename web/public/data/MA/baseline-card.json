@@ -1,0 +1,229 @@
+{
+ "state": "MA",
+ "unit_fields": [
+  "est_1_units",
+  "est_2_units",
+  "est_3-4_units",
+  "est_5+_units"
+ ],
+ "unit_fields_label": "Estimated units in 1-, 2-, 3-4 and 5+ unit buildings (Building Permits Survey)",
+ "data_release": {
+  "source": "bps_state_annual",
+  "vintage": "2025 annual files (final)",
+  "last_full_year": 2025,
+  "release_date": "2026-05-14",
+  "release_date_basis": "Last-Modified date of the state annual file"
+ },
+ "information_cutoff": "2026-11-24",
+ "information_cutoff_basis": "as_of in assumptions/outcome.yaml",
+ "forecast_window": [
+  2027,
+  2031
+ ],
+ "forecast_gap": [
+  2026
+ ],
+ "forecast_gap_text": "2026 has no full-year permit count by the cutoff; the baseline carries the 2025 rule level through it.",
+ "rule": "last_3_mean",
+ "rule_text": "mean of 2023-2025 permits",
+ "annual": {
+  "2021": 19853,
+  "2022": 16830,
+  "2023": 13214,
+  "2024": 14338,
+  "2025": 12477
+ },
+ "historical_years": {
+  "level_years": [
+   2023,
+   2025
+  ],
+  "backtest_years": [
+   1990,
+   2025
+  ]
+ },
+ "role": "reconciled",
+ "state_component": 66715,
+ "formula": "state component = 5 x mean of 2023-2025 state units = 5 x (13,214 + 14,338 + 12,477) / 3 = 66,715 units (rule last_3_mean, state series only; county shares do not change the sum)",
+ "sources": [
+  "bps_state_annual"
+ ],
+ "assumption_ids": [
+  "baseline.recent_window_years",
+  "baseline.horizon_years",
+  "baseline.first_year"
+ ],
+ "diagnostics": {},
+ "bridge": {
+  "method": "carry_annual",
+  "method_text": "Carry annual through the gap: the rule's yearly level from the last full year of data is used unchanged for the gap year and each projected year. The gap year is not projected separately and adds nothing to the five-year total.",
+  "gap_years": [
+   2026
+  ],
+  "nowcast": {
+   "id": "baseline_bridge_nowcast_2026",
+   "label": "2026 nowcast from monthly year-to-date permits (diagnostic only)",
+   "use": "record_only",
+   "status": "available",
+   "year": 2026,
+   "through_month": 9,
+   "file": "st2609y.txt",
+   "release_date": "2026-10-27",
+   "next_file": "st2610y.txt",
+   "next_release_date": "2026-11-25",
+   "history_years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "caveats": [
+    "A year-to-date count is never treated as a full year.",
+    "Monthly and annual files differ in reporting and imputation; the share s absorbs that difference as well as the season.",
+    "Release dates are the files' Last-Modified dates on the Census server; a re-posted file shows a later date than its first release.",
+    "The history files are as posted now; earlier copies were not archived, so this is a revised-data exercise."
+   ],
+   "state": {
+    "ytd": 11156,
+    "ytd_history": {
+     "2021": 13270,
+     "2022": 14165,
+     "2023": 9809,
+     "2024": 10595,
+     "2025": 9091
+    },
+    "shares": {
+     "2021": 0.6684,
+     "2022": 0.8417,
+     "2023": 0.7423,
+     "2024": 0.7389,
+     "2025": 0.7286
+    },
+    "low": 13255,
+    "mid": 15097,
+    "high": 16690,
+    "carried_annual": 13343,
+    "formula": "nowcast = YTD 2026 Jan-Sep / s; YTD = 11,156; s = YTD(y, Jan-Sep) / annual(y) for y in 2021-2025 (2021 0.668, 2022 0.842, 2023 0.742, 2024 0.739, 2025 0.729); low / middle / high use s = 0.842 / 0.739 / 0.668 = 13,255 / 15,097 / 16,690 units; the carried annual level is 13,343 units (the shipped rule's state level, mean of 2023-2025). Diagnostic only: no estimate uses it.",
+    "carried_annual_basis": "the shipped rule's state level, mean of 2023-2025",
+    "sources": [
+     "bps_state_monthly_ytd",
+     "bps_state_annual"
+    ],
+    "assumption_ids": [
+     "baseline_bridge_nowcast_2026",
+     "baseline.first_year",
+     "baseline.recent_window_years"
+    ]
+   }
+  }
+ },
+ "source": "assumptions/calibration/baseline_reconciliation.yaml",
+ "view": {
+  "version": 1,
+  "state": "MA",
+  "rows": [
+   {
+    "id": "historical_years",
+    "label": "Historical years used",
+    "text": "level from 2023–2025 permits; rules tested on 1990–2025. Rule: mean of 2023-2025 permits.",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [
+     "bps_state_annual"
+    ],
+    "assumption_ids": [
+     "baseline.recent_window_years",
+     "baseline.horizon_years",
+     "baseline.first_year"
+    ]
+   },
+   {
+    "id": "unit_fields",
+    "label": "Permit columns counted",
+    "text": "Estimated units in 1-, 2-, 3-4 and 5+ unit buildings (Building Permits Survey) (est_1_units, est_2_units, est_3-4_units, est_5+_units). The reported-only columns are not used.",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [
+     "bps_state_annual"
+    ],
+    "assumption_ids": []
+   },
+   {
+    "id": "data_release",
+    "label": "Data release",
+    "text": "2025 annual files (final), posted 2026-05-14 (Last-Modified date of the state annual file).",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [
+     "bps_state_annual"
+    ],
+    "assumption_ids": []
+   },
+   {
+    "id": "information_cutoff",
+    "label": "Information cutoff",
+    "text": "2026-11-24: nothing released after this date is used (as_of in assumptions/outcome.yaml).",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [],
+    "assumption_ids": []
+   },
+   {
+    "id": "forecast_window",
+    "label": "Projected years and gap",
+    "text": "2027–2031; gap year 2026. 2026 has no full-year permit count by the cutoff; the baseline carries the 2025 rule level through it. Carry annual through the gap: the rule's yearly level from the last full year of data is used unchanged for the gap year and each projected year. The gap year is not projected separately and adds nothing to the five-year total.",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [],
+    "assumption_ids": []
+   },
+   {
+    "id": "baseline_bridge_nowcast_2026",
+    "label": "2026 nowcast (diagnostic only)",
+    "text": "13,255 to 16,690 homes, middle 15,097, from 11,156 permits in January–September (file st2609y.txt, posted 2026-10-27); the baseline carries 13,343 a year through the gap. No estimate uses the nowcast.",
+    "kind": "diagnostic",
+    "status": "diagnostic only",
+    "formula": "nowcast = YTD 2026 Jan-Sep / s; YTD = 11,156; s = YTD(y, Jan-Sep) / annual(y) for y in 2021-2025 (2021 0.668, 2022 0.842, 2023 0.742, 2024 0.739, 2025 0.729); low / middle / high use s = 0.842 / 0.739 / 0.668 = 13,255 / 15,097 / 16,690 units; the carried annual level is 13,343 units (the shipped rule's state level, mean of 2023-2025). Diagnostic only: no estimate uses it.",
+    "sources": [
+     "bps_state_monthly_ytd",
+     "bps_state_annual"
+    ],
+    "assumption_ids": [
+     "baseline_bridge_nowcast_2026",
+     "baseline.first_year",
+     "baseline.recent_window_years"
+    ]
+   },
+   {
+    "id": "reconciliation",
+    "label": "State reconciliation",
+    "text": "Shipped rule on the state's own yearly totals: 66,715 homes; matches the baseline middle value 66,715.",
+    "kind": "check",
+    "status": "matched",
+    "formula": "state component = 5 x mean of 2023-2025 state units = 5 x (13,214 + 14,338 + 12,477) / 3 = 66,715 units (rule last_3_mean, state series only; county shares do not change the sum)",
+    "sources": [
+     "bps_state_annual"
+    ],
+    "assumption_ids": [
+     "baseline.recent_window_years",
+     "baseline.horizon_years",
+     "baseline.first_year"
+    ]
+   }
+  ],
+  "reconciliation": {
+   "role": "reconciled",
+   "state_component": 66715,
+   "baseline_p50": 66715.0,
+   "matched": true
+  },
+  "source": "assumptions/calibration/baseline_reconciliation.yaml"
+ }
+}

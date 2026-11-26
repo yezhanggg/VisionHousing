@@ -1,0 +1,139 @@
+# Cross-state comparison records: CT.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ct.pa25_1_housing_growth
+  kind: policy
+  state: CT
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - parking
+  - commercial_land_housing
+  - missing_middle
+  - adaptive_reuse
+  title: 'Connecticut Public Act 25-1 (Nov. 2025 Special Session, HB 8002): An Act Concerning Housing
+    Growth'
+  citation: Conn. Public Act 25-1, November 2025 Special Session (HB 8002)
+  url: https://www.cga.ct.gov/2025/act/pa/pdf/2025PA-00001-R00HB-08002SS1-PA.pdf
+  session: November 2025 special session
+  bill: HB 8002
+  enacted_date: 2025-11-26
+  effective_dates:
+  - date: 2026-01-01
+    applies_to: Most provisions, including the transit-oriented district/TOC framework and Housing Growth
+      Program grants
+  - date: 2026-07-01
+    applies_to: Parking-minimum limits (§§ 18-20); required summary-review approval of 2-9 unit middle
+      housing and mixed-use on commercial or mixed-use parcels (§ 16); manufactured-home parity
+  geographic_scope: 'TOD is voluntary: a municipality becomes a qualifying transit-oriented community
+    only with its consent by zoning a district that includes land within 0.5 mile of a rapid transit station,
+    or of a bus station with service at least every 60 minutes at peak, 5 days a week. Towns bordering
+    a transit town may instead zone near their downtown. The parking and commercial-parcel rules apply
+    to all zoning municipalities, including special-act towns.'
+  exclusions:
+  - OPM may not require flood zones, wetlands, parks, conservation land, coastal resources, water-supply
+    areas or 30-year sea-level inundation areas in a district
+  - In up to two local conservation/traffic mitigation districts (each at most 4% of land area), parking
+    minimums may apply to developments of up to 15 units
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'TOC as-of-right uses: 2-9 unit middle housing; 10+ unit projects with at least 30% set-aside; and
+    deed-restricted projects on municipal, housing-authority, nonprofit or religious land. Owners of 3+
+    years may add an accessory apartment as of right. Incentives include Housing Growth grants, sewer
+    loans and higher school-construction reimbursement.'
+  - 'Parking: projects under 17 units cannot be rejected solely for lack of parking unless there is a
+    specific safety impact. For 17+ units, developers may rebut minimums with a parking needs assessment.'
+  - Also replaces the fair-share (CGS 4-68ii) and affordable housing plan (8-30j) frameworks and changes
+    protest petitions.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: PA 25-1 text on cga.ct.gov shows 'Approved November 26, 2025'. The OLR public act
+    summary (cga.ct.gov) shows the section-by-section effective dates (2026-01-01 and 2026-07-01) and
+    the TOC criteria (half-mile radius, 60-minute bus service, consent).
+  sources:
+  - label: Public Act 25-1 text
+    url: https://www.cga.ct.gov/2025/act/pa/pdf/2025PA-00001-R00HB-08002SS1-PA.pdf
+    official: true
+  - label: OLR public act summary PA 25-1
+    url: https://www.cga.ct.gov/2025/SUM/PDF/2025SUM00001-R01HB-08002-SUM.PDF
+    official: true
+  discovered_via: addendum
+- id: ct.pa21_29_adu_parking
+  kind: policy
+  state: CT
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - fees
+  title: 'Connecticut Public Act 21-29 (HB 6107): ADUs as of right and parking caps, with local opt-out'
+  citation: Conn. Public Act 21-29 (sHB 6107); CGS § 8-2 and § 8-2o
+  url: https://www.cga.ct.gov/2021/ACT/PA/PDF/2021PA-00029-R00HB-06107-PA.PDF
+  session: 2021 regular session
+  bill: HB 6107
+  enacted_date: 2021-06-10
+  effective_dates:
+  - date: 2021-10-01
+    applies_to: Zoning enabling act changes, including the parking caps, application-fee limits and ADU
+      definitions (§§ 1-5, 7, 10)
+  - date: 2022-01-01
+    applies_to: Main ADU provisions (§ 6)
+  - date: 2023-01-01
+    applies_to: Deadline to opt out of the ADU rules; towns that neither opted out nor adopted ADU rules
+      must then review ADUs under the act's standards; land-use training and zoning officer certification
+      begin
+  geographic_scope: Municipalities that zone under CGS § 8-2; one ADU as of right on lots with a single-family
+    home.
+  exclusions:
+  - Towns could opt out of the ADU and parking provisions by a two-thirds vote of the zoning commission
+    and of the legislative body, after a public hearing
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Parking: zoning may not require more than one space per studio or one-bedroom unit or two spaces
+    per unit with two or more bedrooms, unless the town opted out. An ADU may not be required to have more
+    than one space.'
+  - Also bars caps on units in multifamily, middle or mixed-use projects and minimum floor area rules,
+    and drops the 'character of the district' standard.
+  - How many towns opted out was not read on an official page here.
+  - cga.ct.gov sends an incomplete TLS certificate chain; the pages were read after adding the issuer certificate
+    named in the site's own certificate.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Public Act 21-29 text on cga.ct.gov ends 'Approved June 10, 2021'. The OLR public
+    act summary (cga.ct.gov) gives effective dates October 1, 2021 (most sections, parking) and January
+    1, 2022 (§ 6 ADUs), and the January 1, 2023 opt-out deadline.
+  sources:
+  - label: Public Act 21-29 text
+    url: https://www.cga.ct.gov/2021/ACT/PA/PDF/2021PA-00029-R00HB-06107-PA.PDF
+    official: true
+  - label: OLR public act summary PA 21-29
+    url: https://www.cga.ct.gov/2021/SUM/PDF/2021SUM00029-R02HB-06107-SUM.PDF
+    official: true
+  discovered_via: search

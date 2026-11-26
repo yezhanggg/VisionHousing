@@ -1,0 +1,76 @@
+/* Slide styles for the submission deck. Colours and type come from web/css/tokens.css,
+   which scripts/build_deck.py puts in front of this file. Edit freely; rebuild to see. */
+@page { size: 13.333in 7.5in; margin: 0; }
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--page); color: var(--text); font-family: var(--font-sans); }
+.slide { width: 1280px; height: 720px; padding: 52px 72px 64px; position: relative;
+  background: var(--surface); overflow: hidden; page-break-after: always; break-after: page; }
+.slide + .slide { margin-top: 0; }
+.kicker { color: var(--accent); font-size: 20px; font-weight: 680; letter-spacing: .06em;
+  text-transform: uppercase; margin: 0 0 8px; }
+h2 { font-size: 40px; line-height: 1.15; margin: 0 0 26px; font-weight: 680; }
+h3 { font-size: 22px; margin: 14px 0 8px; color: var(--accent-strong); }
+p, li, td, th { font-size: 21px; line-height: 1.4; }
+.two { display: grid; grid-template-columns: 1fr 1fr; gap: 48px; }
+.map-two { grid-template-columns: 1.2fr 1fr; }
+.big { font-size: 60px; font-weight: 680; color: var(--accent-strong); margin: 0; line-height: 1.1; }
+.big-sm { font-size: 48px; font-weight: 680; color: var(--accent-strong); margin: 0; }
+.stat-label { color: var(--text-muted); margin: 6px 0 14px; font-size: 20px; }
+.lead { font-size: 30px; line-height: 1.35; max-width: 1000px; }
+.sub { font-size: 22px; color: var(--text-muted); }
+.note { font-size: 18px; color: var(--text-quiet); }
+.callout { font-size: 20px; background: var(--accent-soft); border-left: 6px solid var(--accent);
+  padding: 12px 18px; border-radius: 6px; }
+.pending-box { font-size: 18px; background: var(--notice-bg); color: var(--notice-text);
+  border: 1px solid var(--notice-line); padding: 10px 14px; border-radius: 8px; }
+.bullets { padding-left: 24px; margin: 6px 0; } .bullets li { margin: 6px 0; }
+.big-bullets li { font-size: 25px; margin: 12px 0; }
+.steps li { font-size: 24px; margin: 14px 0; }
+.card { background: var(--surface-2); border: 1px solid var(--line); border-radius: 14px; padding: 18px 22px; }
+.card p { font-size: 20px; }
+.grid5 { display: grid; grid-template-columns: repeat(5, 1fr); gap: 14px; margin-bottom: 14px; }
+.grid5 .card p { font-size: 18px; }
+table { border-collapse: collapse; width: 100%; }
+th { text-align: left; color: var(--text-muted); font-weight: 550; font-size: 18px;
+  border-bottom: 2px solid var(--line-strong); padding: 6px 8px; }
+td { border-bottom: 1px solid var(--line); padding: 5px 8px; font-size: 20px; }
+.tornado .t-row { margin: 0 0 16px; } .t-label { font-size: 18px; margin-bottom: 4px; }
+.t-track { position: relative; height: 20px; background: var(--surface-3); border-radius: 4px; }
+.t-band { position: absolute; top: 0; bottom: 0; background: var(--seq-4); border-radius: 4px; }
+.t-mid { position: absolute; top: -4px; bottom: -4px; width: 3px; background: var(--accent-strong); }
+.t-ends { display: flex; justify-content: space-between; font-size: 15px; color: var(--text-muted); margin-top: 3px; }
+tr.chosen td { background: var(--accent-soft); font-weight: 600; }
+td.grade { font-size: 26px; font-weight: 680; color: var(--accent-strong); }
+.cmds td { font-size: 17px; } code { font-family: var(--font-mono); font-size: .92em; }
+.formula { font-family: var(--font-mono); font-size: 15px; line-height: 1.45; background: var(--surface-3);
+  padding: 10px 12px; border-radius: 8px; }
+.chart { width: 100%; height: auto; display: block; }
+.chart-wide { margin: 10px 0 16px; }
+.c-label { font-size: 21px; fill: var(--text); } .c-label-sm { font-size: 17px; fill: var(--text); }
+.c-value { font-size: 19px; fill: var(--text-muted); } .c-value-sm { font-size: 18px; fill: var(--text-muted); }
+.c-track { fill: var(--surface-3); } .c-band { fill: var(--seq-4); } .c-mid { fill: var(--accent-strong); }
+.c-target { stroke: var(--notice-text); stroke-width: 2; stroke-dasharray: 6 4; }
+.map path { stroke: var(--surface); stroke-width: 1; }
+.m-q1 { fill: var(--seq-2); } .m-q2 { fill: var(--seq-3); } .m-q3 { fill: var(--seq-4); }
+.m-q4 { fill: var(--seq-5); } .m-q5 { fill: var(--seq-6); }
+.m-none { fill: var(--no-data); }
+.legend { list-style: none; padding: 0; display: flex; flex-wrap: wrap; gap: 6px 16px; margin: 10px 0 0; }
+.legend li { font-size: 17px; display: flex; align-items: center; gap: 6px; }
+.sw { width: 18px; height: 18px; display: inline-block; border-radius: 4px; }
+.sw.m-q1 { background: var(--seq-2); } .sw.m-q2 { background: var(--seq-3); }
+.sw.m-q3 { background: var(--seq-4); } .sw.m-q4 { background: var(--seq-5); }
+.sw.m-q5 { background: var(--seq-6); }
+.foot { position: absolute; left: 72px; right: 72px; bottom: 20px; display: flex;
+  justify-content: space-between; gap: 24px; font-size: 13px; color: var(--text-quiet); }
+.foot .src { max-width: 1000px; }
+.foot .pend { color: var(--notice-text); font-weight: 600; }
+.slide--title { background: var(--accent-strong); color: var(--on-accent); padding-top: 170px; }
+.slide--title .kicker { color: var(--seq-3); } .slide--title h2 { font-size: 52px; max-width: 1080px; }
+.slide--title .sub { color: var(--seq-2); } .slide--title .foot { color: var(--seq-2); }
+/* Usability slide: six pictures of the running tool, 2 x 3. */
+.shots { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px 16px; margin-top: -10px; }
+.shot { margin: 0; }
+.shot img { width: 100%; aspect-ratio: 16 / 9; object-fit: cover; display: block;
+  border: 1px solid var(--line); border-radius: 8px; }
+.shot figcaption { font-size: 15px; color: var(--text-muted); margin-top: 3px; }
+.shots-note { font-size: 14px; margin: 8px 0 0; }

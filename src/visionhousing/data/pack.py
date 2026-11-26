@@ -3,7 +3,7 @@
 Plain-language summary
 ----------------------
 A **state pack** is everything the engine and the interface need for one state,
-in one folder, ``data/packs/{STATE}/``. It is small (under 10 MB) and can be
+in one folder, ``data/packs/{STATE}/``. It is small (under 12 MB) and can be
 opened in a spreadsheet:
 
 - gzipped CSV tables (``*.csv.gz``). The tables and columns the synthetic state
@@ -28,6 +28,11 @@ blocks             2020 census block with land or homes                  0
 permits_county_year county and year, 1990 to the latest year             0
 transit_stops      transit stop in the state (National Transit Map)      0/1
 transit_feeds      transit feed: how its bus frequencies were counted    1
+transit_walk_tract tract near a major stop: walkshed acres (retrofit)     1
+transit_walk_county county: peak-rule coverage, map tiles (retrofit)    1
+mbta_3a_capacity_tract tract: existing 3A modeled capacity, MA (retrofit) 2
+mbta_3a_capacity_district 3A district: capacity counted, MA (retrofit)  2
+ma_sewer_estimated_tract tract: MassDEP estimated sewer, MA (retrofit)  2
 prices_county      county: house price changes                           0
 prices_tract       tract with a published house price index              0
 hpi_county_year    county and year: the house price index series         0
@@ -39,6 +44,15 @@ jobs_county_sector county and NAICS sector: business patterns            0
 incentives_tract   tract: tax-credit and incentive areas                 0/2
 incentives_county  county: tax-credit and incentive totals               0/2
 safety_county      county: reported offenses per 1,000 residents         0
+safety_local       tract/county, year: city safety and distress records  2
+typology_county    county: group of similar counties, nearest counties   0
+typology_tract     tract: group of similar tracts, nearest tracts        0
+acs_bands          state, county, tract: ACS tables collapsed to bands   0
+afford_chas        state, county: CHAS cost burden by income             0
+afford_chas_tract  tract: CHAS renter cost burden, 3 income groups       0
+afford_income_limits county: HUD AMI and 30/50/80% limits, sizes 1-8     0
+afford_assisted    state, county, tract: assisted homes, expirations     0
+stock_ledger_county state, county: homes, permits, assisted, at risk     0
 municipal_planning municipality part: zoning regime, plans (DCED)        2
 tract_municipalities tract piece per municipality: 2020 housing units    2
 parcels_area       tract and county: parcel attributes (42101, 42003)    2
@@ -46,12 +60,21 @@ owners_area        tract and county: single-family owner types           2
 owners_deeds_year  year: single-family deeds to entities (42101)         2
 pipeline_tract_year tract, year: city new-home permits (Phila., Pitt.)   2
 lihtc_awards       development awarded PHFA tax credits                  2
+law_documents      legal text read or linked (law tables)                2
+state_law_provisions state code section or bill bearing on a reform    2
+law_provision_version one version of one provision, dated (add-on step)  2
+county_land_use    county: county zoning reach and county plan           2
+muni_zoning_rules  municipality part: ADU, lot, parking rules            2
 ================== ===================================================== ======
 
-The last six tables feed the place profile's market research sections; they
-are built only when their inputs could be fetched (see
-:mod:`visionhousing.data.sources.place`; ``safety_county`` needs an
-api.data.gov key in the environment).
+The jobs, incentive and safety tables feed the place profile's market
+research sections; they are built only when their inputs could be fetched
+(see :mod:`visionhousing.data.sources.place`; ``safety_county`` needs an
+api.data.gov key in the environment, ``safety_local`` needs none). The two
+typology tables are worked out from the tables above
+(:mod:`visionhousing.features.typology`). ``acs_bands`` holds the collapsed
+survey tables behind the profile charts (:mod:`visionhousing.features.acs_bands`);
+:func:`add_acs_bands` adds it to a pack already built.
 
 Determinism
 -----------
@@ -74,9 +97,10 @@ import gzip
 import hashlib
 import json
 import shutil
-from collections.abc import Mapping
+from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from pathlib import Path
+from typing import Any
 
 import numpy as np
 import pandas as pd
@@ -84,34 +108,54 @@ import pandas as pd
 from visionhousing import __version__
 from visionhousing.data import local as local_src
 from visionhousing.data import manifest as mf
-from visionhousing.data.http import HttpClient, check_free_space, sha256_file
+from visionhousing.data.http import FetchError, HttpClient, check_free_space, sha256_file
 from visionhousing.data.registry import load_registry
 from visionhousing.data.sources import acs, blocks, boundaries, bps, costs, prices
 from visionhousing.data.sources import place as place_src
 from visionhousing.data.sources import state_fips as to_state_fips
 from visionhousing.data.sources import transit as transit_src
+from visionhousing.districts import weights as district_fx
 from visionhousing.features import acs as fx
+from visionhousing.features import acs_bands as bands_fx
+from visionhousing.features import affordability as afford_fx
 from visionhousing.features import density
+from visionhousing.features import hazards as hazard_fx
+from visionhousing.features import infrastructure as infra_fx
 from visionhousing.features import transit as transit_fx
+from visionhousing.features import transit_walk as walk_fx
+from visionhousing.features import typology as typology_fx
+from visionhousing.law import tables as law_tables
 
 __all__ = [
     "PACK_BUDGET_BYTES",
+    "RETROFITS",
     "SCHEMA_VERSION",
     "TABLES",
     "PackInputs",
     "PackReport",
+    "add_3a_district_tracts",
     "assemble_tables",
     "build_dictionary",
     "build_pack",
     "load_inputs",
     "load_pack",
+    "report_from_folder",
     "size_report",
     "write_pack",
 ]
 
 SCHEMA_VERSION = 1
-PACK_BUDGET_BYTES = 10_000_000
-"""The whole pack folder must be smaller than this (10 MB)."""
+PACK_BUDGET_BYTES = 12_000_000
+"""The whole pack folder must be smaller than this (12 MB).
+
+Raised from 10 MB when Pennsylvania reached 10.42 MB (district outlines, census
+bands, affordability and law columns), with the transit walk tables still to
+come. Packs are git-ignored and built locally by ``make data``; the static site
+has its own 30 MB budget (``export_static.SIZE_LIMIT_BYTES``), so this cap only
+keeps a pack quick to load. The two largest files, ``blocks.csv.gz`` (about
+4.6 MB) and the tract outlines (about 2.6 MB), are already at their stated
+precision. See ``docs/modules/pack.md`` (Size budget).
+"""
 MIN_FREE_GB = 15.0
 
 TESTLAND_COLUMNS: dict[str, tuple[str, ...]] = {
@@ -165,7 +209,7 @@ TABLES: dict[str, dict[str, object]] = {
         "description": (
             "One row per transit stop or station inside the state (National Transit Map), with "
             "its mode, its weekday departures where an agency schedule feed could be read, and "
-            "whether it is a major transit stop (decision D-07). Names are kept for major stops."
+            "whether it is a major transit stop. Names are kept for major stops."
         ),
     },
     "transit_feeds": {
@@ -210,9 +254,44 @@ TABLES.update(place_src.TABLES)
 """Plus the place-profile tables (jobs, incentive areas, safety): see
 :mod:`visionhousing.data.sources.place`. They are built only when their inputs were fetched."""
 
+TABLES.update(typology_fx.TABLES)
+"""Plus the "places like this one" tables, derived from the tables above: see
+:mod:`visionhousing.features.typology`."""
+
+TABLES.update(bands_fx.PACK_TABLE)
+"""Plus the collapsed ACS bands behind the place-profile charts: see
+:mod:`visionhousing.features.acs_bands`."""
+
 TABLES.update(local_src.TABLES)
 """Plus the local refinement tables (zoning status, plans, parcels, owners, city permits,
 LIHTC awards): see :mod:`visionhousing.data.local`."""
+
+TABLES.update(walk_fx.TABLES)
+"""Plus the transit walkshed tables (frequent-bus peak rule, network walksheds per tract):
+see :mod:`visionhousing.features.transit_walk`. Added by :func:`add_transit_walk`."""
+
+TABLES.update(district_fx.PACK_TABLES)
+"""Plus the state legislative district list and its tract and county weights: see
+:mod:`visionhousing.districts`. Added by :func:`visionhousing.districts.build.add_districts`."""
+
+TABLES.update(afford_fx.TABLES)
+"""Plus the cost and affordability tables (CHAS cost burden, income limits, assisted homes,
+stock ledger): see :mod:`visionhousing.features.affordability`. Added by
+:func:`visionhousing.features.affordability.add_affordability`."""
+
+TABLES.update(infra_fx.TABLES)
+"""Plus the water and sewer readiness tables (official service areas, Act 537 plan age, EPA
+context): see :mod:`visionhousing.features.infrastructure`. Added by
+:func:`visionhousing.features.infrastructure_build.add_infrastructure`."""
+
+TABLES.update(hazard_fx.TABLES)
+"""Plus the hazards and land screen (flood zones, land cover, impervious cover, slope): see
+:mod:`visionhousing.features.hazards`. Added by
+:func:`visionhousing.features.hazards_build.add_hazards`."""
+
+TABLES.update(law_tables.VERSION_TABLE)
+"""Plus ``law_provision_version`` (every state; one version of one operative provision, from
+``assumptions/law/timeline.yaml``): see :func:`visionhousing.law.tables.add_provision_versions`."""
 
 TIERS = {
     "0": "Available for every state from national files.",
@@ -250,6 +329,8 @@ class PackInputs:
     """Place-profile inputs (jobs, incentive areas, safety); ``None`` leaves their tables out."""
     local: local_src.LocalTables | None = None
     """Local refinement tables (:mod:`visionhousing.data.local`); ``None`` leaves them out."""
+    acs_bands: pd.DataFrame | None = None
+    """Collapsed ACS bands (:mod:`visionhousing.features.acs_bands`); ``None`` leaves them out."""
 
 
 def _cache_files(cache: Path, fips: str) -> list[tuple[str, Path]]:
@@ -267,6 +348,8 @@ def _cache_files(cache: Path, fips: str) -> list[tuple[str, Path]]:
             files.append(("acs5_summary_file", path))
         elif "Table_Shells" in path.name:
             files.append(("acs5_table_shells", path))
+        elif path.name == acs.PROFILE_EXTRACT.format(fips=fips):
+            files.append(("acs5_profile_tables", path))
     files += [
         ("tiger_2020_tabblock", blocks.extract_path(cache, fips)),
         ("cb_2020_county", cache / "boundaries" / f"cb_2020_{fips}_county_500k.geojson.gz"),
@@ -301,6 +384,11 @@ def load_inputs(
     notes = []
     raw = acs.fetch_acs(state, acs.VINTAGE, cache, client=client, manifest=manifest)
     acs_tracts = fx.tract_features(raw)
+    acs_bands = None
+    try:
+        acs_bands = acs_band_rows(raw, state, cache, client=client, manifest=manifest)
+    except (FetchError, ValueError) as err:
+        notes.append(f"acs_bands left out: {err}")
     block_table, info = blocks.fetch_blocks(state, cache, client=client, manifest=manifest)
     if not info.from_cache:
         notes.append(
@@ -352,7 +440,29 @@ def load_inputs(
         transit=transit,
         place=place,
         local=local,
+        acs_bands=acs_bands,
     )
+
+
+def acs_band_rows(
+    raw: pd.DataFrame,
+    state: str,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    method: str = "auto",
+    manifest: Path | None = mf.MANIFEST_PATH,
+) -> pd.DataFrame:
+    """The ``acs_bands`` rows of every tract (before water-only tracts are dropped).
+
+    ``raw`` is the answer of :func:`visionhousing.data.sources.acs.fetch_acs`; the extra
+    tables come from :func:`~visionhousing.data.sources.acs.fetch_acs_profile`
+    (the API when ``CENSUS_API_KEY`` is set and ``method`` is ``"auto"``, else the
+    keyless summary files; read from the cache when already fetched).
+    """
+    extra = acs.fetch_acs_profile(state, cache, client=client, method=method, manifest=manifest)
+    merged = raw.merge(extra.drop(columns=["level", "geoid"]), on="GEO_ID", how="left")
+    return bands_fx.band_table(merged)
 
 
 # --------------------------------------------------------------------------- tables
@@ -449,30 +559,50 @@ def assemble_tables(inputs: PackInputs) -> dict[str, pd.DataFrame]:
     tables.update(place_src.place_tables(inputs.place, tracts, counties, kept_shapes, lite))
     if inputs.local is not None:
         tables.update(inputs.local.tables)
+        tables.update(law_tables.weigh_law_tables(tables))  # lot weights need tracts, blocks
+    if inputs.acs_bands is not None:
+        tables["acs_bands"] = _bands_for(inputs.acs_bands, tract_ids)
+    tables.update(typology_fx.typology_tables(tables))
     note = f"tracts left out as open water: {', '.join(sorted(dropped))}"
     if dropped and note not in inputs.notes:
         inputs.notes.append(note)
     return {name: _tidy_numbers(t.reset_index(drop=True)) for name, t in tables.items()}
 
 
+def _bands_for(rows: pd.DataFrame, tract_ids: set[str]) -> pd.DataFrame:
+    """The ``acs_bands`` rows of the state, its counties and the pack's tracts."""
+    keep = (rows["level"] != "tract") | rows["geoid"].astype(str).isin(tract_ids)
+    return rows[keep].sort_values("geoid", kind="stable").reset_index(drop=True)
+
+
 def _transit_tables(
     inputs: PackInputs, lite: pd.DataFrame, tracts: pd.DataFrame
 ) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
-    """The stop and feed tables and the per-tract transit features (decision D-07).
+    """The stop and feed tables and the per-tract transit features.
 
-    The D-07 numbers are the ledger's central values (``parking.transit_*``).
+    The major-stop rule's numbers are the ledger's central values (``parking.transit_*``).
     Without transit inputs the tables are empty and every tract gets zeros.
     """
+    return _transit_tables_from(inputs.transit, inputs.tract_shapes, lite, tracts)
+
+
+def _transit_tables_from(
+    transit: transit_src.TransitInputs | None,
+    tract_shapes: list[boundaries.Shape],
+    lite: pd.DataFrame,
+    tracts: pd.DataFrame,
+) -> tuple[pd.DataFrame, pd.DataFrame, pd.DataFrame]:
+    """:func:`_transit_tables` from the transit inputs and tract shapes alone."""
     from visionhousing.ledger import load_ledger
 
     rule = transit_fx.TransitRule.from_ledger(load_ledger())
-    if inputs.transit is None:
+    if transit is None:
         stops = pd.DataFrame(columns=list(transit_src.STOP_COLUMNS))
         feeds = pd.DataFrame(columns=list(transit_src.FEED_COLUMNS))
     else:
         kept = {str(t) for t in tracts["geoid"]}
-        shapes = [s for s in inputs.tract_shapes if s.geoid in kept]
-        stops, feeds = transit_src.build_stop_table(inputs.transit, shapes, rule, blocks=lite)
+        shapes = [s for s in tract_shapes if s.geoid in kept]
+        stops, feeds = transit_src.build_stop_table(transit, shapes, rule, blocks=lite)
     features = transit_fx.tract_transit_features(
         lite, stops, rule, stop_tracts=stops["tract"].astype(str), tracts=tracts["geoid"]
     )
@@ -558,7 +688,7 @@ _BASE: dict[str, tuple[str, str]] = {
     ),
     "major": (
         "flag",
-        "1 if a major transit stop (D-07): any rail stop, or a bus stop with "
+        "1 if a major transit stop: any rail stop, or a bus stop with "
         "at least 64 counted weekday departures",
     ),
     "frequency": (
@@ -584,23 +714,28 @@ _BASE: dict[str, tuple[str, str]] = {
     ),
     "major_bus_stops": ("stops", "Bus stops with at least 64 counted weekday departures"),
     "schedule_feed": ("code", "Mobility Database id of the schedule feed used"),
+    "paired_by": (
+        "text",
+        "How the map feed was paired with its schedule feed: id (same stop ids) or place "
+        "(renumbered stops at the same places, agency names and the reverse check agree)",
+    ),
     "schedule_provider": ("text", "Provider of the schedule feed"),
     "schedule_date": ("date", "Representative weekday the departures were counted on"),
     "schedule_valid_from": ("date", "First date the schedule feed covers"),
     "schedule_valid_to": ("date", "Last date the schedule feed covers"),
     "transit_units_d07": (
         "units",
-        "2020 housing units in blocks within the D-07 distance "
+        "2020 housing units in blocks within the major-stop distance "
         "(1/2 mile of a rail stop or 1/4 mile of a frequent bus stop)",
     ),
     "transit_units_share_d07": ("share", "transit_units_d07 / the tract's 2020 block units"),
-    "transit_land_m2_d07": ("square metres", "Block land within the D-07 distance"),
+    "transit_land_m2_d07": ("square metres", "Block land within the major-stop distance"),
     "transit_land_share_d07": ("share", "transit_land_m2_d07 / the tract's block land"),
     "transit_major_stops": ("stops", "Major transit stops inside the tract"),
     "transit_rich": (
         "flag",
-        "1 if at least half of the tract's 2020 units are within the D-07 "
-        "distance, or a major stop is inside the tract (parking reform rule)",
+        "1 if at least half of the tract's 2020 units are within the "
+        "major-stop distance, or a major stop is inside the tract (parking reform rule)",
     ),
     "hpi_year": ("year", "Latest year of the house price index used for the changes"),
     "hpi_annual_change_pct": ("percent", "House price index change in the latest year"),
@@ -618,7 +753,13 @@ _BASE: dict[str, tuple[str, str]] = {
     "construction_avg_annual_pay": ("dollars per year", "Average pay per construction job"),
     "wage_index_county_vs_state": ("ratio", "County construction pay / state construction pay"),
     "wage_index_state_vs_us": ("ratio", "State construction pay / national construction pay"),
-    "wage_index_method": ("category", "county, or state_value where BLS withholds the county"),
+    "wage_index_method": (
+        "category",
+        (
+            "county; state_value where BLS withholds the county; state_from_counties or "
+            "national_value where it also withholds the state"
+        ),
+    ),
 }
 
 _TABLE_OVERRIDES: dict[tuple[str, str], tuple[str, str]] = {
@@ -648,11 +789,13 @@ _TIER_ONE_COLUMNS = {"weekday_departures", "major", "frequency"}
 
 
 def _tier(table: str, name: str) -> dict[str, str]:
-    if table in local_src.TABLES:
+    if table in local_src.TABLES or table in law_tables.VERSION_TABLE:
         return {"tier": "2"}
     if (table, name) in place_src.TIER_TWO:
         return {"tier": "2"}
-    if table == "transit_feeds":
+    if table == "transit_feeds" or table in walk_fx.TABLES:
+        return {"tier": "1"}
+    if table in infra_fx.TABLES:
         return {"tier": "1"}
     if table == "transit_stops" and name in _TIER_ONE_COLUMNS:
         return {"tier": "1"}
@@ -662,8 +805,26 @@ def _tier(table: str, name: str) -> dict[str, str]:
 
 
 def _describe(table: str, name: str) -> tuple[str, str]:
+    if table in bands_fx.PACK_TABLE:
+        return bands_fx.describe(name)
+    if table in afford_fx.TABLES:
+        return afford_fx.describe(table, name)
+    if table in infra_fx.TABLES:
+        return infra_fx.describe(table, name)
+    if table in hazard_fx.TABLES:
+        return hazard_fx.describe(table, name)
+    if table in typology_fx.TABLES:
+        return typology_fx.describe(table, name)
+    if table in district_fx.PACK_TABLES:
+        return district_fx.describe(table, name)
+    if table in walk_fx.TABLES:
+        return walk_fx.describe(table, name)
     if table in local_src.TABLES:
         return local_src.describe(table, name)
+    if table in law_tables.VERSION_TABLE:
+        if name not in law_tables.VERSION_COLUMNS:
+            raise ValueError(f"no data-dictionary entry for {table}.{name}")
+        return law_tables.VERSION_COLUMNS[name]
     if (table, name) in place_src.COLUMNS:
         unit, text, _ = place_src.COLUMNS[(table, name)]
         return unit, text
@@ -984,10 +1145,106 @@ def build_pack(
     *,
     client: HttpClient | None = None,
     manifest: Path | None = mf.MANIFEST_PATH,
+    retrofits: bool = True,
 ) -> PackReport:
-    """Load the inputs (fetching what is missing) and write the state pack."""
+    """Load the inputs (fetching what is missing), write the state pack, then add the add-on tables.
+
+    ``retrofits`` runs the add-on steps (:data:`RETROFITS`) on the new pack in
+    order, so a full build (``make data``) gives the same tables as building and
+    then running each add-on command. A step that fails is noted and skipped.
+    The returned report lists the files after the add-ons; the caller checks it
+    against the budget (``visionhousing build`` exits 1 when it is over).
+    """
     inputs = load_inputs(state, cache, client=client, manifest=manifest)
-    return write_pack(inputs, out_root, manifest=manifest)
+    report = write_pack(inputs, out_root, manifest=manifest)
+    if not retrofits:
+        return report
+    notes = list(report.notes)
+    for name, _tables, step in RETROFITS:
+        try:
+            step(report.folder, Path(cache), client=client, manifest=manifest)
+        except Exception as err:  # one add-on failing must not lose the rest
+            notes.append(f"{name} not added ({type(err).__name__}: {err})"[:300])
+    return report_from_folder(report.folder, notes)
+
+
+def report_from_folder(folder: Path, notes: list[str] | None = None) -> PackReport:
+    """A :class:`PackReport` read back from a pack folder's manifest (after add-on steps)."""
+    folder = Path(folder)
+    data = json.loads((folder / "pack_manifest.json").read_text(encoding="utf-8"))
+    files = [
+        PackFile(f["path"], int(f["bytes"]), f["sha256"], f.get("rows"))
+        for f in data.get("files", [])
+    ]
+    files.append(_file_entry(folder, "pack_manifest.json"))
+    return PackReport(
+        str(data.get("state") or folder.name), folder, files, data["pack_hash"], notes or []
+    )
+
+
+def _step_districts(folder: Path, cache: Path, **kw: Any) -> None:
+    from visionhousing.districts.build import add_districts
+
+    add_districts(folder, cache, client=kw.get("client"), manifest=kw.get("manifest"))
+
+
+def _step_affordability(folder: Path, cache: Path, **kw: Any) -> None:
+    afford_fx.add_affordability(folder, cache, client=kw.get("client"), manifest=kw.get("manifest"))
+
+
+def _step_infrastructure(folder: Path, cache: Path, **kw: Any) -> None:
+    from visionhousing.features.infrastructure_build import add_infrastructure
+
+    add_infrastructure(folder, cache, client=kw.get("client"), manifest=kw.get("manifest"))
+
+
+def _step_hazards(folder: Path, cache: Path, **kw: Any) -> None:
+    from visionhousing.features.hazards_build import add_hazards
+
+    add_hazards(folder, cache, client=kw.get("client"))
+
+
+def _step_transit_walk(folder: Path, cache: Path, **kw: Any) -> None:
+    add_transit_walk(folder, cache, client=kw.get("client"), manifest=kw.get("manifest"))
+
+
+def _step_3a_tracts(folder: Path, cache: Path, **kw: Any) -> None:
+    add_3a_district_tracts(folder, cache)
+
+
+def _step_ma_capacity(folder: Path, cache: Path, **kw: Any) -> None:
+    from visionhousing.features.ma_capacity_build import add_ma_capacity
+
+    add_ma_capacity(folder, cache, client=kw.get("client"), manifest=kw.get("manifest"))
+
+
+def _step_law_versions(folder: Path, cache: Path, **kw: Any) -> None:
+    law_tables.add_provision_versions(folder, cache)
+
+
+RETROFITS: tuple[tuple[str, tuple[str, ...], Callable[..., None]], ...] = (
+    ("districts", tuple(district_fx.PACK_TABLES), _step_districts),
+    ("affordability", tuple(afford_fx.TABLES), _step_affordability),
+    ("infrastructure", tuple(infra_fx.TABLES), _step_infrastructure),
+    ("hazards", tuple(hazard_fx.TABLES), _step_hazards),
+    ("transit walk", tuple(walk_fx.TABLES), _step_transit_walk),
+    ("3a district tracts", ("mbta_3a_district_tracts",), _step_3a_tracts),
+    (
+        "3a capacity and estimated sewer",
+        ("mbta_3a_capacity_tract", "mbta_3a_capacity_district", "ma_sewer_estimated_tract"),
+        _step_ma_capacity,
+    ),
+    ("law provision versions", tuple(law_tables.VERSION_TABLE), _step_law_versions),
+)
+"""The add-on steps a full build runs after writing the pack, in order: name, tables, step.
+
+Each is also its own command (``visionhousing districts``, ``affordability``,
+``infrastructure``, ``hazards``, ``transit-walk``, ``ma-3a-tracts``, ``ma-capacity``,
+``law-tables``) for refreshing one part of a built pack; ``law-tables`` refreshes
+``law_provision_version`` in every state. The law lot weights need no step:
+:func:`assemble_tables` fills them. The two 3A steps do nothing in a pack without
+Massachusetts' ``mbta_3a_districts`` table.
+"""
 
 
 # --------------------------------------------------------------------------- reading
@@ -1030,3 +1287,394 @@ def size_report(report: PackReport, budget: int = PACK_BUDGET_BYTES) -> str:
     lines.append(f"pack_hash {report.pack_hash}")
     lines += [f"note: {n}" for n in report.notes]
     return "\n".join(lines)
+
+
+# --------------------------------------------------------------------------- retrofit
+
+
+def add_profile_tables(
+    folder: Path,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    manifest: Path | None = mf.MANIFEST_PATH,
+    place: place_src.PlaceInputs | None = None,
+) -> dict[str, pd.DataFrame]:
+    """Add the place-profile tables and the two typology tables to an already built pack.
+
+    A full build (:func:`build_pack`) makes these tables too; this saves
+    rebuilding the whole pack when only they changed. The place-profile inputs
+    (jobs, incentive areas, safety; :func:`visionhousing.data.sources.place.fetch_place`)
+    are read from the cache, fetching only a file that is missing, and turned into
+    tables by the same function the full build uses
+    (:func:`visionhousing.data.sources.place.place_tables`). Tract shapes come from
+    the cached full-detail boundary file when there is one, else from the pack's
+    own boundaries. The typology is then worked out from the pack's tables, and
+    the data dictionary and the pack manifest (file checksums, pack hash, inputs,
+    provenance) are rewritten from every table now in the folder, the same way
+    the full build writes them.
+
+    Args:
+        folder: The pack folder (``data/packs/{STATE}``), rewritten in place.
+        cache: The raw-file cache the full build reads (``data/raw``).
+        client: HTTP client for a missing cache file.
+        manifest: The download manifest to record any fetch in.
+        place: Inputs already read (tests); ``None`` fetches them from ``cache``.
+
+    Returns:
+        The tables written.
+    """
+    folder = Path(folder)
+    cache = Path(cache)
+    state = folder.name.upper()
+    manifest_path = folder / "pack_manifest.json"
+    old = json.loads(manifest_path.read_text(encoding="utf-8"))
+    tables = load_pack(folder)
+    if place is None:
+        place = place_src.fetch_place(state, cache, client=client, manifest=manifest)
+    tract_ids = set(tables["tracts"]["geoid"].astype(str))
+    shapes = [
+        (g, s) for g, s in _tract_shapes(folder, cache, old.get("state_fips")) if g in tract_ids
+    ]
+    written = place_src.place_tables(
+        place, tables["tracts"], tables["counties"], shapes, tables.get("blocks")
+    )
+    new_inputs: list[tuple[str, Path]] = list(place.files)
+    tables.update(written)
+    derived = typology_fx.typology_tables(tables)
+    written.update(derived)
+    _rewrite(folder, cache, written, new_inputs)
+    return written
+
+
+def _rewrite(
+    folder: Path,
+    cache: Path,
+    written: Mapping[str, pd.DataFrame],
+    new_inputs: list[tuple[str, Path]],
+) -> None:
+    """Write retrofitted tables, then rewrite the dictionary and the pack manifest.
+
+    The manifest's file list, pack hash, inputs and provenance are rebuilt from
+    every table now in the folder, the same way the full build writes them.
+    """
+    state = folder.name.upper()
+    manifest_path = folder / "pack_manifest.json"
+    old = json.loads(manifest_path.read_text(encoding="utf-8"))
+    for name, frame in written.items():
+        _write_gz_csv(_tidy_numbers(frame.reset_index(drop=True)), folder / f"{name}.csv.gz")
+    tables = load_pack(folder)
+    dictionary = build_dictionary(tables, state)
+    (folder / "data_dictionary.json").write_text(_json_text(dictionary), encoding="utf-8")
+    files = [
+        f
+        for f in old["files"]
+        if not f["path"].endswith(".csv.gz") and f["path"] != "data_dictionary.json"
+    ]
+    for name, frame in tables.items():
+        path = folder / f"{name}.csv.gz"
+        files.append(
+            {"path": path.name, "bytes": path.stat().st_size, "sha256": sha256_file(path),
+             "rows": len(frame)}
+        )  # fmt: skip
+    files.append(_file_entry(folder, "data_dictionary.json").__dict__)
+    files.sort(key=lambda f: f["path"])
+    digest = hashlib.sha256()
+    for f in files:
+        digest.update(f"{f['path']}\t{f['sha256']}\n".encode())
+    replaced = {sid for sid, _ in new_inputs}
+    inputs = [r for r in old.get("inputs", []) if r.get("source") not in replaced]
+    for sid, path in new_inputs:
+        if path.exists():
+            inputs.append(
+                {"source": sid, "file": path.relative_to(cache).as_posix(),
+                 "sha256": sha256_file(path), "bytes": path.stat().st_size,
+                 "accessed": _read_on(path)}
+            )  # fmt: skip
+    inputs.sort(key=lambda r: (r["source"], r["file"]))
+    old.update(
+        {"pack_hash": digest.hexdigest(), "files": files, "inputs": inputs,
+         "provenance": _provenance(inputs)}
+    )  # fmt: skip
+    manifest_path.write_text(_json_text(old), encoding="utf-8")
+
+
+def add_acs_bands(
+    folder: Path,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    method: str = "auto",
+    manifest: Path | None = mf.MANIFEST_PATH,
+    rows: pd.DataFrame | None = None,
+) -> pd.DataFrame:
+    """Add (or refresh) the ``acs_bands`` table in an already built pack.
+
+    The ACS cells are read from the cache (fetching only what is missing: the API
+    when ``CENSUS_API_KEY`` is set and ``method`` is ``"auto"``, else the keyless
+    summary files), collapsed into bands, cut to the pack's tracts, and written;
+    then the dictionary and the manifest are rewritten as a full build would.
+
+    Args:
+        folder: The pack folder (``data/packs/{STATE}``), rewritten in place.
+        cache: The raw-file cache (``data/raw``).
+        client: HTTP client for a missing cache file.
+        method: ``"auto"``, ``"summary"`` or ``"api"`` (see
+            :func:`visionhousing.data.sources.acs.fetch_acs_profile`).
+        manifest: The download manifest to record any fetch in.
+        rows: Band rows already made by
+            :func:`visionhousing.features.acs_bands.band_table` (tests); ``None``
+            reads the ACS cells from ``cache``.
+
+    Returns:
+        The table written.
+    """
+    folder, cache = Path(folder), Path(cache)
+    state = folder.name.upper()
+    if rows is None:
+        base = acs.fetch_acs(state, acs.VINTAGE, cache, client=client, manifest=manifest)
+        rows = acs_band_rows(base, state, cache, client=client, method=method, manifest=manifest)
+    tracts = load_pack(folder)["tracts"]
+    table = _bands_for(rows, set(tracts["geoid"].astype(str)))
+    old = json.loads((folder / "pack_manifest.json").read_text(encoding="utf-8"))
+    fips = str(old.get("state_fips") or to_state_fips(state))
+    extract = cache / "acs" / str(acs.VINTAGE) / acs.PROFILE_EXTRACT.format(fips=fips)
+    _rewrite(folder, cache, {"acs_bands": table}, [("acs5_profile_tables", extract)])
+    return table
+
+
+def add_transit_stops(
+    folder: Path,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    manifest: Path | None = mf.MANIFEST_PATH,
+) -> dict[str, pd.DataFrame]:
+    """Rebuild ``transit_stops``, ``transit_feeds`` and the tracts' ``transit_*`` columns in a pack.
+
+    For a pack built before a schedule feed was added (for example a feed from
+    ``assumptions/transit_feeds.yaml``): the transit inputs are read from the
+    cache, fetching only what is missing (:func:`transit_src.fetch_transit`),
+    the stop and feed tables are made exactly as a full build makes them
+    (:func:`_transit_tables`), and the tracts' transit columns are replaced.
+    Every other table stays as it is. Run :func:`add_transit_walk` afterwards,
+    since the walkshed tables read the stop table.
+
+    Returns:
+        The tables written (``transit_stops``, ``transit_feeds``, ``tracts``).
+    """
+    folder, cache = Path(folder), Path(cache)
+    state = folder.name.upper()
+    tracts = load_pack(folder)["tracts"]
+    block_table, _info = blocks.fetch_blocks(state, cache, client=client, manifest=manifest)
+    dropped = set(block_table["tract"].astype(str)) - set(tracts["geoid"].astype(str))
+    lite = blocks.blocks_lite(block_table[~block_table["tract"].astype(str).isin(dropped)])
+    county_shapes, tract_shapes = boundaries.fetch_boundaries(
+        state, cache, client=client, manifest=manifest
+    )
+    transit = transit_src.fetch_transit(
+        state, county_shapes, cache, client=client, manifest=manifest
+    )
+    stops, feeds, features = _transit_tables_from(transit, tract_shapes, lite, tracts)
+    keep = [c for c in tracts.columns if c not in set(features.columns) - {"tract"}]
+    tracts = tracts[keep].merge(
+        features.rename(columns={"tract": "geoid"}), on="geoid", how="left", validate="1:1"
+    )
+    written = {"transit_stops": stops, "transit_feeds": feeds, "tracts": tracts}
+    _rewrite(folder, cache, written, list(transit.files))
+    return written
+
+
+def add_transit_walk(
+    folder: Path,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    manifest: Path | None = mf.MANIFEST_PATH,
+    counties: list[str] | None = None,
+    stop_report: Path | None = None,
+    log: object = print,
+) -> dict[str, pd.DataFrame]:
+    """Add (or refresh) ``transit_walk_tract`` and ``transit_walk_county`` in a built pack.
+
+    Steps (method: :mod:`visionhousing.features.transit_walk`): count peak bus
+    departures from each paired, current schedule feed (cached in
+    ``data/raw/transit/gtfs_<id>_peaks*``); flag rail stops and frequent bus
+    stops; fetch (or reuse) the OpenStreetMap walking network tiles around them
+    (``data/raw/osm/``); draw the dissolved network and straight-line walksheds
+    county by county; cut them by the tract outlines; then rewrite the data
+    dictionary and the pack manifest as a full build would.
+
+    Args:
+        folder: The pack folder (``data/packs/{STATE}``), rewritten in place.
+        cache: The raw-file cache (``data/raw``).
+        client: HTTP client for missing cache files.
+        manifest: The download manifest to record fetches in.
+        counties: Only these counties (a partial table; for checks).
+        stop_report: Write each rail stop's own 1/2-mile walkshed to this CSV.
+        log: Function that prints progress.
+
+    Returns:
+        The tables written.
+    """
+    from visionhousing.data.sources import osm
+    from visionhousing.data.sources import transit_peaks as peaks_src
+    from visionhousing.features import walkshed as ws
+    from visionhousing.ledger import load_ledger
+
+    folder, cache = Path(folder), Path(cache)
+    say = log if callable(log) else (lambda _m: None)
+    old = json.loads((folder / "pack_manifest.json").read_text(encoding="utf-8"))
+    fips = str(old.get("state_fips") or to_state_fips(folder.name.upper()))
+    tables = load_pack(folder)
+    stops, feeds = tables["transit_stops"], tables["transit_feeds"]
+    ledger = load_ledger()
+    rules = walk_fx.load_rules()
+    peak_rule = walk_fx.PeakRule.from_ledger(ledger)
+    walk_rule = ws.WalkRule.from_ledger(ledger)
+    feeds = feeds.fillna({"feed_id": "", "schedule_feed": "", "frequency": ""})
+    wanted = sorted(
+        {
+            str(s).split(".")[0]
+            for f, s, q, b in zip(
+                feeds["feed_id"], feeds["schedule_feed"], feeds["frequency"], feeds["bus_stops"],
+                strict=True,
+            )
+            if str(f) and str(s) and not str(q).startswith("unknown") and int(b or 0) > 0
+        }
+    )  # fmt: skip
+    peaks, notes, peak_files = {}, {}, []
+    for mdb in wanted:
+        table, note = peaks_src.fetch_peaks(mdb, cache, client=client, manifest=manifest)
+        notes[mdb] = note
+        say(f"peaks {mdb}: {note.get('status')} {note.get('date')} ({note.get('day_rule')})")
+        if table is not None:
+            peaks[mdb] = table
+        for name in (f"gtfs_{mdb}_peaks.csv.gz", f"gtfs_{mdb}_peaks_note.json"):
+            if (cache / "transit" / name).exists():
+                peak_files.append(cache / "transit" / name)
+    stops = walk_fx.frequent_bus_stops(stops, feeds, peaks, peak_rule)
+    tract_ids = set(tables["tracts"]["geoid"].astype(str))
+    shapes = [(g, s) for g, s in _tract_shapes(folder, cache, fips) if g in tract_ids]
+    tiles_seen: set[Path] = set()
+
+    def fetch(tiles: list[tuple[int, int]]) -> tuple[list[Path], list[tuple[int, int]]]:
+        got, failed = osm.fetch_tiles(
+            tiles, cache, rules["osm"], client=client, manifest=manifest, log=say
+        )
+        tiles_seen.update(got)
+        return got, failed
+
+    tract, county_net, report = walk_fx.build_transit_walk(
+        stops, shapes, peak_rule, walk_rule, rules, fetch, osm.read_tiles,
+        counties=counties, stop_report=stop_report is not None, log=say,
+    )  # fmt: skip
+    county = walk_fx.county_coverage(stops, notes, feeds).merge(county_net, on="county", how="left")
+    for col in ("fallback_stops", "osm_tiles", "osm_tiles_failed"):
+        county[col] = county[col].fillna(0).astype("int64")
+    county = county[list(walk_fx.COUNTY_COLUMNS)].sort_values("county").reset_index(drop=True)
+    if report is not None and stop_report is not None:
+        Path(stop_report).parent.mkdir(parents=True, exist_ok=True)
+        (report.sort_values("ratio") if len(report) else report).to_csv(stop_report, index=False)
+    index = cache / "osm" / f"tiles_index_{fips}.csv"
+    index.parent.mkdir(parents=True, exist_ok=True)
+    rows = sorted((p.relative_to(cache).as_posix(), sha256_file(p)) for p in tiles_seen)
+    index.write_text("file,sha256\n" + "".join(f"{a},{b}\n" for a, b in rows), encoding="utf-8")
+    gtfs_old = [
+        cache / r["file"]
+        for r in old.get("inputs", [])
+        if r.get("source") == transit_src.SOURCE_GTFS
+    ]
+    new_inputs = [(transit_src.SOURCE_GTFS, p) for p in sorted(set(gtfs_old) | set(peak_files))]
+    new_inputs.append((osm.SOURCE, index))
+    written = {"transit_walk_tract": tract, "transit_walk_county": county}
+    _rewrite(folder, cache, written, new_inputs)
+    return written
+
+
+def add_3a_district_tracts(
+    folder: Path,
+    cache: Path,
+    *,
+    settings: Mapping[str, Any] | None = None,
+    lock: Callable[[], Any] | None = None,
+) -> pd.DataFrame | None:
+    """Add (or refresh) ``mbta_3a_district_tracts``: every tract each 3A district reaches.
+
+    Reads the pack's ``mbta_3a_districts`` outlines and the tract outlines
+    (the cached full-detail file, else the pack's boundaries), links them with
+    :func:`visionhousing.features.ma_intake.district_tract_links` (settings:
+    ``district_tracts`` in ``assumptions/ma_intake.yaml``), then rewrites the
+    data dictionary and the pack manifest as a full build would. No download.
+
+    Args:
+        folder: The pack folder (``data/packs/{STATE}``), rewritten in place.
+        cache: The raw-file cache (``data/raw``).
+        settings: The ``district_tracts`` block (tests); ``None`` reads the file.
+        lock: Optional context-manager factory held only while files are written.
+
+    Returns:
+        The table written, or ``None`` when the pack has no district outlines
+        (every state but Massachusetts): nothing is written then.
+    """
+    import contextlib
+
+    from visionhousing.data.sources.ma_intake import load_settings as ma_settings
+    from visionhousing.features import ma_intake as ma_fx
+
+    folder, cache = Path(folder), Path(cache)
+    path = folder / "mbta_3a_districts.csv.gz"
+    if not path.is_file():
+        return None
+    districts = pd.read_csv(path, dtype={"tract": str, "county": str}, compression="gzip")
+    if districts.empty or "geometry" not in districts.columns:
+        return None
+    rule = dict(settings or ma_settings()["district_tracts"])
+    old = json.loads((folder / "pack_manifest.json").read_text(encoding="utf-8"))
+    fips = str(old.get("state_fips") or to_state_fips(folder.name.upper()))
+    tract_ids = set(pd.read_csv(folder / "tracts.csv.gz", dtype={"geoid": str})["geoid"])
+    shapes = [(g, s) for g, s in _tract_shapes(folder, cache, fips) if g in tract_ids]
+    table = ma_fx.district_tract_links(
+        districts, shapes, cell_m=float(rule["cell_m"]), min_share=float(rule["min_share"])
+    )
+    with lock() if lock is not None else contextlib.nullcontext():
+        _rewrite(folder, cache, {"mbta_3a_district_tracts": table}, [])
+    return table
+
+
+def _tract_shapes(
+    folder: Path, cache: Path, fips: str | None
+) -> list[tuple[str, dict[str, object]]]:
+    """``(tract code, geometry)`` from the cached full-detail file, else the pack's boundaries."""
+    full = cache / "boundaries" / f"cb_2020_{fips}_tract_500k.geojson.gz"
+    if fips and full.exists():
+        return [(s.geoid, s.geometry) for s in boundaries._load_extract(full)]
+    out: list[tuple[str, dict[str, object]]] = []
+    for path in sorted((folder / "boundaries" / "tracts").glob("*.geojson")):
+        for f in json.loads(path.read_text(encoding="utf-8"))["features"]:
+            out.append((str(f["properties"]["geoid"]), f["geometry"]))
+    return out
+
+
+def _read_on(path: Path) -> str | None:
+    """The ``read_on`` date written in a cached extract, if it has one.
+
+    A CSV extract carries it in a ``read_on`` column; a cached JSON layer
+    (``*.json`` or ``*.json.gz``, one long line that must not be parsed as CSV)
+    as a top-level ``read_on`` key.
+    """
+    name = Path(path).name
+    if name.endswith((".json", ".json.gz")):
+        try:
+            opener = gzip.open if name.endswith(".gz") else open
+            with opener(path, "rt", encoding="utf-8") as fh:
+                doc = json.load(fh)
+        except (OSError, ValueError):
+            return None
+        value = doc.get("read_on") if isinstance(doc, dict) else None
+        return str(value) if value else None
+    try:
+        first = pd.read_csv(path, nrows=1, dtype=str)
+    except (OSError, ValueError, pd.errors.EmptyDataError):
+        return None
+    return str(first["read_on"].iloc[0]) if "read_on" in first.columns and len(first) else None

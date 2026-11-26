@@ -100,14 +100,21 @@ def test_the_funnel_narrows_and_units_follow(ctx, tl_tracts):
 
 @pytest.mark.parametrize(
     "zero",
-    [{"tod.upzoned_far": 0.0}, {"tod.upzoned_far": 0.8, "tod.current_far_allowed": 0.8}],
+    [
+        {"tod.upzoned_far": 0.0},
+        {
+            "tod.upzoned_far": 0.8,
+            "tod.current_far_allowed": 0.8,
+            "tod.baseline_replacement_probability": 1.0,
+        },
+    ],
     ids=["far_zero", "far_equal_to_today"],
 )
 def test_zero_upzoning_gives_zero(ctx, tl_tracts, zero):
     fixed = {k: {"central": v, "low": v, "high": v, "shape": "fixed"} for k, v in zero.items()}
     res = run(ctx, tl_tracts, distance=0.75, overrides=fixed)
     assert res.records["eligible"].p50 > 0
-    for stage in ("capacity", "built", "absorbed", "net"):
+    for stage in ("capacity", "built", "absorbed", "authorized", "net"):
         assert np.all(res.stages[stage] == 0)
 
 
@@ -142,8 +149,23 @@ def test_net_new_share_scales_the_headline(ctx, tl_tracts):
     half = {"central": 0.5, "low": 0.5, "high": 0.5, "shape": "fixed"}
     a = run(ctx, tl_tracts, overrides={"tod.net_new_share": full})
     b = run(ctx, tl_tracts, overrides={"tod.net_new_share": half})
-    assert np.allclose(b.stages["net"], 0.5 * a.stages["net"])
-    assert "tod.net_new_share" in a.records["net"].assumption_ids
+    assert np.allclose(b.stages["authorized"], 0.5 * a.stages["authorized"])
+    assert "tod.net_new_share" in a.records["authorized"].assumption_ids
+
+
+def test_gross_is_never_below_net_and_removals_follow_the_land(ctx, tl_tracts):
+    res = run(ctx, tl_tracts, distance=0.75)
+    s = res.stages
+    assert np.all(s["authorized"] >= s["net"] - 1e-9)
+    assert np.all(res.removed >= 0)
+    q1 = {"central": 1.0, "low": 1.0, "high": 1.0, "shape": "fixed"}
+    same = run(
+        ctx, tl_tracts, distance=0.75, overrides={"tod.baseline_replacement_probability": q1}
+    )
+    assert np.allclose(
+        same.stages["net"], same.stages["authorized"]
+    )  # q = 1: every removal is baseline
+    assert "tod.baseline_replacement_probability" in res.records["capacity"].assumption_ids
 
 
 def test_reduced_parking_raises_feasibility(ctx, tl_tracts):
@@ -233,3 +255,62 @@ def test_tod_middle_overlap_is_bounded_by_middle(all_five):
     inside = tod_middle_overlap(middle.result, all_five.reforms["tod"].result)
     assert np.all(inside >= 0)
     assert np.all(inside <= middle.state_draws + 1e-9)
+
+
+# ---------------------------------------------------------------- land already zoned by right
+
+
+def test_land_already_zoned_by_right_comes_off_the_developable_land(ctx, tl_tracts):
+    from visionhousing.scenarios.tod import zoned_land_m2
+
+    scenario = ctx.scenarios["tod"]
+    led = apply_overrides(scenario_ledger(ctx.ledger, scenario), RICH)
+    scope = scope_from_scenario("tod", scenario, "d07")
+    plain = tod_funnel(tl_tracts, led, scope, draws=DRAWS, seed=3)
+    geoids = tl_tracts["geoid"].astype(str)
+    land = tl_tracts[f"transit_land_m2_{scope.suffix}"].to_numpy(dtype=float)
+    big = int(np.argmax(land))
+    districts = pd.DataFrame(
+        {
+            "tract": [geoids.iloc[big], geoids.iloc[big], geoids.iloc[0]],
+            "acres": [5.0, 1e6, 3.0],
+            "capacity_station_area": [10, 0, 5],  # the huge district is outside station areas
+        }
+    )
+    zoned = zoned_land_m2(tl_tracts, districts)
+    assert zoned[big] == pytest.approx((5.0 + (3.0 if big == 0 else 0.0)) * M2_PER_ACRE)
+    assert zoned_land_m2(tl_tracts, None) is None
+    got = tod_funnel(tl_tracts, led, scope, draws=DRAWS, seed=3, zoned_m2=zoned)
+    assert (got.stages["developable"] <= plain.stages["developable"] + 1e-9).all()
+    assert got.stages["developable"].sum() < plain.stages["developable"].sum()
+    assert (got.zoned <= land[None, :] / M2_PER_ACRE + 1e-9).all()  # never more than the land
+    rec = got.records["already_zoned"]
+    assert "Section 3A" in rec.name and "massgis_mbta3a_atlas" in rec.source_ids
+    assert "tod.state_zoned_overlap_share" in got.records["developable"].assumption_ids
+    assert (got.stages["eligible"] == plain.stages["eligible"]).all()
+    assert plain.zoned is None and "already_zoned" not in plain.records
+
+
+def test_no_major_stops_reads_as_a_data_gap_not_a_measured_zero():
+    from visionhousing.engine.adapters import _no_major_stops_note
+    from visionhousing.engine.records import quantity
+    from visionhousing.scenarios.tod import NO_MAJOR_STOPS, decomposition_verdict
+
+    zero = {
+        f"decomp_{c}_{s}": quantity("x", 0.0, "units")
+        for c in ("benchmark", "wider", "lowrise", "lowrise_wider")
+        for s in ("eligible", "authorized")
+    }
+    zero = {k: r.model_copy(update={"p50": 0.0}) for k, r in zero.items()}
+    assert decomposition_verdict(zero, 0).endswith(NO_MAJOR_STOPS)
+    assert "almost no land" in decomposition_verdict(zero, 3)
+    assert "almost no land" in decomposition_verdict(zero)
+    stops = pd.DataFrame(
+        {"mode": ["bus"] * 4 + ["unknown"], "major": [0] * 5,
+         "frequency": ["unknown"] * 4 + ["not_major"]}
+    )  # fmt: skip
+    note = _no_major_stops_note(stops)
+    assert "4 of its 5 stops have an unknown frequency because" in note
+    assert "not a measured zero" in note
+    assert _no_major_stops_note(stops.assign(major=[1, 0, 0, 0, 0])) == ""
+    assert _no_major_stops_note(stops.drop(columns="major")) == ""

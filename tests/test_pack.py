@@ -79,8 +79,13 @@ def test_tables_follow_the_testland_schema(tmp_path):
         assert list(columns) == header, name  # the fixed schema is Testland's, in order
         assert list(tables[name].columns[: len(header)]) == header, name
     assert tables["transit_stops"].empty
-    # Place-profile and local tables are built only when their inputs were fetched.
-    optional = set(pack.place_src.TABLES) | set(pack.local_src.TABLES)
+    # Place-profile and local tables are built only when their inputs were fetched; the
+    # transit walkshed, district, affordability, infrastructure and hazard tables only by
+    # their retrofits.
+    optional = set(pack.place_src.TABLES) | set(pack.local_src.TABLES) | {"acs_bands"}
+    optional |= set(pack.walk_fx.TABLES) | set(pack.district_fx.PACK_TABLES)
+    optional |= set(pack.afford_fx.TABLES) | set(pack.infra_fx.TABLES) | set(pack.hazard_fx.TABLES)
+    optional |= set(pack.law_tables.VERSION_TABLE)  # added by its own step
     assert set(pack.TABLES) - optional <= set(tables) <= set(pack.TABLES)
     tl = fixture_csv("tracts").set_index("geoid")
     tr = tables["tracts"].set_index("geoid")
@@ -142,6 +147,7 @@ def test_load_pack_and_size_report(tmp_path):
 def test_cli_build_and_fetch_print_reports(tmp_path, monkeypatch, capsys):
     inputs = make_inputs(tmp_path)
     monkeypatch.setattr(pack, "load_inputs", lambda state, cache, **kw: inputs)
+    monkeypatch.setattr(pack, "RETROFITS", ())  # the add-on steps need the network
     assert cli.main(["build", "--state", "TL", "--raw", str(tmp_path / "raw"),
                      "--out", str(tmp_path / "packs")]) == 0  # fmt: skip
     out = capsys.readouterr().out
@@ -149,3 +155,86 @@ def test_cli_build_and_fetch_print_reports(tmp_path, monkeypatch, capsys):
     assert (tmp_path / "packs" / "TL" / "data_dictionary.json").exists()
     assert cli.main(["fetch", "--state", "TL", "--raw", str(tmp_path / "raw")]) == 0
     assert "tiger_2020_tabblock" in capsys.readouterr().out
+
+
+def test_full_build_fills_the_law_lot_weights(tmp_path):
+    """The law tables are made before tracts and blocks; the build weighs them afterwards."""
+    from visionhousing.data.local import LocalTables
+    from visionhousing.features.zoning_status import tract_municipalities
+    from visionhousing.law import tables as law
+
+    inputs = make_inputs(tmp_path)
+    counties = sorted(set(inputs.acs_tracts["county"]))
+    munis = pd.DataFrame(
+        [{"county": c, "cousub": "00100", "name": f"Place {i}", "dced_id": str(i),
+          "zoning_regime": "own", "population": 1000} for i, c in enumerate(counties)]
+    )  # fmt: skip
+    b = inputs.blocks
+    baf = pd.DataFrame({"block": b["geoid"], "cousub": "00100"})
+    rules = law.muni_zoning_rules(munis, {"documents": [], "rules": []})
+    assert rules["sf_lots"].isna().all()  # what the local step makes: no weights yet
+    inputs.local = LocalTables(
+        tables={
+            "municipal_planning": munis,
+            "tract_municipalities": tract_municipalities(b, baf),
+            "muni_zoning_rules": rules,
+            "county_land_use": law.county_land_use(munis, {}),
+        }
+    )
+    tables = pack.assemble_tables(inputs)
+    filled = tables["muni_zoning_rules"]
+    assert filled["sf_lots"].notna().all() and filled["sf_lots"].sum() > 0
+    assert filled["sf_lots"].sum() == pytest.approx(
+        tables["tracts"]["units_1_detached"].sum(), abs=len(filled)
+    )
+    land = tables["county_land_use"]
+    assert land["sf_lots"].notna().all() and land["res_land_ha"].notna().all()
+    assert set(land["county_name"]) == set(tables["counties"]["name"])
+
+
+def test_every_dictionary_table_comes_from_the_build_or_an_add_on_step():
+    """`make data` must reproduce the whole pack: no table only a separate command makes."""
+    from_steps = {t for _, tables, _ in pack.RETROFITS for t in tables}
+    base = set(pack.TESTLAND_COLUMNS) | {
+        "transit_feeds", "prices_county", "prices_tract", "hpi_county_year",
+        "mortgage_rates_year", "costs_county", "acs_bands",
+    }  # fmt: skip
+    base |= set(pack.place_src.TABLES) | set(pack.local_src.TABLES) | set(pack.typology_fx.TABLES)
+    assert set(pack.TABLES) <= base | from_steps, set(pack.TABLES) - base - from_steps
+    names = [name for name, _, _ in pack.RETROFITS]
+    assert names.index("districts") < names.index("transit walk")  # order is fixed
+
+
+def _key_columns(table: str) -> list[str]:
+    key = pack.TABLES[table]["key"]
+    return [key] if isinstance(key, str) else list(key)
+
+
+def test_full_build_runs_every_add_on_step_on_testland(tmp_path, monkeypatch):
+    """Each step runs in order on the new pack; the report reads the files back afterwards."""
+    inputs = make_inputs(tmp_path)
+    monkeypatch.setattr(pack, "load_inputs", lambda state, cache, **kw: inputs)
+    ran: list[str] = []
+
+    def fake(name, tables):
+        def step(folder, cache, **kw):
+            ran.append(name)
+            if name == "hazards":
+                raise RuntimeError("offline")
+            frames = {t: pd.DataFrame(columns=_key_columns(t)) for t in tables}
+            pack._rewrite(folder, cache, frames, [])
+
+        return step
+
+    steps = tuple((n, t, fake(n, t)) for n, t, _ in pack.RETROFITS)
+    monkeypatch.setattr(pack, "RETROFITS", steps)
+    report = pack.build_pack("TL", tmp_path / "raw", tmp_path / "packs", manifest=None)
+    assert ran == [n for n, _, _ in steps]
+    written = {f.path for f in report.files}
+    for name, tables, _ in steps:
+        for t in tables:
+            assert (f"{t}.csv.gz" in written) == (name != "hazards"), t
+    assert any(n.startswith("hazards not added") for n in report.notes)
+    assert report.total_bytes == sum(
+        p.stat().st_size for p in report.folder.rglob("*") if p.is_file()
+    )

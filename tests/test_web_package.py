@@ -14,7 +14,13 @@ from pathlib import Path
 import pytest
 
 from visionhousing.api.security import SecurityHeaders, content_security_policy
-from visionhousing.export_static import SIZE_LIMIT_BYTES, folder_size
+from visionhousing.export_static import (
+    GZIP_LIMIT_BYTES,
+    SIZE_LIMIT_BYTES,
+    TRACT_FILE_BUDGET_BYTES,
+    folder_gzip_size,
+    folder_size,
+)
 
 ROOT = Path(__file__).resolve().parent.parent
 WEB = ROOT / "web"
@@ -86,9 +92,27 @@ def test_vercel_sends_the_same_security_headers_as_the_app():
 
 
 def test_static_site_data_stays_under_the_limit():
-    """web/public/data is committed for the static site; it must stay small."""
-    size = folder_size(WEB / "public" / "data")
-    assert size <= SIZE_LIMIT_BYTES, f"web/public/data is {size:,} bytes (limit 30 MB)"
+    """web/public/data is committed for the static site; it must stay small.
+
+    The budget is the compressed size (what git stores and the host sends, 12 MB); the
+    uncompressed size has a hard ceiling (60 MB). Both are set in ``export_static``.
+    """
+    data = WEB / "public" / "data"
+    packed = folder_gzip_size(data)
+    assert packed <= GZIP_LIMIT_BYTES, (
+        f"web/public/data is {packed:,} bytes compressed (budget {GZIP_LIMIT_BYTES:,})"
+    )
+    size = folder_size(data)
+    assert size <= SIZE_LIMIT_BYTES, f"web/public/data is {size:,} bytes (ceiling 60 MB)"
+
+
+def test_tract_column_files_stay_small():
+    """Each statewide tract-column file (points, one scenario's values, one funnel) is small."""
+    data = WEB / "public" / "data"
+    files = [*data.glob("*/tract-points.json"), *data.glob("*/tracts/*.json")]
+    files += data.glob("*/tract-funnel/*.json")
+    big = {f.relative_to(data).as_posix(): f.stat().st_size for f in files}
+    assert {k: v for k, v in big.items() if v > TRACT_FILE_BUDGET_BYTES} == {}
 
 
 def test_build_output_and_installs_are_not_committed_but_data_is():

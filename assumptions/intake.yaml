@@ -1,0 +1,84 @@
+# State intake standard: the settings the intake manifest and the readiness
+# check read. No model number lives here; these are labels and lists.
+#
+# Read by visionhousing.intake (manifest.py, readiness.py); method in
+# docs/modules/intake.md.
+
+version: 1
+id: state_intake_2026_11
+
+# Which permit stage a source counts. Every other source gets the value state
+# "not_applicable" for this field (a census table has no permit stage).
+permit_stage:
+  bps_county_annual: authorization (building permit issued; Census Building Permits Survey)
+  bps_state_annual: authorization (building permit issued; Census Building Permits Survey)
+  bps_place_annual: authorization (building permit issued; Census Building Permits Survey)
+  phl_li_permits: permit issued (city building permit)
+  phl_permits_featureserver: permit issued (city building permit)
+  pgh_pli_permits: permit issued (city building permit)
+  ma_adu_survey: approval (ADU building permit issued, as reported by local building officials)
+  ma_adu_survey_file: approval (ADU building permit issued, as reported by local building officials)
+  ma_3a_development_tracker: proposed to permitted (projects in Section 3A districts)
+  hcd_apr_table_a: application (housing development applications received)
+  hcd_apr_table_a2: entitlement, building permit and certificate of occupancy
+
+# The parameters that set take-up (how many eligible lots act in a year) for
+# each lot-based reform. A parameter counts as measured in a state when a
+# calibration file in assumptions/calibration/ names the state and the
+# parameter, or when assumptions/transfer.yaml lists the state in the rule's
+# measured_in. Otherwise its value rests on evidence from other places: it is
+# transferred.
+takeup_parameters:
+  adu:
+    - adu.takeup_feasible_annual
+    - adu.fit_range_position
+    - adu.already_legal_share
+  missing_middle:
+    - missing_middle.sf_turnover_annual
+    - missing_middle.redevelopment_hazard_annual
+    - missing_middle.sf_only_zoned_share
+  tod:
+    - tod.redevelopment_hazard_annual
+    - tod.developable_share_urban
+
+# Eligible exposure for the two fractions: single-family lots, as the law
+# coverage module counts them (muni_zoning_rules.sf_lots when the pack has the
+# table, else the tract counts below).
+exposure:
+  rules_table: muni_zoning_rules
+  rules_weight: sf_lots
+  verified_status: verified
+  tract_columns: [units_1_detached, units_1_attached]
+
+# The five steps of the state intake and release standard.
+readiness_steps:
+  - id: national_inputs
+    title: National inputs
+    what: >-
+      State id, boundary vintage, permit history with reporting flags, housing
+      and household denominators, cost and price sources, and the data tiers.
+  - id: current_law
+    title: Current law
+    what: >-
+      The state law that bears on each benchmark, with citations and effective
+      dates, and where the benchmark changes the status quo.
+  - id: local_evidence
+    title: Local evidence
+    what: >-
+      Rule coverage from verified local readings, at least one validation set
+      that holds the state out, and reviewed inputs with versions.
+  - id: benchmark_adapter
+    title: Benchmark adapter
+    what: >-
+      A fallback for every input without state data, borrowed ranges widened,
+      and a feed failure kept apart from a true zero.
+  - id: publication
+    title: Publication
+    what: >-
+      The same benchmarks and units as every other state, saved runs with
+      their hashes, and the pack's own hash.
+
+# National tables a pack must carry for step 1, and the benchmark runs a
+# published state must have for step 5.
+national_tables: [counties, tracts, blocks, permits_county_year, costs_county, prices_county]
+benchmark_runs: [baseline, adu, missing_middle, tod, parking, fees, package]

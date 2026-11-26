@@ -1,0 +1,375 @@
+# The outcome contract: what every headline number measures, when, and as of when.
+#
+# Read by visionhousing.engine.outcome. Every result the engine returns carries
+# this contract: the measure and its unit, the window, the as-of date, the data
+# and policy vintages, how enacted rules with a later effective date are
+# handled, the economic conditions held constant, and, for each reform, an
+# audit of its final stage (is it a permit authorization, a start, a
+# completion or a change in the housing stock?).
+#
+# Rules for this file:
+#   - No estimate lives here. Dates and words only; every number a reader sees
+#     comes from the engine.
+#   - Change as_of only when the data packs are rebuilt and the law tables are
+#     re-checked; a run states the as-of date it used.
+
+version: 2
+
+# The date the model is frozen at. Inputs fetched or checked after it are
+# flagged in the run's vintages ("after as-of").
+as_of: "2026-11-24"
+
+measure:
+  name: "additional units authorized by building permits"
+  unit: "units"
+  definition: >-
+    New privately owned housing units authorized by building permits, as the
+    Census Bureau's Building Permits Survey counts them, in the five calendar
+    years 2027-2031. A reform's number is the difference from the baseline in
+    the same unit: permits the reform adds, less permits the baseline would
+    have issued anyway on the same sites. The Building Permits Survey leaves
+    out additions, alterations, renovations and conversions of existing
+    buildings, so a unit created that way is not in this measure.
+  source_ids: [bps_county_annual]
+  gross_net: >-
+    Added units authorized count every new unit that needs a permit. Net added
+    homes subtract the existing homes a project demolishes (the reform's share
+    of them: a demolition that would have happened in the baseline anyway is
+    not the reform's). One house replaced by three homes is three
+    authorizations and two more homes.
+
+# Five record types every reform result carries (engine.outcome.accounting).
+# They keep apart quantities that have different units and different rules,
+# so the outcome cannot change meaning between screens. Words and labels only;
+# every number is worked out per draw by the engine.
+records:
+  baseline_bps:
+    kind: a
+    label: "baseline BPS-compatible authorizations"
+    text: >-
+      New privately owned units authorized in the Census Building Permits
+      Survey universe under current rules, 2027-2031: the formal baseline.
+    flags: >-
+      The survey covers places that issue building permits; a place with no
+      permit requirement is outside it. The Census Bureau imputes figures for
+      permit offices that did not report, and since 2023 it updates the set of
+      permit offices every year. The baseline projects the published figures,
+      imputations included.
+  comparable:
+    kind: b
+    label: "additional comparable authorizations"
+    text: >-
+      Policy minus baseline units in the Building Permits Survey definition, in
+      the same years, geography and simulation draw: the formal effect. Split by
+      work type; the construction classification decides what the survey counts.
+  local_outside_bps:
+    kind: c
+    label: "additional locally authorized units outside the survey definition"
+    text: >-
+      Homes a local permit system authorizes as additions or conversions of an
+      existing building. The survey leaves them out. A companion line, never
+      added to the comparable total.
+    status_unknown_capture: >-
+      Bound: how many of these a local permit system records, and how many a
+      survey respondent reports as new construction, is unknown. Read the line
+      as the most the reform could add outside the survey definition, not a
+      measured count.
+    status_none: "None: this reform creates no home by addition or conversion."
+  net_if_completed:
+    kind: d
+    label: "authorized net change if completed"
+    text: >-
+      New units authorized less the existing homes the same projects
+      demolish, compared with the counterfactual's own new units and
+      demolitions on those sites. It is net authorized capacity: the change in
+      the housing stock if every authorized project is finished. It is not
+      observed stock growth, which needs completion and demolition events by
+      date.
+  timing:
+    kind: e
+    label: "completion and timing ledger"
+    text: >-
+      Authorizations moved into or out of the window by a timing mechanism,
+      the rest newly feasible; observed completions and modelled deliveries
+      kept apart from simulated permits.
+    observed_completions: >-
+      Unavailable: no completion series is read for this state, so no observed
+      completion is reported.
+    modelled_deliveries: >-
+      Not modelled: no completion lag is applied, so no permit is turned into
+      a delivered home here. The authorized net change if completed is the
+      upper limit of what these permits could add to the stock.
+    moved_out_note: >-
+      No mechanism in this reform pushes a permit past 2031; a start delay
+      lowers the total instead (permits not issued are not moved).
+
+# Work types. Every additional authorization is one of these, and the work
+# types add up to the reform's headline in every draw. "bps" says how the
+# Building Permits Survey treats it: comparable (counted), outside (an
+# addition or conversion, left out) or uncertain (depends on how the local
+# office classifies it; the survey's rules for attached units go by
+# structure, so "semi-detached" alone does not decide it).
+work_types:
+  new_standalone:
+    label: "stand-alone new construction (a new building of its own)"
+    bps: comparable
+  new_attached:
+    label: "new attached structure (a new building sharing a wall)"
+    bps: comparable
+  new_unsplit:
+    label: "new construction, structure type not split (the baseline's own mix of new buildings)"
+    bps: comparable
+  addition:
+    label: "addition to an existing building"
+    bps: outside
+  conversion:
+    label: "conversion of space inside an existing building"
+    bps: outside
+  uncertain:
+    label: "classification uncertain (an attached ADU: a new attached structure or an addition)"
+    bps: uncertain
+
+# Work type of every added unit for a reform family whose module does not
+# split its units itself. A module that splits them (ADUs, missing middle)
+# reports its own work-type draws, and this entry is not read.
+family_work_type:
+  tod: new_standalone
+  fees: new_unsplit
+  parking: new_unsplit
+  transit_zoning_funded_infrastructure: new_standalone
+  commercial_land_housing: new_standalone
+  adaptive_reuse: new_standalone
+  starter_home_lots: new_standalone
+  fee_deferral_with_affordability: new_unsplit
+
+# Module records read as "outside the survey" companions for a family (for
+# example adaptive reuse's conversions, which are never in its headline).
+family_local_records:
+  adaptive_reuse:
+    conversion: conversion_homes
+
+# The ADU's legal size condition and its economic prototype are separate.
+# The law sets what may be built; the pro forma prices one prototype.
+adu_size:
+  legal_condition_id: adu.min_size_sqft
+  legal_text: >-
+    The benchmark law allows detached and semi-detached ADUs of at least 600
+    sq ft: a legal capacity condition. The fit test asks whether a 600 sq ft
+    (20 x 30 ft) footprint fits on the lot.
+  prototype_version: "adu_prototype_v1"
+  prototype_size_id: adu.unit_size_sqft
+  prototype_text: >-
+    The economic prototype the pro forma prices is a separate, versioned
+    choice: its floor area is drawn from adu.unit_size_sqft (600-900 sq ft).
+    Changing the prototype changes cost, not what the law allows.
+
+# Economic conditions held at today's levels for the whole window. Each is a
+# ledger entry, so a user can change it and see what moves.
+hold_constant:
+  text: >-
+    Interest rates, construction costs, rents, home values and household
+    incomes are held at the levels in the ledger and the data packs for the
+    whole window (2027-2031). The baseline repeats recent permit trends under
+    today's rules; it does not predict a recession or a boom. Only the ranges
+    of the ledger entries and the baseline's back-tested range carry
+    uncertainty about them.
+  assumption_ids:
+    - econ.mortgage_rate_30y
+    - adu.hard_cost_per_sqft
+    - missing_middle.hard_cost_per_sqft
+    - multifamily.hard_cost_per_sqft
+    - baseline.cycle_quantile_typical
+
+# Rules enacted on or before the as-of date whose effective date is later.
+effective_dates:
+  rule: >-
+    Current law is the law in force on the as-of date. A rule enacted on or
+    before the as-of date with a later effective date is current law from its
+    effective date: when that date falls inside 2027-2031 it is modelled as a
+    reform with a start delay equal to the years between January 1, 2027 and
+    the effective date (the reform's start_delay_years entry), and the run
+    names it. Bills not enacted by the as-of date are scenarios, never
+    baseline. The benchmark reforms are assumed in force on January 1, 2027.
+  start_delay_ids:
+    adu: adu.start_delay_years
+    missing_middle: missing_middle.start_delay_years
+    tod: tod.start_delay_years
+    fees: fees.start_delay_years
+    parking: parking.start_delay_years
+
+# Adoption curve of each reform family, by ledger id: start delay and ramp.
+# The five yearly values are the five-year total x ramp(t) / sum of ramp, so
+# they add up to the total in every draw. For the tract-level reforms the ramp
+# also sets the total (it scales take-up); for the fee cut and the parking
+# reform it only spreads the total, which comes from the supply response.
+timing:
+  adu:
+    start_delay: adu.start_delay_years
+    first_year_share: adu.ramp_first_year_share
+    years_to_full: adu.ramp_years_to_full
+    shapes_total: true
+  missing_middle:
+    start_delay: missing_middle.start_delay_years
+    first_year_share: missing_middle.ramp_first_year_share
+    years_to_full: missing_middle.ramp_years_to_full
+    shapes_total: true
+  tod:
+    start_delay: tod.start_delay_years
+    first_year_share: tod.ramp_first_year_share
+    years_to_full: tod.ramp_years_to_full
+    shapes_total: true
+  fees:
+    start_delay: fees.start_delay_years
+    first_year_share: fees.ramp_first_year_share
+    years_to_full: fees.ramp_years_to_full
+    shapes_total: false
+  parking:
+    start_delay: parking.start_delay_years
+    first_year_share: parking.ramp_first_year_share
+    years_to_full: parking.ramp_years_to_full
+    shapes_total: false
+  # Extra scenarios: each module works out its own yearly shares; these name the ids.
+  transit_zoning_funded_infrastructure:
+    start_delay: tod.start_delay_years
+    first_year_share: tod.ramp_first_year_share
+    years_to_full: tod.ramp_years_to_full
+    shapes_total: true
+  commercial_land_housing:
+    start_delay: commercial.start_delay_years
+    first_year_share: commercial.ramp_first_year_share
+    years_to_full: commercial.ramp_years_to_full
+    shapes_total: true
+  adaptive_reuse:
+    start_delay: commercial.start_delay_years
+    first_year_share: commercial.ramp_first_year_share
+    years_to_full: commercial.ramp_years_to_full
+    shapes_total: true
+  starter_home_lots:
+    start_delay: starter.start_delay_years
+    first_year_share: starter.ramp_first_year_share
+    years_to_full: starter.ramp_years_to_full
+    shapes_total: true
+  fee_deferral_with_affordability:
+    start_delay: fees.start_delay_years
+    first_year_share: fees.ramp_first_year_share
+    years_to_full: fees.ramp_years_to_full
+    shapes_total: false
+
+# What moves an authorization in time rather than creating it. No reform in
+# this version has such a mechanism, so every added authorization is "newly
+# feasible" and none is "shifted into the window"; a run says so.
+shifted_into_window:
+  note: >-
+    No benchmark reform changes how long approvals take, so none moves a permit
+    that would have been issued after 2031 (or before 2027) into the window.
+    Every added authorization is newly feasible under the reform. (The ADU
+    timing variants report their shifted permits apart; docs/methods/adu_levers.md.)
+
+# Audit of every reform's final stage and of the baseline.
+#   final_stage   - the module stage that is the headline
+#   measure       - authorizations | starts | completions | stock
+#   calibration   - what the take-up or response evidence counts
+#   conversion    - how a non-authorization calibration is turned into
+#                   authorization timing (ledger ids), or "none needed"
+audit:
+  baseline:
+    final_stage: "county five-year projection"
+    measure: authorizations
+    calibration: >-
+      Census Building Permits Survey county files (units authorized), the same
+      series the back-test scores.
+    conversion: "none needed"
+  adu:
+    final_stage: net
+    measure: authorizations
+    calibration: >-
+      Take-up evidence is counted in permits: Seattle's permitted ADUs, the
+      Massachusetts tracker's permitted or approved ADUs (approvals that are not
+      yet permits make it a slight overcount), and permits per 100,000 residents.
+    conversion: "none needed"
+    stock_note: "An ADU removes no home, so added authorizations equal net added homes."
+    coverage_note: >-
+      Permit statistics may not count every ADU: an ADU added to an existing
+      house can be filed as an addition or conversion, which the Building
+      Permits Survey leaves out. Read ADU numbers as homes added, of which some
+      may not appear in permit statistics.
+  missing_middle:
+    final_stage: authorized
+    measure: authorizations
+    calibration: >-
+      The yearly redevelopment share is team judgement framed as lots
+      permitted; no starts or completions series was used.
+    conversion: "none needed"
+    stock_note: >-
+      Net added homes subtract the demolished house (missing_middle.demolished_per_project)
+      not already replaced in the baseline (missing_middle.baseline_replacement_probability).
+  tod:
+    final_stage: authorized
+    measure: authorizations
+    calibration: >-
+      The yearly share of feasible sites is framed as sites permitted, and the
+      absorption cap is a share of the baseline's 5+ unit permits.
+    conversion: "none needed"
+    stock_note: >-
+      Net added homes subtract the homes on redeveloped land
+      (2020 block counts) not already replaced in the baseline
+      (tod.baseline_replacement_probability).
+  fees:
+    final_stage: "added units from the fee cut"
+    measure: authorizations
+    calibration: >-
+      The supply response is a percent change in permitted units for a percent
+      change in the value-to-cost margin (supply.elasticity_medium_run), applied
+      to baseline permits.
+    conversion: "none needed"
+    stock_note: "No home is removed; added authorizations equal net added homes."
+  parking:
+    final_stage: "added units from parking reform"
+    measure: authorizations
+    calibration: >-
+      The same supply response as the fee cut, applied to baseline permits, plus
+      the units that fit on land no longer used for parking.
+    conversion: "none needed"
+    stock_note: "No home is removed; added authorizations equal net added homes."
+  transit_zoning_funded_infrastructure:
+    final_stage: total
+    measure: authorizations
+    calibration: >-
+      As the TOD reform (sites permitted, absorption cap on baseline 5+ unit
+      permits); the infrastructure part counts only permits on or after the
+      capacity's in-service date.
+    conversion: "none needed"
+    stock_note: >-
+      Net added homes subtract the homes on redeveloped station-area land, on the
+      same basis as the TOD reform.
+  commercial_land_housing:
+    final_stage: authorized
+    measure: authorizations
+    calibration: >-
+      The yearly share of feasible commercial land is framed as sites permitted
+      (new construction), capped by a share of baseline 5+ unit permits.
+    conversion: "none needed"
+    stock_note: "No home stands on commercial land; added authorizations equal net added homes."
+  adaptive_reuse:
+    final_stage: "none (0 added authorizations; conversions reported apart)"
+    measure: "outside the measure"
+    calibration: >-
+      Conversions of existing office and retail buildings are alterations, which
+      the Building Permits Survey leaves out. They are reported in the separate
+      record conversion_homes and never added to authorizations or a package.
+    conversion: "none: kept outside the BPS-comparable total"
+    stock_note: "Conversions add homes to the stock without new-construction permits."
+  starter_home_lots:
+    final_stage: authorized
+    measure: authorizations
+    calibration: "The yearly split share is team judgement framed as lots permitted."
+    conversion: "none needed"
+    stock_note: >-
+      Net added homes subtract the houses torn down where a lot is split and
+      rebuilt (record replaced), less those the baseline would have replaced.
+  fee_deferral_with_affordability:
+    final_stage: "added units (induced homes) of the headline mode"
+    measure: authorizations
+    calibration: "The same supply response as the fee cut, applied to baseline rental permits."
+    conversion: "none needed"
+    stock_note: "No home is removed; added authorizations equal net added homes."

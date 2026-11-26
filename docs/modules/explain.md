@@ -2,7 +2,7 @@
 
 **What it does.** Turns one engine run into everything a reader sees in words: the one-sentence summary and three numbers, a verdict word per reform, each reform's funnel with what every step means, the top drivers, the package waterfall, what each estimate cannot tell you, the "explain this number" payload for every record, and the slide deck spec.
 
-**Why.** Transparency is the largest part of the score, and every screen, export and document must agree. Explanations are plain text built from the engine's own numbers. There is no AI in the product (decision D-12): no model writes or rewrites any sentence.
+**Why.** Transparency is the largest part of the score, and every screen, export and document must agree. Explanations are plain text built from the engine's own numbers. There is no AI in the product: no model writes or rewrites any sentence.
 
 ## The one rule: every number is cited
 
@@ -32,16 +32,18 @@ The engine keeps full precision; the CSV export does too.
 
 A record's id is its path in `Result.to_dict()`, with dots: `baseline`, `baseline_counties.42003`, `reform_results.adu.added`, `reform_results.adu.pct_change`, `reform_results.adu.steps.2`, `reform_results.adu.records.per_100k`, `reform_results.adu.counties.42003`, `package.combined` (also `sum_of_parts`, `overlap`, `interaction`, `pct_change`), `package.interactions.fees -> adu`, `package.counties.42003`, `total`. `resolve(data, id)` follows an id into the JSON, so anyone holding the JSON can find the number without this code.
 
-Cites can also point at the run's ledger (`ledger:<reform>/<parameter id>`, an empty reform meaning the run's own ledger), at a sensitivity row (`drivers.<reform>.<rank - 1>`), at a source (`source:<id>`) or at a county name (`county:<geoid>`).
+Cites can also point at a variance share (`uncertainty.<reform>.<i>`, fields `share`, `shrink`, `label`; `uncertainty.<reform>.leftover`), at the run's ledger (`ledger:<reform>/<parameter id>`, an empty reform meaning the run's own ledger), at a sensitivity row (`drivers.<reform>.<rank - 1>`), at a source (`source:<id>`) or at a county name (`county:<geoid>`).
 
 ## What `explain(result)` returns (`payload.py`)
 
 | Key | Contents |
 |---|---|
-| `headline` | The one sentence and three numbers: baseline five-year homes, homes added, percent change, each P10 / P50 / P90 |
+| `headline` | The one sentence and three numbers: baseline five-year homes, homes added, percent change, each P10 / P50 / P90; `frequency`, the same range said as "In eight of ten simulated futures …" |
 | `verdicts` | Per reform: the word, the middle-estimate percent, and a sentence saying which rule picked it |
 | `funnels` | Per reform: each step's label, plain meaning, range (or central value), rounded form, formula and tier |
 | `drivers` | Per reform: the top five tornado inputs, with values at low and high and one sentence each |
+| `readouts` | Per reform (`readouts.py`): `frequency` ("In eight of ten simulated futures, this reform adds between X and Y homes"), `paired` (the paired sentence with both widths), `chances` (one sentence per ledger threshold), `share_of_baseline`, `added_label`, and `cost` (`framing`, `texts`, `state_fees`, `targeted`) |
+| `narrowing` | Per reform: each input's share of the uncertainty with a sentence, the leftover "interactions and noise", and `agenda`: "Knowing X would shrink the range by about Y%" for the top inputs (`explain.agenda_inputs`) |
 | `waterfall` | Sum of parts, overlap removed, interaction added, combined; each reform's part; each interaction |
 | `limits` | "What this cannot tell you": general, baseline, package and each reform, from `assumptions/limits.yaml` |
 | `numbers` | "Explain this number" for every record id: formula, inputs, assumption ids with labels, source ids, range, tier and tier label |
@@ -54,6 +56,16 @@ Cites can also point at the run's ledger (`ledger:<reform>/<parameter id>`, an e
 > Over {years}, {state} would likely permit between {P10} and {P90} more homes ({pct P10}–{pct P90}%) with {reforms}, on top of a baseline of {baseline P10}–{baseline P90} homes expected under today's rules.
 
 The reforms read as "accessory dwelling units (ADUs) allowed", "development fees cut in half", "parking minimums removed", "two to six homes allowed on single-family lots"; a bill reads as "Pennsylvania HB 2186 passed".
+
+### Frequency wording and the paired sentence
+
+A P10–P90 range holds eight in ten draws, so it is also written "In eight of ten simulated futures, between X and Y homes". The words carry no typed figure; X and Y cite the record's P10 and P90.
+
+The paired sentence picks its first clause by the width ratio of `engine.readouts`: under `explain.paired_much_less_ratio`, "The future level of building is uncertain; the reform's effect on it is much less so"; under one, "… less so"; otherwise "The reform's effect is about as uncertain as the future level of building". It then gives both widths and the share of the baseline.
+
+### ADU wording
+
+Permit statistics do not count ADUs consistently (many towns permit them as additions or conversions, which the national survey does not count as new homes). Wherever homes added by an ADU reform are named (the frequency sentence, the reform's big-number label, the package's "homes added" label when an ADU reform is in it), the words say "homes added, of which some may not appear in permit statistics" (`wording.added_label`). The ADU limits list says the same.
 
 ### Verdict words
 
@@ -72,7 +84,7 @@ Only missing middle can overlap today: when ADUs and missing middle are both on,
 
 The ADU and missing-middle reforms report each step as a range. The fee and parking reforms work one central-value chain and sample the whole chain separately, so their steps are central values and the funnel adds a last row with the likely range. What each step means is written in `wording.py` (no figures).
 
-## Slides (`slides.py`, decision D-22)
+## Slides (`slides.py`)
 
 An ordered list, the same JSON the web `#/slides` route draws:
 
@@ -110,3 +122,7 @@ for key, v in e["verdicts"].items():
 - Funnels follow the engine's steps; every known step has a meaning; drivers equal the sensitivity module's top five; the waterfall equals the package records.
 - The limits file loads, extends, and refuses figures and cycles.
 - The same run gives the same explanation, byte for byte.
+
+## The question box reads this payload
+
+The question box ("Ask about this run", `api/answers.py` and its browser twin `web/js/lib/answers.js`) answers from the records this module writes: `numbers` (each record's `shown` P10 / P50 / P90, name, unit, formula and sources), `drivers` (the sentences and their cited shown values), `sources` and `stamp`. It copies text only; it never rounds or computes a number of its own. See [api.md](api.md#question-box).

@@ -1,0 +1,1033 @@
+# Discovery list for the cross-state panel: candidate reforms NOT yet read in
+# official text, and the trackers used to find them with what their terms allow.
+#
+# Trackers are for finding, never for citing. Where a tracker's terms are unclear
+# it is only linked: nothing from it is fetched by script or kept here beyond a
+# short label we wrote. Each entry counts as "discovered_unreviewed" in the
+# completeness matrix until a verified record replaces it. The note field says
+# which record (if any) has since read the candidate in official text.
+# Format: src/visionhousing/evidence/schema.py (Tracker, DiscoveryEntry).
+
+version: 1
+trackers:
+- id: nyu_furman
+  name: NYU Furman Center Land Use Reform Tracker
+  url: https://www.furmancenter.org/land-use-reform-tracker/
+  terms_url: null
+  programmatic_use: unclear
+  terms_summary: No terms of use, data licence or reuse statement found; the site answered automated requests
+    with 403. Linked only; no tracker data fetched or kept.
+  checked_on: '2026-11-24'
+- id: aei
+  name: AEI Housing Center State Housing Supply Legislation Tracker
+  url: https://heat.aeihousingcenter.org/toolkit/tracker
+  terms_url: https://www.aei.org/about/terms-of-use/
+  programmatic_use: unclear
+  terms_summary: The linked terms page shows only a privacy policy, with nothing on reuse or automated
+    access (a permissive robots file is not a licence). Linked only; no tracker data fetched or kept.
+  checked_on: '2026-11-24'
+- id: open_states
+  name: Open States (Plural Policy)
+  url: https://open.pluralpolicy.com/data/
+  terms_url: https://open.pluralpolicy.com/tos/
+  programmatic_use: allowed
+  terms_summary: Open States terms cover the API and bulk data, make no copyright claim over the data
+    and require no attribution (no implied endorsement); the data page states a public domain dedication
+    unless noted. The API needs a key. Not fetched for this panel.
+  checked_on: '2026-11-24'
+- id: pew_2026
+  name: Pew Charitable Trusts 2026 state housing policy review
+  url: https://www.pew.org/en/research-and-analysis
+  terms_url: null
+  programmatic_use: unclear
+  terms_summary: Read as an ordinary web page for discovery only (its links point to legislature pages);
+    terms for automated reuse not checked, so nothing is fetched by script.
+  checked_on: '2026-11-24'
+entries:
+- state: WA
+  policy_type: commercial_land_housing
+  label: SB 6026 (2026) mid-rise housing in commercial/mixed-use zones
+  year: 2026
+  discovered_via: pew_2026
+  link: https://app.leg.wa.gov/billsummary?BillNumber=6026&Year=2025
+  note: "reviewed 2026-11-24: verified record wa.sb6026_2026_commercial_zones"
+- state: NH
+  policy_type: commercial_land_housing
+  label: HB 1588 (2026) multifamily on commercial land and conversions
+  year: 2026
+  discovered_via: pew_2026
+  link: https://gc.nh.gov/bill_status/billinfo.aspx?id=2446&inflect=2
+  note: "reviewed 2026-11-24: verified record nh.hb1588_2026_parking_commercial"
+- state: NC
+  policy_type: commercial_land_housing
+  label: 'S 445 (2026) Regulatory Reform Act: 60-ft multifamily on commercial land in large cities'
+  year: 2026
+  discovered_via: pew_2026
+  link: https://www.ncleg.gov/BillLookUp/2025/S445
+  note: "reviewed 2026-11-24: verified record nc.sl2026_59_commercial"
+- state: NC
+  policy_type: adu
+  label: S 445 (2026) ADUs required in cities of 50,000+
+  year: 2026
+  discovered_via: pew_2026
+  link: https://www.ncleg.gov/BillLookUp/2025/S445
+  note: "reviewed 2026-11-24: verified record nc.sl2026_59_adu"
+- state: CA
+  policy_type: tod
+  label: AB 2074 (2026) transit-hub districts allowing tall apartments
+  year: 2026
+  discovered_via: pew_2026
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB2074
+  note: "reviewed 2026-11-24: verified record ca.ab2074_2026_transit_hubs"
+- state: CO
+  policy_type: tod
+  label: HB 26-1065 (2026) TOD and affordable housing investment zones
+  year: 2026
+  discovered_via: pew_2026
+  link: https://leg.colorado.gov/bills/HB26-1065
+  note: "reviewed 2026-11-24: verified record co.hb26_1065"
+- state: AZ
+  policy_type: infrastructure_finance
+  label: HB 2999 (2026) infrastructure finance districts for large housing projects
+  year: 2026
+  discovered_via: pew_2026
+  link: https://apps.azleg.gov/BillStatus/BillOverview/85512
+  note: "reviewed 2026-11-24: verified record az.hb2999_2026_said"
+- state: WV
+  policy_type: adu
+  label: SB 659 (2026) ADU rights and limits on local restrictions
+  year: 2026
+  discovered_via: pew_2026
+  link: https://www.wvlegislature.gov/bill_status/bills_history.cfm?btype=bill&input=659&sessiontype=rs&year=2026
+  note: "read 2026-11-24, not verified: record wv.sb659_2026_adu (see its verification_note)"
+- state: VA
+  policy_type: adu
+  label: SB 531 (2026) ADUs allowed where no local ADU ordinance
+  year: 2026
+  discovered_via: pew_2026
+  link: https://lis.virginia.gov/bill-details/20261/SB531/text/CHAP0895
+  note: "reviewed 2026-11-24: verified record va.ch895_2026_adu"
+- state: ID
+  policy_type: adu
+  label: S 1354 (2026) by-right ADUs, parking cap
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.idaho.gov/sessioninfo/2026/legislation/S1354/
+  note: "reviewed 2026-11-24: verified record id.s1354_2026_adu"
+- state: ID
+  policy_type: starter_lots
+  label: H 707 (2026) lot split for home plus ADU
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0707/
+  note: "reviewed 2026-11-24: verified record id.h707_2026_adu_financing_split"
+- state: AZ
+  policy_type: fees
+  label: HB 2946 (2026) limits development/impact fees for ADUs
+  year: 2026
+  discovered_via: pew_2026
+  link: https://apps.azleg.gov/BillStatus/BillOverview/85065
+  note: "reviewed 2026-11-24: verified record az.hb2946_2026_adu_fees"
+- state: ME
+  policy_type: adu
+  label: LD 128 (2026) ADUs exempt from environmental review; small multifamily streamlining
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.maine.gov/billtracker/#Paper/SP0057?legislature=132
+  note: "reviewed 2026-11-24: verified record me.pl2025_c554_ld128"
+- state: ME
+  policy_type: adu
+  label: LD 2173 (2026) ADUs without planning board approval; lot size and lot splits
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.maine.gov/backend/App/services/getDocument.aspx?documentId=124374
+  note: "reviewed 2026-11-24: verified record me.pl2025_c733_ld2173"
+- state: WA
+  policy_type: adu
+  label: HB 1345 (2026) ADUs outside urban growth areas
+  year: 2026
+  discovered_via: pew_2026
+  link: https://app.leg.wa.gov/billsummary?BillNumber=1345&Year=2025
+  note: "reviewed 2026-11-24: verified record wa.hb1345_2026_rural_dadu"
+- state: NC
+  policy_type: parking
+  label: H 162 (2026) removes parking mandates in most of the state
+  year: 2026
+  discovered_via: pew_2026
+  link: https://www.ncleg.gov/billlookup/2025/h162
+  note: "reviewed 2026-11-24: verified record nc.sl2026_39_parking"
+- state: MD
+  policy_type: parking
+  label: HB 894 (2026) eases parking near train stations
+  year: 2026
+  discovered_via: pew_2026
+  link: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0894?ys=2026RS
+  note: "reviewed 2026-11-24: verified record md.ch592_2026_transit_housing"
+- state: VA
+  policy_type: parking
+  label: HB 888 (2026) reduces parking mandates near transit
+  year: 2026
+  discovered_via: pew_2026
+  link: https://lis.virginia.gov/bill-details/20261/HB888
+  note: "reviewed 2026-11-24: verified record va.ch1075_2026_parking_transit"
+- state: KS
+  policy_type: starter_lots
+  label: SB 418 (2026) starter homes on 3,000 sq ft lots, by-right
+  year: 2026
+  discovered_via: pew_2026
+  link: https://www.kslegislature.gov/b2025_26/bills/sb418/
+  note: "reviewed 2026-11-24: verified record ks.sb418_2026_by_right_housing"
+- state: ID
+  policy_type: starter_lots
+  label: S 1352 (2026) smaller minimum lots in new subdivisions
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.idaho.gov/sessioninfo/2026/legislation/S1352/
+  note: "reviewed 2026-11-24: verified record id.s1352_2026_starter_home_subdivisions"
+- state: CA
+  policy_type: starter_lots
+  label: SB 1116 (2026) Starter Home Revitalization Act expansion
+  year: 2026
+  discovered_via: pew_2026
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB1116
+  note: "reviewed 2026-11-24: verified record ca.sb1116_2026_starter_homes"
+- state: FL
+  policy_type: commercial_land_housing
+  label: HB 1389 (2026) housing on religious-institution land
+  year: 2026
+  discovered_via: pew_2026
+  link: https://flsenate.gov/Session/Bill/2026/1389
+  note: "reviewed 2026-11-24: verified record fl.hb1389_2026_live_local_public_religious_land"
+- state: KY
+  policy_type: commercial_land_housing
+  label: HB 333 (2026) housing on religious-institution land
+  year: 2026
+  discovered_via: pew_2026
+  link: https://apps.legislature.ky.gov/record/26rs/hb333.html
+  note: "reviewed 2026-11-24: verified record ky.hb333_2026_religious_land_housing"
+- state: VA
+  policy_type: commercial_land_housing
+  label: HB 1279 (2026) housing on religious-institution land
+  year: 2026
+  discovered_via: pew_2026
+  link: https://lis.virginia.gov/bill-details/20261/HB1279
+  note: "reviewed 2026-11-24: verified record va.ch1009_1096_2026_faith_land"
+- state: CO
+  policy_type: commercial_land_housing
+  label: HB 26-1001 (2026) housing on nonprofit and school land
+  year: 2026
+  discovered_via: pew_2026
+  link: https://leg.colorado.gov/bills/HB26-1001
+  note: "reviewed 2026-11-24: verified record co.hb26_1001_qualifying_properties"
+- state: ID
+  policy_type: permit_timing
+  label: H 585 (2026) trade-permit shot clocks and third-party inspection
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0585/
+  note: "reviewed 2026-11-24: verified record id.h585_2026_inspection_timing"
+- state: AZ
+  policy_type: permit_timing
+  label: SB 1566 (2026) bars unreasonable development delays
+  year: 2026
+  discovered_via: pew_2026
+  link: https://apps.azleg.gov/BillStatus/BillOverview/85181
+  note: "reviewed 2026-11-24: verified record az.sb1566_2026_malicious_delay"
+- state: MD
+  policy_type: permit_timing
+  label: HB 548 (2026) rules vested at application
+  year: 2026
+  discovered_via: pew_2026
+  link: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0548?ys=2026RS
+  note: "reviewed 2026-11-24: verified record md.ch590_591_2026_housing_certainty"
+- state: DE
+  policy_type: permit_timing
+  label: SB 23 (2026) zoning maps conform to comp plan within 12 months; streamlining
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legis.delaware.gov/json/BillDetail/GenerateHtmlDocument?legislationId=143471&legislationTypeId=6&docTypeId=2&legislationName=SS2forSB23
+  note: "reviewed 2026-11-24: verified record de.85ch343_2026_housing_for_every_delawarean"  # secret-scan: allow (public record id)
+- state: NY
+  policy_type: permit_timing
+  label: A 10008 (2026) limits environmental review for infill housing
+  year: 2026
+  discovered_via: pew_2026
+  link: https://nyassembly.gov/leg/?term=2025&bn=A10008
+  note: "reviewed 2026-11-24: verified record ny.ch58_2026_seqra_housing"
+- state: MI
+  policy_type: missing_middle
+  label: HB 5570 / HB 5571 (2026) single-stair height limit raised
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.mi.gov/Bills/Bill?ObjectName=2026-HB-5570
+  note: "reviewed 2026-11-24: verified record mi.pa2026_28_29_single_stair"
+- state: ID
+  policy_type: missing_middle
+  label: H 706 (2026) single-stair buildings
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0706/
+  note: "reviewed 2026-11-24: verified record id.h706_2026_single_stair"
+- state: WA
+  policy_type: missing_middle
+  label: SB 5156 (2026) smaller elevators code review
+  year: 2026
+  discovered_via: pew_2026
+  link: https://app.leg.wa.gov/billsummary?BillNumber=5156&Initiative=false&Year=2025
+  note: "reviewed 2026-11-24: verified record wa.sb5156_2026_small_elevators"
+- state: WA
+  policy_type: missing_middle
+  label: SB 6001 (2026) scissor stairs code amendments
+  year: 2026
+  discovered_via: pew_2026
+  link: https://app.leg.wa.gov/BillSummary/?BillNumber=6001&Year=2025&Initiative=false
+  note: "reviewed 2026-11-24: verified record wa.sb6001_2026_scissor_stairs, wa.hb2228_2026_scissor_stairs"
+- state: FL
+  policy_type: starter_lots
+  label: HB 803 (2026) manufactured housing
+  year: 2026
+  discovered_via: pew_2026
+  link: https://flsenate.gov/Session/Bill/2026/803
+  note: "reviewed 2026-11-24: verified record fl.hb803_2026_permits_offsite_homes"
+- state: ID
+  policy_type: starter_lots
+  label: HB 800 (2026) manufactured housing
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0800/
+  note: "reviewed 2026-11-24: verified record id.h800_2026_manufactured_homes"
+- state: ME
+  policy_type: starter_lots
+  label: LD 2231 (2026) manufactured homes on leased land as real property
+  year: 2026
+  discovered_via: pew_2026
+  link: https://legislature.maine.gov/billtracker/#Paper/HP1506?legislature=132
+  note: "reviewed 2026-11-24: verified record me.pl2025_c691_ld2231"
+- state: VA
+  policy_type: starter_lots
+  label: SB 346 / HB 655 (2026) manufactured homes treated like site-built
+  year: 2026
+  discovered_via: pew_2026
+  link: https://lis.virginia.gov/bill-details/20261/HB655
+  note: "reviewed 2026-11-24: verified record va.ch19_2026_manufactured_homes"
+- state: TX
+  policy_type: commercial_land_housing
+  label: SB 840 (2025) apartments in commercial zones of large cities
+  year: 2025
+  discovered_via: search
+  link: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB840
+  note: "reviewed 2026-11-24: verified record tx.sb840_2025"
+- state: TX
+  policy_type: adaptive_reuse
+  label: SB 2477 (2025) office-to-residential conversions without rezoning/parking
+  year: 2025
+  discovered_via: search
+  link: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB2477
+  note: "reviewed 2026-11-24: verified record tx.sb2477_2025_office_conversion"
+- state: AZ
+  policy_type: commercial_land_housing
+  label: HB 2110 (2025) multifamily on 10% of commercial land in large cities
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/AZ/bill/HB2110/2025
+  note: "reviewed 2026-11-24: verified record az.hb2110_2025_commercial_reuse"
+- state: NH
+  policy_type: commercial_land_housing
+  label: HB 631 (2025) residential use in commercial zones
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/NH/bill/HB631/2025
+  note: "reviewed 2026-11-24: verified record nh.hb631_2025"
+- state: RI
+  policy_type: commercial_land_housing
+  label: H 5800 (2025) residential in commercial zones
+  year: 2025
+  discovered_via: search
+  link: https://webserver.rilegislature.gov/BillText/BillText25/HouseText25/H5800.pdf
+  note: "reviewed 2026-11-24: verified record ri.pl2025_c260_commercial"
+- state: ME
+  policy_type: commercial_land_housing
+  label: LD 997 (2025) residential in commercial zones
+  year: 2025
+  discovered_via: search
+  link: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=997&snum=132
+  note: "reviewed 2026-11-24: verified record me.pl2025_c364_ld997"
+- state: MT
+  policy_type: commercial_land_housing
+  label: SB 243 (2025) 60-ft apartments in commercial/industrial zones
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/MT/bill/SB243/2025
+  note: "reviewed 2026-11-24: verified record mt.sb243_2025_height"
+- state: NV
+  policy_type: commercial_land_housing
+  label: AB 241 (2025) by-right multifamily/mixed use in commercial areas
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/NV/bill/AB241/2025
+  note: "reviewed 2026-11-24: verified record nv.ab241_2025_commercial_byright"
+- state: WA
+  policy_type: tod
+  label: HB 1491 (2025) transit-oriented housing near rail and BRT
+  year: 2025
+  discovered_via: search
+  link: https://app.leg.wa.gov/billsummary?BillNumber=1491&Year=2025
+  note: "reviewed 2026-11-24: verified record wa.hb1491_2025_tod"
+- state: HI
+  policy_type: tod
+  label: HB 1409 (2025) incentives for housing near transit
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/HI/bill/HB1409/2025
+  note: "read 2026-11-24, not verified: record hi.hb1409_2025 (see its verification_note)"
+- state: TX
+  policy_type: starter_lots
+  label: SB 15 (2025) Starter Homes Act, 3,000 sq ft lots
+  year: 2025
+  discovered_via: search
+  link: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB15
+  note: "reviewed 2026-11-24: verified record tx.sb15_2025"
+- state: RI
+  policy_type: missing_middle
+  label: H 5798 (2025) townhomes in more areas
+  year: 2025
+  discovered_via: search
+  link: https://webserver.rilegislature.gov/BillText/BillText25/HouseText25/H5798.pdf
+  note: "reviewed 2026-11-24: verified record ri.pl2025_c262_townhouses"
+- state: WA
+  policy_type: starter_lots
+  label: HB 1096 (2025) streamlined lot splits
+  year: 2025
+  discovered_via: search
+  link: https://app.leg.wa.gov/BillSummary/?BillNumber=1096&Year=2025
+  note: "reviewed 2026-11-24: verified record wa.hb1096_2025_lot_split"
+- state: OR
+  policy_type: missing_middle
+  label: HB 2138 (2025) middle housing and lot-split expansion
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/OR/bill/HB2138/2025
+  note: "reviewed 2026-11-24: verified record or.hb2138_2025_middle_housing"
+- state: RI
+  policy_type: starter_lots
+  label: H 5794 (2025) streamlined subdivisions/lot splits
+  year: 2025
+  discovered_via: search
+  link: https://webserver.rilegislature.gov/BillText/BillText25/HouseText25/H5794.pdf
+  note: "reviewed 2026-11-24: verified record ri.pl2025_c289_subdivisions"
+- state: KY
+  policy_type: starter_lots
+  label: HB 160 (2025) manufactured housing zoning parity
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/KY/bill/HB160/2025
+  note: "reviewed 2026-11-24: verified record ky.hb160_2025_manufactured_home_parity"  # secret-scan: allow (public record id)
+- state: MT
+  policy_type: starter_lots
+  label: SB 252 (2025) manufactured housing zoning parity
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/MT/bill/SB252/2025
+  note: "reviewed 2026-11-24: verified record mt.sb252_2025_manufactured"
+- state: TX
+  policy_type: starter_lots
+  label: SB 785 (2025) expands where manufactured housing allowed
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/TX/bill/SB785/2025
+  note: "reviewed 2026-11-24: verified record tx.sb785_2025_manufactured_housing"
+- state: ME
+  policy_type: starter_lots
+  label: LD 1829 (2025) 5,000 sq ft lot cap, 3-4 units per lot, ADU changes
+  year: 2025
+  discovered_via: search
+  link: https://www.mainelegislature.org/LawMakerWeb/summary.asp?ID=280098944
+  note: "reviewed 2026-11-24: verified record me.pl2025_c385_ld1829"
+- state: ME
+  policy_type: water_compliance
+  label: LD 1829 (2025) streamlined wastewater certification
+  year: 2025
+  discovered_via: search
+  link: https://www.mainelegislature.org/LawMakerWeb/summary.asp?ID=280098944
+  note: "reviewed 2026-11-24: verified record me.pl2025_c385_ld1829"
+- state: WA
+  policy_type: parking
+  label: SB 5184 (2025) parking caps statewide
+  year: 2025
+  discovered_via: search
+  link: https://app.leg.wa.gov/billsummary?BillNumber=5184&Year=2025
+  note: "reviewed 2026-11-24: verified record wa.sb5184_2025_parking"
+- state: MT
+  policy_type: parking
+  label: HB 492 (2025) removes parking mandates for many homes
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/MT/bill/HB492/2025
+  note: "reviewed 2026-11-24: verified record mt.hb492_2025_parking"
+- state: NH
+  policy_type: parking
+  label: SB 284 (2025) one-space-per-home parking cap
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/NH/bill/SB284/2025
+  note: "reviewed 2026-11-24: verified record nh.sb284_2025_parking_cap"
+- state: MT
+  policy_type: missing_middle
+  label: SB 213 (2025) single-stair buildings
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/MT/bill/SB213/2025
+  note: "reviewed 2026-11-24: verified record mt.sb213_2025_single_stair"
+- state: TX
+  policy_type: missing_middle
+  label: SB 2835 (2025) single-stair buildings
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/TX/bill/SB2835/2025
+  note: "reviewed 2026-11-24: verified record tx.sb2835_2025_single_stair"
+- state: CO
+  policy_type: missing_middle
+  label: HB 25-1273 (2025) single-stair buildings
+  year: 2025
+  discovered_via: search
+  link: https://leg.colorado.gov/bills/hb25-1273
+  note: "reviewed 2026-11-24: verified record co.hb25_1273_single_stair"
+- state: NH
+  policy_type: missing_middle
+  label: SB 282 (2025) single-stair up to four stories
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/NH/bill/SB282/2025
+  note: "reviewed 2026-11-24: verified record nh.sb282_2025_single_stair"
+- state: RI
+  policy_type: missing_middle
+  label: H 5804 (2025) 3-4 family homes under residential code
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/RI/bill/H5804/2025
+  note: "reviewed 2026-11-24: verified record ri.pl2025_c276_residential_code"
+- state: AZ
+  policy_type: adu
+  label: HB 2928 (2025) ADUs in unincorporated county areas
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/AZ/bill/HB2928/2025
+  note: "reviewed 2026-11-24: verified record az.hb2928_2025_county_adu"
+- state: MD
+  policy_type: adu
+  label: HB 1466 (2025) all jurisdictions must permit ADUs
+  year: 2025
+  discovered_via: search
+  link: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb1466?ys=2025RS
+  note: "reviewed 2026-11-24: verified record md.ch197_2025_adu"
+- state: NV
+  policy_type: adu
+  label: AB 396 (2025) ADUs in two most populous counties
+  year: 2025
+  discovered_via: search
+  link: https://www.leg.state.nv.us/App/NELIS/REL/83rd2025/Bill/12561/Overview
+  note: "reviewed 2026-11-24: verified record nv.ab396_2025_adu"
+- state: NH
+  policy_type: adu
+  label: HB 577 (2025) detached ADUs by right, parking cap
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/NH/bill/HB577/2025
+  note: "reviewed 2026-11-24: verified record nh.hb577_2025_detached_adu"
+- state: AR
+  policy_type: adu
+  label: Act 313 (2025, HB 1503) ADUs on single-family lots
+  year: 2025
+  discovered_via: search
+  link: https://arkleg.state.ar.us/Bills/Detail?id=HB1503&ddBienniumSession=2025%2F2025R
+  note: "reviewed 2026-11-24: verified record ar.act313_2025_adu"
+- state: IA
+  policy_type: adu
+  label: SF 592 (2025) ADUs on single-family lots
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/IA/bill/SF592/2025
+  note: "reviewed 2026-11-24: verified record ia.sf592_2025_adu"
+- state: AZ
+  policy_type: permit_timing
+  label: SB 1353 (2025) third-party permit approval
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/AZ/bill/SB1353/2025
+  note: "reviewed 2026-11-24: verified record az.sb1353_2025_third_party_review"
+- state: RI
+  policy_type: permit_timing
+  label: H 5803 (2025) statewide e-permitting
+  year: 2025
+  discovered_via: search
+  link: https://webserver.rilegislature.gov/BillText/BillText25/HouseText25/H5803.pdf
+  note: "reviewed 2026-11-24: verified record ri.pl2025_c365_epermitting"
+- state: HI
+  policy_type: permit_timing
+  label: HB 1406 (2025) state/county review redundancy task force
+  year: 2025
+  discovered_via: search
+  link: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HB&billnumber=1406&year=2025
+  note: "read 2026-11-24, not verified: record hi.hb1406_2025 (see its verification_note)"
+- state: TX
+  policy_type: permit_timing
+  label: HB 24 (2025) limits small-minority protests of rezonings
+  year: 2025
+  discovered_via: search
+  link: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=HB24
+  note: "reviewed 2026-11-24: verified record tx.hb24_2025_zoning_protest"
+- state: CA
+  policy_type: permit_timing
+  label: AB 130 (2025) CEQA exemption for urban infill housing
+  year: 2025
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billTextClient.xhtml?bill_id=202520260AB130
+  note: "reviewed 2026-11-24: verified record ca.ab130_2025_infill_ceqa"
+- state: AZ
+  policy_type: permit_timing
+  label: SB 1529 (2025) preapproved housing plans
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/AZ/bill/SB1529/2025
+  note: "reviewed 2026-11-24: verified record az.sb1529_2025_preapproved_plans"
+- state: OR
+  policy_type: permit_timing
+  label: HB 2258 (2025) state preapproved plans up to 12 units
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/OR/bill/HB2258/2025
+  note: "reviewed 2026-11-24: verified record or.hb2258_2025_preapproved_plans"
+- state: HI
+  policy_type: missing_middle
+  label: HB 420 (2025) condo liability reform
+  year: 2025
+  discovered_via: search
+  link: https://legiscan.com/HI/bill/HB420/2025
+  note: "read 2026-11-24, not verified: record hi.hb420_2025 (see its verification_note)"
+- state: CO
+  policy_type: missing_middle
+  label: HB 25-1272 (2025) condo construction-defect reform
+  year: 2025
+  discovered_via: search
+  link: https://leg.colorado.gov/bills/hb25-1272
+  note: "reviewed 2026-11-24: verified record co.hb25_1272_construction_defects"
+- state: CA
+  policy_type: adu
+  label: AB 956 (2026) two detached ADUs per single-family lot
+  year: 2026
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB956
+  note: "reviewed 2026-11-24: verified record ca.ab956_2026_two_detached_adus"
+- state: CA
+  policy_type: missing_middle
+  label: SB 9 (2021) HOME Act duplexes and lot splits
+  year: 2021
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220SB9
+  note: "reviewed 2026-11-24: verified record ca.sb9_2021_two_unit, ca.sb9_2021_lot_split"
+- state: CA
+  policy_type: parking
+  label: AB 2097 (2022) no parking minimums near major transit
+  year: 2022
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220AB2097
+  note: "reviewed 2026-11-24: verified record ca.ab2097_2022_parking_transit"
+- state: CA
+  policy_type: commercial_land_housing
+  label: AB 2011 (2022) housing on commercial corridors
+  year: 2022
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220AB2011
+  note: "reviewed 2026-11-24: verified record ca.ab2011_2022_commercial_corridors"
+- state: CA
+  policy_type: tod
+  label: SB 79 (2025) housing near transit stops
+  year: 2025
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB79
+  note: "reviewed 2026-11-24: verified record ca.sb79_2025_tod"
+- state: CA
+  policy_type: adu
+  label: AB 68 (2019) ADU by-right and timelines
+  year: 2019
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200AB68
+  note: "reviewed 2026-11-24: verified record ca.ab68_2019_adu"
+- state: CA
+  policy_type: adu
+  label: AB 1033 (2023) ADUs may be sold as condos
+  year: 2023
+  discovered_via: search
+  link: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB1033
+  note: "reviewed 2026-11-24: verified record ca.ab1033_2023_adu_condo"
+- state: OR
+  policy_type: missing_middle
+  label: HB 2001 (2019) middle housing in cities
+  year: 2019
+  discovered_via: search
+  link: https://olis.oregonlegislature.gov/liz/2019R1/Measures/Overview/HB2001
+  note: "reviewed 2026-11-24: verified record or.hb2001_2019_middle_housing"
+- state: OR
+  policy_type: starter_lots
+  label: SB 458 (2021) middle housing lot divisions
+  year: 2021
+  discovered_via: search
+  link: https://olis.oregonlegislature.gov/liz/2021R1/Measures/Overview/SB458
+  note: "reviewed 2026-11-24: verified record or.sb458_2021_middle_housing_division"
+- state: OR
+  policy_type: starter_lots
+  label: HB 4037 (2026 2nd special session) lot split streamlining
+  year: 2026
+  discovered_via: search
+  link: https://olis.oregonlegislature.gov/
+  note: "reviewed 2026-11-24: verified record or.hb4037_2026_housing_omnibus (OLIS lists HB 4037 in the 2026 regular session, not a special session)"
+- state: WA
+  policy_type: missing_middle
+  label: HB 1110 (2023) middle housing
+  year: 2023
+  discovered_via: search
+  link: https://app.leg.wa.gov/billsummary?BillNumber=1110&Year=2023
+  note: "reviewed 2026-11-24: verified record wa.hb1110_2023"
+- state: WA
+  policy_type: adu
+  label: HB 1337 (2023) ADUs in urban growth areas
+  year: 2023
+  discovered_via: search
+  link: https://app.leg.wa.gov/billsummary?BillNumber=1337&Year=2023
+  note: "reviewed 2026-11-24: verified record wa.hb1337_2023"
+- state: WA
+  policy_type: permit_timing
+  label: SB 5290 (2023) local permit review timelines
+  year: 2023
+  discovered_via: search
+  link: https://app.leg.wa.gov/billsummary?BillNumber=5290&Year=2023
+  note: "reviewed 2026-11-24: verified record wa.rcw_36_70b_080_sb5290_2023"
+- state: MT
+  policy_type: adu
+  label: SB 528 (2023) ADUs by right
+  year: 2023
+  discovered_via: search
+  link: https://legiscan.com/MT/bill/SB528/2023
+  note: "reviewed 2026-11-24: verified record mt.sb528_2023_adu"
+- state: MT
+  policy_type: missing_middle
+  label: SB 323 (2023) duplexes in single-family zones
+  year: 2023
+  discovered_via: search
+  link: https://legiscan.com/MT/bill/SB323/2023
+  note: "reviewed 2026-11-24: verified record mt.sb323_2023_duplex"
+- state: MT
+  policy_type: commercial_land_housing
+  label: SB 245 (2023) multifamily in commercial zones
+  year: 2023
+  discovered_via: search
+  link: https://legiscan.com/MT/bill/SB245/2023
+  note: "reviewed 2026-11-24: verified record mt.sb245_2023_commercial"
+- state: ME
+  policy_type: missing_middle
+  label: LD 2003 (2022) up to 4 units per lot and ADUs
+  year: 2022
+  discovered_via: search
+  link: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=2003&snum=130
+  note: "reviewed 2026-11-24: verified record me.pl2021_c672_ld2003"
+- state: VT
+  policy_type: missing_middle
+  label: S.100 / Act 47 (2023) HOME Act
+  year: 2023
+  discovered_via: search
+  link: https://legislature.vermont.gov/bill/status/2024/S.100
+  note: "reviewed 2026-11-24: verified record vt.act47_2023_home"
+- state: VT
+  policy_type: permit_timing
+  label: H.687 / Act 181 (2024) Act 250 reform
+  year: 2024
+  discovered_via: search
+  link: https://legislature.vermont.gov/bill/status/2024/H.687
+  note: "reviewed 2026-11-24: verified record vt.act181_2024_tiers"
+- state: MA
+  policy_type: tod
+  label: MBTA Communities, G.L. c.40A s.3A (2021) multifamily near transit
+  year: 2021
+  discovered_via: search
+  link: https://www.mass.gov/info-details/multi-family-zoning-requirement-for-mbta-communities
+  note: "reviewed 2026-11-24: verified record ma.c40a_s3a_mbta_communities"
+- state: MA
+  policy_type: adu
+  label: Affordable Homes Act (2024) ADUs by right statewide
+  year: 2024
+  discovered_via: search
+  link: https://www.mass.gov/info-details/accessory-dwelling-units
+  note: "reviewed 2026-11-24: verified record ma.adu_by_right_ch150_2024"
+- state: CT
+  policy_type: adu
+  label: HB 6107 / PA 21-29 (2021) ADUs and parking limits with opt-out
+  year: 2021
+  discovered_via: search
+  link: https://legiscan.com/CT/bill/HB06107/2021
+  note: "reviewed 2026-11-24: verified record ct.pa21_29_adu_parking"
+- state: CT
+  policy_type: missing_middle
+  label: HB 8002 (2025 special session) housing package
+  year: 2025
+  discovered_via: search
+  link: https://www.cga.ct.gov/
+  note: "reviewed 2026-11-24: verified record ct.pa25_1_housing_growth"
+- state: CO
+  policy_type: adu
+  label: HB 24-1152 (2024) ADUs in subject jurisdictions
+  year: 2024
+  discovered_via: search
+  link: https://leg.colorado.gov/bills/hb24-1152
+  note: "reviewed 2026-11-24: verified record co.hb24_1152"
+- state: CO
+  policy_type: tod
+  label: HB 24-1313 (2024) housing in transit-oriented communities
+  year: 2024
+  discovered_via: search
+  link: https://leg.colorado.gov/bills/hb24-1313
+  note: "reviewed 2026-11-24: verified record co.hb24_1313"
+- state: CO
+  policy_type: parking
+  label: HB 24-1304 (2024) parking minimums near transit
+  year: 2024
+  discovered_via: search
+  link: https://leg.colorado.gov/bills/hb24-1304
+  note: "reviewed 2026-11-24: verified record co.hb24_1304"
+- state: CO
+  policy_type: starter_lots
+  label: HB 26-1114 (2026) minimum lot size reform (status unconfirmed)
+  year: 2026
+  discovered_via: search
+  link: https://leg.colorado.gov/bills/HB26-1114
+  note: "reviewed 2026-11-24: verified record co.hb26_1114_min_lot_size"
+- state: UT
+  policy_type: adu
+  label: HB 82 (2021) internal ADUs permitted
+  year: 2021
+  discovered_via: search
+  link: https://legiscan.com/UT/bill/HB0082/2021
+  note: "reviewed 2026-11-24: verified record ut.hb82_2021_internal_adu"
+- state: UT
+  policy_type: tod
+  label: HB 462 (2022) station area plans
+  year: 2022
+  discovered_via: search
+  link: https://legiscan.com/UT/bill/HB0462/2022
+  note: "reviewed 2026-11-24: verified record ut.hb462_2022_station_area_plans"
+- state: UT
+  policy_type: adu
+  label: SB 284 (2026) detached ADUs in larger municipalities
+  year: 2026
+  discovered_via: search
+  link: https://le.utah.gov/Session/2026/bills/enrolled/SB0284.pdf
+  note: "reviewed 2026-11-24: verified record ut.sb284_2026_detached_adu"
+- state: UT
+  policy_type: infrastructure_finance
+  label: HB 436 (2026) moderate income housing infrastructure amendments
+  year: 2026
+  discovered_via: search
+  link: https://le.utah.gov/Session/2026/bills/enrolled/HB0436.pdf
+  note: "reviewed 2026-11-24: verified record ut.hb436_2026_mih_infrastructure"
+- state: FL
+  policy_type: commercial_land_housing
+  label: SB 102 (2023) Live Local Act
+  year: 2023
+  discovered_via: search
+  link: https://www.flsenate.gov/Session/Bill/2023/102
+  note: "reviewed 2026-11-24: verified record fl.sb102_2023"
+- state: FL
+  policy_type: fees
+  label: HB 337 (2021) impact fee increase limits
+  year: 2021
+  discovered_via: search
+  link: https://www.flsenate.gov/Session/Bill/2021/337
+  note: "reviewed 2026-11-24: verified record fl.hb337_2021_impact_fee_limits"
+- state: FL
+  policy_type: permit_timing
+  label: HB 267 (2024) third-party plan review
+  year: 2024
+  discovered_via: search
+  link: https://www.flsenate.gov/Session/Bill/2024/267
+  note: "reviewed 2026-11-24: verified record fl.hb267_2024_permit_timeframes"
+- state: TX
+  policy_type: permit_timing
+  label: HB 14 (2023) third-party review when city misses deadlines
+  year: 2023
+  discovered_via: search
+  link: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=88R&Bill=HB14
+  note: "reviewed 2026-11-24: verified record tx.hb14_2023_third_party_review"
+- state: NC
+  policy_type: missing_middle
+  label: H 488 (2023) residential code up to four units
+  year: 2023
+  discovered_via: search
+  link: https://www.ncleg.gov/BillLookUp/2023/H488
+  note: "reviewed 2026-11-24: verified record nc.sl2023_108_residential_code"
+- state: MD
+  policy_type: missing_middle
+  label: HB 538 (2024) Housing Expansion and Affordability Act
+  year: 2024
+  discovered_via: search
+  link: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0538?ys=2024RS
+  note: "reviewed 2026-11-24: verified record md.ch122_2024_heaa"
+- state: MD
+  policy_type: permit_timing
+  label: SB 325 (2026) zoning secured at application
+  year: 2026
+  discovered_via: search
+  link: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/sb0325?ys=2026RS
+  note: "reviewed 2026-11-24: verified record md.ch590_591_2026_housing_certainty"
+- state: HI
+  policy_type: adu
+  label: SB 3202 (2024) ADUs on residential lots
+  year: 2024
+  discovered_via: search
+  link: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=SB&billnumber=3202&year=2024
+  note: "read 2026-11-24, not verified: record hi.sb3202_2024 (see its verification_note)"
+- state: NH
+  policy_type: adu
+  label: SB 146 (2016) ADU rights
+  year: 2016
+  discovered_via: search
+  link: https://legiscan.com/NH/bill/SB146/2016
+  note: "read 2026-11-24, not verified: record nh.sb146_2016_adu (see its verification_note)"
+- state: NH
+  policy_type: adu
+  label: HB 1540 (2026) ADUs by right in most districts
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/NH/bill/HB1540/2026
+  note: "reviewed 2026-11-24: verified record nh.hb1540_2026_adu"
+- state: AZ
+  policy_type: adu
+  label: HB 2720 (2024) ADUs in larger cities
+  year: 2024
+  discovered_via: search
+  link: https://legiscan.com/AZ/bill/HB2720/2024
+  note: "reviewed 2026-11-24: verified record az.hb2720_2024_adu"
+- state: AZ
+  policy_type: missing_middle
+  label: HB 2721 (2024) middle housing in larger cities
+  year: 2024
+  discovered_via: search
+  link: https://legiscan.com/AZ/bill/HB2721/2024
+  note: "reviewed 2026-11-24: verified record az.hb2721_2024_middle_housing"
+- state: AR
+  policy_type: missing_middle
+  label: SB 170 (2019) limits aesthetic requirements
+  year: 2019
+  discovered_via: search
+  link: https://legiscan.com/AR/bill/SB170/2019
+  note: "reviewed 2026-11-24: verified record ar.act446_2019_design_elements"
+- state: NJ
+  policy_type: missing_middle
+  label: A 4 / S 50 (2024) affordable housing obligations reform
+  year: 2024
+  discovered_via: search
+  link: https://legiscan.com/NJ/bill/A4/2024
+  note: "reviewed 2026-11-24: verified record nj.pl2024_c2_fourth_round"
+- state: NJ
+  policy_type: adu
+  label: S 1786 / A 3488 (2026) ADU bill (pending)
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/NJ/text/S1786/id/3311677
+  note: "reviewed 2026-11-24: verified record nj.s1786_2026_adu"
+- state: PA
+  policy_type: adu
+  label: HB 2186 (2026) one ADU per lot by right (passed House; pending)
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/PA/bill/HB2186/2025
+  note: "reviewed 2026-11-24: verified record pa.hb2186_2025"
+- state: PA
+  policy_type: missing_middle
+  label: SB 1346 (2025-26) housing bill (pending/tabled)
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/PA/bill/SB1346/2025
+  note: "unreviewed for missing_middle: the verified record pa.sb1346_2025 covers this bill but does not list missing_middle as a type"
+- state: IN
+  policy_type: permit_timing
+  label: HEA 1001 (2026) housing approvals and fee caps
+  year: 2026
+  discovered_via: search
+  link: https://iga.in.gov/legislative/2026/bills/house/1001
+  note: "read 2026-11-24, not verified: record in.hea1001_2026_housing (see its verification_note)"
+- state: IN
+  policy_type: fees
+  label: HEA 1001 (2026) caps on local permit fee increases
+  year: 2026
+  discovered_via: search
+  link: https://iga.in.gov/legislative/2026/bills/house/1001
+  note: "read 2026-11-24, not verified: record in.hea1001_2026_housing (see its verification_note)"
+- state: TN
+  policy_type: permit_timing
+  label: HB 2552 (2026) permit deadlines with deemed approval
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/TN/bill/HB2552/2025
+  note: "reviewed 2026-11-24: verified record tn.hb2552_2026_development_review_deadlines"
+- state: TN
+  policy_type: adu
+  label: SB 2131 / HB 2031 (2026) limits on local ADU restrictions
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/TN/bill/SB2131/2025
+  note: "reviewed 2026-11-24: verified record tn.sb2131_2026_adu"
+- state: TN
+  policy_type: permit_timing
+  label: SB 2100 (2024) third-party plan review
+  year: 2024
+  discovered_via: search
+  link: https://legiscan.com/TN/bill/SB2100/2023
+  note: "reviewed 2026-11-24: verified record tn.sb2100_2024_third_party_review"
+- state: TN
+  policy_type: missing_middle
+  label: SB 2834 (2024) local option for single-stair buildings
+  year: 2024
+  discovered_via: search
+  link: https://legiscan.com/TN/bill/SB2834/2023
+  note: "reviewed 2026-11-24: verified record tn.sb2834_2024_single_stair_local_option"
+- state: GA
+  policy_type: permit_timing
+  label: SB 447 (2026) building permit review shot clock
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/GA/bill/SB447/2025
+  note: "read 2026-11-24, not verified: record ga.sb447_2026_permit_review (see its verification_note)"
+- state: GA
+  policy_type: adu
+  label: HB 1166 (2026) ADUs up to 400 sq ft (passed House; status unclear)
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/GA/bill/HB1166/2025
+  note: "read 2026-11-24, not verified: record ga.hb1166_2026_small_adu (see its verification_note)"
+- state: WI
+  policy_type: permit_timing
+  label: AB 266 (2023) limits objector standing in land use suits
+  year: 2023
+  discovered_via: search
+  link: https://legiscan.com/WI/bill/AB266/2023
+  note: "reviewed 2026-11-24: verified record wi.act16_2023_land_use_review"
+- state: VA
+  policy_type: starter_lots
+  label: HB 1212 (2026) small-lot zoning
+  year: 2026
+  discovered_via: search
+  link: https://lis.virginia.gov/bill-details/20261/HB1212
+  note: "read 2026-11-24, not verified: record va.ch751_2026_small_lot (see its verification_note)"
+- state: MN
+  policy_type: starter_lots
+  label: SF 4123 / HF 3895 (2026) Starter Home Act (pending/stalled)
+  year: 2026
+  discovered_via: search
+  link: https://legiscan.com/MN/bill/SF4123/2025
+  note: "reviewed 2026-11-24: verified record mn.sf4123_2026_starter_homes"
+- state: RI
+  policy_type: adu
+  label: H 7062 (2024) ADUs by right (bill number unconfirmed)
+  year: 2024
+  discovered_via: search
+  link: https://www.rilegislature.gov/
+  note: "reviewed 2026-11-24: verified record ri.pl2024_c284_adu"

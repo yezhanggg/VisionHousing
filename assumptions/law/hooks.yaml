@@ -1,0 +1,109 @@
+# How verified municipal rules make reform assumptions vary by county.
+#
+# Read by visionhousing.law.hooks and, when engine_wired is true, by the engine
+# (visionhousing.engine.context). A county uses its own value only when its
+# verified rows cover at least min_coverage of its residents. On 2026-11-25 three
+# counties do: Warren (42123), Fayette (42051) and Pike (42103). Every other county keeps the
+# statewide range. See docs/modules/law.md.
+
+version: 1
+engine_wired: true
+
+# Which hooks feed the engine. Fees stay off: no verified reading answers the
+# transportation impact fee question yet, so there is nothing to apply.
+wired:
+  adu: true
+  parking: true
+  fees: false
+
+# A county uses its own value only when the verified rows cover at least this
+# share of its residents (2024 estimates). Below it, the statewide ledger range
+# (adu.already_legal_share in assumptions/parameters.yaml, as replaced by the
+# state's calibration in assumptions/calibration/) is used unchanged.
+min_coverage: 0.5
+
+# ADU rules that count as "already legal" (an ADU adds nothing under the reform).
+# A rule the ordinance does not address (not_addressed) is not counted: for
+# example Warren County's second house on lots of 1.5 acres or more is a second
+# principal dwelling, not an ADU rule, so its municipalities stay not_addressed.
+adu_legal_statuses: [by_right]
+
+# Registry id (src/visionhousing/data/sources.yaml) cited by every number that
+# uses a county value from read local law.
+source_id: pa_municipal_ordinances
+
+# ADU legal-status categories (visionhousing.law.coverage.adu_category). A
+# verified by_right row is "already_permitted" when the reading says a detached
+# ADU is allowed and the owner need not live on the lot (the benchmark's
+# terms); any other by_right row is "by_right_conditions". The other statuses
+# map as below. Rows that are not verified, not in force on the run's as-of
+# date (the rule below), or that do not answer the ADU question are "unknown".
+#
+# Not addressed is not prohibited (decision of 2026-11-25). An ordinance that
+# does not list ADUs says nothing by that alone; what an unlisted use may do is
+# set by the ordinance's own clause on unlisted uses (unlisted_uses on the
+# municipal row, with the clause's section in unlisted_uses_cite). Only a
+# verified exclusivity clause ("uses not listed are prohibited") makes a
+# not_addressed row "prohibited"; a clause sending unlisted uses to a hearing
+# makes it "discretionary"; with no clause read it is "unknown" and, for the
+# ADU hook, unread (its residents take the statewide share).
+adu_categories:
+  conditional: discretionary
+  special_exception: discretionary
+  prohibited: prohibited
+  not_addressed: unknown
+  unknown: unknown
+not_addressed_by_unlisted_uses:
+  prohibited: prohibited
+  conditional: discretionary
+  special_exception: discretionary
+
+# Occupancy restrictions (occupancy_restriction on a municipal rule). The
+# benchmark ADU may be lived in by any household. A by_right rule that allows
+# the unit only for relatives of the main household, or for a relative who
+# needs care (Palmer, Lebanon city, Buckingham, Bethlehem, Pine and others),
+# does not meet it, so it goes to "by_right_conditions" whatever its detached
+# and owner flags say. There, as for every by-right-with-conditions lot, the
+# ADU estimate counts a ledger share as still exposed to the reform
+# (adu.conditions_exposure_share in assumptions/parameters.yaml). The resident
+# weighted a + b x s rule (used only where no lot-weighted categories exist)
+# keeps counting every by_right row in a, as before. On a conditional or
+# special-exception row the field is recorded for readers and changes nothing.
+occupancy_restrictions:
+  relatives_only: by_right_conditions
+
+# When a verified rule counts as read (visionhousing.law.inforce, one test used
+# by the hooks and by the coverage and category tables, so they agree). The
+# date compared is the run's own as-of date (as_of in assumptions/outcome.yaml),
+# not the date the pack was built. Adoption, publication and effective dates
+# are kept apart, and adoption never stands in for effectiveness (decision of
+# 2026-11-25):
+#   - effective_date known: read once it is on or before as_of (a year or a
+#     year-month counts from its last possible day). A rule taking effect later
+#     is not law yet: its residents keep the statewide range.
+#   - effective_date unknown, in_force_by known and on or before as_of: read.
+#     in_force_by is the latest dated enactment inside the cited codified
+#     section ("[Added 6-1-15 by Ord. No. 2136]") or the posted text's
+#     "enacted to" line: the section as read stood in force by then.
+#   - neither known: read from reviewed_on, the first day a person saw the
+#     text posted as the municipality's law (read_from_reviewed_on), the same
+#     rule as a timeline record with start_unknown. An adopted_on after as_of
+#     still rules it out; an adoption date alone never puts a rule in force.
+#     Set to "unread" to count only rules with a stated date.
+# The pack's future_effective flag (1 = effective after the build date) stays in
+# the table for readers; no count uses it: the dates themselves are compared.
+unknown_effective: read_from_reviewed_on
+
+# A verified row whose adu_status is blank or unknown does not answer the ADU
+# question. For the ADU hook it counts as unread (its residents are in b and
+# take the statewide share), and in the ADU categories it is "unknown"; never
+# "not legal".
+adu_status_unknown: treat_as_unread
+
+# Residential land weight (visionhousing.law.coverage.muni_weights): each
+# census block with homes counts its land shared among its homes, but at most
+# this many square metres per home (one acre), so a large rural block with one
+# farmhouse counts one acre, not its whole area. A proxy for the land homes sit
+# on, used only to report coverage; it does not change any estimate.
+land_weight:
+  max_m2_per_home: 4046.86

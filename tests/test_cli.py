@@ -16,11 +16,17 @@ def test_help_lists_commands(capsys):
         assert name in out
 
 
-@pytest.mark.parametrize("command", ["run"])
-def test_stubs_explain_themselves(command, capsys):
-    assert cli.main([command]) == 0
+@pytest.mark.parametrize("tier", ["2", "1", "0"])
+def test_run_prints_ranges_at_each_data_tier(tier, capsys):
+    argv = ["run", "--state", "TL", "--reforms", "adu,fees", "--draws", "200", "--data-tier", tier]
+    assert cli.main(argv) == 0
     out = capsys.readouterr().out
-    assert "not built yet" in out and "will" in out
+    assert f"data tier {tier}" in out and "adu (added units)" in out and "package" in out
+
+
+def test_run_rejects_unknown_reform(capsys):
+    assert cli.main(["run", "--state", "TL", "--reforms", "nope", "--draws", "50"]) == 1
+    assert "unknown reform" in capsys.readouterr().err
 
 
 def test_python_check():

@@ -71,8 +71,10 @@ __all__ = [
     "median_from_brackets",
     "parse_bracket",
     "share_above",
+    "share_above_grid",
     "share_above_many",
     "share_below",
+    "share_below_grid",
     "share_below_many",
 ]
 
@@ -488,6 +490,108 @@ def share_below_many(
     r = share_above_many(counts, edges, threshold, top_rule=top_rule, alpha=alpha)
     bound = np.where(r.bound == "lower", "upper", r.bound).astype(object)
     return ShareArrays(1.0 - r.value, r.in_top_bracket, bound, r.total, r.reason, r.rule)
+
+
+def share_above_grid(
+    counts: np.ndarray,
+    edges: BracketTable | np.ndarray | Sequence[Sequence[float]],
+    threshold: np.ndarray,
+    *,
+    top_rule: str = "lower_bound",
+    alpha: float | None = None,
+) -> np.ndarray:
+    """Share above a threshold for a whole grid of thresholds (for example draws x tracts).
+
+    Gives the shares of :func:`share_above_many` for every threshold in the
+    grid, without copying the tract counts once per draw.
+
+    How: a threshold ``t`` falls in one bracket ``j``. Every bracket above ``j``
+    counts in full, every bracket below counts not at all, and bracket ``j``
+    counts in part. So
+
+        share above = (units in brackets above j + count_j x frac_j) / total
+
+    with ``frac_j = (high_j - t) / (high_j - low_j)`` (units spread evenly
+    inside the bracket) and the ``top_rule`` for the open top bracket. "Units in
+    brackets above j" is a running sum worked out once per tract; only ``j``
+    and ``frac_j`` change from draw to draw.
+
+    Rounding: ACS counts are whole numbers, so the running sums are exact. The
+    one fractional term is added last here and inside the sum in
+    :func:`share_above_many`, so the two can differ in the last binary digit
+    (a relative difference near 1e-16; the tests hold it below 1e-12).
+
+    Args:
+        counts: ``(tracts, brackets)`` counts, aligned with ``edges``.
+        edges: A :class:`BracketTable` or a ``(k, 2)`` array of ``[low, high)``;
+            only the last bracket may be open.
+        threshold: Dollar thresholds, any shape ending in the tract axis.
+        top_rule: ``"lower_bound"`` (default) or ``"pareto"``.
+        alpha: Pareto shape; required with ``top_rule="pareto"``.
+
+    Returns:
+        Shares shaped like ``threshold``. ``NaN`` where the threshold is blank, a
+        count is blank, or the tract has no units in the brackets (the reasons
+        of :func:`share_above_many`).
+
+    Raises:
+        ValueError: On bad edges, misaligned shapes, negative counts, an open
+            bracket that is not the last one, or a bad rule.
+    """
+    _check_rule(top_rule, alpha)
+    e = _as_edges(edges)
+    c = np.asarray(counts, dtype=float)
+    t = np.asarray(threshold, dtype=float)
+    k = e.shape[0]
+    if c.ndim != 2 or c.shape[1] != k:
+        raise ValueError(f"counts must have shape (n, {k}), got {c.shape}")
+    n = c.shape[0]
+    if t.shape[-1:] != (n,):
+        raise ValueError(f"thresholds must end in the tract axis ({n}), got shape {t.shape}")
+    if np.any(c < 0):
+        raise ValueError("bracket counts cannot be negative")
+    lows, highs = e[:, 0], e[:, 1]
+    if np.isinf(highs[:-1]).any():
+        raise ValueError("only the last bracket may be open")
+    open_top = bool(np.isinf(highs[-1]))
+    finite_high = np.where(np.isfinite(highs), highs, 0.0)
+    width = np.where(np.isfinite(highs), highs - lows, 1.0)
+    total = c.sum(axis=1)
+    above = np.zeros((n, k + 1))  # above[i, j]: units of tract i in brackets j and up
+    above[:, :k] = np.cumsum(c[:, ::-1], axis=1)[:, ::-1]
+    bad_tract = np.isnan(c).any(axis=1) | ~(total > 0)
+    j = np.clip(np.searchsorted(lows, t, side="right") - 1, 0, k - 1)  # bracket holding t
+    tract = np.arange(n)
+    with np.errstate(invalid="ignore", divide="ignore"):
+        frac = np.clip((finite_high[j] - t) / width[j], 0.0, 1.0)
+        if open_top:
+            if top_rule == "pareto":
+                top_frac = np.where(t <= lows[-1], 1.0, (lows[-1] / t) ** alpha)
+            else:
+                top_frac = np.where(t <= lows[-1], 1.0, 0.0)
+            frac = np.where(j == k - 1, top_frac, frac)
+        part = c.ravel()[tract * k + j] * frac
+        value = (above.ravel()[tract * (k + 1) + j + 1] + part) / total
+    return np.where(bad_tract | np.isnan(t), np.nan, value)
+
+
+def share_below_grid(
+    counts: np.ndarray,
+    edges: BracketTable | np.ndarray | Sequence[Sequence[float]],
+    threshold: np.ndarray,
+    *,
+    top_rule: str = "lower_bound",
+    alpha: float | None = None,
+) -> np.ndarray:
+    """Share below a threshold for a grid of thresholds: ``1 - share_above_grid``.
+
+    Equals the ``value`` of :func:`share_below_many` element by element (to the
+    last binary digit). Arguments and errors are as for :func:`share_above_grid`.
+
+    Returns:
+        Shares shaped like ``threshold``, ``NaN`` where the share is undefined.
+    """
+    return 1.0 - share_above_grid(counts, edges, threshold, top_rule=top_rule, alpha=alpha)
 
 
 @dataclass(frozen=True)

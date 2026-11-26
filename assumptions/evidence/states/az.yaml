@@ -1,0 +1,555 @@
+# Cross-state comparison records: AZ.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: az.ars_45_576_assured_water_supply
+  kind: policy
+  state: AZ
+  jurisdiction: statewide
+  policy_types:
+  - water_compliance
+  title: Assured water supply certificate required before subdivision plat approval in Active Management
+    Areas
+  citation: A.R.S. § 45-576
+  url: https://www.azleg.gov/ars/45/00576.htm
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Subdivided lands offered for sale or lease inside Active Management Areas (AMAs)
+  exclusions:
+  - Subdivisions served by a city, town or private water company designated by ADWR as having an assured
+    water supply (written commitment of service instead of a certificate)
+  - Lands for developments under mineral extraction or industrial use permits (§ 45-576(G))
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Stage gate: certificate (or designated-provider commitment) is needed before the plat goes to the
+    city/county and before the Real Estate Commissioner issues a public report; the city/county must note
+    it on the plat.'
+  - ADWR program pages (azwater.gov) returned HTTP 403, so current ADWR practice (e.g., Phoenix AMA groundwater
+    modeling, ag-to-urban program) was not checked.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Current statute text read on azleg.gov (subsections A-H). No enactment or effective
+    date is shown on that page, so none is recorded.
+  sources:
+  - label: A.R.S. § 45-576 (azleg.gov)
+    url: https://www.azleg.gov/ars/45/00576.htm
+    official: true
+  discovered_via: addendum
+- id: az.hb2999_2026_said
+  kind: policy
+  state: AZ
+  jurisdiction: statewide
+  policy_types:
+  - infrastructure_finance
+  title: 'State Affordability Infrastructure Districts: state-formed districts to bond for housing infrastructure'
+  citation: HB 2999, Laws 2026, Ch. 123 (57th Leg., 2nd Reg. Sess.); adds A.R.S. Title 48, Ch. 40; amends
+    §§ 9-463.05, 11-495, 11-496, 11-1102
+  url: https://www.azleg.gov/legtext/57leg/2R/laws/0123.pdf
+  session: 2026 Fifty-seventh Legislature, Second Regular Session
+  bill: HB 2999
+  enacted_date: 2026-06-04
+  effective_dates:
+  - date: 2026-09-12
+    applies_to: General effective date of the 2026 session
+  - date: 2036-06-30
+    applies_to: Last date the Arizona Finance Authority may issue a formation order; existing districts
+      and bonds continue
+  geographic_scope: Land whose fee owners (all of them) petition the Arizona Finance Authority; may be
+    contiguous or noncontiguous
+  exclusions:
+  - District may not exercise zoning or land-use authority; formation order is not a land-use approval
+  - Does not alter service territories of counties, municipalities, irrigation/electrical districts or
+    utilities
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Finance tools: GO bonds (with election), assessment bonds, revenue bonds, O&M tax; 3-member board;
+    Authority must act within 60 days of a complete petition; project review fee capped at $30,000 per
+    submission.'
+  - District counts toward development-fee credits under §§ 9-463.05 and 11-1102.
+  - 'Signed version titled ''municipal improvement districts; technical correction (now: infrastructure
+    finance districts)''; short title ''State Affordability Infrastructure District Act''.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Chaptered law PDF on azleg.gov: Chapter 123, ''APPROVED BY THE GOVERNOR JUNE 4,
+    2026'', filed with Secretary of State June 5, 2026, June 30, 2036 formation cutoff. House signed-version
+    summary on azleg.gov (Chapter 123, final vote 45-9). azleg.gov general effective dates table: 2026
+    2nd Regular Session = 09-12-2026; sine die June 13, 2026.'
+  sources:
+  - label: HB 2999 chaptered (Laws 2026, Ch. 123)
+    url: https://www.azleg.gov/legtext/57leg/2R/laws/0123.pdf
+    official: true
+  - label: House summary, HB 2999 as signed
+    url: https://www.azleg.gov/legtext/57leg/2R/summary/H.HB2999_062226_SIGNED.DOCX.htm
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: addendum
+- id: az.hb2721_2024_middle_housing
+  kind: policy
+  state: AZ
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - parking
+  title: 'Middle housing in cities of 75,000+: duplex to fourplex and townhomes near downtown and in large
+    new developments'
+  citation: HB 2721, Laws 2024, Ch. 197; A.R.S. § 9-462.10
+  url: https://www.azleg.gov/legtext/56leg/2R/laws/0197.htm
+  session: 2024 Fifty-sixth Legislature, Second Regular Session
+  bill: HB 2721
+  enacted_date: 2024-05-21
+  effective_dates:
+  - date: 2024-09-14
+    applies_to: General effective date
+  - date: 2026-01-01
+    applies_to: Cities of 75,000+ must adopt middle housing rules; if not, middle housing allowed on all
+      single-family lots without limits
+  geographic_scope: 'Municipalities of 75,000 or more: all single-family lots within 1 mile of the central
+    business district, and at least 20% of any new development over 10 contiguous acres'
+  exclusions:
+  - Unincorporated areas; areas lacking urban services or water and sewer; non-residential zones
+  - Land near public or military airports; areas under Title 48, ch. 6, art. 4
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Cities may not cap middle housing below 2 floors or 50% FAR, require owner occupancy, require more
+    than 1 parking space per unit, or apply stricter review than for single-family homes.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Chaptered text on azleg.gov: Chapter 197, approved by the Governor and filed May
+    21, 2024, Jan. 1, 2026 deadline and fallback. azleg.gov general effective dates table: 2024 2nd Regular
+    Session = 09-14-2024.'
+  sources:
+  - label: HB 2721 chaptered (Laws 2024, Ch. 197)
+    url: https://www.azleg.gov/legtext/56leg/2R/laws/0197.htm
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: addendum
+- id: az.hb2720_2024_adu
+  kind: policy
+  state: AZ
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  title: 'ADUs in cities over 75,000: one attached plus one detached by right'
+  citation: HB 2720, Laws 2024, Ch. 196; A.R.S. § 9-461.18 (also amends § 9-500.39 on short-term rentals)
+  url: https://www.azleg.gov/legtext/56leg/2R/laws/0196.htm
+  session: 2024 Fifty-sixth Legislature, Second Regular Session
+  bill: HB 2720
+  enacted_date: 2024-05-21
+  effective_dates:
+  - date: 2024-09-14
+    applies_to: General effective date
+  - date: 2025-01-01
+    applies_to: Deadline for city ADU rules; if missed, ADUs allowed on all residential lots without limits
+  geographic_scope: Municipalities with more than 75,000 people; any lot where a single-family home is
+    allowed
+  exclusions:
+  - Tribal land; land near military, FAA-licensed commercial, general aviation, or public airports
+  - ADU may not sit on a public utility easement without utility consent
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Size floor: 75% of the main house or 1,000 sq ft, whichever is less; extra detached ADU on lots of
+    1+ acre if one ADU is restricted-affordable (<= 80% AMI).'
+  - Cities may not ban separate long-term rental of ADU and house, require a relationship between occupants,
+    or require extra parking.
+  - Cities may require owner residence when an ADU built after the effective date is used as a short-term
+    rental.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Chaptered text on azleg.gov: Chapter 196, approved by the Governor and filed May
+    21, 2024, Jan. 1, 2025 fallback. azleg.gov general effective dates table: 2024 = 09-14-2024.'
+  sources:
+  - label: HB 2720 chaptered (Laws 2024, Ch. 196)
+    url: https://www.azleg.gov/legtext/56leg/2R/laws/0196.htm
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: addendum
+- id: az.hb2946_2026_adu_fees
+  kind: policy
+  state: AZ
+  jurisdiction: statewide (cities and towns)
+  policy_types:
+  - fees
+  - adu
+  title: 'Arizona HB 2946 (2026): caps on city development fees for accessory dwelling units'
+  citation: Laws 2026, ch. 121 (HB 2946); A.R.S. 9-463.05(U), 9-499.15, 9-511.01
+  url: https://www.azleg.gov/legtext/57leg/2R/laws/0121.htm
+  session: 2026 Fifty-seventh Legislature, Second Regular Session
+  bill: HB 2946
+  enacted_date: 2026-06-04
+  effective_dates:
+  - date: 2026-09-12
+    applies_to: Whole act (2026 general effective date; the act has no emergency or delayed-date clause)
+  - date: 2027-01-01
+    applies_to: 'A.R.S. 9-511.01(A)(3): the growth-related part of a water or wastewater fee adopted or raised
+      after 2026-12-31 must follow the development-fee rules of 9-463.05'
+  geographic_scope: All cities and towns that charge development (impact) fees. Counties are not covered
+    by the amended sections.
+  exclusions:
+  - Cities that already set fees by home size or bedroom count before the amendment may keep doing so
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'ADU fees: water and sewer fees may not exceed the extra demand the ADU adds (same meter or separate);
+    all other development fees may not exceed the lesser of 25% of the total fees or the single-family
+    share for those services.'
+  - Also bars new size- or bedroom-based distinctions among single-family homes in development fees.
+  - A cap on fees for one housing type, not a general fee cut; the 25% share is the closest Arizona analogue
+    to the fee-reduction reform.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chaptered text on azleg.gov (Chapter 121) shows 'APPROVED BY THE GOVERNOR JUNE 4, 2026',
+    filed June 5, 2026, and the 9-463.05(U) ADU caps. azleg.gov bill status API shows Signed 2026-06-04,
+    chapter 121, no emergency. azleg.gov general effective dates table shows 09-12-2026 for the 2026 Second
+    Regular Session.
+  sources:
+  - label: Chapter 121 text (HB 2946)
+    url: https://www.azleg.gov/legtext/57leg/2R/laws/0121.htm
+    official: true
+  - label: HB 2946 bill status (azleg.gov)
+    url: https://apps.azleg.gov/BillStatus/BillOverview/85065
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: pew_2026
+- id: az.hb2928_2025_county_adu
+  kind: policy
+  state: AZ
+  jurisdiction: statewide (counties; also amends the city ADU statute)
+  policy_types:
+  - adu
+  - parking
+  title: 'Arizona HB 2928 (2025): accessory dwelling units required in unincorporated county areas'
+  citation: Laws 2025, ch. 217 (HB 2928); A.R.S. 11-810.01 (new), 9-461.18, 9-500.39, 9-500.49, 11-269.17
+  url: https://www.azleg.gov/legtext/57leg/1R/laws/0217.htm
+  session: 2025 Fifty-seventh Legislature, First Regular Session
+  bill: HB 2928
+  enacted_date: 2025-05-23
+  effective_dates:
+  - date: 2025-09-26
+    applies_to: Act generally (2025 general effective date), including the new county ADU duty (11-810.01)
+  - date: 2026-01-01
+    applies_to: Deadline for counties to adopt ADU rules; without them ADUs are allowed on all residential
+      lots without limits. Also the date the amended 9-500.49 takes effect ('from and after December 31,
+      2025')
+  geographic_scope: Every county, on any lot where a single-family home is allowed (unincorporated areas).
+  exclusions:
+  - Tribal land
+  - Land near military airports or in high-noise or accident-potential zones
+  - Land near public or commercial airports with noise above 65 decibels
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Counties must allow one attached and one detached ADU as a permitted use, plus a second detached ADU
+    on lots of one acre or more (that one may be required to be affordable at 80% AMI). Size allowance at
+    least the lesser of 75% of the house or 1,000 sq ft. No added parking, no owner-occupancy or family
+    tie, side and rear setbacks at most 5 ft, no matching-design rules.'
+  - Counties may require a properly sized septic system where there is no sewer or sewer capacity.
+  - Brings the 2024 city ADU rule (HB 2720) to unincorporated land; it does not create new rights inside
+    cities.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chaptered text on azleg.gov (Chapter 217) shows 'APPROVED BY THE GOVERNOR MAY 23, 2025',
+    the 2026-01-01 county deadline and the Sec. 6 delayed date for 9-500.49. azleg.gov bill status API
+    shows Signed 2025-05-23, chapter 217. General effective date 09-26-2025 read on the azleg.gov general
+    effective dates table.
+  sources:
+  - label: Chapter 217 text (HB 2928)
+    url: https://www.azleg.gov/legtext/57leg/1R/laws/0217.htm
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: search
+- id: az.hb2110_2025_commercial_reuse
+  kind: policy
+  state: AZ
+  jurisdiction: statewide (cities of 150,000+)
+  policy_types:
+  - commercial_land_housing
+  - adaptive_reuse
+  - parking
+  title: 'Arizona HB 2110 (2025): multifamily and adaptive reuse on at least 10% of commercial parcels in
+    large cities'
+  citation: Laws 2025, ch. 41 (HB 2110), emergency measure; A.R.S. 9-462.10
+  url: https://www.azleg.gov/legtext/57leg/1R/laws/0041.htm
+  session: 2025 Fifty-seventh Legislature, First Regular Session
+  bill: HB 2110
+  enacted_date: 2025-04-07
+  effective_dates:
+  - date: 2025-04-07
+    applies_to: Whole act (emergency clause, operative on signature); applies retroactively from and after
+      2024-12-31
+  - date: 2025-07-06
+    applies_to: Deadline for large cities to adopt objective standards (90 days after the effective date;
+      date computed by us, not printed in the act)
+  geographic_scope: Cities and towns of 150,000 or more people. At least 10% of existing commercial, office
+    or mixed-use parcels must be open to multifamily or adaptive reuse without rezoning, a conditional use
+    permit or any hearing.
+  exclusions:
+  - Historic districts (local or National Register)
+  - Land near military airports and near public or commercial airports
+  - Tribal land
+  - Commercial or employment hubs the city designates (at most 10% of commercial parcels)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Standards may require only: site plan review, adequate water and sewer, building and fire codes, an
+    obsolete building (disrepair or 50%+ vacancy), a 1-20 acre site and a 10% moderate- or low-income set-aside
+    for 20 years. Parking may not exceed the existing multifamily requirement.'
+  - New multifamily gets the highest multifamily height and density within one mile, capped at five stories
+    (two stories may be required within 100 ft of single-family zones).
+  - Amends the 2024 version of 9-462.10, which used a 'not more than 10%' ceiling; the 2025 act makes 10%
+    a floor and bars parcel-by-parcel designation.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chaptered text on azleg.gov (Chapter 41) shows the emergency clause, the retroactivity
+    clause and 'APPROVED BY THE GOVERNOR APRIL 7, 2025'. azleg.gov bill status API shows Signed 2025-04-07,
+    chapter '41-E'. The 90-day standards deadline is our arithmetic.
+  sources:
+  - label: Chapter 41 text (HB 2110)
+    url: https://www.azleg.gov/legtext/57leg/1R/laws/0041.htm
+    official: true
+  - label: HB 2110 bill status (azleg.gov)
+    url: https://apps.azleg.gov/BillStatus/BillOverview/81803
+    official: true
+  discovered_via: search
+- id: az.sb1529_2025_preapproved_plans
+  kind: policy
+  state: AZ
+  jurisdiction: statewide (cities and towns)
+  policy_types:
+  - permit_timing
+  - adu
+  - missing_middle
+  title: 'Arizona SB 1529 (2025): standard preapproved housing plans, including ADU, duplex and triplex
+    plans'
+  citation: Laws 2025, ch. 259 (SB 1529); A.R.S. 9-461.19 (new), 9-471
+  url: https://www.azleg.gov/legtext/57leg/1R/laws/0259.htm
+  session: 2025 Fifty-seventh Legislature, First Regular Session
+  bill: SB 1529
+  enacted_date: 2025-07-01
+  effective_dates:
+  - date: 2025-09-26
+    applies_to: Act generally (2025 general effective date)
+  - date: 2026-07-01
+    applies_to: Class 1 (single-family, 800-2,000 sq ft) and Class 4 (ADU, 200/600/1,000 sq ft) preapproved
+      plans required
+  - date: 2027-01-01
+    applies_to: Class 2 (duplex) and Class 3 (triplex) preapproved plans required where those types are allowed
+  geographic_scope: All cities and towns, in areas zoned single-family (duplex and triplex plans only where
+    those types are allowed).
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Each class needs at least three plans with three elevations each. Cities must accept outside submissions,
+    post approved plans, and approve or deny applications using them administratively, without discretionary
+    review.
+  - Saves design and review time; it does not change what zoning allows.
+  - The act also changes annexation procedure (9-471), not covered here.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chaptered text on azleg.gov (Chapter 259) shows 'APPROVED BY THE GOVERNOR JULY 1, 2025'
+    and the class start dates. azleg.gov bill status API shows Signed 2025-07-01, chapter 259. General effective
+    date 09-26-2025 read on the azleg.gov general effective dates table.
+  sources:
+  - label: Chapter 259 text (SB 1529)
+    url: https://www.azleg.gov/legtext/57leg/1R/laws/0259.htm
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: search
+- id: az.sb1353_2025_third_party_review
+  kind: policy
+  state: AZ
+  jurisdiction: statewide (cities of 30,000+)
+  policy_types:
+  - permit_timing
+  title: 'Arizona SB 1353 (2025): third-party review when large cities miss 15 working days on single-family
+    building permits'
+  citation: Laws 2025, ch. 187 (SB 1353); A.R.S. 9-470.01 (new), 9-463.01, 9-835
+  url: https://www.azleg.gov/legtext/57leg/1R/laws/0187.htm
+  session: 2025 Fifty-seventh Legislature, First Regular Session
+  bill: SB 1353
+  enacted_date: 2025-05-13
+  effective_dates:
+  - date: 2025-09-26
+    applies_to: Whole act (2025 general effective date)
+  geographic_scope: Cities and towns of 30,000 or more people; single-family residential building permit
+    applications.
+  exclusions:
+  - Applications under a hillside development ordinance
+  - Federal floodplain reviews
+  - Certificates of occupancy and subdivision preplats
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - If the city does not act within 15 working days, a qualified third party from a city-kept list of at
+    least three may do the review; the applicant pays. The clock starts only after construction documents
+    and vertical construction in the subdivision are approved.
+  - Also tightens the licensing time-frame rules in 9-835 (one comprehensive correction request, meeting
+    within 10 working days on request).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chaptered text on azleg.gov (Chapter 187) shows 'APPROVED BY THE GOVERNOR MAY 13, 2025'.
+    azleg.gov bill status API shows Signed 2025-05-13, chapter 187. General effective date 09-26-2025 read
+    on the azleg.gov general effective dates table.
+  sources:
+  - label: Chapter 187 text (SB 1353)
+    url: https://www.azleg.gov/legtext/57leg/1R/laws/0187.htm
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: search
+- id: az.sb1566_2026_malicious_delay
+  kind: policy
+  state: AZ
+  jurisdiction: statewide (cities, towns and counties)
+  policy_types:
+  - permit_timing
+  title: 'Arizona SB 1566 (2026): civil penalty for malicious delay of single-family applications'
+  citation: Laws 2026, ch. 71 (SB 1566); A.R.S. 9-500.54, 11-269.31, 12-1139 (new)
+  url: https://www.azleg.gov/legtext/57leg/2R/laws/0071.htm
+  session: 2026 Fifty-seventh Legislature, Second Regular Session
+  bill: SB 1566
+  enacted_date: 2026-05-29
+  effective_dates:
+  - date: 2026-09-12
+    applies_to: Whole act (2026 general effective date)
+  geographic_scope: All cities, towns and counties; single-family residential applications (site plans,
+    plats, land divisions, lot line changes, building permits).
+  exclusions:
+  - Delays from resource constraints, the applicant or third parties, good-faith errors, or enforcing adopted
+    technical codes are not 'malicious'
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The Attorney General enforces on an owner's written complaint; a violation needs clear and convincing
+    evidence and carries $5,000 per violation. Court claims get expedited review.
+  - '''Malicious'' needs specific intent, unauthorized requirements or repeated unexplained delays beyond
+    twice the adopted time frame. A weak lever on ordinary review speed.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chaptered text on azleg.gov (Chapter 71) shows 'APPROVED BY THE GOVERNOR MAY 29, 2026'.
+    azleg.gov bill status API shows Signed 2026-05-29, chapter 71, no emergency. azleg.gov general effective
+    dates table shows 09-12-2026.
+  sources:
+  - label: Chapter 71 text (SB 1566)
+    url: https://www.azleg.gov/legtext/57leg/2R/laws/0071.htm
+    official: true
+  - label: azleg.gov General Effective Dates
+    url: https://www.azleg.gov/general-effective-dates/
+    official: true
+  discovered_via: pew_2026

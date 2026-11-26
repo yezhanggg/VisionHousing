@@ -1,0 +1,482 @@
+# Cross-state comparison records: CO.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: co.hb24_1313
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - missing_middle
+  - infrastructure_finance
+  title: Housing in transit-oriented communities (zoning capacity goal near transit)
+  citation: HB24-1313; 2024 Colo. Sess. Laws ch. 168
+  url: https://leg.colorado.gov/bills/hb24-1313
+  session: 2024 regular session (75th General Assembly)
+  bill: HB24-1313
+  enacted_date: 2024-05-13
+  effective_dates:
+  - date: 2024-05-13
+    applies_to: Act effective on signature
+  - date: 2024-07-01
+    applies_to: State treasurer transfers $35 million to the transit-oriented communities infrastructure
+      fund
+  - date: 2024-09-30
+    applies_to: Department of Local Affairs must map transit-related areas
+  - date: 2025-06-30
+    applies_to: Preliminary assessment report due (housing opportunity goal, areas needing rezoning)
+  - date: 2026-12-31
+    applies_to: Housing opportunity goal report, affordability and displacement strategies due; water-supply
+      goal modification requests due
+  - date: 2027-12-31
+    applies_to: Deadline for the department to approve goal reports and certify communities
+  geographic_scope: Local governments in a metropolitan planning organization with population of at least
+    4,000 and at least 75 acres of transit-related areas; certain counties with unincorporated transit
+    station areas (within 1/2 mile of commuter or light rail) or enclosed transit corridor areas
+  exclusions:
+  - Communities below the 4,000 population or 75-acre transit-area thresholds
+  - Goal may be modified where insufficient water supply is shown
+  implementation_status: legally_effective
+  litigation:
+    status: challenged
+    note: Six home-rule cities (Greenwood Village, Arvada, Aurora, Glendale, Lafayette, Westminster) filed
+      a complaint in Denver District Court challenging HB24-1313 and HB24-1304 on home-rule grounds (complaint
+      posted by Greenwood Village; filed May 2025). No ruling found on any court page; status not confirmed
+      on a court docket. See separate record co.home_rule_suit_2025.
+    citation: City of Greenwood Village et al. v. State of Colorado et al., Denver District Court (case
+      number not shown on posted complaint)
+    url: https://www.greenwoodvillage.com/DocumentCenter/View/28525/Complaint-for-Declaratory-and-Injunctive-Relief-4908-1584-0837-v1
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Housing opportunity goal is a zoning capacity target (average 40 units/acre times transit-area acres),
+    not a production mandate
+  - Transit centers must allow at least 15 units/acre net density with administrative approval for multifamily
+    on parcels of 5 acres or less
+  - Only certified communities can draw on the infrastructure fund
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: leg.colorado.gov bill page shows Became Law, signed 2024-05-13, effective 2024-05-13,
+    Session Law ch. 168, and the summary deadlines listed.
+  sources:
+  - label: Colorado General Assembly bill page HB24-1313
+    url: https://leg.colorado.gov/bills/hb24-1313
+    official: true
+  discovered_via: search
+- id: co.hb24_1304
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  - tod
+  title: No minimum parking for multifamily and residential adaptive reuse near frequent transit
+  citation: HB24-1304; 2024 Colo. Sess. Laws ch. 159
+  url: https://leg.colorado.gov/bills/hb24-1304
+  session: 2024 regular session (75th General Assembly)
+  bill: HB24-1304
+  enacted_date: 2024-05-10
+  effective_dates:
+  - date: 2024-08-07
+    applies_to: Act effective
+  - date: 2025-06-30
+    applies_to: Covered local governments may not enact or enforce parking minimums for multifamily, residential
+      adaptive reuse, or mostly-residential mixed-use adaptive reuse in applicable transit service areas
+  geographic_scope: Municipalities in a metropolitan planning organization (MPO) and counties for unincorporated
+    MPO areas; applies to projects at least partly within 1/4 mile of qualifying transit stops as mapped
+    by DOLA
+  exclusions:
+  - Disability parking protections
+  - Parking maximums and bicycle parking minimums still allowed
+  - Pre-existing parking-for-affordability agreements
+  - Affordable housing funding conditions requiring a parking ratio
+  - Local governments may still impose minimums on projects of 20+ units or with regulated affordable
+    housing if they publish written findings and report annually to DOLA
+  implementation_status: legally_effective
+  litigation:
+    status: challenged
+    note: Challenged together with HB24-1313 in the 2025 home-rule cities' suit in Denver District Court;
+      no ruling found on a court page. See co.home_rule_suit_2025.
+    citation: null
+    url: https://www.greenwoodvillage.com/DocumentCenter/View/28525/Complaint-for-Declaratory-and-Injunctive-Relief-4908-1584-0837-v1
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Mixed-use adaptive reuse qualifies only if at least 50% residential
+  - Findings-based exception for 20+ unit projects narrows practical reach
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: leg.colorado.gov bill page shows signed 2024-05-10, effective 2024-08-07, Session
+    Law ch. 159, and the 2025-06-30 prohibition date.
+  sources:
+  - label: Colorado General Assembly bill page HB24-1304
+    url: https://leg.colorado.gov/bills/hb24-1304
+    official: true
+  discovered_via: search
+- id: co.hb26_1065
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - infrastructure_finance
+  - tod
+  title: Transit and housing investment zones (sales tax increment financing and affordable housing tax
+    credit)
+  citation: HB26-1065; 2026 Colo. Sess. Laws ch. 157
+  url: https://leg.colorado.gov/bills/hb26-1065
+  session: 2026 regular session
+  bill: HB26-1065
+  enacted_date: 2026-05-27
+  effective_dates:
+  - date: 2026-05-27
+    applies_to: Act effective
+  - date: 2026-10-30
+    applies_to: OEDIT with DOLA and CDOT must publish the transit and housing investment zone map
+  - date: 2027-01-01
+    applies_to: Start of CHFA allocation years (2027-2033) for the affordable housing in transit and housing
+      investment zones tax credit, up to $8,333,333 per year
+  geographic_scope: Local governments acting jointly with a transit agency; areas designated by the Colorado
+    economic development commission
+  exclusions:
+  - Increment revenue may not be used for eminent domain
+  - Commission may approve no more than 3 projects per year and 6 total; dedicated revenue capped at $75
+    million per fiscal year
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Confirmed as a transit-area finance and tax credit law, not a zoning mandate
+  - Approval can be revoked if substantial work does not start within 5 years
+  - Did not confirm on an official page whether the October 2026 map was published
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: leg.colorado.gov bill page shows Became Law, signed 2026-05-27, effective 2026-05-27,
+    Session Law ch. 157; map deadline and credit years from the bill summary.
+  sources:
+  - label: Colorado General Assembly bill page HB26-1065
+    url: https://leg.colorado.gov/bills/hb26-1065
+    official: true
+  discovered_via: search
+- id: co.hb24_1152
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - fees
+  title: ADUs allowed with administrative approval in metro-area jurisdictions
+  citation: HB24-1152; 2024 Colo. Sess. Laws ch. 167
+  url: https://leg.colorado.gov/bills/hb24-1152
+  session: 2024 regular session (75th General Assembly)
+  bill: HB24-1152
+  enacted_date: 2024-05-13
+  effective_dates:
+  - date: 2024-05-13
+    applies_to: Act effective
+  - date: 2025-06-30
+    applies_to: Subject jurisdictions must allow one ADU with any single-unit detached dwelling, approved
+      administratively; deadline for supportive-jurisdiction reports
+  geographic_scope: Municipalities of 1,000+ in an MPO area; county portions within a census-designated
+    place of 40,000+ in an MPO area
+  exclusions:
+  - Jurisdictions outside MPO areas or below thresholds
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - $5M ADU fee-reduction grant program only for supportive jurisdictions
+  - $8M CHFA lending and assistance for low- to moderate-income residents
+  - HOA ADU bans void in supportive jurisdictions, subject to reasonable restrictions
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: leg.colorado.gov bill page shows Became Law, signed 2024-05-13, effective 2024-05-13
+    with requirements from 2025-06-30, Session Law ch. 167.
+  sources:
+  - label: Colorado General Assembly bill page HB24-1152
+    url: https://leg.colorado.gov/bills/hb24-1152
+    official: true
+  discovered_via: search
+- id: co.home_rule_suit_2025
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - court_decision
+  - tod
+  - parking
+  title: Home-rule cities' suit against HB24-1313 and HB24-1304
+  citation: City of Greenwood Village et al. v. State of Colorado et al., District Court, Denver County
+    (complaint for declaratory and injunctive relief)
+  url: https://www.greenwoodvillage.com/DocumentCenter/View/28525/Complaint-for-Declaratory-and-Injunctive-Relief-4908-1584-0837-v1
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 'Plaintiffs: Greenwood Village, Arvada, Aurora, Glendale, Lafayette, Westminster;
+    defendants: State, Governor, DOLA and its executive director'
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: challenged
+    note: Complaint (posted on the Greenwood Village city site) shows Denver District Court, the six plaintiff
+      cities and defendants; case number blank on the posted copy. City page lists a 2025-05-19 news release.
+      No ruling, dismissal, or appeal found on any court or official page.
+    citation: null
+    url: https://greenwoodvillage.com/homerule
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Status after filing unknown; laws remain on the books
+  - Filing date taken from city news-release listing, not from a court stamp
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: Parties and court read on the official complaint posted by Greenwood Village; filing
+    date not read on a court record (posted copy lacks a file stamp and case number) and current status
+    could not be confirmed on any court docket.
+  sources:
+  - label: Complaint (Greenwood Village document center)
+    url: https://www.greenwoodvillage.com/DocumentCenter/View/28525/Complaint-for-Declaratory-and-Injunctive-Relief-4908-1584-0837-v1
+    official: true
+  - label: Greenwood Village home rule page
+    url: https://greenwoodvillage.com/homerule
+    official: true
+  - label: Colorado Municipal League press release (filed May 19, 2025)
+    url: https://www.cml.org/home/publications-news/Media-Center/land-use-preemptions-challenged
+    official: false
+  discovered_via: search
+- id: co.hb25_1273_single_stair
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Colorado HB25-1273: Residential Building Stair Modernization (single-exit buildings up to five
+    stories)'
+  citation: Colo. Sess. Laws 2025, ch. 188 (HB25-1273)
+  url: https://leg.colorado.gov/bills/hb25-1273
+  session: 2025 regular session
+  bill: HB25-1273
+  enacted_date: 2025-05-13
+  effective_dates:
+  - date: 2025-05-13
+    applies_to: Whole act (safety clause; effective on approval)
+  - date: 2027-12-01
+    applies_to: Deadline for subject municipalities to adopt or amend building codes allowing a single exit
+      for up to five stories of Group R-2 (multifamily)
+  - date: 2028-12-01
+    applies_to: First annual report to the state demography office on permits for such buildings
+  geographic_scope: Municipalities of 100,000 or more people served by a fire department, district or
+    authority accredited by the Commission on Fire Accreditation International.
+  exclusions:
+  - Smaller municipalities and counties are not required to act
+  - Conditions on aerial fire apparatus access and site design apply
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Code change, not zoning; it widens which small-lot multifamily designs are buildable.
+  - The section repeals on 2037-07-01.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Session law chapter 188 PDF on leg.colorado.gov shows 'Approved May 13, 2025', the
+    safety clause, the 2027-12-01 code deadline, the 2028-12-01 report and the population/fire-accreditation
+    test. The bill page lists the same signing and effective date. Bill pages answered a fetch tool but
+    returned HTTP 406 to plain curl on 2026-11-24; session law PDFs downloaded normally.
+  sources:
+  - label: HB25-1273 bill page (Colorado General Assembly)
+    url: https://leg.colorado.gov/bills/hb25-1273
+    official: true
+  - label: Session law, 2025 ch. 188
+    url: https://leg.colorado.gov/laws/session-laws/HB25-1273/188/download
+    official: true
+  discovered_via: search
+- id: co.hb25_1272_construction_defects
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - permit_timing
+  title: 'Colorado HB25-1272: Construction Defects and Middle Market Housing (Colorado American Dream Act)'
+  citation: Colo. Sess. Laws 2025, ch. 183 (HB25-1272)
+  url: https://leg.colorado.gov/bills/hb25-1272
+  session: 2025 regular session
+  bill: HB25-1272
+  enacted_date: 2025-05-12
+  effective_dates:
+  - date: 2025-08-06
+    applies_to: Whole act (90 days after adjournment; applies to defect claims brought on or after this date)
+  geographic_scope: Statewide; attached for-sale housing of two or more units (condominiums and townhomes).
+  exclusions:
+  - The narrower claim rules apply only to builders who opt in (warranty, third-party inspection, recorded
+    notice of election)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - For opted-in projects, claims are limited to actual damage, loss of use, injury or safety threats; claimants
+    must mitigate; HOA boards need 65% owner approval (up from a majority) to sue.
+  - Local governments must offer a fast-track (90-day) approval process for for-sale condominium projects
+    seeking state affordable-housing fund assistance.
+  - Liability reform affects condo supply indirectly; it is not a zoning change.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Session law chapter 183 PDF on leg.colorado.gov shows 'Approved May 12, 2025' and the
+    90-days-after-adjournment effective clause; the bill page gives the effective date 2025-08-06 and
+    chapter 183.
+  sources:
+  - label: HB25-1272 bill page (Colorado General Assembly)
+    url: https://leg.colorado.gov/bills/hb25-1272
+    official: true
+  - label: Session law, 2025 ch. 183
+    url: https://leg.colorado.gov/laws/session-laws/HB25-1272/183/download
+    official: true
+  discovered_via: search
+- id: co.hb26_1001_qualifying_properties
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - permit_timing
+  title: 'Colorado HB26-1001: Housing Opportunities Made Easier (HOME) Act, homes on school, transit, housing-authority
+    and nonprofit land'
+  citation: Colo. Sess. Laws 2026, ch. 8 (HB26-1001); C.R.S. 29-35-103 and part 5 of article 35, title 29
+  url: https://leg.colorado.gov/bills/hb26-1001
+  session: 2026 regular session
+  bill: HB26-1001
+  enacted_date: 2026-03-25
+  effective_dates:
+  - date: 2026-03-25
+    applies_to: Whole act (safety clause; effective on approval)
+  - date: 2027-12-31
+    applies_to: Subject jurisdictions must allow residential development on qualifying properties by administrative
+      approval; state guidance on nonprofit status due
+  - date: 2028-06-30
+    applies_to: Later deadline for jurisdictions actively updating their codes on 2027-12-31
+  geographic_scope: Subject jurisdictions (as defined in C.R.S. 29-35); qualifying properties of no more
+    than five acres owned by school districts, state colleges, boards of cooperative services, housing
+    authorities, transit districts, or affordable-housing nonprofits (or partners of one).
+  exclusions:
+  - Properties containing an exempt parcel; airport influence areas
+  - Jurisdictions running a transferable development rights program with a perpetual affordability policy
+    on the property
+  - Life-safety codes, health and floodplain rules, impact fees and water/sewer capacity statements still
+    apply
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A project cannot be denied for height if it is no taller than 3 stories or 38 ft (or the zone's or
+    a neighbouring residential parcel's limit); site design no stricter than for similar housing.
+  - Religious land is not named in the qualifying-owner list read on the bill page.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Session law chapter 8 PDF on leg.colorado.gov shows 'Approved March 25, 2026', the
+    safety clause, the 2027-12-31 compliance date and the five-acre test; the bill page shows 'Governor
+    Signed' 2026-03-25 and session law chapter 8.
+  sources:
+  - label: HB26-1001 bill page (Colorado General Assembly)
+    url: https://leg.colorado.gov/bills/hb26-1001
+    official: true
+  - label: Session law, 2026 ch. 8
+    url: https://leg.colorado.gov/laws/session-laws/HB26-1001/8/download
+    official: true
+  discovered_via: pew_2026
+- id: co.hb26_1114_min_lot_size
+  kind: policy
+  state: CO
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  title: 'Colorado HB26-1114: Allowed Minimum Lot Size for Subject Jurisdictions (failed)'
+  citation: HB26-1114, 2026 regular session (not enacted)
+  url: https://leg.colorado.gov/bills/hb26-1114
+  session: 2026 regular session
+  bill: HB26-1114
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Would have applied to subject jurisdictions, barring minimum lot sizes above 2,000 sq
+    ft for a single-family home (and frontage, setback, open-space or coverage rules that block one), from
+    2031-10-01.
+  exclusions:
+  - Certain lots were exempt in the bill as amended
+  implementation_status: lapsed
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Passed the House 38-26 on 2026-02-25; the Senate Local Government and Housing Committee postponed it
+    indefinitely 7-0 on 2026-04-23.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Bill history on leg.colorado.gov read on 2026-11-24 shows House passage 2026-02-25
+    and Senate committee postponement indefinitely 2026-04-23; no session law chapter.
+  sources:
+  - label: HB26-1114 bill page (Colorado General Assembly)
+    url: https://leg.colorado.gov/bills/hb26-1114
+    official: true
+  discovered_via: search

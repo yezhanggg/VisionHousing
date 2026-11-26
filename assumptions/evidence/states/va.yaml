@@ -1,0 +1,345 @@
+# Cross-state comparison records: VA.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: va.arlington_eho_2023
+  kind: policy
+  state: VA
+  jurisdiction: Arlington County
+  policy_types:
+  - missing_middle
+  title: Arlington County Expanded Housing Option (2 to 6 homes on lots zoned for one)
+  citation: Arlington County Zoning Ordinance § 10.4, Expanded Housing Option amendments
+  url: https://www.arlingtonva.us/About-Arlington/Newsroom/Articles/2023/County-Board-Adopts-Expanded-Housing-Options
+  session: null
+  bill: null
+  enacted_date: 2023-03-22
+  effective_dates:
+  - date: 2023-07-01
+    applies_to: EHO development allowed in R-20, R-10, R-8, R-6 and R-5 districts; permit applications open
+  - date: 2025-10-01
+    applies_to: EHO permit type available again for new applications after the appeal ruling
+  geographic_scope: One-family residential districts R-20 to R-5
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: decided
+    note: Circuit Court declared the amendments void and barred new EHO permits on 2024-09-27; the Court
+      of Appeals of Virginia reversed and remanded on 2025-09-05; the Supreme Court of Virginia agreed in
+      May 2026 to hear a related appeal without halting EHO development.
+    citation: Nordgren v. Arlington County Board
+    url: https://www.arlingtonva.us/Government/Departments/CAO/EHO-Trial-and-Appeal-Information
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The rule was usable for about 15 months (2023-07-01 to 2024-09-27), then halted until late 2025
+  - The adopted program capped EHO permits at 58 a year, spread around the County, so the possible effect
+    on permits is small by design
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'County news release: adopted 2023-03-22, effective 2023-07-01. County EHO trial and appeal
+    page: Circuit Court ruling 2024-09-27, Court of Appeals reversal 2025-09-05, permits open again 2025-10-01.'
+  sources:
+  - label: 'Arlington County: County Board adopts Expanded Housing Options'
+    url: https://www.arlingtonva.us/About-Arlington/Newsroom/Articles/2023/County-Board-Adopts-Expanded-Housing-Options
+    official: true
+  - label: Arlington County EHO trial and appeal information
+    url: https://www.arlingtonva.us/Government/Departments/CAO/EHO-Trial-and-Appeal-Information
+    official: true
+  discovered_via: search
+- id: va.ch1075_2026_parking_transit
+  kind: policy
+  state: VA
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  - tod
+  title: 'Virginia Acts 2026, ch. 1075 (HB 888): parking minimum caps within half a mile of transit'
+  citation: Va. Acts 2026, ch. 1075 (HB 888); Va. Code 15.2-2209.4
+  url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2209.4/
+  session: 2026 regular session (reconvened)
+  bill: HB 888
+  enacted_date: 2026-04-22
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: 'Va. Code 15.2-2209.4: within a designated area (parcels within 0.5 mile of the entrance
+      to a fixed-route transit station or facility, including BRT) minimum parking may not exceed 0.5
+      space per unit for multifamily or mixed-use and 1 space per unit for one- and two-family homes and
+      townhouses; localities over 20,000 people must offer an administrative reduction of at least 20%
+      elsewhere'
+  geographic_scope: All localities with a zoning ordinance. Designated areas are parcels within half a
+    mile of the entrance to a building or enhanced structure where riders board fixed-route rail, bus or
+    other surface transit open to the public.
+  exclusions:
+  - School buses, microtransit, charter and sightseeing services, highway-link car ferries and client-only
+    services do not count as transit
+  - Localities over 600,000 people may set higher minimums near locality-run bus stops if they offer an
+    administrative reduction of at least 25% within 1,000 feet of the stop (for projects at or below 70%
+    AMI, where the spaces are unnecessary, or with a shared-parking agreement)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - These are caps on minimums, not a ban. Ordinary bus stops count only if they are a building or enhanced
+    structure, so coverage depends on how localities read 'station or facility'.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 1075 text in the official LIS document store (lis.blob.core.windows.net)
+    reads '[H 888] Approved April 22, 2026' and has no delayed effective-date clause. The Code of Virginia
+    2026 Updates list (law.lis.virginia.gov) says listed sections took effect July 1, 2026 unless noted;
+    15.2-2209.4 carries no note, and its history line reads '2026, c. 1075'. The lis.virginia.gov bill
+    page is a JavaScript app that shows no content to scripted reading.
+  sources:
+  - label: Va. Code 15.2-2209.4 (Code of Virginia, LIS)
+    url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2209.4/
+    official: true
+  - label: Acts 2026, ch. 1075 text (LIS document store)
+    url: https://lis.blob.core.windows.net/files/1225324.PDF
+    official: true
+  - label: Code of Virginia 2026 Updates, Title 15.2
+    url: https://law.lis.virginia.gov/vacodeupdates/title15.2/
+    official: true
+  discovered_via: pew_2026
+- id: va.ch895_2026_adu
+  kind: policy
+  state: VA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - fees
+  title: 'Virginia Acts 2026, ch. 895 (SB 531): ADUs a permitted accessory use in single-family zones'
+  citation: Va. Acts 2026, ch. 895 (SB 531); Va. Code 15.2-2292.4 (enacted as 15.2-2292.3, renumbered
+    in the Code)
+  url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2292.4/
+  session: 2026 regular session
+  bill: SB 531
+  enacted_date: 2026-04-13
+  effective_dates:
+  - date: 2027-07-01
+    applies_to: 'Va. Code 15.2-2292.4: single-family zoning districts deemed to allow one attached or detached
+      ADU per lot as an accessory use; ADU permit fee capped at $500; setbacks no stricter than for the
+      main house or accessory structures, whichever is less'
+  geographic_scope: Single-family residential zoning districts in localities that had not adopted an ADU
+    ordinance before January 1, 2026.
+  exclusions:
+  - Localities that adopted an ADU ordinance before January 1, 2026 are exempt
+  - Private covenants, condominium, cooperative and property owners' association rules are not overridden
+  - Localities may require 30-day minimum leases, dedicated parking or replacement of lost parking, owner
+    occupancy of one unit at application, size limits no lower than 350 sq ft (lots under 2,500 sq ft)
+    or 500 sq ft, a 500-foot distance limit, and no ADU on lots with more than one unit
+  - ADUs may not be sold separately or subdivided
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The exemption for pre-2026 ordinances may leave many larger localities on their existing rules.
+  - Localities may require dedicated parking for the ADU, so the law does not guarantee no added parking.
+  - The $500 cap is on the ADU permit only; building, site and inspection fees still apply.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 895 text in the official LIS document store reads '[S 531] Approved April
+    13, 2026' and clause 2 'shall become effective on July 1, 2027'. The Code of Virginia page for 15.2-2292.4
+    (law.lis.virginia.gov) shows the section 'Effective July 1, 2027' with history '2026, c. 895'.
+  sources:
+  - label: Va. Code 15.2-2292.4 (Code of Virginia, LIS)
+    url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2292.4/
+    official: true
+  - label: Acts 2026, ch. 895 text (LIS document store)
+    url: https://lis.blob.core.windows.net/files/1223191.PDF
+    official: true
+  discovered_via: pew_2026
+- id: va.ch1009_1096_2026_faith_land
+  kind: policy
+  state: VA
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - missing_middle
+  - parking
+  title: 'Virginia Acts 2026, chs. 1009 and 1096 (SB 388 / HB 1279): by-right affordable housing on religious
+    and nonprofit land'
+  citation: Va. Acts 2026, ch. 1009 (SB 388) and ch. 1096 (HB 1279); Va. Code 15.2-2288.9
+  url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2288.9/
+  session: 2026 regular session (reconvened)
+  bill: HB 1279 / SB 388
+  enacted_date: 2026-04-22
+  effective_dates:
+  - date: 2027-01-01
+    applies_to: 'Va. Code 15.2-2288.9: by-right mixed-use or residential projects on land owned 5+ years
+      by a tax-exempt religious or 501(c)(3) organization, with at least 60% of units affordable (80%
+      AMI rental, 120% AMI for sale) for 30 years; deemed to allow at least 45 ft or the tallest building
+      within 500 ft, 20 units/acre or the densest housing within 500 ft, 10-ft setbacks; parking capped
+      at 1 space per unit'
+  - date: 2031-01-01
+    applies_to: The act expires (clause 4)
+  geographic_scope: All localities with a zoning ordinance, on property owned by tax-exempt religious organizations
+    or 501(c)(3) nonprofits served by or planned for public water and sewer.
+  exclusions:
+  - Property zoned for or next to land zoned for industrial use
+  - In historic districts established by January 1, 2026, the district's height rules control
+  - Permits approved before January 1, 2027
+  - Projects must meet environmental, historic, siting, wetland, stormwater, highway access and health
+    rules
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A temporary law (2027-2030). The 60% affordability share limits which projects pencil.
+  - Two identical chapters; one record covers both.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 1009 ('[S 388] Approved April 22, 2026') and Chapter 1096 ('[H 1279] Approved
+    April 22, 2026') texts in the official LIS document store each say clause 2 'effective on January
+    1, 2027' and clause 4 'expire on January 1, 2031'. The Code of Virginia page for 15.2-2288.9 shows
+    the version 'Effective January 1, 2027, until January 1, 2031' with history citing both chapters.
+  sources:
+  - label: Va. Code 15.2-2288.9 (Code of Virginia, LIS)
+    url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2288.9/
+    official: true
+  - label: Acts 2026, ch. 1009 text (LIS document store)
+    url: https://lis.blob.core.windows.net/files/1225118.PDF
+    official: true
+  - label: Acts 2026, ch. 1096 text (LIS document store)
+    url: https://lis.blob.core.windows.net/files/1225332.PDF
+    official: true
+  discovered_via: pew_2026
+- id: va.ch19_2026_manufactured_homes
+  kind: policy
+  state: VA
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  title: 'Virginia Acts 2026, ch. 19 (HB 655; companion SB 346, ch. 20): manufactured homes treated like
+    site-built homes'
+  citation: Va. Acts 2026, ch. 19 (HB 655); Va. Code 15.2-2290 and 15.2-2247
+  url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2290/
+  session: 2026 regular session
+  bill: HB 655
+  enacted_date: 2026-03-31
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: 'Va. Code 15.2-2290(B): in every district outside agricultural districts where site-built
+      homes are allowed, manufactured homes converted to real property, placed on individual lots and
+      occupied within 5 years of manufacture must be allowed, and may not be regulated more restrictively
+      than a site-built single-family home'
+  geographic_scope: All localities with a zoning ordinance, all residential zoning districts where site-built
+    housing is allowed.
+  exclusions:
+  - Homes not converted to real property, older than 5 years at occupancy, or not on individual lots
+  - Local historic district and archaeological protections still apply
+  - Restrictive covenants still apply
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - SB 346 (ch. 20) amends the same section; its approval date was not read, so this record rests on ch.
+    19.
+  - Lowers the cost of a single-family home on an existing lot; it does not change lot sizes.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 19 text in the official LIS document store reads '[H 655] Approved March
+    31, 2026' with no delayed effective-date clause. The Code of Virginia 2026 Updates list says listed
+    sections took effect July 1, 2026 unless noted; 15.2-2290 carries no note, and its history line reads
+    '2026, cc. 19, 20'.
+  sources:
+  - label: Va. Code 15.2-2290 (Code of Virginia, LIS)
+    url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2290/
+    official: true
+  - label: Acts 2026, ch. 19 text (LIS document store)
+    url: https://lis.blob.core.windows.net/files/1214955.PDF
+    official: true
+  - label: Code of Virginia 2026 Updates, Title 15.2
+    url: https://law.lis.virginia.gov/vacodeupdates/title15.2/
+    official: true
+  discovered_via: pew_2026
+- id: va.ch751_2026_small_lot
+  kind: policy
+  state: VA
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  title: 'Virginia Acts 2026, ch. 751 (HB 1212): small-lot residential zoning district required'
+  citation: Va. Acts 2026, ch. 751 (HB 1212); Va. Code 15.2-2286.2
+  url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2286.2/
+  session: 2026 regular session
+  bill: HB 1212
+  enacted_date: null
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: 'Va. Code 15.2-2286.2: localities of 50,000+ must keep at least one zoning district allowing
+      a single-family home on a lot of 3,000 sq ft or less, with lot widths of at most 30 ft and no setback,
+      coverage or density rule that blocks such homes'
+  geographic_scope: Localities with a population of 50,000 or more. An existing district that already
+    meets the test satisfies the law.
+  exclusions:
+  - Areas within local historic districts
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The law requires one such district to exist and be applied to some land; it does not say how much land.
+  - Search snippets of earlier drafts showed a 20,000-person threshold and a reenactment clause; the codified
+    section reads 50,000 and is shown as current law, but the enrolled chapter was not read.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: Section text, the chapter number (history '2026, c. 751') and the July 1, 2026 effective
+    date (2026 Updates list, no note) were read on law.lis.virginia.gov. The approval date and the chapter's
+    enactment clauses were not read; the lis.virginia.gov bill page is a JavaScript app that shows no
+    content to scripted reading, and the chapter PDF was not found in the LIS document store.
+  sources:
+  - label: Va. Code 15.2-2286.2 (Code of Virginia, LIS)
+    url: https://law.lis.virginia.gov/vacode/title15.2/chapter22/section15.2-2286.2/
+    official: true
+  - label: Code of Virginia 2026 Updates, Title 15.2
+    url: https://law.lis.virginia.gov/vacodeupdates/title15.2/
+    official: true
+  discovered_via: search

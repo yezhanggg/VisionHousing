@@ -72,3 +72,32 @@ def test_place_tables_with_nothing_fetched_are_empty():
     c = pd.DataFrame({"geoid": ["99001"], "name": ["Harbor County"], "population": [1]})
     assert place.place_tables(None, t, c, []) == {}
     assert place.place_tables(place.PlaceInputs(), t, c, []) == {}
+
+
+def test_retrofit_adds_jobs_and_incentive_tables_like_a_full_build(tmp_path):
+    import json
+
+    from visionhousing.data.http import sha256_file
+
+    bare = pack.write_pack(make_inputs(tmp_path), tmp_path / "bare", manifest=None)
+    assert not PLACE_TABLES & {f.path[: -len(".csv.gz")] for f in bare.files}
+    full = pack.write_pack(with_place(tmp_path), tmp_path / "full", manifest=None).folder
+    written = pack.add_profile_tables(
+        bare.folder, tmp_path / "cache", manifest=None, place=with_place(tmp_path).place
+    )
+    assert set(written) >= PLACE_TABLES | {"typology_county", "typology_tract"}
+    tables = pack.load_pack(bare.folder)
+    for name in PLACE_TABLES | {"typology_county", "typology_tract"}:
+        file = f"{name}.csv.gz"
+        assert (bare.folder / file).read_bytes() == (full / file).read_bytes(), name
+    assert "jobs_per_resident" in tables["typology_tract"].columns
+    assert {"jobs_per_resident", "qct_share"} <= set(tables["typology_county"].columns)
+    manifest = json.loads((bare.folder / "pack_manifest.json").read_text(encoding="utf-8"))
+    listed = {f["path"]: f for f in manifest["files"]}
+    for name in PLACE_TABLES:
+        path = bare.folder / f"{name}.csv.gz"
+        assert listed[path.name]["sha256"] == sha256_file(path)
+        assert listed[path.name]["rows"] == len(tables[name])
+    assert manifest["pack_hash"] != bare.pack_hash
+    dictionary = json.loads((bare.folder / "data_dictionary.json").read_text(encoding="utf-8"))
+    assert {t["table"] for t in dictionary["tables"]} >= PLACE_TABLES

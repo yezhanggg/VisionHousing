@@ -1,0 +1,491 @@
+# Cross-state comparison records: MT.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: mt.maid_v_state_2026
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - court_decision
+  - missing_middle
+  - adu
+  title: Montana Supreme Court upholds 2023 housing reform laws (MAID v. State)
+  citation: Montanans Against Irresponsible Densification, LLC v. State, 2026 MT 53, No. DA 25-0200
+  url: https://news.mt.gov/Governors-Office/Governor-Gianforte-Praises-Montana-Supreme-Court-Ruling-Upholding-Pro-Housing-Reforms
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 'Statewide; laws at issue: SB 382 (MLUPA), SB 323 (duplexes, cities 5,000+), SB 528
+    (ADUs), SB 245 (multifamily in commercial zones)'
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: decided
+    note: 'Decided 2026-03-17 (Baker, J., unanimous). (1) MAID''s challenge to MLUPA public participation
+      provisions is justiciable (not moot despite 2025 SB 121). (2) Reversed the Gallatin County district
+      court: MLUPA''s site-specific participation limits (§§ 76-25-106(4)(d), -305(4)-(6), -408(7)-(8),
+      MCA) do not facially violate the constitutional right to participate; injunction falls. (3) Affirmed:
+      the housing laws do not violate equal protection (by population class or covenant status). (4) Vacated
+      the district court''s declaration that the laws cannot displace stricter private covenants, as an
+      advisory opinion. SB 245 challenge not developed by MAID.'
+    citation: 2026 MT 53
+    url: https://news.mt.gov/Governors-Office/Governor-Gianforte-Praises-Montana-Supreme-Court-Ruling-Upholding-Pro-Housing-Reforms
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Opinion text read from a copy bearing the court's 03/17/2026 file stamp hosted by State Court Report,
+    not from the court's own document service
+  - Private restrictive covenants question left open
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Decision date 2026-03-17 and upheld bills (SB 323, SB 528, SB 382) read on the official
+    Governor's Office release (news.mt.gov); docket DA 25-0200, 2026 MT 53 and per-issue holdings read
+    in the file-stamped opinion (secondary host; Montana docket site could not be read automatically).
+  sources:
+  - label: Montana Governor's Office release, 2026-03-17
+    url: https://news.mt.gov/Governors-Office/Governor-Gianforte-Praises-Montana-Supreme-Court-Ruling-Upholding-Pro-Housing-Reforms
+    official: true
+  - label: Opinion copy (State Court Report)
+    url: https://statecourtreport.org/sites/default/files/2026-03/montana_densification_5824b10a-9859-ceaf-8bf7-9cfdb4a00000.pdf
+    official: false
+  discovered_via: search
+- id: mt.sb382_2023
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - permit_timing
+  title: Montana Land Use Planning Act (plan-first zoning with streamlined site review)
+  citation: SB 382 (2023); 2023 Mont. Laws ch. 500; Title 76, ch. 25, MCA
+  url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0250/part_0010/section_0050/0760-0250-0010-0050.html
+  session: 68th Legislature (2023)
+  bill: SB 382
+  enacted_date: null
+  effective_dates:
+  - date: 2026-05-17
+    applies_to: Compliance deadline for municipalities meeting thresholds on May 17, 2023 (3 years; later
+      if a growth policy was adopted in the prior 5 years)
+  geographic_scope: Municipalities of 5,000+ in counties of 70,000+ (per decennial census); others may
+    opt in
+  exclusions:
+  - Smaller municipalities unless they opt in
+  - Complying governments are exempt from Title 76 chapters 1, 2, 3 and 8
+  implementation_status: legally_effective
+  litigation:
+    status: decided
+    note: Upheld by the Montana Supreme Court 2026-03-17 (2026 MT 53); see mt.maid_v_state_2026. Public
+      participation provisions amended by 2025 SB 121 (ch. 555).
+    citation: 2026 MT 53
+    url: https://news.mt.gov/Governors-Office/Governor-Gianforte-Praises-Montana-Supreme-Court-Ruling-Upholding-Pro-Housing-Reforms
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Governor approval date not read on an official page (enacted_date left null)
+  - Legislative staff summary says about 10 cities were covered at enactment
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: MCA 76-25-105 (mca.legmt.gov) shows thresholds, the May 17, 2023 baseline and 3-year
+    compliance rule, history 'Sec. 5, Ch. 500, L. 2023'. Legislative Services 2023 land use summary (archive.legmt.gov)
+    confirms coverage.
+  sources:
+  - label: MCA 76-25-105
+    url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0250/part_0010/section_0050/0760-0250-0010-0050.html
+    official: true
+  - label: Legislative Services 2023 land use legislation summary
+    url: https://archive.legmt.gov/content/Committees/Interim/2023-2024/Local-Government/Meetings/September-7-2023/4.2_2023LandUseLegSummary_web.pdf
+    official: true
+  discovered_via: search
+- id: mt.sb528_2023_adu
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - fees
+  title: 'Montana SB 528 (2023): at least one ADU by right on every single-family lot in zoned municipalities'
+  citation: 2023 Mont. Laws ch. 502 (SB 528); MCA 76-2-345
+  url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0450/0760-0020-0030-0450.html
+  session: 68th Legislature (2023)
+  bill: SB 528
+  enacted_date: 2023-05-17
+  effective_dates:
+  - date: 2024-01-01
+    applies_to: Whole act; non-complying local ADU rules in effect on or after this date are void and the
+      statute applies directly until regulations are amended
+  geographic_scope: Every incorporated city, town or consolidated city-county that zones under MCA Title
+    76 ch. 2 part 3; any lot or parcel with a single-family dwelling
+  exclusions:
+  - Short-term rentals may still be regulated
+  - Building, fire and public health codes still apply; a water and sewer will-serve letter may be required
+  - Detached or attached ADUs capped at the lesser of 75% of the house or 1,000 sq ft
+  implementation_status: legally_effective
+  litigation:
+    status: decided
+    note: Upheld against equal-protection claims by the Montana Supreme Court on 2026-03-17 (2026 MT 53);
+      see mt.maid_v_state_2026.
+    citation: 2026 MT 53
+    url: https://news.mt.gov/Governors-Office/Governor-Gianforte-Praises-Montana-Supreme-Court-Ruling-Upholding-Pro-Housing-Reforms
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Municipalities may not require extra parking or fees in lieu, matching design, owner occupancy, occupant
+    relationships, impact fees, street improvements, or dimensional rules stricter than for the house.
+    A one-time application fee of up to $250 is allowed.'
+  - Close to benchmark reform 1 (one ADU, detached allowed, no added parking), except the size cap can
+    fall below 600 sq ft where the main house is under 800 sq ft.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 2023 Montana Session Laws vol. 2 (archive.legmt.gov) shows Chapter No. 502 [SB 528],
+    section 3 effective January 1, 2024, 'Approved May 17, 2023'. MCA 76-2-345 (mca.legmt.gov) shows
+    the current text and history 'En. Sec. 1, Ch. 502, L. 2023'. The bill status site bills.legmt.gov
+    is script-only and was not read.
+  sources:
+  - label: MCA 76-2-345
+    url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0450/0760-0020-0030-0450.html
+    official: true
+  - label: 2023 Laws of Montana, vol. 2 (ch. 445, 499, 502)
+    url: https://archive.legmt.gov/content/Publications/sales/2023SessionLaws_VOL2.pdf
+    official: true
+  - label: Legislative Services 2023 land use legislation summary
+    url: https://archive.legmt.gov/content/Committees/Interim/2023-2024/Local-Government/Meetings/September-7-2023/4.2_2023LandUseLegSummary_web.pdf
+    official: true
+  discovered_via: search
+- id: mt.sb323_2023_duplex
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Montana SB 323 (2023): duplexes allowed wherever single-family homes are, in cities of 5,000+'
+  citation: 2023 Mont. Laws ch. 445 (SB 323); MCA 76-2-304(3)
+  url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+  session: 68th Legislature (2023)
+  bill: SB 323
+  enacted_date: 2023-05-04
+  effective_dates:
+  - date: 2024-01-01
+    applies_to: Whole act
+  geographic_scope: Cities with at least 5,000 residents; every lot where a single-family home is a permitted
+    use
+  exclusions:
+  - Cities under 5,000 and unincorporated counties
+  - Only two units (duplex), not 3-6
+  implementation_status: legally_effective
+  litigation:
+    status: decided
+    note: A Gallatin County district court had enjoined the law; the Montana Supreme Court upheld it on
+      2026-03-17 (2026 MT 53); see mt.maid_v_state_2026.
+    citation: 2026 MT 53
+    url: https://news.mt.gov/Governors-Office/Governor-Gianforte-Praises-Montana-Supreme-Court-Ruling-Upholding-Pro-Housing-Reforms
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Duplex rules may not be stricter than single-family rules. Duplexes only, so it covers the low end of
+    benchmark reform 2 (2-6 units).
+  - Effect was delayed in practice by the injunction until the 2026 ruling.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 2023 Montana Session Laws vol. 2 shows Chapter No. 445 [SB 323], 'Approved May 4,
+    2023', section 3 effective January 1, 2024. MCA 76-2-304 shows the duplex subsection and history
+    'amd. Sec. 1, Ch. 445, L. 2023'. The Legislative Services summary gives the same effective date.
+  sources:
+  - label: MCA 76-2-304
+    url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+    official: true
+  - label: 2023 Laws of Montana, vol. 2 (ch. 445, 499, 502)
+    url: https://archive.legmt.gov/content/Publications/sales/2023SessionLaws_VOL2.pdf
+    official: true
+  - label: Legislative Services 2023 land use legislation summary
+    url: https://archive.legmt.gov/content/Committees/Interim/2023-2024/Local-Government/Meetings/September-7-2023/4.2_2023LandUseLegSummary_web.pdf
+    official: true
+  discovered_via: search
+- id: mt.sb245_2023_commercial
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - parking
+  title: 'Montana SB 245 (2023): multifamily and mixed use permitted in commercial zones of urban municipalities
+    over 5,000'
+  citation: 2023 Mont. Laws ch. 499 (SB 245); MCA 76-2-304(4)
+  url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+  session: 68th Legislature (2023)
+  bill: SB 245
+  enacted_date: 2023-05-17
+  effective_dates:
+  - date: 2023-05-17
+    applies_to: Whole act (effective on passage and approval; applies retroactively to zoning adopted
+      on or before that date)
+  geographic_scope: Municipalities designated as Census urban areas with more than 5,000 people; parcels
+    in a commercial zone
+  exclusions:
+  - Parcels without a will-serve letter from both municipal water and sewer
+  - Buildings of fewer than five units are not 'multiple-unit dwellings' under the law
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: Named among the 2023 laws in MAID v. State but the court noted the plaintiffs did not develop
+      a challenge to it (see mt.maid_v_state_2026).
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Parking capped at one space per unit (plus ADA spaces) for these projects. Mixed use means less than
+    50% non-residential floor area, on the ground floor only.
+  - Raised to a 60-ft height floor in some commercial zones by 2025 SB 243 (mt.sb243_2025_height).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 2023 Montana Session Laws vol. 2 shows Chapter No. 499 [SB 245], section 3 'effective
+    on passage and approval', 'Approved May 17, 2023'. The Legislative Services summary gives effective
+    date May 17, 2023. MCA 76-2-304 shows the current text.
+  sources:
+  - label: MCA 76-2-304
+    url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+    official: true
+  - label: 2023 Laws of Montana, vol. 2 (ch. 445, 499, 502)
+    url: https://archive.legmt.gov/content/Publications/sales/2023SessionLaws_VOL2.pdf
+    official: true
+  - label: Legislative Services 2023 land use legislation summary
+    url: https://archive.legmt.gov/content/Committees/Interim/2023-2024/Local-Government/Meetings/September-7-2023/4.2_2023LandUseLegSummary_web.pdf
+    official: true
+  discovered_via: search
+- id: mt.hb492_2025_parking
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  title: 'Montana HB 492 (2025): municipal parking minimums capped at one space per home, none for several
+    uses'
+  citation: 2025 Mont. Laws ch. 682 (HB 492); MCA 76-2-304(5)-(6), 76-25-303
+  url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+  session: 69th Legislature (2025)
+  bill: HB 492
+  enacted_date: 2025-05-13
+  effective_dates:
+  - date: 2026-10-01
+    applies_to: Whole act
+  geographic_scope: All municipalities zoning under MCA Title 76 ch. 2 part 3, and local governments under
+    the Montana Land Use Planning Act (76-25-303)
+  exclusions:
+  - ADA accessible parking still required
+  - County zoning under part 1 and part 2 not covered by the 76-2-304 change
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Caps: no more than one space per home; no more than half a space per home under 1,200 sq ft; no
+    minimum at all for changes of use in existing buildings, licensed child care, deed-restricted affordable
+    housing or assisted living. Builders may still provide more.'
+  - A reduction, not abolition; benchmark reform 4 assumes removal.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 2025 Montana Session Laws vol. 3 (archive.legmt.gov) shows Chapter No. 682 [HB 492],
+    'Approved May 13, 2025'. The 2025 Montana Legislative Review effective-date table lists Ch. 682 HB
+    492 10/01/2026, and the enrolled text section 3 says effective October 1, 2026. MCA 76-2-304 shows
+    the 'Effective October 1, 2026' version with the parking caps.
+  sources:
+  - label: MCA 76-2-304 (both versions)
+    url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+    official: true
+  - label: 2025 Laws of Montana, vol. 3 (ch. 682)
+    url: https://archive.legmt.gov/content/Publications/sales/2025SessionLaws_VOL3.pdf
+    official: true
+  - label: HB 492 enrolled text (chapter 682)
+    url: https://archive.legmt.gov/content/Sessions/69th/Contractor_index/CH0682.pdf
+    official: true
+  - label: Montana Legislative Review 2025 (effective dates by chapter)
+    url: https://static.legmt.gov/Laws/MCA-Supplements/2025LegislativeReview_Updated.pdf
+    official: true
+  discovered_via: search
+- id: mt.sb243_2025_height
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  title: 'Montana SB 243 (2025): no height limit under 60 ft in downtown commercial, heavy commercial and
+    industrial zones for housing'
+  citation: 2025 Mont. Laws ch. 591 (SB 243); MCA 76-2-304(4)(b)(iii), 76-25-303
+  url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+  session: 69th Legislature (2025)
+  bill: SB 243
+  enacted_date: 2025-05-12
+  effective_dates:
+  - date: 2026-10-01
+    applies_to: Whole act
+  geographic_scope: Municipalities designated as Census urban areas with more than 5,000 people; multifamily
+    and mixed-use projects on commercial parcels with water and sewer will-serve letters
+  exclusions:
+  - Smaller municipalities
+  - Height floor applies only in downtown commercial, heavy commercial or industrial zones
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Extends the 2023 SB 245 rule (mt.sb245_2023_commercial); cities may not set a height limit below 60
+    ft for these projects in the named zones.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 2025 Montana Session Laws vol. 2 shows Chapter No. 591 [SB 243], 'Approved May 12,
+    2025'. The 2025 Montana Legislative Review lists Ch. 591 SB 243 effective 10/01/2026; the enrolled
+    text section 3 says effective October 1, 2026. MCA 76-2-304 (October 1, 2026 version) shows the 60-ft
+    rule.
+  sources:
+  - label: MCA 76-2-304 (both versions)
+    url: https://mca.legmt.gov/bills/mca/title_0760/chapter_0020/part_0030/section_0040/0760-0020-0030-0040.html
+    official: true
+  - label: SB 243 enrolled text (chapter 591)
+    url: https://archive.legmt.gov/content/Sessions/69th/Contractor_index/CH0591.pdf
+    official: true
+  - label: 2025 Laws of Montana, vol. 2 (ch. 368, 376, 591)
+    url: https://archive.legmt.gov/content/Publications/sales/2025SessionLaws_VOL2.pdf
+    official: true
+  - label: Montana Legislative Review 2025 (effective dates by chapter)
+    url: https://static.legmt.gov/Laws/MCA-Supplements/2025LegislativeReview_Updated.pdf
+    official: true
+  discovered_via: search
+- id: mt.sb252_2025_manufactured
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  title: 'Montana SB 252 (2025): zoning must treat manufactured and factory-built homes like other homes'
+  citation: 2025 Mont. Laws ch. 376 (SB 252); MCA 76-2-119, 76-2-202, 76-2-302, 76-25-103, 76-25-303,
+    77-1-902
+  url: https://archive.legmt.gov/content/Sessions/69th/Contractor_index/CH0376.pdf
+  session: 69th Legislature (2025)
+  bill: SB 252
+  enacted_date: 2025-05-05
+  effective_dates:
+  - date: 2025-10-01
+    applies_to: Whole act
+  geographic_scope: Statewide; county and municipal zoning, Land Use Planning Act jurisdictions, and state
+    trust land leases
+  exclusions:
+  - Building codes and HUD standards still apply
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Zoning may not treat manufactured or factory-built units differently from other homes, with a rebuttable
+    presumption that they do not lower nearby property values. Lowers cost per home; does not change
+    lot size or density.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 2025 Montana Session Laws vol. 2 shows Chapter No. 376 [SB 252], 'Approved May 5,
+    2025'. The 2025 Montana Legislative Review lists Ch. 376 SB 252 effective 10/01/2025 (the act has
+    no effective-date section, so the default date applies). Enrolled text read.
+  sources:
+  - label: SB 252 enrolled text (chapter 376)
+    url: https://archive.legmt.gov/content/Sessions/69th/Contractor_index/CH0376.pdf
+    official: true
+  - label: 2025 Laws of Montana, vol. 2 (ch. 368, 376, 591)
+    url: https://archive.legmt.gov/content/Publications/sales/2025SessionLaws_VOL2.pdf
+    official: true
+  - label: Montana Legislative Review 2025 (effective dates by chapter)
+    url: https://static.legmt.gov/Laws/MCA-Supplements/2025LegislativeReview_Updated.pdf
+    official: true
+  discovered_via: search
+- id: mt.sb213_2025_single_stair
+  kind: policy
+  state: MT
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Montana SB 213 (2025): state building code must permit single-stair apartment buildings up to
+    six storeys'
+  citation: 2025 Mont. Laws ch. 368 (SB 213); MCA 50-60-203(10)
+  url: https://archive.legmt.gov/content/Sessions/69th/Contractor_index/CH0368.pdf
+  session: 69th Legislature (2025)
+  bill: SB 213
+  enacted_date: 2025-05-05
+  effective_dates:
+  - date: 2025-10-01
+    applies_to: Whole act (the state building code agency then adopts rules)
+  geographic_scope: Statewide state building code (R-2 apartment buildings)
+  exclusions:
+  - Buildings over six storeys above grade or with more than four units per floor
+  - Requires automatic sprinklers and an emergency exit provision (such as a window) in each unit
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Mandatory ('shall permit') in the state code, unlike Idaho's local option. Whether the implementing
+    rule has been adopted was not checked.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 2025 Montana Session Laws vol. 2 shows Chapter No. 368 [SB 213], 'Approved May 5,
+    2025'. The 2025 Montana Legislative Review lists Ch. 368 SB 213 effective 10/01/2025. Enrolled text
+    read for the conditions.
+  sources:
+  - label: SB 213 enrolled text (chapter 368)
+    url: https://archive.legmt.gov/content/Sessions/69th/Contractor_index/CH0368.pdf
+    official: true
+  - label: 2025 Laws of Montana, vol. 2 (ch. 368, 376, 591)
+    url: https://archive.legmt.gov/content/Publications/sales/2025SessionLaws_VOL2.pdf
+    official: true
+  - label: Montana Legislative Review 2025 (effective dates by chapter)
+    url: https://static.legmt.gov/Laws/MCA-Supplements/2025LegislativeReview_Updated.pdf
+    official: true
+  discovered_via: search

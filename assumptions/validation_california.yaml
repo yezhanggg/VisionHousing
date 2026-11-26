@@ -1,0 +1,134 @@
+# California validation: settings for the HCD Annual Progress Report (APR) study.
+# Read by visionhousing.validation.apr_data and visionhousing.validation.california;
+# the command `visionhousing validate-california` writes
+#   assumptions/evidence/california_apr.yaml          (comparison records, stage tables)
+#   assumptions/calibration/apr_timing_donor_ca.yaml   (transferred timing/attrition ranges)
+#   assumptions/calibration/adu_rate_plausibility.yaml (PA ADU rate next to CA rates)
+# Method: docs/modules/validation_california.md.
+#
+# Every rule below was written before the post-2019 outcomes were computed.
+# Changing a rule changes the study; record why in the project's decision log.
+
+version: 1
+
+first_year: 2018          # first APR reporting year with jurisdiction-level tables
+last_year: 2025           # last complete reporting year in the download
+# Projects still waiting are right-censored at the end of the last reporting year:
+# a stage reached after this date cannot appear in the tables yet.
+censor_date: 2025-12-31
+# Dates outside this window are treated as typing errors and set blank.
+earliest_valid_date: 2000-01-01
+
+sources:
+  table_a: hcd_apr_table_a        # applications received (one row per application)
+  table_a2: hcd_apr_table_a2      # entitled / permitted / completed (one row per project-year)
+  acs_table: acs5_profile_tables  # B25024 units in structure (1-unit detached = lots proxy)
+  acs_geos: acs5_geos
+acs_table_name: b25024
+acs_lots_cell: B25024_002E        # one-unit detached homes
+state_fips: "06"
+
+# Reading the large files: rows per chunk (the files are streamed, never loaded whole).
+chunk_rows: 100000
+
+# ---------------------------------------------------------------- project groups
+# Each project gets exactly one group, tested in this order (first match wins).
+# UNIT_CAT is the APR unit category; the streamlining field is APP_SUBMITTED_SB35
+# in Table A and APPROVE_SB35 in Table A2 (since 2022 it names the law used:
+# "SB 9 (2021) - Duplex in SF Zone", "SB 35 (2017)", "AB 2011 (2022)" and so on).
+# ADU rows stay ADUs even when an SB 9 flag is present, so the ADU series is the
+# same one the state counts; SB 9 and ministerial multifamily never mix with it.
+groups:
+  - id: adu
+    label: "Accessory dwelling units (ADU, JADU)"
+    unit_cats: ["ADU"]
+  - id: sb9
+    label: "SB 9 duplex or lot split (flagged on the APR)"
+    streamlining_pattern: 'SB 9'
+  - id: ministerial_5_plus
+    label: "5+ homes, streamlined or ministerial approval"
+    unit_cats: ["5+"]
+    streamlining_values: ["Y", "Yes-Approved", "SB 35 (2017)", "SMAP", "AB 2011 (2022)",
+                          "SB 423 (2023)", "SB 4 (2023)", "SB 6 (2022)"]
+    streamlining_pattern: '(?:SB 35|AB 2011|SB 423|SB 4 \(|SB 6 \(|SMAP)'
+    project_type: "Ministerial"   # Table A PROJECT_TYPE also qualifies a 5+ project
+  - id: mf_2_4
+    label: "2-4 homes (not SB 9)"
+    unit_cats: ["2 to 4"]
+  - id: mf_5_plus_other
+    label: "5+ homes, other approval path"
+    unit_cats: ["5+"]
+  - id: single_family
+    label: "Single-family and mobile homes (SFD, SFA, MH)"
+    unit_cats: ["SFD", "SFA", "MH"]
+
+# ---------------------------------------------------------------- linking
+# A project is (jurisdiction, assessor parcel number with non-digits removed,
+# unit category). Table A applications are joined to Table A2 rows of the same
+# project whose stage date is on or after the application date.
+link:
+  min_apn_digits: 6       # shorter parcel numbers are too ambiguous to join on
+
+# ---------------------------------------------------------------- measures
+quantiles: [0.10, 0.25, 0.50, 0.75, 0.90]
+horizons_years: [1, 2, 3, 4, 5]
+days_per_year: 365.25
+# A Kaplan-Meier figure needs at least this many projects; smaller cells are blank.
+min_projects: 30
+
+# ---------------------------------------------------------------- jurisdiction choice
+# Rule (written before any 2020-2025 outcome was computed; one revision, noted below):
+# 1. Candidates: incorporated cities with at least `min_lots` one-unit detached
+#    homes (ACS 2020-2024).
+# 2. The two focal cities are named for a documented difference in pathway:
+#    San Diego added a local legal pathway (the ADU Bonus Program, adopted in 2020,
+#    allows extra ADUs near major transit); Los Angeles is the largest ministerial
+#    ADU permitting office in the state and runs a pre-approved ADU standard-plan
+#    program in its building department.
+# 3. Each focal city gets its own peer: the candidate (not focal, not already a
+#    peer) whose pre-period ADU permit rate (`pre_years`, per 1,000 one-unit
+#    detached homes) is closest to the focal city's own, provided it is within
+#    `peer_tolerance` (relative difference). A focal city with no candidate that
+#    close gets no peer; its record is a plain before/after (descriptive). The
+#    peer's local ADU programme is not reviewed; it stands for "state-law
+#    pathway, as far as this study knows".
+# Only the pre-period years are passed to the selection code.
+# Revision (2026-11-24, before any file was published): the first draft matched one
+# peer to the mean of the two focal rates; Los Angeles's pre-period rate is about
+# 4.6 times San Diego's, so that mean matched neither city. Changed to one peer per
+# focal city with a tolerance. This revision was made after the first run had
+# printed post-period rates; see the decision log.
+selection:
+  min_lots: 100000
+  pre_years: [2018, 2019]
+  focal:
+    - name: "SAN DIEGO"
+      pathway: "local legal pathway: ADU Bonus Program (extra ADUs in the transit-served Sustainable Development Area)"
+      change: "ADU Bonus Program added to the municipal code in the 2020 Housing Legislative Package"
+      change_date: "2020"
+      source_url: https://www.sandiego.gov/development-services/housing-toolkit
+    - name: "LOS ANGELES"
+      pathway: "process pathway: ministerial ADU plan check at scale, with a pre-approved standard-plan program"
+      change: "Pre-approved ADU standard plans offered by the Department of Building and Safety (start date not verified here)"
+      change_date: "after 2019 (not verified)"
+      source_url: https://dbs.lacity.gov/standard-plan-program
+  peer_tolerance: 0.25   # |peer rate - focal rate| / focal rate
+
+# Statewide change used for the before/after record (state law, every jurisdiction).
+statewide_change:
+  what: "State ADU laws (AB 68, AB 881, SB 13) took effect: ministerial approval within 60 days, no owner-occupancy rule until 2025, limits on parking, fees and lot-size rules"
+  date: "2020-01-01"
+  pre_years: [2018, 2019]
+  post_years: [2020, 2021, 2022, 2023, 2024, 2025]
+
+# ---------------------------------------------------------------- plausibility
+# The VisionHousing run read for the PA ADU rate. The first file that exists is
+# used; when none does, Testland is run with `fallback_draws` draws.
+plausibility:
+  run_files:
+    - web/public/data/PA/runs/adu.json
+  reform: adu
+  eligible_step: eligible
+  built_step: built
+  years: 5
+  fallback_draws: 200

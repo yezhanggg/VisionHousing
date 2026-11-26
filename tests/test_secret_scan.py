@@ -109,3 +109,14 @@ def test_url_paths_pass_but_url_query_keys_are_caught():
     assert not [h for h in ss.scan_text("a.yaml", path_only, []) if "entropy" in h.kind]
     with_query = f"url: https://example.gov/files/data.zip?key={RANDOM_TOKEN}"
     assert [h for h in ss.scan_text("a.yaml", with_query, []) if "entropy" in h.kind]
+
+
+def test_compact_profile_index_columns_are_not_secrets():
+    """A compact profile's index column looks random; only the randomness check is skipped."""
+    column = "0123456789" + "abcdefghijklmnopqrstuvwxyz" + "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+    line = '{"cols":{"x":{"i":"' + column + '"}}}'
+    assert ss.scan_text("web/public/data/PA/profiles/county-values.json", line, []) == []
+    assert ss.scan_text("web/public/data/PA/runs/adu.json", line, [])
+    key = "AKIA" + "ABCDEFGHIJKLMNOP"
+    tracts = "web/public/data/PA/profiles/" + "tracts-42001.json"
+    assert ss.scan_text(tracts, key, [])

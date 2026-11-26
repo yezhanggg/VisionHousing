@@ -28,6 +28,18 @@ Facts come from two Census Bureau products (see
 A county is compared with the state, a tract with its county. County-level
 facts are compared with the state; for the state the counties are added up.
 
+Charts (see :mod:`visionhousing.profile.charts`):
+
+- **Jobs by sector** (a ranked bar list): the largest NAICS sectors by jobs
+  located in the place (LODES), with the rest added up as "All other sectors",
+  and the bigger area's shares of the same sectors.
+- **How workers get to work** (a pie): ACS table B08301 for the workers who
+  live in the place (drove alone, carpooled, transit, walked or cycled, other,
+  worked from home).
+
+Headline: jobs located in the place. Summary points: jobs per resident, the
+largest sector and the share of workers who drive alone.
+
 Named largest employers are not shown: Pennsylvania's Center for Workforce
 Information publishes them only as PDF files.
 """
@@ -37,9 +49,11 @@ from __future__ import annotations
 import pandas as pd
 
 from visionhousing.features.jobs import SECTOR_NAMES
+from visionhousing.profile.charts import band_chart, items_from_counts
 from visionhousing.profile.context import Area, Measure, MissingDataError, ProfileContext
-from visionhousing.profile.model import Fact, Section
-from visionhousing.profile.sections._common import FactMaker, finish, sentence
+from visionhousing.profile.format import fmt
+from visionhousing.profile.model import Chart, ChartCompare, Fact, Section
+from visionhousing.profile.sections._common import FactMaker, finish, point, sentence
 
 KEY = "jobs"
 TITLE = "Jobs and employers"
@@ -47,6 +61,8 @@ WAC = "lodes_wac"
 OD = "lodes_od"
 CBP = "cbp_county"
 TOP_SECTORS = 3
+CHART_SECTORS = 6
+"""Sectors shown one by one in the sector chart; the rest are added up."""
 
 LIMITS = (
     "Jobs are counted where people work, from unemployment-insurance records and federal "
@@ -166,7 +182,30 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
                measured_at="county")  # fmt: skip
         facts += fc.facts
 
+    charts = [
+        _sector_chart(ctx, place, other, rows, sectors),
+        band_chart(
+            ctx,
+            KEY,
+            "commute_mode",
+            "commute",
+            "pie",
+            place,
+            other,
+            note="workers who live in the place, wherever they work",
+        ),
+    ]
     jobs, ratio = fm.get("jobs_located"), fm.get("jobs_per_resident")
+    points = [point(ratio, "{text} jobs per resident{words}")]
+    first_sector = fm.get("sector_1")
+    if first_sector and first_sector.value is not None:
+        name = first_sector.label.split(": ", 1)[1]
+        points.append(f"Largest sector: {name.lower()} ({first_sector.text} of jobs)")
+    commute = charts[1]
+    if commute is not None:
+        alone = next((i for i in commute.items if i.key == "drove_alone"), None)
+        if alone is not None and alone.share is not None:
+            points.append(f"{fmt(alone.share, 'share')} of working residents drive to work alone")
     parts = []
     if jobs and jobs.value is not None:
         lead = f"{place.name} has {jobs.text} jobs located in it"
@@ -182,4 +221,48 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
     if inflow and inflow.value is not None:
         where = "its" if place.level == "county" else "its county's"
         parts.append(f"{inflow.text} of {where} jobs are held by people who live elsewhere")
-    return finish(KEY, TITLE, sentence(parts), facts, LIMITS)
+    return finish(KEY, TITLE, sentence(parts), facts, LIMITS, charts=charts, lead=jobs,
+                  points=points)  # fmt: skip
+
+
+def _sector_chart(ctx, place, other, rows, sectors: list[str]) -> Chart | None:
+    """Jobs by NAICS sector: the largest :data:`CHART_SECTORS`, then "All other sectors"."""
+
+    def counts(area) -> pd.Series:
+        return rows(area)[sectors].apply(pd.to_numeric, errors="coerce").sum()
+
+    mine = counts(place)
+    if not len(mine) or mine.sum() <= 0:
+        return None
+    order = mine[mine > 0].sort_values(ascending=False, kind="stable")
+    top = list(order.index[:CHART_SECTORS])
+    rest = [c for c in sectors if c not in top]
+
+    def items(series: pd.Series):
+        out = []
+        for column in top:
+            code = column.rsplit("_", 1)[1]
+            out.append((code, SECTOR_NAMES.get(code, code), float(series[column]), None))
+        if rest:
+            out.append(("other", "All other sectors", float(series[rest].sum()), None))
+        return items_from_counts(out)
+
+    made, total = items(mine)
+    compare = None
+    if other is not None:
+        theirs = counts(other)
+        if theirs.sum() > 0:
+            compare = ChartCompare(other.name, items(theirs)[0])
+    return Chart(
+        id=f"{KEY}.sectors",
+        kind="rank",
+        title="Jobs by industry sector",
+        unit="jobs",
+        items=made,
+        total=total,
+        compare=compare,
+        source_ids=(WAC,),
+        vintage=ctx.vintage(WAC),
+        note=f"LODES jobs by NAICS sector; largest {CHART_SECTORS} shown, the rest added up; "
+        "share = sector jobs / all jobs.",
+    )

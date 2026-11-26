@@ -29,7 +29,18 @@ from visionhousing.ledger.schema import Source
 
 DEFAULT_PATH = ROOT / "assumptions" / "scenarios.yaml"
 
-Reform = Literal["adu", "missing_middle", "tod", "parking", "fees"]
+Reform = Literal[
+    "adu",
+    "missing_middle",
+    "tod",
+    "parking",
+    "fees",
+    "transit_zoning_funded_infrastructure",
+    "commercial_land_housing",
+    "adaptive_reuse",
+    "starter_home_lots",
+    "fee_deferral_with_affordability",
+]
 BuildingType = Literal["sf_detached", "sf_attached", "two_to_four", "five_plus"]
 
 
@@ -47,7 +58,9 @@ class Scenario(BaseModel):
 
     Attributes:
         title: Short name shown to users.
-        kind: ``baseline``, a Handbook ``benchmark``, or a ``state`` scenario.
+        kind: ``baseline``, a Handbook ``benchmark``, a ``state`` scenario (a bill),
+            or an ``extra`` scenario (a named policy beyond the benchmarks; the
+            benchmark presets stay unchanged).
         priority: Build priority: ``must``, ``should`` or ``could``.
         handbook_text: The Handbook's exact wording (benchmark and baseline only).
         description: Plain-language summary.
@@ -62,7 +75,7 @@ class Scenario(BaseModel):
     model_config = ConfigDict(extra="forbid", frozen=True)
 
     title: str = Field(min_length=1)
-    kind: Literal["baseline", "benchmark", "state"]
+    kind: Literal["baseline", "benchmark", "state", "extra"]
     priority: Literal["must", "should", "could"]
     handbook_text: str | None = None
     description: str = Field(min_length=1)
@@ -100,7 +113,7 @@ def parse_scenarios(data: Any, ledger: Ledger, name: str = "scenarios.yaml") -> 
             continue
         if scenario.kind == "baseline" and scenario.reforms:
             problems.append(f"scenario '{sid}': the baseline turns on no reforms")
-        if scenario.kind != "state" and not scenario.handbook_text:
+        if scenario.kind in ("baseline", "benchmark") and not scenario.handbook_text:
             problems.append(f"scenario '{sid}': needs the Handbook's wording")
         try:
             apply_overrides(ledger, scenario.overrides)

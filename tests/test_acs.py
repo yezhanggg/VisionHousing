@@ -54,7 +54,8 @@ class Opener:
     def open(self, req, data=None, timeout=None):
         url = req.full_url
         self.urls.append(url)
-        if self.api and url.startswith("https://api.census.gov"):
+        parts = urllib.parse.urlsplit(url)
+        if self.api and parts.scheme == "https" and parts.hostname == "api.census.gov":
             return Response(self.api(urllib.parse.parse_qs(urllib.parse.urlsplit(url).query)))
         name = urllib.parse.urlsplit(url).path.rsplit("/", 1)[1]
         body = self.files[name]

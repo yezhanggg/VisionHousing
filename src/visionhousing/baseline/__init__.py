@@ -1,10 +1,12 @@
 """The baseline: what housing production looks like with no reform.
 
 Projects building-permit units for the next five years under current rules and
-economics, and backtests that projection against past years. Four simple rules
-are compared (five- and ten-year means, an exponentially weighted mean, and a
-damped trend); the simplest one within tolerance of the best is used. The likely
-range comes from the rule's own past errors, by county size class.
+economics, and backtests that projection against past years. Seven simple rules
+compete (``contest``): five- and three-year means, the median of five years, a
+damped trend, shrink to place type, top-down share and their average. A choosing
+rule fixed in ``assumptions/backtest.yaml`` picks the winner. The likely range
+comes from the winner's own past errors, pooled by county size class or place
+type, whichever does better when tested on later years only.
 """
 
 from visionhousing.baseline.backtest import (

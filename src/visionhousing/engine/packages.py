@@ -157,8 +157,8 @@ def lot_overlap(alone: np.ndarray, with_adu_lots: np.ndarray) -> np.ndarray:
 # package too, missing middle has already lost lots to ADUs; the removal applies
 # to what is left (state share, per draw), so a lot is never removed twice.
 #
-# Parking: the TOD pro forma already builds parking at the D-08 transit-rich
-# share, and the parking reform acts only on baseline production, so TOD and
+# Parking: the TOD pro forma already builds parking at the transit-rich
+# still-built share, and the parking reform acts only on baseline production, so TOD and
 # parking never count the same unit; no parking -> TOD interaction is added.
 
 TOD_FAMILY = "tod"
@@ -173,7 +173,7 @@ def tod_middle_overlap(middle: Any, tod: Any) -> np.ndarray:
 
     Args:
         middle: The missing-middle ``ReformResult`` (run alone; tract level, its
-            ``detail.stages["net"]`` is draws x tracts).
+            ``detail.stages["authorized"]``, its headline, is draws x tracts).
         tod: The TOD ``ReformResult`` (its ``detail.in_area_units_share`` is the
             share of each tract's homes within the TOD distance).
 
@@ -181,7 +181,7 @@ def tod_middle_overlap(middle: Any, tod: Any) -> np.ndarray:
         Units by draw, shape ``(draws,)``, never negative and never above
         missing middle's own total in that draw.
     """
-    net = np.asarray(middle.detail.stages["net"], dtype=float)  # draws x tracts
+    net = np.asarray(middle.detail.stages["authorized"], dtype=float)  # draws x tracts
     share = pd.Series(
         np.asarray(tod.detail.in_area_units_share, dtype=float),
         index=[str(g) for g in tod.detail.geoids],

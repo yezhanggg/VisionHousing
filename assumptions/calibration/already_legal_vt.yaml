@@ -1,0 +1,80 @@
+# Calibration table: share of Vermont lots where the benchmark ADU and
+# missing-middle reforms are already legal under state law.
+#
+# Vermont law already requires every town's zoning bylaw to allow, as a
+# permitted use:
+#   - one accessory dwelling unit within or appurtenant to a single-family
+#     dwelling (24 V.S.A. § 4412(1)(E)), reviewed like the house alone;
+#   - duplexes in any district that allows year-round residential development,
+#     on no more land than a single home needs, and multiunit dwellings of four
+#     or fewer units on the same size lot as a single home wherever municipal
+#     sewer and water serve a residential district (24 V.S.A. § 4412(1)(D)).
+# So most of what the two benchmark reforms would allow is already allowed. The
+# reform adds homes only where practice lags the statute (bylaws not yet
+# updated, conditional review kept, flood-area exceptions) and, for missing
+# middle, where the statute stops short of the reform (5-6 units on sewered
+# lots; 3-6 units on lots without municipal sewer and water). Missing middle
+# now reads the dated statute directly (see "also" below).
+#
+# Compliance is not complete and has not been measured town by town, so the
+# ranges below are documented judgement, not a measurement, and none reaches
+# 100%. A Vermont town-rule index (like Pennsylvania's) would replace them.
+#
+# The engine turns this into overrides of the ledger entries named below for
+# Vermont runs only (visionhousing.scenarios.adu.legal_share_override). Read by
+# visionhousing.scenarios.adu.load_legal_shares; see docs/TECHNICAL_APPENDIX.md
+# section G.2 (Vermont).
+
+version: 1
+id: already_legal_vt_2026_11
+state: VT
+parameter: adu.already_legal_share
+unit: "share of lots"
+kind: judgement
+
+provenance:
+  summary: >-
+    State law read on the Vermont General Assembly's website on 2026-11-23:
+    24 V.S.A. § 4412(1)(D) and (1)(E), in the version in force until
+    January 1, 2028 (the 2028 version only adds an exception for districts that
+    require more than four units).
+  read_between: "2026-11-23"
+  sources:
+    - id: vt_24_vsa_4412
+      citation: >-
+        Vermont Statutes, Title 24, Chapter 117, § 4412(1)(D) (duplexes and
+        multiunit dwellings) and § 4412(1)(E) (accessory dwelling units)
+      url: https://legislature.vermont.gov/statutes/section/24/117/04412
+
+# The range written into the ledger for adu.already_legal_share in Vermont.
+range:
+  low: 0.55
+  central: 0.70
+  high: 0.85
+  shape: pert
+  how:
+    low: >-
+      State law makes one ADU a permitted use with every single-family home
+      outside flood hazard and fluvial erosion areas. The low end assumes that
+      almost half of lots still face a bylaw not yet updated, a conditional or
+      site-plan review kept in practice, or a flood-area exception.
+    central: >-
+      Seven in ten lots: the statute applies everywhere, but compliance has not
+      been measured and some towns lag. Team judgement.
+    high: >-
+      Most lots, but not all: flood-area bylaws are excepted and some bylaws
+      still lag the statute, so the high end stops at 85%, not 100%.
+
+# Other ledger entries this table replaces for Vermont: none. The missing-middle
+# reform no longer uses a judged "already legal" share in Vermont: the funnel
+# reads the dated § 4412(1)(D) floor itself (assumptions/law/statutory_rights.yaml,
+# missing_middle_application; visionhousing.law.rights.middle_floor_schedule)
+# and counts only the building sizes above what the floor already allows. The
+# share of single-family lots whose own bylaw allows one home keeps the
+# national ledger range (missing_middle.sf_only_zoned_share).
+also: {}
+
+limits:
+  - "Compliance with § 4412 has not been measured town by town; the ranges are team judgement."
+  - "A share of lots is assumed; no Vermont parcel or town-rule data are used."
+  - "The ADU share is applied to every tract; lots in flood hazard and fluvial erosion areas are not told apart."

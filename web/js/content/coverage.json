@@ -1,0 +1,782 @@
+{
+ "version": 1,
+ "generated_by": "python -m visionhousing.profile.coverage",
+ "registry": "src/visionhousing/data/sources.yaml",
+ "sections": {
+  "people": {
+   "title": "People",
+   "text": "Not measured for this place. People is built from American Community Survey 5-year table-based summary files (2020-2024) (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "acs5_summary_file",
+     "name": "American Community Survey 5-year table-based summary files (2020-2024)",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "state",
+      "county",
+      "tract",
+      "block group"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "American Community Survey 5-year table-based summary files (2020-2024) (U.S. Census Bureau): published for every state; by state, county, tract, block group.",
+     "limits": "Estimates are survey averages over five years with margins of error; small tracts often have wide margins."
+    }
+   ]
+  },
+  "housing": {
+   "title": "Homes",
+   "text": "Not measured for this place. Homes is built from American Community Survey 5-year table-based summary files (2020-2024) (published for every state); American Community Survey 5-year tables for the place-profile charts (2020-2024) (published for every state); FHFA House Price Index, annual, counties (published for every state); FHFA House Price Index, annual, census tracts (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "acs5_summary_file",
+     "name": "American Community Survey 5-year table-based summary files (2020-2024)",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "state",
+      "county",
+      "tract",
+      "block group"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "American Community Survey 5-year table-based summary files (2020-2024) (U.S. Census Bureau): published for every state; by state, county, tract, block group.",
+     "limits": "Estimates are survey averages over five years with margins of error; small tracts often have wide margins."
+    },
+    {
+     "id": "acs5_profile_tables",
+     "name": "American Community Survey 5-year tables for the place-profile charts (2020-2024)",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "state",
+      "county",
+      "tract"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "American Community Survey 5-year tables for the place-profile charts (2020-2024) (U.S. Census Bureau): published for every state; by state, county, tract.",
+     "limits": "Survey estimates averaged over five years, with margins of error; tract counts in small bands are often very uncertain."
+    },
+    {
+     "id": "fhfa_hpi_county",
+     "name": "FHFA House Price Index, annual, counties",
+     "publisher": "Federal Housing Finance Agency",
+     "geography": [
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "FHFA House Price Index, annual, counties (Federal Housing Finance Agency): published for every state; by county.",
+     "limits": "Repeat-sales index built from mortgages bought or guaranteed by Fannie Mae and Freddie Mac; thin in rural counties, where years can be missing."
+    },
+    {
+     "id": "fhfa_hpi_tract",
+     "name": "FHFA House Price Index, annual, census tracts",
+     "publisher": "Federal Housing Finance Agency",
+     "geography": [
+      "tract"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "FHFA House Price Index, annual, census tracts (Federal Housing Finance Agency): published for every state; by tract.",
+     "limits": "Experimental tract-level index; many tracts have too few repeat sales and are blank."
+    }
+   ]
+  },
+  "jobs": {
+   "title": "Jobs and employers",
+   "text": "Not measured for this place. Jobs and employers is built from LEHD Origin-Destination Employment Statistics (LODES 8), workplace area characteristics, all jobs (published for every state); LEHD Origin-Destination Employment Statistics (LODES 8), home-to-work flows, all jobs (published for every state); County Business Patterns, county file (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "lodes_wac",
+     "name": "LEHD Origin-Destination Employment Statistics (LODES 8), workplace area characteristics, all jobs",
+     "publisher": "U.S. Census Bureau, Longitudinal Employer-Household Dynamics program",
+     "geography": [
+      "block",
+      "tract",
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "LEHD Origin-Destination Employment Statistics (LODES 8), workplace area characteristics, all jobs (U.S. Census Bureau, Longitudinal Employer-Household Dynamics program): published for every state; by block, tract, county.",
+     "limits": "Counts jobs covered by unemployment insurance plus federal civilian jobs, by where people work."
+    },
+    {
+     "id": "lodes_od",
+     "name": "LEHD Origin-Destination Employment Statistics (LODES 8), home-to-work flows, all jobs",
+     "publisher": "U.S. Census Bureau, Longitudinal Employer-Household Dynamics program",
+     "geography": [
+      "block",
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "LEHD Origin-Destination Employment Statistics (LODES 8), home-to-work flows, all jobs (U.S. Census Bureau, Longitudinal Employer-Household Dynamics program): published for every state; by block, county.",
+     "limits": "Links each job's workplace block to the worker's home block."
+    },
+    {
+     "id": "cbp_county",
+     "name": "County Business Patterns, county file",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "County Business Patterns, county file (U.S. Census Bureau): published for every state; by county.",
+     "limits": "Counts private establishments with paid employees and their mid-March employment and yearly payroll."
+    }
+   ]
+  },
+  "permits": {
+   "title": "Permits",
+   "text": "Not measured for this place. Permits is built from Building Permits Survey, county annual files (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "bps_county_annual",
+     "name": "Building Permits Survey, county annual files",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "Building Permits Survey, county annual files (U.S. Census Bureau): published for every state; by county.",
+     "limits": "Counts units authorized by permit, not units started or finished."
+    }
+   ]
+  },
+  "affordability": {
+   "title": "Cost and affordability",
+   "text": "Not measured for this place. Cost and affordability is built from Comprehensive Housing Affordability Strategy (CHAS) data, Tables 8, 12 and 15C (published for every state); HUD income limits (Section 8), area median family income and 30%, 50% and 80% limits by household size (published for every state); HUD Housing Choice Vouchers by Tract (map service) (published for every state); Low-Income Housing Tax Credit properties (HUD LIHTC database) (published for every state); HUD Multifamily Properties - Assisted (map service) (published for every state); HUD Public Housing Developments (map service) (published for every state); The Gap: A Shortage of Affordable Homes, 2026 (cited benchmark, not ingested) (published for many states, not all). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "hud_chas",
+     "name": "Comprehensive Housing Affordability Strategy (CHAS) data, Tables 8, 12 and 15C",
+     "publisher": "U.S. Department of Housing and Urban Development, Office of Policy Development and Research (special tabulation of ACS data by the Census Bureau)",
+     "geography": [
+      "state",
+      "county",
+      "tract"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "Comprehensive Housing Affordability Strategy (CHAS) data, Tables 8, 12 and 15C (U.S. Department of Housing and Urban Development, Office of Policy Development and Research (special tabulation of ACS data by the Census Bureau)): published for every state; by state, county, tract.",
+     "limits": "Survey estimates averaged over five years, rounded by the Census Bureau, with margins of error; small tract cells are very uncertain."
+    },
+    {
+     "id": "hud_income_limits",
+     "name": "HUD income limits (Section 8), area median family income and 30%, 50% and 80% limits by household size",
+     "publisher": "U.S. Department of Housing and Urban Development, Office of Policy Development and Research",
+     "geography": [
+      "county",
+      "town (New England)",
+      "HUD area"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "HUD income limits (Section 8), area median family income and 30%, 50% and 80% limits by household size (U.S. Department of Housing and Urban Development, Office of Policy Development and Research): published for every state; by county, town (New England), HUD area.",
+     "limits": "Limits are set per HUD area (a metro area or a non-metro county) with caps, floors and state non-metro adjustments, so the 80% limit is not always 1.6 times the 50% limit and the 30% limit can be raised to the poverty guideline."
+    },
+    {
+     "id": "hud_hcv_tract",
+     "name": "HUD Housing Choice Vouchers by Tract (map service)",
+     "publisher": "U.S. Department of Housing and Urban Development (HUD eGIS open data)",
+     "geography": [
+      "tract"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "HUD Housing Choice Vouchers by Tract (map service) (U.S. Department of Housing and Urban Development (HUD eGIS open data)): published for every state; by tract.",
+     "limits": "Households using a tenant-based voucher, by the tract of the home they rent."
+    },
+    {
+     "id": "hud_lihtc",
+     "name": "Low-Income Housing Tax Credit properties (HUD LIHTC database)",
+     "publisher": "U.S. Department of Housing and Urban Development",
+     "geography": [
+      "point"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "Low-Income Housing Tax Credit properties (HUD LIHTC database) (U.S. Department of Housing and Urban Development): published for every state; by point.",
+     "limits": "Projects placed in service since 1987 as reported by state agencies; recent years are incomplete (the map service's Pennsylvania records stop at 2020) and the year is unknown for some projects."
+    },
+    {
+     "id": "hud_mf_assisted",
+     "name": "HUD Multifamily Properties - Assisted (map service)",
+     "publisher": "U.S. Department of Housing and Urban Development (HUD eGIS open data)",
+     "geography": [
+      "point"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "HUD Multifamily Properties - Assisted (map service) (U.S. Department of Housing and Urban Development (HUD eGIS open data)): published for every state; by point.",
+     "limits": "Properties with an active HUD project-based assistance contract (Section 8, Section 202/811 and similar)."
+    },
+    {
+     "id": "hud_public_housing",
+     "name": "HUD Public Housing Developments (map service)",
+     "publisher": "U.S. Department of Housing and Urban Development (HUD eGIS open data)",
+     "geography": [
+      "point"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "HUD Public Housing Developments (map service) (U.S. Department of Housing and Urban Development (HUD eGIS open data)): published for every state; by point.",
+     "limits": "Public housing developments as reported by housing agencies; a scattered-site development is one point."
+    },
+    {
+     "id": "nlihc_gap_2026",
+     "name": "The Gap: A Shortage of Affordable Homes, 2026 (cited benchmark, not ingested)",
+     "publisher": "National Low Income Housing Coalition",
+     "geography": [
+      "state"
+     ],
+     "tier": 1,
+     "tier_text": "published for many states, not all",
+     "counties": [],
+     "covers": "The Gap: A Shortage of Affordable Homes, 2026 (cited benchmark, not ingested) (National Low Income Housing Coalition): published for many states, not all; by state.",
+     "limits": "State level only."
+    }
+   ]
+  },
+  "pipeline_local": {
+   "title": "Local permit pipeline",
+   "text": "Not measured for this place. Local permit pipeline is built from Philadelphia Licenses and Inspections building permits (permits) (local only: published for a few counties or cities); City of Pittsburgh PLI Permits (local only: published for a few counties or cities); PHFA Low-Income Housing Tax Credit award lists (local only: published for a few counties or cities). These sources exist only for some places, so most places have no data here.",
+   "sources": [
+    {
+     "id": "phl_li_permits",
+     "name": "Philadelphia Licenses and Inspections building permits (permits)",
+     "publisher": "City of Philadelphia, Department of Licenses and Inspections (via OpenDataPhilly, Carto SQL)",
+     "geography": [
+      "point"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "Philadelphia Licenses and Inspections building permits (permits) (City of Philadelphia, Department of Licenses and Inspections (via OpenDataPhilly, Carto SQL)): local only: published for a few counties or cities; by point.",
+     "limits": "Permits issued, not homes started or finished."
+    },
+    {
+     "id": "pgh_pli_permits",
+     "name": "City of Pittsburgh PLI Permits",
+     "publisher": "City of Pittsburgh, Department of Permits, Licenses and Inspections (via WPRDC)",
+     "geography": [
+      "point"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "City of Pittsburgh PLI Permits (City of Pittsburgh, Department of Permits, Licenses and Inspections (via WPRDC)): local only: published for a few counties or cities; by point.",
+     "limits": "No home counts, so only permits are counted."
+    },
+    {
+     "id": "phfa_lihtc_awards",
+     "name": "PHFA Low-Income Housing Tax Credit award lists",
+     "publisher": "Pennsylvania Housing Finance Agency (PHFA)",
+     "geography": [
+      "address"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "PHFA Low-Income Housing Tax Credit award lists (Pennsylvania Housing Finance Agency (PHFA)): local only: published for a few counties or cities; by address.",
+     "limits": "Awards, not homes built: some awarded projects are delayed or dropped."
+    }
+   ]
+  },
+  "zoning": {
+   "title": "Zoning and overlays",
+   "text": "Not measured for this place. Zoning and overlays is built from Municipal Statistics, County / Municipal Planning, Zoning & Building Code report (local only: published for a few counties or cities); Pennsylvania municipal zoning ordinances published on each municipality's own website (local only: published for a few counties or cities). These sources exist only for some places, so most places have no data here.",
+   "sources": [
+    {
+     "id": "pa_dced_munstats",
+     "name": "Municipal Statistics, County / Municipal Planning, Zoning & Building Code report",
+     "publisher": "Pennsylvania Department of Community and Economic Development (DCED)",
+     "geography": [
+      "municipality"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "Municipal Statistics, County / Municipal Planning, Zoning & Building Code report (Pennsylvania Department of Community and Economic Development (DCED)): local only: published for a few counties or cities; by municipality.",
+     "limits": "Self-reported by municipalities and updated when they tell DCED; some entries may be out of date."
+    },
+    {
+     "id": "pa_municipal_ordinances",
+     "name": "Pennsylvania municipal zoning ordinances published on each municipality's own website",
+     "publisher": "Pennsylvania municipalities (each its own)",
+     "geography": [
+      "municipality"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "Pennsylvania municipal zoning ordinances published on each municipality's own website (Pennsylvania municipalities (each its own)): local only: published for a few counties or cities; by municipality.",
+     "limits": "Five municipalities read by hand so far, out of about 2,560; all others are unknown."
+    }
+   ]
+  },
+  "plans": {
+   "title": "Comprehensive plans",
+   "text": "Not measured for this place. Comprehensive plans is built from Municipal Statistics, County / Municipal Planning, Zoning & Building Code report (local only: published for a few counties or cities); County comprehensive plans (citation list in assumptions/plans.yaml) (local only: published for a few counties or cities). These sources exist only for some places, so most places have no data here.",
+   "sources": [
+    {
+     "id": "pa_dced_munstats",
+     "name": "Municipal Statistics, County / Municipal Planning, Zoning & Building Code report",
+     "publisher": "Pennsylvania Department of Community and Economic Development (DCED)",
+     "geography": [
+      "municipality"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "Municipal Statistics, County / Municipal Planning, Zoning & Building Code report (Pennsylvania Department of Community and Economic Development (DCED)): local only: published for a few counties or cities; by municipality.",
+     "limits": "Self-reported by municipalities and updated when they tell DCED; some entries may be out of date."
+    },
+    {
+     "id": "county_comprehensive_plans",
+     "name": "County comprehensive plans (citation list in assumptions/plans.yaml)",
+     "publisher": "Pennsylvania county planning commissions",
+     "geography": [
+      "county"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "County comprehensive plans (citation list in assumptions/plans.yaml) (Pennsylvania county planning commissions): local only: published for a few counties or cities; by county.",
+     "limits": "A citation list for all 67 counties with the planning commission's link; 34 plans are confirmed with name and adoption year on the county's page, the rest are marked not confirmed."
+    }
+   ]
+  },
+  "state_law": {
+   "title": "State law and bills",
+   "text": "Not measured for this place. State law and bills is built from MBTA Communities (3A) District Atlas, districts layer (map service) (local only: published for a few counties or cities). These sources exist only for some places, so most places have no data here.",
+   "sources": [
+    {
+     "id": "massgis_mbta3a_atlas",
+     "name": "MBTA Communities (3A) District Atlas, districts layer (map service)",
+     "publisher": "MassGIS for the Massachusetts Executive Office of Housing and Livable Communities (HLC)",
+     "geography": [
+      "zoning district",
+      "municipality"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "MBTA Communities (3A) District Atlas, districts layer (map service) (MassGIS for the Massachusetts Executive Office of Housing and Livable Communities (HLC)): local only: published for a few counties or cities; by zoning district, municipality.",
+     "limits": "Holds only districts in towns HLC has found compliant (159 towns, 494 districts on 2026-11-24); towns in interim compliance or noncompliant have none."
+    }
+   ]
+  },
+  "incentives": {
+   "title": "Tax credits and incentive areas",
+   "text": "Not measured for this place. Tax credits and incentive areas is built from Low-Income Housing Tax Credit Qualified Census Tracts (published for every state); Low-Income Housing Tax Credit Difficult Development Areas (published for every state); Qualified Opportunity Zones designated for 2027 (second decennial round) (published for every state); New Markets Tax Credit low-income community tracts (2016-2020 ACS) (published for every state); Keystone Opportunity Zone (KOZ) locations, public view (local only: published for a few counties or cities); Low-Income Housing Tax Credit properties (HUD LIHTC database) (published for every state); National Register of Historic Places, listed property points and polygons (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "hud_qct",
+     "name": "Low-Income Housing Tax Credit Qualified Census Tracts",
+     "publisher": "U.S. Department of Housing and Urban Development",
+     "geography": [
+      "tract"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "Low-Income Housing Tax Credit Qualified Census Tracts (U.S. Department of Housing and Urban Development): published for every state; by tract.",
+     "limits": "A Qualified Census Tract lets a tax-credit project claim a 30% larger basis."
+    },
+    {
+     "id": "hud_dda",
+     "name": "Low-Income Housing Tax Credit Difficult Development Areas",
+     "publisher": "U.S. Department of Housing and Urban Development",
+     "geography": [
+      "zcta",
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "Low-Income Housing Tax Credit Difficult Development Areas (U.S. Department of Housing and Urban Development): published for every state; by zcta, county.",
+     "limits": "In metro areas, Difficult Development Areas are ZIP Code Tabulation Areas (ZCTAs); outside them, whole counties."
+    },
+    {
+     "id": "treasury_oz2027",
+     "name": "Qualified Opportunity Zones designated for 2027 (second decennial round)",
+     "publisher": "U.S. Department of the Treasury",
+     "geography": [
+      "tract"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "Qualified Opportunity Zones designated for 2027 (second decennial round) (U.S. Department of the Treasury): published for every state; by tract.",
+     "limits": "The new round of zones starts on 2027-01-01."
+    },
+    {
+     "id": "cdfi_nmtc_lic",
+     "name": "New Markets Tax Credit low-income community tracts (2016-2020 ACS)",
+     "publisher": "U.S. Department of the Treasury, CDFI Fund",
+     "geography": [
+      "tract"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "New Markets Tax Credit low-income community tracts (2016-2020 ACS) (U.S. Department of the Treasury, CDFI Fund): published for every state; by tract.",
+     "limits": "Shows whether a tract meets the poverty (20% or more) or income (80% of the benchmark or less) test."
+    },
+    {
+     "id": "dced_koz_sites",
+     "name": "Keystone Opportunity Zone (KOZ) locations, public view",
+     "publisher": "Pennsylvania Department of Community and Economic Development",
+     "geography": [
+      "point"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "Keystone Opportunity Zone (KOZ) locations, public view (Pennsylvania Department of Community and Economic Development): local only: published for a few counties or cities; by point.",
+     "limits": "Pennsylvania only."
+    },
+    {
+     "id": "hud_lihtc",
+     "name": "Low-Income Housing Tax Credit properties (HUD LIHTC database)",
+     "publisher": "U.S. Department of Housing and Urban Development",
+     "geography": [
+      "point"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "Low-Income Housing Tax Credit properties (HUD LIHTC database) (U.S. Department of Housing and Urban Development): published for every state; by point.",
+     "limits": "Projects placed in service since 1987 as reported by state agencies; recent years are incomplete (the map service's Pennsylvania records stop at 2020) and the year is unknown for some projects."
+    },
+    {
+     "id": "nps_nrhp",
+     "name": "National Register of Historic Places, listed property points and polygons",
+     "publisher": "U.S. Department of the Interior, National Park Service",
+     "geography": [
+      "point",
+      "polygon"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "National Register of Historic Places, listed property points and polygons (U.S. Department of the Interior, National Park Service): published for every state; by point, polygon.",
+     "limits": "Only properties NPS has mapped and does not restrict are shown, so counts are a floor."
+    }
+   ]
+  },
+  "transit": {
+   "title": "Transit",
+   "text": "Not measured for this place. Transit is built from National Transit Map, stops (published for every state); TIGER/Line 2020 tabulation blocks (attribute table only) (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "ntm_stops",
+     "name": "National Transit Map, stops",
+     "publisher": "U.S. Department of Transportation, Bureau of Transportation Statistics",
+     "geography": [
+      "point"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "National Transit Map, stops (U.S. Department of Transportation, Bureau of Transportation Statistics): published for every state; by point.",
+     "limits": "Stops as reported by agencies in their schedule feeds; some agencies are missing or out of date."
+    },
+    {
+     "id": "tiger_2020_tabblock",
+     "name": "TIGER/Line 2020 tabulation blocks (attribute table only)",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "block"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "TIGER/Line 2020 tabulation blocks (attribute table only) (U.S. Census Bureau): published for every state; by block.",
+     "limits": "Housing units and population are 2020 counts, not current."
+    }
+   ]
+  },
+  "infrastructure": {
+   "title": "Water and sewer readiness",
+   "text": "Not measured for this place. Water and sewer readiness is built from EPA Clean Watersheds Needs Survey 2022, documented needs by county (published for every state); EPA sewersheds of the United States (version 1.3) and their endpoint treatment plants (published for every state); Pennsylvania public water supplier service areas (DEP, via PASDA) (published for many states, not all); Pennsylvania DEP Act 537 official plan status (plan age by municipality) (published for many states, not all); TIGER/Line 2020 tabulation blocks (attribute table only) (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "epa_cwns_2022",
+     "name": "EPA Clean Watersheds Needs Survey 2022, documented needs by county",
+     "publisher": "U.S. Environmental Protection Agency (Office of Water)",
+     "geography": [
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "EPA Clean Watersheds Needs Survey 2022, documented needs by county (U.S. Environmental Protection Agency (Office of Water)): published for every state; by county.",
+     "limits": "Capital needs states documented for the survey (projects eligible for Clean Water State Revolving Fund loans), summarized by county by EPA."
+    },
+    {
+     "id": "epa_sewersheds",
+     "name": "EPA sewersheds of the United States (version 1.3) and their endpoint treatment plants",
+     "publisher": "U.S. Environmental Protection Agency (Office of Research and Development, Office of Water)",
+     "geography": [
+      "polygon",
+      "point"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "EPA sewersheds of the United States (version 1.3) and their endpoint treatment plants (U.S. Environmental Protection Agency (Office of Research and Development, Office of Water)): published for every state; by polygon, point.",
+     "limits": "Context only."
+    },
+    {
+     "id": "pa_dep_pws_service_areas",
+     "name": "Pennsylvania public water supplier service areas (DEP, via PASDA)",
+     "publisher": "Pennsylvania Department of Environmental Protection; served by PASDA",
+     "geography": [
+      "polygon"
+     ],
+     "tier": 1,
+     "tier_text": "published for many states, not all",
+     "counties": [],
+     "covers": "Pennsylvania public water supplier service areas (DEP, via PASDA) (Pennsylvania Department of Environmental Protection; served by PASDA): published for many states, not all; by polygon.",
+     "limits": "Present service-area boundaries of public water systems, made for the State Water Plan to find self-supplied areas; not a statement of spare supply."
+    },
+    {
+     "id": "pa_dep_act537_plan_status",
+     "name": "Pennsylvania DEP Act 537 official plan status (plan age by municipality)",
+     "publisher": "Pennsylvania Department of Environmental Protection",
+     "geography": [
+      "municipality"
+     ],
+     "tier": 1,
+     "tier_text": "published for many states, not all",
+     "counties": [],
+     "covers": "Pennsylvania DEP Act 537 official plan status (plan age by municipality) (Pennsylvania Department of Environmental Protection): published for many states, not all; by municipality.",
+     "limits": "Gives only the date DEP last approved each municipality's official sewage facilities plan (or a pre-1971 county plan) and DEP's age class."
+    },
+    {
+     "id": "tiger_2020_tabblock",
+     "name": "TIGER/Line 2020 tabulation blocks (attribute table only)",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "block"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "TIGER/Line 2020 tabulation blocks (attribute table only) (U.S. Census Bureau): published for every state; by block.",
+     "limits": "Housing units and population are 2020 counts, not current."
+    }
+   ]
+  },
+  "hazards": {
+   "title": "Hazards and land",
+   "text": "Not measured for this place. Hazards and land is built from FEMA National Flood Hazard Layer (flood hazard zones and NFHL availability), public map service (published for every state); USGS 3D Elevation Program bare-earth elevation (3DEPElevation image service) (published for every state); USGS Annual NLCD land cover and fractional impervious surface (Collection 1), MRLC coverage service (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "fema_nfhl",
+     "name": "FEMA National Flood Hazard Layer (flood hazard zones and NFHL availability), public map service",
+     "publisher": "Federal Emergency Management Agency",
+     "geography": [
+      "polygon"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "FEMA National Flood Hazard Layer (flood hazard zones and NFHL availability), public map service (Federal Emergency Management Agency): published for every state; by polygon.",
+     "limits": "The Special Flood Hazard Area is the regulatory 1% annual chance floodplain; it leaves out flooding from heavy rain away from mapped streams, and some maps are decades old."
+    },
+    {
+     "id": "usgs_3dep_dem",
+     "name": "USGS 3D Elevation Program bare-earth elevation (3DEPElevation image service)",
+     "publisher": "U.S. Geological Survey (The National Map)",
+     "geography": [
+      "30 m grid"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "USGS 3D Elevation Program bare-earth elevation (3DEPElevation image service) (U.S. Geological Survey (The National Map)): published for every state; by 30 m grid.",
+     "limits": "Resampled by the service to 30 m (bilinear), so short steep banks are smoothed and the steep share is a lower bound for small sites."
+    },
+    {
+     "id": "usgs_annual_nlcd",
+     "name": "USGS Annual NLCD land cover and fractional impervious surface (Collection 1), MRLC coverage service",
+     "publisher": "U.S. Geological Survey (Multi-Resolution Land Characteristics Consortium)",
+     "geography": [
+      "30 m grid"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "USGS Annual NLCD land cover and fractional impervious surface (Collection 1), MRLC coverage service (U.S. Geological Survey (Multi-Resolution Land Characteristics Consortium)): published for every state; by 30 m grid.",
+     "limits": "Satellite classification at 30 m: small lots, narrow streets and tree-covered yards are blurred; the developed classes include parks and lawns (class 21)."
+    }
+   ]
+  },
+  "safety": {
+   "title": "Safety",
+   "text": "Not measured for this place. Safety is built from FBI Crime Data Explorer API, agency list and agency offense counts (summary reporting) (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "fbi_cde_agency",
+     "name": "FBI Crime Data Explorer API, agency list and agency offense counts (summary reporting)",
+     "publisher": "U.S. Department of Justice, Federal Bureau of Investigation",
+     "geography": [
+      "agency",
+      "county"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "FBI Crime Data Explorer API, agency list and agency offense counts (summary reporting) (U.S. Department of Justice, Federal Bureau of Investigation): published for every state; by agency, county.",
+     "limits": "Offenses known to police, as agencies report them; not victimization."
+    }
+   ]
+  },
+  "typology": {
+   "title": "Places like this one",
+   "text": "Not measured for this place. Places like this one is built from American Community Survey 5-year table-based summary files (2020-2024) (published for every state). A source that covers this state may not have been added to its data pack yet, or may not report for this place.",
+   "sources": [
+    {
+     "id": "acs5_summary_file",
+     "name": "American Community Survey 5-year table-based summary files (2020-2024)",
+     "publisher": "U.S. Census Bureau",
+     "geography": [
+      "state",
+      "county",
+      "tract",
+      "block group"
+     ],
+     "tier": 0,
+     "tier_text": "published for every state",
+     "counties": [],
+     "covers": "American Community Survey 5-year table-based summary files (2020-2024) (U.S. Census Bureau): published for every state; by state, county, tract, block group.",
+     "limits": "Estimates are survey averages over five years with margins of error; small tracts often have wide margins."
+    }
+   ]
+  },
+  "owners": {
+   "title": "Institutional buyers",
+   "text": "Not measured for this place. Institutional buyers is built from Philadelphia Properties and Assessment History (opa_properties_public) (local only: published for a few counties or cities); Allegheny County Property Assessments (local only: published for a few counties or cities); Philadelphia Real Estate Transfers (rtt_summary) (local only: published for a few counties or cities). These sources exist only for some places, so most places have no data here.",
+   "sources": [
+    {
+     "id": "phl_opa_properties",
+     "name": "Philadelphia Properties and Assessment History (opa_properties_public)",
+     "publisher": "City of Philadelphia, Office of Property Assessment (via OpenDataPhilly, Carto SQL)",
+     "geography": [
+      "parcel"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [
+      "42101"
+     ],
+     "covers": "Philadelphia Properties and Assessment History (opa_properties_public) (City of Philadelphia, Office of Property Assessment (via OpenDataPhilly, Carto SQL)): local only: published for a few counties or cities; by parcel; only for counties 42101.",
+     "limits": "Assessment records, not a census of who lives where."
+    },
+    {
+     "id": "alle_assessments",
+     "name": "Allegheny County Property Assessments",
+     "publisher": "Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)",
+     "geography": [
+      "parcel"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [
+      "42003"
+     ],
+     "covers": "Allegheny County Property Assessments (Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)): local only: published for a few counties or cities; by parcel; only for counties 42003.",
+     "limits": "Fair market values are 2012 base-year assessments, far below today's prices."
+    },
+    {
+     "id": "phl_rtt_summary",
+     "name": "Philadelphia Real Estate Transfers (rtt_summary)",
+     "publisher": "City of Philadelphia, Department of Records (via OpenDataPhilly, Carto SQL)",
+     "geography": [
+      "parcel"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "Philadelphia Real Estate Transfers (rtt_summary) (City of Philadelphia, Department of Records (via OpenDataPhilly, Carto SQL)): local only: published for a few counties or cities; by parcel.",
+     "limits": "Grantee names are judged entity or person by word list only."
+    }
+   ]
+  },
+  "parcels": {
+   "title": "Parcels and property",
+   "text": "Not measured for this place. Parcels and property is built from Philadelphia Properties and Assessment History (opa_properties_public) (local only: published for a few counties or cities); Allegheny County Property Assessments (local only: published for a few counties or cities); Allegheny County Real Estate Sales (local only: published for a few counties or cities). These sources exist only for some places, so most places have no data here.",
+   "sources": [
+    {
+     "id": "phl_opa_properties",
+     "name": "Philadelphia Properties and Assessment History (opa_properties_public)",
+     "publisher": "City of Philadelphia, Office of Property Assessment (via OpenDataPhilly, Carto SQL)",
+     "geography": [
+      "parcel"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [
+      "42101"
+     ],
+     "covers": "Philadelphia Properties and Assessment History (opa_properties_public) (City of Philadelphia, Office of Property Assessment (via OpenDataPhilly, Carto SQL)): local only: published for a few counties or cities; by parcel; only for counties 42101.",
+     "limits": "Assessment records, not a census of who lives where."
+    },
+    {
+     "id": "alle_assessments",
+     "name": "Allegheny County Property Assessments",
+     "publisher": "Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)",
+     "geography": [
+      "parcel"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [
+      "42003"
+     ],
+     "covers": "Allegheny County Property Assessments (Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)): local only: published for a few counties or cities; by parcel; only for counties 42003.",
+     "limits": "Fair market values are 2012 base-year assessments, far below today's prices."
+    },
+    {
+     "id": "alle_property_sales",
+     "name": "Allegheny County Real Estate Sales",
+     "publisher": "Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)",
+     "geography": [
+      "parcel"
+     ],
+     "tier": 2,
+     "tier_text": "local only: published for a few counties or cities",
+     "counties": [],
+     "covers": "Allegheny County Real Estate Sales (Allegheny County Office of Property Assessments (via the Western Pennsylvania Regional Data Center)): local only: published for a few counties or cities; by parcel.",
+     "limits": "Only sales the assessment office marked valid (sale codes in assumptions/parcels.yaml) are counted."
+    }
+   ]
+  },
+  "data_quality": {
+   "title": "Data quality",
+   "text": "This section summarises how complete the other sections are for the place; it has no source of its own.",
+   "sources": []
+  }
+ }
+}

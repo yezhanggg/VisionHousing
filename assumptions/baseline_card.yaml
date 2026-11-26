@@ -1,0 +1,89 @@
+# Baseline card settings (read by visionhousing.baseline.card).
+#
+# Kept apart from assumptions/backtest.yaml on purpose: that file is part of
+# the engine's calibration fingerprint, and nothing here changes an estimate,
+# so editing this file must not change any run's hash.
+
+version: 1
+
+# Baseline card, state reconciliation, PA window diagnostic and the 2026 bridge.
+#
+# Read by visionhousing.baseline.card (command: visionhousing baseline-card,
+# light: state files only, no engine run). Results go to
+# assumptions/calibration/baseline_reconciliation.yaml; the API and the docs
+# read that file. Nothing here changes an estimate.
+#
+# 1. Card. What the baseline is built from: the historical years each state's
+#    shipped rule reads, the Building Permits Survey columns (estimated units in
+#    1-, 2-, 3-4 and 5+ unit buildings; the "rep" reported-only columns are not
+#    used), the data release (vintage, release date = the file's Last-Modified
+#    date on the Census server, read by script), the information cutoff (as_of
+#    in assumptions/outcome.yaml: only data released on or before it count),
+#    and the forecast gap: the calendar years between the last full year of
+#    data and baseline.first_year, which have no full-year count.
+# 2. Reconciliation (a release fixture). For each state in `reconcile`, the
+#    shipped rule (recorded in assumptions/calibration/baseline_reliability.yaml)
+#    is applied to the STATE total series from the state annual files, origin =
+#    the last full data year, targets = the five projected years. For mean-type
+#    rules this is the state component of the shipped midpoint. A state in
+#    `controls` is reported only: its shipped midpoint comes from county
+#    shrinkage, which a state series cannot reproduce.
+# 3. Window diagnostic (one per entry in `window_diagnostics`). The state
+#    series' mean over the listed years, times the horizon, compared with the
+#    shipped rule's state component. HONEST STATUS: the Pennsylvania window
+#    2022-2025 was named in the 2026-11-25 review after the 2021 spike had been
+#    seen. It is a disclosed historical-window sensitivity, not a pre-registered
+#    test and not a replacement baseline. It is recorded only and is never
+#    subtracted from any reform or package result.
+# 4. Bridge across the gap. The shipped method carries the rule's annual level
+#    flat through the gap year (carry_annual). A separate nowcast diagnostic
+#    uses only the monthly year-to-date state files released on or before the
+#    cutoff: nowcast = YTD(gap year, Jan..m) / s, where s = YTD(y, Jan..m) /
+#    annual(y) for each history year y (same months, like for like; the low,
+#    middle and high nowcast use the highest, median and lowest s). A
+#    year-to-date count is never treated as a full year. Monthly and annual
+#    files differ in reporting and imputation, and s absorbs that difference
+#    as well as seasonality. When no monthly file is available by the cutoff
+#    the nowcast is recorded as unavailable.
+baseline_card:
+  written_on: 2026-11-25
+  unit_fields: [est_1_units, est_2_units, est_3-4_units, est_5+_units]
+  unit_fields_label: "Estimated units in 1-, 2-, 3-4 and 5+ unit buildings (Building Permits Survey)"
+  reconcile: [PA, MA, WY]
+  controls: [VT]
+  states: [PA, MA, WY, VT]
+  shown_years: [2021, 2022, 2023, 2024, 2025]
+  window_diagnostics:
+    baseline_pa_window_2022_2025:
+      label: "Pennsylvania baseline window sensitivity: 2022-2025 mean instead of the shipped window"
+      state: PA
+      first_year: {central: 2022, low: 2022, high: 2022}
+      last_year: {central: 2025, low: 2025, high: 2025}
+      kind: judgement
+      source:
+        - id: bps_state_annual
+          citation: "U.S. Census Bureau, Building Permits Survey, state annual files 2021-2025"
+          url: https://www2.census.gov/econ/bps/State/
+      rationale: >-
+        Pennsylvania's 2021 total is far above 2022-2025, and the shipped rule's
+        five-year window includes it. Showing the four-year mean makes the effect of
+        that one model choice visible. Named after the spike was seen, so it is a
+        disclosed sensitivity, not a pre-registered test or a replacement baseline.
+      use: record_only
+  bridge:
+    method: carry_annual
+    nowcast:
+      id: baseline_bridge_nowcast_2026
+      label: "2026 nowcast from monthly year-to-date permits (diagnostic only)"
+      history_years: {central: [2021, 2022, 2023, 2024, 2025], low: [2021, 2022, 2023, 2024, 2025], high: [2021, 2022, 2023, 2024, 2025]}
+      kind: judgement
+      source:
+        - id: bps_state_monthly_ytd
+          citation: "U.S. Census Bureau, Building Permits Survey, state monthly year-to-date files"
+          url: https://www2.census.gov/econ/bps/State/
+      rationale: >-
+        The same five years the shipped Pennsylvania rule reads. Each year gives one
+        seasonal share s; the nowcast's range uses their spread, so a year with an
+        unusual first part shows up as a wider range rather than a hidden bias.
+      use: record_only
+  results: assumptions/calibration/baseline_reconciliation.yaml

@@ -1,0 +1,67 @@
+column,line_type,description
+T8_est1,Total,Tenure=Total: Occupied housing units | Household income=All | Cost burden=All | Facilities=All
+T8_est2,Subtotal,Tenure=Owner occupied | Household income=All | Cost burden=All | Facilities=All
+T8_est3,Subtotal,Tenure=Owner occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=All | Facilities=All
+T8_est4,Subtotal,Tenure=Owner occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est7,Subtotal,Tenure=Owner occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est10,Subtotal,Tenure=Owner occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est13,Subtotal,Tenure=Owner occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est16,Subtotal,Tenure=Owner occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=All | Facilities=All
+T8_est17,Subtotal,Tenure=Owner occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est20,Subtotal,Tenure=Owner occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est23,Subtotal,Tenure=Owner occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est26,Subtotal,Tenure=Owner occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est29,Subtotal,Tenure=Owner occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=All | Facilities=All
+T8_est30,Subtotal,Tenure=Owner occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est33,Subtotal,Tenure=Owner occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est36,Subtotal,Tenure=Owner occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est39,Subtotal,Tenure=Owner occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est42,Subtotal,Tenure=Owner occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=All | Facilities=All
+T8_est43,Subtotal,Tenure=Owner occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est46,Subtotal,Tenure=Owner occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est49,Subtotal,Tenure=Owner occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est52,Subtotal,Tenure=Owner occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est55,Subtotal,Tenure=Owner occupied | Household income=greater than 100% of HAMFI | Cost burden=All | Facilities=All
+T8_est56,Subtotal,Tenure=Owner occupied | Household income=greater than 100% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est59,Subtotal,Tenure=Owner occupied | Household income=greater than 100% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est62,Subtotal,Tenure=Owner occupied | Household income=greater than 100% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est65,Subtotal,Tenure=Owner occupied | Household income=greater than 100% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est68,Subtotal,Tenure=Renter occupied | Household income=All | Cost burden=All | Facilities=All
+T8_est69,Subtotal,Tenure=Renter occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=All | Facilities=All
+T8_est70,Subtotal,Tenure=Renter occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est73,Subtotal,Tenure=Renter occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est76,Subtotal,Tenure=Renter occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est79,Subtotal,Tenure=Renter occupied | Household income=less than or equal to 30% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est82,Subtotal,Tenure=Renter occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=All | Facilities=All
+T8_est83,Subtotal,Tenure=Renter occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est86,Subtotal,Tenure=Renter occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est89,Subtotal,Tenure=Renter occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est92,Subtotal,Tenure=Renter occupied | Household income=greater than 30% but less than or equal to 50% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est95,Subtotal,Tenure=Renter occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=All | Facilities=All
+T8_est96,Subtotal,Tenure=Renter occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est99,Subtotal,Tenure=Renter occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est102,Subtotal,Tenure=Renter occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est105,Subtotal,Tenure=Renter occupied | Household income=greater than 50% but less than or equal to 80% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est108,Subtotal,Tenure=Renter occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=All | Facilities=All
+T8_est109,Subtotal,Tenure=Renter occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est112,Subtotal,Tenure=Renter occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est115,Subtotal,Tenure=Renter occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est118,Subtotal,Tenure=Renter occupied | Household income=greater than 80% but less than or equal to 100% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T8_est121,Subtotal,Tenure=Renter occupied | Household income=greater than 100% of HAMFI | Cost burden=All | Facilities=All
+T8_est122,Subtotal,Tenure=Renter occupied | Household income=greater than 100% of HAMFI | Cost burden=less than or equal to 30% | Facilities=All
+T8_est125,Subtotal,Tenure=Renter occupied | Household income=greater than 100% of HAMFI | Cost burden=greater than 30% but less than or equal to 50% | Facilities=All
+T8_est128,Subtotal,Tenure=Renter occupied | Household income=greater than 100% of HAMFI | Cost burden=greater than 50% | Facilities=All
+T8_est131,Subtotal,Tenure=Renter occupied | Household income=greater than 100% of HAMFI | Cost burden=not computed (no/negative income) | Facilities=All
+T15C_est1,Total,Tenure=Total: Renter occupied housing units | Facilities=All | Rent=All | Household income=All | Number of bedrooms=All
+T15C_est2,Detail,Tenure=Renter occupied | Facilities=lacks complete kitchen or plumbing facilities | Rent=All | Household income=All | Number of bedrooms=All
+T15C_est4,Subtotal,Tenure=Renter occupied | Facilities=has complete kitchen and plumbing facilities | Rent=less than or equal to RHUD30 | Household income=All | Number of bedrooms=All
+T15C_est25,Subtotal,Tenure=Renter occupied | Facilities=has complete kitchen and plumbing facilities | Rent=greater than RHUD30 but less than or equal to RHUD50 | Household income=All | Number of bedrooms=All
+T15C_est46,Subtotal,Tenure=Renter occupied | Facilities=has complete kitchen and plumbing facilities | Rent=greater than RHUD50 but less than or equal to RHUD80 | Household income=All | Number of bedrooms=All
+T15C_est67,Subtotal,Tenure=Renter occupied | Facilities=has complete kitchen and plumbing facilities | Rent=greater than RHUD80 | Household income=All | Number of bedrooms=All
+T12_est88,Subtotal,Tenure=Renter occupied | Year structure was built=All | Household income=All | Cost burden=All
+T12_est123,Subtotal,Tenure=Renter occupied | Year structure was built=between 1960 and 1979 | Household income=All | Cost burden=All
+T12_est124,Subtotal,Tenure=Renter occupied | Year structure was built=between 1960 and 1979 | Household income=less than or equal to 50% of HAMFI | Cost burden=All
+T12_est140,Subtotal,Tenure=Renter occupied | Year structure was built=between 1940 and 1959 | Household income=All | Cost burden=All
+T12_est141,Subtotal,Tenure=Renter occupied | Year structure was built=between 1940 and 1959 | Household income=less than or equal to 50% of HAMFI | Cost burden=All
+T12_est157,Subtotal,Tenure=Renter occupied | Year structure was built=1939 or earlier | Household income=All | Cost burden=All
+T12_est158,Subtotal,Tenure=Renter occupied | Year structure was built=1939 or earlier | Household income=less than or equal to 50% of HAMFI | Cost burden=All

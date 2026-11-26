@@ -10,10 +10,12 @@ If a state allows 2–6 homes, up to three storeys, on every lot now restricted 
 
 ## The funnel
 
-The tool follows the same formula as the ADU reform (plan §4.3, "Channel A"), with one change: a missing-middle project replaces a house, so each project adds `k − 1` homes, not `k`.
+The tool follows the same funnel as the ADU reform, with one change: a missing-middle project replaces a house. Instead of a shortcut ("`k − 1` homes per project"), each redeveloped lot carries four event fields, in both arms (steps 6 and 7).
 
 ```
-added units (tract) = E × f × Σ_k [ w_k × p_k × (k − 1) ] × min(h, turnover) × Σ ramp(t) × (1 − x)
+lots redeveloped (tract) = E × f × Σ_k [ w_k × p_k ] × min(h, turnover) × Σ ramp(t)
+added units authorized   = (policy units − counterfactual units) × (1 − x)
+net added homes          = added units authorized − (policy demolitions − counterfactual demolitions)
 ```
 
 | Term | Plain meaning | Where it comes from |
@@ -25,7 +27,8 @@ added units (tract) = E × f × Σ_k [ w_k × p_k × (k − 1) ] × min(h, turno
 | `h` | Share of feasible lots redeveloped each year | `missing_middle.redevelopment_hazard_annual` |
 | `turnover` | Share of single-family homes sold each year; `h` can never exceed it | `missing_middle.sf_turnover_annual` |
 | `ramp(t)` | Permits climb in the first years | `missing_middle.ramp_first_year_share`, `missing_middle.ramp_years_to_full` |
-| `− 1` | The house that is torn down | `missing_middle.demolished_per_project` (1) |
+| `d` | Homes torn down per redeveloped lot (policy demolitions) | `missing_middle.demolished_per_project` (1) |
+| `q`, `r` | Chance the baseline tears the same house down anyway, and the homes it rebuilds (counterfactual demolitions and units) | `missing_middle.baseline_replacement_probability`, `missing_middle.baseline_units_per_replacement` |
 | `x` | Share that would have been built anyway | `missing_middle.displacement_share` |
 
 The tool reports seven steps: **eligible lots → lots large enough → feasible lots → lots redeveloped → new units → net units after demolition → net added units**. Each is a P10 / P50 / P90 range from seeded draws of every ledger value (2,000 by default).
@@ -33,6 +36,21 @@ The tool reports seven steps: **eligible lots → lots large enough → feasible
 ### Step 1 · Eligible lots `E`
 
 Census single-family homes are turned into lots with the same correction the ADU funnel uses (counting lots from census building tables overstates real lots by about a tenth). Only lots in single-family-only zones gain anything from the reform. At Tier 0 that share is a ledger parameter (`missing_middle.sf_only_zoned_share`, 0.75, range 0.50–0.90): most single-family homes sit in zones that allow nothing else, but older boroughs and cities often allow two units already. At Tier 2 it will come from zoning data.
+
+### A state floor by date (Vermont)
+
+Where a state law already guarantees part of what the reform allows, the reform adds only the rest. Vermont's 24 V.S.A. § 4412(1)(D) already makes a duplex a permitted use on every lot in a district that allows year-round homes, and up to four units where municipal **water and sewer** serve the district. So in Vermont, `E` is the single-family lots whose own bylaw allows one home (the national ledger range above: no Vermont count exists), and then, in the mix method:
+
+- **Only bigger buildings count.** A `k`-unit building counts only where `k` is above what is already allowed: 5 or 6 units on lots with water and sewer, 3 to 6 on lots without. The share with both services is `s × a + (1 − s) × b`: `s` is the tract's share of homes inside a mapped municipal sewer service area (pack table `infra_tract`), `a` the share of those also on municipal water (`missing_middle.floor_water_share_in_sewer_area`, 0.85, range 0.60–0.97) and `b` the share of homes with no sewer record that have both (`missing_middle.floor_served_share_no_sewer_record`, 0.03, range 0–0.10). The pack has no statewide municipal water map, so the four-unit right is unknown on every lot; the two draft judgement entries turn "unknown" into a likely range, never into "no right".
+- **Count the change, not the level.** On a lot where the already-allowed design (a fourplex with services, a duplex without) also pencils, a bigger building adds only its extra homes: `k − m` where `m` is what is already allowed (a six-unit building instead of a fourplex adds two). The share of such lots is `min(p_m, p_k) / p_k`.
+- **No double count.** "Already allowed" is the larger of the rights in force that year and the rights the baseline's permit history already reflects. Act 47 of 2023 put the duplex and four-unit rights in force on July 1, 2023, so permits since then include them, and the baseline already carries that production.
+- **Current law in both arms.** Each window year reads the version of § 4412(1)(D) in force on July 1 of that year: the Act 179 text in 2027, and from January 1, 2028 the text that adds an exception for districts that require multiunit buildings of more than four homes. Both arms use the same schedule. The exception does not reach the reform's lots (a district whose bylaw allows one home requires no multiunit buildings), so it changes nothing here.
+- **The same lot in both arms.** On a lot where the already-allowed `m`-unit design also pencils, the counterfactual is that building: `m` new units and the same demolition, with no `q × r` rebuild on top. The other redeveloped lots keep the usual counterfactual (`q × r` new units, `q ×` the demolitions). So a fourplex (4 units, 1 demolition) against an already-allowed duplex (2 and 1) gives 2 added authorizations and +2 homes. Records `baseline_on_sites` and `counterfactual_removed` include those duplexes and their demolitions.
+- **"Freeze today's rules"** keeps the version in force on November 25, 2026 in every year. It is a separate comparison (record `floor_freeze_difference`), not a forecast arm; in Vermont it is zero.
+
+Records: `floor_served_share`, `floor_newly_legal_share`, `floor_existing_alternative` (homes not counted because the already-allowed design also pencils) and `floor_freeze_difference`. The parameters of each version are in `assumptions/law/statutory_rights.yaml` (block `missing_middle_application`); the code is `law/rights.py` (`middle_floor_schedule`), `engine/law_floor.py` and the funnel's `floor` argument. The prototype method is not changed by the floor. This replaces the earlier judged Vermont range for `missing_middle.sf_only_zoned_share` (15–50% of lots "not yet legal"), which folded the statute into one share.
+
+Limits: how far each town's bylaw has caught up with the statute is not measured.
 
 ### Step 2 · Lot large enough `f`
 
@@ -68,17 +86,111 @@ lots redeveloped = feasible lots × min(h, turnover) × Σ_{t=2027..2031} ramp(t
 
 `h` (0.3% of feasible lots a year, range 0.05–1%) is the main behavioural parameter. It is still a draft judgement; it is to be calibrated on places with gentle-density reforms that published permits. Redevelopment needs a sale, so `h` is capped at the yearly sale rate of single-family homes (`missing_middle.sf_turnover_annual`, 4.5%). The ramp has the same form as the ADU ramp: `ramp(t) = min(1, r1 + (1 − r1)(t − 1)/(Y − 1))`.
 
-### Step 5 · Units and net units
+### Step 5 · New units authorized
 
-New units = Σ_k lots redeveloped with `k`-unit buildings × `k`. Net units = new units − lots redeveloped × 1 (one house torn down per project). So a duplex adds one home, a sixplex five.
+New units authorized = Σ_k lots redeveloped with `k`-unit buildings × `k`. Every unit in the new building needs a permit.
 
-### Step 6 · Displacement
+### Steps 6 and 7 · Events on the same lots, then gross and net
 
-Some of these homes would have been built anyway, as single-family homes or apartments elsewhere. Net added units = net units × (1 − `missing_middle.displacement_share`) (0.15, range 0–0.40).
+Each redeveloped lot has four event fields:
+
+| Field | Policy | Counterfactual (the baseline) |
+|---|---|---|
+| New units authorized | `k` (the new building) | `q × r` (with chance `q` the lot is rebuilt with `r` homes anyway) |
+| Homes demolished | `d` | `q × d` (the same house, torn down anyway) |
+
+One function (`engine.outcome.site_account`) gives both accounts:
+
+```
+added units authorized (the headline) = (policy units − counterfactual units) × (1 − x)
+net added homes if completed          = added units authorized − (policy demolitions − counterfactual demolitions)
+```
+
+`x` = `missing_middle.displacement_share`: homes that would have been permitted
+elsewhere anyway. It moves no demolition. Records `units`, `removed`,
+`baseline_on_sites`, `counterfactual_removed` and `demolitions_caused` keep
+every field, so a reader can redo the subtraction.
+
+**Worked cases** (tested, `tests/test_outcome_accounting.py`):
+
+- A fourplex replacing a house that the baseline would have rebuilt as one
+  house (`q = 1`): 4 − 1 = 3 added authorizations; demolitions 1 − 1 = 0, so +3
+  homes if completed.
+- The same fourplex where the baseline leaves the house alone (`q = 0`): 4 added
+  authorizations, 1 demolition caused, +3 homes.
+- An already-permitted duplex under a two-unit ceiling: both arms build the
+  same duplex, so 0 and 0. Such a lot is not in a single-family-only zone, so
+  it is not eligible in the first place.
+
+**Work types.** Every new building here is new construction, which the
+Building Permits Survey counts, so the headline equals the comparable record
+(`accounting.records.comparable`). On a detached lot it is a stand-alone
+building; on a semi-detached or row lot (only in scenarios that reach them) a
+new attached structure. See [`outcome.md`](outcome.md) for the five record
+types.
 
 ### Overlap with the ADU reform
 
 ADUs and missing middle compete for the same lots (plan §4.5). In a package, the engine passes the lots ADUs used. A share `missing_middle.adu_lot_overlap_share` (0.75) of them leaves the eligible pool: a lot that just gained an ADU is rarely torn down soon after, and some ADU lots sit outside single-family-only zones anyway. The engine decides how lots are split between the two reforms; this module removes only what it is given.
+
+Under the package option `market` (project choice, [market.md](market.md)) this rule is replaced: each lot both rules reach goes to its best use (an ADU, the best 2-6 unit prototype, a conventional new house, or nothing), compared on residual value lot by lot, and the funnel is rerun with those rivals (option `rivals`, prototype method). The benchmark headline keeps the rule above.
+
+## Prototypes: duplex, fourplex, six-unit building
+
+The benchmark preset keeps its ledger mix of building types (above). Beside it,
+every run compares three **prototypes** on the same lots and draws
+(`scenarios/prototypes.py`; records `proto_*`), to show why one pencils where
+another does not:
+
+| Prototype | Homes | Smallest lot | Floor area per home | Rent | Code and financing |
+|---|---|---|---|---|---|
+| Duplex | 2 | `missing_middle.prototype_duplex_min_lot_sqft` (4,000 sq ft) | 1,200 sq ft | three-bedroom median | residential code; residential mortgage |
+| Fourplex | 4 | `..._fourplex_min_lot_sqft` (6,000) | 950 | two-bedroom median | building code: + `missing_middle.code_cost_ibc_per_sqft`; accessible ground-floor homes: + `missing_middle.accessibility_cost_per_ground_unit` |
+| Six-unit | 6 | `..._sixplex_min_lot_sqft` (8,000) | 850 | two-bedroom median | as the fourplex, plus commercial financing: + `missing_middle.commercial_finance_margin_add` on the required return |
+
+**Code and financing thresholds.** The thresholds themselves are cited: the
+residential code covers one- and two-family homes (IRC R101.2), so three or more
+homes are built under the building code, which requires sprinklers in
+residential buildings (IBC 903.2.8); federal accessible design applies to
+ground-floor homes in buildings of four or more without an elevator (24 CFR
+100.205); residential mortgages stop at four units, so five or more need a
+multifamily (commercial) loan. The dollar and percentage amounts attached to
+each threshold are judgement, flagged `draft` in the ledger.
+
+For each prototype, in each tract and draw:
+
+1. **Lots big enough** = the block lot-size proxy against its smallest lot, as
+   in step 2 (bigger buildings never fit on more lots).
+2. **Land bid** = its residual land value (rent capitalised, minus hard cost
+   with any code add-on, soft cost, the $50,000 fees, parking and the required
+   return with any finance add-on) − demolition
+   (`missing_middle.demolition_cost_per_lot`) − accessible design on a third of
+   its homes (three storeys). This is the most a builder of that prototype
+   could pay for the lot.
+3. **Pencils alone** = lots big enough × share of owner home values with value ×
+   (1 + acquisition premium) at or below the land bid. Records
+   `proto_<k>_fit`, `proto_<k>_alone` and `proto_<k>_bid` compare the three, next
+   to `proto_lot_price` (the documented lot price: ACS home value × (1 +
+   premium), eligible-lot-weighted).
+4. **Best choice.** Lots fall into size bands (fits six; fits four but not six;
+   fits a duplex only). In each band the builder takes the prototype with the
+   highest land bid among those that fit: the lot price is the same whatever is
+   built, so the highest bid is the most profitable. The lot is feasible when
+   its price is at or below that bid (`proto_<k>_chosen`).
+
+**Why a duplex pencils where a six-unit building does not.** On small lots only
+the duplex fits. Where both fit, the six-unit building spreads land over more
+homes but pays the building-code and accessibility costs and a higher required
+return, and its homes are smaller; a duplex with three-bedroom rents and no code
+step can bid more per lot in mid-rent tracts. The records show which effect
+wins where.
+
+**The named variant `missing_middle_prototype_choice`** (`method: prototypes`)
+uses the best choice as the funnel's feasible step: feasible lots = the
+banded feasible share × eligible lots, and new units = lots redeveloped × the
+homes of the chosen prototype. Take-up, the baseline's own permits on the
+sites, displacement and demolition then follow steps 4–7 unchanged, on the same
+draws as the benchmark.
 
 ## What the numbers say on Testland
 
@@ -101,7 +213,7 @@ With rents doubled, as in a high-cost metro, and Testland scaled to Pennsylvania
 - **Which lots.** Fit and feasibility are tract shares. The model does not know which lots sit next to each other, or which owners would sell.
 - **Teardown prices.** Census home values are owners' own estimates. The real price of a house bought to tear down may differ; the acquisition premium carries this uncertainty.
 - **Zoning detail.** At Tier 0 the single-family-only share is one statewide range. Places that already allow two units are not mapped.
-- **Lending and building codes.** Five- and six-unit buildings often need commercial loans and stricter code rules. The mix weights stand in for this; they are not modelled from first principles.
+- **Lending and building codes.** In the benchmark the mix weights stand in for these. The prototype comparison prices the code and financing thresholds explicitly, but the amounts are judgement; local amendments to the codes are not read.
 - **Who lives in the new homes, what they rent for, effects after 2031, and whether towns comply or obstruct.**
 
 ## Parameters added for this funnel

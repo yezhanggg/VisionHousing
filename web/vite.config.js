@@ -8,6 +8,9 @@
  * - Files in web/public/ are copied into dist/ as they are. The static-site data
  *   (web/public/data/, written by `visionhousing export-static`) arrives that way.
  *
+ * - `VITE_BASEMAP=off` makes a build start with the optional map basemap switched off
+ *   (the browser tests use it so they never reach the internet); readers can still turn it on.
+ *
  * No plugins: the screens use htm templates in plain JavaScript, so nothing needs compiling.
  */
 import { defineConfig } from "vite";

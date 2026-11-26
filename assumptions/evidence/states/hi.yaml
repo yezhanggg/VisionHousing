@@ -1,0 +1,154 @@
+# Cross-state comparison records: HI.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: hi.hb1409_2025
+  kind: policy
+  state: HI
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  title: 'Hawaii HB 1409 (2025): incentives for housing near transit (status not read)'
+  citation: HB 1409, 2025 regular session (Act number, if any, not read)
+  url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HB&billnumber=1409&year=2025
+  session: 2025 regular session
+  bill: HB 1409
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Not read on an official page; the label comes from a search lead only.
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: unknown
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Whether this bill passed, its Act number and its scope are all unconfirmed.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: The Hawaii State Legislature measure page (capitol.hawaii.gov) returned HTTP 403 (Cloudflare) to scripted reading on 2026-11-24, so the bill status, Act number, signing date, effective date and text were not read. Not worked around.
+  sources:
+  - label: HB 1409 (2025) measure status page (Hawaii State Legislature; refused scripted access)
+    url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HB&billnumber=1409&year=2025
+    official: true
+  discovered_via: search
+- id: hi.hb1406_2025
+  kind: policy
+  state: HI
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Hawaii HB 1406 (2025): task force on redundant state and county permit review (status not read)'
+  citation: HB 1406, 2025 regular session (Act number, if any, not read)
+  url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HB&billnumber=1406&year=2025
+  session: 2025 regular session
+  bill: HB 1406
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Not read on an official page; the label comes from a search lead only.
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: unknown
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Whether this bill passed, its Act number and its scope are all unconfirmed.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: The Hawaii State Legislature measure page (capitol.hawaii.gov) returned HTTP 403 (Cloudflare) to scripted reading on 2026-11-24, so the bill status, Act number, signing date, effective date and text were not read. Not worked around.
+  sources:
+  - label: HB 1406 (2025) measure status page (Hawaii State Legislature; refused scripted access)
+    url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HB&billnumber=1406&year=2025
+    official: true
+  discovered_via: search
+- id: hi.hb420_2025
+  kind: policy
+  state: HI
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Hawaii HB 420 (2025): condominium construction liability reform (status not read)'
+  citation: HB 420, 2025 regular session (Act number, if any, not read)
+  url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HB&billnumber=420&year=2025
+  session: 2025 regular session
+  bill: HB 420
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Not read on an official page; the label comes from a search lead only.
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: unknown
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Whether this bill passed, its Act number and its scope are all unconfirmed.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: The Hawaii State Legislature measure page (capitol.hawaii.gov) returned HTTP 403 (Cloudflare) to scripted reading on 2026-11-24, so the bill status, Act number, signing date, effective date and text were not read. Not worked around.
+  sources:
+  - label: HB 420 (2025) measure status page (Hawaii State Legislature; refused scripted access)
+    url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=HB&billnumber=420&year=2025
+    official: true
+  discovered_via: search
+- id: hi.sb3202_2024
+  kind: policy
+  state: HI
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'Hawaii SB 3202 (2024): accessory dwelling units on residential lots (status not read)'
+  citation: SB 3202, 2024 regular session (Act number, if any, not read)
+  url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=SB&billnumber=3202&year=2024
+  session: 2024 regular session
+  bill: SB 3202
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Not read on an official page; the label comes from a search lead only.
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: unknown
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Whether this bill passed, its Act number and its scope are all unconfirmed.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: The Hawaii State Legislature measure page (capitol.hawaii.gov) returned HTTP 403 (Cloudflare) to scripted reading on 2026-11-24, so the bill status, Act number, signing date, effective date and text were not read. Not worked around.
+  sources:
+  - label: SB 3202 (2024) measure status page (Hawaii State Legislature; refused scripted access)
+    url: https://www.capitol.hawaii.gov/session/measure_indiv.aspx?billtype=SB&billnumber=3202&year=2024
+    official: true
+  discovered_via: search

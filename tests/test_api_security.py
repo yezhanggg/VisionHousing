@@ -155,6 +155,25 @@ def test_inline_script_hashes_skip_external_scripts():
     assert hashes == [f"'sha256-{expected}'"]
 
 
+def _sha(text: str) -> str:
+    return f"'sha256-{base64.b64encode(hashlib.sha256(text.encode()).digest()).decode()}'"
+
+
+@pytest.mark.parametrize(
+    "html, bodies",
+    [
+        ("<SCRIPT>a()</SCRIPT>", ["a()"]),
+        ("<script>a()</script >", ["a()"]),
+        ("<script >x='</div>'</script>", ["x='</div>'"]),
+        ("<script SRC='x.js'></script><script>b()</script>", ["b()"]),
+        ("<script src=x.js />", []),
+        ("<p>no scripts</p>", []),
+    ],
+)
+def test_inline_script_hashes_read_tags_like_a_browser(html, bodies):
+    assert inline_script_hashes(html) == [_sha(b) for b in bodies]
+
+
 def test_csv_cells_cannot_start_a_formula(client):
     r = client.get(f"{API}/export/csv?s=TL&r=adu&draws=100")
     for line in r.text.splitlines()[1:]:

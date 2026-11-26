@@ -1,0 +1,48 @@
+# Cross-state comparison records: WV.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: wv.sb659_2026_adu
+  kind: policy
+  state: WV
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'West Virginia SB 659 (2026): accessory dwelling unit rights and limits on local restrictions'
+  citation: W. Va. SB 659 (2026 regular session); citation and any acts chapter not read
+  url: https://www.wvlegislature.gov/bill_status/bills_history.cfm?btype=bill&input=659&sessiontype=rs&year=2026
+  session: 2026 regular session
+  bill: SB 659
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Not read. A secondary review describes statewide ADU rights with limits on local restrictions.
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: unknown
+    note: Not checked.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Placeholder so the candidate is tracked; nothing in it has been checked against official text.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: wvlegislature.gov did not answer scripted reading on 2026-11-24 (curl timed out after
+    30 s; the fetch tool got connection refused). Passage, signature, effective date, code sections and
+    scope were not read on any official page.
+  sources:
+  - label: SB 659 bill history (West Virginia Legislature), not reachable
+    url: https://www.wvlegislature.gov/bill_status/bills_history.cfm?btype=bill&input=659&sessiontype=rs&year=2026
+    official: true
+  discovered_via: pew_2026

@@ -1,0 +1,169 @@
+# Cross-state comparison records: PA.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: pa.sb1346_2025
+  kind: policy
+  state: PA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - permit_timing
+  - fees
+  title: 'Pennsylvania SB 1346: by-right accessory dwelling units (MPC amendment)'
+  citation: SB 1346 (2025-2026), Printer's No. 1747; amends Municipalities Planning Code (Act 247 of 1968),
+    new § 603(m) and § 603.2
+  url: https://www.palegis.us/legislation/bills/2025/sb1346
+  session: 2025-2026 regular session
+  bill: SB 1346
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Every municipality where single-family detached dwellings are permitted; at least
+    one ADU per single-family detached dwelling, attached, internal or detached on the same lot.
+  exclusions:
+  - Does not override deed restrictions, covenants, master deeds or planned-community documents
+  - Amends the Municipalities Planning Code, so it does not reach Philadelphia or Pittsburgh, which zone
+    under their own laws
+  - Recreational vehicles are not ADUs
+  - ADU may be rented but not sold separately from the main dwelling
+  implementation_status: pending
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Not law. Referred to Urban Affairs & Housing 2026-05-26; reported as committed 10-1 and first consideration
+    2026-07-12; laid on the table under Senate Rule 9 on 2026-11-17 (last action as of 2026-11-24). A
+    tabled bill can be taken off the table; no later action was shown.
+  - 'Text (PN 1747): ministerial approval with no hearing; 14-day decision clock with deemed approval;
+    review fee limited to cost; no owner-occupancy requirement; no added off-street parking and no replacement
+    of converted garage spaces; minimum size cap no higher than 150 sq ft; maximum size no lower than
+    the lesser of 50% of the house or 1,250 sq ft; side/rear setback of 4 ft at most; limits on utility
+    connection fees. Act would take effect 60 days after enactment.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: palegis.us bill page shows PN 1747 and the actions 2026-05-26 referral, 2026-07-12
+    reported and first consideration, and 2026-11-17 laid on the table (Rule 9). Provisions read in the
+    PN 1747 text on palegis.us.
+  sources:
+  - label: palegis.us SB 1346 bill page and history
+    url: https://www.palegis.us/legislation/bills/2025/sb1346
+    official: true
+  - label: SB 1346 PN 1747 text
+    url: https://www.palegis.us/legislation/bills/text/HTM/2025/0/SB1346/PN1747
+    official: true
+  discovered_via: addendum
+- id: pa.hb2186_2025
+  kind: policy
+  state: PA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  title: 'Pennsylvania HB 2186: accessory dwelling units as a by-right use (Title 53)'
+  citation: HB 2186 (2025-2026), Printer's No. 3373; new 53 Pa.C.S. Chapter 63
+  url: https://www.palegis.us/legislation/bills/2025/hb2186
+  session: 2025-2026 regular session
+  bill: HB 2186
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Every municipality (city, borough, incorporated town, township, home-rule and optional-plan
+    municipalities) whose zoning permits a residential building; one ADU per lot or parcel, attached,
+    internal or detached.
+  exclusions:
+  - Does not override deed restrictions, covenants or planned-community documents
+  - Recreational vehicles are not ADUs
+  - Municipality may ban rentals shorter than 30 consecutive days
+  implementation_status: pending
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Not law. Passed the House 139-62 on 2026-06-01; referred to Senate Urban Affairs & Housing on 2026-06-05,
+    which is the last action as of 2026-11-24.
+  - 'PN 3373 text: no owner-occupancy requirement; no added off-street parking and no replacement of converted
+    garage spaces; minimum size cap no higher than 200 sq ft; maximum size no lower than the lesser of
+    50% of the house or 850 sq ft; height limit no lower than the lesser of 25 ft or the house height;
+    setback of 4 ft at most. Act would take effect 60 days after enactment.'
+  - Differs from SB 1346 (for example, 850 vs 1,250 sq ft size floor, and Title 53 vs MPC vehicle). Do
+    not merge the two bills.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'palegis.us bill page shows PN 2842/3173/3373 and actions: 2026-02-02 referral, 2026-04-13
+    reported as amended, 2026-05-06 second consideration (PN 3373), 2026-06-01 final House passage 139-62,
+    2026-06-05 referred to Senate Urban Affairs & Housing. Provisions read in the PN 3373 text.'
+  sources:
+  - label: palegis.us HB 2186 bill page and history
+    url: https://www.palegis.us/legislation/bills/2025/hb2186
+    official: true
+  - label: HB 2186 PN 3373 text
+    url: https://www.palegis.us/legislation/bills/text/HTM/2025/0/HB2186/PN3373
+    official: true
+  discovered_via: addendum
+- id: pa.housing_action_plan_2026
+  kind: policy
+  state: PA
+  jurisdiction: statewide
+  policy_types:
+  - infrastructure_finance
+  - permit_timing
+  title: Pennsylvania Housing Action Plan (governor's plan, not law)
+  citation: Pennsylvania Housing Action Plan, DCED, released 2026-02-12 under Executive Order 2024-03
+  url: https://dced.pa.gov/newsroom/governor-shapiro-unveils-pennsylvanias-first-ever-housing-action-plan-to-build-more-housing-reduce-costs-and-create-opportunity-for-every-pennsylvanian/
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Statewide policy agenda; it does not bind municipalities by itself.
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - This is a plan, not a law. It proposes nearly 30 initiatives under five goals, including modernizing
+    development rules through Municipalities Planning Code updates. It estimates a shortfall of about
+    185,000 homes by 2035.
+  - Its first budget items, including a proposed $1 billion Critical Infrastructure Investment Fund paid
+    for by general obligation bonds, were in the proposed 2026-27 budget. Whether these were enacted was
+    not checked.
+  - The release says Executive Order 2024-03 was signed in September 2024 but gives no exact date.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: DCED press release dated 2026-02-12 announces the plan and cites Executive Order
+    2024-03. No enactment date is recorded because the plan is not law.
+  sources:
+  - label: 'DCED release: Governor unveils Housing Action Plan (2026-02-12)'
+    url: https://dced.pa.gov/newsroom/governor-shapiro-unveils-pennsylvanias-first-ever-housing-action-plan-to-build-more-housing-reduce-costs-and-create-opportunity-for-every-pennsylvanian/
+    official: true
+  - label: DCED Housing Action Plan page
+    url: https://dced.pa.gov/housing-and-development/pennsylvania-housing-action-plan/
+    official: true
+  discovered_via: addendum

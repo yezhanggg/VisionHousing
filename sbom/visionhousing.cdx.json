@@ -1,0 +1,4915 @@
+{
+  "bomFormat": "CycloneDX",
+  "specVersion": "1.5",
+  "serialNumber": "urn:uuid:73c15a6a-2780-5baf-ac0d-e2dbb7c36890",
+  "version": 1,
+  "metadata": {
+    "tools": {
+      "components": [
+        {
+          "type": "application",
+          "name": "visionhousing-sbom",
+          "description": "scripts/sbom.py (Python standard library only)"
+        }
+      ]
+    },
+    "component": {
+      "type": "application",
+      "bom-ref": "pkg:pypi/visionhousing@0.1.0",
+      "name": "visionhousing",
+      "version": "0.1.0",
+      "purl": "pkg:pypi/visionhousing@0.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    }
+  },
+  "components": [
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/annotated-doc@0.0.7",
+      "name": "annotated-doc",
+      "version": "0.0.7",
+      "purl": "pkg:pypi/annotated-doc@0.0.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "0a30ef8f5322a4173720ae6712dc9a5e58f5a19868f3f167b4b5778db066c2b5"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/0b/7d/bdbf3062e5dae31da8b3de1e3269110beb93d268df4a7f6d22b167c6cee0/annotated_doc-0.0.7.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/annotated-types@0.8.0",
+      "name": "annotated-types",
+      "version": "0.8.0",
+      "purl": "pkg:pypi/annotated-types@0.8.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "13b2beaad985e05e2d6407ee4c4f35590b11f8d693a258a561055cac8f64cab7"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/5f/56/a8120250d128bed162cd73c76d45f6ef9991f3e068f62a8ee060afa3104a/annotated_types-0.8.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/anyio@4.16.0",
+      "name": "anyio",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/anyio@4.16.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "59bb03251907983d1603d27c3087ddb1e93299ea2163adcdba37899a4fb12ffb"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/a1/98/7e457a3b014976887a050561955c0b76e1e7e2d6e27b78ecef2ef80518f2/anyio-4.16.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/click@8.5.1",
+      "name": "click",
+      "version": "8.5.1",
+      "purl": "pkg:pypi/click@8.5.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "9bbfada76703fd1d784b83eea012e3e8c6a001a876543ef104fa56aaaeb072b4"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/45/37/edbf1b0707709013c0cf2e8317e03d97ed29bf4cac709fe328904ae92a38/click-8.5.1.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/colorama@0.4.6",
+      "name": "colorama",
+      "version": "0.4.6",
+      "purl": "pkg:pypi/colorama@0.4.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "08695f5cb7ed6e0531a20572697297273c47b8cae5a63ffc6d6ed5c201be6e44"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/d8/53/6f443c9a4a8358a93a6792e2acffb9d9d5cb0a5cfd8802644b7b1c9a02e4/colorama-0.4.6.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/fastapi@0.165.0",
+      "name": "fastapi",
+      "version": "0.165.0",
+      "purl": "pkg:pypi/fastapi@0.165.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "dd94d4128319c1e1d50535ab023ab698f850a4d2822f0e181747b46f4ff3c0ab"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/27/f9/e7820ef181026fea100bde02d811445bf8e883362d7092b6928767147056/fastapi-0.165.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/greenlet@3.5.6",
+      "name": "greenlet",
+      "version": "3.5.6",
+      "purl": "pkg:pypi/greenlet@3.5.6",
+      "licenses": [
+        {
+          "expression": "MIT AND PSF-2.0"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8e67c43bdfc88d5fee6db0d3e40175b362fc95fb85f0412d233b9b203c53a575"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/3e/6e/0091f175ccd02b02bc8811bbcbcc6ac2e980be116e3b2f7a736ca322bf84/greenlet-3.5.6.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/h11@0.16.0",
+      "name": "h11",
+      "version": "0.16.0",
+      "purl": "pkg:pypi/h11@0.16.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/idna@3.20",
+      "name": "idna",
+      "version": "3.20",
+      "purl": "pkg:pypi/idna@3.20",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a7db850025b95ded1eae8a46181a1a6c56c92c96f0e2b005d9ff8dc0210cab44"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/f5/08/8eea9d4b8302028f3abb2c0813953f7aec26d33b7a8960ed760e65ff29fa/idna-3.20.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/iniconfig@2.3.1",
+      "name": "iniconfig",
+      "version": "2.3.1",
+      "purl": "pkg:pypi/iniconfig@2.3.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "67f4b9c50da0dedf52af349e7749a80a9057a5031199791b906c3bb3ae878960"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/01/e1/2069291243c926a2ff1cd706c7f3eeb9b62144bf60f77c9fb9ff2fb26bd3/iniconfig-2.3.1.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/numpy@2.5.5",
+      "name": "numpy",
+      "version": "2.5.5",
+      "purl": "pkg:pypi/numpy@2.5.5",
+      "licenses": [
+        {
+          "expression": "BSD-3-Clause AND 0BSD AND MIT AND Zlib AND CC0-1.0"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "5cddc243c75114ba845f01b1f87aca1572dbf7b6c2d88636ed3e1d2bccd7f1bf"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/4e/3a/8770c288c47f0b5c2a786d3c20e79f66fd245f2d42cd232d7cd5e00e83e5/numpy-2.5.5.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/opentelemetry-api@1.45.2",
+      "name": "opentelemetry-api",
+      "version": "1.45.2",
+      "purl": "pkg:pypi/opentelemetry-api@1.45.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d7b0008e21e5fd61cbe7a7f34ca3b6905a78ab677d9bc395e299359c75cda6b4"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/19/14/cf3a6b6448849656e1e5f4e2101f3988dc6789724050096aba1bc5ccf592/opentelemetry_api-1.45.2.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/packaging@26.3",
+      "name": "packaging",
+      "version": "26.3",
+      "purl": "pkg:pypi/packaging@26.3",
+      "licenses": [
+        {
+          "expression": "Apache-2.0 OR BSD-2-Clause"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-26.3.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pandas@3.1.1",
+      "name": "pandas",
+      "version": "3.1.1",
+      "purl": "pkg:pypi/pandas@3.1.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "05fed3e3b7c99b226f160e29d7d6cb7ef39638c758cbfe42b3f24ba34f04b859"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/17/ca/24c6bc92aca3d366146358e47f1d374c0e1a50763ef226fc71eff20a63fb/pandas-3.1.1.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/playwright@1.65.2",
+      "name": "playwright",
+      "version": "1.65.2",
+      "purl": "pkg:pypi/playwright@1.65.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "8b031f81de9cdbe8550d8fe8b58dba47d96239e53177ee4cd47dab0fff07a87e"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/b9/33/151d28773e930d0d438b73e5dcd29b418da65150f9ad05ddd772b275395e/playwright-1.65.2.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pluggy@1.7.0",
+      "name": "pluggy",
+      "version": "1.7.0",
+      "purl": "pkg:pypi/pluggy@1.7.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d1eaa46ebb595891b860ab086b4d09c8588af65ebd4361b8e8f4bb8920b90ba8"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/bf/db/7fc19e6f2dc92a966727031389fc2e08b558f0f25eb7403c1119ad4713cd/pluggy-1.7.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pydantic@2.14.4",
+      "name": "pydantic",
+      "version": "2.14.4",
+      "purl": "pkg:pypi/pydantic@2.14.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7c19f1d46f8accf55a4617a6116e1ade64840870f397b846a2c53fb9019414ba"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/8e/25/3ec212432a6031b65f043eaca9c820ddf87c0d0aa330023e64f79fcb5db6/pydantic-2.14.4.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pydantic-core@2.50.5",
+      "name": "pydantic-core",
+      "version": "2.50.5",
+      "purl": "pkg:pypi/pydantic-core@2.50.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "1e740886083ff95530d694e6a3f09ed914bcf92a496d16acd307c6c3484fc36d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/fb/63/0ceb815a7762576027ce388544c573d440574f95afb1302a2496b96db548/pydantic_core-2.50.5.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pygments@2.21.0",
+      "name": "pygments",
+      "version": "2.21.0",
+      "purl": "pkg:pypi/pygments@2.21.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/49/2e/ced460408999b33da6b31b0021b0f37d329e202d4169aeb164493778f25b/pygments-2.21.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pypdf@7.1.1",
+      "name": "pypdf",
+      "version": "7.1.1",
+      "purl": "pkg:pypi/pypdf@7.1.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2eff4e2fc5fb22a6d6711e6f1166cdc9ab5765d90cd0d77dfea3f4aa91a27b1d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/96/5f/f41984a8150ec37c6ee50fa6fa1868d065337b65ba510a155848b2ce0b62/pypdf-7.1.1.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pyshp@3.1.9",
+      "name": "pyshp",
+      "version": "3.1.9",
+      "purl": "pkg:pypi/pyshp@3.1.9",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7a4ac6c0898f54d09a7f75c8494c05a2ed86964010f27a8a7df9c7ecb6738569"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/b7/e5/1e72c0eca21dfd63a22dfd774931d28d1a7d02ca4b61e7530d54923054d2/pyshp-3.1.9.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pytest@9.2.0",
+      "name": "pytest",
+      "version": "9.2.0",
+      "purl": "pkg:pypi/pytest@9.2.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "97c4f3b1f3c7414aa36465e09b8220f1d03627993bd51b1282e193753c80557b"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/79/42/bb4641652e58dedeac2ec51abc1f8cae4fee4ec63899a0999016229a0f2a/pytest-9.2.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/python-dateutil@4.0.0",
+      "name": "python-dateutil",
+      "version": "4.0.0",
+      "purl": "pkg:pypi/python-dateutil@4.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "d7295ff14fdc0f92f662100bfb6c551d160ca090f2939f1ec5b9794265c03f06"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/18/39/b3927f3616f6223832f9b760e4208e8a7c7e1dea2b4d9ad7d32a5d214c3a/python_dateutil-4.0.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/pyyaml@6.0.4",
+      "name": "pyyaml",
+      "version": "6.0.4",
+      "purl": "pkg:pypi/pyyaml@6.0.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "e24bf71af8a432d7808fabff134d38dfe16d3cbb41f2873bb4b1e42422de0a1a"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/76/b8/c0b780928e2fb1c87e9e375818c6f121da2398b071012d1747be300b83f4/pyyaml-6.0.4.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/ruff@0.17.6",
+      "name": "ruff",
+      "version": "0.17.6",
+      "purl": "pkg:pypi/ruff@0.17.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "2b04276561331300325040bdca21460770029ec574d4c479099e39e8ad1ed43c"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/df/8e/6929d337aa5380aafc7355f3149f3ccfe55cba5fdd34a045697ebaceb5a0/ruff-0.17.6.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/starlette@1.10.0",
+      "name": "starlette",
+      "version": "1.10.0",
+      "purl": "pkg:pypi/starlette@1.10.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "b8399098d4c1e3522734f7235dc79b1fc967f96cf139c81e0fa30479e0685f9b"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/48/bb/3d8757f21e9a53d9035c9eb039a777047139a16bfdbedfc7a58241c3d914/starlette-1.10.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/truststore@0.10.5",
+      "name": "truststore",
+      "version": "0.10.5",
+      "purl": "pkg:pypi/truststore@0.10.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "30d36967ccaded5cbb38d602c433f53600036c79d502f4533a49b60a03bbefcd"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/ee/9f/c5201d42a484c061e528825fc8e2d565f5abd50a4ced6fb7d29c4ec99b2b/truststore-0.10.5.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typing-extensions@4.16.0",
+      "name": "typing-extensions",
+      "version": "4.16.0",
+      "purl": "pkg:pypi/typing-extensions@4.16.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "PSF-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "dc983d19a509c94dba722ee6abd33940f7c05a89e243c47e907eb4db6f1a43e5"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/f6/cc/6253133b5bb138fc3306cebfbda2c520f545d36b5be2c7255cc528bb45d6/typing_extensions-4.16.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/typing-inspection@0.4.5",
+      "name": "typing-inspection",
+      "version": "0.4.5",
+      "purl": "pkg:pypi/typing-inspection@0.4.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "7f16c411e7930dc79596d42ab44672a3fe5f60eb34b781a1647e7872363120c7"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/ff/50/0195198eb1d75bab716bb0a813abea4cc394bfa17a92a189f021a34859af/typing_inspection-0.4.5.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/tzdata@2026.6",
+      "name": "tzdata",
+      "version": "2026.6",
+      "purl": "pkg:pypi/tzdata@2026.6",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "85d2cd9c09f81f0bb29db27759fc83af4f1e620efb814f8c5bf8b4cc4feece6d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/7a/29/6a1391d31cd00ff9e927215a224a880e1e84e826b64ba80a499e51c074d8/tzdata-2026.6.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:pypi/uvicorn@0.54.0",
+      "name": "uvicorn",
+      "version": "0.54.0",
+      "purl": "pkg:pypi/uvicorn@0.54.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-256",
+          "content": "a2e33cbfaa0306f8e6b0c13e0cb89d7d7a2da3e62b90c66e18c33d9807b28620"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://files.pythonhosted.org/packages/da/34/30e9280707135d2cfc589dfff3cb796bd07a3aeb1a3e415ba09dd89d7bb4/uvicorn-0.54.0.tar.gz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "python"
+        }
+      ]
+    },
+    {
+      "type": "application",
+      "bom-ref": "pkg:npm/visionhousing-web@0.1.0",
+      "name": "visionhousing-web",
+      "version": "0.1.0",
+      "purl": "pkg:npm/visionhousing-web@0.1.0",
+      "description": "Browser interface (web/), built with Vite",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+      "name": "@esbuild/aix-ppc64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5c4c5c3be76f2cabd5b4d4e26d24c17a3d4d0806da1a15a7f56c3564fc7cd2ab1a8613c57bff238163f421c84d7b41771f0914ee7f1e8e11fc6e3a27aa1b7c99"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/aix-ppc64/-/aix-ppc64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/android-arm@0.28.2",
+      "name": "@esbuild/android-arm",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-arm@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9175e888f55519072721818e79aa2fc0e511a678830694aae00d37aa443e04c42ab461ba1d86a9df19def42d4ed72a384d1deac65097e48aaa997e9f168d8baa"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/android-arm/-/android-arm-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/android-arm64@0.28.2",
+      "name": "@esbuild/android-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e587ca79e23ca967c16485febb6c590b76656f73acfe02d2dac6c428cf88e1939cb169874b658bcac09c4190c0151b250d45393a2ab8e207fa3d8375bc6c06e4"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/android-arm64/-/android-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/android-x64@0.28.2",
+      "name": "@esbuild/android-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/android-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3b7f3b8ad7bb4b353209ccb72505f83f86cbb4403b6cb2e4c7e7acbdee491e7c987cd4f1715a57668f6385d07495328de38833b442d3754ee74bc36bd7a16cd5"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/android-x64/-/android-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+      "name": "@esbuild/darwin-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9f82aa90e42badac4725c82333546fc1b8a07d028828956933bc69f8ab318b2512ad17485e7b7bdd586b3c0c747d5e388607e62152a3c4c37d275b798f249593"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/darwin-arm64/-/darwin-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+      "name": "@esbuild/darwin-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "baaeacb885983f7eeacc675d04a3f0e501103e2e8788b1ac3bb5269297f2698350dc3fab37ac3a59fc07fa7baa7065d6bdac06c31384ae83b86069c587de5acf"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/darwin-x64/-/darwin-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+      "name": "@esbuild/freebsd-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "9fe234053491228cbe77a44f2a7115c2a979530049a25cadbd8e2600e204268aca96a80f208f22c7ab25555adf6794e78fb825219be5a3295b07f1093cc5845f"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/freebsd-arm64/-/freebsd-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+      "name": "@esbuild/freebsd-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "efc5c94c992f3ecd24cf6c3ad77d353c98d797883bab726a898319fccff2548ef710706b0914e0921bbda2a1bbbcfaaaf9aff269d116f1a0fe6a02a5939c6b9a"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/freebsd-x64/-/freebsd-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-arm@0.28.2",
+      "name": "@esbuild/linux-arm",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-arm@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5e50e7bb6ab9ca8a9e9acfb16b2eb0480720f430c3ecaf512ca64404e3199b7724369241bce5f6d2d49f6f2f0a7ebae120d0f2bfd57661564a63f4a9a06248f3"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-arm/-/linux-arm-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+      "name": "@esbuild/linux-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a56e000b43f78adf1cedda3d315338a79d45cc7cdd33f4d9adeaeeae045c1c9d964dad55435088ab5f319dc7e9049c38a23922659aca5b6c8805604ff768fa52"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-arm64/-/linux-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+      "name": "@esbuild/linux-ia32",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0986e78fbf07b08780f8386050a80509fbcdb131c584c32b8a752b319a435c95ca37c4f75d589367ffb0b47795c44598f1ec12cd314dfa74664b03b6b5968b51"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-ia32/-/linux-ia32-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+      "name": "@esbuild/linux-loong64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "6eec2477c9eca61e11f9a8d1bf0d2a3391e36bf4d7428c37a6dcd63b611b1bf72a70890796846b76506d425b21c98193345bdf91f279b693cb5646380edb0f7d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-loong64/-/linux-loong64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+      "name": "@esbuild/linux-mips64el",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "655ca46c3ca4ef9d7d57088d6fd2dc8fd9bc5cceafe55f6e28fbeb10c92411e7557b07fed22b6485a869e070e98044578702d1a56172a6c19b1bf27cb3442324"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-mips64el/-/linux-mips64el-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+      "name": "@esbuild/linux-ppc64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "0805e5f83b5df5452e25df2928a77087a30b9b7314322a8c3e6859ded4d25cfa9fc90def0e5e91e6165d67f918a232b8a1f5ed75f4afd6d16af17cd6c7785e35"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-ppc64/-/linux-ppc64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+      "name": "@esbuild/linux-riscv64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "19e5c27a3e0842d53507e4250d5f16fd146f6f32373bf4adb2cfbf6c25efe25665b3958646dbb66bedc9900de2e2a21494c5e970779b5a917c024261013a30b8"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-riscv64/-/linux-riscv64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+      "name": "@esbuild/linux-s390x",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "dc7d707936193f1b7f58e841caccd06726d2f70e652b3527d450ccb2010285b1d64301d841045f071802719bcf8631df2b22632227afbcc98451ac09add63d0e"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-s390x/-/linux-s390x-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/linux-x64@0.28.2",
+      "name": "@esbuild/linux-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/linux-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e314d9af5154992a105b85c85a68addedcd0ad44d933e3773f45d5f3144e298179d177c8ef178ef74fb56d9bcdc3122e7d0f610d0551247e588603d517c03f1d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/linux-x64/-/linux-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+      "name": "@esbuild/netbsd-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b120134633de0c1837a5d807a107e8601a1bd752a4d4519af65ba2e51207642a029096bd40a96f977fef2b3daeb02998623b3bca6251ff6367b2a7be1e3b799f"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/netbsd-arm64/-/netbsd-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+      "name": "@esbuild/netbsd-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "96a9f3095fa633480800368a8a188283a89f81f5362f7879137deb35004dd58e0c6951a7cebcb39afbdfed41f1a6ba50744f21a6a2e8949f5197e4a42110e9cb"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/netbsd-x64/-/netbsd-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+      "name": "@esbuild/openbsd-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "00bdaa2482c7ee5363ac3982403bddc4c7c0508bfc28c3593afaf0010f22f3ffe7b4bf457e584ec8c27c39948c05bf3f0165dedffe6fe52db4cb7cc2a1958aa1"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/openbsd-arm64/-/openbsd-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+      "name": "@esbuild/openbsd-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "42d8ae3f2b5c851c82e2bc142a17b125d40abc3b99ea15a5a22de282a3d03542424b5feff4488edd44ce5d1e80dc5a0ca387e700a6d625da9a23084ece1f2a13"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/openbsd-x64/-/openbsd-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+      "name": "@esbuild/openharmony-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5a48580e6a538cbbc6952700d6bc234549a197893ca174777086eda969842e053f7457871e51259710ef75670d255f6b6f309ec41e6fcfc82d35ec162e0093ed"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/openharmony-arm64/-/openharmony-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+      "name": "@esbuild/sunos-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "18f3129133ad327bf653617c8317b8228eaa995b3e60aca9f37d84b6aab1af48459e0997437af3c32b5e966dc6227ed3e15be245495fdec3a004e89376f69fee"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/sunos-x64/-/sunos-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+      "name": "@esbuild/win32-arm64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3c886112413db8f06579106b404269527ecc06789b6736c6cd858f998df1f98a1583ff79cdb8c1e02c4f3ce43c979b5860ce2631a0ad845f3fd4321f05043259"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/win32-arm64/-/win32-arm64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+      "name": "@esbuild/win32-ia32",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "62625b7d396f53b49d9fd041fb83d1112e2807aa71812dfb30038d8fe841aff7295d2d5a04f297c4d9c36eef900963e3d28f5d832c5eabbf60e9ce4ff0a7ae60"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/win32-ia32/-/win32-ia32-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40esbuild/win32-x64@0.28.2",
+      "name": "@esbuild/win32-x64",
+      "version": "0.28.2",
+      "purl": "pkg:npm/%40esbuild/win32-x64@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e5e6e9c6bde758cceb2ffae7508ef9e4992e79ed1b1cbfc6ab459317d96f729bfbdf0029e5ebbc31f0548162bd6e15af6638fbc97f1eb5fffcb48f0d7b2ebde6"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@esbuild/win32-x64/-/win32-x64-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40mapbox/jsonlint-lines-primitives@2.0.3",
+      "name": "@mapbox/jsonlint-lines-primitives",
+      "version": "2.0.3",
+      "purl": "pkg:npm/%40mapbox/jsonlint-lines-primitives@2.0.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d12125695d2e331127c73061857f564ee3f251e32c00dfd24b48b5ead8ee6dae3f9a2a3adcc1bd9218c2d5ad090223c65c0c2fc26e147c725444237b9f2b9d42"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@mapbox/jsonlint-lines-primitives/-/jsonlint-lines-primitives-2.0.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40mapbox/point-geometry@1.1.0",
+      "name": "@mapbox/point-geometry",
+      "version": "1.1.0",
+      "purl": "pkg:npm/%40mapbox/point-geometry@1.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "606701cf5720e004d70c233fef52fdc6f7a1e1dca77c699c2c3aae7d1fa7410cb77cac2c019b1677fc78eb6d7feae25a781f66c0e1c4ea13de0e05f3f6e56251"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@mapbox/point-geometry/-/point-geometry-1.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40mapbox/tiny-sdf@2.3.0",
+      "name": "@mapbox/tiny-sdf",
+      "version": "2.3.0",
+      "purl": "pkg:npm/%40mapbox/tiny-sdf@2.3.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "801bdc34304107ae9b81062f9da27a264f9509a32656ae7e2194769163e2b13f3c67cb3490142dea17d58bc420456f15a60d14599cc1038652cb31c70be55e44"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@mapbox/tiny-sdf/-/tiny-sdf-2.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40mapbox/unitbezier@1.0.0",
+      "name": "@mapbox/unitbezier",
+      "version": "1.0.0",
+      "purl": "pkg:npm/%40mapbox/unitbezier@1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-2-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7ea779d797e306600d2861ac436f3a1365af8ff5ef0c5a46cf0271ab8088ea3310b9ee8ecb4e2e08aa7e256285d34c514e693a704bb58cf27da77c6a1fc616a9"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@mapbox/unitbezier/-/unitbezier-1.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40mapbox/vector-tile@3.0.0",
+      "name": "@mapbox/vector-tile",
+      "version": "3.0.0",
+      "purl": "pkg:npm/%40mapbox/vector-tile@3.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "41fd744b5b881cc936d2b8bf215067a52f9eb1412455a4791dfb66cfcf234c89eba665a03c625f3dedcb5638e513beedacbc7cb47eaa8d31bbb961fd848abfd1"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@mapbox/vector-tile/-/vector-tile-3.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40maplibre/geojson-vt@6.3.3",
+      "name": "@maplibre/geojson-vt",
+      "version": "6.3.3",
+      "purl": "pkg:npm/%40maplibre/geojson-vt@6.3.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b1f7ed378df6e9fa13eee7b1d1a3748eaafebeafe57e07937c048e77e92f754774b8c3088176433dd9ed09acca14a29cc4f1f4d3634f0b2e23dfdea979a9d60a"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@maplibre/geojson-vt/-/geojson-vt-6.3.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40maplibre/maplibre-gl-style-spec@26.9.0",
+      "name": "@maplibre/maplibre-gl-style-spec",
+      "version": "26.9.0",
+      "purl": "pkg:npm/%40maplibre/maplibre-gl-style-spec@26.9.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "71064ada51b777a239163ae23d90a0271fcb8953295aaa1589b17e720a769a443f3f804818eb2b0375acbcbc35c01dbc43d254f6fd9f6a9b1050951b8e3c1aea"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@maplibre/maplibre-gl-style-spec/-/maplibre-gl-style-spec-26.9.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40maplibre/mlt@1.3.0",
+      "name": "@maplibre/mlt",
+      "version": "1.3.0",
+      "purl": "pkg:npm/%40maplibre/mlt@1.3.0",
+      "licenses": [
+        {
+          "expression": "(MIT OR Apache-2.0)"
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "eccd8eec004cf343a2f173e47e4ae3281f263812311a8560900e7632ee11316a01bef31d6a0439db6f96c5562e8d9b0ca6a22bdc1a73ad36d7ae6e24f250b309"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@maplibre/mlt/-/mlt-1.3.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40maplibre/vt-pbf@4.3.3",
+      "name": "@maplibre/vt-pbf",
+      "version": "4.3.3",
+      "purl": "pkg:npm/%40maplibre/vt-pbf@4.3.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7447b95d477ae1141bc4dc72d8ecc89099f03435a35664978c277403bccb8ab9bb409fd659b9ad0c52247ec88ce32b7572996acc6ea84a2bd161e5b1d52335ca"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@maplibre/vt-pbf/-/vt-pbf-4.3.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40preact/signals@2.11.4",
+      "name": "@preact/signals",
+      "version": "2.11.4",
+      "purl": "pkg:npm/%40preact/signals@2.11.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "45bfb944fa3d81649a1edcc979aba11f1882f0a3ff205d8310f9073c43863a7bb2db09c9cd1ab278b45a9e450261de800eab714ba1a7586bfa21edf8dddf1a63"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@preact/signals/-/signals-2.11.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40preact/signals-core@1.14.5",
+      "name": "@preact/signals-core",
+      "version": "1.14.5",
+      "purl": "pkg:npm/%40preact/signals-core@1.14.5",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "bdc46fec8b72cf925599e895a8896e2c5cd3fcf0d2fc09611d4a70dff6945aa71552ce9b0c620f5c4ffa4520b87af04d598be79e2a338394b27e3df76a5de092"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@preact/signals-core/-/signals-core-1.14.5.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-android-arm-eabi@4.68.8",
+      "name": "@rollup/rollup-android-arm-eabi",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-android-arm-eabi@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ee5f4575e0868e198c4d578f82774ae2df6ee6d2d1f95b934cca327343ec72a6437588d2d3b66c434bd062c5ac383bbf65960f1bb5952706d467bee7d61553fb"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-android-arm-eabi/-/rollup-android-arm-eabi-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-android-arm64@4.68.8",
+      "name": "@rollup/rollup-android-arm64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-android-arm64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "91792422226e8c18c0ac7c044e8cfdf4142a22a89b9f8c5d57a4a3b286b1b99cef2d4095133a074352e9eb69bbc4e8692d1a56a42b712f6654cbf0032aecfdfe"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-android-arm64/-/rollup-android-arm64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-android-x64@4.68.8",
+      "name": "@rollup/rollup-android-x64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-android-x64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "298a01ca09c7b37cd438b474cfb49aaa132752b485f696ee4ce253fee1cadcfae009776fff168cb9b643f230a983a353a38e9d79ab0b81946adfcc454f2bbcbb"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-android-x64/-/rollup-android-x64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-darwin-arm64@4.68.8",
+      "name": "@rollup/rollup-darwin-arm64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-arm64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "626054363826e5bb23381c8ef87d5315bb8665ef999c7718b4f5d88fdf8bd5cc13bbf046f338ee5333b63c7f4ac12f393f4507f9624349bfa643686a8e9e6e05"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-arm64/-/rollup-darwin-arm64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-darwin-x64@4.68.8",
+      "name": "@rollup/rollup-darwin-x64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-darwin-x64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5cc5f9c9bb8e9a4c22335dca26db01c5a919ebda72691f6d851614d9f31e8e1681d15bb32cc22421cfbd4c1b2edabbf7e1e11fe9769230e68b3b21201c65874d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-darwin-x64/-/rollup-darwin-x64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-freebsd-arm64@4.68.8",
+      "name": "@rollup/rollup-freebsd-arm64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-freebsd-arm64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5ae05749c5890daa8f24ac15ae8b547b5b0cf431d630df77ec2db744296dd0c54756dec0d6b072dbce597d94cb71c3c454cc6618932dda3bdd1cc388df796b28"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-freebsd-arm64/-/rollup-freebsd-arm64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-freebsd-x64@4.68.8",
+      "name": "@rollup/rollup-freebsd-x64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-freebsd-x64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "91e8301aa3f7acc7a710c68aa3c3b33016f95af2d6da1da3ad0de22ae629b534c5f02ff2bb1cfe8629e304faed62e20f2c90f0c4773f86fd9ee2ee699abaa8f4"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-freebsd-x64/-/rollup-freebsd-x64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-arm-gnueabihf@4.68.8",
+      "name": "@rollup/rollup-linux-arm-gnueabihf",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm-gnueabihf@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "41cb74a0b335cc635bbeab35b9d427b9c860f90f6e1db90c710a827ecdccedfa0d9fb1ef124532a5f167f68e5f9258a6508e4e1770369cc927778fefac4c9e56"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-arm-gnueabihf/-/rollup-linux-arm-gnueabihf-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-arm-musleabihf@4.68.8",
+      "name": "@rollup/rollup-linux-arm-musleabihf",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm-musleabihf@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c531f9bc3fa55bfe4c53790bfcea7c452486fcef5fc54419b897120669817987a6f6e5d8bc2aba3c31f1fe80d235ec8b0ffa78a46ba31b63d523447c3230214b"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-arm-musleabihf/-/rollup-linux-arm-musleabihf-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-arm64-gnu@4.68.8",
+      "name": "@rollup/rollup-linux-arm64-gnu",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm64-gnu@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "94f3d2b66ca7487bf05a94ab02cb9e98f141f8458539b5e3c33e3810ae07a61e3b53a481024d4a7a1ab932423b8bc118563ad775d68057b624247f265fc41265"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-arm64-gnu/-/rollup-linux-arm64-gnu-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-arm64-musl@4.68.8",
+      "name": "@rollup/rollup-linux-arm64-musl",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-arm64-musl@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "91992f21802284cea5e8cfa08925076b20c37ff24bf93611e5b6168805fbfe35055af324326cac038195d85d073ac5d0344c9cb56df1d712e3c30d46a96ed0d7"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-arm64-musl/-/rollup-linux-arm64-musl-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-loong64-gnu@4.68.8",
+      "name": "@rollup/rollup-linux-loong64-gnu",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-loong64-gnu@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5d928b10863defb389afacd4b4aea795070b5e67b7e1cf07a95a77f9698a43129537a363f9bf6a1376475880c75f39c726c1a5d80b1a30e801d062f47e464652"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-loong64-gnu/-/rollup-linux-loong64-gnu-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-loong64-musl@4.68.8",
+      "name": "@rollup/rollup-linux-loong64-musl",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-loong64-musl@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "fac37e163e85f6cba4f1290be9ba087d70e68fd889c1228f093782cbcfe97d3387bb3357f9dba14dbf6eca3eb5e78a152bc39d979ce02f80d7459cd78ec44a73"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-loong64-musl/-/rollup-linux-loong64-musl-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-ppc64-gnu@4.68.8",
+      "name": "@rollup/rollup-linux-ppc64-gnu",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-ppc64-gnu@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1010aedee0c5686c12a1d525f9747ccae6ef5455244a8e902bd60020e575be58ea9edcd3176fe65cb33abad80b69219fffca0cfaa11ef008b425de3eb7232821"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-ppc64-gnu/-/rollup-linux-ppc64-gnu-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-ppc64-musl@4.68.8",
+      "name": "@rollup/rollup-linux-ppc64-musl",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-ppc64-musl@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "8510b48d676c2c17240a28f1db08947e4ef35b54aa116e3bc8cb023680c69907e8aaad008d6fbd51866ac60dcb4e61bbe8fc8735d346052baca41dc2aab84620"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-ppc64-musl/-/rollup-linux-ppc64-musl-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-riscv64-gnu@4.68.8",
+      "name": "@rollup/rollup-linux-riscv64-gnu",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-riscv64-gnu@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "3992ab4d15b21a72c84d44e2a5b7970ddb5bd9dc503f2164fc56f0f6a111f2922f77625af611c42e463416fe69f726189229aab7356102928a5c6bf47161901b"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-riscv64-gnu/-/rollup-linux-riscv64-gnu-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-riscv64-musl@4.68.8",
+      "name": "@rollup/rollup-linux-riscv64-musl",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-riscv64-musl@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1e685245243e74e78e9ed3df998bb1e2b0a93902edb066dc18b42ee279bc8a0dedb95a9efdb29f0c7a2b837e8b280a98ab85ff9f016befd226b5a1471ec9f8ba"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-riscv64-musl/-/rollup-linux-riscv64-musl-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-s390x-gnu@4.68.8",
+      "name": "@rollup/rollup-linux-s390x-gnu",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-s390x-gnu@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c24d428b586c31111a0442e828f4a7cd1021d685142c8fbc91f6f6179bd59930f621c7d1f4028cb240aeb22cd984802fa233ad3d98a13e3e0e74acba89f67085"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-s390x-gnu/-/rollup-linux-s390x-gnu-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.68.8",
+      "name": "@rollup/rollup-linux-x64-gnu",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "983b9fa1427a7e72999c2ca3577b06103bd741090cea3d5498834785e197e0499abb74d9589cd7dec09599bce4341f96d86f3806215074309c174f65bf48b454"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-gnu/-/rollup-linux-x64-gnu-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.68.8",
+      "name": "@rollup/rollup-linux-x64-musl",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ec41952fdad84584197b7502f094337c137daf1938f3845fb38bbfc865ae99360a51d26dead99d3fed18dea1ef02fcc9090f8940ce6b4aa65b572ac9011946a4"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-linux-x64-musl/-/rollup-linux-x64-musl-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-openbsd-x64@4.68.8",
+      "name": "@rollup/rollup-openbsd-x64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-openbsd-x64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "526925cfe4121b0296415955aec309af0171d6835160782bc521a264cf29242329cd69cc0cc8a70e13c82dfd01bd15df03540e02bb0372cf8013b25de9d431bc"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-openbsd-x64/-/rollup-openbsd-x64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-openharmony-arm64@4.68.8",
+      "name": "@rollup/rollup-openharmony-arm64",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-openharmony-arm64@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "065469eaecd00cae6b73301d69743c765488445465903441aa96fc186b6ff22c19c5074e8e88a0745539b7975cc699e953471a3284fd987dbb332025e1d5b02b"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-openharmony-arm64/-/rollup-openharmony-arm64-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-win32-arm64-msvc@4.68.8",
+      "name": "@rollup/rollup-win32-arm64-msvc",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-win32-arm64-msvc@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "49cf0c91ffdf55f715d2104934344833cd818d2e24267d8e7f48cff1d810f93a1daaec6d099ff90fa1604ac637b8de48066362f19adbfce1ddeb420460a6b0f9"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-win32-arm64-msvc/-/rollup-win32-arm64-msvc-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-win32-ia32-msvc@4.68.8",
+      "name": "@rollup/rollup-win32-ia32-msvc",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-win32-ia32-msvc@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5cf4c55dc94df88f827eedce3560ecc3ebaf8126634c96b5076bb612fb5d2a549d80d53a9ab39976079a324bcdfb64f628f4c45e7e9f9d163c20e0e5460dff4e"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-win32-ia32-msvc/-/rollup-win32-ia32-msvc-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-win32-x64-gnu@4.68.8",
+      "name": "@rollup/rollup-win32-x64-gnu",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-win32-x64-gnu@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "eb775688782fa567227a77ddaf8eb9953dd2227e2edf9df9bdb0df68b2a14a7d05d8a274e9b6dc52c7b00c625950f6426c9ebba844ab3c385bf3952759d6f97b"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-win32-x64-gnu/-/rollup-win32-x64-gnu-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40rollup/rollup-win32-x64-msvc@4.68.8",
+      "name": "@rollup/rollup-win32-x64-msvc",
+      "version": "4.68.8",
+      "purl": "pkg:npm/%40rollup/rollup-win32-x64-msvc@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "fd6d4b06c31e4007620ae1f767682446ca65de69712fe6eeb649e1ab8bd78e6c4ee39bee4f4f01aa17a1c43a04e184be9bab3d961a6ae8cf7f3e34c4020f0f63"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@rollup/rollup-win32-x64-msvc/-/rollup-win32-x64-msvc-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40types/estree@1.0.10",
+      "name": "@types/estree",
+      "version": "1.0.10",
+      "purl": "pkg:npm/%40types/estree@1.0.10",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "953c8e32739c991073742bfaff8cd4642ac4855d31aea422519059b5571b98b1c15ca2e737cabcf6fff029117f4341dbc15b2a6c81b7a391c3a0597db1db8cfa"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/estree/-/estree-1.0.10.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/%40types/geojson@7946.0.16",
+      "name": "@types/geojson",
+      "version": "7946.0.16",
+      "purl": "pkg:npm/%40types/geojson@7946.0.16",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e82f27a96babde3f7c53afa55c37d351621f82f654f84ba6be91ca7188ee8ca1fbc286322e3dac5267dfd2d461aea33b068854c3b3f3dd90758e3da05bd16f9a"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/@types/geojson/-/geojson-7946.0.16.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/bidi-js@1.1.0",
+      "name": "bidi-js",
+      "version": "1.1.0",
+      "purl": "pkg:npm/bidi-js@1.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7d7d4e9e4d2d7553c2ee86cf581e446c9d73ecd5612eae26db164bab6617064c7331720646934c53cf27d043e05ac78a975d89ef35eceeaac3c4f2b8b11b367e"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/bidi-js/-/bidi-js-1.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/earcut@3.2.4",
+      "name": "earcut",
+      "version": "3.2.4",
+      "purl": "pkg:npm/earcut@3.2.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "14773ac8da674ce441d2d339926674de20f6983b8d6a40c4da5bdfe07c355e47f1b441c81958b4d41fc6a944b0c7e35c0b55868e27407e94d7cde00bb4fb5fa6"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/earcut/-/earcut-3.2.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/esbuild@0.28.2",
+      "name": "esbuild",
+      "version": "0.28.2",
+      "purl": "pkg:npm/esbuild@0.28.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "1ca54b4bc76f208fb1a0a5bd926ab16d12ab9d61177c926bfc56618499a2a880747b4e7740d605a8e068b9330efe4e6c203e0cbc28940afbfc6fd338877db020"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/esbuild/-/esbuild-0.28.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/fdir@6.5.0",
+      "name": "fdir",
+      "version": "6.5.0",
+      "purl": "pkg:npm/fdir@6.5.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b486d8b596ee70eb340511aa3c992c84951874bf920c7edd54cf208f2f84469dd60148cb105244fb4da46a7c87b708d63a7c2b298062c0098cd29e242c90275e"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/fdir/-/fdir-6.5.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/fsevents@2.3.3",
+      "name": "fsevents",
+      "version": "2.3.3",
+      "purl": "pkg:npm/fsevents@2.3.3",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "e71a037d7f9f2fb7da0139da82658fa5b16dc21fd1efb5a630caaa1c64bae42defbc1d181eb805f81d58999df8e35b4c8f99fade4d36d765cda09c339617df43"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/gl-matrix@3.4.4",
+      "name": "gl-matrix",
+      "version": "3.4.4",
+      "purl": "pkg:npm/gl-matrix@3.4.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "95ab529f20cdb7ff3361407a54827a3c28768c18c95fa8270eca0267b2f25bb1a4aab0f9d445b06bda82a068b18fc62a06d11340aff163b3a6a5317cc73d4375"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/gl-matrix/-/gl-matrix-3.4.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/htm@3.1.1",
+      "name": "htm",
+      "version": "3.1.1",
+      "purl": "pkg:npm/htm@3.1.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "Apache-2.0"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "f7cdd5ca0f0dc1413b26467a3663aaa4267eb21d5b2afda2613954933956980e490f669c2a8c5de0a5716cc9b15fff399ad7dd9c399316834a720e43180bf135"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/htm/-/htm-3.1.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/json-stringify-pretty-compact@4.0.0",
+      "name": "json-stringify-pretty-compact",
+      "version": "4.0.0",
+      "purl": "pkg:npm/json-stringify-pretty-compact@4.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "dc2359d839eba41c86f4daa3e97a3cbea6e34f817a37eb5be066f6f04480663619e72aaf99ce7a27efe4b88c2468030ec9b953421516ecfc4c9146fc437e8ddd"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/json-stringify-pretty-compact/-/json-stringify-pretty-compact-4.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/kdbush@4.1.0",
+      "name": "kdbush",
+      "version": "4.1.0",
+      "purl": "pkg:npm/kdbush@4.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "7bdbeeaf3ad7250ac55fa724a473f76ef8f997ef429d8ce4c43367350d61d904ea756b1400981788a74635c39ad4463ce5d53c29b43ecff15d41d07b3fef727d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/kdbush/-/kdbush-4.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/maplibre-gl@6.17.0",
+      "name": "maplibre-gl",
+      "version": "6.17.0",
+      "purl": "pkg:npm/maplibre-gl@6.17.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "d9c848670a4b19e9e851039c9e6f4f93848b6c0f29a4d16af239695e2abdbdc626dd8d702777dcf3614bd062f005a3d82422f33effe60b8e8a12ea55a2fef9ad"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/maplibre-gl/-/maplibre-gl-6.17.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/minimist@1.2.8",
+      "name": "minimist",
+      "version": "1.2.8",
+      "purl": "pkg:npm/minimist@1.2.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "db2c8047ca8190ddd8ba17896a7529582e54ddb6f9a2c0f2c0d07c4730d5943c031dba1c009bdeaaa8f5bbcf92543ee39164f8cafb070a95aaa96a80c5bd3308"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/minimist/-/minimist-1.2.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/murmurhash-js@1.0.0",
+      "name": "murmurhash-js",
+      "version": "1.0.0",
+      "purl": "pkg:npm/murmurhash-js@1.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4ef9a436192ff3272dd125414b2fa8f306335e3138673dcf09eb1b7ecf078825d775c4eea1c02916fd7551694d156298b0fda892aae16fb24d9529bd22706123"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/murmurhash-js/-/murmurhash-js-1.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/nanoid@3.3.20",
+      "name": "nanoid",
+      "version": "3.3.20",
+      "purl": "pkg:npm/nanoid@3.3.20",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "b8a760d86dc63422909fd6f260ea716c6aab4f67c63b9291b7927ff1bde9a24f2b4faab119617a871332262118b407fe155c98b83f6145a0ea5f9b8f15827865"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/nanoid/-/nanoid-3.3.20.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/pbf@5.2.0",
+      "name": "pbf",
+      "version": "5.2.0",
+      "purl": "pkg:npm/pbf@5.2.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "47a629b5a459974b7d4953ba32596ccd8ab522468e41ac33a6b9dd9af43112816bb6f5fb7d3fa83483e8543d79d8d3a59662d6102dd3871cd44ea057d76ab915"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/pbf/-/pbf-5.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/picocolors@1.1.1",
+      "name": "picocolors",
+      "version": "1.1.1",
+      "purl": "pkg:npm/picocolors@1.1.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c5c787dac9e1b5be4cf658aa0ec984c39ea57b7efa993664117fe311bfd1c4d1727a036e97b78db250973fd1438ff2dcbb45fc284c8c71e3f69eda5a1eb0c454"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/picocolors/-/picocolors-1.1.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/picomatch@4.0.7",
+      "name": "picomatch",
+      "version": "4.0.7",
+      "purl": "pkg:npm/picomatch@4.0.7",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a9c26ef3c436216a89b030f9dbd24a31dc069bf76f2275b81ef427470887f49b62849bf318eb1c0ed1c4df1d6904a794393cac43c91598b9c9da426eef285c18"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/picomatch/-/picomatch-4.0.7.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/postcss@8.5.33",
+      "name": "postcss",
+      "version": "8.5.33",
+      "purl": "pkg:npm/postcss@8.5.33",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "4551c453dfcfa751678ebfcca4026c668003ba408a85f222d793ae9c46221a4b489182e43d5bc2d6c8a85a89460d2ed7072313c7d9bf2066eba3426cd77ce19d"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/postcss/-/postcss-8.5.33.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/potpack@2.1.0",
+      "name": "potpack",
+      "version": "2.1.0",
+      "purl": "pkg:npm/potpack@2.1.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "a5c6928507354a1ab4cbe13b1aa26abd98fc0d3b61595d4a78719d8b467a2008a7d8e8b72672c239fc270a8f38a9cf87029e76c13f672bd1fb140269e5ae3819"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/potpack/-/potpack-2.1.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/preact@11.2.0",
+      "name": "preact",
+      "version": "11.2.0",
+      "purl": "pkg:npm/preact@11.2.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "fc77c723fecdf387ba1ab581277276f34cf798b6912620dc4af8ff03ecbfe006cb9cd0ffd549461ded6c47aa18b931b021dd273fb76a0d4f4e9cbc4c3d9ef106"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/preact/-/preact-11.2.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/protocol-buffers-schema@3.6.1",
+      "name": "protocol-buffers-schema",
+      "version": "3.6.1",
+      "purl": "pkg:npm/protocol-buffers-schema@3.6.1",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "546d8aeb7220922bfda7bead93596295ccc42b5713fa40a32ad91d870d5d41957793721725b777a3a1e8f1bf732596874a74f684a7b823e39b997f70ea6e5299"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/protocol-buffers-schema/-/protocol-buffers-schema-3.6.1.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/quickselect@3.0.0",
+      "name": "quickselect",
+      "version": "3.0.0",
+      "purl": "pkg:npm/quickselect@3.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5dd8d402b6cae019b97cb2ef966e4aa5314e88e4e181f5962386b10190d683813fd2629d67223db4d11f76cdbba828b5cdefefc13475ea4be6986851adaddcda"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/quickselect/-/quickselect-3.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/require-from-string@2.0.2",
+      "name": "require-from-string",
+      "version": "2.0.2",
+      "purl": "pkg:npm/require-from-string@2.0.2",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "5dfd2759ee91b1ece214cbbe029f5b8a251b9a996ae92f7fa7eef0ed85cffc904786b5030d48706bebc0372b9bbaa7d9593bde53ffc36151ac0c6ed128bfef13"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/require-from-string/-/require-from-string-2.0.2.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/rollup@4.68.8",
+      "name": "rollup",
+      "version": "4.68.8",
+      "purl": "pkg:npm/rollup@4.68.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "207c780de7931a1a003e47baa755a5834244405c90a194108c47b5883fa784411193b7a87872bdcf23a9549886739e19d4c0a023deab375b43ed3b6e6fc5f23c"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/rollup/-/rollup-4.68.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/source-map-js@1.2.4",
+      "name": "source-map-js",
+      "version": "1.2.4",
+      "purl": "pkg:npm/source-map-js@1.2.4",
+      "licenses": [
+        {
+          "license": {
+            "id": "BSD-3-Clause"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "27b66332f1ddf4ed5f713ff9574f5059a69297605b5b1dc5e8ed3cb2975ef3635a99ff540741b145520f88d6d5b1d2a4a22cc7892a53a1da37be9d9b032f7530"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/source-map-js/-/source-map-js-1.2.4.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/tinyglobby@0.2.17",
+      "name": "tinyglobby",
+      "version": "0.2.17",
+      "purl": "pkg:npm/tinyglobby@0.2.17",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "c1747f758a5ca8a99f5a911d66388a24ec023459dd0f40cc9eb5bf7188d51adb449017d581c2c51e836b963e3b9a339589cf72c8dbbae5a96c805e0d4324dada"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/tinyglobby/-/tinyglobby-0.2.17.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/tinyqueue@3.0.0",
+      "name": "tinyqueue",
+      "version": "3.0.0",
+      "purl": "pkg:npm/tinyqueue@3.0.0",
+      "licenses": [
+        {
+          "license": {
+            "id": "ISC"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "8116bd830614dc40a6418bf796c96db39871b886bdd2f79a11cc4362ebb740638800433698e664547a78f00349baed42511b51747294058e4b9b5b4757eb03e2"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/tinyqueue/-/tinyqueue-3.0.0.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        }
+      ]
+    },
+    {
+      "type": "library",
+      "bom-ref": "pkg:npm/vite@7.3.8",
+      "name": "vite",
+      "version": "7.3.8",
+      "purl": "pkg:npm/vite@7.3.8",
+      "licenses": [
+        {
+          "license": {
+            "id": "MIT"
+          }
+        }
+      ],
+      "hashes": [
+        {
+          "alg": "SHA-512",
+          "content": "ded4e2efc3002a1564f61f986555cc43c3ce9a7789b84f7b4143c05ad260847ce11fb040ca2a90382d8a661d4358eb2efd4481d9c4578739cf07269a6ef6177f"
+        }
+      ],
+      "externalReferences": [
+        {
+          "type": "distribution",
+          "url": "https://registry.npmjs.org/vite/-/vite-7.3.8.tgz"
+        }
+      ],
+      "properties": [
+        {
+          "name": "visionhousing:ecosystem",
+          "value": "npm"
+        },
+        {
+          "name": "visionhousing:npm-dev",
+          "value": "true"
+        }
+      ]
+    }
+  ],
+  "dependencies": [
+    {
+      "ref": "pkg:pypi/annotated-doc@0.0.7",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/annotated-types@0.8.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/anyio@4.16.0",
+      "dependsOn": [
+        "pkg:pypi/idna@3.20",
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/click@8.5.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/colorama@0.4.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/fastapi@0.165.0",
+      "dependsOn": [
+        "pkg:pypi/annotated-doc@0.0.7",
+        "pkg:pypi/anyio@4.16.0",
+        "pkg:pypi/opentelemetry-api@1.45.2",
+        "pkg:pypi/pydantic@2.14.4",
+        "pkg:pypi/starlette@1.10.0",
+        "pkg:pypi/typing-extensions@4.16.0",
+        "pkg:pypi/typing-inspection@0.4.5"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/greenlet@3.5.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/h11@0.16.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/idna@3.20",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/iniconfig@2.3.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/numpy@2.5.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/opentelemetry-api@1.45.2",
+      "dependsOn": [
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/packaging@26.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pandas@3.1.1",
+      "dependsOn": [
+        "pkg:pypi/numpy@2.5.5",
+        "pkg:pypi/python-dateutil@4.0.0",
+        "pkg:pypi/tzdata@2026.6"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/playwright@1.65.2",
+      "dependsOn": [
+        "pkg:pypi/greenlet@3.5.6"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pluggy@1.7.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pydantic@2.14.4",
+      "dependsOn": [
+        "pkg:pypi/annotated-types@0.8.0",
+        "pkg:pypi/pydantic-core@2.50.5",
+        "pkg:pypi/typing-extensions@4.16.0",
+        "pkg:pypi/typing-inspection@0.4.5"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pydantic-core@2.50.5",
+      "dependsOn": [
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pygments@2.21.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pypdf@7.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pyshp@3.1.9",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/pytest@9.2.0",
+      "dependsOn": [
+        "pkg:pypi/colorama@0.4.6",
+        "pkg:pypi/iniconfig@2.3.1",
+        "pkg:pypi/packaging@26.3",
+        "pkg:pypi/pluggy@1.7.0",
+        "pkg:pypi/pygments@2.21.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/python-dateutil@4.0.0",
+      "dependsOn": [
+        "pkg:pypi/tzdata@2026.6"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/pyyaml@6.0.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/ruff@0.17.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/starlette@1.10.0",
+      "dependsOn": [
+        "pkg:pypi/anyio@4.16.0",
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/truststore@0.10.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/typing-extensions@4.16.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/typing-inspection@0.4.5",
+      "dependsOn": [
+        "pkg:pypi/typing-extensions@4.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/tzdata@2026.6",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:pypi/uvicorn@0.54.0",
+      "dependsOn": [
+        "pkg:pypi/click@8.5.1",
+        "pkg:pypi/h11@0.16.0"
+      ]
+    },
+    {
+      "ref": "pkg:pypi/visionhousing@0.1.0",
+      "dependsOn": [
+        "pkg:npm/visionhousing-web@0.1.0",
+        "pkg:pypi/fastapi@0.165.0",
+        "pkg:pypi/numpy@2.5.5",
+        "pkg:pypi/pandas@3.1.1",
+        "pkg:pypi/playwright@1.65.2",
+        "pkg:pypi/pydantic@2.14.4",
+        "pkg:pypi/pypdf@7.1.1",
+        "pkg:pypi/pyshp@3.1.9",
+        "pkg:pypi/pytest@9.2.0",
+        "pkg:pypi/pyyaml@6.0.4",
+        "pkg:pypi/ruff@0.17.6",
+        "pkg:pypi/truststore@0.10.5",
+        "pkg:pypi/uvicorn@0.54.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/visionhousing-web@0.1.0",
+      "dependsOn": [
+        "pkg:npm/%40preact/signals-core@1.14.5",
+        "pkg:npm/%40preact/signals@2.11.4",
+        "pkg:npm/htm@3.1.1",
+        "pkg:npm/maplibre-gl@6.17.0",
+        "pkg:npm/preact@11.2.0",
+        "pkg:npm/vite@7.3.8"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/android-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/android-arm@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/android-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-arm@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/linux-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40esbuild/win32-x64@0.28.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40mapbox/jsonlint-lines-primitives@2.0.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40mapbox/point-geometry@1.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40mapbox/tiny-sdf@2.3.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40mapbox/unitbezier@1.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40mapbox/vector-tile@3.0.0",
+      "dependsOn": [
+        "pkg:npm/%40mapbox/point-geometry@1.1.0",
+        "pkg:npm/%40types/geojson@7946.0.16",
+        "pkg:npm/pbf@5.2.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40maplibre/geojson-vt@6.3.3",
+      "dependsOn": [
+        "pkg:npm/kdbush@4.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40maplibre/maplibre-gl-style-spec@26.9.0",
+      "dependsOn": [
+        "pkg:npm/%40mapbox/jsonlint-lines-primitives@2.0.3",
+        "pkg:npm/%40mapbox/unitbezier@1.0.0",
+        "pkg:npm/json-stringify-pretty-compact@4.0.0",
+        "pkg:npm/minimist@1.2.8",
+        "pkg:npm/quickselect@3.0.0",
+        "pkg:npm/tinyqueue@3.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40maplibre/mlt@1.3.0",
+      "dependsOn": [
+        "pkg:npm/%40mapbox/point-geometry@1.1.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40maplibre/vt-pbf@4.3.3",
+      "dependsOn": [
+        "pkg:npm/%40mapbox/point-geometry@1.1.0",
+        "pkg:npm/%40types/geojson@7946.0.16",
+        "pkg:npm/pbf@5.2.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40preact/signals-core@1.14.5",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40preact/signals@2.11.4",
+      "dependsOn": [
+        "pkg:npm/%40preact/signals-core@1.14.5",
+        "pkg:npm/preact@11.2.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-android-arm-eabi@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-android-arm64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-android-x64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-darwin-arm64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-darwin-x64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-freebsd-arm64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-freebsd-x64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-arm-gnueabihf@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-arm-musleabihf@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-arm64-gnu@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-arm64-musl@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-loong64-gnu@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-loong64-musl@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-ppc64-gnu@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-ppc64-musl@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-riscv64-gnu@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-riscv64-musl@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-s390x-gnu@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-linux-x64-musl@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-openbsd-x64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-openharmony-arm64@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-win32-arm64-msvc@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-win32-ia32-msvc@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-win32-x64-gnu@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40rollup/rollup-win32-x64-msvc@4.68.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40types/estree@1.0.10",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/%40types/geojson@7946.0.16",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/bidi-js@1.1.0",
+      "dependsOn": [
+        "pkg:npm/require-from-string@2.0.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/earcut@3.2.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/esbuild@0.28.2",
+      "dependsOn": [
+        "pkg:npm/%40esbuild/aix-ppc64@0.28.2",
+        "pkg:npm/%40esbuild/android-arm64@0.28.2",
+        "pkg:npm/%40esbuild/android-arm@0.28.2",
+        "pkg:npm/%40esbuild/android-x64@0.28.2",
+        "pkg:npm/%40esbuild/darwin-arm64@0.28.2",
+        "pkg:npm/%40esbuild/darwin-x64@0.28.2",
+        "pkg:npm/%40esbuild/freebsd-arm64@0.28.2",
+        "pkg:npm/%40esbuild/freebsd-x64@0.28.2",
+        "pkg:npm/%40esbuild/linux-arm64@0.28.2",
+        "pkg:npm/%40esbuild/linux-arm@0.28.2",
+        "pkg:npm/%40esbuild/linux-ia32@0.28.2",
+        "pkg:npm/%40esbuild/linux-loong64@0.28.2",
+        "pkg:npm/%40esbuild/linux-mips64el@0.28.2",
+        "pkg:npm/%40esbuild/linux-ppc64@0.28.2",
+        "pkg:npm/%40esbuild/linux-riscv64@0.28.2",
+        "pkg:npm/%40esbuild/linux-s390x@0.28.2",
+        "pkg:npm/%40esbuild/linux-x64@0.28.2",
+        "pkg:npm/%40esbuild/netbsd-arm64@0.28.2",
+        "pkg:npm/%40esbuild/netbsd-x64@0.28.2",
+        "pkg:npm/%40esbuild/openbsd-arm64@0.28.2",
+        "pkg:npm/%40esbuild/openbsd-x64@0.28.2",
+        "pkg:npm/%40esbuild/openharmony-arm64@0.28.2",
+        "pkg:npm/%40esbuild/sunos-x64@0.28.2",
+        "pkg:npm/%40esbuild/win32-arm64@0.28.2",
+        "pkg:npm/%40esbuild/win32-ia32@0.28.2",
+        "pkg:npm/%40esbuild/win32-x64@0.28.2"
+      ]
+    },
+    {
+      "ref": "pkg:npm/fdir@6.5.0",
+      "dependsOn": [
+        "pkg:npm/picomatch@4.0.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/fsevents@2.3.3",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/gl-matrix@3.4.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/htm@3.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/json-stringify-pretty-compact@4.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/kdbush@4.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/maplibre-gl@6.17.0",
+      "dependsOn": [
+        "pkg:npm/%40mapbox/point-geometry@1.1.0",
+        "pkg:npm/%40mapbox/tiny-sdf@2.3.0",
+        "pkg:npm/%40mapbox/unitbezier@1.0.0",
+        "pkg:npm/%40mapbox/vector-tile@3.0.0",
+        "pkg:npm/%40maplibre/geojson-vt@6.3.3",
+        "pkg:npm/%40maplibre/maplibre-gl-style-spec@26.9.0",
+        "pkg:npm/%40maplibre/mlt@1.3.0",
+        "pkg:npm/%40maplibre/vt-pbf@4.3.3",
+        "pkg:npm/%40types/geojson@7946.0.16",
+        "pkg:npm/bidi-js@1.1.0",
+        "pkg:npm/earcut@3.2.4",
+        "pkg:npm/gl-matrix@3.4.4",
+        "pkg:npm/kdbush@4.1.0",
+        "pkg:npm/murmurhash-js@1.0.0",
+        "pkg:npm/pbf@5.2.0",
+        "pkg:npm/potpack@2.1.0",
+        "pkg:npm/quickselect@3.0.0",
+        "pkg:npm/tinyqueue@3.0.0"
+      ]
+    },
+    {
+      "ref": "pkg:npm/minimist@1.2.8",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/murmurhash-js@1.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/nanoid@3.3.20",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/pbf@5.2.0",
+      "dependsOn": [
+        "pkg:npm/protocol-buffers-schema@3.6.1"
+      ]
+    },
+    {
+      "ref": "pkg:npm/picocolors@1.1.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/picomatch@4.0.7",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/postcss@8.5.33",
+      "dependsOn": [
+        "pkg:npm/nanoid@3.3.20",
+        "pkg:npm/picocolors@1.1.1",
+        "pkg:npm/source-map-js@1.2.4"
+      ]
+    },
+    {
+      "ref": "pkg:npm/potpack@2.1.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/preact@11.2.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/protocol-buffers-schema@3.6.1",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/quickselect@3.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/require-from-string@2.0.2",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/rollup@4.68.8",
+      "dependsOn": [
+        "pkg:npm/%40rollup/rollup-android-arm-eabi@4.68.8",
+        "pkg:npm/%40rollup/rollup-android-arm64@4.68.8",
+        "pkg:npm/%40rollup/rollup-android-x64@4.68.8",
+        "pkg:npm/%40rollup/rollup-darwin-arm64@4.68.8",
+        "pkg:npm/%40rollup/rollup-darwin-x64@4.68.8",
+        "pkg:npm/%40rollup/rollup-freebsd-arm64@4.68.8",
+        "pkg:npm/%40rollup/rollup-freebsd-x64@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-arm-gnueabihf@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-arm-musleabihf@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-arm64-gnu@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-arm64-musl@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-loong64-gnu@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-loong64-musl@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-ppc64-gnu@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-ppc64-musl@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-riscv64-gnu@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-riscv64-musl@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-s390x-gnu@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-x64-gnu@4.68.8",
+        "pkg:npm/%40rollup/rollup-linux-x64-musl@4.68.8",
+        "pkg:npm/%40rollup/rollup-openbsd-x64@4.68.8",
+        "pkg:npm/%40rollup/rollup-openharmony-arm64@4.68.8",
+        "pkg:npm/%40rollup/rollup-win32-arm64-msvc@4.68.8",
+        "pkg:npm/%40rollup/rollup-win32-ia32-msvc@4.68.8",
+        "pkg:npm/%40rollup/rollup-win32-x64-gnu@4.68.8",
+        "pkg:npm/%40rollup/rollup-win32-x64-msvc@4.68.8",
+        "pkg:npm/%40types/estree@1.0.10",
+        "pkg:npm/fsevents@2.3.3"
+      ]
+    },
+    {
+      "ref": "pkg:npm/source-map-js@1.2.4",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/tinyglobby@0.2.17",
+      "dependsOn": [
+        "pkg:npm/fdir@6.5.0",
+        "pkg:npm/picomatch@4.0.7"
+      ]
+    },
+    {
+      "ref": "pkg:npm/tinyqueue@3.0.0",
+      "dependsOn": []
+    },
+    {
+      "ref": "pkg:npm/vite@7.3.8",
+      "dependsOn": [
+        "pkg:npm/esbuild@0.28.2",
+        "pkg:npm/fdir@6.5.0",
+        "pkg:npm/fsevents@2.3.3",
+        "pkg:npm/picomatch@4.0.7",
+        "pkg:npm/postcss@8.5.33",
+        "pkg:npm/rollup@4.68.8",
+        "pkg:npm/tinyglobby@0.2.17"
+      ]
+    }
+  ]
+}

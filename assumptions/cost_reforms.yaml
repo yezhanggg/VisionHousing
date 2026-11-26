@@ -1,0 +1,71 @@
+# VisionHousing settings of the two cost-saving reforms (parking, fees) that are
+# not ledger numbers: which levels the parking binding-share curve is worked
+# out at, which baseline-window sensitivities the fee and parking reforms can
+# be re-run under, and the fixed words of the fiscal screen.
+#
+# Read by visionhousing.scenarios.parking (binding_curve), the parking and fee
+# adapters (baseline_windows) and visionhousing.engine.readouts (fiscal).
+# Methods: docs/methods/parking.md, docs/methods/fees.md.
+#
+# Rules for this file:
+#   - No estimate lives here. Every uncertain number is a ledger entry in
+#     assumptions/parameters.yaml.
+#   - Every block has an id, so a record can cite it.
+#   - The five benchmark presets never change because of this file: the curve
+#     is a readout, the windows run only in named variants.
+
+version: 1
+id: cost_reforms_2026_11
+
+# Binding share of the parking minimum: the share of baseline homes (in the
+# building types the reform reaches) whose project would provide fewer spaces
+# than the minimum left in force, so the minimum binds. Worked out in every
+# draw at each level below. A level is the share of today's minimum left in
+# force: 1 = today's rule, 0.5 = halved, 0 = removed (the benchmark).
+binding_curve:
+  id: cost_reforms.parking_binding_curve
+  kept_shares: [1.0, 0.75, 0.5, 0.25, 0.0]
+
+# Baseline-window sensitivities a fee or parking run can be re-run under
+# (option baseline_window). The factor is worked out from the diagnostic that
+# visionhousing baseline-card writes: five_year / shipped_state_component. The
+# fee and parking estimates are linear in the baseline, so the county baseline
+# is scaled by that factor. A sensitivity is shown beside the headline; it is
+# never subtracted from any result.
+baseline_windows:
+  id: cost_reforms.baseline_windows
+  file: assumptions/calibration/baseline_reconciliation.yaml
+  allowed: [baseline_pa_window_2022_2025]
+
+# The fiscal screen of a fee cut (engine.readouts.fiscal_split).
+fiscal:
+  id: cost_reforms.fiscal
+  recipients_text: >-
+    Not split by recipient: the benchmark's $50,000 is one total across all fee
+    categories, and no pack holds who collects each part (municipality,
+    school district, water or sewer authority, county or state).
+  years_text: >-
+    Not split by year in the fiscal screen: the five-year totals are shown. The
+    added homes' own yearly split is in the reform's annual series.
+
+# Verified local parking minimums (variant parking_verified_minimums, option
+# minimums: verified). Read by visionhousing.scenarios.parking through
+# visionhousing.law.parking_rules. Each municipality whose rule is verified and
+# in force on the run's as-of date uses its own minimum in place of the ledger
+# default (parking.required_spaces_per_unit_*); every other municipality keeps
+# the labelled default. Blank is never zero.
+#   apartment_fields       columns of muni_zoning_rules tried in order for the
+#                          minimum per apartment (5+ unit building)
+#   small_building_fields  the same for a home in a 2-4 unit building: the
+#                          per-dwelling multi-family figure first, the
+#                          single-family figure when only that is read
+#   weight                 how a county mixes its municipalities' minimums
+#                          (words for records; the code follows it)
+verified_minimums:
+  id: cost_reforms.parking_verified_minimums
+  apartment_fields: [parking_min_per_unit_mf]
+  small_building_fields: [parking_min_per_unit_mf, parking_min_per_unit_sf]
+  weight: >-
+    existing homes of the building type (ACS units in structure, by tract),
+    split among the municipalities a tract touches by their 2020 housing units
+    in it (tract_municipalities), within each transit class

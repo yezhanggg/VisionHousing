@@ -1,0 +1,1 @@
+{"$packed":1,"$pool":[],"$data":{"state":"WY","seed":0,"draws":2000,"columns":[{"label":"this scenario","reforms":["parking"],"overrides":{},"cycle":"typical","baseline":{"$s":45},"reform_results":{"parking":{"$s":8823}},"package":{"reforms":["parking"],"combined":{"$s":8726},"pct_change":{"$s":8728},"waterfall":{"$s":8776}},"total":{"$s":8779},"hashes":{"$s":3}}]},"$shared":1}

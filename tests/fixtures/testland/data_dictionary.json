@@ -796,6 +796,1734 @@
    "tier": "0"
   },
   {
+   "table": "acs_bands",
+   "name": "geoid",
+   "unit": "code",
+   "description": "State (2 digits), county (5 digits) or tract (11 digits) code",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "level",
+   "unit": "category",
+   "description": "state, county or tract",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_total",
+   "unit": "persons",
+   "description": "Age: all all residents (B01001 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_under_18",
+   "unit": "persons",
+   "description": "Age: Under 18 (B01001 cells 003, 004, 005, 006, 027, 028, 029, 030)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_18_24",
+   "unit": "persons",
+   "description": "Age: 18 to 24 (B01001 cells 007, 008, 009, 010, 031, 032, 033, 034)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_25_34",
+   "unit": "persons",
+   "description": "Age: 25 to 34 (B01001 cells 011, 012, 035, 036)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_35_54",
+   "unit": "persons",
+   "description": "Age: 35 to 54 (B01001 cells 013, 014, 015, 016, 037, 038, 039, 040)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_55_64",
+   "unit": "persons",
+   "description": "Age: 55 to 64 (B01001 cells 017, 018, 019, 041, 042, 043)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_65_plus",
+   "unit": "persons",
+   "description": "Age: 65 or older (B01001 cells 020, 021, 022, 023, 024, 025, 044, 045, 046, 047, 048, 049)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_total",
+   "unit": "persons",
+   "description": "Race and ethnicity: all all residents (B03002 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_white",
+   "unit": "persons",
+   "description": "Race and ethnicity: White (not Hispanic) (B03002 cells 003)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_black",
+   "unit": "persons",
+   "description": "Race and ethnicity: Black (not Hispanic) (B03002 cells 004)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_asian",
+   "unit": "persons",
+   "description": "Race and ethnicity: Asian (not Hispanic) (B03002 cells 006)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_hispanic",
+   "unit": "persons",
+   "description": "Race and ethnicity: Hispanic or Latino (any race) (B03002 cells 012)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_multi",
+   "unit": "persons",
+   "description": "Race and ethnicity: Two or more races (not Hispanic) (B03002 cells 009)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_other",
+   "unit": "persons",
+   "description": "Race and ethnicity: Other race (not Hispanic) (B03002 cells 005, 007, 008)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_total",
+   "unit": "households",
+   "description": "Household size: all households (B11016 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_1",
+   "unit": "households",
+   "description": "Household size: 1 person (B11016 cells 010)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_2",
+   "unit": "households",
+   "description": "Household size: 2 people (B11016 cells 003, 011)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_3",
+   "unit": "households",
+   "description": "Household size: 3 people (B11016 cells 004, 012)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_4",
+   "unit": "households",
+   "description": "Household size: 4 people (B11016 cells 005, 013)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_5_plus",
+   "unit": "households",
+   "description": "Household size: 5 or more people (B11016 cells 006, 007, 008, 014, 015, 016)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_total",
+   "unit": "households",
+   "description": "Household income: all households (B19001 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_lt_25k",
+   "unit": "households",
+   "description": "Household income: Under $25,000 (B19001 cells 002, 003, 004, 005)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_25k_50k",
+   "unit": "households",
+   "description": "Household income: $25,000 to $49,999 (B19001 cells 006, 007, 008, 009, 010)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_50k_75k",
+   "unit": "households",
+   "description": "Household income: $50,000 to $74,999 (B19001 cells 011, 012)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_75k_100k",
+   "unit": "households",
+   "description": "Household income: $75,000 to $99,999 (B19001 cells 013)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_100k_150k",
+   "unit": "households",
+   "description": "Household income: $100,000 to $149,999 (B19001 cells 014, 015)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_150k_plus",
+   "unit": "households",
+   "description": "Household income: $150,000 or more (B19001 cells 016, 017)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_total",
+   "unit": "persons",
+   "description": "Education (aged 25 or older): all residents aged 25 or older (B15003 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_lt_hs",
+   "unit": "persons",
+   "description": "Education (aged 25 or older): No high school diploma (B15003 cells 002, 003, 004, 005, 006, 007, 008, 009, 010, 011, 012, 013, 014, 015, 016)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_hs",
+   "unit": "persons",
+   "description": "Education (aged 25 or older): High school diploma or GED (B15003 cells 017, 018)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_some_college",
+   "unit": "persons",
+   "description": "Education (aged 25 or older): Some college or associate degree (B15003 cells 019, 020, 021)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_bachelors",
+   "unit": "persons",
+   "description": "Education (aged 25 or older): Bachelor's degree (B15003 cells 022)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_graduate",
+   "unit": "persons",
+   "description": "Education (aged 25 or older): Graduate or professional degree (B15003 cells 023, 024, 025)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_total",
+   "unit": "persons",
+   "description": "How workers get to work: all workers aged 16 or older (B08301 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_drove_alone",
+   "unit": "persons",
+   "description": "How workers get to work: Drove alone (B08301 cells 003)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_carpool",
+   "unit": "persons",
+   "description": "How workers get to work: Carpooled (B08301 cells 004)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_transit",
+   "unit": "persons",
+   "description": "How workers get to work: Public transit (B08301 cells 010)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_walk_bike",
+   "unit": "persons",
+   "description": "How workers get to work: Walked or cycled (B08301 cells 018, 019)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_other",
+   "unit": "persons",
+   "description": "How workers get to work: Taxi, motorcycle or other (B08301 cells 016, 017, 020)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_home",
+   "unit": "persons",
+   "description": "How workers get to work: Worked from home (B08301 cells 021)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "tenure_total",
+   "unit": "households",
+   "description": "Owners and renters: all occupied homes (B25003 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "tenure_owner",
+   "unit": "households",
+   "description": "Owners and renters: Owner households (B25003 cells 002)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "tenure_renter",
+   "unit": "households",
+   "description": "Owners and renters: Renter households (B25003 cells 003)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_total",
+   "unit": "units",
+   "description": "Homes by building type: all all homes (B25024 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_1_detached",
+   "unit": "units",
+   "description": "Homes by building type: Single-family detached (B25024 cells 002)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_1_attached",
+   "unit": "units",
+   "description": "Homes by building type: Single-family attached (row houses) (B25024 cells 003)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_2_4",
+   "unit": "units",
+   "description": "Homes by building type: 2 to 4 units (B25024 cells 004, 005)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_5_19",
+   "unit": "units",
+   "description": "Homes by building type: 5 to 19 units (B25024 cells 006, 007)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_20_plus",
+   "unit": "units",
+   "description": "Homes by building type: 20 or more units (B25024 cells 008, 009)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_mobile_other",
+   "unit": "units",
+   "description": "Homes by building type: Mobile home, boat, RV or van (B25024 cells 010, 011)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_total",
+   "unit": "units",
+   "description": "Homes by year built: all all homes (B25034 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_2010_plus",
+   "unit": "units",
+   "description": "Homes by year built: 2010 or later (B25034 cells 002, 003)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_2000_2009",
+   "unit": "units",
+   "description": "Homes by year built: 2000 to 2009 (B25034 cells 004)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_1980_1999",
+   "unit": "units",
+   "description": "Homes by year built: 1980 to 1999 (B25034 cells 005, 006)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_1960_1979",
+   "unit": "units",
+   "description": "Homes by year built: 1960 to 1979 (B25034 cells 007, 008)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_1940_1959",
+   "unit": "units",
+   "description": "Homes by year built: 1940 to 1959 (B25034 cells 009, 010)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_pre_1940",
+   "unit": "units",
+   "description": "Homes by year built: Before 1940 (B25034 cells 011)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_total",
+   "unit": "households",
+   "description": "Rent as a share of household income: all renter homes paying cash rent (B25070 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_lt_30",
+   "unit": "households",
+   "description": "Rent as a share of household income: Under 30% of income (B25070 cells 002, 003, 004, 005, 006)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_30_49",
+   "unit": "households",
+   "description": "Rent as a share of household income: 30% to 49% (cost-burdened) (B25070 cells 007, 008, 009)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_50_plus",
+   "unit": "households",
+   "description": "Rent as a share of household income: 50% or more (severely cost-burdened) (B25070 cells 010)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_not_computed",
+   "unit": "households",
+   "description": "Rent as a share of household income: Not computed (no income or loss) (B25070 cells 011)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_total",
+   "unit": "units",
+   "description": "Why vacant homes are empty: all vacant homes (B25004 total)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_for_rent",
+   "unit": "units",
+   "description": "Why vacant homes are empty: For rent (B25004 cells 002)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_for_sale",
+   "unit": "units",
+   "description": "Why vacant homes are empty: For sale (B25004 cells 004)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_rented_sold",
+   "unit": "units",
+   "description": "Why vacant homes are empty: Rented or sold, not yet moved in (B25004 cells 003, 005)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_seasonal",
+   "unit": "units",
+   "description": "Why vacant homes are empty: Seasonal or migrant-worker use (B25004 cells 006, 007)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_other",
+   "unit": "units",
+   "description": "Why vacant homes are empty: Other vacant (B25004 cells 008)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "median_household_income",
+   "unit": "dollars per year",
+   "description": "Published median household income (B19013); state and counties",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "median_gross_rent",
+   "unit": "dollars per month",
+   "description": "Published median gross rent (B25064); state and counties",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_total_moe",
+   "unit": "persons",
+   "description": "90% margin of error of age_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_under_18_moe",
+   "unit": "persons",
+   "description": "90% margin of error of age_under_18",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_18_24_moe",
+   "unit": "persons",
+   "description": "90% margin of error of age_18_24",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_25_34_moe",
+   "unit": "persons",
+   "description": "90% margin of error of age_25_34",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_35_54_moe",
+   "unit": "persons",
+   "description": "90% margin of error of age_35_54",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_55_64_moe",
+   "unit": "persons",
+   "description": "90% margin of error of age_55_64",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "age_65_plus_moe",
+   "unit": "persons",
+   "description": "90% margin of error of age_65_plus",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_total_moe",
+   "unit": "persons",
+   "description": "90% margin of error of race_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_white_moe",
+   "unit": "persons",
+   "description": "90% margin of error of race_white",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_black_moe",
+   "unit": "persons",
+   "description": "90% margin of error of race_black",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_asian_moe",
+   "unit": "persons",
+   "description": "90% margin of error of race_asian",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_hispanic_moe",
+   "unit": "persons",
+   "description": "90% margin of error of race_hispanic",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_multi_moe",
+   "unit": "persons",
+   "description": "90% margin of error of race_multi",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "race_other_moe",
+   "unit": "persons",
+   "description": "90% margin of error of race_other",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_total_moe",
+   "unit": "households",
+   "description": "90% margin of error of hhsize_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_1_moe",
+   "unit": "households",
+   "description": "90% margin of error of hhsize_1",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_2_moe",
+   "unit": "households",
+   "description": "90% margin of error of hhsize_2",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_3_moe",
+   "unit": "households",
+   "description": "90% margin of error of hhsize_3",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_4_moe",
+   "unit": "households",
+   "description": "90% margin of error of hhsize_4",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "hhsize_5_plus_moe",
+   "unit": "households",
+   "description": "90% margin of error of hhsize_5_plus",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_total_moe",
+   "unit": "households",
+   "description": "90% margin of error of income_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_lt_25k_moe",
+   "unit": "households",
+   "description": "90% margin of error of income_lt_25k",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_25k_50k_moe",
+   "unit": "households",
+   "description": "90% margin of error of income_25k_50k",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_50k_75k_moe",
+   "unit": "households",
+   "description": "90% margin of error of income_50k_75k",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_75k_100k_moe",
+   "unit": "households",
+   "description": "90% margin of error of income_75k_100k",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_100k_150k_moe",
+   "unit": "households",
+   "description": "90% margin of error of income_100k_150k",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "income_150k_plus_moe",
+   "unit": "households",
+   "description": "90% margin of error of income_150k_plus",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_total_moe",
+   "unit": "persons",
+   "description": "90% margin of error of edu_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_lt_hs_moe",
+   "unit": "persons",
+   "description": "90% margin of error of edu_lt_hs",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_hs_moe",
+   "unit": "persons",
+   "description": "90% margin of error of edu_hs",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_some_college_moe",
+   "unit": "persons",
+   "description": "90% margin of error of edu_some_college",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_bachelors_moe",
+   "unit": "persons",
+   "description": "90% margin of error of edu_bachelors",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "edu_graduate_moe",
+   "unit": "persons",
+   "description": "90% margin of error of edu_graduate",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_total_moe",
+   "unit": "persons",
+   "description": "90% margin of error of commute_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_drove_alone_moe",
+   "unit": "persons",
+   "description": "90% margin of error of commute_drove_alone",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_carpool_moe",
+   "unit": "persons",
+   "description": "90% margin of error of commute_carpool",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_transit_moe",
+   "unit": "persons",
+   "description": "90% margin of error of commute_transit",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_walk_bike_moe",
+   "unit": "persons",
+   "description": "90% margin of error of commute_walk_bike",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_other_moe",
+   "unit": "persons",
+   "description": "90% margin of error of commute_other",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "commute_home_moe",
+   "unit": "persons",
+   "description": "90% margin of error of commute_home",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "tenure_total_moe",
+   "unit": "households",
+   "description": "90% margin of error of tenure_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "tenure_owner_moe",
+   "unit": "households",
+   "description": "90% margin of error of tenure_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "tenure_renter_moe",
+   "unit": "households",
+   "description": "90% margin of error of tenure_renter",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_total_moe",
+   "unit": "units",
+   "description": "90% margin of error of units_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_1_detached_moe",
+   "unit": "units",
+   "description": "90% margin of error of units_1_detached",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_1_attached_moe",
+   "unit": "units",
+   "description": "90% margin of error of units_1_attached",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_2_4_moe",
+   "unit": "units",
+   "description": "90% margin of error of units_2_4",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_5_19_moe",
+   "unit": "units",
+   "description": "90% margin of error of units_5_19",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_20_plus_moe",
+   "unit": "units",
+   "description": "90% margin of error of units_20_plus",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "units_mobile_other_moe",
+   "unit": "units",
+   "description": "90% margin of error of units_mobile_other",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_total_moe",
+   "unit": "units",
+   "description": "90% margin of error of built_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_2010_plus_moe",
+   "unit": "units",
+   "description": "90% margin of error of built_2010_plus",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_2000_2009_moe",
+   "unit": "units",
+   "description": "90% margin of error of built_2000_2009",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_1980_1999_moe",
+   "unit": "units",
+   "description": "90% margin of error of built_1980_1999",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_1960_1979_moe",
+   "unit": "units",
+   "description": "90% margin of error of built_1960_1979",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_1940_1959_moe",
+   "unit": "units",
+   "description": "90% margin of error of built_1940_1959",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "built_pre_1940_moe",
+   "unit": "units",
+   "description": "90% margin of error of built_pre_1940",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_total_moe",
+   "unit": "households",
+   "description": "90% margin of error of burden_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_lt_30_moe",
+   "unit": "households",
+   "description": "90% margin of error of burden_lt_30",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_30_49_moe",
+   "unit": "households",
+   "description": "90% margin of error of burden_30_49",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_50_plus_moe",
+   "unit": "households",
+   "description": "90% margin of error of burden_50_plus",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "burden_not_computed_moe",
+   "unit": "households",
+   "description": "90% margin of error of burden_not_computed",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_total_moe",
+   "unit": "units",
+   "description": "90% margin of error of vacancy_total",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_for_rent_moe",
+   "unit": "units",
+   "description": "90% margin of error of vacancy_for_rent",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_for_sale_moe",
+   "unit": "units",
+   "description": "90% margin of error of vacancy_for_sale",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_rented_sold_moe",
+   "unit": "units",
+   "description": "90% margin of error of vacancy_rented_sold",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_seasonal_moe",
+   "unit": "units",
+   "description": "90% margin of error of vacancy_seasonal",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "vacancy_other_moe",
+   "unit": "units",
+   "description": "90% margin of error of vacancy_other",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "median_household_income_moe",
+   "unit": "dollars per year",
+   "description": "90% margin of error of median_household_income",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "acs_bands",
+   "name": "median_gross_rent_moe",
+   "unit": "dollars per month",
+   "description": "90% margin of error of median_gross_rent",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "geoid",
+   "unit": "code",
+   "description": "Tract code: 5-digit county code + 6-digit tract code (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_status",
+   "unit": "category",
+   "description": "verified, outside, constraint or unknown: the sewer answer holding most of the tract's 2020 homes (official records only); blank for a tract with no homes (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_share",
+   "unit": "share",
+   "description": "Share of 2020 homes inside a mapped public sewer service area or a utility's whole-jurisdiction service statement; blank where no official record speaks (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_known",
+   "unit": "share",
+   "description": "Share of 2020 homes that an official sewer record speaks to (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "constraint_share",
+   "unit": "share",
+   "description": "Share of 2020 homes in an area with a documented sewer moratorium or connection ban (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_source",
+   "unit": "source id",
+   "description": "Source id of the official sewer record used (blank: none) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "water_share",
+   "unit": "share",
+   "description": "Share of 2020 homes inside a mapped public water supplier service area; blank where the state has no statewide map (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "epa_share",
+   "unit": "share",
+   "description": "Share of 2020 homes inside an EPA sewershed (mostly modelled; context only) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "act537_class",
+   "unit": "category",
+   "description": "Act 537 plan age of the municipality with most of the tract's homes: lt10, 10to20, 20plus or prereg (Pennsylvania DEP table date) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "hazard_tract",
+   "name": "geoid",
+   "unit": "code",
+   "description": "Tract code: 5-digit county code + 6-digit tract code (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "hazard_tract",
+   "name": "sfha_share",
+   "unit": "share",
+   "description": "Share of 2020 homes (block counts) inside FEMA's digital flood map whose block point lies in a Special Flood Hazard Area (FEMA NFHL, SFHA_TF = T); blank where less than the minimum share of homes is mapped (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "hazard_tract",
+   "name": "sfha_dev_share",
+   "unit": "share",
+   "description": "Share of developed land (NLCD classes 21-24) inside FEMA's digital flood map that is in a Special Flood Hazard Area; blank where less than the minimum share of homes is mapped (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "hazard_tract",
+   "name": "developed_share",
+   "unit": "share",
+   "description": "Developed land (NLCD classes 21-24) / all land (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "hazard_tract",
+   "name": "impervious_share",
+   "unit": "share",
+   "description": "Mean fractional impervious surface over land cells with a valid value (NLCD), 0-1 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "hazard_tract",
+   "name": "steep_share",
+   "unit": "share",
+   "description": "Share of land with slope above the threshold (3DEP 30 m grid) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "level",
+   "unit": "category",
+   "description": "county or tract (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "geoid",
+   "unit": "code",
+   "description": "County (5 digits) or tract (11 digits) code (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "county",
+   "unit": "code",
+   "description": "County code (5 digits) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "as_of",
+   "unit": "date",
+   "description": "Date the records were read; sales windows count back from it (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "value_basis",
+   "unit": "text",
+   "description": "Which assessed value the medians use (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "parcels",
+   "unit": "parcels",
+   "description": "Parcels in the assessment file (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_single_family",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Single-family homes (detached, twin, row, townhouse, mobile home) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_small_multi",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Small multifamily (2 to 4 homes) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_apartments",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Apartment buildings (5 or more homes) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_condo",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Condominium units (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_mixed_use",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Shops or offices with homes above (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_commercial",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Commercial (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_industrial",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Industrial (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_vacant",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Vacant land (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_government",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Government and public (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_agricultural",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Farm and agricultural (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "lu_other",
+   "unit": "parcels",
+   "description": "Parcels in land-use class: Other (garages, utilities, special purpose) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_parcels",
+   "unit": "parcels",
+   "description": "Single-family parcels (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_median_value",
+   "unit": "dollars",
+   "description": "Median assessed value of single-family parcels (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_median_lot_sqft",
+   "unit": "square feet",
+   "description": "Median lot area of single-family parcels (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_built_pre_1940",
+   "unit": "parcels",
+   "description": "Single-family parcels built 1939 or earlier (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_built_y1940_1979",
+   "unit": "parcels",
+   "description": "Single-family parcels built 1940-1979 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_built_y1980_1999",
+   "unit": "parcels",
+   "description": "Single-family parcels built 1980-1999 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_built_y2000_plus",
+   "unit": "parcels",
+   "description": "Single-family parcels built 2000 or later (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sf_built_unknown",
+   "unit": "parcels",
+   "description": "Single-family parcels with no year built (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sales_short",
+   "unit": "sales",
+   "description": "Single-family sales in the short window (months in assumptions/parcels.yaml) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "sales_long",
+   "unit": "sales",
+   "description": "Single-family sales in the long window (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "median_sale_short",
+   "unit": "dollars",
+   "description": "Median single-family sale price, short window (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "median_sale_long",
+   "unit": "dollars",
+   "description": "Median single-family sale price, long window (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "parcels_area",
+   "name": "unplaced",
+   "unit": "parcels",
+   "description": "Parcels not placed in any tract (county rows) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "county",
+   "unit": "code",
+   "description": "County code (5 digits) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "hud_area_code",
+   "unit": "code",
+   "description": "HUD income-limit area code (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "hud_area_name",
+   "unit": "text",
+   "description": "HUD income-limit area name (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "areas_in_county",
+   "unit": "count",
+   "description": "HUD areas the county spans (above 1 only in New England) (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "median",
+   "unit": "dollars per year",
+   "description": "HUD area median family income (AMI), fiscal year 2026 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_1",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 1 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_2",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 2 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_3",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 3 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_4",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 4 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_5",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 5 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_6",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 6 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_7",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 7 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l30_8",
+   "unit": "dollars per year",
+   "description": "HUD 30% income limit, household of 8 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_1",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 1 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_2",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 2 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_3",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 3 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_4",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 4 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_5",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 5 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_6",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 6 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_7",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 7 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l50_8",
+   "unit": "dollars per year",
+   "description": "HUD 50% income limit, household of 8 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_1",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 1 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_2",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 2 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_3",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 3 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_4",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 4 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_5",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 5 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_6",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 6 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_7",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 7 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "afford_income_limits",
+   "name": "l80_8",
+   "unit": "dollars per year",
+   "description": "HUD 80% income limit, household of 8 (Testland: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
    "table": "boundaries",
    "name": "level",
    "unit": "category",

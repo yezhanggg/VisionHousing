@@ -1,0 +1,238 @@
+# Calibration (transferred): California timing and attrition ranges (generated; do not edit).
+# Written by `visionhousing validate-california`. Measured in California and
+# labelled transferred: a Pennsylvania scenario may use these ranges only as a
+# sensitivity. Method: docs/modules/validation_california.md.
+
+version: 1
+id: apr_timing_donor_ca_2026_11
+state: CA
+label: Transferred timing and attrition ranges from California's APR (for sensitivities)
+status: transferred
+use: Ranges a Pennsylvania timing (E4) or financing (E6) scenario may borrow for a sensitivity, labelled
+  'transferred from California'. Not measured in Pennsylvania.
+provenance:
+  summary: Low-high ranges across California and the chosen cities of the median and 75th percentile days,
+    and the share reached within 1-5 years, for application to permit, permit to completion and application
+    to entitlement, by project group.
+  measured_on: '2026-11-24'
+  method: Table A and Table A2 streamed in chunks (settings in assumptions/validation_california.yaml);
+    projects joined on jurisdiction, parcel number and unit category; Kaplan-Meier in visionhousing.features.permit_timing;
+    see docs/modules/validation_california.md.
+  generated_by: visionhousing validate-california
+  sources:
+  - id: hcd_apr_table_a
+    citation: California Department of Housing and Community Development (via the California Open Data
+      Portal), Housing Element Annual Progress Report (APR) data, Table A (housing development applications
+      received)
+    url: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/c78b769d-cc02-4050-91ef-79ded665b5a8/download/tablea.csv
+    licence: Portal listing states "No restrictions on public use" (rights field); licence field "not
+      specified"; the state's open data handbook releases portal data in the public domain. Only aggregates
+      are kept.
+  - id: hcd_apr_table_a2
+    citation: California Department of Housing and Community Development (via the California Open Data
+      Portal), Housing Element Annual Progress Report (APR) data, Table A2 (entitled, permitted and completed
+      units)
+    url: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/fe505d9b-8c36-42ba-ba30-08bc4f34e022/download/tablea2.csv
+    licence: Portal listing states "No restrictions on public use" (rights field); licence field "not
+      specified"; the state's open data handbook releases portal data in the public domain. Only aggregates
+      are kept.
+  - id: acs5_profile_tables
+    citation: U.S. Census Bureau, American Community Survey 5-year tables for the place-profile charts
+      (2020-2024)
+    url: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/data/5YRData/acsdt5y2024-b25024.dat
+    licence: Public domain (U.S. government work)
+  limits:
+  - Self-reported by each city and county; HCD does not verify the reports. Missing or late reports lower
+    counts; revisions change past years in later downloads.
+  - Applications are joined to later stages by jurisdiction, parcel number and unit category. Applications
+    that never join count as not reaching the stage, so reached shares are lower bounds; the share that
+    ever joins is reported beside each figure.
+  - Several projects on one parcel with the same unit category (for example two ADUs years apart) merge
+    into one project.
+  - Entitlement dates are reported only where a discretionary approval exists; ADUs and ministerial projects
+    mostly have none.
+  - Completion is a certificate of occupancy reported in the APR; some jurisdictions report it unevenly,
+    so permit-to-completion shares are lower bounds.
+  - The lot denominator is one-unit detached homes in one ACS period (2020-2024) for every year; unincorporated
+    county areas get no place rate.
+places:
+- CALIFORNIA
+- SAN DIEGO
+- LOS ANGELES
+- SAN JOSE
+groups:
+  adu: Accessory dwelling units (ADU, JADU)
+  sb9: SB 9 duplex or lot split (flagged on the APR)
+  ministerial_5_plus: 5+ homes, streamlined or ministerial approval
+  mf_2_4: 2-4 homes (not SB 9)
+  mf_5_plus_other: 5+ homes, other approval path
+  single_family: Single-family and mobile homes (SFD, SFA, MH)
+ranges:
+  adu:
+    application_to_permit:
+      median_days: {low: 196.0, high: 670.0, n: 4}
+      p75_days: {low: 591.0, high: 973.0, n: 2}
+      reached_by_years:
+        1: {low: 0.429, high: 0.666, n: 4}
+        2: {low: 0.51, high: 0.775, n: 4}
+        3: {low: 0.54, high: 0.808, n: 4}
+        4: {low: 0.547, high: 0.824, n: 4}
+        5: {low: 0.547, high: 0.835, n: 4}
+    permit_to_completion:
+      median_days: {low: 522.0, high: 1290.0, n: 4}
+      p75_days: {low: 1190.0, high: 1190.0, n: 1}
+      reached_by_years:
+        1: {low: 0.249, high: 0.351, n: 4}
+        2: {low: 0.422, high: 0.625, n: 4}
+        3: {low: 0.488, high: 0.734, n: 4}
+        4: {low: 0.504, high: 0.781, n: 4}
+        5: {low: 0.513, high: 0.806, n: 4}
+    application_to_entitlement:
+      median_days: null
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.0, high: 0.278, n: 4}
+        2: {low: 0.0, high: 0.291, n: 4}
+        3: {low: 0.0, high: 0.295, n: 4}
+        4: {low: 0.0, high: 0.298, n: 4}
+        5: {low: 0.0, high: 0.3, n: 4}
+  sb9:
+    application_to_permit:
+      median_days: {low: 203.0, high: 203.0, n: 1}
+      p75_days: {low: 531.0, high: 531.0, n: 1}
+      reached_by_years:
+        1: {low: 0.049, high: 0.667, n: 3}
+        2: {low: 0.049, high: 0.783, n: 3}
+        3: {low: 0.461, high: 0.461, n: 1}
+        4: {low: 0.461, high: 0.461, n: 1}
+        5: {low: 0.461, high: 0.461, n: 1}
+    permit_to_completion:
+      median_days: {low: 476.0, high: 491.0, n: 2}
+      p75_days: {low: 847.0, high: 1182.0, n: 2}
+      reached_by_years:
+        1: {low: 0.329, high: 0.346, n: 2}
+        2: {low: 0.637, high: 0.69, n: 2}
+        3: {low: 0.736, high: 0.807, n: 2}
+        4: {low: 0.78, high: 0.78, n: 1}
+        5: {low: 0.78, high: 0.78, n: 1}
+    application_to_entitlement:
+      median_days: null
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.0, high: 0.234, n: 3}
+        2: {low: 0.0, high: 0.257, n: 3}
+        3: {low: 0.26, high: 0.26, n: 1}
+        4: {low: 0.26, high: 0.26, n: 1}
+        5: {low: 0.26, high: 0.26, n: 1}
+  ministerial_5_plus:
+    application_to_permit:
+      median_days: {low: 863.0, high: 863.0, n: 1}
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.165, high: 0.294, n: 3}
+        2: {low: 0.238, high: 0.461, n: 3}
+        3: {low: 0.281, high: 0.563, n: 3}
+        4: {low: 0.321, high: 0.604, n: 3}
+        5: {low: 0.321, high: 0.604, n: 3}
+    permit_to_completion:
+      median_days: {low: 1202.0, high: 1202.0, n: 1}
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.033, high: 0.033, n: 1}
+        2: {low: 0.165, high: 0.165, n: 1}
+        3: {low: 0.444, high: 0.444, n: 1}
+        4: {low: 0.521, high: 0.521, n: 1}
+        5: {low: 0.521, high: 0.521, n: 1}
+    application_to_entitlement:
+      median_days: null
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.04, high: 0.283, n: 3}
+        2: {low: 0.043, high: 0.331, n: 3}
+        3: {low: 0.049, high: 0.354, n: 3}
+        4: {low: 0.049, high: 0.369, n: 3}
+        5: {low: 0.049, high: 0.371, n: 3}
+  mf_2_4:
+    application_to_permit:
+      median_days: {low: 379.0, high: 1111.0, n: 2}
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.225, high: 0.492, n: 3}
+        2: {low: 0.294, high: 0.607, n: 3}
+        3: {low: 0.336, high: 0.648, n: 3}
+        4: {low: 0.34, high: 0.671, n: 3}
+        5: {low: 0.353, high: 0.678, n: 3}
+    permit_to_completion:
+      median_days: {low: 521.0, high: 884.0, n: 3}
+      p75_days: {low: 906.0, high: 906.0, n: 1}
+      reached_by_years:
+        1: {low: 0.179, high: 0.316, n: 3}
+        2: {low: 0.457, high: 0.678, n: 3}
+        3: {low: 0.512, high: 0.796, n: 3}
+        4: {low: 0.533, high: 0.834, n: 3}
+        5: {low: 0.533, high: 0.854, n: 3}
+    application_to_entitlement:
+      median_days: null
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.023, high: 0.176, n: 3}
+        2: {low: 0.029, high: 0.2, n: 3}
+        3: {low: 0.033, high: 0.205, n: 3}
+        4: {low: 0.033, high: 0.209, n: 3}
+        5: {low: 0.033, high: 0.211, n: 3}
+  mf_5_plus_other:
+    application_to_permit:
+      median_days: {low: 1056.0, high: 1056.0, n: 1}
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.0, high: 0.204, n: 4}
+        2: {low: 0.018, high: 0.419, n: 4}
+        3: {low: 0.054, high: 0.516, n: 4}
+        4: {low: 0.071, high: 0.55, n: 4}
+        5: {low: 0.071, high: 0.344, n: 3}
+    permit_to_completion:
+      median_days: {low: 1385.0, high: 1990.0, n: 3}
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.012, high: 0.18, n: 4}
+        2: {low: 0.093, high: 0.319, n: 4}
+        3: {low: 0.143, high: 0.434, n: 4}
+        4: {low: 0.154, high: 0.538, n: 4}
+        5: {low: 0.161, high: 0.624, n: 4}
+    application_to_entitlement:
+      median_days: {low: 1606.0, high: 2793.0, n: 2}
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.031, high: 0.319, n: 4}
+        2: {low: 0.042, high: 0.437, n: 4}
+        3: {low: 0.042, high: 0.474, n: 4}
+        4: {low: 0.042, high: 0.494, n: 4}
+        5: {low: 0.312, high: 0.506, n: 3}
+  single_family:
+    application_to_permit:
+      median_days: {low: 158.0, high: 2816.0, n: 3}
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.244, high: 0.595, n: 4}
+        2: {low: 0.321, high: 0.643, n: 4}
+        3: {low: 0.374, high: 0.66, n: 4}
+        4: {low: 0.374, high: 0.668, n: 4}
+        5: {low: 0.374, high: 0.672, n: 4}
+    permit_to_completion:
+      median_days: {low: 325.0, high: 762.0, n: 3}
+      p75_days: {low: 1186.0, high: 1186.0, n: 1}
+      reached_by_years:
+        1: {low: 0.086, high: 0.528, n: 4}
+        2: {low: 0.137, high: 0.623, n: 4}
+        3: {low: 0.155, high: 0.727, n: 4}
+        4: {low: 0.163, high: 0.795, n: 4}
+        5: {low: 0.165, high: 0.833, n: 4}
+    application_to_entitlement:
+      median_days: null
+      p75_days: null
+      reached_by_years:
+        1: {low: 0.022, high: 0.197, n: 4}
+        2: {low: 0.026, high: 0.207, n: 4}
+        3: {low: 0.026, high: 0.21, n: 4}
+        4: {low: 0.026, high: 0.211, n: 4}
+        5: {low: 0.027, high: 0.213, n: 4}

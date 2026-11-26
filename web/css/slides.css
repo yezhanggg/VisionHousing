@@ -438,3 +438,47 @@
 .slide-foot {
   gap: calc(16 * var(--u));
 }
+
+/* ---------- Entry motion (ui/motion.js `useReveal`): screens only, never in print ---------- */
+@media screen {
+  .reveal :is(.slide-kicker, .slide-title, .slide-big, .slide-text, .slide-bullets li, .slide-chart-row) {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  .reveal.is-in :is(.slide-kicker, .slide-title, .slide-big, .slide-text, .slide-bullets li, .slide-chart-row) {
+    opacity: 1;
+    transform: none;
+    transition:
+      opacity 480ms var(--ease) calc(var(--i, 0) * 90ms),
+      transform 480ms var(--ease) calc(var(--i, 0) * 90ms);
+  }
+  /* `scale`, not `transform`: a band's own transform places it on the track. */
+  .reveal :is(.range-band, .tornado-band) {
+    animation: none;
+    scale: 0 1;
+  }
+  .reveal.is-in :is(.range-band, .tornado-band) {
+    scale: 1 1;
+    transition:
+      scale 750ms var(--ease-out) calc(var(--i, 3) * 90ms + 120ms),
+      transform 520ms var(--ease-out);
+  }
+  .reveal :is(.range-mid, .tornado-mid) {
+    opacity: 0;
+  }
+  .reveal.is-in :is(.range-mid, .tornado-mid) {
+    opacity: 1;
+    transition: opacity 300ms var(--ease) calc(var(--i, 3) * 90ms + 600ms);
+  }
+}
+
+/* Export and Share link sit in the slides bar; on phones they take a row of their own. */
+@media (max-width: 767px) {
+  .slides-tools {
+    flex-wrap: wrap;
+  }
+  .slides-tools .scenario-actions {
+    width: 100%;
+    justify-content: flex-end;
+  }
+}

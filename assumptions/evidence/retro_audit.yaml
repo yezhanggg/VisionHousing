@@ -1,0 +1,168 @@
+# Retrospective reform panel: treatment-date audit, declared before any re-scoring.
+#
+# What this file is: a second, separate design block for `visionhousing evidence-retro
+# audit`. It re-defines WHICH law and phase each panel case is scored on, publishes the
+# year convention (how a reform that starts part-way through a year is handled), and
+# lists the variants that will be re-scored. It was written on 2026-11-25 BEFORE any of
+# its estimates were computed; its fingerprint is in assumptions/preregistration.yaml
+# (block retro_treatment_audit). The original design (retro_design.yaml) and its
+# results (retro_results.yaml) are left unchanged: they are the "before" record.
+#
+# Honest note: the original panel's results WERE seen before this block was written
+# (they were published on 2026-11-24). Only the re-scored variants below are new.
+# Method: docs/modules/evidence_retro.md ("Treatment-date audit").
+
+version: 1
+id: retro_treatment_audit_2026_11
+declared_on: 2026-11-25
+
+retro_treatment_audit:
+  # Everything not listed here (data, outcomes, horizon, base years, pre-trend and
+  # placebo tests, pool rule, estimators, seed, draws, pass marks, identification
+  # rule) is the original design's, read from retro_design.yaml and checked against
+  # its own fingerprint before scoring.
+  inherits: retro_design
+  why: >-
+    Two panel dates needed a treatment-definition audit. Saint Paul was scored from its
+    Phase 1 ordinance (22-1, effective 2022-03-05: small homes, ADUs, small parcels),
+    but the 2-4 unit outcome belongs to Phase 2 (Ordinance 23-43, effective 2023-11-26:
+    duplexes to fourplexes in more places). Portland was scored at g = 2022 from the
+    first Residential Infill Project phase (Ordinance 190093, in force 2021-08-01); the
+    second phase (RIP2, Ordinance 190851) took effect 2022-06-30. The year convention
+    behind "Portland 2022" was not published next to the result.
+
+  year_convention:
+    rule: g = year of the effective date if it falls on or before June 30, else the next year
+    partial_year: >-
+      Data are calendar-year counts, so a year is either treated or not; nothing is
+      pro-rated. When the effective date is after June 30, the months under the rule
+      fall in the last base year (g-1), which is then a partly treated base year; when
+      it is on or before June 30, the first treated year g has up to six months before
+      the rule. Each case names its partial year below. A reform in force on
+      January 1 has none.
+    sensitivity_conventions:
+      any_exposure: g = calendar year of the effective date (a partial year counts as treated)
+      first_full_year_all_phases: >-
+        g = first calendar year in which every listed phase of the case's 2-4 unit
+        treatment was in force for the whole year
+
+  # The primary treatment of each case: the law and phase that legalised 2-4 unit
+  # buildings, matching the primary outcome (units in 2-4 unit buildings). Dates were
+  # read by script on official pages on 2026-11-25 where the site allowed it
+  # (robots.txt respected); "not verified by script" means the earlier verified
+  # record's date is kept but this audit could not re-read it.
+  cases:
+    - record: mn.minneapolis_2040_plan
+      name: Minneapolis
+      treatment: Minneapolis 2040 Comprehensive Plan policies in effect (city-wide 1-3 units)
+      phase: single date
+      effective_date: 2020-01-01
+      partial_year: none
+      other_phases: [{what: Land Use Rezoning Study, effective_date: 2023-07-01, role: later change inside the horizon}]
+      date_check: verified by script (minneapolis2040.com overview, 2026-11-25); the 1-3 unit zoning ordinance's own date was not confirmed
+      g: {audited: 2020, any_exposure: 2020, first_full_year_all_phases: 2020}
+    - record: mn.saint_paul_1to4_units
+      name: Saint Paul
+      treatment: Ordinance 23-43 (1-4 Unit Housing Study Phase 2), duplexes to fourplexes in more places
+      phase: Phase 2
+      effective_date: 2023-11-26
+      partial_year: 2023 (36 days under Phase 2) is the last base year
+      other_phases:
+        - {what: Ordinance 22-1 (Phase 1; small homes, ADUs, small parcels), effective_date: 2022-03-05,
+           role: earlier phase; in force through the base years 2022-2023}
+      date_check: verified by script (stpaul.gov 1-4 Unit Housing Study page, 2026-11-25)
+      g: {audited: 2024, any_exposure: 2023, first_full_year_all_phases: 2024}
+      g_before: 2022  # the original panel (Phase 1 date)
+    - record: or.portland_rip_2021
+      name: Portland
+      treatment: Ordinance 190093 (Residential Infill Project, first phase), directives b, d, f, g, h
+      phase: RIP1
+      effective_date: 2021-08-01
+      partial_year: 2021 (5 months under RIP1) is the last base year
+      other_phases:
+        - {what: Ordinance 190851 (RIP2; R10/R20 zones, attached houses, cottage clusters),
+           effective_date: 2022-06-30, role: second phase; in force from the middle of the first treated year}
+      date_check: verified by script (Ordinance 190093 text on efiles.portlandoregon.gov; portland.gov RIP2 page, 2026-11-25)
+      g: {audited: 2022, any_exposure: 2021, first_full_year_all_phases: 2023}
+      g_before: 2022
+    - record: nc.raleigh_missing_middle_2021
+      name: Raleigh
+      treatment: Text change TC-5-20 (Ordinance 263-TC-451), Missing Middle Housing
+      phase: single date
+      effective_date: 2021-08-05
+      partial_year: 2021 (about 5 months) is the last base year
+      other_phases: []
+      date_check: not verified by script (raleighnc.gov refused the request with HTTP 403, 2026-11-25); date kept from the verified record
+      g: {audited: 2022, any_exposure: 2021, first_full_year_all_phases: 2022}
+    - record: wa.spokane_boca_2022
+      name: Spokane
+      treatment: Ordinance C36232 (Building Opportunity and Choices for All, interim)
+      phase: interim ordinance
+      effective_date: 2022-08-27
+      partial_year: 2022 (about 4 months) is the last base year
+      other_phases:
+        - {what: permanent Building Opportunity for Housing code (approved 2023-11-20; residential interim
+           portions expired 2023-12-18), effective_date: null, role: continuation inside the horizon}
+      date_check: >-
+        month verified by script (my.spokanecity.org page: "expected to go into effect in August 2022");
+        exact day not verified by script (the city's document server refused robots.txt with HTTP 403)
+      g: {audited: 2023, any_exposure: 2022, first_full_year_all_phases: 2023}
+    - record: va.arlington_eho_2023
+      name: Arlington County
+      treatment: Zoning Ordinance 10.4 Expanded Housing Option amendments
+      phase: single date
+      effective_date: 2023-07-01
+      partial_year: 2023 (6 months) is the last base year
+      other_phases:
+        - {what: court halt 2024-09-27; permits open again 2025-10-01, effective_date: 2025-10-01, role: interruption inside the horizon}
+      date_check: not verified by script (arlingtonva.us refused robots.txt with HTTP 403, 2026-11-25); date kept from the verified record
+      g: {audited: 2024, any_exposure: 2023, first_full_year_all_phases: 2024}
+
+  # Variants re-scored. Each re-runs every outcome of the original design (units_1,
+  # units_2, units_3_4, units_2_4, units_5plus; primary units_2_4) for every case, plus
+  # the pooled event study.
+  variants:
+    audited:
+      g: audited
+      comparisons: never_treated_only
+      role: primary (the panel's reference record for these treatment definitions)
+    dates_only:
+      g: audited
+      comparisons: never_treated_and_not_yet_treated  # the original rule
+      role: separates the date change from the comparison change
+    any_exposure:
+      g: any_exposure
+      comparisons: never_treated_only
+      role: sensitivity
+    first_full_year_all_phases:
+      g: first_full_year_all_phases
+      comparisons: never_treated_only
+      role: sensitivity
+  comparisons_rule:
+    never_treated_only: >-
+      Only the never-treated pool (the original pool rule) is used. A case is never a
+      comparison for another case, because an earlier phase (Saint Paul Phase 1 from
+      2022, Portland RIP1 from August 2021) would otherwise sit in the comparison group.
+    never_treated_and_not_yet_treated: the original design's rule (a later case is a comparison before its own g)
+
+  reading_rule:
+    adoption: >-
+      Decided before scoring, whatever the estimates: the audited variant becomes the
+      panel's reference record for every case (it changes the treatment year only for
+      Saint Paul). The original results file is kept unchanged as the "before" record.
+      Sensitivity variants are shown beside it and never replace it.
+    robustness: >-
+      A case is called robust to the date convention only if the 90% intervals of its
+      primary outcome under audited, any_exposure and first_full_year_all_phases have
+      the same relation to zero (all include zero, or all exclude it on the same side).
+    null_results: >-
+      An interval that includes zero is reported as "no change distinguishable from
+      ordinary cities", never dropped and never described as a negative or positive effect.
+
+  caveats:
+    - Saint Paul under the audited date has two post years (2024-2025), the declared minimum; its base years
+      2021-2023 include Phase 1, and its placebo date (2021) looks at years that include Phase 1.
+    - Eligible exposure (the share of the city's lots the rule changed) is not measured; the outcome is a city-wide
+      rate, so a rule that touched few lots is diluted.
+    - The audit changes no pool rule, outcome, base, horizon or pass mark; the pool and the data files are the
+      original run's.

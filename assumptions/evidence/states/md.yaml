@@ -1,0 +1,273 @@
+# Cross-state comparison records: MD.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: md.ch592_2026_transit_housing
+  kind: policy
+  state: MD
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  - tod
+  - commercial_land_housing
+  title: 'Maryland Chapter 592 of 2026 (HB 894): Maryland Transit and Housing Opportunity Act'
+  citation: Md. Laws 2026, ch. 592 (HB 894; cross-filed SB 389); Land Use Article 4-104(c), (e)-(g)
+  url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0894?ys=2026RS
+  session: 2026 regular session
+  bill: HB 894
+  enacted_date: 2026-05-26
+  effective_dates:
+  - date: 2026-10-01
+    applies_to: 'Whole act: no minimum off-street parking for residential or mixed-use development within
+      0.25 mile of a rail station with at least hourly weekday service (8 a.m.-6 p.m.); mixed-use must
+      be allowed within 0.5 mile on residential or suitable commercial land in later rezonings; no height,
+      setback or use limits on state, Baltimore City or WMATA transit land under an MDOT-approved TOD plan;
+      automatic enterprise-zone designation for new TOD areas'
+  geographic_scope: Land near rail transit stations with at least hourly service on average from 8 a.m.
+    to 6 p.m. on weekdays. The act names charter counties and Baltimore City among the places the rules
+    reach.
+  exclusions:
+  - Rail stations on the campus of an institution of higher education
+  - Land zoned for single-family residential use on January 1, 2026
+  - A local government may keep minimums if it did an adequate parking study within 3 years before the
+    application and MDOT concurred (MDOT silence for 45 days counts as concurrence)
+  - The mixed-use and transit-land rules do not change local authority over environmental, public health
+    and safety, or adequate public facilities rules
+  - The mixed-use rule applies only to rezonings or actions taken on or after the effective date
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Section 3 (impact fees and excise taxes collected only after completion, for TOD mixed-use) took effect
+    only if chapters 590 and 591 of 2026 failed. Both became law, so Section 3 is void by its own terms;
+    the broader fee-timing rule is in md.ch590_591_2026_housing_certainty.
+  - The parking rule is a ban on minimums, not on parking. It covers only a quarter mile around qualifying
+    rail stations, a small share of land.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: mgaleg.maryland.gov bill page shows 'Approved by the Governor - Chapter 592' and
+    effective date October 1, 2026. Chapter 592 text on mgaleg.maryland.gov ends 'Approved by the Governor,
+    May 26, 2026' and gives the Section 5 contingency and the Section 6 effective date. Exclusions read
+    in the DLS enrolled fiscal and policy note.
+  sources:
+  - label: HB 894 bill page (Maryland General Assembly)
+    url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0894?ys=2026RS
+    official: true
+  - label: Chapter 592 of 2026 text
+    url: https://mgaleg.maryland.gov/2026RS/Chapters_noln/CH_592_hb0894e.pdf
+    official: true
+  - label: HB 894 fiscal and policy note (enrolled, revised)
+    url: https://mgaleg.maryland.gov/2026RS/fnotes/bil_0004/hb0894.pdf
+    official: true
+  discovered_via: pew_2026
+- id: md.ch590_591_2026_housing_certainty
+  kind: policy
+  state: MD
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - fees
+  title: 'Maryland Chapters 590 and 591 of 2026 (SB 325 / HB 548): Maryland Housing Certainty Act'
+  citation: Md. Laws 2026, ch. 590 (SB 325) and ch. 591 (HB 548); new Land Use Article Title 12 and Local
+    Government Article 20-128
+  url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0548?ys=2026RS
+  session: 2026 regular session
+  bill: HB 548 / SB 325
+  enacted_date: 2026-05-26
+  effective_dates:
+  - date: 2026-10-01
+    applies_to: 'Whole act: housing applications judged only under the rules in force when a complete
+      application was filed; 30-day completeness check (deemed complete after 35 days); vested right
+      for the longer of 5 years or a local period after all approvals; impact fees and development excise
+      taxes on residential projects not collected until construction is complete and occupancy requirements
+      are met (or up to 30 days before final inspection)'
+  geographic_scope: All counties and municipalities, and the Maryland-National Capital Park and Planning
+    Commission, for housing development projects (new construction or substantial renovation of residential
+    projects, including mixed-use with homes). The fee-timing rule applies to counties and municipalities
+    that impose development impact fees, surcharges or excise taxes.
+  exclusions:
+  - Fee timing does not apply to an impact fee or excise tax that finances county debt incurred on or before
+    January 1, 2026
+  - A rezoning or zoning text amendment does not start the vesting clock
+  - Local governments keep power over immediate health and safety threats and may still approve density
+    increases by rezoning
+  - Applies only where it does not conflict with other state or federal law
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The fee rule changes when fees are paid, not how much. It lowers carrying cost, not the fee itself.
+  - A locality may withhold or revoke an occupancy certificate if fees are not paid in a reasonable time.
+  - SB 325 and HB 548 are cross-filed and both became chapters; one record covers both.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: mgaleg.maryland.gov bill pages show HB 548 'Approved by the Governor - Chapter 591'
+    and SB 325 'Approved by the Governor - Chapter 590', effective October 1, 2026. Chapter 591 and Chapter
+    590 texts on mgaleg.maryland.gov each end 'Approved by the Governor, May 26, 2026'; Section 2 gives
+    October 1, 2026. Completeness deadlines read in the DLS enrolled fiscal and policy note.
+  sources:
+  - label: HB 548 bill page (Maryland General Assembly)
+    url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0548?ys=2026RS
+    official: true
+  - label: SB 325 bill page (Maryland General Assembly)
+    url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/sb0325?ys=2026RS
+    official: true
+  - label: Chapter 591 of 2026 text
+    url: https://mgaleg.maryland.gov/2026RS/Chapters_noln/CH_591_hb0548e.pdf
+    official: true
+  - label: Chapter 590 of 2026 text
+    url: https://mgaleg.maryland.gov/2026RS/Chapters_noln/CH_590_sb0325e.pdf
+    official: true
+  - label: HB 548 fiscal and policy note (enrolled, revised)
+    url: https://mgaleg.maryland.gov/2026RS/fnotes/bil_0008/hb0548.pdf
+    official: true
+  discovered_via: pew_2026
+- id: md.ch197_2025_adu
+  kind: policy
+  state: MD
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'Maryland Chapter 197 of 2025 (HB 1466): accessory dwelling units, local laws required'
+  citation: Md. Laws 2025, ch. 197 (HB 1466; cross-filed SB 891); new Land Use Article Title 4, Subtitle
+    5 and Real Property Article provisions
+  url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb1466?ys=2025RS
+  session: 2025 regular session
+  bill: HB 1466
+  enacted_date: 2025-04-22
+  effective_dates:
+  - date: 2025-10-01
+    applies_to: Act in force, including the limits on covenants and HOA rules that unreasonably bar ADUs
+  - date: 2026-10-01
+    applies_to: Deadline for each county or municipal legislative body to adopt a local law authorizing
+      ADUs on land with a single-family detached home
+  geographic_scope: Every county and municipality, including charter counties and Baltimore City, on lots
+    whose primary home is a single-family detached house. An ADU may be at most 75% of the size of the
+    main home.
+  exclusions:
+  - Local laws may set safety standards and may bar converting an accessory structure reached only from
+    an alley
+  - Local laws may add off-street parking rules after a parking study, with a waiver process
+  - Historic property listed in or eligible for the Maryland Register is outside the covenant limit
+  - Covenants may still limit short-term rental of an ADU
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The enacted law is far narrower than the bill as introduced. The chapter text shows stricken drafts
+    of a 90-day ministerial review, a fee waiver under 750 sq ft and parking caps near transit; the DLS
+    third-reader note lists none of them, so they are treated as not enacted.
+  - The required local law must keep ADUs out of density limits and cannot set side and rear setbacks
+    stricter than those for existing accessory structures. Size, design and other rules stay local.
+  - The Planning Department's task-force inventory found 81 of 155 jurisdictions (52%) already had some
+    ADU provisions (as reported in the fiscal note).
+  - Whether jurisdictions met the October 1, 2026 deadline was not checked.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: mgaleg.maryland.gov bill page shows 'Approved by the Governor - Chapter 197' and
+    effective date October 1, 2025. Chapter 197 text on mgaleg.maryland.gov ends 'Approved by the Governor,
+    April 22, 2025' and sets the October 1, 2026 local-law deadline. Scope read in the DLS third-reader
+    (revised) fiscal and policy note.
+  sources:
+  - label: HB 1466 bill page (Maryland General Assembly)
+    url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb1466?ys=2025RS
+    official: true
+  - label: Chapter 197 of 2025 text
+    url: https://mgaleg.maryland.gov/2025RS/Chapters_noln/CH_197_hb1466t.pdf
+    official: true
+  - label: HB 1466 fiscal and policy note (third reader, revised)
+    url: https://mgaleg.maryland.gov/2025RS/fnotes/bil_0006/hb1466.pdf
+    official: true
+  discovered_via: search
+- id: md.ch122_2024_heaa
+  kind: policy
+  state: MD
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - tod
+  - commercial_land_housing
+  - starter_lots
+  title: 'Maryland Chapter 122 of 2024 (HB 538): Housing Expansion and Affordability Act of 2024'
+  citation: Md. Laws 2024, ch. 122 (HB 538; cross-filed SB 484); Land Use Article 4-104(d) and new Title
+    7, Subtitle 5
+  url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0538?ys=2024RS
+  session: 2024 regular session
+  bill: HB 538
+  enacted_date: 2024-04-25
+  effective_dates:
+  - date: 2025-01-01
+    applies_to: 'Whole act: density bonuses for qualified affordable projects (middle housing in single-family
+      zones; 30% more density in multifamily zones; mixed-use in nonresidential zones); manufactured and
+      modular homes allowed where single-family homes are'
+  geographic_scope: 'Statewide. Qualified projects are on former state land, large former federal military
+    sites, land wholly within 0.75 mile of a rail station (at least 15% affordable at 60% AMI, or 20% where
+    a local rule already requires 15%), or nonprofit-owned land (at least 25% affordable); each with a
+    40-year deed restriction.'
+  exclusions:
+  - The rail-station route excludes stations on college campuses, parcels only partly within 0.75 mile,
+    and land zoned single-family on January 1, 2024
+  - Projects must carry long-term affordability deed restrictions; market-rate projects do not qualify
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Only deed-restricted affordable projects get the density; this is not a general upzoning.
+  - Local governments may not impose unreasonable limits on qualified projects or require more than a set
+    number of public hearings (per the fiscal note).
+  - The manufactured-home rule covers homes converted to real property and modular dwellings on approved
+    foundations.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: mgaleg.maryland.gov bill page shows 'Approved by the Governor - Chapter 122' and
+    effective date January 1, 2025. Chapter 122 text on mgaleg.maryland.gov ends 'Approved by the Governor,
+    April 25, 2024'. Qualified-project criteria read in the DLS enrolled fiscal and policy note.
+  sources:
+  - label: HB 538 bill page (Maryland General Assembly)
+    url: https://mgaleg.maryland.gov/mgawebsite/Legislation/Details/hb0538?ys=2024RS
+    official: true
+  - label: Chapter 122 of 2024 text
+    url: https://mgaleg.maryland.gov/2024RS/Chapters_noln/CH_122_hb0538e.pdf
+    official: true
+  - label: HB 538 fiscal and policy note (enrolled, revised)
+    url: https://mgaleg.maryland.gov/2024RS/fnotes/bil_0008/hb0538.pdf
+    official: true
+  discovered_via: search

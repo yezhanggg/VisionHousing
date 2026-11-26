@@ -1,0 +1,478 @@
+# Cross-state comparison records: published studies.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: us.pew_adu_report_2026
+  kind: study
+  state: US
+  jurisdiction: 346 US cities with 100,000+ residents
+  policy_types:
+  - adu
+  title: 'Pew: Accessory Dwelling Units Can Meaningfully Boost Housing Supply'
+  citation: The Pew Charitable Trusts, report, October 21, 2026
+  url: https://www.pew.org/en/research-and-analysis/reports/2026/10/accessory-dwelling-units-can-meaningfully-boost-housing-supply
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: All 346 US cities with 100,000+ residents (Census estimates, May 2025); state ADU
+    preemption laws in all states
+  exclusions:
+  - Cities under 100,000 residents
+  - 40 of 346 cities lacked ADU permit data in the vendor dataset
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: ADU building permits issued in 2025
+  denominator: per 100,000 residents, by city ordinance type (permissive / restrictive / none)
+  horizon: Cross-section for 2025; national permit series 2000-2025
+  observed_result:
+    summary: Cities with permissive ADU ordinances issued 81 ADU permits per 100,000 residents in 2025,
+      over 11 times the rate of restrictive-ordinance cities and over 75 times the rate of cities with
+      no ordinance. Outside California the permissive-city rate was 26 per 100,000. National ADU permits
+      rose from 4,962 (2016) to 61,655 (2025); the 346 cities issued 37,455 of them. 276 of 346 cities
+      (80%) allow ADUs; 118 of those impose at least one major restriction; 158 are permissive, 131 of
+      them in states with strong preemption. 22 states had ADU preemption laws as of August 2026 (17 by-right).
+    value: 81
+    unit: ADU permits per 100,000 residents in 2025, permissive-ordinance cities
+    source_label: Pew report, Key findings and 'Cities with permissive ordinances build more ADUs'
+    source_url: https://www.pew.org/en/research-and-analysis/reports/2026/10/accessory-dwelling-units-can-meaningfully-boost-housing-supply
+  identification: descriptive
+  caveats:
+  - Cross-sectional comparison of ordinance types; not a causal design, though authors argue gaps are
+    not only geography
+  - Results heavily driven by California; non-California permissive rate is 26 per 100k
+  - Permits identified with vendor (ATTOM) proprietary ADU flag whose method is undocumented; Pew text
+    classifier used as robustness check
+  - Ordinance coding current as of April 2026; state preemption assumed fully in force regardless of local
+    compliance
+  - Permits are a proxy for construction
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Read on pew.org report page (dated October 21, 2026): key findings, permit figures
+    (61,655; 37,455; 81 and 26 per 100k), Table of city/state preemption counts, Appendix A (April 2026
+    coding) and Appendix B (ATTOM permit data, 306 of 346 cities covered).'
+  sources:
+  - label: Pew report page
+    url: https://www.pew.org/en/research-and-analysis/reports/2026/10/accessory-dwelling-units-can-meaningfully-boost-housing-supply
+    official: true
+  discovered_via: search
+- id: us.urban_land_use_reforms_2023
+  kind: study
+  state: US
+  jurisdiction: 1,136 cities in eight US metro regions
+  policy_types:
+  - missing_middle
+  title: 'Urban Institute: Land-Use Reforms and Housing Costs (cross-city reform panel)'
+  citation: 'Stacy, Davis, Freemark, Lo, MacDonald, Zheng, Pendall, ''Land-Use Reforms and Housing Costs:
+    Does Allowing for Increased Density Lead to Greater Affordability?'', Urban Studies 60(14), 2023;
+    Urban Institute page dated March 29, 2023'
+  url: https://www.urban.org/research/publication/land-use-reforms-and-housing-costs
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 180 local upzoning or downzoning reforms in 1,136 cities across eight metro regions,
+    2000-2019
+  exclusions:
+  - Reforms not found through newspaper text search
+  - Only eight metro regions
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: Housing supply (USPS address counts, new and existing stock); median rents; affordable
+    units
+  denominator: Cities with a loosening (upzoning) reform vs. same cities' pre-reform trend
+  horizon: 3-9 years after reform passage
+  observed_result:
+    summary: Loosening reforms were associated with a statistically significant 0.8% increase in housing
+      supply 3-9 years after passage, with gains mainly at the upper end of the rent distribution; no
+      significant evidence that lower-cost units became more available or cheaper. Tightening reforms
+      were associated with higher median rents and fewer units affordable to middle-income renters.
+    value: 0.8
+    unit: percent increase in housing stock, 3-9 years after loosening reform
+    source_label: Urban Institute publication page
+    source_url: https://www.urban.org/research/publication/land-use-reforms-and-housing-costs
+  identification: causal
+  caveats:
+  - Panel fixed-effects model with city-specific time trends; authors frame results as associations
+  - Reforms identified by machine learning on newspaper articles then hand-coded; AEI (2026) argues many
+    coded reforms are too minor or misclassified, biasing the effect toward zero
+  - Small short-run effect; may grow beyond the 9-year window
+  - Eight metro regions only
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: urban.org publication page (March 29, 2023) states 180 reforms, 1,136 cities, eight
+    metros, 2000-2019, fixed effects with city trends, and 0.8% supply increase within 3-9 years.
+  sources:
+  - label: Urban Institute publication page
+    url: https://www.urban.org/research/publication/land-use-reforms-and-housing-costs
+    official: true
+  discovered_via: search
+- id: ny.urban_big_upzonings_nyc_2026
+  kind: study
+  state: NY
+  jurisdiction: New York City
+  policy_types:
+  - missing_middle
+  title: 'Urban Institute: How Big Upzonings Affect Housing Supply (New York City)'
+  citation: 'Su, Curran-Groome, Freemark, ''How Big Upzonings Affect Housing Supply: An Examination of
+    Recent Regulatory Reforms on Construction and Permitting in New York City and Philadelphia'', Urban
+    Institute research report, April 15, 2026'
+  url: https://www.urban.org/research/publication/how-big-upzonings-affect-housing-supply
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Seven city-initiated neighborhood-scale rezonings in New York City (parcel-level data)
+  exclusions:
+  - Developer-initiated parcel rezonings not studied
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: Additional housing units on upzoned parcels vs. matched non-upzoned parcels
+  denominator: Upzoned parcels vs. propensity-score-matched comparison parcels
+  horizon: 4 years after upzoning
+  observed_result:
+    summary: Seven neighborhood upzonings produced more than 4,000 additional housing units within four
+      years relative to similar non-upzoned parcels; Gowanus showed the largest effect; Jerome Avenue
+      (Bronx) showed no significant change.
+    value: 4000
+    unit: additional housing units within 4 years (lower bound, 'more than')
+    source_label: Urban Institute report page
+    source_url: https://www.urban.org/research/publication/how-big-upzonings-affect-housing-supply
+  identification: causal
+  caveats:
+  - Propensity-score matching plus difference-in-differences; still observational
+  - Rezonings were often paired with Mandatory Inclusionary Housing and public investment, so zoning effect
+    is not isolated
+  - Effects uneven; weak-market areas showed none
+  - Short horizon; more supply expected later
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: urban.org report page (April 15, 2026) states PSM + DiD method and 'more than 4,000
+    additional housing units within four years' for NYC.
+  sources:
+  - label: Urban Institute report page
+    url: https://www.urban.org/research/publication/how-big-upzonings-affect-housing-supply
+    official: true
+  discovered_via: search
+- id: pa.urban_big_upzonings_phl_2026
+  kind: study
+  state: PA
+  jurisdiction: Philadelphia
+  policy_types:
+  - missing_middle
+  title: 'Urban Institute: How Big Upzonings Affect Housing Supply (Philadelphia 2012 zoning rewrite)'
+  citation: Su, Curran-Groome, Freemark, Urban Institute research report, April 15, 2026
+  url: https://www.urban.org/research/publication/how-big-upzonings-affect-housing-supply
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Philadelphia block faces upzoned in the 2012 citywide zoning code rewrite
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: Housing unit permits on upzoned vs. matched non-upzoned block faces
+  denominator: Upzoned block faces vs. propensity-score-matched comparison block faces
+  horizon: About 15 years of permit data around 2012; peak effect 2019-2021
+  observed_result:
+    summary: The 2012 rewrite contributed up to about 4,000 additional housing unit permits per year relative
+      to non-upzoned areas, strongest in 2019-2021; effect came through larger projects rather than more
+      projects.
+    value: 4000
+    unit: additional housing unit permits per year (maximum)
+    source_label: Urban Institute report page
+    source_url: https://www.urban.org/research/publication/how-big-upzonings-affect-housing-supply
+  identification: causal
+  caveats:
+  - Propensity-score matching plus difference-in-differences; observational
+  - Annual effect fluctuates widely; 4,000 is a maximum, not an average
+  - Permits, not completions
+  - Upzoning did not measurably shift where developers applied
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: urban.org report page (April 15, 2026) states Philadelphia result 'a maximum of about
+    4,000 additional housing unit permits per year', strongest 2019-2021.
+  sources:
+  - label: Urban Institute report page
+    url: https://www.urban.org/research/publication/how-big-upzonings-affect-housing-supply
+    official: true
+  discovered_via: search
+- id: ca.ucla_discretion_delay_la_2022
+  kind: study
+  state: CA
+  jurisdiction: Los Angeles
+  policy_types:
+  - permit_timing
+  - tod
+  title: 'UCLA: Does Discretion Delay Development? (by-right vs discretionary approval times, LA TOC program)'
+  citation: Manville, Monkkonen, Gray, Phillips, 'Does Discretion Delay Development?', Journal of the
+    American Planning Association (published online November 15, 2022)
+  url: https://its.ucla.edu/publication/does-discretion-delay-development
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: About 350 multifamily projects permitted in Los Angeles, January 2018 - March 2020
+  exclusions:
+  - Not a study of Executive Directive 1 (ED1); predates it
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: Time from application to permit (approval timeline)
+  denominator: By-right projects vs. discretionary projects, controlling for project and neighborhood
+    traits
+  horizon: Projects permitted 2018-2020
+  observed_result:
+    summary: By-right projects were permitted 28% faster than discretionary projects, with less variance
+      in approval times.
+    value: 28
+    unit: percent faster approval, by-right vs discretionary
+    source_label: UCLA ITS publication page abstract
+    source_url: https://its.ucla.edu/publication/does-discretion-delay-development
+  identification: descriptive
+  caveats:
+  - Regression-adjusted comparison exploiting TOC by-right option; authors acknowledge selection bias
+  - Pre-ED1; no independent ED1 approval-time study was found (see la.ed1 record)
+  - Abstract read on authors' institute page, not the journal page
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: UCLA Institute of Transportation Studies publication page (dated November 15, 2022)
+    shows authors, ~350 projects Jan 2018-Mar 2020, and 28% faster result in the abstract. Journal (JAPA)
+    page not opened.
+  sources:
+  - label: UCLA ITS publication page (authors' institute)
+    url: https://its.ucla.edu/publication/does-discretion-delay-development
+    official: true
+  discovered_via: search
+- id: ca.la_ed1_approval_times_city
+  kind: study
+  state: CA
+  jurisdiction: Los Angeles
+  policy_types:
+  - permit_timing
+  title: Los Angeles Executive Directive 1 approval times (city-reported figures)
+  citation: Mayor's Executive Directive 1 (Dec 16, 2022, revised 2023); LA Planning report to Council
+    file 23-0623 (Dec 6, 2023)
+  url: https://cityclerk.lacity.org/onlinedocs/2023/23-0623_rpt_plan_12-06-23.pdf
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 100% affordable housing and shelter projects processed under ED1 in Los Angeles
+  exclusions:
+  - Single-family and more restrictive zones excluded from ED1 by 2023 revision (per search results, unconfirmed)
+  implementation_status: unknown
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: Average days to approval for ED1 projects
+  denominator: ED1 projects with complete applications
+  horizon: First year of ED1
+  observed_result:
+    summary: Search results report city figures of about 45 days average (Dec 2023 Planning report), later
+      47, 37 and 22 days in mayoral statements, vs. a 60-day target; a 2026 report says only about 23%
+      of ED1-approved units had building permits. None confirmed on an official page.
+    value: null
+    unit: days to approval
+    source_label: City reports (not read)
+    source_url: https://cityclerk.lacity.org/onlinedocs/2023/23-0623_rpt_plan_12-06-23.pdf
+  identification: descriptive
+  caveats:
+  - No independent ED1 approval-time study (UCLA Lewis Center, Terner Center or similar) was found
+  - City-reported averages vary by date and definition and are not audits
+  - Approval speed has not translated into permits for most units
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: Could not read the city clerk PDF (server returned an HTML page instead of the PDF
+    to an automated request). Figures come only from search-result summaries of city and press sources.
+  sources:
+  - label: LA Planning report, Council file 23-0623
+    url: https://cityclerk.lacity.org/onlinedocs/2023/23-0623_rpt_plan_12-06-23.pdf
+    official: true
+  discovered_via: search
+- id: ca.terner_sb9_turns_one_2023
+  kind: study
+  state: CA
+  jurisdiction: 13 California jurisdictions
+  policy_types:
+  - missing_middle
+  - starter_lots
+  title: 'Terner Center: California''s HOME Act Turns One (SB 9 year-one applications)'
+  citation: Garcia and Alameldin, Terner Center for Housing Innovation, UC Berkeley, January 18, 2023
+  url: https://ternercenter.berkeley.edu/research-and-policy/sb-9-turns-one-applications/
+  session: null
+  bill: SB 9 (2021)
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 13 jurisdictions chosen for likely SB 9 feasibility and high ADU output; data through
+    November 2022
+  exclusions:
+  - Rest of California not surveyed
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: SB 9 lot-split and unit applications and approvals in year one
+  denominator: Per jurisdiction (counts)
+  horizon: First year (2022, through November)
+  observed_result:
+    summary: 'Uptake was low: Los Angeles had 211 SB 9 unit applications (38 approved) and 28 lot-split
+      applications (0 approved); San Diego 7 unit / 3 lot-split applications; San Jose 1 / 10; Saratoga
+      15 / 21; Danville 0 / 20 (13 lot splits approved); Sacramento 9 / 9; San Francisco 25 / 4. Most
+      other surveyed places reported few or none.'
+    value: 211
+    unit: SB 9 unit applications in Los Angeles (largest count)
+    source_label: Terner Center article table
+    source_url: https://ternercenter.berkeley.edu/research-and-policy/sb-9-turns-one-applications/
+  identification: descriptive
+  caveats:
+  - Non-random sample of 13 cities
+  - Only one year of data; high rates and costs in 2022 also depressed activity
+  - Interviews with 8 planners in 4 jurisdictions
+  - Authors say it is too early to judge SB 9
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Terner Center page (January 18, 2023) shows the 13-jurisdiction method and the application/approval
+    table.
+  sources:
+  - label: Terner Center article
+    url: https://ternercenter.berkeley.edu/research-and-policy/sb-9-turns-one-applications/
+    official: true
+  discovered_via: search
+- id: mn.mplsfed_2040_indicators_2026
+  kind: study
+  state: MN
+  jurisdiction: Minneapolis
+  policy_types:
+  - missing_middle
+  - parking
+  title: 'Minneapolis Fed: Minneapolis 2040 Plan indicators point to stable rents, stalled development'
+  citation: Horowitz, Starling, Xu, Federal Reserve Bank of Minneapolis, October 7, 2026
+  url: https://www.minneapolisfed.org/article/2026/minneapolis-2040-plan-indicators-point-to-stable-rents-stalled-development
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: City of Minneapolis vs. a weighted comparison group of 126 similar cities
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: New-lease rents; multifamily permits; 2-4 unit building permits
+  denominator: Minneapolis vs. comparison group weighted to pre-2019 patterns
+  horizon: 2018/2020 through August 2026
+  observed_result:
+    summary: 'Inflation-adjusted rents fell nearly 20% Jan 2020-Aug 2026 vs. just over 10% in the comparison
+      group, though the nominal gap narrowed (Minneapolis +8.9% Jan 2025-Aug 2026 vs +1.8%). Multifamily
+      permits fell 91.6% from the 2022 peak to 300 units in 2025. 2020-2025: 317 units in duplex-fourplex
+      buildings (about 2% of 12,335 multifamily units), 47 of 106 such buildings on formerly single-family-only
+      parcels.'
+    value: 317
+    unit: units permitted in 2-4 unit buildings, 2020-2025
+    source_label: Minneapolis Fed article
+    source_url: https://www.minneapolisfed.org/article/2026/minneapolis-2040-plan-indicators-point-to-stable-rents-stalled-development
+  identification: matched
+  caveats:
+  - Authors say 2040 Plan effects are hard to isolate from pandemic, 2020 and 2026 unrest, rent control
+    debate and inclusionary zoning costs
+  - Rent source switched to listing data (Apartment List, CoStar)
+  - Permit data from Metropolitan Council differ from Census figures
+  - Comparison cities' policies not inventoried
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: minneapolisfed.org article (October 7, 2026) shows method (126 weighted comparison
+    cities) and all figures cited.
+  sources:
+  - label: Minneapolis Fed article
+    url: https://www.minneapolisfed.org/article/2026/minneapolis-2040-plan-indicators-point-to-stable-rents-stalled-development
+    official: true
+  discovered_via: search
+- id: us.pew_state_review_2026
+  kind: study
+  state: US
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - missing_middle
+  - starter_lots
+  - permit_timing
+  - commercial_land_housing
+  - tod
+  - infrastructure_finance
+  title: 'Pew: More States Have Embraced Housing Policy Reform in 2026 (state review; discovery tool)'
+  citation: Hatchett, Kravitz, Horowitz, The Pew Charitable Trusts, article, October 29, 2026 (updated
+    November 20, 2026)
+  url: https://www.pew.org/en/research-and-analysis/articles/2026/10/29/more-states-have-embraced-housing-policy-reform-in-2026
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: All states; 2026 legislative sessions
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: Count of states enacting significant housing reforms in 2026
+  denominator: 50 states
+  horizon: 2026 sessions
+  observed_result:
+    summary: About one-third of states passed significant housing reforms in 2026; seven enacted their
+      first major reforms; four states passed first ADU laws (ID, NC, VA, WV), bringing ADU-law states
+      to 22.
+    value: 22
+    unit: states with ADU laws (2026)
+    source_label: Pew 2026 state review
+    source_url: https://www.pew.org/en/research-and-analysis/articles/2026/10/29/more-states-have-embraced-housing-policy-reform-in-2026
+  identification: descriptive
+  caveats:
+  - Advocacy-oriented review; used only to discover bills, each of which links to official legislature
+    pages
+  - Article corrected November 20, 2026 (Idaho lot size, faith-group laws)
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Read on pew.org; counts and bill list read there. Individual bills not verified (see
+    discovery.yaml).
+  sources:
+  - label: Pew 2026 state review
+    url: https://www.pew.org/en/research-and-analysis/articles/2026/10/29/more-states-have-embraced-housing-policy-reform-in-2026
+    official: true
+  - label: Pew 2025 state review
+    url: https://www.pew.org/en/research-and-analysis/articles/2025/09/15/state-legislatures-make-bipartisan-breakthroughs-on-policies-that-promote-housing
+    official: true
+  discovered_via: pew_2026

@@ -26,6 +26,11 @@ def test_all_scenarios_present(scenarios):
         "fees",
         "pa_hb2186",
         "pa_sb1346",
+        "transit_zoning_funded_infrastructure",
+        "commercial_land_housing",
+        "adaptive_reuse",
+        "starter_home_lots",
+        "fee_deferral_with_affordability",
     }
     must = {sid for sid, s in scenarios.items() if s.priority == "must"}
     assert must == {"baseline", "adu", "parking", "fees"}

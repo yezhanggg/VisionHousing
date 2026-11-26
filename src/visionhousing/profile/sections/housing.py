@@ -16,6 +16,20 @@ From the American Community Survey 2020-2024 5-year estimates (ACS):
 - **Age of homes** (B25034): the share built before 1940 and the share built
   in 2010 or later (only where the pack has year-built columns).
 
+- **Rent burden** (B25070): the share of renter households paying 30% or more
+  of their income in gross rent ("cost-burdened"), of those whose share could
+  be worked out. The margin uses the Bureau's formula for a proportion.
+- **Median gross rent** for a county or the state is the Bureau's published
+  median (B25064) where the pack has it, else the bracket estimate above.
+
+Charts (see :mod:`visionhousing.profile.charts`): owners and renters (pie),
+homes by building type (bar), homes by year built (bar), rent as a share of
+income (one stacked bar), and, for counties and the state, why vacant homes
+are empty (pie, B25004).
+
+Headline: median home value. Summary points: median rent, the cost-burdened
+share of renters, and the largest building type.
+
 From the Federal Housing Finance Agency's annual house price index (FHFA HPI):
 the change in house prices over the latest year, five years and ten years. The
 county index is used for counties; the tract index for tracts, where FHFA
@@ -30,9 +44,11 @@ from collections.abc import Callable
 import pandas as pd
 
 from visionhousing.features import brackets as br
+from visionhousing.profile.charts import band_chart, band_share, largest, published_median
 from visionhousing.profile.context import Area, Measure, MissingDataError, ProfileContext
+from visionhousing.profile.format import fmt
 from visionhousing.profile.model import Section
-from visionhousing.profile.sections._common import FactMaker, finish, sentence, with_words
+from visionhousing.profile.sections._common import FactMaker, finish, point, sentence, with_words
 
 KEY = "housing"
 TITLE = "Homes"
@@ -92,7 +108,13 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
     fm.add("median_home_value", "Median home value (owner homes)", "dollars", SOURCE, years,
            lambda a: a.median("median_home_value", br.VALUE))  # fmt: skip
     fm.add("median_gross_rent", "Median gross rent", "dollars per month", SOURCE, years,
-           lambda a: a.median("median_gross_rent", br.RENT))  # fmt: skip
+           lambda a: published_median(ctx, a, "median_gross_rent")
+           or a.median("median_gross_rent", br.RENT))  # fmt: skip
+    fm.add("rent_burden_share", "Renter households paying 30% or more of income in rent",
+           "share", "acs5_profile_tables", years,
+           band_share(ctx, "burden", ["30_49", "50_plus"], ["lt_30", "30_49", "50_plus"]),
+           note="of renter households whose rent-to-income share could be worked out "
+           "(B25070)")  # fmt: skip
     fm.add("vacancy_rate", "Vacant homes", "share", SOURCE, years,
            lambda a: a.ratio(["vacant_units"], ["housing_units"]))  # fmt: skip
     fm.add("share_built_before_1940", "Homes built before 1940", "share", SOURCE, years,
@@ -122,10 +144,30 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
         parts.append(f"the median rent is {rent.text}")
     if hpi5 and hpi5.value is not None:
         parts.append(f"prices changed {hpi5.text} in five years")
+    charts = [
+        band_chart(ctx, KEY, "tenure", "tenure", "pie", place, other),
+        band_chart(ctx, KEY, "building_type", "units", "bar", place, other),
+        band_chart(ctx, KEY, "year_built", "built", "bar", place, other),
+        band_chart(
+            ctx, KEY, "rent_burden", "burden", "stack", place, other, exclude=("not_computed",)
+        ),
+        band_chart(ctx, KEY, "vacancy_status", "vacancy", "pie", place, other),
+    ]
+    burden = fm.get("rent_burden_share")
+    points = [
+        point(rent, "Median rent {text}{words}"),
+        point(burden, "{text} of renters pay 30% or more of income in rent{words}"),
+    ]
+    top_type = largest(charts[1])
+    if top_type is not None:
+        points.append(f"Most common building type: {top_type.label.lower()}, "
+                      f"{fmt(top_type.share, 'share')} of homes")  # fmt: skip
     limits = (
         "Survey estimates averaged over five years, with margins of error. County and state "
-        "medians are estimated from bracket counts and can differ a little from the published "
-        "medians. The price index tracks repeat sales; FHFA does not publish an index for tracts "
+        "home values are estimated from bracket counts and can differ a little from the "
+        "published medians. Vacancy reasons are shown for counties and the state only. "
+        "The price index tracks repeat sales; FHFA does not publish an index for tracts "
         "with too few sales, and the pack holds no state index to compare with."
     )
-    return finish(KEY, TITLE, sentence(parts), fm.facts, limits)
+    return finish(KEY, TITLE, sentence(parts), fm.facts, limits, charts=charts, lead=value,
+                  points=points)  # fmt: skip

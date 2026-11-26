@@ -79,11 +79,11 @@ CHOICES = {
 """Accepted range-end words, including the link codes, to the ledger's own words."""
 
 STATE = re.compile(r"^[A-Z]{2}$")
-REFORM = re.compile(r"^[a-z][a-z0-9_]{0,31}$")
+REFORM = re.compile(r"^[a-z][a-z0-9_]{0,39}$")
 PARAM = re.compile(r"^[a-z][a-z0-9_]*(?:\.[a-z0-9_]+){1,3}$")
 NUMBER = re.compile(r"^-?\d{1,9}(?:\.\d{1,6})?$")
 
-ReformKey = Annotated[str, StringConstraints(pattern=REFORM.pattern, max_length=32)]
+ReformKey = Annotated[str, StringConstraints(pattern=REFORM.pattern, max_length=40)]
 ParamId = Annotated[str, StringConstraints(pattern=PARAM.pattern, max_length=64)]
 OptionValue = Annotated[str, StringConstraints(max_length=64)] | int | float | bool
 RANGE_FIELDS = frozenset({"low", "central", "high", "shape"})
@@ -140,6 +140,10 @@ class _Scenario(BaseModel):
     ) = Field(default_factory=list)
     overrides: dict[ParamId, Any] = Field(default_factory=dict)
     preset: Literal["low", "central", "high"] = "central"
+    market: Literal["choice", "choice+capacity"] | None = None
+    """Package option (``engine.market``): project choice, optionally with the capacity limit."""
+    capacity_screen: bool = False
+    """Run option (``engine.capacity``): also report each reform screened for practical capacity."""
 
     @field_validator("reforms")
     @classmethod
@@ -181,6 +185,12 @@ class RunRequest(_Scenario):
         reforms: Reform keys, or key -> options.
         overrides: Ledger id -> number, range end, or a small range mapping.
         preset: ``low`` / ``central`` / ``high``: the baseline housing cycle.
+        market: Package option ``choice`` or ``choice+capacity`` (``engine.market``):
+            the package under project choice (and the shared capacity limit),
+            reported beside today's package in ``market``. Omitted: today's rules only.
+        capacity_screen: ``true`` also reports every reform and the package screened
+            for practical capacity (sewer, flood zone, steep slope; ``engine.capacity``)
+            in ``capacity``. Omitted or ``false``: today's numbers only.
         seed: Random seed (same seed, same numbers).
         draws: Monte Carlo draws, 1 to 4,000.
         explain: Attach the explanation payload (default true; false is quicker).

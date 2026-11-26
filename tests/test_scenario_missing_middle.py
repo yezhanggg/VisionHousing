@@ -86,6 +86,9 @@ GOLDEN = {
     "missing_middle.ramp_first_year_share": 0.2,
     "missing_middle.ramp_years_to_full": 3,
     "missing_middle.displacement_share": 0.25,
+    "missing_middle.baseline_replacement_probability": 0.1,
+    "missing_middle.baseline_units_per_replacement": 1,
+    "missing_middle.start_delay_years": 0,
 }
 """Every input pinned, so each stage can be worked out by hand."""
 
@@ -123,11 +126,16 @@ def test_golden_fourplex_by_hand(ledger, scenarios):
     ramp = 0.2 + 0.6 + 1 + 1 + 1  # 3.8
     assert s["redeveloped"] == pytest.approx(115.2 * 0.01 * ramp)  # 4.3776
     assert s["units"] == pytest.approx(4 * 4.3776)
-    assert s["net_units"] == pytest.approx(3 * 4.3776)  # units - 1 per project
-    assert s["net"] == pytest.approx(3 * 4.3776 * 0.75)  # 9.8496
-    assert res.net_by_year[0] == pytest.approx(9.8496 * np.array([0.2, 0.6, 1, 1, 1]) / ramp)
-    assert res.records["net"].p50 == pytest.approx(9.8496)
-    assert res.records["per_100k"].p50 == pytest.approx(9.8496 / 5 / 2500 * 100_000)
+    # Added authorizations: (4 - q x r) per lot, q = 0.1, r = 1, less 25% displacement.
+    assert s["authorized"] == pytest.approx((4 - 0.1) * 4.3776 * 0.75)  # 12.80448
+    # Net added homes: less (1 - q) x one home demolished per lot.
+    assert s["net"] == pytest.approx(12.80448 - 0.9 * 4.3776)
+    assert res.records["removed"].p50 == pytest.approx(4.3776)
+    assert res.records["baseline_on_sites"].p50 == pytest.approx(0.1 * 4.3776)
+    assert res.net_by_year[0] == pytest.approx(12.80448 * np.array([0.2, 0.6, 1, 1, 1]) / ramp)
+    assert res.net_by_year[0].sum() == pytest.approx(s["authorized"])
+    assert res.records["authorized"].p50 == pytest.approx(12.80448)
+    assert res.records["per_100k"].p50 == pytest.approx(12.80448 / 5 / 2500 * 100_000)
 
 
 def test_golden_turnover_caps_the_hazard(ledger, scenarios):
@@ -149,7 +157,9 @@ def test_golden_acquisition_premium_and_duplex(ledger, scenarios):
     res = run(tract, ledger, scenarios, overrides=changes, draws=2)
     assert res.residual_land_value[2][0] == pytest.approx(78_500)
     assert res.feasible_share[0, 0] == pytest.approx(0.28)
-    assert res.stages["net_units"][0, 0] == pytest.approx(res.stages["redeveloped"][0, 0])
+    lots = res.stages["redeveloped"][0, 0]
+    assert res.stages["units"][0, 0] == pytest.approx(2 * lots)
+    assert res.stages["net"][0, 0] == pytest.approx(res.stages["authorized"][0, 0] - 0.9 * lots)
 
 
 def test_golden_mix_weights_are_normalised(ledger, scenarios):
@@ -327,8 +337,12 @@ def test_records_carry_formula_ids_and_sources(ledger, scenarios, tracts):
     assert "missing_middle.fit_share" in res.records["fit"].assumption_ids
     assert "fees.fee_total_per_unit" in res.records["feasible"].assumption_ids
     assert "missing_middle.acquisition_premium" in res.records["feasible"].assumption_ids
-    assert "missing_middle.demolished_per_project" in res.records["net_units"].assumption_ids
-    assert "missing_middle.displacement_share" in res.records["net"].assumption_ids
+    assert "missing_middle.demolished_per_project" in res.records["net"].assumption_ids
+    assert "missing_middle.displacement_share" in res.records["authorized"].assumption_ids
+    assert (
+        "missing_middle.baseline_replacement_probability"
+        in res.records["authorized"].assumption_ids
+    )
     assert "missing_middle.units_per_project" not in res.records["net"].assumption_ids
     for pid in res.records["net"].assumption_ids:
         assert pid in ledger
@@ -342,7 +356,7 @@ def test_tract_table_and_counties_add_up(ledger, scenarios, tracts):
     counties = res.county_records("net")
     per_county = sum(res.stages["net"][:, res.counties == c].sum(axis=1) for c in counties)
     assert per_county == pytest.approx(res.stages["net"].sum(axis=1))
-    assert res.net_by_year.sum(axis=1) == pytest.approx(res.stages["net"].sum(axis=1))
+    assert res.net_by_year.sum(axis=1) == pytest.approx(res.stages["authorized"].sum(axis=1))
 
 
 def test_result_shape_matches_the_adu_module(ledger, scenarios, tracts):

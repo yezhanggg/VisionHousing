@@ -1,5 +1,14 @@
 name: CI
 
+# Every push and pull request runs four jobs in parallel:
+#   checks  - lint, licence audit, secret scan, generated-document check, SBOM check
+#   tests   - the offline test suite on the built-in synthetic state (Testland),
+#             installed WITHOUT the optional "geo" extra to prove it is optional
+#   web     - npm ci, npm audit (high or critical fails), both Vite builds
+#   e2e     - the browser checks (Playwright + Chromium) against the real app
+# Together, "tests" and "e2e" run exactly what `make test` runs. No job needs
+# fetched data, a key or a secret.
+
 on:
   push:
   pull_request:
@@ -13,10 +22,78 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  verify:
-    name: make verify (Python 3.12)
+  checks:
+    name: Lint, licences, secrets, docs, SBOM
     runs-on: ubuntu-latest
-    timeout-minutes: 30
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - name: Install every locked package (all groups, so each licence can be read)
+        run: uv sync --locked --all-groups
+      - name: Lint and formatting
+        run: make lint
+      - name: Licence audit (permissive licences only)
+        run: make licence
+      - name: Secret scan
+        run: make secrets
+      - name: Generated document tables are up to date
+        run: make docs
+      - name: SBOM is up to date with the lockfiles
+        run: make sbom-check
+
+  tests:
+    name: make test (Testland, default groups only)
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+          enable-cache: true
+      - name: Install the locked packages (default groups)
+        run: uv sync --locked
+      - name: Offline tests (browser checks run in the e2e job)
+        run: make test-unit
+
+  web:
+    name: Web packages, audit and builds
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v5
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v5
+        with:
+          node-version: "22"
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - name: Install web packages from package-lock.json
+        run: npm ci
+        working-directory: web
+      - name: No high or critical advisories
+        run: npm audit --audit-level=high
+        working-directory: web
+      - name: Build the served interface
+        run: npm run build
+        working-directory: web
+      - name: Build the static site
+        run: npm run build:static
+        working-directory: web
+
+  e2e:
+    name: End-to-end browser checks
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
     steps:
       - uses: actions/checkout@v5
         with:
@@ -30,9 +107,12 @@ jobs:
           node-version: "22"
           cache: npm
           cache-dependency-path: web/package-lock.json
-      - name: Set up (uv.lock, the test browser, web packages from package-lock.json)
-        run: make setup
-      - name: Verify (lint, tests, licence audit, secret scan)
-        run: make verify
-      - name: Web packages have no high or critical advisories
-        run: cd web && npm audit --audit-level=high
+      - name: Install the locked packages (default groups)
+        run: uv sync --locked
+      - name: Install web packages from package-lock.json
+        run: npm ci
+        working-directory: web
+      - name: Install the Playwright browser (Chromium and its system libraries)
+        run: uv run --locked playwright install --with-deps chromium
+      - name: Browser checks
+        run: make test-browser

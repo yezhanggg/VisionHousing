@@ -1,0 +1,274 @@
+# Cross-state comparison records: MA.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ma.c40a_s3a_mbta_communities
+  kind: policy
+  state: MA
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - missing_middle
+  title: Massachusetts MBTA Communities law (M.G.L. c. 40A, § 3A)
+  citation: M.G.L. c. 40A, § 3A, inserted by St. 2020, c. 358, § 18
+  url: https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3A
+  session: null
+  bill: null
+  enacted_date: 2021-01-14
+  effective_dates: []
+  geographic_scope: MBTA communities. Each must have at least one zoning district of reasonable size that
+    allows multifamily housing as of right at a gross density of at least 15 units per acre, with no age
+    restrictions, suitable for families with children, and within 0.5 mile of a commuter rail, subway,
+    ferry or bus station if applicable.
+  exclusions:
+  - Density is subject to wetlands (c. 131 § 40) and Title 5 septic limits
+  implementation_status: legally_effective
+  litigation:
+    status: decided
+    note: Attorney General v. Town of Milton (SJC, reported decided 2025-01-08). See ma.ag_v_milton_2025,
+      which is unverified.
+    citation: SJC-13580
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Noncompliant communities lose eligibility for the Housing Choice Initiative, Local Capital Projects
+    Fund, MassWorks and HousingWorks.
+  - EOHLC compliance guidelines are required by statute. The EOHLC compliance-status page (mass.gov) returned
+    HTTP 403, so counts of compliant, interim and noncompliant communities and the deadlines are NOT recorded.
+  - Zoning capacity is not permits or construction.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Statute text read on malegislature.gov. St. 2020, c. 358 on malegislature.gov shows
+    § 18 inserting § 3A and 'Approved (in part), January 14, 2021'. The mass.gov compliance page could
+    not be read (403).
+  sources:
+  - label: M.G.L. c. 40A § 3A
+    url: https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3A
+    official: true
+  - label: St. 2020, c. 358
+    url: https://malegislature.gov/Laws/SessionLaws/Acts/2020/Chapter358
+    official: true
+  - label: EOHLC MBTA Communities compliance status (not readable, 403)
+    url: https://www.mass.gov/info-details/mbta-communities-compliance-status
+    official: true
+  discovered_via: addendum
+- id: ma.ag_v_milton_2025
+  kind: policy
+  state: MA
+  jurisdiction: statewide
+  policy_types:
+  - court_decision
+  - tod
+  title: 'Attorney General v. Town of Milton (SJC 2025): MBTA Communities law upheld; guidelines must
+    be issued as regulations'
+  citation: Attorney General v. Town of Milton, SJC-13580 (Mass. Jan. 8, 2025)
+  url: https://www.mass.gov/doc/attorney-general-v-town-of-milton-executive-office-of-housing-and-livable-communities-sjc-13580/download
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates:
+  - date: '2025-01-08'
+    applies_to: Decision issued; § 3A enforceable, guidelines ineffective until re-promulgated
+  geographic_scope: All MBTA communities
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: decided
+    note: Supreme Judicial Court, argued 2024-10-07, decided 2025-01-08. Held that § 3A is constitutional
+      and the Attorney General may enforce it (including equitable relief beyond the act's penalties).
+      Held that the agency's compliance guidelines were not issued under the Administrative Procedure
+      Act and so had no effect until promulgated as regulations; other claims dismissed.
+    citation: SJC-13580
+    url: https://www.mass.gov/doc/attorney-general-v-town-of-milton-executive-office-of-housing-and-livable-communities-sjc-13580/download
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The regulations re-issued after the decision were not read for this record.
+  - The decision changes the enforcement path, not the zoning in any town by itself.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Slip opinion PDF on mass.gov read: docket SJC-13580, dates ''October 7, 2024. -
+    January 8, 2025.'', the conclusion and the order. Attorney General statement page dated 1/08/2025.'
+  sources:
+  - label: SJC slip opinion (mass.gov)
+    url: https://www.mass.gov/doc/attorney-general-v-town-of-milton-executive-office-of-housing-and-livable-communities-sjc-13580/download
+    official: true
+  - label: Attorney General statement, 2025-01-08
+    url: https://www.mass.gov/news/ag-campbell-issues-statement-on-victory-in-attorney-general-v-town-of-milton
+    official: true
+  discovered_via: addendum
+- id: ma.adu_by_right_ch150_2024
+  kind: policy
+  state: MA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  title: Massachusetts by-right ADU law (Affordable Homes Act)
+  citation: St. 2024, c. 150, §§ 7-8 (amending M.G.L. c. 40A §§ 1A and 3); effective date set by § 143
+  url: https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter150
+  session: 2023-2024 (193rd General Court)
+  bill: H.4977
+  enacted_date: 2024-08-06
+  effective_dates:
+  - date: 2025-02-02
+    applies_to: § 8 by-right ADU paragraph of c. 40A § 3. § 143 makes it effective 180 days after the
+      act, which was an emergency law approved 2024-08-06.
+  geographic_scope: All municipalities. One ADU per lot in single-family residential zoning districts
+    may not be prohibited, unreasonably restricted, or subjected to a special permit. ADU limited to the
+    smaller of half the principal dwelling's floor area or 900 sq ft.
+  exclusions:
+  - Short-term rentals may be restricted or banned
+  - A second or further ADU still needs a special permit
+  - 'Reasonable rules allowed: Title 5 septic, site plan review, setbacks, bulk and height'
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'CORRECTION: the by-right ADU provision is § 8 (definition in § 7), with the effective date in § 143.
+    It is not § 135, which concerns EOHLC guidance under c. 23B § 33(g).'
+  - No owner-occupancy requirement. At most 1 added parking space, and none within 0.5 mile of a commuter
+    rail, subway, ferry or bus station.
+  - EOHLC may issue guidelines or regulations (760 CMR 71 was not checked, because mass.gov is blocked).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Session law text on malegislature.gov shows §§ 7-8, the emergency preamble, § 143
+    ('Sections 8, 46, 48 and 49 shall take effect 180 days after the effective date of this act') and
+    'Approved, August 6, 2024'. 2024-08-06 plus 180 days is 2025-02-02.
+  sources:
+  - label: St. 2024, c. 150 (Affordable Homes Act)
+    url: https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter150
+    official: true
+  discovered_via: addendum
+- id: ma.adu_tracker_2025_2026
+  kind: study
+  state: MA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'Massachusetts ADU tracker: applications and approvals since the by-right ADU law'
+  citation: EOHLC Accessory Dwelling Unit Tracker (mass.gov)
+  url: https://www.mass.gov/info-details/accessory-dwelling-unit-tracker
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 'Municipalities answering the state''s building-official surveys: 293 answered one
+    or both 2025 surveys; 265 answered the July 2026 survey (January-June 2026)'
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: ADU building-permit applications and ADU approvals (building permits issued) reported
+    by local building officials
+  denominator: Responding municipalities (293 for 2025, 265 for H1 2026; not all 351)
+  horizon: January 2025 through June 2026 (law effective 2025-02-02)
+  observed_result:
+    summary: 2,824 ADU applications submitted and 2,084 ADUs approved (building permits issued) from January
+      2025 to June 2026; about 50% of approvals were detached and 50% attached or interior; 246 municipalities
+      reported at least one approval. Approvals are permits, not completions; a few have certificates
+      of occupancy.
+    value: 2084
+    unit: ADUs approved (building permits issued)
+    source_label: EOHLC ADU tracker, 2026 mid-year survey
+    source_url: https://www.mass.gov/info-details/accessory-dwelling-unit-tracker
+  identification: descriptive
+  caveats:
+  - 'Survey cohorts differ: 2025 figures combine a July 2025 mid-year and a January 2026 full-year survey
+    (293 respondents); 2026 figures come from 265 respondents, so totals are not a fixed panel.'
+  - Applications and approvals in the same period are different cohorts; 2,084 / 2,824 is not an approval
+    rate.
+  - Approvals are building permits issued, not homes completed; attached/detached split is statewide only.
+  - Municipal detail is in the downloadable composite CSV (registered as ma_adu_survey).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Tracker page on mass.gov read by plain HTTPS on 2026-11-24: 2,824 applications,
+    2,084 approved, 50% detached, 246 municipalities, survey respondents 293 (2025) and 265 (July 2026).'
+  sources:
+  - label: EOHLC ADU tracker
+    url: https://www.mass.gov/info-details/accessory-dwelling-unit-tracker
+    official: true
+  - label: ADU survey 2026 mid-year composite (CSV)
+    url: https://www.mass.gov/files/csv/2026-08/ADUSurvey2026Midyear_DownloadableComposite.csv
+    official: true
+  discovered_via: addendum
+- id: ma.adu_financing_masshousing
+  kind: policy
+  state: MA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - fees
+  title: 'Massachusetts state ADU financing: MassHousing ADU Loan Program'
+  citation: MassHousing Accessory Dwelling Unit Loan Program (ADULP), announced 2026-01-14
+  url: https://www.masshousing.com/press/2026-01-14_adu-loan-program
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Massachusetts owner-occupants of single-family homes with household income up to 135%
+    of AMI
+  exclusions:
+  - Construction only; plans and permits must be in hand
+  - Projects started before loan closing are not eligible
+  implementation_status: unknown
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Loans of up to $250,000 for detached and $150,000 for attached ADUs: a 20-year fixed-rate second
+    mortgage plus zero-interest deferred funding. The 2026-01-14 release said applications would open
+    ''later this spring'', and the actual opening date was not confirmed.'
+  - The reported $5 million state ADU program (titled in mass.gov listings as 'Governor Healey announces
+    $5 million to make it easier and more affordable to build ADUs'; a search summary described it as
+    a Community ADU Pilot for affordable-housing developers) could NOT be confirmed because mass.gov returned
+    403. MassHousing pages do not mention $5 million or a total loan fund size.
+  - MassHousing also cites a separate $10 million Massachusetts Housing Partnership technical-assistance
+    program.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: MassHousing release dated 2026-01-14 and the masshousing.com/adu page show the loan
+    program terms. The $5 million figure is unverified (see caveats). Only the MassHousing program is
+    treated as verified.
+  sources:
+  - label: MassHousing release 2026-01-14
+    url: https://www.masshousing.com/press/2026-01-14_adu-loan-program
+    official: true
+  - label: MassHousing ADU Loan Program page
+    url: https://www.masshousing.com/adu
+    official: true
+  - label: mass.gov $5 million ADU announcement (403, not read)
+    url: https://www.mass.gov/news/governor-healey-announces-5-million-to-make-it-easier-and-more-affordable-to-build-adus
+    official: true
+  discovered_via: addendum

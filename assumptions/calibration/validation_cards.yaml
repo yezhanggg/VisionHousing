@@ -1,0 +1,4941 @@
+# Calibration (validation): validation cards (generated; do not edit).
+# Written by `visionhousing validate-cards`. Names the study, origins, target,
+# geography and release behind every published coverage count, and adds an interval
+# score, signed error, error by size, a non-overlapping subset and a fold timeline
+# (block validation_card_scores in assumptions/validation_cards.yaml). Descriptive;
+# changes no estimate. Method: docs/modules/validation_cards.md.
+
+version: 1
+id: validation_cards_2026_11
+label: 'Validation cards: what each coverage count refers to'
+status: validation
+use: Descriptive. The validation API returns each state's cards beside its counts; changes no estimate.
+provenance:
+  summary: Study, origins, target, geography and release behind each published coverage count, with an
+    interval score, signed error, error by size, a non-overlapping subset and a fold timeline for the
+    re-derived studies.
+  measured_on: '2026-11-25'
+  method: visionhousing.validation.cards; block validation_card_scores in assumptions/validation_cards.yaml;
+    cases re-derived with the studies' own building blocks (read-only); see docs/modules/validation_cards.md.
+  generated_by: visionhousing validate-cards
+  sources:
+  - id: bps_county_annual
+    citation: U.S. Census Bureau, Building Permits Survey, county annual files
+    url: https://www2.census.gov/econ/bps/County/
+    licence: Public domain (U.S. government work)
+  limits:
+  - 'Rolling start years overlap: the non-overlapping subsets hold one to three cases per state, so they
+    show how little the overlapping counts certify, not a better coverage estimate.'
+  - The projection rule each study scores (and the baseline's bias-correction and widening settings) was
+    chosen on the full record, which includes the evaluation years of every fold, so the counts are somewhat
+    favourable. Not rebuilt now.
+  - The baseline contest that chose each state's rule describes counties with today's place types (county
+    typology and tract mix), not the types known at each origin. County ranges use size classes computed
+    at each origin. Origin-specific typologies are not rebuilt in this release.
+  - The national state-total calibration is listed with its counts only; its cases were not re-derived
+    in this release.
+preregistration:
+- block: validation_card_scores
+  file: assumptions/validation_cards.yaml
+  sha256: 0085f334612a5d5e856392e2bfb7f40ef27c0c02c4d019e16d13db0c1c8962f8
+  recorded_on: '2026-11-25'
+  verified: true
+cross_state:
+  note: 'Error by size for state cards: each study''s states ordered from the smallest to the largest
+    mean five-year total over the scored cases.'
+  studies:
+    baseline_reliability_state:
+    - state: VT
+      card: baseline_reliability.state.VT
+      quote: 8/8
+      actual_mean: 10477.25
+      interval_score_mean: 0.9635
+      signed_log_error_median: 0.273
+      non_overlapping_primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+    - state: WY
+      card: baseline_reliability.state.WY
+      quote: 8/8
+      actual_mean: 10491.625
+      interval_score_mean: 1.2764
+      signed_log_error_median: 0.1016
+      non_overlapping_primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+    - state: MA
+      card: baseline_reliability.state.MA
+      quote: 7/8
+      actual_mean: 84207.5
+      interval_score_mean: 1.1607
+      signed_log_error_median: 0.1158
+      non_overlapping_primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+    - state: PA
+      card: baseline_reliability.state.PA
+      quote: 8/8
+      actual_mean: 137152.125
+      interval_score_mean: 0.7512
+      signed_log_error_median: 0.2628
+      non_overlapping_primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+    state_holdouts:
+    - state: VT
+      card: state_holdouts.state.VT
+      quote: 11/11
+      actual_mean: 9830.8182
+      interval_score_mean: 0.7209
+      signed_log_error_median: 0.2437
+      non_overlapping_primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 3
+        coverage: 1.0
+    - state: WY
+      card: state_holdouts.state.WY
+      quote: 10/11
+      actual_mean: 10359.9091
+      interval_score_mean: 1.2099
+      signed_log_error_median: -0.123
+      non_overlapping_primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 2
+        coverage: 0.6667
+    - state: MA
+      card: state_holdouts.state.MA
+      quote: 6/11
+      actual_mean: 81213.4545
+      interval_score_mean: 1.7324
+      signed_log_error_median: 0.1664
+      non_overlapping_primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 2
+        coverage: 0.6667
+cards:
+- id: baseline_reliability.state.PA
+  quote: 8/8
+  study: Measured reliability of the baseline range (state range)
+  study_key: baseline_reliability_state
+  command: visionhousing validate-baseline-reliability
+  method: The state range as shipped, rebuilt at each past start year from the state's own earlier state-total
+    errors (centred, then widened as the engine widens it).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: state
+    area: PA
+  target: Five-year total of units authorized by building permits in the state (BPS county files added
+    up)
+  rule_scored: top_down_share
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived:
+      cases: 8
+      covered: 8
+    matches: true
+  scores:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+    above: 0
+    below: 0
+    interval_score_mean: 0.7512
+    interval_score_median: 0.7231
+    signed_log_error_median: 0.2628
+    signed_log_error_mean: 0.2482
+    width_mean: 0.9621
+    actual_mean: 137152.125
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 0.7512
+      miss_mean: 0.0
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2018
+        origins:
+        - 2013
+        - 2018
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2017
+        origins:
+        - 2012
+        - 2017
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2016
+        origins:
+        - 2016
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      - anchor: 2015
+        origins:
+        - 2015
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      min: 1.0
+      max: 1.0
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: baseline_reliability.county.PA
+  quote: 545/1004
+  study: Measured reliability of the baseline range (county ranges)
+  study_key: baseline_reliability_county
+  command: visionhousing validate-baseline-reliability
+  method: Each county's range from other counties' earlier errors in its size class (the contest's leave-one-county-out
+    test, out of time).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: county
+    area: PA
+    groups: size class at each origin
+  target: Five-year total of units authorized by building permits in each county
+  rule_scored: top_down_share
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 1004
+    covered: 545
+    coverage: 0.5428
+  parity:
+    rederived:
+      cases: 1004
+      covered: 545
+    matches: true
+  scores:
+    cases: 1004
+    covered: 545
+    coverage: 0.5428
+    above: 118
+    below: 341
+    interval_score_mean: 4.8104
+    interval_score_median: 1.3887
+    signed_log_error_median: -0.3152
+    signed_log_error_mean: -0.3646
+    width_mean: 0.8314
+    actual_mean: 1821.5876
+    excluded_from_relative_scores: 11
+    interval_score_parts:
+      width_mean: 1.3851
+      miss_mean: 3.4253
+    by_size:
+      medium:
+        cases: 330
+        covered: 174
+        coverage: 0.5273
+        above: 32
+        below: 124
+        interval_score_mean: 4.3131
+        interval_score_median: 1.4515
+        signed_log_error_median: -0.3769
+        signed_log_error_mean: -0.4155
+        width_mean: 0.801
+        actual_mean: 652.7576
+        excluded_from_relative_scores: 0
+      large:
+        cases: 330
+        covered: 167
+        coverage: 0.5061
+        above: 54
+        below: 109
+        interval_score_mean: 5.4468
+        interval_score_median: 1.2701
+        signed_log_error_median: -0.0846
+        signed_log_error_mean: -0.2388
+        width_mean: 0.8189
+        actual_mean: 4666.7576
+        excluded_from_relative_scores: 0
+      small:
+        cases: 344
+        covered: 204
+        coverage: 0.593
+        above: 32
+        below: 108
+        interval_score_mean: 4.6727
+        interval_score_median: 1.3855
+        signed_log_error_median: -0.3898
+        signed_log_error_mean: -0.4387
+        width_mean: 0.8741
+        actual_mean: 213.4709
+        excluded_from_relative_scores: 11
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 200
+        covered: 123
+        coverage: 0.615
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 200
+        covered: 123
+        coverage: 0.615
+      - anchor: 2018
+        origins:
+        - 2008
+        - 2013
+        - 2018
+        cases: 201
+        covered: 110
+        coverage: 0.5473
+      - anchor: 2017
+        origins:
+        - 2007
+        - 2012
+        - 2017
+        cases: 201
+        covered: 108
+        coverage: 0.5373
+      - anchor: 2016
+        origins:
+        - 2006
+        - 2011
+        - 2016
+        cases: 201
+        covered: 110
+        coverage: 0.5473
+      - anchor: 2015
+        origins:
+        - 2005
+        - 2010
+        - 2015
+        cases: 201
+        covered: 94
+        coverage: 0.4677
+      min: 0.4677
+      max: 0.615
+  origin_set:
+    origins:
+    - 2005
+    - 2006
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2005
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2005
+    train:
+    - 1990
+    - 2005
+    train_errors_from_origins_up_to: 1999
+    gap:
+    - 2006
+    - 2006
+    evaluation:
+    - 2007
+    - 2011
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2006
+    train:
+    - 1990
+    - 2006
+    train_errors_from_origins_up_to: 2000
+    gap:
+    - 2007
+    - 2007
+    evaluation:
+    - 2008
+    - 2012
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2007
+    train:
+    - 1990
+    - 2007
+    train_errors_from_origins_up_to: 2001
+    gap:
+    - 2008
+    - 2008
+    evaluation:
+    - 2009
+    - 2013
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2008
+    train:
+    - 1990
+    - 2008
+    train_errors_from_origins_up_to: 2002
+    gap:
+    - 2009
+    - 2009
+    evaluation:
+    - 2010
+    - 2014
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2009
+    train:
+    - 1990
+    - 2009
+    train_errors_from_origins_up_to: 2003
+    gap:
+    - 2010
+    - 2010
+    evaluation:
+    - 2011
+    - 2015
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2010
+    train:
+    - 1990
+    - 2010
+    train_errors_from_origins_up_to: 2004
+    gap:
+    - 2011
+    - 2011
+    evaluation:
+    - 2012
+    - 2016
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2011
+    train:
+    - 1990
+    - 2011
+    train_errors_from_origins_up_to: 2005
+    gap:
+    - 2012
+    - 2012
+    evaluation:
+    - 2013
+    - 2017
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: baseline_reliability.state.VT
+  quote: 8/8
+  study: Measured reliability of the baseline range (state range)
+  study_key: baseline_reliability_state
+  command: visionhousing validate-baseline-reliability
+  method: The state range as shipped, rebuilt at each past start year from the state's own earlier state-total
+    errors (centred, then widened as the engine widens it).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: state
+    area: VT
+  target: Five-year total of units authorized by building permits in the state (BPS county files added
+    up)
+  rule_scored: shrink_to_group
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived:
+      cases: 8
+      covered: 8
+    matches: true
+  scores:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+    above: 0
+    below: 0
+    interval_score_mean: 0.9635
+    interval_score_median: 0.9795
+    signed_log_error_median: 0.273
+    signed_log_error_mean: 0.2826
+    width_mean: 1.2794
+    actual_mean: 10477.25
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 0.9635
+      miss_mean: 0.0
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2018
+        origins:
+        - 2013
+        - 2018
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2017
+        origins:
+        - 2012
+        - 2017
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2016
+        origins:
+        - 2016
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      - anchor: 2015
+        origins:
+        - 2015
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      min: 1.0
+      max: 1.0
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: baseline_reliability.county.VT
+  quote: 103/210
+  study: Measured reliability of the baseline range (county ranges)
+  study_key: baseline_reliability_county
+  command: visionhousing validate-baseline-reliability
+  method: Each county's range from other counties' earlier errors in its size class (the contest's leave-one-county-out
+    test, out of time).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: county
+    area: VT
+    groups: size class at each origin
+  target: Five-year total of units authorized by building permits in each county
+  rule_scored: shrink_to_group
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 210
+    covered: 103
+    coverage: 0.4905
+  parity:
+    rederived:
+      cases: 210
+      covered: 103
+    matches: true
+  scores:
+    cases: 210
+    covered: 103
+    coverage: 0.4905
+    above: 33
+    below: 74
+    interval_score_mean: 7.8552
+    interval_score_median: 2.1338
+    signed_log_error_median: -0.0996
+    signed_log_error_mean: -0.2159
+    width_mean: 1.1015
+    actual_mean: 648.1095
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 1.5869
+      miss_mean: 6.2683
+    by_size:
+      medium:
+        cases: 75
+        covered: 33
+        coverage: 0.44
+        above: 16
+        below: 26
+        interval_score_mean: 5.9832
+        interval_score_median: 2.1195
+        signed_log_error_median: -0.1423
+        signed_log_error_mean: -0.1517
+        width_mean: 0.9209
+        actual_mean: 490.8133
+        excluded_from_relative_scores: 0
+      small:
+        cases: 75
+        covered: 37
+        coverage: 0.4933
+        above: 6
+        below: 32
+        interval_score_mean: 12.1059
+        interval_score_median: 4.1382
+        signed_log_error_median: -0.5031
+        signed_log_error_mean: -0.3987
+        width_mean: 1.5218
+        actual_mean: 183.8667
+        excluded_from_relative_scores: 0
+      large:
+        cases: 60
+        covered: 33
+        coverage: 0.55
+        above: 11
+        below: 16
+        interval_score_mean: 4.8819
+        interval_score_median: 1.0059
+        signed_log_error_median: 0.1011
+        signed_log_error_mean: -0.0677
+        width_mean: 0.8017
+        actual_mean: 1425.0333
+        excluded_from_relative_scores: 0
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 42
+        covered: 23
+        coverage: 0.5476
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 42
+        covered: 23
+        coverage: 0.5476
+      - anchor: 2018
+        origins:
+        - 2008
+        - 2013
+        - 2018
+        cases: 42
+        covered: 22
+        coverage: 0.5238
+      - anchor: 2017
+        origins:
+        - 2007
+        - 2012
+        - 2017
+        cases: 42
+        covered: 20
+        coverage: 0.4762
+      - anchor: 2016
+        origins:
+        - 2006
+        - 2011
+        - 2016
+        cases: 42
+        covered: 21
+        coverage: 0.5
+      - anchor: 2015
+        origins:
+        - 2005
+        - 2010
+        - 2015
+        cases: 42
+        covered: 17
+        coverage: 0.4048
+      min: 0.4048
+      max: 0.5476
+  origin_set:
+    origins:
+    - 2005
+    - 2006
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2005
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2005
+    train:
+    - 1990
+    - 2005
+    train_errors_from_origins_up_to: 1999
+    gap:
+    - 2006
+    - 2006
+    evaluation:
+    - 2007
+    - 2011
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2006
+    train:
+    - 1990
+    - 2006
+    train_errors_from_origins_up_to: 2000
+    gap:
+    - 2007
+    - 2007
+    evaluation:
+    - 2008
+    - 2012
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2007
+    train:
+    - 1990
+    - 2007
+    train_errors_from_origins_up_to: 2001
+    gap:
+    - 2008
+    - 2008
+    evaluation:
+    - 2009
+    - 2013
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2008
+    train:
+    - 1990
+    - 2008
+    train_errors_from_origins_up_to: 2002
+    gap:
+    - 2009
+    - 2009
+    evaluation:
+    - 2010
+    - 2014
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2009
+    train:
+    - 1990
+    - 2009
+    train_errors_from_origins_up_to: 2003
+    gap:
+    - 2010
+    - 2010
+    evaluation:
+    - 2011
+    - 2015
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2010
+    train:
+    - 1990
+    - 2010
+    train_errors_from_origins_up_to: 2004
+    gap:
+    - 2011
+    - 2011
+    evaluation:
+    - 2012
+    - 2016
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2011
+    train:
+    - 1990
+    - 2011
+    train_errors_from_origins_up_to: 2005
+    gap:
+    - 2012
+    - 2012
+    evaluation:
+    - 2013
+    - 2017
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: baseline_reliability.state.MA
+  quote: 7/8
+  study: Measured reliability of the baseline range (state range)
+  study_key: baseline_reliability_state
+  command: visionhousing validate-baseline-reliability
+  method: The state range as shipped, rebuilt at each past start year from the state's own earlier state-total
+    errors (centred, then widened as the engine widens it).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: state
+    area: MA
+  target: Five-year total of units authorized by building permits in the state (BPS county files added
+    up)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 8
+    covered: 7
+    coverage: 0.875
+  parity:
+    rederived:
+      cases: 8
+      covered: 7
+    matches: true
+  scores:
+    cases: 8
+    covered: 7
+    coverage: 0.875
+    above: 1
+    below: 0
+    interval_score_mean: 1.1607
+    interval_score_median: 1.1234
+    signed_log_error_median: 0.1158
+    signed_log_error_mean: 0.1624
+    width_mean: 1.2982
+    actual_mean: 84207.5
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 1.1347
+      miss_mean: 0.026
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2018
+        origins:
+        - 2013
+        - 2018
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2017
+        origins:
+        - 2012
+        - 2017
+        cases: 2
+        covered: 1
+        coverage: 0.5
+      - anchor: 2016
+        origins:
+        - 2016
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      - anchor: 2015
+        origins:
+        - 2015
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      min: 0.5
+      max: 1.0
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: baseline_reliability.county.MA
+  quote: 97/210
+  study: Measured reliability of the baseline range (county ranges)
+  study_key: baseline_reliability_county
+  command: visionhousing validate-baseline-reliability
+  method: Each county's range from other counties' earlier errors in its size class (the contest's leave-one-county-out
+    test, out of time).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: county
+    area: MA
+    groups: size class at each origin
+  target: Five-year total of units authorized by building permits in each county
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 210
+    covered: 97
+    coverage: 0.4619
+  parity:
+    rederived:
+      cases: 210
+      covered: 97
+    matches: true
+  scores:
+    cases: 210
+    covered: 97
+    coverage: 0.4619
+    above: 58
+    below: 55
+    interval_score_mean: 4.1979
+    interval_score_median: 1.425
+    signed_log_error_median: 0.019
+    signed_log_error_mean: -0.0596
+    width_mean: 0.8326
+    actual_mean: 5221.2
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 0.93
+      miss_mean: 3.2679
+    by_size:
+      medium:
+        cases: 75
+        covered: 47
+        coverage: 0.6267
+        above: 8
+        below: 20
+        interval_score_mean: 4.4932
+        interval_score_median: 1.3468
+        signed_log_error_median: -0.004
+        signed_log_error_mean: -0.0541
+        width_mean: 0.9977
+        actual_mean: 4619.1867
+        excluded_from_relative_scores: 0
+      small:
+        cases: 75
+        covered: 24
+        coverage: 0.32
+        above: 28
+        below: 23
+        interval_score_mean: 5.0792
+        interval_score_median: 1.7756
+        signed_log_error_median: 0.0503
+        signed_log_error_mean: -0.0819
+        width_mean: 0.7554
+        actual_mean: 808.08
+        excluded_from_relative_scores: 0
+      large:
+        cases: 60
+        covered: 26
+        coverage: 0.4333
+        above: 22
+        below: 12
+        interval_score_mean: 2.7273
+        interval_score_median: 1.3781
+        signed_log_error_median: 0.0693
+        signed_log_error_mean: -0.0386
+        width_mean: 0.7226
+        actual_mean: 11490.1167
+        excluded_from_relative_scores: 0
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 42
+        covered: 26
+        coverage: 0.619
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 42
+        covered: 26
+        coverage: 0.619
+      - anchor: 2018
+        origins:
+        - 2008
+        - 2013
+        - 2018
+        cases: 42
+        covered: 23
+        coverage: 0.5476
+      - anchor: 2017
+        origins:
+        - 2007
+        - 2012
+        - 2017
+        cases: 42
+        covered: 15
+        coverage: 0.3571
+      - anchor: 2016
+        origins:
+        - 2006
+        - 2011
+        - 2016
+        cases: 42
+        covered: 16
+        coverage: 0.381
+      - anchor: 2015
+        origins:
+        - 2005
+        - 2010
+        - 2015
+        cases: 42
+        covered: 17
+        coverage: 0.4048
+      min: 0.3571
+      max: 0.619
+  origin_set:
+    origins:
+    - 2005
+    - 2006
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2005
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2005
+    train:
+    - 1990
+    - 2005
+    train_errors_from_origins_up_to: 1999
+    gap:
+    - 2006
+    - 2006
+    evaluation:
+    - 2007
+    - 2011
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2006
+    train:
+    - 1990
+    - 2006
+    train_errors_from_origins_up_to: 2000
+    gap:
+    - 2007
+    - 2007
+    evaluation:
+    - 2008
+    - 2012
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2007
+    train:
+    - 1990
+    - 2007
+    train_errors_from_origins_up_to: 2001
+    gap:
+    - 2008
+    - 2008
+    evaluation:
+    - 2009
+    - 2013
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2008
+    train:
+    - 1990
+    - 2008
+    train_errors_from_origins_up_to: 2002
+    gap:
+    - 2009
+    - 2009
+    evaluation:
+    - 2010
+    - 2014
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2009
+    train:
+    - 1990
+    - 2009
+    train_errors_from_origins_up_to: 2003
+    gap:
+    - 2010
+    - 2010
+    evaluation:
+    - 2011
+    - 2015
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2010
+    train:
+    - 1990
+    - 2010
+    train_errors_from_origins_up_to: 2004
+    gap:
+    - 2011
+    - 2011
+    evaluation:
+    - 2012
+    - 2016
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2011
+    train:
+    - 1990
+    - 2011
+    train_errors_from_origins_up_to: 2005
+    gap:
+    - 2012
+    - 2012
+    evaluation:
+    - 2013
+    - 2017
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: baseline_reliability.state.WY
+  quote: 8/8
+  study: Measured reliability of the baseline range (state range)
+  study_key: baseline_reliability_state
+  command: visionhousing validate-baseline-reliability
+  method: The state range as shipped, rebuilt at each past start year from the state's own earlier state-total
+    errors (centred, then widened as the engine widens it).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: state
+    area: WY
+  target: Five-year total of units authorized by building permits in the state (BPS county files added
+    up)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived:
+      cases: 8
+      covered: 8
+    matches: true
+  scores:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+    above: 0
+    below: 0
+    interval_score_mean: 1.2764
+    interval_score_median: 1.2688
+    signed_log_error_median: 0.1016
+    signed_log_error_mean: 0.0569
+    width_mean: 1.3786
+    actual_mean: 10491.625
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 1.2764
+      miss_mean: 0.0
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2014
+        - 2019
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2018
+        origins:
+        - 2013
+        - 2018
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2017
+        origins:
+        - 2012
+        - 2017
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2016
+        origins:
+        - 2016
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      - anchor: 2015
+        origins:
+        - 2015
+        cases: 1
+        covered: 1
+        coverage: 1.0
+      min: 1.0
+      max: 1.0
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: baseline_reliability.county.WY
+  quote: 205/340
+  study: Measured reliability of the baseline range (county ranges)
+  study_key: baseline_reliability_county
+  command: visionhousing validate-baseline-reliability
+  method: Each county's range from other counties' earlier errors in its size class (the contest's leave-one-county-out
+    test, out of time).
+  results_file: assumptions/calibration/baseline_reliability.yaml
+  preregistered_block: baseline_reliability
+  geography:
+    level: county
+    area: WY
+    groups: size class at each origin
+  target: Five-year total of units authorized by building permits in each county
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: null
+    results_id: baseline_reliability_2026_11
+  published:
+    cases: 340
+    covered: 205
+    coverage: 0.6029
+  parity:
+    rederived:
+      cases: 340
+      covered: 205
+    matches: true
+  scores:
+    cases: 340
+    covered: 205
+    coverage: 0.6029
+    above: 5
+    below: 130
+    interval_score_mean: 10.7613
+    interval_score_median: 3.2038
+    signed_log_error_median: -0.1384
+    signed_log_error_mean: -0.2592
+    width_mean: 2.4368
+    actual_mean: 474.0588
+    excluded_from_relative_scores: 2
+    interval_score_parts:
+      width_mean: 4.6846
+      miss_mean: 6.0767
+    by_size:
+      large:
+        cases: 105
+        covered: 66
+        coverage: 0.6286
+        above: 0
+        below: 39
+        interval_score_mean: 5.5502
+        interval_score_median: 1.7728
+        signed_log_error_median: -0.1086
+        signed_log_error_mean: -0.2172
+        width_mean: 1.4531
+        actual_mean: 1147.0762
+        excluded_from_relative_scores: 0
+      small:
+        cases: 115
+        covered: 66
+        coverage: 0.5739
+        above: 2
+        below: 47
+        interval_score_mean: 16.7931
+        interval_score_median: 4.5442
+        signed_log_error_median: -0.2732
+        signed_log_error_mean: -0.3893
+        width_mean: 2.6801
+        actual_mean: 36.4348
+        excluded_from_relative_scores: 2
+      medium:
+        cases: 120
+        covered: 73
+        coverage: 0.6083
+        above: 3
+        below: 44
+        interval_score_mean: 9.6411
+        interval_score_median: 3.2349
+        signed_log_error_median: -0.0302
+        signed_log_error_mean: -0.1735
+        width_mean: 3.0683
+        actual_mean: 304.5583
+        excluded_from_relative_scores: 0
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 67
+        covered: 43
+        coverage: 0.6418
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 67
+        covered: 43
+        coverage: 0.6418
+      - anchor: 2018
+        origins:
+        - 2008
+        - 2013
+        - 2018
+        cases: 69
+        covered: 41
+        coverage: 0.5942
+      - anchor: 2017
+        origins:
+        - 2007
+        - 2012
+        - 2017
+        cases: 68
+        covered: 41
+        coverage: 0.6029
+      - anchor: 2016
+        origins:
+        - 2006
+        - 2011
+        - 2016
+        cases: 68
+        covered: 39
+        coverage: 0.5735
+      - anchor: 2015
+        origins:
+        - 2005
+        - 2010
+        - 2015
+        cases: 68
+        covered: 41
+        coverage: 0.6029
+      min: 0.5735
+      max: 0.6418
+  origin_set:
+    origins:
+    - 2005
+    - 2006
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2005
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2005
+    train:
+    - 1990
+    - 2005
+    train_errors_from_origins_up_to: 1999
+    gap:
+    - 2006
+    - 2006
+    evaluation:
+    - 2007
+    - 2011
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2006
+    train:
+    - 1990
+    - 2006
+    train_errors_from_origins_up_to: 2000
+    gap:
+    - 2007
+    - 2007
+    evaluation:
+    - 2008
+    - 2012
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2007
+    train:
+    - 1990
+    - 2007
+    train_errors_from_origins_up_to: 2001
+    gap:
+    - 2008
+    - 2008
+    evaluation:
+    - 2009
+    - 2013
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2008
+    train:
+    - 1990
+    - 2008
+    train_errors_from_origins_up_to: 2002
+    gap:
+    - 2009
+    - 2009
+    evaluation:
+    - 2010
+    - 2014
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2009
+    train:
+    - 1990
+    - 2009
+    train_errors_from_origins_up_to: 2003
+    gap:
+    - 2010
+    - 2010
+    evaluation:
+    - 2011
+    - 2015
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2010
+    train:
+    - 1990
+    - 2010
+    train_errors_from_origins_up_to: 2004
+    gap:
+    - 2011
+    - 2011
+    evaluation:
+    - 2012
+    - 2016
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2011
+    train:
+    - 1990
+    - 2011
+    train_errors_from_origins_up_to: 2005
+    gap:
+    - 2012
+    - 2012
+    evaluation:
+    - 2013
+    - 2017
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+- id: state_holdouts.state.MA
+  quote: 6/11
+  study: State confidence check (current range method, held out of time)
+  study_key: state_holdouts
+  command: visionhousing validate-state-holdouts
+  method: The state's own state-total error record blended toward Pennsylvania's, only widened, scored
+    with one fixed rule for every state (not each state's shipped rule).
+  results_file: assumptions/calibration/state_holdouts.yaml
+  preregistered_block: state_holdout_check
+  geography:
+    level: state
+    area: MA
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/co{year}a.txt
+    results_measured_on: '2026-11-24'
+    results_id: state_holdouts_2026_11
+  published:
+    cases: 11
+    covered: 6
+    coverage: 0.5455
+  parity:
+    rederived:
+      cases: 11
+      covered: 6
+    matches: true
+  scores:
+    cases: 11
+    covered: 6
+    coverage: 0.5455
+    above: 5
+    below: 0
+    interval_score_mean: 1.7324
+    interval_score_median: 1.2442
+    signed_log_error_median: 0.1664
+    signed_log_error_mean: 0.2395
+    width_mean: 0.865
+    actual_mean: 81213.4545
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 0.7311
+      miss_mean: 1.0013
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 2
+        coverage: 0.6667
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 2
+        coverage: 0.6667
+      - anchor: 2018
+        origins:
+        - 2013
+        - 2018
+        cases: 2
+        covered: 1
+        coverage: 0.5
+      - anchor: 2017
+        origins:
+        - 2012
+        - 2017
+        cases: 2
+        covered: 1
+        coverage: 0.5
+      - anchor: 2016
+        origins:
+        - 2011
+        - 2016
+        cases: 2
+        covered: 1
+        coverage: 0.5
+      - anchor: 2015
+        origins:
+        - 2010
+        - 2015
+        cases: 2
+        covered: 1
+        coverage: 0.5
+      min: 0.5
+      max: 0.6667
+  origin_set:
+    origins:
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2009
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2009
+    train:
+    - 1990
+    - 2009
+    train_errors_from_origins_up_to: 2003
+    gap:
+    - 2010
+    - 2010
+    evaluation:
+    - 2011
+    - 2015
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2010
+    train:
+    - 1990
+    - 2010
+    train_errors_from_origins_up_to: 2004
+    gap:
+    - 2011
+    - 2011
+    evaluation:
+    - 2012
+    - 2016
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2011
+    train:
+    - 1990
+    - 2011
+    train_errors_from_origins_up_to: 2005
+    gap:
+    - 2012
+    - 2012
+    evaluation:
+    - 2013
+    - 2017
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: Not used by this card's ranges (the scored rule needs no place types).
+- id: state_holdouts.state.WY
+  quote: 10/11
+  study: State confidence check (current range method, held out of time)
+  study_key: state_holdouts
+  command: visionhousing validate-state-holdouts
+  method: The state's own state-total error record blended toward Pennsylvania's, only widened, scored
+    with one fixed rule for every state (not each state's shipped rule).
+  results_file: assumptions/calibration/state_holdouts.yaml
+  preregistered_block: state_holdout_check
+  geography:
+    level: state
+    area: WY
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/co{year}a.txt
+    results_measured_on: '2026-11-24'
+    results_id: state_holdouts_2026_11
+  published:
+    cases: 11
+    covered: 10
+    coverage: 0.9091
+  parity:
+    rederived:
+      cases: 11
+      covered: 10
+    matches: true
+  scores:
+    cases: 11
+    covered: 10
+    coverage: 0.9091
+    above: 0
+    below: 1
+    interval_score_mean: 1.2099
+    interval_score_median: 1.2257
+    signed_log_error_median: -0.123
+    signed_log_error_mean: -0.0279
+    width_mean: 1.0648
+    actual_mean: 10359.9091
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 1.0318
+      miss_mean: 0.1781
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 2
+        coverage: 0.6667
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 2
+        coverage: 0.6667
+      - anchor: 2018
+        origins:
+        - 2013
+        - 2018
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2017
+        origins:
+        - 2012
+        - 2017
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2016
+        origins:
+        - 2011
+        - 2016
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2015
+        origins:
+        - 2010
+        - 2015
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      min: 0.6667
+      max: 1.0
+  origin_set:
+    origins:
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2009
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2009
+    train:
+    - 1990
+    - 2009
+    train_errors_from_origins_up_to: 2003
+    gap:
+    - 2010
+    - 2010
+    evaluation:
+    - 2011
+    - 2015
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2010
+    train:
+    - 1990
+    - 2010
+    train_errors_from_origins_up_to: 2004
+    gap:
+    - 2011
+    - 2011
+    evaluation:
+    - 2012
+    - 2016
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2011
+    train:
+    - 1990
+    - 2011
+    train_errors_from_origins_up_to: 2005
+    gap:
+    - 2012
+    - 2012
+    evaluation:
+    - 2013
+    - 2017
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: Not used by this card's ranges (the scored rule needs no place types).
+- id: state_holdouts.state.VT
+  quote: 11/11
+  study: State confidence check (current range method, held out of time)
+  study_key: state_holdouts
+  command: visionhousing validate-state-holdouts
+  method: The state's own state-total error record blended toward Pennsylvania's, only widened, scored
+    with one fixed rule for every state (not each state's shipped rule).
+  results_file: assumptions/calibration/state_holdouts.yaml
+  preregistered_block: state_holdout_check
+  geography:
+    level: state
+    area: VT
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/co{year}a.txt
+    results_measured_on: '2026-11-24'
+    results_id: state_holdouts_2026_11
+  published:
+    cases: 11
+    covered: 11
+    coverage: 1.0
+  parity:
+    rederived:
+      cases: 11
+      covered: 11
+    matches: true
+  scores:
+    cases: 11
+    covered: 11
+    coverage: 1.0
+    above: 0
+    below: 0
+    interval_score_mean: 0.7209
+    interval_score_median: 0.7213
+    signed_log_error_median: 0.2437
+    signed_log_error_mean: 0.2119
+    width_mean: 0.9024
+    actual_mean: 9830.8182
+    excluded_from_relative_scores: 0
+    interval_score_parts:
+      width_mean: 0.7209
+      miss_mean: 0.0
+    non_overlapping:
+      primary:
+        anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 3
+        coverage: 1.0
+      anchors:
+      - anchor: 2019
+        origins:
+        - 2009
+        - 2014
+        - 2019
+        cases: 3
+        covered: 3
+        coverage: 1.0
+      - anchor: 2018
+        origins:
+        - 2013
+        - 2018
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2017
+        origins:
+        - 2012
+        - 2017
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2016
+        origins:
+        - 2011
+        - 2016
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      - anchor: 2015
+        origins:
+        - 2010
+        - 2015
+        cases: 2
+        covered: 2
+        coverage: 1.0
+      min: 1.0
+      max: 1.0
+  origin_set:
+    origins:
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2009
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2009
+    train:
+    - 1990
+    - 2009
+    train_errors_from_origins_up_to: 2003
+    gap:
+    - 2010
+    - 2010
+    evaluation:
+    - 2011
+    - 2015
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2010
+    train:
+    - 1990
+    - 2010
+    train_errors_from_origins_up_to: 2004
+    gap:
+    - 2011
+    - 2011
+    evaluation:
+    - 2012
+    - 2016
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2011
+    train:
+    - 1990
+    - 2011
+    train_errors_from_origins_up_to: 2005
+    gap:
+    - 2012
+    - 2012
+    evaluation:
+    - 2013
+    - 2017
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2012
+    train:
+    - 1990
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1990
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1990
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1990
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1990
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1990
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1990
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1990
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1990
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: Not used by this card's ranges (the scored rule needs no place types).
+- id: national_state_calibration.pooled.state.PA
+  quote: 7/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: PA
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: top_down_share
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 7
+    coverage: 0.875
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: pooled
+  listed_only: true
+- id: national_state_calibration.pooled.state.VT
+  quote: 8/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: VT
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: shrink_to_group
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: pooled
+  listed_only: true
+- id: national_state_calibration.pooled.state.MA
+  quote: 6/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: MA
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 6
+    coverage: 0.75
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: pooled
+  listed_only: true
+- id: national_state_calibration.pooled.state.WY
+  quote: 8/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: WY
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: pooled
+  listed_only: true
+- id: national_state_calibration.shock.state.PA
+  quote: 8/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: PA
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: top_down_share
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: shock
+  listed_only: true
+- id: national_state_calibration.shock.state.VT
+  quote: 8/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: VT
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: shrink_to_group
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: shock
+  listed_only: true
+- id: national_state_calibration.shock.state.MA
+  quote: 7/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: MA
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 7
+    coverage: 0.875
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: shock
+  listed_only: true
+- id: national_state_calibration.shock.state.WY
+  quote: 8/8
+  study: National state-total calibration (pre-registered test; not adopted)
+  study_key: national_state_calibration
+  command: visionhousing validate-national-state-calibration
+  method: A state range from every state's earlier state-total errors (two variants); listed here with
+    its counts only.
+  results_file: assumptions/calibration/national_state_calibration.yaml
+  preregistered_block: national_state_calibration
+  geography:
+    level: state
+    area: WY
+  target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  rule_scored: last_3_mean
+  release:
+    data: U.S. Census Bureau, Building Permits Survey, county annual files, 1999-2025
+    source_id: bps_county_annual
+    url: https://www2.census.gov/econ/bps/County/
+    results_measured_on: '2026-11-25'
+    results_id: national_state_calibration_2026_11
+  published:
+    cases: 8
+    covered: 8
+    coverage: 1.0
+  parity:
+    rederived: null
+    matches: null
+  origin_set:
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    first: 2012
+    last: 2019
+    lead_years: 2
+    horizon_years: 5
+    overlapping_windows: true
+    note: Consecutive start years share all but one of their five target years; see scores.non_overlapping
+      for start years five years apart.
+  fold_timeline:
+  - origin: 2012
+    train:
+    - 1999
+    - 2012
+    train_errors_from_origins_up_to: 2006
+    gap:
+    - 2013
+    - 2013
+    evaluation:
+    - 2014
+    - 2018
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2013
+    train:
+    - 1999
+    - 2013
+    train_errors_from_origins_up_to: 2007
+    gap:
+    - 2014
+    - 2014
+    evaluation:
+    - 2015
+    - 2019
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2014
+    train:
+    - 1999
+    - 2014
+    train_errors_from_origins_up_to: 2008
+    gap:
+    - 2015
+    - 2015
+    evaluation:
+    - 2016
+    - 2020
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2015
+    train:
+    - 1999
+    - 2015
+    train_errors_from_origins_up_to: 2009
+    gap:
+    - 2016
+    - 2016
+    evaluation:
+    - 2017
+    - 2021
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2016
+    train:
+    - 1999
+    - 2016
+    train_errors_from_origins_up_to: 2010
+    gap:
+    - 2017
+    - 2017
+    evaluation:
+    - 2018
+    - 2022
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2017
+    train:
+    - 1999
+    - 2017
+    train_errors_from_origins_up_to: 2011
+    gap:
+    - 2018
+    - 2018
+    evaluation:
+    - 2019
+    - 2023
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2018
+    train:
+    - 1999
+    - 2018
+    train_errors_from_origins_up_to: 2012
+    gap:
+    - 2019
+    - 2019
+    evaluation:
+    - 2020
+    - 2024
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  - origin: 2019
+    train:
+    - 1999
+    - 2019
+    train_errors_from_origins_up_to: 2013
+    gap:
+    - 2020
+    - 2020
+    evaluation:
+    - 2021
+    - 2025
+    selection:
+    - 1999
+    - 2025
+    selection_overlaps_evaluation: true
+  disclosures:
+    selection_full_record: The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation years of every fold,
+      so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each origin. County
+      ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
+      release.
+  variant: shock
+  listed_only: true

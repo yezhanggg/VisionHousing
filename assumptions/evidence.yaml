@@ -14,7 +14,7 @@
 #   excerpt_only      seen only as a short excerpt; treat as unconfirmed
 # An entry's own "verification" is its weakest source.
 #
-# used_for: calibration (sets a ledger range), hindcast (job T4 compares the model
+# used_for: calibration (sets a ledger range), hindcast (the hindcast compares the model
 # with what happened), evidence_card (shown on a reform page as context).
 #
 # Ledger parameters cite an entry with a source id equal to the entry id ("ev.").
@@ -291,7 +291,7 @@ entries:
       published. Jurisdictions revise past reports, so a later download will differ
       slightly. California pairs a strong state law with very high rents, so its
       per-capita rate is far above what Pennsylvania should expect; this is the panel
-      for job T2, not a target.
+      for the planned ADU take-up fit, not a target.
     used_for: [calibration, evidence_card]
 
   ev.adu.pew_national_2025:

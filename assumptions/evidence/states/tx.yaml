@@ -1,0 +1,370 @@
+# Cross-state comparison records: TX.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: tx.sb840_2025
+  kind: policy
+  state: TX
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - adaptive_reuse
+  - parking
+  title: Multifamily and mixed-use by right in commercial, office, retail and warehouse zones; office-to-residential
+    conversions
+  citation: SB 840, 89th Leg., R.S. (2025); Tex. Loc. Gov't Code ch. 218
+  url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB840
+  session: 89th Legislature, regular session (2025)
+  bill: SB 840
+  enacted_date: 2025-06-20
+  effective_dates:
+  - date: 2025-09-01
+    applies_to: Act effective; Subchapter B applies to projects initiated on/after this date; Subchapter
+      C to conversion permit applications filed on/after this date
+  geographic_scope: Cities over 150,000 population wholly or partly in a county over 300,000
+  exclusions:
+  - Zones allowing heavy industrial use
+  - Within 1,000 ft of heavy industrial use
+  - Within 3,000 ft of an airport or military base
+  - Clear zones and accident potential zones
+  - Historic preservation rules preserved
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Cities may not cap density below the greater of their highest residential density or 36 units/acre,
+    height below the greater of site commercial height or 45 ft, or require more than 1 parking space
+    per unit
+  - Mixed use means at least 65% residential
+  - Conversions limited to buildings at least 5 years old
+  - Private right of action with fee shifting
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.texas.gov history shows signed by Governor 2025-06-20, effective 2025-09-01;
+    thresholds and exclusions read in enrolled text (SB00840F).
+  sources:
+  - label: Texas Legislature Online bill history SB 840
+    url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB840
+    official: true
+  - label: Enrolled text SB 840
+    url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00840F.htm
+    official: true
+  discovered_via: search
+- id: tx.sb15_2025
+  kind: policy
+  state: TX
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - parking
+  title: Small residential lots (3,000 sq ft) in new subdivisions of large cities
+  citation: SB 15, 89th Leg., R.S. (2025); Tex. Loc. Gov't Code §§ 211.051-211.058
+  url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB15
+  session: 89th Legislature, regular session (2025)
+  bill: SB 15
+  enacted_date: 2025-06-20
+  effective_dates:
+  - date: 2025-09-01
+    applies_to: Act effective
+  geographic_scope: Cities over 150,000 population wholly or partly in a county over 300,000; unplatted
+    tracts of 5+ acres zoned single-family that will be platted
+  exclusions:
+  - Within 1 mile of a law enforcement training center in a county of 2.6M+
+  - Within 3,000 ft of an airport or military base
+  - Within 15,000 ft of a military base in a military airport overlay zone
+  - HOA rules and deed restrictions unaffected
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Minimum lot may not exceed 3,000 sq ft, 30 ft width, 75 ft depth
+  - 'For lots of 4,000 sq ft or less: setback caps 15/10/5 ft, max 1 parking space, no covered parking,
+    open-space cap 30%, at least three stories allowed'
+  - Private deed restrictions can still block small lots
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.texas.gov history shows signed by Governor 2025-06-20, effective 2025-09-01;
+    thresholds read in enrolled text (SB00015F).
+  sources:
+  - label: Texas Legislature Online bill history SB 15
+    url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB15
+    official: true
+  - label: Enrolled text SB 15
+    url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00015F.htm
+    official: true
+  discovered_via: search
+- id: tx.sb2477_2025_office_conversion
+  kind: policy
+  state: TX
+  jurisdiction: statewide (cities over 150,000 in counties over 300,000)
+  policy_types:
+  - adaptive_reuse
+  - commercial_land_housing
+  - parking
+  - fees
+  title: 'Texas SB 2477 (2025): office-to-residential conversions without rezoning, new parking or most
+    impact fees'
+  citation: Acts 2025, 89th Leg., R.S. (SB 2477); Tex. Local Gov't Code ch. 218, 395.011
+  url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB2477
+  session: 89th Legislature, Regular Session (2025)
+  bill: SB 2477
+  enacted_date: 2025-06-20
+  effective_dates:
+  - date: 2025-09-01
+    applies_to: Whole act; applies to conversions whose building permit is submitted on or after this date
+  geographic_scope: Cities over 150,000 people that lie wholly or partly in a county over 300,000. Office
+    buildings at least five years old converted to at least 65% residential (building and each floor).
+  exclusions:
+  - Sites zoned for heavy industry or within 1,000 ft of heavy industry
+  - Within 3,000 ft of an airport or military base, or in a military clear or accident-potential zone up
+    to 15,000 ft
+  - Historic landmark and local historic district rules still apply
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Cities may not require rezoning or variances, traffic studies or fees, parking beyond what is on site,
+    density below the greater of the city''s highest residential density or 36 units/acre, or design rules
+    stricter than the building code. Approval must be administrative.'
+  - Impact fees barred unless the land was already subject to them; housing organizations may sue to enforce.
+  - Applies to office buildings only; retail and other commercial uses are covered by SB 840 (tx.sb840_2025).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.texas.gov bill history shows 'Signed by the Governor 06/20/2025' and 'Effective
+    on 9/1/25'. Enrolled text on capitol.texas.gov shows the scope, exclusions and Section 5 effective date.
+  sources:
+  - label: SB 2477 bill history (Texas Legislature Online)
+    url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB2477
+    official: true
+  - label: Enrolled text SB 2477
+    url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB02477F.htm
+    official: true
+  discovered_via: search
+- id: tx.sb2835_2025_single_stair
+  kind: policy
+  state: TX
+  jurisdiction: statewide (local option)
+  policy_types:
+  - missing_middle
+  title: 'Texas SB 2835 (2025): cities may allow single-stair apartment buildings up to six stories'
+  citation: Acts 2025, 89th Leg., R.S. (SB 2835); Tex. Local Gov't Code 214.301
+  url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB2835
+  session: 89th Legislature, Regular Session (2025)
+  bill: SB 2835
+  enacted_date: 2025-06-20
+  effective_dates:
+  - date: 2025-09-01
+    applies_to: Whole act
+  geographic_scope: Any city that chooses to use it; apartment buildings of up to six stories above grade
+    with at most four units per floor.
+  exclusions:
+  - High-rise buildings as defined by the International Building Code
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Permissive, not a mandate. Conditions include sprinklered stairs, 2-hour stair enclosures without elevator
+    openings, at most 20 ft from unit door to stair and 125 ft of travel, and building-wide smoke detection.
+  - Became law without the Governor's signature (filed 2025-06-20); that date is recorded as the enacted
+    date.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.texas.gov bill history shows 'Filed without the Governor's signature 06/20/2025'
+    and 'Effective on 9/1/25'. Enrolled text on capitol.texas.gov shows the conditions and Section 2 effective
+    date.
+  sources:
+  - label: SB 2835 bill history (Texas Legislature Online)
+    url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB2835
+    official: true
+  - label: Enrolled text SB 2835
+    url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB02835F.htm
+    official: true
+  discovered_via: search
+- id: tx.sb785_2025_manufactured_housing
+  kind: policy
+  state: TX
+  jurisdiction: statewide (cities with zoning)
+  policy_types:
+  - starter_lots
+  - permit_timing
+  title: 'Texas SB 785 (2025): new HUD-code manufactured homes by right in at least one residential zone'
+  citation: Acts 2025, 89th Leg., R.S. (SB 785); Tex. Occupations Code 1201.008
+  url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB785
+  session: 89th Legislature, Regular Session (2025)
+  bill: SB 785
+  enacted_date: 2025-06-22
+  effective_dates:
+  - date: 2026-09-01
+    applies_to: Whole act
+  geographic_scope: Cities with zoning must allow new HUD-code manufactured homes by right in at least one
+    residential zone that is actually mapped. An application is deemed granted unless denied in writing within
+    45 days.
+  exclusions:
+  - Cities where all residential zones were deed-restricted against manufactured homes on 2025-09-01
+  - Cities with no business or industrial zones
+  - Deed restrictions made before 2025-01-02 and historic district rules are untouched
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A specific use permit may not be required if other homes in the same zone do not need one.
+  - One zone is a low floor; it does not set lot sizes. Listed under starter lots as a lower-cost homeownership
+    route.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.texas.gov bill history shows 'Signed by the Governor 06/22/2025' and an effective
+    date of September 1, 2026. Enrolled text on capitol.texas.gov shows Section 2 'This Act takes effect September
+    1, 2026'.
+  sources:
+  - label: SB 785 bill history (Texas Legislature Online)
+    url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=SB785
+    official: true
+  - label: Enrolled text SB 785
+    url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00785F.htm
+    official: true
+  discovered_via: search
+- id: tx.hb24_2025_zoning_protest
+  kind: policy
+  state: TX
+  jurisdiction: statewide (municipal zoning)
+  policy_types:
+  - permit_timing
+  - missing_middle
+  title: 'Texas HB 24 (2025): higher bar for neighbor protests of zoning changes that add housing'
+  citation: Acts 2025, 89th Leg., R.S. (HB 24); Tex. Local Gov't Code 211.0011, 211.006, 211.0061, 211.0063,
+    211.0073
+  url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=HB24
+  session: 89th Legislature, Regular Session (2025)
+  bill: HB 24
+  enacted_date: 2025-06-20
+  effective_dates:
+  - date: 2025-09-01
+    applies_to: Whole act; applies to zoning change proposals made on or after this date
+  geographic_scope: All cities with zoning.
+  exclusions:
+  - Changes that add commercial or industrial uses (beyond limited ground-floor use up to 35% of a residential
+    project) keep the old 20% protest and three-fourths vote rule
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Citywide changes that allow more housing (comprehensive changes and corridor overlays) are not subject
+    to the protest supermajority at all.
+  - For site rezonings adding housing, a neighbor protest needs owners of 60% of the land within 200 ft (was
+    20%), and then only a simple majority vote is needed (was three-fourths).
+  - Speeds approval politics, not permit processing.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.texas.gov bill history shows 'Signed by the Governor 06/20/2025' and 'Effective
+    on 9/1/25'. Enrolled text on capitol.texas.gov shows the 60% threshold, majority vote and Section 9 effective
+    date.
+  sources:
+  - label: HB 24 bill history (Texas Legislature Online)
+    url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=89R&Bill=HB24
+    official: true
+  - label: Enrolled text HB 24
+    url: https://capitol.texas.gov/tlodocs/89R/billtext/html/HB00024F.htm
+    official: true
+  discovered_via: search
+- id: tx.hb14_2023_third_party_review
+  kind: policy
+  state: TX
+  jurisdiction: statewide (all political subdivisions that review development)
+  policy_types:
+  - permit_timing
+  title: 'Texas HB 14 (2023): third-party review and inspection when a local authority misses its deadline
+    by 15 days'
+  citation: Acts 2023, 88th Leg., R.S. (HB 14); Tex. Local Gov't Code ch. 247
+  url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=88R&Bill=HB14
+  session: 88th Legislature, Regular Session (2023)
+  bill: HB 14
+  enacted_date: 2023-06-12
+  effective_dates:
+  - date: 2023-09-01
+    applies_to: Whole act; applies to development documents and inspection requests submitted on or after
+      this date
+  geographic_scope: Any city, county or other political subdivision that approves plats, plans or development
+    permits or inspects improvements.
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - If the authority misses a deadline set in the Local Government Code by 15 days, a licensed engineer,
+    an ICC-certified inspector or another government's reviewer may do the review or inspection. No extra
+    fee may be charged for it.
+  - Works only where the code sets a deadline (for example plats); it does not create new deadlines.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.texas.gov bill history shows 'Signed by the Governor 06/12/2023' and 'Effective
+    on 9/1/23'. Enrolled text on capitol.texas.gov shows chapter 247 and Section 3 effective date.
+  sources:
+  - label: HB 14 bill history (Texas Legislature Online)
+    url: https://capitol.texas.gov/BillLookup/History.aspx?LegSess=88R&Bill=HB14
+    official: true
+  - label: Enrolled text HB 14
+    url: https://capitol.texas.gov/tlodocs/88R/billtext/html/HB00014F.htm
+    official: true
+  discovered_via: search

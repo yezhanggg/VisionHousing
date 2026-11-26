@@ -16,11 +16,26 @@ id                                        record
 ``reform_results.adu.steps.2``            the third step of the ADU funnel
 ``reform_results.adu.records.per_100k``   another record of the reform
 ``reform_results.adu.counties.42003``     units added in one county
+``reform_results.adu.readouts.chance_at_least_2``
+                                          a paired readout (``engine.readouts``)
+``reform_results.fees.readout_counties.revenue_given_up.42003``
+                                          a readout for one county
 ``package.combined``                      all reforms together (also ``sum_of_parts``,
                                           ``overlap``, ``interaction``, ``pct_change``)
 ``package.interactions.fees -> adu``      one interaction
 ``package.counties.42003``                the package in one county
 ``total``                                 baseline plus the package
+``reform_results.mm.gross_net.net_stock``  net added homes after demolition (also
+                                          ``removed``, ``baseline_on_sites``)
+``reform_results.mm.net_stock_counties.42003``
+                                          net added homes in one county
+``reform_results.adu.annual.state.0``     the reform's added permits in 2027
+``reform_results.adu.annual.timing.newly_feasible``
+                                          permits newly feasible (vs shifted in time)
+``annual.baseline.state.4``               the baseline in 2031 (also ``package``, ``total``)
+``reform_results.adu.accounting.records.comparable``
+                                          additional comparable authorizations (one of
+                                          the five record types, ``engine.outcome.accounting``)
 ========================================  ==========================================
 
 Because the id is the path, anyone holding the JSON can find the number
@@ -60,6 +75,22 @@ def record_index(result: Any) -> dict[str, Record]:
             out[f"{base}.records.{name}"] = r
         for c, r in o.counties.items():
             out[f"{base}.counties.{c}"] = r
+        for name, r in o.readouts.items():
+            out[f"{base}.readouts.{name}"] = r
+        for name, by in o.readout_counties.items():
+            for c, r in by.items():
+                out[f"{base}.readout_counties.{name}.{c}"] = r
+        for name, r in o.gross_net.items():
+            if name != "authorized":  # the headline itself, already ``added``
+                out[f"{base}.gross_net.{name}"] = r
+        for c, r in o.net_stock_counties.items():
+            out[f"{base}.net_stock_counties.{c}"] = r
+        if o.annual is not None:
+            _annual(out, f"{base}.annual", o.annual)
+        books = getattr(o, "accounting", None)
+        if books is not None:
+            for name, r in books.records.items():
+                out[f"{base}.accounting.records.{name}"] = r
     p = result.package
     if p is not None:
         for name in ("sum_of_parts", "overlap", "interaction", "combined", "pct_change"):
@@ -70,7 +101,20 @@ def record_index(result: Any) -> dict[str, Record]:
             out[f"package.counties.{c}"] = r
     if result.total is not None:
         out["total"] = result.total
+    for name in ("baseline", "package", "total"):
+        series = getattr(result, f"{name}_annual", None)
+        if series is not None:
+            _annual(out, f"annual.{name}", series)
     return out
+
+
+def _annual(out: dict[str, Record], base: str, series: Any) -> None:
+    """Add a yearly series: one state record per year, and its timing split."""
+    for i, r in enumerate(series.state):
+        out[f"{base}.state.{i}"] = r
+    for name, r in series.timing.items():
+        if isinstance(r, Record):
+            out[f"{base}.timing.{name}"] = r
 
 
 def resolve(data: Mapping[str, Any], ref: str) -> Any:

@@ -1,0 +1,427 @@
+{
+ "version": 1,
+ "states": {
+  "PA": {
+   "name": "Pennsylvania",
+   "words": [
+    "pennsylvania",
+    "pennsylvanias"
+   ]
+  },
+  "VT": {
+   "name": "Vermont",
+   "words": [
+    "vermont",
+    "vermonts"
+   ]
+  },
+  "MA": {
+   "name": "Massachusetts",
+   "words": [
+    "massachusetts",
+    "massachusettss"
+   ]
+  },
+  "WY": {
+   "name": "Wyoming",
+   "words": [
+    "wyoming",
+    "wyomings"
+   ]
+  },
+  "TL": {
+   "name": "Testland",
+   "words": [
+    "testland",
+    "testlands"
+   ]
+  }
+ },
+ "reforms": {
+  "adu": {
+   "title": "Accessory dwelling units",
+   "words": [
+    "adu",
+    "adus",
+    "accessory dwelling",
+    "accessory dwellings",
+    "accessory unit",
+    "granny flat",
+    "in law unit",
+    "backyard cottage"
+   ]
+  },
+  "missing_middle": {
+   "title": "Missing middle",
+   "words": [
+    "missing middle",
+    "duplex",
+    "duplexes",
+    "triplex",
+    "triplexes",
+    "fourplex",
+    "fourplexes",
+    "fiveplex",
+    "sixplex",
+    "sixplexes",
+    "middle housing",
+    "plex"
+   ]
+  },
+  "tod": {
+   "title": "Transit-oriented density",
+   "words": [
+    "tod",
+    "transit",
+    "transit oriented",
+    "station",
+    "stations",
+    "near stops",
+    "bus stop",
+    "rail"
+   ]
+  },
+  "parking": {
+   "title": "Parking requirement reduction",
+   "words": [
+    "parking",
+    "parking minimum",
+    "parking minimums",
+    "parking requirement"
+   ]
+  },
+  "fees": {
+   "title": "Development fee reduction",
+   "words": [
+    "fee",
+    "fees",
+    "impact fee",
+    "impact fees",
+    "development fee"
+   ]
+  }
+ },
+ "package": {
+  "title": "All five reforms together",
+  "words": [
+   "all five",
+   "package",
+   "all reforms",
+   "every reform",
+   "all the reforms",
+   "together",
+   "combined"
+  ]
+ },
+ "intents": [
+  {
+   "id": "share",
+   "words": [
+    "share",
+    "link",
+    "download",
+    "cite",
+    "citation",
+    "exact number",
+    "number im seeing",
+    "send this",
+    "reproduce"
+   ]
+  },
+  {
+   "id": "address",
+   "words": [
+    "address",
+    "parcel",
+    "my lot",
+    "my property",
+    "my house",
+    "my home",
+    "this lot",
+    "this property",
+    "my street",
+    "can i build",
+    "build a"
+   ],
+   "patterns": [
+    "\\b\\d+\\s+[a-z]+(\\s+[a-z]+)?\\s+(street|st|avenue|ave|road|rd|lane|ln|drive|dr|boulevard|blvd|way|court|ct|place|pl)\\b"
+   ]
+  },
+  {
+   "id": "law",
+   "words": [
+    "in place",
+    "in force",
+    "already",
+    "law",
+    "laws",
+    "legal",
+    "enacted",
+    "effective",
+    "passed",
+    "bill",
+    "bills",
+    "ordinance",
+    "statute",
+    "adopted",
+    "signed",
+    "when did",
+    "current law"
+   ]
+  },
+  {
+   "id": "target",
+   "words": [
+    "reach",
+    "target",
+    "goal",
+    "budget",
+    "enough",
+    "meet",
+    "hit",
+    "funding",
+    "appropriation",
+    "within our"
+   ]
+  },
+  {
+   "id": "coverage",
+   "words": [
+    "coverage",
+    "missing",
+    "missing data",
+    "data are missing",
+    "unknown",
+    "data gap",
+    "gap",
+    "gaps",
+    "no data",
+    "why zero",
+    "zero",
+    "not covered",
+    "unavailable",
+    "how complete",
+    "measured",
+    "not known"
+   ]
+  },
+  {
+   "id": "drivers",
+   "words": [
+    "driver",
+    "drivers",
+    "drives",
+    "drive",
+    "sensitive",
+    "sensitivity",
+    "what matters",
+    "depends",
+    "depend on",
+    "lever",
+    "levers",
+    "biggest effect",
+    "which input",
+    "inputs",
+    "most uncertain"
+   ]
+  },
+  {
+   "id": "baseline",
+   "words": [
+    "baseline",
+    "no change",
+    "without reform",
+    "without any reform",
+    "todays rules",
+    "current rules",
+    "look high",
+    "looks high",
+    "look low",
+    "looks low",
+    "so high",
+    "so low",
+    "too high",
+    "too low"
+   ]
+  },
+  {
+   "id": "result",
+   "words": [
+    "how many",
+    "homes",
+    "units",
+    "add",
+    "adds",
+    "added",
+    "result",
+    "effect",
+    "impact",
+    "change",
+    "more homes",
+    "produce",
+    "permits",
+    "likely range"
+   ]
+  },
+  {
+   "id": "outside",
+   "words": [
+    "rent",
+    "rents",
+    "price",
+    "prices",
+    "displacement",
+    "displace",
+    "who will move",
+    "jobs",
+    "tax",
+    "taxes",
+    "traffic",
+    "school",
+    "schools",
+    "property value",
+    "home values",
+    "crime",
+    "mortgage"
+   ]
+  }
+ ],
+ "budget_words": [
+  "budget",
+  "funding",
+  "appropriation",
+  "cost",
+  "money",
+  "spend",
+  "dollars",
+  "million",
+  "grant",
+  "grants",
+  "program"
+ ],
+ "fallback": "unsupported",
+ "not_observed": [
+  "missing",
+  "assumed",
+  "available",
+  "imputed",
+  "suppressed",
+  "feed_failure"
+ ],
+ "coverage_note_words": [
+  "gap in",
+  "unknown",
+  "no schedule feed",
+  "not a measured zero",
+  "not covered",
+  "no verified",
+  "unavailable",
+  "no eligible land"
+ ],
+ "suggestions": {
+  "PA": [
+   "Why does the Pennsylvania baseline look high?",
+   "How many homes would ADUs add in Pennsylvania?",
+   "Is the Pennsylvania ADU bill in place?",
+   "Will ADUs reach 5,000 additional homes?",
+   "Will ADUs reach 5,000 homes with a $20 million budget?"
+  ],
+  "VT": [
+   "Is the Vermont ADU rule already in place?",
+   "What drives the ADU result in Vermont?",
+   "How many homes would all five reforms add in Vermont?"
+  ],
+  "MA": [
+   "Is the Massachusetts ADU reform already in place?",
+   "How many homes would transit-oriented density add in Massachusetts?",
+   "Can I share the exact number I'm seeing?"
+  ],
+  "WY": [
+   "How many homes will Wyoming TOD add?",
+   "Why does the Wyoming baseline look the way it does?",
+   "What data are missing for Wyoming TOD?"
+  ],
+  "default": [
+   "How many homes would ADUs add?",
+   "What drives the ADU result?",
+   "Can I share the exact number I'm seeing?"
+  ]
+ },
+ "templates": {
+  "title": {
+   "result": "{scenario_title}: homes added in {state_name}",
+   "baseline": "The {state_name} baseline",
+   "drivers": "What moves {scenario_title} in {state_name}",
+   "law": "Is it law in {state_name}? {scenario_title}",
+   "coverage": "What this run does not know: {scenario_title} in {state_name}",
+   "target": "Targets for {scenario_title} in {state_name}",
+   "address": "Address-level questions",
+   "share": "Share this exact number",
+   "unsupported": "I can't answer that from this run",
+   "outside": "Outside what this model estimates",
+   "unavailable": "Not in this run"
+  },
+  "result": "{scenario_title} in {state_name}, {period}: a likely range of {p10} to {p90} added (middle {p50}), on top of a no-change baseline of {b10} to {b90}.",
+  "result_share": "As a share of the baseline: {s10} to {s90}.",
+  "result_status": "{status_text}",
+  "result_status_note": "{note}",
+  "result_partial": "{title}: {label}.",
+  "result_baseline_only": "No reform is switched on, so this run shows only the baseline: {state_name}, {period}, a likely range of {b10} to {b90} authorized by building permits (middle {b50}).",
+  "baseline": "The {state_name} baseline for {period} is a likely range of {b10} to {b90} authorized by building permits (middle {b50}), from the rule \"{rule_name}\".",
+  "baseline_rule": "Rule: {rule_text}.",
+  "baseline_classes": "It counts {unit_fields}.",
+  "baseline_past": "Homes permitted in the past years it reads: {past}.",
+  "baseline_reliability": "{sentence}",
+  "baseline_offer": "A separate check is on record: {label} (id {id}). {status}",
+  "drivers_lead": "{lead}",
+  "drivers_item": "{text}",
+  "drivers_none": "The drivers were not worked out for this run, so the box cannot rank them.",
+  "drivers_package": "Drivers are ranked for one reform at a time. Pick one reform and ask again.",
+  "law_row": "{citation} ({level}): {line}. Dated {start}; checked {verified_on}. Scope: {scope}.",
+  "law_row_nodate": "{citation} ({level}): {line}. No start date on record; checked {verified_on}. Scope: {scope}.",
+  "law_pending": "{pending_note}",
+  "law_none": "{none_text}",
+  "law_package": "Law records are kept per reform. Pick one reform and ask again.",
+  "coverage_note": "{note}",
+  "coverage_status": "{status_text}",
+  "coverage_gap": "Also not observed for this reform: {label} ({value_state}: {limit}).",
+  "coverage_next": "Next missing observation: {label} ({value_state}: {limit}).",
+  "coverage_none": "The data report card lists no input of this reform as missing or assumed.",
+  "coverage_zero": "This run gives no measured number for {scenario_title} in {state_name}; the box will not invent one.",
+  "target_row": "{dial}: for the middle estimate, {p50}; for the low end (P10), {p10}.",
+  "target_head": "{headline}",
+  "target_rows_only": "This run holds precomputed targets for {scenario_title} at {targets} homes only; others are out of range for this run.",
+  "target_ask_number": "Name a number of homes. This run holds precomputed targets at {targets} homes.",
+  "target_trials": "Each cell is {draws} seeded draws (seed {seed}); rule: {rule}.",
+  "target_budget": "The budget-and-target grid is not in this build, so a cost limit cannot be checked here; the local app (make app) has it for ADUs.",
+  "budget_head": "Read from the ADU budget-and-target grid: {scope}",
+  "budget_ask_number": "Name a number of homes. The grid tests targets of {targets} added ADU authorizations.",
+  "budget_outside": "That target is outside the tested targets ({targets}). The grid does not extrapolate.",
+  "budget_bracket": "That target lies between the tested targets {lo} and {hi}. The grid does not interpolate, so here are both tested cells.",
+  "budget_target": "Target {target}: the tested options on the trade-off between cost and the share of draws meeting it (the Pareto set), cheapest first; with more than four, the two cheapest and the two most likely.",
+  "budget_no_pareto": "No tested option within this budget meets that target in any modeled draw.",
+  "budget_option": "{arm}, upfront {appropriation}, awards of {award}: meets it in {share} of the modeled draws (Monte Carlo standard error {se}); net public cost {net_cost} (middle); adds {added} homes (likely range).",
+  "budget_option_law": "{arm}, no program money: meets it in {share} of the modeled draws (Monte Carlo standard error {se}); adds {added} homes (likely range).",
+  "budget_flag": "{flag}",
+  "budget_ceiling": "Budget ceiling: {budget}, a tested value.",
+  "budget_ceiling_untested": "Your budget is not a tested value (tested: {budgets}); options are read only from tested cells at or below it.",
+  "budget_trials": "Each cell is {draws} seeded draws (seed {seed}); the appropriations and awards are illustrative settings, not estimates.",
+  "budget_uncapped": "{note}",
+  "target_none": "This run holds no precomputed target cells for {scenario_title}.",
+  "target_package": "Targets are precomputed for one reform at a time. Pick one reform and ask again.",
+  "address": "This tool works at state, county and tract level. It holds no parcel or address data and makes no decision about what may be built on a lot.",
+  "address_rule": "Local rule on record: {citation} ({agency}), {url}",
+  "address_pick": "Pick a county on the map to see the local rules on record there.",
+  "address_ask": "Ask the local planning or zoning office for a lot-level answer.",
+  "share": "The link {link} reopens this view: {scenario_title} in {state_name}, run {run_id}.",
+  "share_record": "Its headline record \"{name}\" is {p10} to {p90} (middle {p50}), {period}.",
+  "share_download": "The table behind this run can be downloaded from the link with this answer.",
+  "share_no_download": "This build has no downloadable table for this run.",
+  "unavailable_custom": "This scenario uses changed assumptions, which this site does not hold. Its link opens only in the local app (make app). The box does not fall back to the default run.",
+  "unavailable_scenario": "This scenario is not saved on this site; the local app (make app) runs it. The box does not fall back to the default run.",
+  "unavailable_combo": "This mix of reforms is not saved on this site; the local app (make app) runs it. The box does not fall back to the default run.",
+  "unavailable_missing": "The records this question needs are not in this build.",
+  "unsupported": "I can't answer that from this run. I answer from this run's own records: the result of a reform, the baseline, what drives a result, whether a rule is law, what data are missing, precomputed targets and budget cells, and how to share a number.",
+  "outside": "This model counts homes authorized by building permits over five years. It does not estimate rents, prices, who moves, taxes or other effects, so I can't answer that from this run."
+ }
+}

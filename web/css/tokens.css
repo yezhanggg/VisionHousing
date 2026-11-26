@@ -51,6 +51,12 @@
   --seq-4: #4ea8ae;
   --seq-5: #2c7aa1;
   --seq-6: #243f78;
+  /* Back-test error map: one diverging ramp (ColorBrewer RdBu), blue = ran low, red = ran high. */
+  --div-1: #2166ac;
+  --div-2: #92c5de;
+  --div-3: #f7f7f7;
+  --div-4: #f4a582;
+  --div-5: #b2182b;
   /* "No data" and "Not modelled" are grey and never count as a result. */
   --no-data: #c9cfd4;
   --not-modelled: #e7eaed;
@@ -88,9 +94,30 @@
 
   /* Motion: short and calm; switched off for people who ask for less motion. */
   --ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --dur-fast: 120ms;
   --dur: 200ms;
   --dur-slow: 320ms;
+  /* Springs, near critically damped (they settle without a visible bounce). Browsers without
+     linear() get the ease-out curve above. Use them with these durations:
+     panel 420ms (cards, sheets, panels), tab 320ms (pills, knobs), fold 420ms (folds). */
+  --spring-panel: var(--ease-out);
+  --spring-tab: var(--ease-out);
+  --spring-fold: var(--ease-out);
+  --dur-panel: 420ms;
+  --dur-tab: 320ms;
+  --dur-fold: 420ms;
+  --dur-exit: 200ms;
+  --dur-bar: 520ms;
+  --stagger: 40ms;
+}
+
+@supports (transition-timing-function: linear(0, 1)) {
+  :root {
+    --spring-panel: linear(0, 0.107, 0.315, 0.525, 0.696, 0.821, 0.903, 0.954, 0.982, 0.997, 1.003, 1.005, 1.005, 1.004, 1.003, 1.002, 1);
+    --spring-tab: linear(0, 0.108, 0.314, 0.519, 0.686, 0.808, 0.889, 0.941, 0.971, 0.988, 0.997, 1.001, 1.002, 1.002, 1.002, 1.001, 1);
+    --spring-fold: linear(0, 0.102, 0.289, 0.473, 0.625, 0.739, 0.821, 0.879, 0.919, 0.946, 0.964, 0.976, 0.985, 0.99, 0.993, 0.996, 1);
+  }
 }
 
 @media (max-width: 767px) {
@@ -104,6 +131,12 @@
     --dur-fast: 0ms;
     --dur: 0ms;
     --dur-slow: 0ms;
+    --dur-panel: 0ms;
+    --dur-tab: 0ms;
+    --dur-fold: 0ms;
+    --dur-exit: 0ms;
+    --dur-bar: 0ms;
+    --stagger: 0ms;
   }
   *,
   *::before,

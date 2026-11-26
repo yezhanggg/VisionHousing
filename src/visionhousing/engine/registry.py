@@ -31,6 +31,7 @@ were drawn. ``Draws.values`` holds those samples once for the engine's own use
 
 from __future__ import annotations
 
+import functools
 from collections.abc import Callable, Mapping
 from dataclasses import dataclass, field
 from typing import Any
@@ -110,7 +111,8 @@ class ReformResult:
         geoids: Ids along the first axis of ``added``.
         county_of: County id of each row of ``added`` (equal to ``geoids`` at
             county level).
-        added: Net added permitted units 2027-2031, shape ``(geographies, draws)``.
+        added: Added units authorized by building permits 2027-2031 (against the
+            baseline), shape ``(geographies, draws)``.
         headline: The reform module's own state record for the same quantity.
         steps: Explanation steps in order (the funnel), each a record.
         records: Other records the reform produced, by name.
@@ -120,6 +122,22 @@ class ReformResult:
         ledger: The ledger the reform actually used (scenario and user
             overrides applied). Sampling it with the run's seed gives the exact
             input draws behind ``added``.
+        county_notes: County id to ``(text, source ids)``: a plain statement
+            added to that county's record formula, with the sources it cites
+            (for example a value taken from read local law).
+        year_share: Each year's share of the five-year total, per draw, shape
+            ``(draws, years)``; rows add to 1. The reform's adoption curve
+            (start delay and ramp); ``None``: the engine works it out from the
+            reform's ramp entries (``engine.outcome``).
+        net_stock: Net change in the housing stock by geography and draw (same
+            shape as ``added``), or ``None`` when no home is removed (it equals ``added``).
+        removed: Existing homes demolished by geography and draw, or ``None`` (none).
+        baseline_on_sites: Baseline authorizations on the redeveloped sites by
+            geography and draw, or ``None`` (no site is redeveloped).
+        status: What is known about the inputs, by stage, JSON-ready (the TOD
+            transit status ladder, :mod:`visionhousing.features.transit_status`),
+            with ``statewide.shown`` false when the statewide range must not be
+            shown; ``None`` when the reform has none.
     """
 
     reform: str
@@ -135,6 +153,12 @@ class ReformResult:
     notes: tuple[str, ...] = ()
     detail: Any = field(default=None, repr=False, compare=False)
     ledger: Ledger | None = field(default=None, repr=False, compare=False)
+    county_notes: Mapping[str, tuple[str, tuple[str, ...]]] = field(default_factory=dict)
+    year_share: np.ndarray | None = field(default=None, repr=False, compare=False)
+    net_stock: np.ndarray | None = field(default=None, repr=False, compare=False)
+    removed: np.ndarray | None = field(default=None, repr=False, compare=False)
+    baseline_on_sites: np.ndarray | None = field(default=None, repr=False, compare=False)
+    status: Mapping[str, Any] | None = field(default=None, repr=False, compare=False)
 
     def __post_init__(self) -> None:
         """Check that the shapes and labels agree."""
@@ -147,6 +171,14 @@ class ReformResult:
             raise ValueError("county_of needs one county per geography")
         if not np.all(np.isfinite(arr)):
             raise ValueError(f"reform '{self.reform}' returned a non-finite number of units")
+
+    def county_sum(self, arr: np.ndarray, county_ids: tuple[str, ...]) -> np.ndarray:
+        """Sum any ``(geographies, draws)`` array of this result to counties, in the order given."""
+        index = {c: i for i, c in enumerate(county_ids)}
+        rows = np.array([index[c] for c in self.county_of], dtype=int)
+        out = np.zeros((len(county_ids), np.asarray(arr).shape[1]))
+        np.add.at(out, rows, np.asarray(arr, dtype=float))
+        return out
 
     def county_draws(self, county_ids: tuple[str, ...]) -> np.ndarray:
         """Sum ``added`` to counties, in the order given.
@@ -186,6 +218,9 @@ class ReformSpec:
             be combined in one package (for example the benchmark ADU reform and
             an ADU bill).
         uses: Ledger ``used_by`` name of the reform (for listing its inputs).
+        excludes: Other families this reform reaches the same lots or projects as
+            (an extra scenario and the benchmark it builds on); a package may hold
+            only one of them, so no home is counted twice.
     """
 
     key: str
@@ -193,13 +228,21 @@ class ReformSpec:
     adapter: Adapter
     family: str
     uses: str
+    excludes: tuple[str, ...] = ()
 
 
 REGISTRY: dict[str, ReformSpec] = {}
 """Registry key to its spec. Filled by ``engine.adapters`` on import."""
 
 
-def register(key: str, title: str, *, family: str | None = None, uses: str | None = None):
+def register(
+    key: str,
+    title: str,
+    *,
+    family: str | None = None,
+    uses: str | None = None,
+    excludes: tuple[str, ...] = (),
+):
     """Register a reform adapter under ``key`` (a decorator).
 
     Args:
@@ -207,6 +250,7 @@ def register(key: str, title: str, *, family: str | None = None, uses: str | Non
         title: Plain name shown to users.
         family: Family name (defaults to the key).
         uses: Ledger ``used_by`` name (defaults to the family).
+        excludes: Families that may not share a package with this reform.
 
     Returns:
         The decorator; it returns the adapter unchanged.
@@ -219,10 +263,35 @@ def register(key: str, title: str, *, family: str | None = None, uses: str | Non
         if key in REGISTRY:
             raise ValueError(f"reform '{key}' is already registered")
         fam = family or key
-        REGISTRY[key] = ReformSpec(key, title, adapter, fam, uses or fam)
+        REGISTRY[key] = ReformSpec(
+            key, title, _screenable(adapter, fam), fam, uses or fam, tuple(excludes)
+        )
         return adapter
 
     return wrap
+
+
+def _screenable(adapter: Adapter, family: str) -> Adapter:
+    """The adapter, plus the practical capacity screen when its options ask for it.
+
+    With the option ``capacity_screen`` (or a variant that sets it) the reform's
+    added homes are multiplied by the practical capacity multiplier
+    (``engine.capacity.screen_result``); otherwise the adapter's result is
+    returned unchanged. Every caller (the run, the package reruns, the
+    readouts, the market option) goes through this, so a screened variant is
+    screened everywhere.
+    """
+
+    @functools.wraps(adapter)
+    def run(context: RunContext, draws: Draws, options: Mapping[str, Any]) -> ReformResult:
+        res = adapter(context, draws, options)
+        from visionhousing.engine.capacity import screen_result, screen_wanted
+
+        if screen_wanted(family, options):
+            return screen_result(res, context, draws, family)
+        return res
+
+    return run
 
 
 def get_reform(key: str) -> ReformSpec:

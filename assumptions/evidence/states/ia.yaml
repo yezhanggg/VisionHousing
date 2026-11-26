@@ -1,0 +1,68 @@
+# Cross-state comparison records: IA.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ia.sf592_2025_adu
+  kind: policy
+  state: IA
+  jurisdiction: statewide (cities and counties)
+  policy_types:
+  - adu
+  - parking
+  - permit_timing
+  title: 'Iowa SF 592 (2025): cities and counties must allow at least one ADU per single-family lot'
+  citation: 2025 Iowa Acts ch. 38 (SF 592); Iowa Code 331.301(27), 364.3(20)
+  url: https://www.legis.iowa.gov/legislation/BillBook?ga=91&ba=SF592
+  session: 91st General Assembly, 2025 session
+  bill: SF 592
+  enacted_date: 2025-05-01
+  effective_dates:
+  - date: 2025-07-01
+    applies_to: Whole act (standard effective date; the act has no other date)
+  geographic_scope: Every city and county, on any lot with a single-family residence.
+  exclusions:
+  - State historic building code limits adopted locally, deed restrictions and common-interest community
+    rules may still limit or bar ADUs
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Size cap is the larger of 1,000 sq ft or 50% of the house. No added parking, owner residence, family
+    tie, income or age limits, matching design, or stricter height, setback, lot or density rules than for
+    the house.
+  - Permits must be decided without discretionary review or hearing, on the single-family review timeline;
+    denials must be in writing with the fix needed. Impact fee structures may not differ from the house's.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The Governor's approval letter posted on legis.iowa.gov shows SF 592 approved May 1,
+    2025; the bill page shows 'Signed by Governor' and Acts Chapter 38. The enrolled text (legis.iowa.gov)
+    has no effective-date section; the 2025 Summary of Legislation (legis.iowa.gov) states enactments take
+    effect July 1, 2025 unless otherwise specified, and its SF 592 entry names no other date.
+  sources:
+  - label: SF 592 bill book (Iowa Legislature)
+    url: https://www.legis.iowa.gov/legislation/BillBook?ga=91&ba=SF592
+    official: true
+  - label: Governor's approval letter, SF 592
+    url: https://www.legis.iowa.gov/docs/publications/LGE/91/Attachments/SF592_GovLetter.pdf
+    official: true
+  - label: SF 592 enrolled text
+    url: https://www.legis.iowa.gov/docs/publications/LGE/91/SF592.pdf
+    official: true
+  - label: 2025 Summary of Legislation (Legislative Services Agency)
+    url: https://www.legis.iowa.gov/docs/publications/SOL/1543083.pdf
+    official: true
+  discovered_via: search

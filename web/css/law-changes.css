@@ -1,0 +1,198 @@
+/* "What this law changes" (web/js/ui/law-changes.js): the key, the county card, the table
+   twin and the read-next list. Colour tokens only (css/tokens.css); the four answers use the
+   same tokens as their map classes (MEASURE_COLOURS in ui/map.js). */
+
+.law-swatch[data-answer="already_allowed"] { background: var(--seq-2); }
+.law-swatch[data-answer="changed_condition"] { background: var(--seq-4); }
+.law-swatch[data-answer="newly_allowed"] { background: var(--seq-6); }
+.law-swatch[data-answer="unresolved"] { background: var(--no-data); }
+.law-swatch[data-answer="outside"] {
+  background: var(--not-modelled);
+  box-shadow: inset 0 0 0 1px var(--line-strong);
+}
+
+.law-toggle {
+  margin-top: var(--space-2);
+  margin-left: var(--space-2);
+}
+
+.law-read-next .btn {
+  height: auto;
+  min-height: 28px;
+  padding-block: var(--space-1);
+  white-space: normal;
+  text-align: left;
+}
+
+.law-key-list {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-2) 0;
+  padding: 0;
+  list-style: none;
+}
+
+.law-key-row {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.law-key-share,
+.law-num {
+  font-variant-numeric: tabular-nums;
+}
+
+.law-num {
+  text-decoration: underline dotted var(--line-strong);
+  text-underline-offset: 3px;
+}
+
+.law-none {
+  color: var(--text-quiet);
+}
+
+.law-views {
+  display: inline-flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin: var(--space-1) 0;
+}
+
+.law-key-total {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.law-card:focus,
+.law-table:focus {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.law-answer {
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 2px var(--space-2);
+  align-items: center;
+  margin: 0 0 var(--space-3);
+}
+
+.law-answer .card-sub {
+  grid-column: 2;
+}
+
+.law-facts {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-3);
+}
+
+.law-facts > div {
+  display: grid;
+  grid-template-columns: minmax(96px, 30%) 1fr;
+  gap: var(--space-2);
+}
+
+.law-facts dt,
+.law-rn-facts dt {
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+.law-facts dd,
+.law-rn-facts dd {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.law-sections {
+  margin: var(--space-1) 0 0;
+  padding-left: var(--space-4);
+}
+
+.law-shares {
+  margin-bottom: var(--space-3);
+}
+
+.law-stage {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.law-munis summary {
+  cursor: pointer;
+  font-weight: var(--weight-bold);
+}
+
+.law-muni-list,
+.law-rn-list {
+  display: grid;
+  gap: var(--space-3);
+  margin: var(--space-2) 0 0;
+  padding: 0;
+  list-style: none;
+}
+
+.law-muni,
+.law-rn {
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-sm);
+  background: var(--surface-2);
+}
+
+.law-muni-head,
+.law-rn-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.law-muni-rule {
+  margin: var(--space-1) 0;
+  font-size: var(--text-sm);
+}
+
+.law-table-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.law-sort {
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.law-rn-facts {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-2);
+  margin: var(--space-2) 0;
+}
+
+.law-rn-switch {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+.law-rn-switch.is-switch {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .law-key-row,
+  .law-rn {
+    transition: background-color var(--dur) var(--ease);
+  }
+}

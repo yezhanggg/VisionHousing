@@ -57,6 +57,12 @@ tracts have a five-year change. Construction pay is published for 63 counties; t
 withheld by BLS and take the state value (index 1.0, method `state_value`). State construction
 pay is 1.017 times the national figure.
 
+Small states: BLS can withhold the **statewide** figure too (Vermont, 2025: private construction
+pay is flagged "N" for the state and for 8 of its 14 counties). The build then does not fail. The
+state pay becomes the job-weighted mean pay of the counties BLS does publish, and withheld counties
+are marked `state_from_counties` (or `national_value` if no county is published either). The state
+report card says how many counties were published.
+
 ## Which cost source, and why
 
 Both key-free options answered on 2026-11-22. **BLS QCEW construction wages** was chosen over

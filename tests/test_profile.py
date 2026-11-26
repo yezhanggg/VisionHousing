@@ -33,7 +33,7 @@ from visionhousing.profile import (
     load_profile_context,
     render,
 )
-from visionhousing.profile.format import compare_words, fmt
+from visionhousing.profile.format import compare_words, fmt, tidy
 from visionhousing.profile.registry import build_section
 from visionhousing.profile.render import CSV_COLUMNS
 
@@ -158,10 +158,13 @@ def test_people_numbers_match_testland(county, tract, tracts):
     assert renter.comparison.against == "state"
     all_hh = tracts["households_owner"].sum() + tracts["households_renter"].sum()
     assert renter.comparison.value == pytest.approx(tracts["households_renter"].sum() / all_hh)
+    # A county reads the published median from acs_bands (Testland: the household-weighted
+    # mean of its tracts' medians, rounded to $100); see test_profile_charts.py for the
+    # fallback when a pack has no acs_bands table.
     weights = rows["households_owner"] + rows["households_renter"]
-    income = np.average(rows["median_household_income"], weights=weights)
+    income = round(np.average(rows["median_household_income"], weights=weights), -2)
     assert people.fact("people.median_household_income").value == pytest.approx(income)
-    assert "approximate" in people.fact("people.median_household_income").note
+    assert "published" in people.fact("people.median_household_income").note
     one = tracts[tracts["geoid"] == TRACT].iloc[0]
     t_income = tract.section("people").fact("people.median_household_income")
     assert t_income.value == one["median_household_income"]
@@ -358,3 +361,34 @@ def test_cli_profile_errors(capsys):
     assert cli.main(["profile", "--state", "TL", "--county", "99003", "--tract", TRACT]) == 2
     assert cli.main(["profile", "--state", "TL", "--county", "99999"]) == 1
     assert "no county or tract" in capsys.readouterr().err
+
+
+def test_tidy_cuts_raw_floats_only_where_the_text_is_the_same():
+    """A raw float keeps 4 significant digits, or more where fewer would show differently."""
+    assert tidy(105.62196741208714, "households") == 105.6
+    assert tidy(0.05337078651685393, "share") == 0.05337
+    assert tidy(84750.0, "dollars") == 84750.0  # whole: unchanged
+    assert tidy(2670, "persons") == 2670  # an integer: unchanged
+    assert tidy("rural", "category") == "rural" and tidy(None, "share") is None
+    # 4 digits would read $103,900 and 5 $103,890; the text is $103,893, so it keeps 6.
+    assert tidy(103893.4, "dollars") == 103893.0
+    for value, unit in [(12345.678, "persons"), (0.0449999, "share"), (9.95, "ratio")]:
+        assert fmt(tidy(value, unit), unit) == fmt(value, unit)
+
+
+def test_profile_json_texts_are_unchanged_by_tidying(county, tract):
+    """Every shown text in the JSON is the exact value's; only raw numbers lose digits."""
+    for prof in (county, tract):
+        d = prof.to_dict()
+        facts = [f for s in d["sections"] for f in s["facts"]]
+        exact = {f.id: f for f in prof.facts()}
+        for f in facts:
+            e = exact[f["id"]]
+            assert f["text"] == e.text and f["range_text"] == e.range_text
+            for key in ("value", "moe", "low", "high"):
+                raw, short = getattr(e, key), f[key]
+                if isinstance(raw, float):
+                    assert fmt(short, e.unit) == fmt(raw, e.unit)
+                    assert len(repr(short)) <= len(repr(raw))
+                else:
+                    assert short == raw

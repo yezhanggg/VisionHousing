@@ -1,6 +1,6 @@
 version: 2
 updates:
-  - package-ecosystem: pip   # reads pyproject.toml and uv.lock
+  - package-ecosystem: uv    # reads pyproject.toml and updates uv.lock
     directory: "/"
     schedule:
       interval: weekly

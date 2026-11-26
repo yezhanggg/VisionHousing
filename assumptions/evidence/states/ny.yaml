@@ -1,0 +1,125 @@
+# Cross-state comparison records: NY.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ny.nyc_city_of_yes_housing
+  kind: policy
+  state: NY
+  jurisdiction: New York City
+  policy_types:
+  - adu
+  - tod
+  - parking
+  - commercial_land_housing
+  - adaptive_reuse
+  - missing_middle
+  title: NYC City of Yes for Housing Opportunity (citywide zoning text amendment)
+  citation: N 240290 ZRY (Zoning Resolution text amendment)
+  url: https://council.nyc.gov/press/2024/12/05/2761/
+  session: null
+  bill: N 240290 ZRY
+  enacted_date: 2024-12-05
+  effective_dates: []
+  geographic_scope: Citywide. TOD (3-5 stories) on qualifying R3-R5 sites near subway or rail that are
+    over 5,000 sq ft and on a short block end or a street at least 75 ft wide. Town Center housing (2-4
+    stories above ground-floor commercial) in low-density commercial overlays. One ADU of up to 800 sq
+    ft per 1- or 2-family building.
+  exclusions:
+  - No basement or detached ADUs in expanded 2050/2080 flood zones
+  - No detached ADUs in historic districts, some contextual districts (R1-2A, R2A, R3A) outside the Greater
+    Transit Zone, or the Bay Ridge special district west of Ridge Blvd
+  - Owner must live on the property to build an ADU
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: Not checked in depth.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Parking: Zone 1 (Manhattan Core/LIC and Inner Transit Zone) has no mandates. Zone 2 (Outer Transit
+    Zone) has reduced mandates. Zone 3 (Beyond the Greater Transit Zone) keeps mandates largely as before.
+    ADUs, affordable housing and qualifying developments under 75 units are exempt in some zones.'
+  - 'Conversions: eligibility moved from buildings built before 1961/1977 to before 1991, eligible geography
+    expanded citywide, and more housing types allowed.'
+  - Council estimate of over 82,000 homes in 15 years is a projection, not an outcome. Includes the Universal
+    Affordability Preference.
+  - The effective date was not read on an official page, so effective_dates is empty. The ZR 'recently
+    adopted' page is dated 12/5/2024.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: City Council press release dated 2024-12-05 reports passage with modifications. The
+    DCP final-plan PDF (nyc.gov) gives the ADU, TOD, Town Center, parking-zone and conversion details
+    and says the Council approved it 'On December 5'. The ZR page shows N 240290 ZRY dated 12/5/2024.
+  sources:
+  - label: NYC Council press release 2024-12-05
+    url: https://council.nyc.gov/press/2024/12/05/2761/
+    official: true
+  - label: DCP City of Yes for Housing Opportunity final plan (PDF)
+    url: https://www.nyc.gov/assets/planning/download/pdf/plans-studies/city-of-yes/housing-opportunity/city-of-yes-for-housing-opportunity_final-plan.pdf
+    official: true
+  - label: 'Zoning Resolution: recently adopted N 240290 ZRY'
+    url: https://zr.planning.nyc.gov/index.php/recently-adopted/city-yes-housing-opportunity-n-240290-zry
+    official: true
+  discovered_via: addendum
+- id: ny.ch58_2026_seqra_housing
+  kind: policy
+  state: NY
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'New York Laws of 2026, ch. 58, Part R (A 10008-C / S 9008-C budget bill): SEQRA exemption for
+    infill housing on previously disturbed sites'
+  citation: N.Y. Laws 2026, ch. 58, Part R; Environmental Conservation Law 8-0105, 8-0109, 8-0111(5-a),
+    (7), (8)
+  url: https://nyassembly.gov/leg/?term=2025&bn=A10008
+  session: 2025-2026 session (2026-27 budget)
+  bill: A 10008-C / S 9008-C
+  enacted_date: 2026-05-26
+  effective_dates:
+  - date: 2026-05-26
+    applies_to: Part R takes effect immediately and applies to pending proceedings, except actions where
+      an environmental impact statement was already required before that date
+  geographic_scope: 'Statewide. Exempt from SEQRA review: housing on previously disturbed sites connected
+    to public water and sewer, up to 250 homes (500 where zoning allows over 45 ft) in places of 1 million+
+    people, and up to 100 homes (20 without zoning, 300 in urban areas) elsewhere.'
+  exclusions:
+  - Sites in FEMA 100-year floodplains (outside places that require elevation above base flood), coastal
+    erosion hazard areas, recent farmland, or (in New York City) areas zoned only for industry
+  - A single house on a large lot (half an acre in NYC, one acre elsewhere) does not qualify
+  - Historic preservation, wetlands, stormwater and local zoning and site plan authority are unchanged
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Agencies must decide within 120 days whether an action qualifies (extensions limited); EISs must be
+    finished within two years of being required.
+  - Applicants must certify a Phase I environmental site assessment and hazardous-waste compliance.
+  - Removes one review layer; local discretionary approvals remain.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: nyassembly.gov bill page for A10008 shows actions '05/26/2026 delivered to governor'
+    and '05/26/2026 signed chap.58' and the bill text, whose Part R section 6 says it takes effect immediately.
+  sources:
+  - label: A10008 bill summary, actions and text (NY Assembly)
+    url: https://nyassembly.gov/leg/?default_fld=&leg_video=&bn=A10008&term=2025&Summary=Y&Actions=Y&Text=Y
+    official: true
+  discovered_via: pew_2026

@@ -99,10 +99,14 @@ def test_zero_lots_or_zero_hazard_give_zero(env):
     assert (res.stages["net"] == 0).all()
 
 
-def test_net_units_are_units_minus_one_per_project(env):
+def test_gross_and_net_follow_demolition_and_replacement(env):
     res = result(env)
     s = res.stages
-    assert s["net_units"] == pytest.approx(s["units"] - s["redeveloped"])
+    removed, on_sites = res.removed, res.baseline_on_sites
+    assert removed == pytest.approx(s["redeveloped"])  # one home demolished per lot
+    assert (on_sites <= s["redeveloped"] + 1e-9).all()  # q <= 1, one home per teardown
+    assert (s["authorized"] >= s["net"] - 1e-9).all()  # gross >= net where homes are removed
+    assert (s["authorized"] <= s["units"] + 1e-9).all()
     assert (s["units"] >= 2 * s["redeveloped"] - 1e-9).all()
     assert (s["units"] <= 6 * s["redeveloped"] + 1e-9).all()
 
@@ -112,8 +116,8 @@ def test_funnel_narrows_at_every_step(env):
     order = ["eligible", "fit", "feasible", "redeveloped"]
     for a, b in itertools.pairwise(order):
         assert (s[b] <= s[a] + 1e-9).all(), (a, b)
-    assert (s["net_units"] <= s["units"] + 1e-9).all()
-    assert (s["net"] <= s["net_units"] + 1e-9).all()
+    assert (s["authorized"] <= s["units"] + 1e-9).all()
+    assert (s["net"] <= s["authorized"] + 1e-9).all()
     assert (s["net"] >= 0).all()
 
 

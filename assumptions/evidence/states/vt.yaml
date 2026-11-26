@@ -1,0 +1,303 @@
+# Cross-state comparison records: VT.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: vt.24vsa4412_adu_duplex
+  kind: policy
+  state: VT
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - missing_middle
+  title: 'Vermont 24 V.S.A. § 4412: ADU and duplex/fourplex equal treatment'
+  citation: 24 V.S.A. § 4412(1)(D)-(F)
+  url: https://legislature.vermont.gov/statutes/section/24/117/04412
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Latest amendments to § 4412 (2025 Acts No. 155 § 4, No. 166 § 3, No. 179 § 9, Adj. Sess.)
+  - date: 2028-01-01
+    applies_to: 'Revised (1)(D): the four-unit rule does not apply where a district requires multiunit
+      buildings to have more than four units (2025 No. 179 § 9a)'
+  geographic_scope: All Vermont municipalities with bylaws. Duplexes must be allowed in every year-round
+    residential district under the same dimensional rules as a single-unit home. Where sewer and water
+    serve the district, buildings of up to four units must be allowed on a single-unit lot size. One ADU
+    within or attached to a single-family home is a permitted use.
+  exclusions:
+  - Flood hazard and fluvial erosion bylaws under § 4424 may still limit ADUs
+  - Towns may regulate short-term rentals separately
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A home with an ADU gets the same review as one without. Converting an existing detached nonresidential
+    building to an ADU cannot face stricter rules.
+  - The statute page has one combined history note, so it does not show which act changed each subdivision.
+    The section was first added in 2003. No ADU size cap appears in (1)(E).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: legislature.vermont.gov statute page shows the current (1)(D)-(F) text, the version
+    of (1)(D) effective 2028-01-01, and history entries with 2026-07-01 and 2028-01-01 effective dates.
+  sources:
+  - label: 24 V.S.A. § 4412 (Vermont Legislature)
+    url: https://legislature.vermont.gov/statutes/section/24/117/04412
+    official: true
+  discovered_via: addendum
+- id: vt.act152_2026
+  kind: policy
+  state: VT
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - starter_lots
+  title: 'Vermont Act 152 of 2026 (S.325): Act 250 Tier changes and extension of the interim housing exemptions'
+  citation: 2025, No. 152 (Adj. Sess.) (Act 152 of 2026), S.325
+  url: https://legislature.vermont.gov/bill/status/2026/S.325
+  session: 2025-2026 biennium, 2026 adjourned session
+  bill: S.325
+  enacted_date: 2026-06-16
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: First of several effective dates
+  - date: 2028-01-01
+    applies_to: New expiration date of the interim Act 250 housing exemptions, previously 2027-01-01 or
+      2027-07-01
+  geographic_scope: Statewide Act 250 jurisdiction. Interim housing exemptions apply in designated centers
+    and growth or neighborhood areas, subject to unit and acreage limits.
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Repeals parts of Act 181 of 2024, including Tier 2, Tier 3 and the road jurisdiction trigger. Act
+    250 triggers do not change outside Tier 1A and 1B areas.
+  - Extends any regional or municipal plan expiring in 2026 or 2027 to 2027-12-31. Requires the housing
+    department to report by 2027-01-15 on limiting appeals of municipal permits and on housing built under
+    the interim exemptions.
+  - Unit and acreage limits of the interim exemptions were not re-read in the act text. They come from
+    the Act 181 framework (see vt.act181_2024_tiers).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: S.325 status page shows Act 152 signed by the Governor on 2026-06-16. The Legislative
+    Counsel Act 152 summary PDF shows the repeals, the extension of the interim exemptions to 2028-01-01,
+    and 'multiple effective dates, beginning on July 1, 2026'.
+  sources:
+  - label: S.325 bill status (Vermont Legislature)
+    url: https://legislature.vermont.gov/bill/status/2026/S.325
+    official: true
+  - label: Act 152 act summary (Legislative Counsel)
+    url: https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT152/ACT152%20Act%20Summary.pdf
+    official: true
+  - label: LURB Act 181/Act 152 FAQ (2026-08-31)
+    url: https://act250.vermont.gov/sites/acttwofifty/files/documents/LURB%20Act%20181%20and%20Act%20152%20Frequently%20Asked%20Questions.pdf
+    official: true
+  discovered_via: addendum
+- id: vt.act181_2024_tiers
+  kind: policy
+  state: VT
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - infrastructure_finance
+  title: 'Vermont Act 181 of 2024: location-based Act 250 jurisdiction (Tier 1A/1B)'
+  citation: 2023, No. 181 (Adj. Sess.) (Act 181 of 2024), H.687; as amended by Act 152 of 2026
+  url: https://legislature.vermont.gov/Documents/2024/Docs/ACTS/ACT181/ACT181%20Act%20Summary.pdf
+  session: 2023-2024 biennium, 2024 adjourned session
+  bill: H.687
+  enacted_date: null
+  effective_dates:
+  - date: 2024-06-17
+    applies_to: First of several effective dates
+  geographic_scope: 'Tier 1A: full Act 250 exemption in areas approved by the Land Use Review Board on
+    a municipal application. Tier 1B: Act 250 exemption for housing projects of up to 50 units in areas
+    where the municipality opts in. Both are limited to downtown/village centers and planned growth areas,
+    and village areas for 1B, on Board-approved regional future land use maps.'
+  exclusions:
+  - Tier 1B requires water, wastewater or septic-suitable soils, a confirmed plan, and permanent zoning
+    and subdivision rules
+  - Flood hazard and river corridor areas are excluded unless adequately regulated
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Tiers 2 and 3 and the road rule were repealed by Act 152 of 2026.
+  - The LURB FAQ (2026-08-31) points to a map viewer of proposed and approved Tier 1A/1B areas but gives
+    no count of approved areas. Whether any area is practically usable was not confirmed.
+  - Act 181 also made zoning changes on density, parking and appeals, which were not itemized here.
+  - The bill status page shows delivery to the Secretary of State on 2024-06-25 but not the date it became
+    law, so enacted_date is left null even though the act is in force.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Act 181 summary PDF (Legislative Counsel) shows the Tier system and 'multiple effective
+    dates, beginning on June 17, 2024'. The LURB FAQ dated 2026-08-31 shows the current Tier 1A/1B rules
+    after Act 152.
+  sources:
+  - label: Act 181 act summary
+    url: https://legislature.vermont.gov/Documents/2024/Docs/ACTS/ACT181/ACT181%20Act%20Summary.pdf
+    official: true
+  - label: H.687 bill status
+    url: https://legislature.vermont.gov/bill/status/2024/H.687
+    official: true
+  - label: LURB Act 181/Act 152 FAQ (2026-08-31)
+    url: https://act250.vermont.gov/sites/acttwofifty/files/documents/LURB%20Act%20181%20and%20Act%20152%20Frequently%20Asked%20Questions.pdf
+    official: true
+  discovered_via: addendum
+- id: vt.chip_act69_2025
+  kind: policy
+  state: VT
+  jurisdiction: statewide
+  policy_types:
+  - infrastructure_finance
+  title: 'Vermont Community and Housing Infrastructure Program (CHIP): project-based tax increment financing
+    for housing infrastructure'
+  citation: 2025, No. 69 (Act 69 of 2025), S.127, CHIP provisions
+  url: https://legislature.vermont.gov/bill/status/2026/S.127
+  session: 2025-2026 biennium, 2025 session
+  bill: S.127
+  enacted_date: 2025-06-12
+  effective_dates:
+  - date: 2025-06-12
+    applies_to: First of several effective dates of Act 69
+  - date: 2035-12-31
+    applies_to: Final deadline for CHIP tax increment financing applications
+  geographic_scope: Any Vermont municipality that adopts a housing development plan, designates a housing
+    development site, signs a housing infrastructure agreement, and gets VEPC approval.
+  exclusions:
+  - Development must devote at least 60% of floor area to housing or otherwise meaningfully serve CHIP's
+    purpose
+  - Must pass the but-for test
+  implementation_status: practically_usable
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - VEPC may approve up to $200 million a year in total lifetime education-tax increment retention. Debt
+    may be incurred for 5 years after the site is created, extendable by 3 years. Increment may be kept
+    for up to 20 years from the first debt.
+  - The ACCD page states retention of at least 85% of municipal increment, up to 75% of education increment
+    for market-rate projects, and up to 85% for projects with at least 15% affordable units.
+  - The ACCD page says CHIP 'launched on January 30th' but gives no year (probably 2026). It cites a $2
+    billion investment potential by 2035, which is a program claim, not an outcome.
+  - Codification (24 V.S.A. chapter 53) was not checked on the statutes site. No approved CHIP sites were
+    found.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: S.127 status page shows Act 69 signed 2025-06-12. The Act 69 summary PDF shows the
+    CHIP terms, the 2035-12-31 deadline, and effective dates beginning 2025-06-12. The ACCD CHIP page
+    shows the retention shares and the launch.
+  sources:
+  - label: S.127 bill status
+    url: https://legislature.vermont.gov/bill/status/2026/S.127
+    official: true
+  - label: Act 69 act summary
+    url: https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT069/ACT069%20Act%20Summary.pdf
+    official: true
+  - label: ACCD CHIP program page
+    url: https://accd.vermont.gov/economic-development/vepc/chip
+    official: true
+  discovered_via: addendum
+- id: vt.act47_2023_home
+  kind: policy
+  state: VT
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - parking
+  - adu
+  - permit_timing
+  title: 'Vermont Act 47 (2023), S.100, the HOME Act: duplexes everywhere, fourplexes with sewer and water,
+    parking caps, Act 250 relief'
+  citation: 2023, No. 47 (S.100); 24 V.S.A. §§ 4412, 4413, 4414 and Act 250 (10 V.S.A. ch. 151)
+  url: https://legislature.vermont.gov/bill/status/2024/S.100
+  session: 2023-2024 biennium, 2023 session
+  bill: S.100
+  enacted_date: 2023-06-05
+  effective_dates:
+  - date: 2023-06-05
+    applies_to: Sec. 46 (lead inspectors), on passage
+  - date: 2023-07-01
+    applies_to: Most of the act, and Sec. 2 subdivision 24 V.S.A. § 4412(1)(D)
+  - date: 2023-09-01
+    applies_to: Sec. 3 (24 V.S.A. § 4413, limits on regulating shelters and similar uses)
+  - date: 2024-12-01
+    applies_to: Secs. 1 (24 V.S.A. § 4414) and 2 (24 V.S.A. § 4412), other than § 4412(1)(D)
+  geographic_scope: All municipalities with bylaws. Duplexes wherever single-family homes are allowed;
+    up to four units and at least five units per acre in residential districts served by municipal sewer
+    and water.
+  exclusions:
+  - Towns may define which areas count as served by municipal sewer and water
+  - 'Parking: up to 1.5 spaces per unit may be required for multiunit homes in areas without sewer and
+    water if other parking is not sufficient'
+  - The Act 250 threshold relief (25 units in designated centres) was temporary, sunsetting 2026-07-01
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - In residential districts with sewer and water, no more than one parking space per unit may be required.
+  - ADUs get the same review as single-family homes (see vt.24vsa4412_adu_duplex for the current statute).
+  - Affordable housing may add up to 40% more density and one more floor where served by sewer and water.
+  - Later changed by Act 181 (2024) and Act 152 (2026), which have their own records.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: legislature.vermont.gov bill status shows S.100 (Act 47) 'Signed into law 6/5/2023'.
+    The act as enacted (Sec. 47, Effective Dates) gives July 1, 2023 generally, December 1, 2024 for Secs.
+    1-2 except § 4412(1)(D) (July 1, 2023), September 1, 2023 for Sec. 3, passage for Sec. 46, and 'Date
+    Governor signed bill June 5, 2023'. The Legislative Counsel act summary was used for the scope.
+  sources:
+  - label: S.100 (Act 47) bill status
+    url: https://legislature.vermont.gov/bill/status/2024/S.100
+    official: true
+  - label: Act 47 as enacted
+    url: https://legislature.vermont.gov/Documents/2024/Docs/ACTS/ACT047/ACT047%20As%20Enacted.pdf
+    official: true
+  - label: Act 47 summary (Office of Legislative Counsel)
+    url: https://legislature.vermont.gov/Documents/2024/Docs/ACTS/ACT047/ACT047%20Act%20Summary.pdf
+    official: true
+  discovered_via: search

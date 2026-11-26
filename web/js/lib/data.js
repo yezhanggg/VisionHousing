@@ -20,19 +20,33 @@ function remember(key, promise) {
   return promise;
 }
 
-/** Load (or reuse) the reply for `key`. An empty key loads nothing. */
-export function useJson(key, load) {
-  const [state, setState] = useState({ data: null, error: "", loading: Boolean(key), localOnly: false });
+/**
+ * Load (or reuse) the reply for `key`. An empty key loads nothing.
+ *
+ * While a new key loads, the last reply stays (`stale: true`) so a changed number can roll from
+ * its old text to the new one, but only while `keep` is the same: a reply loaded under another
+ * `keep` (another state) is dropped at once, so the old state's range and sentence never sit
+ * under the new state's heading. The screens then show their loading skeleton. `forKey` is the
+ * key the data belongs to.
+ */
+export function useJson(key, load, keep = "") {
+  const [state, setState] = useState({ data: null, error: "", loading: Boolean(key), localOnly: false, keep, forKey: "" });
+  // Drop a reply of another `keep` in the same render the key changes (no frame with old numbers).
+  const shown = state.keep === keep ? state : { data: null, error: "", loading: Boolean(key), localOnly: false, keep, forKey: "" };
   useEffect(() => {
     if (!key) {
-      setState({ data: null, error: "", loading: false, localOnly: false });
+      setState({ data: null, error: "", loading: false, localOnly: false, keep, forKey: "" });
       return undefined;
     }
     let live = true;
-    setState((s) => ({ data: s.data, error: "", loading: true, localOnly: false, stale: true }));
+    setState((s) =>
+      s.keep === keep
+        ? { data: s.data, error: "", loading: true, localOnly: false, stale: Boolean(s.data), keep, forKey: s.forKey }
+        : { data: null, error: "", loading: true, localOnly: false, keep, forKey: "" },
+    );
     const promise = cache.get(key) || remember(key, load());
     promise
-      .then((data) => live && setState({ data, error: "", loading: false, localOnly: false }))
+      .then((data) => live && setState({ data, error: "", loading: false, localOnly: false, keep, forKey: key }))
       .catch(
         (err) =>
           live &&
@@ -41,25 +55,27 @@ export function useJson(key, load) {
             error: String(err?.message || err),
             loading: false,
             localOnly: err instanceof LocalOnlyError,
+            keep,
+            forKey: key,
           }),
       );
     return () => {
       live = false;
     };
-  }, [key]);
-  return state;
+  }, [key, keep]);
+  return shown;
 }
 
 /** The run of a scenario: `POST /run` with its explanation (and, if asked, the top drivers). */
 export function useRun(sc, { drivers = false, explain = true, skip = false } = {}) {
   const body = runBody(sc, { explain, drivers });
   const key = skip ? "" : `run:${JSON.stringify(body)}`;
-  return useJson(key, () => api.run(body));
+  return useJson(key, () => api.run(body), sc.state);
 }
 
 /** The county map of a scenario. */
 export function useMap(sc) {
-  return useJson(`map:${JSON.stringify(runBody(sc))}`, () => api.map(sc));
+  return useJson(`map:${JSON.stringify(runBody(sc))}`, () => api.map(sc), sc.state);
 }
 
 /** The "explain this number" payload of a record id in a run, or null. */

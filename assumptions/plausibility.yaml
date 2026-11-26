@@ -1,0 +1,102 @@
+# Plausibility card: how each reform's result is turned into a rate, and which
+# observed rates it is set beside. No model number lives here; the model's
+# rate is read from the engine run, the observed rates from the evidence files.
+#
+# Read by visionhousing.validation.plausibility; method in
+# docs/modules/validation_plausibility.md.
+
+version: 1
+id: plausibility_2026_11
+years: 5   # the run's horizon, 2027-2031
+axis_log_ratio: 20   # the card's strip uses a log scale when its highest value is more
+                     # than 20 times its lowest (so small and large rates both show)
+
+# One block per measure. A reform can be shown in more than one measure.
+#   numerator    the run record that holds the reform's result ("added" is the
+#                headline: added units authorized 2027-2031)
+#   denominator  a record of the same reform (its P50 is used), or none when
+#                the record is already a yearly rate
+#   scale        multiply by this after dividing (1,000 for "per 1,000")
+measures:
+  per_1000_lots_year:
+    label: homes per 1,000 eligible lots per year
+    numerator: added
+    denominator: records.eligible
+    scale: 1000
+    per_year: true
+  per_100k_residents_year:
+    label: homes per 100,000 residents per year
+    numerator: records.per_100k   # already per 100,000 residents per year
+    denominator: null
+    scale: 1
+    per_year: false
+
+reforms:
+  adu:
+    measures: [per_1000_lots_year, per_100k_residents_year]
+    outside_band:
+      below: >-
+        The observed places are large cities in high-rent markets with strong
+        state ADU law (most of them in California); our lots include small
+        towns and lower rents, and the reform's take-up range is set from
+        evidence across markets, so a lower rate is expected.
+      above: >-
+        Our rate is above every place observed with a similar rule. The
+        likely cause is a take-up or feasibility range set too high for this
+        state; check adu.takeup_feasible_annual and the feasibility step.
+  missing_middle:
+    measures: [per_1000_lots_year, per_100k_residents_year]
+    outside_band:
+      below: >-
+        Observed places allowed small multifamily homes in hot markets where
+        land is dear; here few lots clear the redevelopment test at today's
+        rents and costs, so few are rebuilt in five years.
+      above: >-
+        Our rate is above the places observed. The likely cause is the
+        redevelopment rate or the feasibility test; check
+        missing_middle.sf_turnover_annual and the pro forma inputs.
+  tod:
+    measures: [per_100k_residents_year]
+    outside_band:
+      below: >-
+        Observed transit rezonings sit in large regions with strong demand
+        near stations; here the stops and the demand near them are fewer.
+      above: >-
+        Our rate is above the places observed. Check the regional absorption
+        cap and the developable share of land near stops.
+  parking:
+    measures: []
+    no_rate: >-
+      The parking reform acts on the cost of homes that would be built anyway,
+      not on a count of eligible lots, so it has no per-lot rate.
+  fees:
+    measures: []
+    no_rate: >-
+      The fee cut acts on the cost of homes that would be built anyway, not on
+      a count of eligible lots, so it has no per-lot rate.
+
+# Where observed rates are read. Each source names the measure its rates are
+# in and, for the libraries with mixed units, which units and wording count.
+observed:
+  california_apr:
+    file: assumptions/evidence/california_apr.yaml
+    reform: adu
+    measure: per_1000_lots_year
+    unit_text: ADU homes permitted per 1,000 one-unit detached homes per year
+    caveat_extra: >-
+      California's denominator is one-unit detached homes; our eligible lots
+      also count attached single-family homes, so our rate is lower for the
+      same count.
+  adu_rate_plausibility:
+    file: assumptions/calibration/adu_rate_plausibility.yaml
+    reform: adu
+    measure: per_1000_lots_year
+  evidence_library:
+    file: assumptions/evidence.yaml
+    units:
+      "permits per 100k people per year": per_100k_residents_year
+    include_measure_words: [permissive]   # rates for places with the reform, not without it
+  comparison_records:
+    folder: assumptions/evidence/states
+    units:
+      "ADU permits per 100,000 residents in 2025, permissive-ordinance cities": per_100k_residents_year

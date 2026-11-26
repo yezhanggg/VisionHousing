@@ -39,11 +39,24 @@ def _plan_fact(ctx: ProfileContext, county: str, measured_at: str) -> Fact | Non
     plan = read_plan_citations().get(county)
     if not plan:
         return None
+    if not plan.get("name"):
+        return Fact(
+            id=f"{KEY}.county_plan",
+            label="County comprehensive plan",
+            value=None,
+            unit="text",
+            text=f"no current county plan found online (looked {plan['accessed']})",
+            source=PLAN_SOURCE,
+            vintage=ctx.vintage(PLAN_SOURCE),
+            year="not found",
+            measured_at=measured_at,
+            note=str(plan.get("note") or ""),
+        )
     year = plan.get("adopted")
     text = plan["name"] + (f" (adopted {year})" if year else " (adoption year not found)")
     if not plan.get("verified"):
         text += "; not confirmed on the county's own page"
-    note = f"{plan['url']} (read {plan['accessed']})"
+    note = f"{plan['url'] or 'no link confirmed'} (read {plan['accessed']})"
     if plan.get("note"):
         note += f". {plan['note']}"
     return Fact(
@@ -57,6 +70,25 @@ def _plan_fact(ctx: ProfileContext, county: str, measured_at: str) -> Fact | Non
         year=str(year) if year else "not stated",
         measured_at=measured_at,
         note=note,
+    )
+
+
+def _commission_fact(ctx: ProfileContext, county: str, measured_at: str) -> Fact | None:
+    plan = read_plan_citations().get(county) or {}
+    url = plan.get("commission_url")
+    if not url:
+        return None
+    return Fact(
+        id=f"{KEY}.county_commission",
+        label="County planning commission or agency",
+        value=url,
+        unit="text",
+        text=url,
+        source=PLAN_SOURCE,
+        vintage=ctx.vintage(PLAN_SOURCE),
+        year=str(plan.get("accessed", "")),
+        measured_at=measured_at,
+        note="link opened on the date shown; the county's page is the authority",
     )
 
 
@@ -176,10 +208,15 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
     parts = [lead]
     if plan is not None:
         facts.append(plan)
-        parts.append(f"the county plan is {plan.text}")
+        parts.append(f"the county plan is {plan.text}" if plan.value else f"there is {plan.text}")
+    commission = _commission_fact(ctx, county, "county")
+    if commission is not None:
+        facts.append(commission)
     limits = (
         "DCED's record says whether a plan exists, not how old it is or what it says. "
-        "Municipalities report it themselves. County plans are listed only for large counties, "
-        "from each county's own page; a plan marked not confirmed could not be checked there."
+        "Municipalities report it themselves. County plans are listed for all 67 counties from "
+        "each county's (or its regional commission's) own page; a plan marked not confirmed had "
+        "no adoption year on the page or the page could not be opened. The planning code asks "
+        "counties to update their plans at least every ten years (section 302)."
     )
     return finish(KEY, TITLE, sentence(parts), facts, limits)

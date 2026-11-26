@@ -5,8 +5,10 @@ Plain-language summary
 :func:`build_profile` opens the state's pack (or uses one already open),
 checks the place, builds every registered section in order and gathers the
 footnotes: one entry per source a fact cites, with its name, publisher and
-edition. :func:`list_places` finds counties (or tracts) whose name or code
-contains the search text, for the place search box.
+edition. A county's profile also carries its ranks among the state's
+counties (:mod:`visionhousing.profile.ranks`). :func:`list_places` finds
+counties (or tracts) whose name or code contains the search text, for the
+place search box.
 """
 
 from __future__ import annotations
@@ -20,6 +22,7 @@ from visionhousing.profile.context import (
     tract_name,
 )
 from visionhousing.profile.model import Profile
+from visionhousing.profile.ranks import county_ranks
 from visionhousing.profile.registry import build_sections, section_keys
 
 __all__ = ["PlaceNotFoundError", "build_profile", "list_places"]
@@ -56,9 +59,14 @@ def build_profile(
     place, _ = ctx.place(geoid)
     county = place.counties[0]
     built = build_sections(ctx, geoid, keys)
+    ranks = county_ranks(ctx, geoid) if place.level == "county" else ()
     cited: list[str] = []
     for s in built:
         for src in (*s.sources, *(f.source for f in s.facts)):
+            if src not in cited:
+                cited.append(src)
+    for r in ranks:
+        for src in r.source_ids:
             if src not in cited:
                 cited.append(src)
     return Profile(
@@ -73,6 +81,7 @@ def build_profile(
         synthetic=ctx.synthetic,
         pack_hash=ctx.pack_hash,
         sources={src: ctx.source_info(src) for src in cited},
+        ranks=ranks,
     )
 
 

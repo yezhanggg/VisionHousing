@@ -1,0 +1,210 @@
+{
+ "state": "VT",
+ "unit_fields": [
+  "est_1_units",
+  "est_2_units",
+  "est_3-4_units",
+  "est_5+_units"
+ ],
+ "unit_fields_label": "Estimated units in 1-, 2-, 3-4 and 5+ unit buildings (Building Permits Survey)",
+ "data_release": {
+  "source": "bps_state_annual",
+  "vintage": "2025 annual files (final)",
+  "last_full_year": 2025,
+  "release_date": "2026-05-14",
+  "release_date_basis": "Last-Modified date of the state annual file"
+ },
+ "information_cutoff": "2026-11-24",
+ "information_cutoff_basis": "as_of in assumptions/outcome.yaml",
+ "forecast_window": [
+  2027,
+  2031
+ ],
+ "forecast_gap": [
+  2026
+ ],
+ "forecast_gap_text": "2026 has no full-year permit count by the cutoff; the baseline carries the 2025 rule level through it.",
+ "rule": "shrink_to_group",
+ "rule_text": "mean of 2021-2025 permits per home, pulled toward the county's place-type rate with weight s / (s + 100) on its own rate (s = its mean yearly permits)",
+ "annual": {
+  "2021": 2319,
+  "2022": 2403,
+  "2023": 2456,
+  "2024": 2654,
+  "2025": 2294
+ },
+ "historical_years": {
+  "level_years": [
+   2021,
+   2025
+  ],
+  "backtest_years": [
+   1990,
+   2025
+  ]
+ },
+ "role": "control",
+ "note": "The shipped middle value comes from county shrinkage toward place-type rates; county histories, home counts and group assignments are needed to reproduce it, so the state series is an outside control only.",
+ "diagnostics": {},
+ "bridge": {
+  "method": "carry_annual",
+  "method_text": "Carry annual through the gap: the rule's yearly level from the last full year of data is used unchanged for the gap year and each projected year. The gap year is not projected separately and adds nothing to the five-year total.",
+  "gap_years": [
+   2026
+  ],
+  "nowcast": {
+   "id": "baseline_bridge_nowcast_2026",
+   "label": "2026 nowcast from monthly year-to-date permits (diagnostic only)",
+   "use": "record_only",
+   "status": "available",
+   "year": 2026,
+   "through_month": 9,
+   "file": "st2609y.txt",
+   "release_date": "2026-10-27",
+   "next_file": "st2610y.txt",
+   "next_release_date": "2026-11-25",
+   "history_years": [
+    2021,
+    2022,
+    2023,
+    2024,
+    2025
+   ],
+   "caveats": [
+    "A year-to-date count is never treated as a full year.",
+    "Monthly and annual files differ in reporting and imputation; the share s absorbs that difference as well as the season.",
+    "Release dates are the files' Last-Modified dates on the Census server; a re-posted file shows a later date than its first release.",
+    "The history files are as posted now; earlier copies were not archived, so this is a revised-data exercise."
+   ],
+   "state": {
+    "ytd": 1210,
+    "ytd_history": {
+     "2021": 1549,
+     "2022": 1761,
+     "2023": 1831,
+     "2024": 1877,
+     "2025": 2011
+    },
+    "shares": {
+     "2021": 0.668,
+     "2022": 0.7328,
+     "2023": 0.7455,
+     "2024": 0.7072,
+     "2025": 0.8766
+    },
+    "low": 1380,
+    "mid": 1651,
+    "high": 1811,
+    "carried_annual": 2425,
+    "formula": "nowcast = YTD 2026 Jan-Sep / s; YTD = 1,210; s = YTD(y, Jan-Sep) / annual(y) for y in 2021-2025 (2021 0.668, 2022 0.733, 2023 0.746, 2024 0.707, 2025 0.877); low / middle / high use s = 0.877 / 0.733 / 0.668 = 1,380 / 1,651 / 1,811 units; the carried annual level is 2,425 units (state-series mean of 2021-2025; the shipped level comes from county shrinkage). Diagnostic only: no estimate uses it.",
+    "carried_annual_basis": "state-series mean of 2021-2025; the shipped level comes from county shrinkage",
+    "sources": [
+     "bps_state_monthly_ytd",
+     "bps_state_annual"
+    ],
+    "assumption_ids": [
+     "baseline_bridge_nowcast_2026",
+     "baseline.first_year",
+     "baseline.recent_window_years"
+    ]
+   }
+  }
+ },
+ "source": "assumptions/calibration/baseline_reconciliation.yaml",
+ "view": {
+  "version": 1,
+  "state": "VT",
+  "rows": [
+   {
+    "id": "historical_years",
+    "label": "Historical years used",
+    "text": "level from 2021–2025 permits; rules tested on 1990–2025. Rule: mean of 2021-2025 permits per home, pulled toward the county's place-type rate with weight s / (s + 100) on its own rate (s = its mean yearly permits).",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [
+     "bps_state_annual"
+    ],
+    "assumption_ids": []
+   },
+   {
+    "id": "unit_fields",
+    "label": "Permit columns counted",
+    "text": "Estimated units in 1-, 2-, 3-4 and 5+ unit buildings (Building Permits Survey) (est_1_units, est_2_units, est_3-4_units, est_5+_units). The reported-only columns are not used.",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [
+     "bps_state_annual"
+    ],
+    "assumption_ids": []
+   },
+   {
+    "id": "data_release",
+    "label": "Data release",
+    "text": "2025 annual files (final), posted 2026-05-14 (Last-Modified date of the state annual file).",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [
+     "bps_state_annual"
+    ],
+    "assumption_ids": []
+   },
+   {
+    "id": "information_cutoff",
+    "label": "Information cutoff",
+    "text": "2026-11-24: nothing released after this date is used (as_of in assumptions/outcome.yaml).",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [],
+    "assumption_ids": []
+   },
+   {
+    "id": "forecast_window",
+    "label": "Projected years and gap",
+    "text": "2027–2031; gap year 2026. 2026 has no full-year permit count by the cutoff; the baseline carries the 2025 rule level through it. Carry annual through the gap: the rule's yearly level from the last full year of data is used unchanged for the gap year and each projected year. The gap year is not projected separately and adds nothing to the five-year total.",
+    "kind": "fact",
+    "status": "",
+    "formula": "",
+    "sources": [],
+    "assumption_ids": []
+   },
+   {
+    "id": "baseline_bridge_nowcast_2026",
+    "label": "2026 nowcast (diagnostic only)",
+    "text": "1,380 to 1,811 homes, middle 1,651, from 1,210 permits in January–September (file st2609y.txt, posted 2026-10-27); the baseline carries 2,425 a year through the gap. No estimate uses the nowcast.",
+    "kind": "diagnostic",
+    "status": "diagnostic only",
+    "formula": "nowcast = YTD 2026 Jan-Sep / s; YTD = 1,210; s = YTD(y, Jan-Sep) / annual(y) for y in 2021-2025 (2021 0.668, 2022 0.733, 2023 0.746, 2024 0.707, 2025 0.877); low / middle / high use s = 0.877 / 0.733 / 0.668 = 1,380 / 1,651 / 1,811 units; the carried annual level is 2,425 units (state-series mean of 2021-2025; the shipped level comes from county shrinkage). Diagnostic only: no estimate uses it.",
+    "sources": [
+     "bps_state_monthly_ytd",
+     "bps_state_annual"
+    ],
+    "assumption_ids": [
+     "baseline_bridge_nowcast_2026",
+     "baseline.first_year",
+     "baseline.recent_window_years"
+    ]
+   },
+   {
+    "id": "reconciliation",
+    "label": "State reconciliation",
+    "text": "Outside control, not reconciled. The shipped middle value comes from county shrinkage toward place-type rates; county histories, home counts and group assignments are needed to reproduce it, so the state series is an outside control only.",
+    "kind": "check",
+    "status": "control",
+    "formula": "",
+    "sources": [],
+    "assumption_ids": []
+   }
+  ],
+  "reconciliation": {
+   "role": "control",
+   "state_component": null,
+   "baseline_p50": 12242.561223962386,
+   "matched": null
+  },
+  "source": "assumptions/calibration/baseline_reconciliation.yaml"
+ }
+}

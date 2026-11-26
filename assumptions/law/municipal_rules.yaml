@@ -1,0 +1,2357 @@
+# Municipal zoning rules read by hand from each municipality's own text.
+#
+# Read by visionhousing.law.tables, which builds the muni_zoning_rules table:
+# one row for every Pennsylvania municipality in the DCED record. A
+# municipality listed here gets the values below; every other one stays
+# "unknown" (method: unread). Unknown never means "no".
+#
+# Rules for this file:
+# - Only documents the municipality publishes itself (its own website or its
+#   own legislative system), or, where the county zones for a municipality
+#   (MPC § 602), the county's ordinance on the county's own website.
+#   Commercial code hosts (eCode360, Municode, American Legal) forbid bulk or
+#   automated use: never read them here.
+# - A county ordinance gives one row per municipality it covers, all with the
+#   same values (YAML anchors: "<<: *name" repeats the first row with a new
+#   geoid). Which municipalities it covers comes from the county's own text
+#   or zoning page, not only from the DCED record, because the two can differ.
+# - status: verified only when the quote was found in the document's text at
+#   the offset given, by a person, on reviewed_on. Anything less is draft.
+# - Quotes are at most 300 characters: enough to find the passage again.
+# - evidence_offset is the character offset of the quote in the text pypdf
+#   extracts from the document (visionhousing.law.text.pdf_text); text_sha256
+#   identifies that text.
+# - A value read only from a picture of a table (no extractable text) is left
+#   unknown, because nobody can re-find it from the offset.
+# - Rule-change tracker: a document may give adopted_on, amended_through and
+#   effective_date (YYYY, YYYY-MM or YYYY-MM-DD, as the text states them; never
+#   guessed). A rule takes its document's dates unless it gives its own, and
+#   may give binding_conditions (plain words). The build sets future_effective
+#   when effective_date is after the build date; such a rule counts as not read
+#   until then (assumptions/law/hooks.yaml).
+# - in_force_by (a rule only): where the text prints no adoption date, the
+#   latest dated enactment inside the cited codified section, or the posted
+#   text's "enacted to" date. The rule as read stood in force by then; it is
+#   not an adoption date, so it is never written as adopted_on. A YAML comment
+#   beside it gives the quote and offset.
+# - occupancy_restriction: relatives_only when only relatives of the main
+#   household (or a relative needing care) may live in the ADU. The benchmark
+#   lets any household live there, so a by_right rule with it counts as "by
+#   right with conditions" (assumptions/law/hooks.yaml).
+#
+# The 2026-11 calibration of adu_legal_share.yaml cites 221 town readings, but
+# only its totals are in this repository; the per-town notes are not, so they
+# could not be turned into rows here.
+
+version: 1
+
+documents:
+  - doc_id: pgh_ord_2025_1545
+    title: "City of Pittsburgh, Bill 2025-1545 (Ordinance 31 of 2026), final text (Version 7)"
+    level: municipality
+    publisher: City of Pittsburgh (City Council legislative system, Legistar)
+    # The City's Legistar web API: matter 31504, text of version 7 (key 35471).
+    # sha256 and text_chars are of its plain text with white space collapsed
+    # (fetched by script 2026-11-25). The attachment server holding the PDF
+    # copy disallows all robots, so the PDF is not used.
+    url: https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/35471
+    licence: Public legislative record of the City of Pittsburgh
+    access: hand_read
+    source_id: pgh_legistar
+    sha256: b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67
+    text_chars: 390737
+    fetched_on: 2026-11-25
+    adopted_on: 2026-10-27  # passed finally (Legistar enactment date)
+    effective_date: 2026-10-29  # Legistar "Effective date: 10/29/2026"; signed that day
+  - doc_id: phl_li_adu_checklist_2022
+    title: "City of Philadelphia, L&I Accessory Dwelling Unit Checklist PZ_004_INF (Rev 3.2022)"
+    level: municipality
+    publisher: City of Philadelphia, Department of Licenses and Inspections
+    url: https://www.phila.gov/media/20220308130807/PZ_004_INF_Accessory-Dwelling-Unit-Checklist-rev-3.8.2022.pdf
+    licence: Public guidance of the City of Philadelphia
+    access: hand_read
+    source_id: phl_li_adu_checklist
+    sha256: 4fdc4ced8bbadba4dbd661af46a9fc015d8d7f442ef65b3afee5bc6cf56c0a80
+    text_chars: 4277
+    fetched_on: 2026-11-23
+  - doc_id: shrewsbury_york_zo_2023
+    title: "Shrewsbury Borough (York County) Zoning Ordinance, Ordinance 2023-2"
+    level: municipality
+    publisher: Shrewsbury Borough
+    url: https://shrewsburyborough.org/wp-content/uploads/2023/10/2023-Shrewsbury-Borough-Zoning-Ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: bcdcac0448fab45a543963b1971cb5f022f9acb5716d22559308fef7a62749a9
+    text_chars: 277437
+    fetched_on: 2026-11-23
+    adopted_on: "2023"  # Ordinance 2023-2; day not read
+  - doc_id: waynesboro_franklin_zo_1158
+    title: "Borough of Waynesboro (Franklin County) Zoning Ordinance No. 1158 (2017)"
+    level: municipality
+    publisher: Borough of Waynesboro
+    url: https://waynesboropa.gov/download/45/forms-and-information/1410/zoning-ordinance-no-1158-adopted-04-19-2017.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 104355166dfa4d579cb6f6fc88b3882f44679a8a8df50acd16e30ae40dc5050d
+    text_chars: 424972
+    fetched_on: 2026-11-23
+    adopted_on: 2017-04-19  # adoption date in the borough's file title
+  - doc_id: wyomissing_berks_zo_2010
+    title: "Borough of Wyomissing (Berks County) Zoning Ordinance of 2010, as amended June 2024"
+    level: municipality
+    publisher: Borough of Wyomissing
+    url: https://wyomissingboro.org/DocumentCenter/View/249/Chapter-27-Zoning-PDF
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: d3ac2cf79bfda503fbaf0fda04973a5636d271e86ada1f8792984f15224edcf4
+    text_chars: 489148
+    fetched_on: 2026-11-23
+    adopted_on: "2010"
+    amended_through: "2024-06"
+  - doc_id: derry_dauphin_zo_2017
+    title: "Township of Derry (Dauphin County) Zoning Ordinance, Chapter 225, as amended to February 2019"
+    level: municipality
+    publisher: Township of Derry
+    url: https://www.derrytownship.org/wp-content/uploads/2019/04/ZO_as_amended_2.12.19.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: d4b0b983b5e05152ab4e220c06ff81d5fe59d73fb44b95d4dcce2ca88e40e341
+    text_chars: 741626
+    fetched_on: 2026-11-23
+    amended_through: 2019-02-12  # "as amended 2.12.19" in the township's file
+  - doc_id: hermitage_mercer_ch27_2025
+    title: "City of Hermitage (Mercer County) Code Chapter 27 Zoning, Supplement 28 (December 2025)"
+    level: municipality
+    publisher: City of Hermitage
+    url: https://www.hermitage.net/DocumentCenter/View/809/Chapter-27-Zoning-PDF-
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 5bcec889e12e9c5d1c33ced0deddf5fc19b05c2128c6f4d188ddbdbdc7a7f02e
+    text_chars: 404564
+    fetched_on: 2026-11-23
+    amended_through: "2025-12"  # Supplement 28
+    # Text re-fetched 2026-11-24, same text_sha256. Offset 2839: "§ 27-102.
+    # Effective Date. [Ord. No. 1-2024, 1/2/2024] This chapter shall take effect
+    # on seven days following adoption of the Board of Commissioners." The
+    # effective day is not printed, so only adopted_on is recorded.
+    adopted_on: 2024-01-02
+  - doc_id: fayette_county_zo_2006
+    title: "Fayette County Zoning Ordinance (effective November 1, 2006), with Table I as revised July 1, 2009"
+    level: county
+    publisher: County of Fayette, Planning, Zoning and Community Development
+    url: https://fayettecountypa.org/DocumentCenter/View/1391/Zoning-Ordinance-Adopted-11-1-06-PDF
+    licence: Public ordinance of the county
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: dc12bfe82f61d66ac8ba72f97df95ef82a64fbfb2c9934932881a8911b492019
+    text_chars: 440834
+    fetched_on: 2026-11-23
+    effective_date: 2006-11-01
+    amended_through: 2009-07-01  # Table I revision read
+  - doc_id: warren_county_zo_2008
+    title: "Warren County Zoning Ordinance (adopted August 13, 2008, amended February 18, 2026)"
+    level: county
+    publisher: County of Warren, Planning and Zoning Department
+    url: https://warrencountypa.gov/DocumentCenter/View/3455/Zoning-Ordinance---amended-February-18-2026
+    licence: Public ordinance of the county
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: dd541b86c34989e3a92355395a14fa08ac4b15478591b90cc23b0c9be5a65c5a
+    text_chars: 393358
+    fetched_on: 2026-11-23
+    adopted_on: 2008-08-13
+    amended_through: 2026-02-18
+  - doc_id: warren_city_zo_1978
+    title: "City of Warren (Warren County) Zoning Ordinance, Ordinance No. 1978 (adopted May 20, 2024)"
+    level: municipality
+    publisher: City of Warren
+    url: https://www.cityofwarrenpa.gov/vertical/sites/%7BCDBD0A89-8CCA-46C2-BCCB-A88A2A856A75%7D/uploads/No._1978_Zoning_Executed_052024_-_web.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 0f71cd24915dda5f2b11a96068359e796a334d13110fb365f5c52779cff8f9ac
+    text_chars: 230954
+    fetched_on: 2026-11-23
+    adopted_on: 2024-05-20
+  - doc_id: fox_elk_zo_2005
+    title: "Township of Fox (Elk County) Zoning Ordinance, Chapter 110, Ordinance No. 2005-10"
+    level: municipality
+    publisher: Township of Fox
+    url: https://www.foxtownship.com/_files/ugd/466293_4fc8ac2d750c46ac897a69a0fce2e2c1.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: ca20a70358c7f46733146ae8323466e119bf39a485d0e16ae453de2e1b916a75
+    text_chars: 271202
+    fetched_on: 2026-11-24
+    adopted_on: 2005-10-05
+    effective_date: 2005-10-05  # "immediately upon enactment" (§ 110-2)
+  - doc_id: millcreek_erie_zo_2022
+    title: "Millcreek Township (Erie County) Zoning Ordinance, Chapter 145, Ordinance 2022-4, as amended to September 2024"
+    level: municipality
+    publisher: Millcreek Township
+    url: https://millcreektownship.com/DocumentCenter/View/3307/Zoning-Ordinance-as-of-Sept-15-2024-w-Appendix
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f42482e456a5289fc994477f993843c758e6bbe9418ca3f06c65458a675af2d6
+    text_chars: 502030
+    fetched_on: 2026-11-24
+    adopted_on: 2022-04-28
+    effective_date: 2022-05-03
+    amended_through: 2024-09-10
+  - doc_id: allentown_lehigh_zo_16166
+    title: "City of Allentown (Lehigh County) Zoning Ordinance, Chapter 660, Ordinance No. 16166"
+    level: municipality
+    publisher: City of Allentown
+    url: https://www.allentownpa.gov/Portals/0/files/Departments/PlanningZoning/Zoning%20Ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 10c358ecaf226e680a1e9c790d94e59b83a112a242c099d22b00f598ae97e589
+    text_chars: 761314
+    fetched_on: 2026-11-24
+    adopted_on: 2025-10-15
+    effective_date: 2026-01-01
+  - doc_id: dunmore_lackawanna_zo_2023
+    title: "Borough of Dunmore (Lackawanna County) Zoning Ordinance, adopted December 20, 2023"
+    level: municipality
+    publisher: Borough of Dunmore
+    url: https://dunmorepa.gov/wp-content/uploads/2024/04/Dunmore-SAPA-Zoning-Ord-Final-12.20.2023.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 5373f4408f57b0d17b27bc1bd6a4e815e8904b396d307eb71c6b81961f64a8b2
+    text_chars: 452393
+    fetched_on: 2026-11-24
+    adopted_on: 2023-12-20
+  - doc_id: frankstown_blair_zo_2007
+    title: "Township of Frankstown (Blair County) Zoning Ordinance, Amendment Ordinance No. 100207-A (2007)"
+    level: municipality
+    publisher: Township of Frankstown
+    url: https://www.frankstowntownship.com/sites/default/files/2026-05/frankzoneordfinal.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 79c1b483a6b689ab07eb0cf2cf16ad284f7f6e760126fb7ff7910487a3beec66
+    text_chars: 97073
+    fetched_on: 2026-11-24
+    adopted_on: "2007"
+  - doc_id: scranton_lackawanna_zo_2023_draft
+    title: "City of Scranton 2023 Zoning Ordinance, Final Draft as Proposed by the City Planning Commission, with Council amendments"
+    level: municipality
+    publisher: City of Scranton
+    url: https://scrantonpa.gov/wp-content/uploads/2023/05/2023-Proposed-Zoning-Ordinance-Final-452023-with-Council-amendments.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 464cacf1b2fc127612fc661ba67379a4a7d7ed92325bf8de993579c0f0c104d2
+    text_chars: 481083
+    fetched_on: 2026-11-24
+  - doc_id: penn_hills_allegheny_zo
+    title: Municipality of Penn Hills (Allegheny County) Zoning Ordinance (Ordinance 2121, as
+      amended; posted March 2020)
+    level: municipality
+    publisher: Municipality of Penn Hills
+    url: https://pennhillspa.gov/wp-content/uploads/2020/03/Penn-Hills-Zoning-Ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 65ec1a4f281bb470b87a6c1c973562acec69fbe1834f19cb7f61162409a2327f
+    text_chars: 435143
+    fetched_on: 2026-11-24
+    # Re-fetched 2026-11-24, same text_sha256. Offset 13234 (§ 1.1 Short
+    # Title): "...referred to as, the Municipality of Penn Hills Zoning
+    # Ordinance of 1980." Day not stated. The cover (offset 12366) reads "PENN
+    # HILLS ZONING ORDINANCE #2420 MAY 2004" (the amending ordinance); later
+    # amendments may be in the posted copy, so no amended_through is given.
+    adopted_on: "1980"
+  - doc_id: monroeville_allegheny_zo_2779
+    title: Municipality of Monroeville (Allegheny County) Zoning Ordinance, Ordinance No. 2779,
+      as amended by Ordinance 2805 (June 10, 2025)
+    level: municipality
+    publisher: Municipality of Monroeville
+    url: https://www.monroeville.pa.us/DocumentCenter/View/2666/ORD-2779-Zoning-Ordinance---AMMENDED-6-10-25-FINAL-PDF
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 02fe52224278dae5772f6e907479adb6227079d7e811cefb3f6e912ecd111140
+    text_chars: 1159390
+    fetched_on: 2026-11-24
+    effective_date: 2023-11-14
+    amended_through: 2025-06-10
+  - doc_id: upper_st_clair_allegheny_ch130_8
+    title: Township of Upper St. Clair (Allegheny County) Code Chapter 130 Zoning, § 130.8 R1
+      Single Family Residential District
+    level: municipality
+    publisher: Township of Upper St. Clair
+    url: https://www.twpusc.org/Documents/Government/Township%20Code/Selected%20Code%20Chapters%20(Numerical)/Chapter%20130%20Zoning/130.8.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 8b1f8f3fd95ff09ad7e7035d2e268a0f74532a94e38dc048fcdb7421348784e5
+    text_chars: 50687
+    fetched_on: 2026-11-24
+  - doc_id: hampton_allegheny_zo_2026
+    title: Township of Hampton (Allegheny County) Zoning Ordinance, Chapter 310 (adopted April
+      22, 2026)
+    level: municipality
+    publisher: Township of Hampton
+    url: https://www.hampton-pa.gov/DocumentCenter/View/5513/HAMP---Zoning-Ordinance---ADOPTED---9926-Update
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 97be1c899e5da9f328a669e838e48fbd5281429e5952138175ca58cea4fbf6b6
+    text_chars: 607184
+    fetched_on: 2026-11-24
+    adopted_on: 2026-04-22
+  - doc_id: mckeesport_allegheny_zo_2017
+    title: City of McKeesport (Allegheny County) Official Zoning Ordinance, Chapter 1331 (February
+      2017)
+    level: municipality
+    publisher: City of McKeesport
+    url: https://www.mckeesport-pa.gov/DocumentCenter/View/208/McKeesport-Zoning-Ordinance
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f06c02627802718cb6fac26d126e5ed601e5039eaeabef53bab6b3d2831407c2
+    text_chars: 395753
+    fetched_on: 2026-11-24
+    # Re-fetched 2026-11-24, same text_sha256; the ordinance text gives no
+    # adoption date. City Council minutes of April 5, 2017 (own site,
+    # AgendaCenter/ViewFile/Minutes/_04052017-19, text sha256 ea3e93e6...,  # secret-scan: allow (public web address)
+    # offset 28761): "ORDINANCE NO. 17-004 - BILL #66 - AN ORDINANCE OF THE CITY
+    # OF MCKEESPORT ... AMENDING THE CITY OF MCKEESPORT ZONING ORDINANCE IN ITS
+    # ENTIRETY AND REPEALING ALL INCONSISTENT ORDINANCES", approved 7-0. The
+    # city's Community Development page: "The City of McKeesport formally
+    # adopted a new zoning ordinance in April 2017."
+    adopted_on: 2017-04-05
+  - doc_id: robinson_allegheny_zo_2017
+    title: Robinson Township (Allegheny County) Zoning Ordinance, Chapter 300 (revised 2017)
+    level: municipality
+    publisher: Township of Robinson
+    url: https://www.townshipofrobinson.com/wp-content/uploads/2017/07/zoningord2017.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f89423f97c4ab3b4acd4d36b9459a2c9c5383c1af3c0ebbe214f7c2417a2956f
+    text_chars: 612108
+    fetched_on: 2026-11-24
+    adopted_on: '2017'
+  - doc_id: pine_allegheny_zo_404
+    title: Township of Pine (Allegheny County) Zoning Ordinance, Chapter 84, Ordinance No. 404
+      (February 5, 2024)
+    level: municipality
+    publisher: Township of Pine
+    url: https://twp.pine.pa.us/DocumentCenter/View/3645/Combined-Ordinance-404_Comprehensive-Zoning-Ordinance-Update_2-5-24
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: b77245e0d4422a85eb4ea62bbb09556392f08720b1cb42bf1e8ca86eb0a9e26c
+    text_chars: 706982
+    fetched_on: 2026-11-24
+    adopted_on: 2024-02-05
+    effective_date: 2024-02-05
+  - doc_id: whitehall_allegheny_ch180_art4
+    title: Borough of Whitehall (Allegheny County) Code Chapter 180 Zoning, Article IV Residence
+      District R-1 (as amended through June 15, 2022)
+    level: municipality
+    publisher: Borough of Whitehall
+    url: https://whitehallboro.org/wp-content/uploads/2023/01/20220615-Chapter180Article4.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 251de16efbe63b2e4d52f6f51a4ac9afafb18e1532050eb38b6a3ba2147f0b18
+    text_chars: 10666
+    fetched_on: 2026-11-24
+    amended_through: 2022-06-15
+  - doc_id: west_deer_allegheny_zo_394
+    title: Township of West Deer (Allegheny County) Zoning Ordinance, Ordinance No. 394 (2012)
+    level: municipality
+    publisher: Township of West Deer
+    url: https://cms2.revize.com/revize/westdeer/Document%20Center/How%20Do%20I/Apply%20For/Forms/zoning_ordinace_394.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 85e8bad804af76583c0769fe3d293de76d477e26b4d1aa37b747279212b19f25
+    text_chars: 386984
+    fetched_on: 2026-11-24
+    adopted_on: 2012-08-29
+  - doc_id: ohara_allegheny_zo_1361
+    title: Township of O'Hara (Allegheny County) Zoning Ordinance, Chapter 72, Ordinance No.
+      1361 (2020)
+    level: municipality
+    publisher: Township of O'Hara
+    url: https://www.ohara.pa.us/sites/g/files/vyhlif6181/f/uploads/zoning_ord_1361.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: be3548f5039967400fb39da1c164c5c34f0721fdc09ec8d01dc94a3b0ec098be
+    text_chars: 723056
+    fetched_on: 2026-11-24
+    adopted_on: 2020-01-14
+  - doc_id: swissvale_allegheny_zo_2017
+    title: Swissvale Borough (Allegheny County) Zoning Ordinance, February 2017
+    level: municipality
+    publisher: Borough of Swissvale
+    url: https://www.swissvaleborough.com/DocumentCenter/View/101/Zoning-Ordinance-2017-PDF
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 96e4f807a87fbf4cb4cdaaa62a2f151f01287d98c8c97c3a2af1bf967695a499
+    text_chars: 436202
+    fetched_on: 2026-11-24
+    adopted_on: '2017'
+  - doc_id: findlay_allegheny_ch117_art4
+    title: Findlay Township (Allegheny County) Code Chapter 117 Zoning, Article IV District
+      Regulations (as amended through April 10, 2019)
+    level: municipality
+    publisher: Township of Findlay
+    url: https://www.findlay.pa.us/DocumentCenter/View/169/Article-IV---District-Regulations-PDF-
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 8069b3859a91a6feecd6a803f91b53fed0ee7ef04af58a425a4dc92ae1cea2f6
+    text_chars: 41032
+    fetched_on: 2026-11-24
+    amended_through: 2019-09-26  # offset 8644: "[Added 9-26-19 by Ord. 428]" (latest bracket in the file)
+  - doc_id: ohio_allegheny_zo_305
+    title: Township of Ohio (Allegheny County) Zoning Ordinance, Ordinance No. 305 (August 6,
+      2012)
+    level: municipality
+    publisher: Township of Ohio
+    url: https://www.ohiotwp.org/vertical/Sites/%7B941757A3-CCD1-47BA-9A1A-E6013FADA729%7D/uploads/Ordinance_305.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f9a6a09dc5df2c5bb81289ddff1d6258387cc0f7b2d64696fe08983a8c72999a
+    text_chars: 505039
+    fetched_on: 2026-11-24
+    adopted_on: 2012-08-06
+    effective_date: 2012-08-06
+  - doc_id: bethlehem_zo_part13
+    title: City of Bethlehem Zoning Ordinance, Part 13 of the Codified Ordinances (last revised
+      July 17, 2018)
+    level: municipality
+    publisher: City of Bethlehem
+    url: https://www.bethlehem-pa.gov/CityOfBethlehem/media/COBfiles/pdf/ordinances/Zoning-Ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 08e08cb35c94b65b0a159e292c3c54220d8d31756234a0f5df1c7183dd656347
+    text_chars: 591452
+    fetched_on: 2026-11-24
+    effective_date: 2012-06-15
+    amended_through: 2018-07-17
+  - doc_id: upper_milford_lehigh_zo_175
+    title: Upper Milford Township (Lehigh County) Zoning Ordinance, Ordinance No. 175 (adopted
+      May 21, 2026)
+    level: municipality
+    publisher: Upper Milford Township
+    url: https://uppermilford.net/ords/zoning-ord.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 38bd6f00c216460348648da20bd0aa4a60a628f8a9427428841b45574300259b
+    text_chars: 529492
+    fetched_on: 2026-11-24
+    adopted_on: 2026-05-21
+  - doc_id: guilford_franklin_zo_art3
+    title: Guilford Township (Franklin County) Zoning Ordinance No. 97-8, Article 3 District
+      Use Regulations (as amended through July 16, 2026)
+    level: municipality
+    publisher: Guilford Township
+    url: https://www.guilfordtwp.us/media/2026-zo/Article%203%20-%2007-16-26%204888-6030-34962.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 7fa5dd42d7a26b48585bd39a7d864a95db08c4a67bf068a261fdaf833d5dd25f
+    text_chars: 81264
+    fetched_on: 2026-11-24
+    adopted_on: 1997-09-18
+    amended_through: 2026-07-16
+  - doc_id: neshannock_lawrence_zo_2024
+    title: Neshannock Township (Lawrence County) Zoning Ordinance Amendment, adopted April 17,
+      2024
+    level: municipality
+    publisher: Neshannock Township
+    url: https://www.neshannock.org/DocumentCenter/View/259/Neshannock-Township-Zoning-Ordinance---April-2024
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 967e55ef7a3e36ac7a97a41609ed10aeb22b9bec696d8f9f06e8f90205208e95
+    text_chars: 482423
+    fetched_on: 2026-11-24
+    adopted_on: 2024-04-17
+  - doc_id: duquesne_allegheny_zo_2017
+    title: City of Duquesne (Allegheny County) Zoning Ordinance, Chapter 27 (2017)
+    level: municipality
+    publisher: City of Duquesne (file host of its website)
+    url: https://0n.b5z.net/i/u/10068876/f/Duquesne_ZONING_2017.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 2047c39db878e017d77d58fc043ff084488c740b3780b0fb2fc78bfb4a6f27bd
+    text_chars: 310168
+    fetched_on: 2026-11-24
+    adopted_on: '2017'
+  - doc_id: tarentum_allegheny_zo_13_03
+    title: Borough of Tarentum (Allegheny County) Zoning Ordinance, Ordinance No. 13-03 of 2013
+    level: municipality
+    publisher: Borough of Tarentum
+    url: https://tarentumboro.com/wp-content/uploads/2018/01/Zoning-Ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 8faacfc965e21f615cb09b6c1a15dc0bf0a016e666e83da54ab056fa6d324310
+    text_chars: 301707
+    fetched_on: 2026-11-24
+    adopted_on: 2013-02-18
+  - doc_id: north_braddock_allegheny_zo_2014
+    title: North Braddock Borough (Allegheny County) Zoning Ordinance, April 29, 2014
+    level: municipality
+    publisher: Borough of North Braddock
+    url: https://northbraddockborough.com/wp-content/uploads/2020/10/north_braddock_zoning_april_2014.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f66f7901c8221b2e5c1717e2beb49df86e2db80e8dd1358ede3de89c93db00f4
+    text_chars: 353135
+    fetched_on: 2026-11-24
+    adopted_on: 2014-04
+  - doc_id: pitcairn_allegheny_ch27
+    title: Borough of Pitcairn (Allegheny County) Code, Chapter 27 Zoning (Ordinance 657 of
+      1963, as amended through 2011)
+    level: municipality
+    publisher: Borough of Pitcairn
+    url: https://pitcairnborough.us/ordinances/Chapter%2027%20Zoning.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: dbe66f52d727d2dfd88f391d64ed433d387b596746cbbdd6c78cb8c882302150
+    text_chars: 125019
+    fetched_on: 2026-11-24
+    adopted_on: 1963-11-15
+    amended_through: 2011-05-31
+  - doc_id: east_mckeesport_allegheny_ch27
+    title: Borough of East McKeesport (Allegheny County) Code, Chapter 27 Zoning (Ordinance
+      935, May 10, 2018)
+    level: municipality
+    publisher: Borough of East McKeesport
+    url: https://www.eastmckeesportboro.com/DocumentCenter/View/344/Chapter-27-Zoning-PDF
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: c752941a7bf956339591581d00a23976340cc104b906014aa3204f38ffc3713b
+    text_chars: 304132
+    fetched_on: 2026-11-24
+    adopted_on: 2018-05-10
+  - doc_id: east_pittsburgh_allegheny_zo_908
+    title: Borough of East Pittsburgh (Allegheny County) Zoning Ordinance, Ordinance No. 908
+      (October 1, 2014)
+    level: municipality
+    publisher: Borough of East Pittsburgh
+    url: https://eastpittsburghboro.com/wp-content/uploads/2015/09/Ord-908-East-Pittsburgh-Zoning.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 2bf49407a39a66f0541a2ca1871296b13c8d951e330563b0ecb954867108cc6a
+    text_chars: 301230
+    fetched_on: 2026-11-24
+    adopted_on: '2014'
+  - doc_id: lower_paxton_dauphin_zo_2025
+    title: Lower Paxton Township (Dauphin County) Zoning Ordinance, May 19, 2025
+    level: municipality
+    publisher: Lower Paxton Township
+    url: https://www.lowerpaxton-pa.gov/DocumentCenter/View/2455/Lower-Paxton-Township-Zoning-Ordinance-approved-5-19-25
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: cea86a78635c93b25030aee8372d77a7ea2129ed7385171abacd479ff1baa126
+    text_chars: 890094
+    fetched_on: 2026-11-24
+    adopted_on: 2025-05-19
+  - doc_id: dingman_pike_zo
+    title: Dingman Township (Pike County) Zoning Ordinance, effective April 2, 1979, as amended
+      (township's consolidated copy)
+    level: municipality
+    publisher: Dingman Township
+    url: https://www.dingmantownship.org/uploads/9/0/4/6/9046391/zoning_ordinance_final.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: fdac85e3ebd10284db6ae49a72a7d5e79c49cac9c315eb44a4a1ad05b30075fd
+    text_chars: 463586
+    fetched_on: 2026-11-24
+    effective_date: 1979-04-02
+  - doc_id: delaware_pike_zo_110
+    title: Delaware Township (Pike County) Zoning Ordinance No. 110 (as reworked May 29, 2013)
+    level: municipality
+    publisher: Delaware Township
+    url: https://www.delawaretownshippa.gov/images/ordinances/2015.01.08.Zoning_Ordinance_110.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f58c6c46ab23b79dfccd49909f0590496e8a463cd93aa7081b1e8c10f3296cef
+    text_chars: 192559
+    fetched_on: 2026-11-24
+    amended_through: 2013-05-29
+    # Re-fetched 2026-11-24, same text_sha256. The posted text stops at § 110.23
+    # (page 78); the § 110.26 "Enactment" page is not in the file. Township
+    # sources: the ordinances page links "2013.09.25.APPROVED & SIGNED ZONING
+    # MAP to go with Ordinance 110" (a scan), and the township's news page
+    # reprints the Pike County Dispatch of Thursday, October 3, 2013:
+    # "Delaware Township Supervisors approved their zoning ordinance, zoning map
+    # and zoning definitions ... At last Wednesday's meeting". Month recorded,
+    # not the day. Later amendments listed on the ordinances page (2015 § 110.7
+    # 3(c), a scan; 2016-2026 others) are not in this copy.
+    adopted_on: "2013-09"
+  - doc_id: milford_twp_pike_zo_2026
+    title: Milford Township (Pike County) Zoning Ordinance, as amended March 16, 2026
+    level: municipality
+    publisher: Milford Township
+    url: https://milfordtownshippike.com/wp-content/uploads/2026/05/2026-March-Zoning-Ordinance-Amendments-since-2019-Incorporated.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: e3f46a314f5447e07e69763d2a61d9970db698df18393081842eac2858cd9da5
+    text_chars: 279974
+    fetched_on: 2026-11-24
+    amended_through: 2026-03-16
+  # --- G2b readings (allegheny), 2026-11-24
+  - doc_id: mt_lebanon_allegheny_ch20_zoning
+    title: "Municipality of Mt. Lebanon (Allegheny County) Code, Chapter XX Zoning (municipal e-book, pages updated through March 2022)"
+    level: municipality
+    publisher: Municipality of Mt. Lebanon (ebooks.mtlebanon.org)
+    url: https://ebooks.mtlebanon.org/codebook/MunicipalCode/
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 6827a275628db86fb1909b61cacfc0e7a21441731b212b09c3b5b2a945a4a965
+    text_chars: 648926
+    fetched_on: 2026-11-24
+    effective_date: 2005-09-26  # § 108: "the term 'effective date' shall mean September 26, 2005"
+    amended_through: "2022-03"  # pages marked "Updated 10/2021", one "Updated 3/2022"
+  - doc_id: clairton_allegheny_zo_2014
+    title: "City of Clairton (Allegheny County) Zoning Ordinance, Chapter 337 (enacted July 8, 2014)"
+    level: municipality
+    publisher: City of Clairton
+    url: https://cityofclairton.com/wp-content/uploads/2017/05/FinalZoningOrdinance_July2014_opt1.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 07a587821d18780657b3396b43d56986c29bcbf4bdf0a013d2ca85cb90150730
+    text_chars: 285430
+    fetched_on: 2026-11-24
+    adopted_on: 2014-07-08  # cover: "Enacted: July 8, 2014"
+  # --- G2b readings (bucks), 2026-11-24
+  - doc_id: northampton_bucks_ch27
+    title: "Northampton Township (Bucks County) Code, Chapter 27 Zoning (Ord. 160 of 1977, Supp. I revised February 27, 2013)"
+    level: municipality
+    publisher: Northampton Township
+    url: https://northamptontownship.com/media/1364/chapter-27-zoning.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: c65d79930fccc932d3a91741798282ab161e9d4f07bc7172bb361953b34419c5
+    text_chars: 453296
+    fetched_on: 2026-11-24
+    adopted_on: 1977-04-06
+    amended_through: 2013-02-27  # "Supp. I; revised 2/27/2013" in the page footers
+  # --- G2b readings (central), 2026-11-24
+  - doc_id: harrisburg_zo_2014_am2021
+    title: City of Harrisburg 2014 Zoning Code (Title 7, Part 3), adopted July 8, 2014, as amended
+      (city's copy dated July 19, 2021)
+    level: municipality
+    publisher: City of Harrisburg, Planning Bureau (file host of its website)
+    url: https://harrisburgpa.gov/Documents/Services/Planning/2014-Zoning-Code-AS-AMENDED-07.19.2021.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 0e8fd268a824f452d90cd56249556b38d43e24630b0c5f0395b5d6c59cd76f97
+    text_chars: 424570
+    fetched_on: 2026-11-24
+    adopted_on: 2014-07-08
+    amended_through: 2021-07-19  # "AS AMENDED 07.19.2021" in the city's file name
+  # --- G2b readings (counties), 2026-11-24
+  - doc_id: schuylkill_county_zo_2010_1
+    title: "Schuylkill County Zoning Ordinance, Ordinance No. 2010-1 (as adopted December 22, 2010)"
+    level: county
+    publisher: County of Schuylkill, Planning and Zoning (county GIS services site)
+    url: https://services.co.schuylkill.pa.us/mapviewercontent/Ordinance/Schuylkill%20County%20Zoning%20Ordinance.pdf
+    licence: Public ordinance of the county
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: eea6bcbf8d5733c9f9664f4c51a1373148cae4fea6f87ac3822d47a499bf61a5
+    text_chars: 404783
+    fetched_on: 2026-11-24
+    adopted_on: 2010-12-22
+    effective_date: 2010-12-27
+  # --- G2b readings (east_sw), 2026-11-24
+  - doc_id: lackawaxen_pike_zo_1992
+    title: Lackawaxen Township (Pike County) Zoning Ordinance of February 19, 1992, as revised
+      through Ordinance #113 (January 18, 2021)
+    level: municipality
+    publisher: Lackawaxen Township (file host of its website)
+    url: https://lackawaxentownshippa.gov/s/ZONING-ORDINANCE-REVISED-1993-20212343.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: ff40f8f9bac7d6c5f3cde82e1ed06e2d0329d5fa9050890a1777ba9bbb61faa4
+    text_chars: 445832
+    fetched_on: 2026-11-24
+    adopted_on: 1992-02-19
+    amended_through: 2021-01-18  # "Revised 01/18/21 Ordinance #113" on the cover
+  # --- G2b readings (montdel), 2026-11-24
+  - doc_id: abington_montgomery_zo_2017
+    title: "Township of Abington (Montgomery County) Zoning Ordinance 2017, with maps (township's posted copy)"
+    level: municipality
+    publisher: Township of Abington
+    url: https://www.abingtonpa.gov/DocumentCenter/View/444/2017-Abington-Township-Zoning-Ordinance-with-Maps-PDF
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 72635f5143d08e7a421a8880dfb6d9af959808f0f3a370bf045304c7d49759b8
+    text_chars: 960302
+    fetched_on: 2026-11-24
+    adopted_on: "2017"  # "Zoning Ordinance 2017"; day not stated in the text
+
+  # --- G2c readings (Palmer), 2026-11-24
+  - doc_id: palmer_northampton_zo_2023_484
+    title: Palmer Township (Northampton County) Zoning Ordinance, Chapter 190, Ordinance No.
+      2023-484 (adopted December 27, 2023)
+    level: municipality
+    publisher: Township of Palmer
+    url: https://palmertwp.com/forms/2023adoptedzoningordinance.122723.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f39f6d1a3202895018100c0f7d16c70d46c46a89844760c1a1fffee36a39a3d9
+    text_chars: 1009353
+    fetched_on: 2026-11-24
+    # Offset 2306: "ARTICLE IV. EFFECTIVE DATE This Ordinance shall become effective
+    # five ( 5) days after enactment. ENACTED BY THE TOWNSHIP OF PALMER,
+    # NORTHAMPTON COUNTY, PENNSYLVANIA, THIS 27 DAY OF December , 2023". The
+    # effective day is not printed, so only adopted_on is recorded.
+    adopted_on: 2023-12-27
+  # --- G2c readings (Luzerne County, Lebanon), 2026-11-24
+  - doc_id: luzerne_county_zo_2021
+    title: "Luzerne County Zoning Ordinance of 2021 (Ordinance 2021-06; adopted March 9, 2021, effective March 24, 2021)"
+    level: county
+    publisher: County of Luzerne, Department of Planning and Zoning
+    url: https://www.luzernecounty.org/DocumentCenter/View/24924/Zoning-Ordinance-2021
+    licence: Public ordinance of the county
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: e751057b3f7dc13f017f3cb9e047205b0ea82658959ab341089ed2a91812d94f
+    text_chars: 418931
+    fetched_on: 2026-11-24
+    # Offset 44: "Adopted on: March 9, 2021 Effective: March 24, 2021" (cover).
+    # Offset 15075: "No. 2021-06 ORDINANCE An Ordinance of Luzerne County Council
+    # Adopting the Luzerne County Zoning Ordinance of 2021 and the Luzerne
+    # County Zoning Map of 2021".
+    adopted_on: 2021-03-09
+    effective_date: 2021-03-24
+  - doc_id: lebanon_city_zo_2020
+    title: "City of Lebanon (Lebanon County) Zoning Ordinance, Codified Part 13 Title One (adopted June 22, 2020)"
+    level: municipality
+    publisher: City of Lebanon
+    url: https://www.lebanonpa.org/getattachment/c34e9b2f-05b6-4969-bda8-2d38b20829d9/zoning-ORDINANCE.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 59a64fe26e4a9413852e44afeee7c5efdb22e0ae29b4a8dab7301ad795eec54b
+    text_chars: 540782
+    fetched_on: 2026-11-24
+    # Offset 9516 (§ 1301.06 Enactment): "...the City Council of the City of
+    # Lebanon hereby enacts and ordains into an Ordinance the attached document
+    # this date of June 22, 2020. This Ordinance shall become effective on June
+    # 22, 2020."
+    adopted_on: 2020-06-22
+    effective_date: 2020-06-22
+  # --- G2c readings (Manheim, Buckingham, Warrington), 2026-11-24
+  - doc_id: manheim_lancaster_zo_art9
+    title: "Township of Manheim (Lancaster County) Zoning Ordinance of 2014, Article IX Residential District R-3 with the residential use table (amended June 28, 2021)"
+    level: municipality
+    publisher: Township of Manheim
+    url: https://www.manheimtownship.org/DocumentCenter/View/7176/12ARTICLE-9Residential-3
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 216fcf4d4eb0957d5892bc38a908540cc0be3fd935a01a6786ba80c66b3ef1bf
+    text_chars: 17510
+    fetched_on: 2026-11-24
+    # Offset 1227: "Amended by Ordinance 2021-04, dated June 28, 2021" (page footer of
+    # the use table; the Article IX heading at 1281 says the same).
+    amended_through: 2021-06-28
+    # Article XXV (ADU standards, § 2515) read from
+    # https://www.manheimtownship.org/DocumentCenter/View/7922/28-ARTICLE-25Performance-Standards-
+    # (text sha256 b1dd5706b0896cb6e69938948c80bfd9a0f90447aaabc9356435227642171299,
+    # 131,335 chars); its heading, offset 0: "(Amended by Ordinance 2021-04, dated
+    # June 28, 2021 and Ordinance 2023-15, dated 11/27/2023)".
+  - doc_id: buckingham_bucks_zo_2021
+    title: "Buckingham Township (Bucks County) Zoning Ordinance, incorporating amendments enacted to September 22, 2021"
+    level: municipality
+    publisher: Buckingham Township
+    url: https://www.buckinghampa.org/DocumentCenter/View/634
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 8391e6b11b0a629bcfe0b7326911ea45750cc5f485533fe3c93086e35b265a9b
+    text_chars: 936355
+    fetched_on: 2026-11-24
+    # Offset 114: "Incorporating Amendments Enacted To September 22, 2021". The base
+    # ordinance's adoption date is not printed (§ 3805: "effective five (5)
+    # days after enactment").
+    amended_through: 2021-09-22
+  - doc_id: warrington_bucks_zo_2021
+    title: "Warrington Township (Bucks County) Zoning Ordinance, Chapter 370 (Ordinance 2021-O-04, final text of August 2021)"
+    level: municipality
+    publisher: Warrington Township
+    url: https://www.warringtontownship.org/Documents/Department/Planning%20Development%20Zoning/2021-08-25-Final-Zoning-Ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 0a2e38323c973274630b744ac5d3875218b8de11e140054726929ffad3a83e43
+    text_chars: 938152
+    fetched_on: 2026-11-24
+    # The township's address redirects to its CMS host cms3.revize.com (as
+    # West Deer's). The text gives no enactment date (offset 1770: "the Board
+    # of Supervisors on or about August 24, 2021 held a public hearing").
+    # Ordinance 2023-O-2 (own site, Documents/Local Government/Township Codes
+    # Ordinances/Ordinances/2023/, text sha256
+    # 0d5341778e86d67d98be89039b0beffc4cf4d76ed191f29ef4da81c21c69790a,
+    # offset 158): "WHEREAS, the Board on August 24, 2021 adopted a new Zoning
+    # Ordinance which was incorporated into the Township's Codified Ordinances
+    # as Chapter 370". Effective "five (5) days after its adoption" per the
+    # adopting ordinance template; day not computed.
+    adopted_on: 2021-08-24
+  # --- G2d readings (fork_B), 2026-11-24
+  - doc_id: tri_borough_allegheny_jzo_2009
+    title: Avalon-Bellevue-Ben Avon (Tri-Borough Communities) Joint Zoning Ordinance (August
+      2009), Avalon copy listing amendments passed through February 19, 2019
+    level: municipality
+    publisher: Borough of Avalon
+    url: https://boroughofavalon.org/__static/98a30a3b27e8ff43f9bd7cd3e1bf0f00/joint-zoning-ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: e41aa50495823c455fcf0626e15de5d6c435f87147da84767f0e6e33fabac686
+    text_chars: 428225
+    fetched_on: 2026-11-24
+    # No adoption date or enacting ordinance number is printed (the cover and
+    # every page footer read "August 2009", the preparation date). The cover
+    # lists "Amendments Passed by Avalon Borough", the latest at offset 1026:
+    # "Ordinance 1388 - 2/19/19" (signage). The rule's in_force_by uses it.
+  # --- G2d readings (fork_C), 2026-11-24
+  - doc_id: east_deer_allegheny_zo_1987
+    title: East Deer Township (Allegheny County) Zoning Ordinance (effective April 12, 1987)
+    level: municipality
+    publisher: Township of East Deer
+    url: https://eastdeertownship.org/wp-content/uploads/2015/12/East-Deer-Township-Zoning-Ordinance.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 9b3d9bd28178092ba5951750a930b425f68fed26af50830bd90a149dba1a23a1
+    text_chars: 178901
+    fetched_on: 2026-11-24
+    # Offset 8353: "Section 104 EFFECTIVE DATE The effective date of this
+    # ordinance is April 12, 1987." Linked as the zoning ordinance from the
+    # township's Zoning & Ordinance page; later amendments seen there
+    # (Ord. 846, billboards, 2023) do not touch residential uses.
+    effective_date: 1987-04-12
+  - doc_id: elizabeth_boro_allegheny_zo_2013_002
+    title: Elizabeth Borough (Allegheny County) Zoning Ordinance, Ordinance No. 2013-002 (enacted
+      April 30, 2013)
+    level: municipality
+    publisher: Borough of Elizabeth
+    url: https://elizabethpa.net/wp-content/uploads/2011/03/ElizabethZoningOrdinance_FullVersion.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 81b8cc171da5ecd57e39990801c434ce5e9606eb308a8b06d9d3e4b9d3ab9c55
+    text_chars: 370573
+    fetched_on: 2026-11-24
+    # Offset 370405: "Enacted this 30th day of April, 2013 by the Borough
+    # Council of Elizabeth, Ordinance No. 2013-002" (cover: "ZONING ORDINANCE
+    # ENACTED April 30, 2013").
+    adopted_on: 2013-04-30
+
+  # --- G2e readings, 2026-11-25
+  - doc_id: palmyra_pike_zo_2025
+    title: Palmyra Township (Pike County) Zoning Ordinance, adopted July 15, 2025
+    level: municipality
+    publisher: Palmyra Township
+    url: https://palmyrapike.org/wp-content/uploads/2025/07/Palmyra-Twp-Zoning-Ord-2025-07-15.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 9a5f1da9044f77c1520d0f78ff0c0d2c8f48666dd1c3af68da3d9fa1d4be412d
+    text_chars: 739493
+    fetched_on: 2026-11-25
+    # Cover (offset 91): "ZONING ORDINANCE ... ADOPTED JULY 15, 2025". § 1.700
+    # (offset 30188): "This Zoning Ordinance shall take effect immediately upon
+    # its adoption."
+    adopted_on: 2025-07-15
+    effective_date: 2025-07-15
+
+rules:
+  - geoid: "4200361000"
+    doc_id: pgh_ord_2025_1545
+    section_cite: "Pittsburgh Zoning Code § 912.08.C.2, as amended by Ordinance 31 of 2026; § 914.02.A (parking)"
+    adu_status: by_right
+    adu_detached: true
+    adu_owner_occupancy: false
+    parking_min_per_unit_sf: 0
+    parking_min_per_unit_mf: 0
+    evidence_quote: >-
+      Accessory Dwelling Units are permitted to be located on any lot where a
+      primary use is a Residential use, Community Center, or Religious Assembly
+      use as defined in Section 911.02;
+    evidence_offset: 237803
+    adopted_on: 2026-10-27
+    effective_date: 2026-10-29
+    binding_conditions: >-
+      Lots whose primary use is residential, community center or religious
+      assembly; up to 2 ADUs per lot; ADU up to 1,000 sq ft; no owner-occupancy rule.
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-25
+    status: verified
+    note: >-
+      Effective October 29, 2026 (the City's Legistar record, read by script
+      2026-11-25; passed finally October 27, signed October 29). Detached units
+      allowed (§ 912.08.B.1); the overlay, owner-occupancy rule and one-per-lot
+      cap are struck. Chapter 914 is replaced: no automobile parking minimum,
+      only maximums (§ 914.02.A, offset 306671), so both parking minimums are 0.
+      Offsets are in the version 7 plain text (timeline: pgh_ord31_adu_effective).
+  - geoid: "4210160000"
+    doc_id: phl_li_adu_checklist_2022
+    section_cite: "Philadelphia Zoning Code § 14-604(11), per the L&I checklist"
+    adu_status: by_right
+    adu_detached: false
+    adu_owner_occupancy: true
+    evidence_quote: "Is the property located in the RSA-5 or CMX-1 zoning districts?"
+    evidence_offset: 2275
+    method: hand
+    confidence: low
+    status: draft
+    note: >-
+      Draft, not verified: a 2022 city checklist, not the code (the code is
+      hosted only on a commercial site). By right only in RSA-5 and CMX-1 on
+      lots of 1,600 sq ft or more outside some overlays (and some historic
+      buildings); detached only in an existing accessory building. Checked
+      2026-11-23: the city's zoning legislation table (phila.gov, updated
+      November 6, 2026) lists the only pending ADU bill, 250042 (§ 14-604), as
+      introduced, not enacted; no ADU bill was enacted in 2026.
+  - geoid: "4213370568"
+    doc_id: shrewsbury_york_zo_2023
+    section_cite: "§ 102.3 (definition); §§ 202-207 (district uses)"
+    adu_status: not_addressed
+    unlisted_uses: special_exception
+    unlisted_uses_cite: "§ 201.2"
+    min_lot_sf_smallest_res_district: 9000
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: >-
+      ACCESSORY DWELLING UNITS (IN-LAW QUARTERS) – An accessory dwelling unit
+      (ADU) is a dwelling unit added to, or created within, a single-family
+      dwelling
+    evidence_offset: 15835
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      Defined but listed as a use in no district, so not addressed as a
+      permitted use; unlisted uses may seek a special exception (§ 201.2).
+      Lot: 9,000 sq ft (§ 205.4, V district). Parking: 2 per dwelling (§ 303.2).
+  - geoid: "4205581824"
+    doc_id: waynesboro_franklin_zo_1158
+    section_cite: "Whole ordinance (no ADU term); Art. V § 13.A.2; Art. X § 67.A"
+    adu_status: not_addressed
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: >-
+      Single-family; duplex; two-family; apartment; townhouse; and multifamily
+      dwellings 0.5 dwelling unit (2 spaces per unit)
+    evidence_offset: 299056
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      The 2017 copy the borough posts; later amendments not checked. Its lot
+      table is a picture without text, so the smallest lot is left unknown.
+  - geoid: "4201186880"
+    doc_id: wyomissing_berks_zo_2010
+    section_cite: "§ 402 (R-1 uses); § 434 (R-2A lots); § 609.20.A (parking)"
+    adu_status: not_addressed
+    min_lot_sf_smallest_res_district: 6000
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: "Lot Size 10,000 sq. ft. 6,000 sq. ft. per dwelling unit 10,000 sq. ft."
+    evidence_offset: 90895
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      6,000 sq ft is per semi-detached home in R-2A and R-3A; single-family
+      lots are at least 10,000 sq ft. Two parking spaces per dwelling (§ 609.20.A).
+  - geoid: "4204318936"
+    doc_id: derry_dauphin_zo_2017
+    section_cite: "§ 225-502.9.A"
+    adu_status: special_exception
+    adu_detached: true
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: >-
+      The Township Zoning Hearing Board may grant a special exception to permit
+      the establishment of an accessory dwelling unit
+    evidence_offset: 536487
+    binding_conditions: >-
+      Special exception; lot of at least 9,000 sq ft; occupants related to or
+      serving the resident owner.
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      Needs a 9,000 sq ft lot; may be inside an accessory structure; occupants
+      must be related to or serve the resident owner. Parking (Table 35): 2 per
+      single-family home and per apartment of 2 or more bedrooms.
+      Residential lots are set by density, so the smallest lot is unknown.
+      No adoption date read; the township's robots.txt disallows all
+      automated access (checked 2026-11-24), so the text was not re-read.
+  - geoid: "4208534064"
+    doc_id: hermitage_mercer_ch27_2025
+    section_cite: "§ 27-303.20 (SR1 accessory uses); § 27-321.10"
+    adu_status: by_right
+    adu_detached: true
+    adu_owner_occupancy: true
+    min_lot_sf_smallest_res_district: 5000
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: "ACCESSORY USES Accessory Dwelling Unit (ADU) 27-321.10"
+    evidence_offset: 95816
+    binding_conditions: >-
+      RR, SR1, SR2 and NMU districts; owner must live on the lot; no extra
+      parking.
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      A listed accessory use in RR, SR1, SR2 and NMU; an owner must live on the
+      lot; no extra parking for the ADU. Smallest lot: 5,000 sq ft in the MHP
+      (mobile home park) district; SR1 and SR2 need 12,000. Parking (§ 27-405):
+      2 per home, 1.5 per apartment of one bedroom or less.
+
+  # Fayette County: the county ordinance applies in 31 of its 42 municipalities
+  # (the county's zoning page names the 11 that zone themselves). One reading,
+  # one row per municipality, all the same values.
+  - &fayette_county_zoning
+    geoid: "4205105288"  # Belle Vernon borough
+    doc_id: fayette_county_zo_2006
+    section_cite: "§ 1000-203 Table 1 (uses); § 1000-206 Table 2 (lots); § 1000-210.H; § 1000-303 Table 6"
+    adu_status: not_addressed
+    max_units_by_right_sf_district: 1
+    min_lot_sf_smallest_res_district: 5445
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2.25
+    permitted_types: [single_family_detached, two_family, townhouse, multifamily]
+    evidence_quote: >-
+      Only one (1) single-family detached dwelling unit, one (1) mobile home or
+      one (1) two- family detached dwelling, together with its permitted
+      accessory structures, shall be located on any single lot.
+    evidence_offset: 131639
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      County zoning (MPC § 602). No ADU term anywhere; one home per lot
+      (§ 1000-210.H). The July 2009 Table I (a scan) keeps the same residential
+      rows. Smallest lot 5,445 sq ft: R-2 with public sewer (Table 2). Parking:
+      2 per house; 2 per apartment plus 1 guest space per 4 (Table 6).
+      Amendments posted through 2025 concern other uses (titles checked).
+  - {<<: *fayette_county_zoning, geoid: "4205109432"}  # Brownsville borough
+  - {<<: *fayette_county_zoning, geoid: "4205109434"}  # Brownsville township
+  - {<<: *fayette_county_zoning, geoid: "4205110152"}  # Bullskin township
+  - {<<: *fayette_county_zoning, geoid: "4205115784"}  # Connellsville township
+  - {<<: *fayette_county_zoning, geoid: "4205118360"}  # Dawson borough
+  - {<<: *fayette_county_zoning, geoid: "4205120216"}  # Dunbar borough
+  - {<<: *fayette_county_zoning, geoid: "4205120224"}  # Dunbar township
+  - {<<: *fayette_county_zoning, geoid: "4205124336"}  # Everson borough
+  - {<<: *fayette_county_zoning, geoid: "4205124536"}  # Fairchance borough
+  - {<<: *fayette_county_zoning, geoid: "4205125456"}  # Fayette City borough
+  - {<<: *fayette_county_zoning, geoid: "4205127400"}  # Franklin township
+  - {<<: *fayette_county_zoning, geoid: "4205128792"}  # Georges township
+  - {<<: *fayette_county_zoning, geoid: "4205128856"}  # German township
+  - {<<: *fayette_county_zoning, geoid: "4205137872"}  # Jefferson township
+  - {<<: *fayette_county_zoning, geoid: "4205145144"}  # Lower Tyrone township
+  - {<<: *fayette_county_zoning, geoid: "4205145560"}  # Luzerne township
+  - {<<: *fayette_county_zoning, geoid: "4205147560"}  # Markleysburg borough
+  - {<<: *fayette_county_zoning, geoid: "4205148000"}  # Masontown borough
+  - {<<: *fayette_county_zoning, geoid: "4205153504"}  # Newell borough
+  - {<<: *fayette_county_zoning, geoid: "4205154392"}  # Nicholson township
+  - {<<: *fayette_county_zoning, geoid: "4205155464"}  # North Union township
+  - {<<: *fayette_county_zoning, geoid: "4205159464"}  # Perry township
+  - {<<: *fayette_county_zoning, geoid: "4205161864"}  # Point Marion borough
+  - {<<: *fayette_county_zoning, geoid: "4205163904"}  # Redstone township
+  - {<<: *fayette_county_zoning, geoid: "4205167640"}  # Saltlick township
+  - {<<: *fayette_county_zoning, geoid: "4205171320"}  # Smithfield borough
+  - {<<: *fayette_county_zoning, geoid: "4205172080"}  # South Connellsville borough
+  - {<<: *fayette_county_zoning, geoid: "4205173064"}  # Springfield township
+  - {<<: *fayette_county_zoning, geoid: "4205179344"}  # Upper Tyrone township
+  - {<<: *fayette_county_zoning, geoid: "4205179768"}  # Vanderbilt borough
+
+  # Warren County: the county ordinance (as amended February 18, 2026) names the
+  # 14 municipalities it covers (§ 301.2). The DCED record differs for seven
+  # of them; the ordinance's own list is used here.
+  - &warren_county_zoning
+    geoid: "4212313776"  # Clarendon borough
+    doc_id: warren_county_zo_2008
+    section_cite: "§§ 302-305 (district uses and Tables 302-304); § 507.2.2 (parking)"
+    adu_status: not_addressed
+    min_lot_sf_smallest_res_district: 7500
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family_detached, two_family, multifamily]
+    evidence_quote: "(1) On lots of 1.5 acres or more, two separate dwelling units may be permitted."
+    evidence_offset: 27148
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      County zoning (MPC § 602). No ADU term. A second house on lots of 1.5 acres
+      or more is permitted in ACR, R-1, R-2, V and BT; R-1 allows "only one
+      dwelling per lot" otherwise and bars studio and garage apartments (§ 303).
+      Read as not addressed, not by right, because a 1.5-acre test is not an ADU
+      rule. Smallest lot 7,500 sq ft (R-1, R-2, V with public water and sewer).
+      Parking 2 per home (§ 507.2.2).
+  - {<<: *warren_county_zoning, geoid: "4212315408"}  # Columbus township
+  - {<<: *warren_county_zoning, geoid: "4212315672"}  # Conewango township
+  - {<<: *warren_county_zoning, geoid: "4212318560"}  # Deerfield township
+  - {<<: *warren_county_zoning, geoid: "4212322920"}  # Eldred township
+  - {<<: *warren_county_zoning, geoid: "4212323064"}  # Elk township
+  - {<<: *warren_county_zoning, geoid: "4212325304"}  # Farmington township
+  - {<<: *warren_county_zoning, geoid: "4212329328"}  # Glade township
+  - {<<: *warren_county_zoning, geoid: "4212348272"}  # Mead township
+  - {<<: *warren_county_zoning, geoid: "4212360480"}  # Pine Grove township
+  - {<<: *warren_county_zoning, geoid: "4212361208"}  # Pleasant township
+  - {<<: *warren_county_zoning, geoid: "4212372600"}  # Southwest township
+  - {<<: *warren_county_zoning, geoid: "4212375024"}  # Sugar Grove borough
+  - {<<: *warren_county_zoning, geoid: "4212376696"}  # Tidioute borough
+  - geoid: "4212381000"  # Warren city
+    doc_id: warren_city_zo_1978
+    section_cite: "City of Warren Code § 470-16 (use table); § 470-15 (area); § 470-69.A (parking)"
+    adu_status: by_right
+    min_lot_sf_smallest_res_district: 5000
+    parking_min_per_unit_sf: 1
+    parking_min_per_unit_mf: 1
+    permitted_types: [single_family_detached, multifamily, mobile_home, accessory_dwelling]
+    evidence_quote: "Accessory Dwelling Unit P P P P"
+    evidence_offset: 14847
+    binding_conditions: >-
+      R-1, R-2, R-3 and MU districts; the ordinance sets no ADU standards.
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-23
+    status: verified
+    note: >-
+      Ordinance 1978, adopted May 20, 2024. The use table marks Accessory
+      Dwelling Unit P (permitted) in R-1, R-2, R-3 and MU (checked on the page
+      image, since the text drops empty cells). The ordinance does not define an
+      ADU or set owner-occupancy or detached rules, so those stay unknown.
+      Residential lots 5,000 sq ft (§ 470-15). One parking space per dwelling
+      unit (§ 470-69.A).
+  - geoid: "4204727088"  # Fox township (Elk)
+    doc_id: fox_elk_zo_2005
+    section_cite: "§ 110-12 (RR uses); §§ 110-13, 110-14 (RS, VC uses); § 110-48.F (parking)"
+    adu_status: not_addressed
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    min_lot_sf_smallest_res_district: 5000
+    evidence_quote: >-
+      Permitted uses. The following are permitted uses in the RR District: (1)
+      Single-family detached dwellings, including mobile homes, provided that
+      the mobile home is placed on a permanent foundation
+    evidence_offset: 55193
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      No ADU-type term in the ordinance or in the posted 2022-6 amendment
+      (campgrounds, signs). RR, RS and VC list only "accessory buildings and
+      uses". Smallest lot 5,000 sq ft (VC, § 110-14.D). Parking 2 per dwelling
+      unit. Later amendments in the township's code book were not checked.
+  - geoid: "4204949548"  # Millcreek township (Erie)
+    doc_id: millcreek_erie_zo_2022
+    section_cite: "§§ 145-14.F, 145-15.E, 145-16.E (CR, R1, R2 accessory uses); § 145-58 (In-Law Apartment); § 145-92 (parking)"
+    adu_status: special_exception
+    occupancy_restriction: relatives_only
+    adu_detached: false
+    adu_owner_occupancy: true
+    min_lot_sf_smallest_res_district: 5000
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    binding_conditions: >-
+      Special exception; inside a single-family detached home only; owner
+      occupied; at most 720 sq ft or 40% of the house; family occupants.
+    evidence_quote: >-
+      Exception for the following Accessory Uses and their associated
+      Structures where it finds that all general criteria as set forth in
+      Article IV of this Chapter and all applicable criteria for the Use as set
+      forth in Article V of this Chapter are satisfied: 1. Home Occupation. 2.
+      In-Law Apartment.
+    evidence_offset: 111468
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      "In-Law Apartment" (a unit within a single-family detached dwelling) is an
+      accessory use by special exception in CR, R1 and R2 (quote: R1,
+      § 145-15.E). § 145-58: owner-occupied, owner's unit over 70% of living
+      space. Smallest lot 5,000 sq ft (R3). The township posts 2026 amendment
+      material, so this September 2024 copy may lag.
+  - geoid: "4207702000"  # Allentown city (Lehigh)
+    doc_id: allentown_lehigh_zo_16166
+    section_cite: "§§ 660-30.F, 660-31.F (House B and C: dwelling units); § 660-42 (ADU standards); Table 660-10 (parking)"
+    adu_status: by_right
+    adu_detached: true
+    adu_owner_occupancy: true
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.5
+    binding_conditions: >-
+      One per lot with one home; at most 800 sq ft or 40% of the house; owner
+      lives in one unit; deed restriction; one extra parking space; detached
+      only with alley or side-street access; by building type.
+    evidence_quote: >-
+      accessory dwelling unit requirements and 660-49 for outbuildings.
+      Accessory Dwelling Units 1 in principal building or outbuilding
+    evidence_offset: 253585
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      The 2026 ordinance sets ADUs by building type: House B (N3-N5) and House
+      C allow one in the house or an outbuilding with a zoning permit (§ 660-42;
+      no hearing seen); some twin and rowhouse types allow one inside only,
+      others none. Parking 2 per one-unit home, 1.5 per unit in 2-4 unit
+      buildings outside N1/N2. Effective January 1, 2026.
+  - geoid: "4206920352"  # Dunmore borough (Lackawanna)
+    doc_id: dunmore_lackawanna_zo_2023
+    section_cite: "Art. 2 (definition); Art. 3 district sheets 9, 10, 11, 18 (accessory uses); § 7.1.1 (parking)"
+    adu_status: by_right
+    adu_detached: true
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    binding_conditions: >-
+      Permitted (P) in districts 9, 10, 11 and 18, not listed in 6 (Suburban
+      Single Family); the definition says only where listed as special review.
+    evidence_quote: "Dwelling: Accessory (granny flat/garage apartment) P Home Based Business, No Impact P"
+    evidence_offset: 103098
+    method: hand
+    confidence: low
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      The district 10 (Town-City Single Family Residential) sheet lists the
+      accessory dwelling as P; the definition allows it in the house or a
+      detached building but says it goes "only in those zoning districts where
+      the use is listed as a special review", which the sheets do not do. Read
+      as by right where listed, with low confidence. Not listed in district 6.
+  - geoid: "4201327600"  # Frankstown township (Blair)
+    doc_id: frankstown_blair_zo_2007
+    section_cite: "§ 401 (R uses); § 501 (R-1 uses); preamble item 4 (unlisted uses prohibited); § 403 (lots)"
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "Preamble item 4 (offset 4404)"
+    min_lot_sf_smallest_res_district: 10000
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: >-
+      Residential District, only the following buildings, structures and uses
+      shall be permitted. SECTION 401. USES PERMITTED A. One (1) single family
+      detached dwelling per lot.
+    evidence_offset: 32653
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      No ADU-type use. One single-family detached dwelling per lot (§ 401.A);
+      uses not listed in Articles IV-VI "are specifically prohibited" (offset
+      4404). Lot 10,000 sq ft with public sewer. A 2025 solar amendment was not
+      read.
+  - geoid: "4206969000"  # Scranton city (Lackawanna)
+    doc_id: scranton_lackawanna_zo_2023_draft
+    section_cite: "Art. 2 (definition); Art. 3 district sheet 6 (accessory uses)"
+    adu_status: by_right
+    adu_detached: true
+    evidence_quote: "Dwelling: accessory (ADU) P Electric vehicle charing station P Home based business, no impact P"
+    evidence_offset: 119021
+    method: hand
+    confidence: low
+    status: draft
+    note: >-
+      Draft, not verified: the posted file is the "Final Draft As Proposed by
+      City Planning Commission" with council amendments, and its enactment date
+      is a placeholder ("Month and Day, 2023"). It lists the accessory dwelling
+      as P in the Suburban Single Family sheet. Verify against the enacted text.
+  - geoid: '4200359032'
+    doc_id: penn_hills_allegheny_zo
+    section_cite: § 5.1 (R-1 uses); § 3.2 (residential accessory uses); § 10.1.D (parking)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 5.1 (R-1: uses not clearly permitted are prohibited)"
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: 'Structures and uses not clearly permitted in an R-1 District are prohibited.
+      5.1.A. The permitted uses in an R-1 District are: (1) Single-family residences (2) Agriculture/gardening
+      (3) Accessory uses'
+    evidence_offset: 98562
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type term. Residential accessory uses are garages, sheds and the like, no dwelling;
+      R-1 prohibits uses not clearly permitted. The posted 2020 copy may lag amendments. Parking
+      2 per home; 2 per unit up to 50 units.
+  - geoid: '4200350528'
+    doc_id: monroeville_allegheny_zo_2779
+    section_cite: § 320 Zoning Use Chart; § 504.Z and § 1211.B (Dependent Dwelling criteria);
+      § 904 (parking); § 306 Table 301 (lots)
+    adu_status: special_exception
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    min_lot_sf_smallest_res_district: 7500
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.5
+    binding_conditions: Special exception in R-1, conditional use in R-2 to R-4; dependent close
+      relatives only; lot of 7,200 sq ft; accessory structure, 400-625 sq ft per storey, one
+      bedroom.
+    evidence_quote: Dependent Dwelling SE CU CU CU
+    evidence_offset: 290211
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: 'The use chart (columns R-1 to R-4) lists Dependent Dwelling (granny flat) as SE in
+      R-1 and CU in R-2, R-3 and R-4: a hearing either way. The definition says attached; the
+      standards place it in an accessory structure. Uses not shown are prohibited.'
+  - geoid: '4200379274'
+    doc_id: upper_st_clair_allegheny_ch130_8
+    section_cite: § 130.8.2 (R1 authorized uses); § 130.7.1 (unlisted uses); § 130.3.99 (definition)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 130.7.1"
+    min_lot_sf_smallest_res_district: 7500
+    parking_min_per_unit_sf: 2
+    evidence_quote: 130.8.2.1.1.1. SINGLE-FAMILY DWELLINGS. 130.8.2.1.1.2. PUBLIC UTILITY.
+    evidence_offset: 430
+    # No adoption date in the posted sections (130.1-2, 130.7, 130.8 re-checked
+    # 2026-11-24; same text_sha256). The latest enactment inside § 130.8.2 as it
+    # reads, offset 3679: "[Added 6-1-15 by Ord. No. 2136]" (the section took
+    # its present form by then).
+    in_force_by: 2015-06-01
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: 'Chapter 130 is posted section by section; §§ 130.1-130.3, 130.7-130.10 and 130.19
+      were read with no ADU-type use. § 130.7.1 (its own PDF, offset 214): a use not authorized
+      in a district is not permitted. Smallest lot 7,500 sq ft (R3).'
+  - geoid: '4200332328'
+    doc_id: hampton_allegheny_zo_2026
+    section_cite: § 310-3.3.4 (table of uses); § 310-6.4 (conversion apartments); § 310-5.4.1
+      (parking)
+    adu_status: not_addressed
+    unlisted_uses: conditional
+    unlisted_uses_cite: "§ 310-3.3.4 table row 'Residential Uses Not Provided'"
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.25
+    evidence_quote: Single-Family Dwelling R R R R R X R X X X X Stable (Private) C C C X X
+      X X X X X X Townhouses X X X X R X R R X X X Two-Family Dwelling/Duplex X X X R R X X
+      X X X X Residential Uses Not Provided C C C C C C C C C C C
+    evidence_offset: 179063
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use in the 2026 ordinance. Residential uses not provided for are conditional
+      uses in every district, so an ADU could only seek conditional use as an unlisted use.
+      Conversion apartments (an older house split in two, RC and RD) are not an ADU rule.
+  - geoid: '4200346256'
+    doc_id: mckeesport_allegheny_zo_2017
+    section_cite: § 1331-307 Table C (principal uses); § 1331-502 (other residential uses)
+    adu_status: not_addressed
+    unlisted_uses: special_exception
+    unlisted_uses_cite: "Uses not specifically listed (with Table C, § 1331-307)"
+    min_lot_sf_smallest_res_district: 2500
+    evidence_quote: 'Uses not specifically listed. Uses which are not specifically listed in
+      Table C: Principal Land Use Table or Articles IV, V, or VI of this Ordinance shall be
+      submitted to the Zoning Hearing Board as a special exception.'
+    evidence_offset: 142935
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; unlisted uses go to the zoning hearing board as a special exception.
+      Document dated February 2017; later amendments may not be in the posted copy. Smallest
+      single-family lot 2,500 sq ft.
+  - geoid: '4200365352'
+    doc_id: robinson_allegheny_zo_2017
+    section_cite: § 300-36 (R-1 uses); § 300-73 (accessory uses); § 300-38 (R-3 lots)
+    adu_status: not_addressed
+    min_lot_sf_smallest_res_district: 5000
+    evidence_quote: Permitted uses. (a) Single-family dwellings. (b) Farms as regulated herein
+      by § 300-64. (c) Planned residential developments, as regulated herein by Article VI.
+      (d) Public and essential services. (e) Accessory uses to the above principal uses, as
+      regulated herein by § 300-73.
+    evidence_offset: 198907
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; the accessory-use list has no dwelling (caretaker quarters only in
+      C-4 and C-5). The posted copy is the 2017 revision and may lag amendments.
+  - geoid: '4200360272'
+    doc_id: pine_allegheny_zo_404
+    section_cite: § 84-26 Table 4 (accessory uses); § 84-34.B (ADU standards); § 84-19 Table
+      1 (lots)
+    adu_status: by_right
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    adu_owner_occupancy: true
+    binding_conditions: Use and occupancy permit; one per lot; owner lives on the lot; no rental;
+      relatives of the household; at most 50% of the house or 1,000 sq ft.
+    evidence_quote: Accessory Dwelling Unit P P P P P
+    evidence_offset: 176372
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: Table 4 marks Accessory Dwelling Unit P in all five residential districts (E-1, S-1,
+      R-1, R-2, R-3). Owner-occupancy text at offset 245794. Detached (garage or barn type)
+      or inside with a separate entrance; the definition says detached, the standards allow
+      both.
+  - geoid: '4200384512'
+    doc_id: whitehall_allegheny_ch180_art4
+    section_cite: § 180.8 (R-1 uses); Art. II, VI, XXV, XXVIII (read, no ADU use)
+    adu_status: not_addressed
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.5
+    evidence_quote: 'In this district, the land may be used and BUILDINGS and STRUCTURES may
+      he erected, altered or used for the following purposes and no other: 180.8.1. Permitted
+      uses. 180.8.1.1. SINGLE-FAMILY detached DWELLING.'
+    evidence_offset: 141
+    # No adoption date in Article IV (re-fetched 2026-11-24, same text_sha256;
+    # Article I is a scan). The latest enactment inside § 180.8, offset 1271:
+    # "[Repealed 6-15-22 by Ord. No. 1154]".
+    in_force_by: 2022-06-15
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: The code is posted one PDF per article; the quote is from Article IV (R-1). No ADU-type
+      use in Articles II, IV, VI, XXV or XXVIII; the R-1 list is closed ('and no other'). Not
+      every residence article was read.
+  - geoid: '4200382800'
+    doc_id: west_deer_allegheny_zo_394
+    section_cite: § 5.4 (use table); Arts. VIII-XI (R-1 to R-4); § 4.2.7 (definition)
+    adu_status: not_addressed
+    evidence_quote: No building or land shall hereafter be used or occupied and no building
+      or part thereof shall be erected, moved, or altered unless in conformity with the regulations
+      herein specified for the district in which it is located.
+    evidence_offset: 102865
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: The only ADU-type term is agricultural employee housing (definition only). Residential
+      accessory uses are garages and customary uses. The posted copy is the 2012 original; the
+      code was re-adopted in 2016 and amended since, not read.
+  - geoid: '4200356384'
+    doc_id: ohara_allegheny_zo_1361
+    section_cite: § 72-1.6 (prohibited uses); § 72-1.4 (one principal use per lot)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 72-1.6"
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: Land uses not specifically provided for in Article IV through Article XI
+      are hereby prohibited.
+    evidence_offset: 31899
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; a single-family dwelling may not share a lot with another principal
+      building (§ 72-1.4). The posted copy is the 2020 adoption; later amendments not read.
+  - geoid: '4200375816'
+    doc_id: swissvale_allegheny_zo_2017
+    section_cite: § 317 Table 9 (accessory uses); § 406.01 (ADU standards); § 607 Table 11 (parking)
+    adu_status: conditional
+    adu_detached: true
+    adu_owner_occupancy: true
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.5
+    binding_conditions: Conditional use (council); owner lives on the lot; one per lot; separate
+      utilities; meant mainly for a relative.
+    evidence_quote: 'Section 406.01: Accessory Dwelling Unit A. Accessory dwelling units may
+      be attached to the principal building, a freestanding structure, or in conjunction with
+      a permitted accessory building on the lot.'
+    evidence_offset: 199137
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: Table 9 lists Accessory Dwelling Unit CU in SFR, MFR and NMU (offset 169913). Owner-occupancy
+      text at offset 199601. Later amendments may exist and were not read.
+  - geoid: '4200325904'
+    doc_id: findlay_allegheny_ch117_art4
+    section_cite: § 117.401.5 (unlisted uses); § 117.402.2 (accessory uses table)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 117.401.5"
+    parking_min_per_unit_sf: 2
+    evidence_quote: USES Not Specifically Listed. USES which are not specifically listed on
+      the Summary Table of Authorized Uses, Section 117.402 or in the Definition of Use Categories,
+      Section 117.401, shall not be permitted in the TOWNSHIP.
+    evidence_offset: 1285
+    # No adoption date in Article IV (re-fetched 2026-11-24, same text_sha256).
+    # The latest enactment inside the cited § 117.402.2, offset 11151: "[Added
+    # 4-10-19 by Ord. No. 423]".
+    in_force_by: 2019-04-10
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: Posted article by article (Articles II, III, IV, VI, VII read). No ADU-type use; conversion
+      apartments are not allowed in AG, LDR or MDR (not an ADU rule). Parking 2 per home of
+      up to 2 bedrooms, 3 for more.
+  - geoid: '4200356392'
+    doc_id: ohio_allegheny_zo_305
+    section_cite: § 303.A (district regulations); Art. V and later (residential districts)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 303.A"
+    evidence_quote: In the C-D, R-1, R-2 and R-3 Districts, any use not specifically listed
+      as an Authorized Use in the Zoning District shall not be permitted in that Zoning District.
+    evidence_offset: 96291
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type term in the text. Unlisted uses are barred in every residential district.
+      Enacted August 6, 2012; later amendments not read.
+  - geoid: '4207706088'
+    doc_id: bethlehem_zo_part13
+    section_cite: § 1304 (use table, accessory uses); § 1302.140 (definition); § 1322.03(bbb)
+      (standards)
+    adu_status: by_right
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    binding_conditions: 'Unit for care of a relative: relatives only, at most 2, one needing
+      care; removable or convertible back; deed-type restriction; permit renewed yearly.'
+    evidence_quote: Unit for Care of Relative (S. 1322) P P P P P
+    evidence_offset: 89895
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: 'Unit for Care of Relative is P in RR, RS, RG, RT and RRC: a care-based, relatives-only
+      unit (like ECHO housing), not a general ADU, so it counts as by right with conditions.
+      The 2018 copy may lag; a newer consolidated copy linked by the city returned 404.'
+  - geoid: '4207779160'
+    doc_id: upper_milford_lehigh_zo_175
+    section_cite: § 155.068 Table of Permitted Uses (G-6); G-6 accessory family dwelling unit
+      standards
+    adu_status: special_exception
+    adu_detached: false
+    binding_conditions: Special exception; family members or a caregiver, at most 2; inside
+      the house, at most 25% of its floor area; registration ends on sale; no rental; deed restriction.
+    evidence_quote: G-6 Accessory family dwelling unit SE SE SE SE SE SE SE SE N SE SE
+    evidence_offset: 148718
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: Accessory family dwelling unit is SE in every district but I (columns CON R-A RS-R
+      S-R AC VR VC C I CZAMB COSDO). Ordinance 175 was enacted May 21, 2026 and repeals the
+      prior ordinance.
+  - geoid: '4205531720'
+    doc_id: guilford_franklin_zo_art3
+    section_cite: §§ 3.1.B, 3.2.B, 3.3.B (AR, R-1, R-2 special exceptions); § 3.4 (C); Art.
+      2 (definition)
+    adu_status: special_exception
+    adu_detached: false
+    binding_conditions: Special exception; inside an existing single-family detached home without
+      substantial outside change.
+    evidence_quote: 'Special Exceptions. Subject to the procedures and expressed standards and
+      criteria set forth elsewhere in this Ordinance, the following uses are permitted by Special
+      Exceptions: 1. Accessory Apartments'
+    evidence_offset: 9424
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: Accessory apartments are SE in AR, R-1 and R-2; by right only within the principal
+      building in C; by SE in the Village Overlay, where an accessory building may hold one.
+      Posted article by article; Article 3 read, Article 2 for the definition.
+  - geoid: '4207353064'
+    doc_id: neshannock_lawrence_zo_2024
+    section_cite: § 304 Table 300 (accessory uses); § 715 (ADU standards); Art. II (definition)
+    adu_status: by_right
+    adu_detached: true
+    adu_owner_occupancy: true
+    binding_conditions: One per lot; at most 40% of the house; owner lives on the lot; separate
+      water meter; no rental or short-term rental (definition); building permit.
+    evidence_quote: Accessory Dwelling Unit R R R R R -- -- -- -- -- -- --
+    evidence_offset: 144496
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: R (by right) in R-1-A, R-1, R-2, R-2-A and R-3. Attached to the house or to a permitted
+      accessory building (definition, offset 43292). The amendment takes effect 5 days after
+      adoption.
+  - geoid: '4200320432'
+    doc_id: duquesne_allegheny_zo_2017
+    section_cite: § 304 and Table 300-1 (authorized uses); § 306(C) (conversions); Table 300-2
+      (lots)
+    adu_status: not_addressed
+    min_lot_sf_smallest_res_district: 3000
+    evidence_quote: R-1 SINGLE-FAMILY RESIDENTIAL DISTRICTS Single-family dwelling Place of
+      assembly/worship Customary residential accessory uses Forestry Home-based business, no-impact
+      Communications Antennas School Cemetery Two-family dwelling
+    evidence_offset: 105818
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; uses are limited to Table 300-1 and customary residential accessory
+      uses are garages, sheds and the like. Linked from the city's own site as its 2017 Zoning
+      Ordinance (the file sits on the site builder's file host); no adoption ordinance number
+      in the text.
+  - geoid: '4200376104'
+    doc_id: tarentum_allegheny_zo_13_03
+    section_cite: §§ 265-404, 265-405 (R-2, R-1); § 265-301.G (accessory uses); § 265-1105 (uses
+      not provided for)
+    adu_status: not_addressed
+    unlisted_uses: conditional
+    unlisted_uses_cite: "§ 265-1105"
+    min_lot_sf_smallest_res_district: 5000
+    evidence_quote: Whenever, under this Ordinance, a use is neither specifically permitted
+      nor denied, and an application is made by an applicant to the Zoning Officer for such
+      use, the Zoning Officer shall refer the application to the Borough Council to hear and
+      decide such request as a conditional use.
+    evidence_offset: 249652
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; residential accessory uses are playhouses, garages and sheds. An
+      unlisted use may ask council for a conditional use (quote). Enacted February 18, 2013;
+      later amendments not read.
+  - geoid: '4200354816'
+    doc_id: north_braddock_allegheny_zo_2014
+    section_cite: § 601.E (unlisted uses); § 602 (table of uses); § 506 (parking)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 601.E (unlisted uses only in M or OU, by conditional use)"
+    parking_min_per_unit_sf: 1
+    parking_min_per_unit_mf: 1
+    evidence_quote: Uses Not Specifically Listed. Uses which are not specifically listed on
+      the summary Tables of Authorized Uses, §602, shall be permitted in the M or OU District
+      as a Conditional Use.
+    evidence_offset: 83503
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use in the residential rows; unlisted uses only in M or OU by conditional
+      use. Conversion dwellings are not an ADU rule. Cover dated April 29, 2014; no adoption
+      clause in the text.
+  - geoid: '4200360712'
+    doc_id: pitcairn_allegheny_ch27
+    section_cite: § 27-501 (use table); §§ 27-601, 27-602 (lots); § 27-701.2 (parking)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 27-501"
+    min_lot_sf_smallest_res_district: 4000
+    parking_min_per_unit_sf: 1
+    parking_min_per_unit_mf: 1
+    evidence_quote: Use not specifically listed or interpreted to be incl uded in the categories
+      under this Chapter shall not be permitted. Permitted Principal Use Accessory Uses Conditional
+      Uses R-1 Residential District Single-Family Dwelling Private Garage
+    evidence_offset: 15239
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; R-1 accessory uses are a garage, sheds, home occupation, pool and
+      signs; unlisted uses are not permitted. The codification runs to 2011; later amendments
+      listed on the borough site (manufactured homes, rental occupancy) are not in it.
+  - geoid: '4200321444'
+    doc_id: east_mckeesport_allegheny_ch27
+    section_cite: § 27-502 (use table); § 27-503 (districts); § 27-821 (similar uses)
+    adu_status: not_addressed
+    unlisted_uses: conditional
+    unlisted_uses_cite: "§ 27-502 (not expressly permitted: restricted); § 27-821 (similar uses, conditional use)"
+    min_lot_sf_smallest_res_district: 7500
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    evidence_quote: The following table shall establish uses permitted in each zoning district
+      as established in §27-500. Uses not expressly permitted are hereby restricted.
+    evidence_offset: 77031
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; duplexes by right in R-2. A use similar to a listed one may be reviewed
+      as a conditional use (§ 27-821). 2018 supplement; later amendments not read.
+  - geoid: '4200321712'
+    doc_id: east_pittsburgh_allegheny_zo_908
+    section_cite: § 601.D (unlisted uses); § 602 (table of uses); § 506 (parking)
+    adu_status: not_addressed
+    unlisted_uses: prohibited
+    unlisted_uses_cite: "§ 601.D"
+    parking_min_per_unit_sf: 1
+    parking_min_per_unit_mf: 1
+    evidence_quote: not specifically listed on the Table of Authorized Uses, §602, shall not
+      be permitted in the Borough.
+    evidence_offset: 86467
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use, though single-family to multi-family dwellings are all by right in
+      R-1. Cover dated October 1, 2014, no signature page; posted by the borough as its zoning
+      ordinance.
+  - geoid: '4204345056'
+    doc_id: lower_paxton_dauphin_zo_2025
+    section_cite: § 312 (table of accessory uses); § 314.A (ADU); Art. II (definitions)
+    adu_status: by_right
+    adu_detached: true
+    binding_conditions: Building permit and certificate of use and occupancy; no size, owner
+      or parking limits found in § 314.A.
+    evidence_quote: Accessory Dwelling Units P P P P P P P P P Bar/Tasting Room
+    evidence_offset: 239680
+    method: hand
+    confidence: low
+    reviewed_on: 2026-11-24
+    status: verified
+    note: The accessory-use table marks ADUs P in 9 of 13 district columns; the text layer does
+      not show which columns are blank. The single-family row also has 9 entries (8 P, 1 SE),
+      so the residential districts are almost surely P. Attached or detached (definition). Adopted
+      May 19, 2025 (file name and header).
+  - geoid: '4210319272'
+    doc_id: dingman_pike_zo
+    section_cite: § 105 (uses not provided for); § 305 (use chart); § 402 (accessory uses)
+    adu_status: not_addressed
+    unlisted_uses: special_exception
+    unlisted_uses_cite: "§ 105 (referred to the zoning hearing board)"
+    evidence_quote: Uses Not Provided For Whenever in any District established under this Ordinance,
+      a use is neither specifically permitted nor denied and an application is made by the property
+      owner to the Zoning Officer for such use, the application shall be referred to the Zoning
+      Hearing Board
+    evidence_offset: 9551
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU-type use; an unlisted use goes to the zoning hearing board. Residential conversion
+      (up to 4 apartments) is not an ADU rule. The township calls this copy unofficial; signed
+      originals prevail.
+  - geoid: '4210318704'
+    doc_id: delaware_pike_zo_110
+    section_cite: § 110.7 (uses by district); § 110.16 (conditional uses)
+    adu_status: not_addressed
+    min_lot_sf_smallest_res_district: 87120
+    binding_conditions: 'In RR and C only: one accessory apartment as a conditional use on a
+      lot of at least 1 acre.'
+    evidence_quote: 'R: Residential a. Principal permitted uses. Single-family dwellings, places
+      of worship, and Private Community structures.'
+    evidence_offset: 14928
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: The main residential district (R) provides no accessory apartment. In RR and C a single
+      accessory apartment is a conditional use on a lot of 1 acre or more (offset 16799).
+  - geoid: '4210349408'
+    doc_id: milford_twp_pike_zo_2026
+    section_cite: § 307 (minimum development standards); § 306 (uses not provided for)
+    adu_status: conditional
+    occupancy_restriction: relatives_only
+    binding_conditions: Conditional use; second unit only for a parent, child or other family
+      member needing help with daily living.
+    evidence_quote: An exception may be granted as a Conditional Use, however, when the second
+      unit is restricted to the occupancy of a parent, child or other family member requiring
+      assistance with the activities of daily living.
+    evidence_offset: 58813
+    # The text gives no enactment date (re-fetched 2026-11-24, same
+    # text_sha256). Supervisors' minutes of March 16, 2026 (own site,
+    # wp-content/uploads/2026/04/2026-3-16-Minutes-Website.pdf, text sha256  # secret-scan: allow (public web address)
+    # 8a5067b3..., offset 8302): "The Supervisors voted unanimously to adopt
+    # the amendment to Section 306." § 306 is cited here; the cover reads "As
+    # amended March 16, 2026".
+    in_force_by: 2026-03-16
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU use as such; each dwelling needs its own minimum lot, but a family-care second
+      unit may be approved as a conditional use in any district.
+  # --- G2b readings (allegheny), 2026-11-24
+  - geoid: "4200351696"
+    doc_id: mt_lebanon_allegheny_ch20_zoning
+    section_cite: "§ 202.2 (R-1 uses by right); § 803.3 (residential accessory uses); § 109; § 204.6.2.1.1 (R-3 lots); § 817.5 (parking)"
+    adu_status: not_addressed
+    min_lot_sf_smallest_res_district: 5000
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1
+    permitted_types: [single_family_detached, townhouse, two_family, multifamily]
+    evidence_quote: >-
+      202.2 Uses by Right. The following Uses are permitted in the R-1 District:
+      202.2.1 Single-family Detached Dwellings. 202.2.2 Accessory Uses as
+      outlined in §803.
+    evidence_offset: 39299
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      From the municipality's own e-book (no PDF posted): text pages
+      translate/740a.html to 1136a.html, tags stripped, joined by newlines;
+      offsets and sha256 refer to that text. No ADU term; § 803.3 residential
+      accessory uses list no dwelling; unlisted uses may seek a special
+      exception only in C-2 (§ 109). Lot: 5,000 sq ft detached, R-3. Parking
+      (§ 817.5): 2 per house; multi-family 1 per studio or one-bedroom, 2 per
+      larger unit. Pages updated to 10/2021 (one 3/2022).
+  - geoid: "4200313704"
+    doc_id: clairton_allegheny_zo_2014
+    section_cite: "§ 337-12 (definitions); Table 301 and § 337-22 (uses, read by eye); § 337-20; Table 703 (parking)"
+    adu_status: not_addressed
+    unlisted_uses: conditional
+    unlisted_uses_cite: "§ 337-20"
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family_detached, townhouse, two_family, multifamily]
+    evidence_quote: >-
+      (a) SINGLE FAMILY DETACHED DWELLING – A building occupied by only one
+      dwelling unit, and having no party wall in common with an adjacent
+      building.
+    evidence_offset: 33922
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      pypdf cannot read pages 30-48 (Article III, a font fault); they were read
+      by eye with another extractor. Table 301 lists no ADU, § 337-22.E no
+      accessory dwelling. A use not provided for may be sought as a conditional
+      use (§ 337-20). Table 302 (R1 5,000, R2 3,000 sq ft) is not in the offset
+      text, so the lot is left unknown. Parking (Table 703, offset 239401): 2
+      per house, 2 per multi-family unit. April 2025 amendments not read.
+    # quote 2 (parking), offset 239401: "Class I: Residential Single - family Two (2) spaces Duplex Four (4) spaces Multi - family Two (2) spaces per dwelling unit"
+  # --- G2b readings (bucks), 2026-11-24
+  - geoid: "4201754688"
+    doc_id: northampton_bucks_ch27
+    section_cite: "§§ 27-302, 27-405, 27-406 (uses by right); § 27-407.2 table (R-3 lots); § 27-1110.2.A (parking)"
+    adu_status: not_addressed
+    max_units_by_right_sf_district: 1
+    min_lot_sf_smallest_res_district: 9000
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family_detached, two_family, townhouse, multifamily, mobile_home]
+    evidence_quote: >-
+      §27-406. R-2 Single-Family District. 1. Use regulations in the R-2
+      District shall be as follows: A. Uses by Right. (1) One single-family
+      detached dwelling. [Ord. 277]
+    evidence_offset: 94348
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      No ADU, accessory apartment or in-law term anywhere in the chapter; AR,
+      R-1 and R-2 allow one single-family detached dwelling by right. Smallest
+      lot: 9,000 sq ft for a single-family detached house in an R-3 mixed
+      dwelling development (zero lot line 6,200, patio and twin 4,500,
+      townhouse 2,500 per unit); R-2 is 20,000 sq ft. Parking: residential 2
+      per dwelling unit, elderly housing 1.5 (§ 27-1110). Posted
+      amendments to 2015 touch other parts; later ones not read.
+  # --- G2b readings (central), 2026-11-24
+  - geoid: '4204332800'
+    doc_id: harrisburg_zo_2014_am2021
+    section_cite: § 7-305 use table C (accessory uses); § 7-307.3A (lots); § 7-311 parking table;
+      § 7-309.2(a) (older text, see note)
+    adu_status: by_right
+    adu_detached: true
+    min_lot_sf_smallest_res_district: 1500
+    parking_min_per_unit_sf: 1
+    parking_min_per_unit_mf: 1
+    permitted_types: [single_family_detached, two_family, townhouse, multifamily, mobile_home,
+      accessory_dwelling]
+    evidence_quote: Accessory Dwelling Unit (7-309) N P P SE N N P N N
+    evidence_offset: 51508
+    binding_conditions: By right in RL, RM and RF; special exception in CN; one parking space
+      per ADU; size cap in § 7-309.2(a). Owner-occupancy not read in the city's copy.
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: 'Conflict resolved by date: the use table (columns OSR RL RM CN CG DC RF INS IND)
+      shows P in RL, RM, RF and SE in CN, which matches the 2021 amendment (Ordinance 6-2021);
+      § 7-309.2(a) at offset 75308 still has the 2014 wording (special exception in RL, RM,
+      CN, RF) and was not updated in this copy. The table governs. Ordinance 6-2021 itself
+      is not on the city''s site, so its owner-occupancy and size terms are not read here.
+      Smallest lot: 1,500 sq ft per unit (RM); RL 5,000 sq ft. Parking 1 per dwelling.'
+  # --- G2b readings (counties), 2026-11-24
+  - &schuylkill_county_zoning
+    geoid: "4210703264"  # Ashland borough
+    doc_id: schuylkill_county_zo_2010_1
+    section_cite: "§ 202 (Accessory Apartment, definition); § 306.C-N (district uses); § 306.G.3.a (R-3 lots); § 803.B.2; § 601 Table 6.1"
+    adu_status: not_addressed
+    unlisted_uses: special_exception
+    unlisted_uses_cite: "§ 105.B"
+    min_lot_sf_smallest_res_district: 2500
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family_detached, two_family, townhouse, multifamily, mobile_home]
+    evidence_quote: >-
+      Accessory Apartment. One dwelling unit that is created within part of a
+      principal dwelling or above a vehicle garage on a residential lot.
+    evidence_offset: 63521
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      County zoning where a municipality has none (Title § 1). Accessory
+      Apartment is defined (§ 202) but listed in no district (§ 306): not
+      addressed; unlisted uses may seek a special exception (§ 105.B). CR
+      allows only single-family homes by right. Lots: 2,500 sq ft in R-3 with
+      water and sewer, 10,000 in R-2. Parking 2 per unit. Amendments after 2010
+      not read. Covered list is DCED's: the county site's robots file bars
+      automated reading.
+    adu_detached: null
+  - {<<: *schuylkill_county_zoning, geoid: "4210703488"}  # Auburn borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210704352"}  # Barry township
+  - {<<: *schuylkill_county_zoning, geoid: "4210718672"}  # Delano township
+  - {<<: *schuylkill_county_zoning, geoid: "4210721616"}  # East Norwegian township
+  - {<<: *schuylkill_county_zoning, geoid: "4210722912"}  # Eldred township
+  - {<<: *schuylkill_county_zoning, geoid: "4210727232"}  # Frackville borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210727248"}  # Frailey township
+  - {<<: *schuylkill_county_zoning, geoid: "4210729088"}  # Gilberton borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210729264"}  # Girardville borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210730128"}  # Gordon borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210741264"}  # Landingville borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210746592"}  # Mahanoy City borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210748448"}  # Mechanicsville borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210749048"}  # Middleport borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210750088"}  # Minersville borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210751488"}  # Mount Carbon borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210753944"}  # New Philadelphia borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210754016"}  # New Ringgold borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210755472"}  # North Union township
+  - {<<: *schuylkill_county_zoning, geoid: "4210757752"}  # Palo Alto borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210760456"}  # Pine Grove borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210762128"}  # Port Carbon borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210762136"}  # Port Clinton borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210762200"}  # Porter township
+  - {<<: *schuylkill_county_zoning, geoid: "4210764088"}  # Reilly township
+  - {<<: *schuylkill_county_zoning, geoid: "4210777184"}  # Tower City borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210777392"}  # Tremont borough
+  - {<<: *schuylkill_county_zoning, geoid: "4210777400"}  # Tremont township
+  - {<<: *schuylkill_county_zoning, geoid: "4210778400"}  # Union township
+  - {<<: *schuylkill_county_zoning, geoid: "4210779120"}  # Upper Mahantongo township
+  - {<<: *schuylkill_county_zoning, geoid: "4210781312"}  # Washington township
+  # --- G2b readings (east_sw), 2026-11-24
+  - geoid: "4210340776"
+    doc_id: lackawaxen_pike_zo_1992
+    section_cite: "§ 513 and § 513.3 (conversions, accessory apartment); § 406 schedules of uses;
+      § 407 Schedule of Development Standards; § 505.5.A (parking)"
+    adu_status: conditional
+    adu_detached: false
+    min_lot_sf_smallest_res_district: 87120
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family_detached, two_family, multifamily]
+    evidence_quote: >-
+      Any conversion of any building to a residential use or the conversion of
+      any dwelling to accommodate additional dwelling units shall be considered
+      a conditional use
+    evidence_offset: 224156
+    binding_conditions: >-
+      Conditional use; only in a single-family house built before the ordinance,
+      altered but not enlarged; apartment at most 25% of floor area and 750 sq ft.
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      Accessory apartment (§ 513.3) is a conversion, a conditional use (§ 513):
+      inside an existing house only, so no detached unit. No owner-occupancy rule
+      stated. Every single-family lot needs 2 acres (§ 407); R-1 permits only
+      single-family houses by right; two-family by right in ND, multifamily
+      conditional. Parking 2 per dwelling (§ 505.5.A). Ordinances 114-125 posted
+      later are scans, not read.
+  # --- G2b readings (mine), 2026-11-24
+  - geoid: '4209506088'  # Bethlehem city (Northampton County part)
+    doc_id: bethlehem_zo_part13
+    section_cite: § 1304 (use table, accessory uses); § 1302.140 (definition); § 1322.03(bbb)
+      (standards)
+    adu_status: by_right
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    binding_conditions: 'Unit for care of a relative: relatives only, at most 2, one needing
+      care; removable or convertible back; deed-type restriction; permit renewed yearly.'
+    evidence_quote: Unit for Care of Relative (S. 1322) P P P P P
+    evidence_offset: 89895
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: 'Same citywide ordinance as the Lehigh County part (one city, two county parts);
+      quote re-checked at the offset on 2026-11-24 (text checksum unchanged). Unit for Care
+      of Relative is P in RR, RS, RG, RT and RRC: a care-based, relatives-only unit, so it
+      counts as by right with conditions.'
+  # --- G2b readings (montdel), 2026-11-24
+  - geoid: "4209100156"
+    doc_id: abington_montgomery_zo_2017
+    section_cite: "§ 2103.A Use A-1 (ADUs); Comprehensive Use Matrix (A-1, H uses); Fig. 6.1 (R4 lots); § 2304 (parking)"
+    adu_status: special_exception
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    adu_owner_occupancy: true
+    min_lot_sf_smallest_res_district: 7500
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.33
+    permitted_types: [single_family_detached, two_family, townhouse, multifamily, mobile_home, accessory_dwelling]
+    evidence_quote: "A-1 Accessory Dwelling Units (ADUs) 1 N N SE SE SE SE SE"
+    evidence_offset: 919691
+    binding_conditions: >-
+      Special exception in R1-R4 (and the LP overlay); attached or detached
+      suite accessory to a single-family detached house; one per lot; only
+      while the lot owner's family lives in the main house; occupants must be
+      relatives (parent, grandparent, etc.); no rental; one extra parking space.
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      Use matrix (PDF p. 347, read on the rendered page; the text layer drops
+      blank cells): A-1 is SE in LP, R1-R4. It is headed "Draft" but is the
+      appendix the district articles adopt (§ 501: "See Comprehensive Use
+      Matrix"). Definition at offset 341896; owner-family rule at 342502. Lot:
+      R4 7,500 sq ft (Fig. 6.1). Parking: house 2, apartment 1.33, ADU +1
+      (§ 2304). Posted amendments (Ord. 2131-2237) have no ADU terms
+      (Ord. 2196, a scan, not checked).
+  # --- G2c readings (Palmer), 2026-11-24
+  - geoid: '4209557672'
+    doc_id: palmer_northampton_zo_2023_484
+    section_cite: §§ 190-403.D, 190-404.D, 190-405.D (LDR, MDR, HDR accessory uses); § 190-981;
+      Table 3 (parking)
+    adu_status: by_right
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.5
+    evidence_quote: 'D. Permitted accessory uses. Accessory uses in the LDR Low-Density Residential District
+      shall be as follows: 1. Accessory use and structure which are clearly customary and incidental
+      to a permitted principal use 2. Accessory dwelling unit'
+    evidence_offset: 231891
+    binding_conditions: Permitted accessory use in LDR, MDR and HDR; may be limited to a relative;
+      conversions need a 1,500 sq ft home, 600 sq ft per unit, owner or relative living there
+      36 months, a covenant; 1 extra parking space.
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: '"Accessory dwelling unit" is a permitted accessory use in LDR (offset 231891), MDR
+      and HDR. Definition (offset 102170): "UNIT, ACCESSORY DWELLING (RELATIVE CARE)", within
+      the house or in a detached building. § 190-981 (offset 866913): "may be restricted to
+      occupancy by a relative"; 1 extra space. Owner occupancy only for conversions (owner or
+      relative), so left empty. Parking (Table 3, offset 994664): 2 per single-family home;
+      1.5 per 1-bedroom apartment plus 0.5 per extra bedroom. Smallest lot not set (HDR 12,000
+      sq ft for single-family; other types differ).'
+  # --- G2c readings (Luzerne County, Lebanon), 2026-11-24
+  # Luzerne County: the county ordinance applies in the 19 municipalities its
+  # zoning page lists "As of April 22, 2026" (luzernecounty.org/307/Zoning).
+  # That list adds Courtdale (DCED: own) and West Wyoming (DCED: joint) and
+  # drops Newport Township (DCED: county; the page lists it among those NOT
+  # under county jurisdiction, though the ordinance's own 2021 list had it and
+  # a November 2025 county rezoning touched it), so Newport stays unknown.
+  # Wyoming borough, on the 2021 list, is not on the 2026 page either.
+  - &luzerne_county_zoning
+    geoid: "4207903640"  # Avoca borough
+    doc_id: luzerne_county_zo_2021
+    section_cite: "§ 307 (uses not addressed); Appendix 1.2 (use table); Appendix 2 (lots); § 414 (parking)"
+    adu_status: not_addressed
+    unlisted_uses: special_exception
+    unlisted_uses_cite: "§ 307"
+    min_lot_sf_smallest_res_district: 6000
+    parking_min_per_unit_sf: 1
+    parking_min_per_unit_mf: 1.5
+    permitted_types: [single_family_detached, two_family, multifamily, mobile_home]
+    evidence_quote: >-
+      Whenever, in any zoning district established under this Ordinance, a use
+      is neither specifically permitted nor denied and/or the Zoning Officer is
+      unable to classify a subject use and an application is made by a
+      landowner to the Zoning Officer for such use, the Zoning Officer shall
+      refer
+    evidence_offset: 89595
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      County zoning (MPC § 602). No ADU-type term anywhere (definitions, use
+      table, supplemental uses); an unlisted use goes to the zoning hearing
+      board as a special exception (§ 307). Smallest lot 6,000 sq ft for a
+      single-family home in R-2 with sewer (Appendix 2, note 4). Parking: 1
+      per single- or two-family dwelling, 1.5 per apartment (§ 414). The 2026
+      data-center amendment drafts and map rezonings do not touch housing uses.
+  - {<<: *luzerne_county_zoning, geoid: "4207915904"}  # Conyngham township
+  - {<<: *luzerne_county_zoning, geoid: "4207916568"}  # Courtdale borough (DCED: own)
+  - {<<: *luzerne_county_zoning, geoid: "4207920424"}  # Dupont borough
+  - {<<: *luzerne_county_zoning, geoid: "4207920512"}  # Duryea borough
+  - {<<: *luzerne_county_zoning, geoid: "4207924752"}  # Fairmount township
+  - {<<: *luzerne_county_zoning, geoid: "4207936152"}  # Hughestown borough
+  - {<<: *luzerne_county_zoning, geoid: "4207936296"}  # Hunlock township
+  - {<<: *luzerne_county_zoning, geoid: "4207936432"}  # Huntington township
+  - {<<: *luzerne_county_zoning, geoid: "4207937792"}  # Jeddo borough
+  - {<<: *luzerne_county_zoning, geoid: "4207940848"}  # Laflin borough
+  - {<<: *luzerne_county_zoning, geoid: "4207940920"}  # Lake township
+  - {<<: *luzerne_county_zoning, geoid: "4207953448"}  # New Columbus borough
+  - {<<: *luzerne_county_zoning, geoid: "4207962712"}  # Pringle borough
+  - {<<: *luzerne_county_zoning, geoid: "4207966272"}  # Ross township
+  - {<<: *luzerne_county_zoning, geoid: "4207978384"}  # Union township
+  - {<<: *luzerne_county_zoning, geoid: "4207981080"}  # Warrior Run borough
+  - {<<: *luzerne_county_zoning, geoid: "4207984272"}  # West Wyoming borough (DCED: joint)
+  - {<<: *luzerne_county_zoning, geoid: "4207986952"}  # Yatesville borough
+
+  - geoid: "4207542168"  # Lebanon city
+    doc_id: lebanon_city_zo_2020
+    section_cite: "§ 1303 (residential use table, accessory uses); § 1306.03(20) (Unit for Care of Relative); § 1315.02 (definition); § 1310 parking table"
+    adu_status: by_right
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.5
+    permitted_types: [single_family_detached, two_family, townhouse, multifamily]
+    binding_conditions: >-
+      Unit for care of a relative: at most 2 relatives, one needing care;
+      convertible back or removable; binding deed-type mechanism; detached
+      only as a modular unit in the rear yard, at most 800 sq ft.
+    evidence_quote: Unit for Care of Relative (See 1306.03) P P P P
+    evidence_offset: 21735
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      Unit for Care of Relative is P in all four residential districts (RLD &
+      RMLD, RMD, RHD, MR): a care-based, relatives-only unit, counted as by
+      right with conditions as for Bethlehem. Conversions of a house into more
+      units are SE in RMD and RHD. Parking (offset 309047): 2 per dwelling; 1.5
+      for a 2-bedroom and 1 for a 1-bedroom apartment. The 2020 copy may lag
+      later amendments (not checked). Smallest lot not read.
+  # --- G2c readings (Manheim, Buckingham, Warrington), 2026-11-24
+  - geoid: '4207146896'
+    doc_id: manheim_lancaster_zo_art9
+    section_cite: Use table (R-1, R-2, R-3); § 905 (R-3 special exceptions); Art. XXV § 2515 (ADU standards)
+    adu_status: special_exception
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    adu_owner_occupancy: true
+    evidence_quote: "R-1 R-2 R-3 Accessory dwelling units SE SE SE"
+    evidence_offset: 192
+    binding_conditions: >-
+      Special exception in R-1, R-2, R-3; inside or attached to the house or
+      above a detached garage; owner lives on the lot; occupants family only;
+      at most 40% of floor area, 1,000 sq ft, 2 bedrooms; 1 extra space;
+      public sewer and water.
+    adopted_on: 2021-06-28  # Ord. 2021-04, offset 1227 (the table as it reads)
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      Article XXV § 2515 (its own PDF, offsets 56818 and 57443): an ADU must be
+      in or attached to the principal dwelling or above a detached garage, and
+      the owner must occupy one of the two units. A full rewrite of the 2014
+      ordinance is in progress (draft only); proposed 2024-2025 amendments may
+      not be in the posted articles.
+  - geoid: '4201709816'
+    doc_id: buckingham_bucks_zo_2021
+    section_cite: § 405 B10.E (Accessory In-Law Dwellings); use table B10
+    adu_status: by_right
+    occupancy_restriction: relatives_only
+    adu_detached: true
+    evidence_quote: "1. Accessory In-law dwellings are permitted as accessory uses only for use B-1, Single Family Detached Dwelling"
+    evidence_offset: 214211
+    binding_conditions: >-
+      Accessory to a single-family detached home (B1, B5, B14) meeting its
+      district's minimum lot; occupied only by a family member of the main
+      household, never rented; at most 33% of floor area; 2 extra spaces; a
+      new separate building only on a lot of 1.5 times the minimum.
+    # The posted text is "enacted to September 22, 2021" (offset 114); no
+    # adoption date of the base ordinance is printed. Same reading as the
+    # bracket-date rule used for codified sections: the text stood enacted by
+    # that date. Drop this line if that reading is not accepted.
+    in_force_by: 2021-09-22
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      Residential accessory uses (B10) are permitted by right in every district
+      (use table, offset 932410). Inside the house or an existing accessory
+      building such as a garage (offset 216872). Family occupancy only, so it
+      is narrower than the benchmark ADU. Later amendments, if any, are not in
+      the posted copy.
+  - geoid: '4201781048'
+    doc_id: warrington_bucks_zo_2021
+    section_cite: § 370-305.H.(1) (H1 Multigenerational Apartment); Table 300
+    adu_status: special_exception
+    occupancy_restriction: relatives_only
+    adu_detached: false
+    adu_owner_occupancy: true
+    evidence_quote: "H1. MULTIGENERATIONAL APARTMENT. A dwelling unit contained within an owner-occupied, single-family residence"
+    evidence_offset: 311010
+    binding_conditions: >-
+      Special exception; inside an owner-occupied single-family home with
+      internal access; relatives only, no rent; at most 25% of the house or
+      800 sq ft; 1 extra space.
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-24
+    status: verified
+    note: >-
+      Table 300 (offset 347468) lists H1 as a special exception in the
+      residential districts. Later Chapter 370 amendments on the township's
+      ordinance page (2023-O-2, read: no change to H1; 2025-O-01 overlay;
+      2026-O-04 and 2026-O-05 single parcels) do not touch this use.
+  # --- G2d readings (fork_B), 2026-11-24
+  - geoid: '4200303608'
+    doc_id: tri_borough_allegheny_jzo_2009
+    section_cite: § 2000-405 Table 1 (Land Use Table, residential uses); § 2000-202
+      (definition)
+    adu_status: special_exception
+    adu_detached: true
+    evidence_quote: 1A c c e s s o r y  D w e l l i n g S S
+    evidence_offset: 111869
+    # The text prints no adoption date. The cover's list of amendments passed by
+    # Avalon Borough ends at offset 1026: "Ordinance 1388 - 2/19/19". The
+    # ordinance as posted stood in force (and amended) by then; not an
+    # adoption date.
+    in_force_by: 2019-02-19
+    binding_conditions: Special exception (zoning hearing board) in the two districts where
+      Table 1 lists it; not permitted elsewhere; no ADU standards section.
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: 'Table 1 (offset 111452) lists Accessory Dwelling as S in two of its ten district
+      columns; the text layer drops blank cells, so which two is not certain, but no column
+      allows it by right (P), so it is a special exception wherever allowed. Definition
+      (offset 16681) allows a unit in the house or detached on the same lot. Owner rule not
+      read. Parking left empty: the 2009 table (offset 301782) may be replaced by Ord. 1386
+      (2019, off-street parking). Row for Avalon only: Bellevue and Ben Avon passed their own
+      amendments.'
+  # --- G2d readings (fork_C), 2026-11-24
+  - geoid: '4200321024'
+    doc_id: east_deer_allegheny_zo_1987
+    section_cite: § 601 (R-1 uses); § 701 (R-2 uses); § 301 (definitions); § 603 (R-1 lots)
+    adu_status: not_addressed
+    min_lot_sf_smallest_res_district: 3500
+    evidence_quote: 'Section 601 PERMISSIVE USES A. Principal uses : 1. Single -family detached dwelling
+      units . 2. two -family dwelling units . 3. Multi -family dwelling units'
+    evidence_offset: 57238
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: No ADU, in-law or accessory-apartment use; R-1 and R-2 accessory uses are garages,
+      pools, sheds, pet shelters and "other customarily incidental" uses. Two-family and
+      multi-family dwellings are by right in both residential districts (R-1 two-family 3,000
+      sq ft per unit). Parking (§ 1201, offset 108318) is 1 space per unit in R-1, 2 in
+      R-2, so left empty. Smallest lot 3,500 sq ft (R-1 single-family, § 603). The posted copy
+      is the 1987 text; later amendments may exist.
+  - geoid: '4200322992'
+    doc_id: elizabeth_boro_allegheny_zo_2013_002
+    section_cite: § 304(C) (R-1 accessory uses); § 305(C) (R-2); § 511 (in-law apartment); Art.
+      II (definition)
+    adu_status: special_exception
+    adu_detached: false
+    adu_owner_occupancy: true
+    parking_min_per_unit_sf: 2
+    min_lot_sf_smallest_res_district: 3500
+    evidence_quote: 'R-1: Low-Density Residential Permitted Special Exception Garage, community
+      Dwelling, in-law apartment'
+    evidence_offset: 124972
+    binding_conditions: Special exception in R-1, R-2, MU and the Riverfront Overlay; inside a
+      single-family detached house only; at most 1,000 sq ft and 2 bedrooms; 1 extra space;
+      permit in the owner's name ends on sale or when the owner stops living there.
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-24
+    status: verified
+    note: 'The accessory-use tables put "Dwelling, in-law apartment" in the Special Exception
+      column in R-1, R-2, MU and RO (columns confirmed on the rendered page, PDF p. 50; the
+      text layer interleaves them). § 511 (offset 210471): an accessory use to a detached
+      single-family dwelling, created "within a single-family residence"; (K)-(M) permit
+      ends with the owner''s occupancy. No relatives-only rule. Lots: R-1 4,500 sq ft, R-2
+      3,500 (all uses); the RO overlay 1,800.'
+  # --- G2e readings, 2026-11-25
+  - geoid: '4210357728'
+    doc_id: palmyra_pike_zo_2025
+    section_cite: § 4.401 (Schedule of Uses, R district); § 4.402 (uses not provided for); § 5.201
+      (two or more uses on a lot); § 4.400 (development standards); § 5.500 (parking)
+    adu_status: not_addressed
+    unlisted_uses: conditional
+    unlisted_uses_cite: "§ 4.402 (offset 192714)"
+    min_lot_sf_smallest_res_district: 32670
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2.25
+    permitted_types: [single_family_detached, two_family, townhouse, multifamily]
+    evidence_quote: 'PRINCIPAL PERMITTED USES (Zoning Officer) - Cemetery, not including a crematorium
+      - Crop production - Dwelling, single-family - Dwelling, two-family'
+    evidence_offset: 196098
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-25
+    status: verified
+    note: No accessory dwelling, in-law or accessory-apartment use in any district; the accessory
+      uses allowed in all districts (offset 195019) list no dwelling. A second dwelling on a lot
+      needs a full extra minimum lot (§ 5.201 B, offset 225935); a two-family dwelling is by
+      right in R and MR on twice the single-family lot. An unlisted use may ask for a conditional
+      use (§ 4.402, offset 192714). Smallest lot 0.75 acre (R and MR with off-site water and
+      sewer). Parking (offset 288098) 2 per single- or two-family unit; multi-family 2 plus 0.25
+      for visitors.

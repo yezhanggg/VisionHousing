@@ -1,0 +1,399 @@
+# Cross-state comparison records: OR.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: or.sb974_2025
+  kind: policy
+  state: OR
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 120-day clock for final engineering plans; limited review for some housing land-use applications;
+    design standards limits
+  citation: SB 974 (2025), Oregon Laws 2025, ch. 330; amends ORS 197.830, 197.835; adds sections to ORS
+    ch. 197A
+  url: https://www.oregonlegislature.gov/bills_laws/lawsstatutes/2025orlaw0330.pdf
+  session: 2025 regular session
+  bill: SB 974
+  enacted_date: 2025-06-16
+  effective_dates:
+  - date: 2025-09-26
+    applies_to: Act effective (91st day after sine die)
+  - date: 2026-07-01
+    applies_to: 'Sections 1 and 3 operative: 120-day engineering review clock and limited land-use review
+      process; LUBA amendments (ORS 197.830, 197.835)'
+  - date: 2033-01-02
+    applies_to: Section 8 (ban on residential design standards) repealed
+  geographic_scope: Local governments and special districts reviewing residential development inside urban
+    growth boundaries
+  exclusions:
+  - Limited review (sec. 3) covers only zone changes to denser residential use, PUDs, and variances from
+    residential standards on residentially zoned/planned land inside a UGB; not final plats, building
+    permits, engineering plans, ministerial approvals, or applications reducing minimum density
+  - Design standards ban (sec. 8) does not apply to multifamily structures or applications of 20+ units,
+    nor to setbacks, height, safety, water quality, hazards, or Goal-based resource rules
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Stages touched: (1) post-tentative-plat engineering review and site development permits: completeness
+    in 30 days, decision in 120 days, tolling while corrections are pending, applicant extensions up to
+    245 days total, mandamus in circuit court if late; (2) land-use decision for listed housing applications:
+    notice to owners within 100 ft, 14-day written comment, no hearing required; (3) LUBA appeal procedures;
+    (4) design review limits.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Oregon Laws 2025 ch. 330 PDF on oregonlegislature.gov shows Approved by the Governor
+    June 16, 2025, filed June 17, 2025, effective September 26, 2025. Enrolled SB 974 on OLIS shows sec.
+    6 operative July 1, 2026 and sec. 9 repeal Jan. 2, 2033. OLIS overview confirms chapter 330 and relating
+    clause.
+  sources:
+  - label: Oregon Laws 2025, chapter 330
+    url: https://www.oregonlegislature.gov/bills_laws/lawsstatutes/2025orlaw0330.pdf
+    official: true
+  - label: OLIS SB 974 (2025R1) overview
+    url: https://olis.oregonlegislature.gov/liz/2025R1/Measures/Overview/SB974
+    official: true
+  - label: SB 974 enrolled text (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2025R1/Downloads/MeasureDocument/SB974/Enrolled
+    official: true
+  discovered_via: addendum
+- id: or.portland_rip_2021
+  kind: policy
+  state: OR
+  jurisdiction: Portland
+  policy_types:
+  - missing_middle
+  - adu
+  title: Portland Residential Infill Project (more housing types in single-dwelling zones)
+  citation: City of Portland Ordinance No. 190093 (As Amended), Residential Infill Project
+  url: https://www.portland.gov/ppd/planning/doza/news/2021/7/16/major-updates-citys-housing-related-zoning-rules-coming-august-1
+  session: null
+  bill: null
+  enacted_date: 2020-08-12
+  effective_dates:
+  - date: 2021-08-01
+    applies_to: Directives b, d, f, g and h of Ordinance 190093 (zoning code changes) in full force
+  geographic_scope: Citywide single-dwelling zones
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Adopted in the same period as Oregon's statewide middle-housing law (HB 2001, 2019), which the ordinance
+    itself cites; effects of the two cannot be told apart
+  - A second part (Ordinance 190851) took effect 2022-06-30 and is not covered by this record
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Ordinance 190093 text (City Auditor efiles): Section 2 directives in full force 2021-08-01;
+    passed by Council 2020-08-12. City news page (2021-07-16) repeats the 2021-08-01 date.'
+  sources:
+  - label: 'City of Portland: major updates to housing-related zoning rules coming August 1 (2021-07-16)'
+    url: https://www.portland.gov/ppd/planning/doza/news/2021/7/16/major-updates-citys-housing-related-zoning-rules-coming-august-1
+    official: true
+  - label: Ordinance No. 190093 As Amended (City Auditor efiles)
+    url: https://efiles.portlandoregon.gov/record/13932017/file/document
+    official: true
+  discovered_via: search
+- id: or.hb2001_2019_middle_housing
+  kind: policy
+  state: OR
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Oregon HB 2001 (2019): duplexes and middle housing on single-family land'
+  citation: Enrolled HB 2001 (2019), Oregon Laws 2019, ch. 639 (now ORS 197A.420, formerly ORS 197.758)
+  url: https://olis.oregonlegislature.gov/liz/2019R1/Measures/Overview/HB2001
+  session: 2019 regular session
+  bill: HB 2001
+  enacted_date: 2019-08-08
+  effective_dates:
+  - date: 2019-08-08
+    applies_to: Act in force (effective date per the measure history)
+  - date: 2020-01-01
+    applies_to: Core middle-housing section and related amendments become operative
+  - date: 2021-06-30
+    applies_to: Deadline for cities of 10,000-25,000 outside Metro to allow a duplex on each residential
+      lot that allows a detached house
+  - date: 2022-06-30
+    applies_to: Deadline for cities of 25,000+ and Metro cities and counties to allow all middle housing
+      types (duplex, triplex, quadplex, cottage cluster, townhouse) in areas that allow detached houses
+  geographic_scope: Inside urban growth boundaries. Large cities and Metro jurisdictions must allow all
+    middle housing types; mid-size cities must allow duplexes. Places that miss the deadline get the
+    state model ordinance directly.
+  exclusions:
+  - Cities of 1,000 people or fewer
+  - Land outside urban growth boundaries
+  - Unincorporated land lacking urban services, or under interim urban-holding zoning
+  - Land not zoned for residential use
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Local siting and design rules are allowed if they do not, alone or together, discourage middle housing
+    through unreasonable cost or delay.
+  - Expanded by HB 2138 (2025); see or.hb2138_2025_middle_housing.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: OLIS measure history shows 'Governor signed' 2019-08-08 and 'Chapter 639, (2019 Laws)
+    Effective date August 8, 2019'. The enrolled text on OLIS shows the operative date (2020-01-01), the
+    2021 and 2022 deadlines, scope and exclusions.
+  sources:
+  - label: HB 2001 (2019) measure overview and history (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2019R1/Measures/Overview/HB2001
+    official: true
+  - label: HB 2001 enrolled text (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2019R1/Downloads/MeasureDocument/HB2001/Enrolled
+    official: true
+  discovered_via: search
+- id: or.sb458_2021_middle_housing_division
+  kind: policy
+  state: OR
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - missing_middle
+  - permit_timing
+  title: 'Oregon SB 458 (2021): middle housing land divisions (one lot per unit)'
+  citation: Enrolled SB 458 (2021), Oregon Laws 2021, ch. 103 (now ORS 92.031)
+  url: https://olis.oregonlegislature.gov/liz/2021R1/Measures/Overview/SB458
+  session: 2021 regular session
+  bill: SB 458
+  enacted_date: 2021-05-26
+  effective_dates:
+  - date: 2022-01-01
+    applies_to: Act in force
+  - date: 2022-07-01
+    applies_to: Middle housing land division section applies to divisions permitted on or after this date
+  geographic_scope: Wherever middle housing must be allowed under HB 2001 (now ORS 197A.420). Cities and
+    counties must approve dividing a middle-housing lot so each unit sits on its own lot, through the
+    expedited land division procedure (decision within 63 days, extension at most to 120 days).
+  exclusions:
+  - Local government need not allow an ADU on a lot created this way
+  - Approval may bar further division of the resulting lots
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - No driveway, parking or frontage criteria may be added; separate utilities and easements are required.
+  - Homeowners association rules and covenants may not forbid such divisions.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: OLIS measure history shows 'Governor signed' 2021-05-26, 'Chapter 103, 2021 Laws',
+    'Effective date, January 1, 2022'. The enrolled text on OLIS shows the 2022-07-01 applicability and
+    the 63-day decision rule.
+  sources:
+  - label: SB 458 (2021) measure overview and history (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2021R1/Measures/Overview/SB458
+    official: true
+  - label: SB 458 enrolled text (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2021R1/Downloads/MeasureDocument/SB458/Enrolled
+    official: true
+  discovered_via: search
+- id: or.hb2138_2025_middle_housing
+  kind: policy
+  state: OR
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - starter_lots
+  - adu
+  title: 'Oregon HB 2138 (2025): expanded middle housing, urban unincorporated land and land divisions'
+  citation: Enrolled HB 2138 (2025), Oregon Laws 2025, ch. 476; amends ORS 197A.420 and others
+  url: https://olis.oregonlegislature.gov/liz/2025R1/Measures/Overview/HB2138
+  session: 2025 regular session
+  bill: HB 2138
+  enacted_date: 2025-07-17
+  effective_dates:
+  - date: 2025-07-17
+    applies_to: Act in force on passage (emergency clause)
+  - date: 2027-01-01
+    applies_to: Deadline for cities to conform with the expanded middle-housing rules; ban on private restrictions
+      limiting middle housing, ADUs or density becomes operative (applied to documents of any date)
+  - date: 2028-01-01
+    applies_to: Deadline for cottage-cluster changes; LCDC rules due
+  geographic_scope: 'Counties, cities of 25,000+ and Metro cities of 1,000+ must allow all middle housing
+    types on each lot zoned residential (now including urban unincorporated land); non-Metro cities of
+    2,500-25,000 must allow a duplex on each such lot. One or two extra units are allowed where a unit
+    is accessible or affordable (up to five- or six-unit buildings).'
+  exclusions:
+  - Land outside urban growth boundaries or not zoned for residential use
+  - Urban unincorporated land outside Metro is excluded from some provisions (existing-house additions,
+    bonus units)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - No traffic impact analysis may be required for an individual middle housing project (except townhouse
+    or cottage projects over 12 units).
+  - Reforms expedited land divisions (exempt from hearings and opponent appeals) and allows plats combining
+    a land division and a middle housing land division, reviewed within 120 days (per the OLIS summary).
+  - Also expands single room occupancies.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: OLIS measure history shows 'Governor signed' 2025-07-17 and 'Chapter 476, (2025 Laws)
+    Effective date July 17, 2025'. The enrolled text on OLIS shows the 2027-01-01 and 2028-01-01 dates
+    and the scope.
+  sources:
+  - label: HB 2138 (2025) measure overview and history (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2025R1/Measures/Overview/HB2138
+    official: true
+  - label: HB 2138 enrolled text (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2025R1/Downloads/MeasureDocument/HB2138/Enrolled
+    official: true
+  discovered_via: search
+- id: or.hb2258_2025_preapproved_plans
+  kind: policy
+  state: OR
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - missing_middle
+  title: 'Oregon HB 2258 (2025): state-preapproved housing plans and required land use approval'
+  citation: Enrolled HB 2258 (2025), Oregon Laws 2025, ch. 479; new sections in ORS chapters 197A and
+    455
+  url: https://olis.oregonlegislature.gov/liz/2025R1/Measures/Overview/HB2258
+  session: 2025 regular session
+  bill: HB 2258
+  enacted_date: 2025-07-17
+  effective_dates:
+  - date: 2025-07-17
+    applies_to: Act in force on passage (emergency clause)
+  - date: 2027-01-01
+    applies_to: Deadline for LCDC's initial rules
+  geographic_scope: 'LCDC may require local governments to approve, by rule, listed housing types on vacant
+    lots of 1,500-20,000 sq ft inside urban growth boundaries: houses, ADUs, plexes and townhouses up
+    to 2,200 sq ft, cottage clusters or small multiunit buildings (7-11 units), including plans preapproved
+    by the state building codes division.'
+  exclusions:
+  - Slopes averaging over 15%
+  - Mapped sensitive resource, open space, scenic or natural hazard areas (floodplain, landslide, wildfire)
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Enabling law; nothing binds local governments until LCDC adopts rules (due 2027-01-01), so marked
+    enacted.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: OLIS measure history shows 'Governor signed' 2025-07-17 and 'Chapter 479, (2025 Laws)
+    Effective date July 17, 2025'; the enrolled text on OLIS shows the lot criteria and the 2027-01-01
+    rule deadline. Whether LCDC has adopted rules was not checked.
+  sources:
+  - label: HB 2258 (2025) measure overview and history (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2025R1/Measures/Overview/HB2258
+    official: true
+  - label: HB 2258 enrolled text (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2025R1/Downloads/MeasureDocument/HB2258/Enrolled
+    official: true
+  discovered_via: search
+- id: or.hb4037_2026_housing_omnibus
+  kind: policy
+  state: OR
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - starter_lots
+  title: 'Oregon HB 4037 (2026): housing omnibus (clear and objective review, plan review limits, land
+    division fixes)'
+  citation: Enrolled HB 4037 (2026), Oregon Laws 2026, ch. 108; amends ORS 197A.400, 455.628, 92.031
+    and others
+  url: https://olis.oregonlegislature.gov/liz/2026R1/Measures/Overview/HB4037
+  session: 2026 regular session
+  bill: HB 4037
+  enacted_date: 2026-04-07
+  effective_dates:
+  - date: 2026-06-05
+    applies_to: Act in force (91st day after adjournment sine die)
+  - date: 2026-07-01
+    applies_to: Amended clear-and-objective review rule (ORS 197A.400) becomes operative
+  geographic_scope: 'Statewide: for housing under clear and objective standards, local governments may
+    notify only owners within 100 feet (500 feet for 20+ units), may not require a public hearing, and
+    only the applicant may appeal. No building plan review is required for one- and two-unit homes whose
+    plans are stamped by a certified engineer or architect. Middle housing land division rules are amended.'
+  exclusions:
+  - Central city plan areas and Metro regional centers in cities of 500,000+ and designated historic areas
+    are outside the clear-and-objective rule
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The discovery label called this a 2026 second special session bill; OLIS lists it in the 2026 regular
+    session (2026R1).
+  - Also adjusts an affordable housing loan program, surplus-land priority, urban reserve rules and disaster
+    tenancy rules (not summarised).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: OLIS measure history shows 'Governor signed' 2026-04-07 and 'Chapter 108, (2026 Laws)
+    Effective date June 5, 2026'; the enrolled text on OLIS shows the 2026-07-01 operative date and the
+    sections summarised.
+  sources:
+  - label: HB 4037 (2026) measure overview and history (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2026R1/Measures/Overview/HB4037
+    official: true
+  - label: HB 4037 enrolled text (OLIS)
+    url: https://olis.oregonlegislature.gov/liz/2026R1/Downloads/MeasureDocument/HB4037/Enrolled
+    official: true
+  discovered_via: search

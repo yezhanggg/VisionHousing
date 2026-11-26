@@ -14,17 +14,32 @@ from DCED's record (``municipal_planning`` table):
   homes under each kind of zoning (a tract crossing a municipal line is split
   by where its homes are). Compared with its county, worked out the same way.
 
-It does not say what any ordinance allows (densities, lot sizes, uses):
-statewide zoning maps are not openly available.
+Where the law tables are in the pack (:mod:`visionhousing.law`), it also says
+what the rules allow, municipality by municipality:
+
+- for a **county**: the share of its residents whose municipality's ordinance
+  has been read and verified (compared with the state), how many
+  municipalities fall under the county's own zoning ordinance, and the ADU
+  rule of each verified municipality (all rules when the county is one
+  municipality);
+- for a **tract**: the rules of the municipality holding most of its homes:
+  ADU rule with its citation, reading date and method, smallest residential
+  minimum lot, parking minimums and housing types permitted.
+
+A municipality whose ordinance nobody has read shows "not read yet
+(unknown)", never "no". Statewide zoning maps are not openly available.
 """
 
 from __future__ import annotations
+
+from dataclasses import replace
 
 import pandas as pd
 
 from visionhousing.features.zoning_status import load_rules
 from visionhousing.profile.context import Area, Measure, MissingDataError, ProfileContext
 from visionhousing.profile.model import Fact, Section
+from visionhousing.profile.sections import _law
 from visionhousing.profile.sections._common import FactMaker, finish, sentence
 
 KEY = "zoning"
@@ -184,11 +199,154 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
             if names
             else ""
         )
+    law_facts, law_summary = _law_facts(
+        ctx, place, other, munis, mine if place.level != "county" else None
+    )
+    facts = list(facts) + law_facts
+    if law_summary:
+        summary = (summary[:-1] + "; " + law_summary + ".") if summary else law_summary + "."
+    engine_words = _engine_words(ctx, munis, place)
+    if engine_words:
+        where = "here" if place.level == "county" else "in its county"
+        tail = f"this tool's ADU estimate {where} uses these read rules, not the statewide guess"
+        summary = (
+            (summary[:-1] + "; " + tail + ".") if summary else tail[0].upper() + tail[1:] + "."
+        )
+        facts.append(
+            Fact(
+                id=f"{KEY}.adu_estimate_uses_local_law",
+                label="Used in this tool's estimates",
+                value="read local law",
+                unit="category",
+                text=engine_words,
+                source=LAW_SOURCE,
+                vintage=ctx.vintage(LAW_SOURCE),
+                year="as read (see each rule's date)",
+                measured_at="county",
+                note="assumptions/law/hooks.yaml: a county uses its own already-legal ADU share "
+                "and parking reach when verified rules cover enough of its residents",
+            )
+        )
     limits = (
         "From DCED's Municipal Statistics, which municipalities report themselves; an entry may "
         "be out of date. It says who sets zoning, not what the zoning allows (densities, lot "
         "sizes, uses), and not when the ordinance was last changed. Joint zoning means a "
         "municipality's ordinance is shared with neighbours. DCED names were matched to Census "
-        "municipalities by name."
+        "municipalities by name. ADU, lot and parking rules come only from ordinances a person "
+        "read on the municipality's own website; the rest of the state is unknown, not 'no'. "
+        "Posted copies can lag amendments."
     )
     return finish(KEY, TITLE, summary, facts, limits)
+
+
+LAW_SOURCE = "pa_municipal_ordinances"
+
+
+def _engine_words(ctx: ProfileContext, munis: pd.DataFrame, place: Area) -> str:
+    """Plain words when the engine uses this county's read rules (``law.hooks``), else ``""``."""
+    from visionhousing.law.hooks import local_law_for_engine
+
+    try:
+        rules = _law.rules_table(ctx)
+    except MissingDataError:
+        return ""
+    if place.level == "state" or not place.counties:
+        return ""
+    if "_local_law" not in ctx._cache:
+        ctx._cache["_local_law"] = local_law_for_engine(rules, munis)
+    law = ctx._cache["_local_law"]
+    if law is None:
+        return ""
+    words = law.plain_words(place.counties[0])
+    if not words:
+        return ""
+    return words
+
+
+VERIFIED_SHOWN = 6
+"""At most this many verified municipalities are listed for a county (display only)."""
+
+
+def _law_facts(
+    ctx: ProfileContext,
+    place: Area,
+    other: Area | None,
+    munis: pd.DataFrame,
+    mine: pd.DataFrame | None,
+) -> tuple[list[Fact], str]:
+    """Facts from the law tables; empty when the pack has none."""
+    try:
+        rules = _law.rules_table(ctx)
+    except MissingDataError:
+        return [], ""
+    m = munis.copy()
+    m["geoid"] = _law.muni_geoids(m)
+    joined = m.merge(
+        rules.drop(columns=["name", "dced_id", "zoning_regime"], errors="ignore"),
+        on="geoid",
+        how="left",
+    )
+    if mine is not None:
+        top = mine.iloc[0]
+        geoid = str(top["county"]).zfill(5) + str(top["cousub"]).zfill(5)
+        hit = joined[joined["geoid"] == geoid]
+        if hit.empty:
+            return [], ""
+        row = hit.iloc[0]
+        facts = _law.rule_facts(ctx, KEY, row, str(row["name"]))
+        return facts, f"in {row['name']} ADUs are {_law.ADU_WORDS[str(row['adu_status'])]}"
+
+    def in_area(area: Area) -> pd.DataFrame:
+        return joined if area.level == "state" else joined[joined["county"].isin(area.counties)]
+
+    def verified_share(area: Area) -> Measure:
+        rows = in_area(area)
+        total = rows["population"].sum()
+        if total <= 0:
+            return Measure(None)
+        return Measure(float(rows.loc[rows["status"] == "verified", "population"].sum() / total))
+
+    fm = FactMaker(ctx, KEY, place, other)
+    fm.add(
+        "share_read",
+        "Share of residents whose municipality's zoning rules have been read and verified",
+        "share",
+        LAW_SOURCE,
+        "2024 population estimates",
+        verified_share,
+        note="residents of municipalities with a verified row in muni_zoning_rules / all residents",
+    )
+    facts = list(fm.facts)
+    land = ctx.table("county_land_use")
+    if land is not None and place.level == "county":
+        row = land[land["county"].astype(str).str.zfill(5) == place.geoid]
+        if len(row):
+            r = row.iloc[0]
+            n, people = int(r["munis_under_county_zoning"]), int(r["residents_under_county_zoning"])
+            facts.append(
+                Fact(
+                    id=f"{KEY}.under_county_zoning",
+                    label="Municipalities under the county's zoning ordinance",
+                    value=n,
+                    unit="municipalities",
+                    text=f"{n:,} ({people:,} residents)",
+                    source=SOURCE,
+                    vintage=ctx.vintage(SOURCE),
+                    year=YEAR,
+                    measured_at="county",
+                    note="county zoning applies only where a municipality has none of its own "
+                    "(Municipalities Planning Code section 602)",
+                )
+            )
+    here = in_area(place)
+    if len(here) == 1:
+        row = here.iloc[0]
+        facts += _law.rule_facts(ctx, KEY, row, str(row["name"]))
+        return facts, f"in {row['name']} ADUs are {_law.ADU_WORDS[str(row['adu_status'])]}"
+    read = here[here["status"] == "verified"].sort_values("population", ascending=False)
+    for _, row in read.head(VERIFIED_SHOWN).iterrows():
+        f = _law.rule_facts(ctx, KEY, row, str(row["name"]))[0]
+        facts.append(replace(f, id=f"{KEY}.adu_rule_{row['geoid']}"))
+    share = fm.get("share_read")
+    words = f"{share.text} of residents live where the zoning rules have been read" if share else ""
+    return facts, words

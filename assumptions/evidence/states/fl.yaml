@@ -1,0 +1,371 @@
+# Cross-state comparison records: FL.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: fl.sb102_2023
+  kind: policy
+  state: FL
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - missing_middle
+  - parking
+  title: 'Live Local Act: affordable multifamily by right on commercial, industrial and mixed-use land'
+  citation: CS/SB 102 (2023); Ch. 2023-17, Laws of Fla.; Fla. Stat. §§ 166.04151(7), 125.01055(7)
+  url: https://www.flsenate.gov/Session/Bill/2023/102
+  session: 2023 regular session
+  bill: SB 102
+  enacted_date: 2023-03-29
+  effective_dates:
+  - date: 2023-07-01
+    applies_to: Act effective (except as otherwise provided)
+  - date: 2033-10-01
+    applies_to: Subsection (7) expires (per current statute text); approved projects remain conforming
+  geographic_scope: All Florida municipalities (166.04151) and counties (125.01055); land zoned commercial,
+    industrial or mixed use
+  exclusions:
+  - Airport-impacted areas
+  - Recreational and commercial working waterfront in industrial zones
+  - Wekiva Study Area and Everglades Protection Area
+  - Areas of critical state concern
+  - Land under conservation easements
+  - No administrative approval within 1/4 mile of listed military installations
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Per current (2026) statute: at least 40% of units must be affordable rental units for at least 30
+    years; mixed-use projects must be at least 65% residential'
+  - Density and height floors tied to the highest allowed in the jurisdiction or within 1 mile
+  - Terms described are from the current statute as amended in 2024-2026, not the 2023 original text
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: flsenate.gov bill page shows approved by Governor 2023-03-29, Ch. 2023-17, effective
+    2023-07-01; affordability term, 65% residential share and 2033-10-01 expiry read on leg.state.fl.us
+    Fla. Stat. 166.04151 (2026).
+  sources:
+  - label: Florida Senate bill page SB 102 (2023)
+    url: https://www.flsenate.gov/Session/Bill/2023/102
+    official: true
+  - label: Fla. Stat. 166.04151 (2026)
+    url: http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0166/Sections/0166.04151.html
+    official: true
+  discovered_via: search
+- id: fl.sb328_2024
+  kind: policy
+  state: FL
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - parking
+  title: 'Live Local Act amendments: FAR floor, height limits near single-family, posted procedures'
+  citation: CS/CS/SB 328 (2024); Ch. 2024-188, Laws of Fla.; Fla. Stat. §§ 166.04151(7), 125.01055(7)
+  url: https://www.flsenate.gov/Session/Bill/2024/328
+  session: 2024 regular session
+  bill: SB 328
+  enacted_date: 2024-05-16
+  effective_dates:
+  - date: 2024-05-16
+    applies_to: Act effective
+  geographic_scope: All Florida municipalities and counties
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Bill page summary: bars restricting FAR of qualifying projects, lets local governments limit height
+    next to single-family development, requires posting administrative approval policy online'
+  - Current statute provides 15% parking reduction near transit stops/hubs; whether that provision came
+    from SB 328 was not confirmed from the bill text
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: flsenate.gov bill page shows approved by Governor 2024-05-16, Ch. 2024-188, effective
+    2024-05-16.
+  sources:
+  - label: Florida Senate bill page SB 328 (2024)
+    url: https://www.flsenate.gov/Session/Bill/2024/328
+    official: true
+  discovered_via: search
+- id: fl.sb1730_2025
+  kind: policy
+  state: FL
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  title: 'Live Local Act amendments: flexibly zoned areas (PUDs), cap on nonresidential share'
+  citation: CS/CS/SB 1730 (2025); Ch. 2025-172, Laws of Fla.; Fla. Stat. §§ 166.04151(7), 125.01055(7)
+  url: https://www.flsenate.gov/Session/Bill/2025/1730
+  session: 2025 regular session
+  bill: SB 1730
+  enacted_date: 2025-06-23
+  effective_dates:
+  - date: 2025-07-01
+    applies_to: Act effective
+  geographic_scope: All Florida municipalities and counties
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Bill page summary: multifamily/mixed-use must be permitted in portions of flexibly zoned areas; limits
+    on required nonresidential share (current statute: no more than 10% nonresidential may be required)'
+  - Current statute also references a July 1, 2026 date for open-space districts, suggesting a further
+    2026 amendment not recorded here
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: flsenate.gov bill page shows approved by Governor 2025-06-23, Ch. 2025-172, effective
+    2025-07-01.
+  sources:
+  - label: Florida Senate bill page SB 1730 (2025)
+    url: https://www.flsenate.gov/Session/Bill/2025/1730
+    official: true
+  - label: Fla. Stat. 166.04151 (2026)
+    url: http://www.leg.state.fl.us/statutes/index.cfm?App_mode=Display_Statute&URL=0100-0199/0166/Sections/0166.04151.html
+    official: true
+  discovered_via: search
+- id: fl.hb1389_2026_live_local_public_religious_land
+  kind: policy
+  state: FL
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  title: 'Florida CS/CS/HB 1389 (2026): Live Local Act changes, including housing on public and religious-institution
+    land'
+  citation: Laws of Fla. ch. 2026-179 (CS/CS/HB 1389); amends ss. 125.01055 and 166.04151, F.S.
+  url: https://flsenate.gov/Session/Bill/2026/1389
+  session: 2026 regular session
+  bill: HB 1389
+  enacted_date: 2026-06-26
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act; tax-exemption changes first apply to the 2027 property tax roll; the parcel-assemblage
+      rule expires 2030-07-01
+  geographic_scope: All counties and municipalities. Multifamily and mixed-use residential must be allowed
+    on county, municipal and school-district land (within that body's own boundaries) and on religious-institution
+    parcels over 3 acres that have held a house of worship for the preceding 10 years, if at least 40%
+    of the units are rentals affordable for 30 years or more and the owner is party to the application.
+  exclusions:
+  - Areas under pre-July 1, 2026 regulations meant to keep land open (open-space, park, rural and similar
+    districts)
+  - Areas of Critical State Concern
+  - Land under a recorded conservation easement
+  - Farms and farm operations are not 'commercial' or 'industrial' uses for the Act (retroactive to 2024-01-01)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Also bars local governments from capping height indirectly through setbacks or stepbacks, and lets
+    a project assemble commonly owned parcels separated by up to 15 feet (until 2030-07-01).
+  - The house of worship must stay on the religious-institution site after the housing is built.
+  - Applicants with pre-July 1, 2026 applications could elect to proceed under the earlier Act.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: flsenate.gov bill history shows the bill presented to the Governor on 2026-06-15,
+    'Approved by Governor' entered 2026-06-26 and Chapter No. 2026-179 on 2026-06-29, effective date 7/1/2026.
+    The House final bill analysis (flsenate.gov) confirms approval on 2026-06-26, ch. 2026-179, effective
+    2026-07-01, and the scope and exclusions above.
+  sources:
+  - label: HB 1389 (2026) bill page and history (Florida Senate)
+    url: https://flsenate.gov/Session/Bill/2026/1389
+    official: true
+  - label: HB 1389 final bill analysis (Florida House)
+    url: https://www.flsenate.gov/Session/Bill/2026/1389/Analyses/h1389z1.HAT.PDF
+    official: true
+  discovered_via: pew_2026
+- id: fl.hb803_2026_permits_offsite_homes
+  kind: policy
+  state: FL
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - permit_timing
+  title: 'Florida CS/CS/HB 803 (2026): building permits and inspections; manufactured and modular homes
+    zoned like site-built homes'
+  citation: Laws of Fla. ch. 2026-63 (CS/CS/HB 803)
+  url: https://flsenate.gov/Session/Bill/2026/803
+  session: 2026 regular session
+  bill: HB 803
+  enacted_date: 2026-05-06
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act
+  geographic_scope: All counties and municipalities. Local zoning, land-use and development rules may
+    not treat offsite-constructed homes (manufactured or modular) differently from or more restrictively
+    than site-built single-family detached homes.
+  exclusions:
+  - Local governments may keep compatibility standards limited to roof pitch, livable floor area, exterior
+    finish, foundation enclosure, attached structures, setbacks, lot dimensions and orientation on the
+    lot
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Most of the act is about permitting: reduced fees when a private provider is used on commercial
+    projects, a private-provider registration system, a uniform state permit application, permit expiry
+    one year after issue (or the next code edition), and permit exemptions for some owner work under
+    $7,500.'
+  - It changes where cheaper factory-built homes can go; it does not change minimum lot sizes.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: flsenate.gov bill history shows the bill presented to the Governor 2026-04-30, 'Approved
+    by Governor' entered 2026-05-06 and Chapter No. 2026-63 on 2026-05-07, effective date 7/1/2026. The
+    House final bill analysis (flsenate.gov) confirms approval on 2026-05-06, ch. 2026-63, effective 2026-07-01
+    (section 12), and the offsite-home parity rule (section 6).
+  sources:
+  - label: HB 803 (2026) bill page and history (Florida Senate)
+    url: https://flsenate.gov/Session/Bill/2026/803
+    official: true
+  - label: HB 803 final bill analysis (Florida House)
+    url: https://www.flsenate.gov/Session/Bill/2026/803/Analyses/h0803z1.IPA.PDF
+    official: true
+  discovered_via: pew_2026
+- id: fl.hb337_2021_impact_fee_limits
+  kind: policy
+  state: FL
+  jurisdiction: statewide
+  policy_types:
+  - fees
+  title: 'Florida CS/CS/CS/HB 337 (2021): limits on impact fee increases'
+  citation: Laws of Fla. ch. 2021-63 (CS/CS/CS/HB 337); amends s. 163.31801, F.S.
+  url: https://www.flsenate.gov/Session/Bill/2021/337
+  session: 2021 regular session
+  bill: HB 337
+  enacted_date: 2021-06-04
+  effective_dates:
+  - date: 2021-06-04
+    applies_to: Whole act on approval; the increase limits apply retroactively to 2021-01-01
+  geographic_scope: All counties, municipalities, school districts and special districts that charge
+    impact fees.
+  exclusions:
+  - A larger or faster increase is allowed if a study done within 12 months shows extraordinary circumstances,
+    at least two public workshops are held and the increase passes by a two-thirds vote
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Limits: an increase of up to 25% is phased in over two equal yearly steps; 25-50% over four steps;
+    no increase above 50%; no more than one increase every four years; no retroactive increases.'
+  - It caps increases; it does not cut existing fees. Later sessions amended s. 163.31801 again; this
+    record covers the 2021 act only.
+  - Credits for contributions toward the same type of public facility must be given, and the CFO of each
+    charging body must file a yearly compliance affidavit.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: flsenate.gov bill history shows the bill presented 2021-06-03, 'Approved by Governor'
+    entered 2021-06-04 and Chapter No. 2021-63 on 2021-06-09; effective date 6/4/2021. The House final
+    bill analysis (flsenate.gov) confirms approval on 2021-06-04, effective that date, with the limits
+    retroactive to 2021-01-01.
+  sources:
+  - label: HB 337 (2021) bill page and history (Florida Senate)
+    url: https://www.flsenate.gov/Session/Bill/2021/337
+    official: true
+  - label: HB 337 final bill analysis (Florida House)
+    url: https://www.flsenate.gov/Session/Bill/2021/337/Analyses/h0337z1.LAV.PDF
+    official: true
+  discovered_via: search
+- id: fl.hb267_2024_permit_timeframes
+  kind: policy
+  state: FL
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Florida CS/CS/CS/HB 267 (2024): shorter building permit review deadlines and private-provider
+    review'
+  citation: Laws of Fla. ch. 2024-191 (CS/CS/CS/HB 267); amends ss. 553.79 and 553.791, F.S., among others
+  url: https://www.flsenate.gov/Session/Bill/2024/267
+  session: 2024 regular session
+  bill: HB 267
+  enacted_date: 2024-05-16
+  effective_dates:
+  - date: 2025-01-01
+    applies_to: Most of the act, including the new permit deadlines (the act says 'except as otherwise
+      stated'; at least one attic-related code standard is tied to 2025-07-01)
+  geographic_scope: All local building departments.
+  exclusions:
+  - The fee-reduction penalty for missed deadlines does not apply when the delay is caused by the applicant,
+    force majeure or other extraordinary circumstances
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Deadlines for a complete application: 30 business days for some structures under 7,500 sq ft; 60
+    days for multifamily up to 50 units, small nonresidential buildings, site plans and plats without
+    hearings; 12 business days under an approved master plan; 10 business days when a sealed private
+    provider (engineer or architect) is used. Completeness must be decided in 5 business days.'
+  - Missing a deadline reduces the permit fee under existing law; this is not a deemed approval.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: flsenate.gov bill history shows the bill presented 2024-05-07, 'Approved by Governor'
+    entered 2024-05-16 and Chapter No. 2024-191 on 2024-05-17; effective date 1/1/2025. The House final
+    bill analysis (flsenate.gov) confirms approval on 2024-05-16 and effect on 2025-01-01 except as otherwise
+    stated. Section-level exceptions to the 2025-01-01 date were not each read in the enrolled text.
+  sources:
+  - label: HB 267 (2024) bill page and history (Florida Senate)
+    url: https://www.flsenate.gov/Session/Bill/2024/267
+    official: true
+  - label: HB 267 final bill analysis (Florida House)
+    url: https://www.flsenate.gov/Session/Bill/2024/267/Analyses/h0267z1.RRS.PDF
+    official: true
+  discovered_via: search

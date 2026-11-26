@@ -4,9 +4,12 @@
  *         fingerprints (GET /export/csv, or the exported file on the static site)
  *   html  the print-ready brief from the report writer (GET /export/html), saved as a page;
  *         open it and use the browser's Print to save a PDF
+ *   hearing  the two-page hearing brief (GET /export/hearing, src/visionhousing/report/
+ *         hearing.py), opened in a new tab to print; when this build cannot give it, the
+ *         reason is said instead
  */
 import { showToast } from "../state/store.js";
-import { api, COMBO_ONLY, LOCAL_ONLY } from "./api.js";
+import { api, COMBO_ONLY, hearingBrief, LOCAL_ONLY } from "./api.js";
 
 function why(sc) {
   return Object.keys(sc.overrides || {}).length ? LOCAL_ONLY : COMBO_ONLY;
@@ -35,4 +38,12 @@ export async function openBrief(sc) {
   if (!url) return showToast(why(sc), 3600);
   follow(url);
   showToast("Brief saved: open it and print to PDF", 3200);
+}
+
+/** Open the two-page hearing brief of a scenario in a new tab, or say why it cannot open. */
+export async function openHearing(sc) {
+  const { url, reason } = await hearingBrief(sc);
+  if (!url) return showToast(reason || why(sc), 4200);
+  window.open(url, "_blank", "noopener");
+  showToast("Hearing brief opened: print it to PDF", 3200);
 }

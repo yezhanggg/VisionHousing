@@ -12,13 +12,17 @@
  * also prints. Class breaks come with the reply and stay the same while the reform shown
  * changes.
  */
-import { reformById } from "../content/reforms.js";
-import { api, scenarioQuery } from "../lib/api.js";
+import { BENCHMARK_IDS, reformById } from "../content/reforms.js";
+import { api, IS_STATIC, scenarioQuery } from "../lib/api.js";
 import { numberOf, useJson } from "../lib/data.js";
-import { html, useState } from "../lib/html.js";
+import { html, useEffect, useRef, useState } from "../lib/html.js";
 import { Status } from "./bits.js";
 import { Icon } from "./icons.js";
+import { MapFunnelSteps } from "./map-funnel.js";
+import { ImplementationRows } from "./implementation.js";
+import { LeverCard } from "./lever.js";
 import { Num } from "./popover.js";
+import { Ladder, statusView } from "./tod-status.js";
 
 const TRACT_SWATCHES = ["--seq-2", "--seq-3", "--seq-4", "--seq-5", "--seq-6"];
 
@@ -106,7 +110,12 @@ function TractTable({ res, formula }) {
   </details>`;
 }
 
-export function CountyPanel({ sc, fips, row, ids, run, onClose }) {
+/**
+ * `funnel` shows the map funnel's stage tabs (the Reform screen has its own). With exactly one
+ * benchmark reform on, the lever and implementation cards follow (local app only: the static
+ * site has no county lever file, and the implementation file comes with the next export).
+ */
+export function CountyPanel({ sc, fips, row, ids, run, onClose, funnel = true }) {
   const query = scenarioQuery(sc);
   const county = useJson(`county:${sc.state}:${fips}:${query}`, () => api.county(sc.state, fips, query));
   const data = county.data;
@@ -115,13 +124,16 @@ export function CountyPanel({ sc, fips, row, ids, run, onClose }) {
   const shown = withTracts.includes(pick) ? pick : withTracts[0];
   const name = row?.name || data?.name || fips;
   const res = shown ? data.tract_results.reforms[shown] : null;
-  return html`<section class="card county-panel" aria-labelledby="county-title">
+  // Opened from the map or the table: focus moves to the panel, so the next Tab is inside it.
+  const card = useRef(null);
+  useEffect(() => card.current?.focus({ preventScroll: true }), []);
+  return html`<section class="card county-panel" aria-labelledby="county-title" tabindex="-1" ref=${card}>
     <header class="card-head">
       <div>
         <h2 class="card-title" id="county-title">${name}</h2>
         <p class="card-sub">County ${fips} · the next five years</p>
       </div>
-      <button type="button" class="btn btn-quiet btn-xs" onClick=${onClose}>
+      <button type="button" class="btn btn-quiet btn-xs" onClick=${onClose} title="Close (Esc)">
         <${Icon} name="close" size=${16} /><span>Close panel</span></button>
     </header>
     <div class="card-body">
@@ -134,9 +146,26 @@ export function CountyPanel({ sc, fips, row, ids, run, onClose }) {
             <dd><${Num} of=${`${name}: homes added`} text=${row?.added && `${row.added.shown.p10} to ${row.added.shown.p90}`}
               n=${row?.added && { ...row.added, ...ids?.added }} /></dd></div>
           <div><dt>Change from baseline</dt>
-            <dd><${Num} of=${`${name}: change from baseline`} text=${row?.change && `${row.change.shown.p10} to ${row.change.shown.p90}`}
-              n=${row?.change && { ...row.change, ...ids?.change }} /></dd></div>`}
+            <dd>${row?.no_base
+              ? html`<span class="no-base" title=${row.no_base.rule}>${row.no_base.text}</span>`
+              : html`<${Num} of=${`${name}: change from baseline`} text=${row?.change && `${row.change.shown.p10} to ${row.change.shown.p90}`}
+              n=${row?.change && { ...row.change, ...ids?.change }} />`}</dd></div>`}
       </dl>
+      ${sc.reforms.map((k) => {
+        const v = statusView(run, k);
+        return v?.counties?.[fips] && html`<${Ladder} key=${`ladder-${k}`} view=${v} row=${v.counties[fips]}
+          title=${`${v.title}: transit status in ${name}`} />`;
+      })}
+      ${data?.notes?.backtest &&
+      html`<p class="card-sub county-note"><strong>Past accuracy.</strong> ${data.notes.backtest}</p>`}
+      ${data?.notes?.local_law &&
+      html`<div class="county-note">
+        <p class="card-sub"><strong>Local rules read.</strong> ${data.notes.local_law.text}</p>
+        <details>
+          <summary>Rules read (${data.notes.local_law.citations.length})</summary>
+          <ul>${data.notes.local_law.citations.map((c) => html`<li>${c}</li>`)}</ul>
+        </details>
+      </div>`}
       ${sc.reforms.length > 1 &&
       html`<div>
         <p class="field-label">Each reform alone in this county</p>
@@ -149,6 +178,9 @@ export function CountyPanel({ sc, fips, row, ids, run, onClose }) {
           })}
         </ul>
       </div>`}
+      ${!IS_STATIC && sc.reforms.length === 1 && BENCHMARK_IDS.includes(sc.reforms[0]) &&
+      html`<${LeverCard} state=${sc.state} county=${fips} reform=${sc.reforms[0]} h=${3} />
+        <${ImplementationRows} state=${sc.state} geoid=${fips} reform=${sc.reforms[0]} h=${3} />`}
       <${Status} state=${county} what="the tract detail" />
       ${data &&
       (withTracts.length
@@ -161,11 +193,13 @@ export function CountyPanel({ sc, fips, row, ids, run, onClose }) {
                   onClick=${() => setPick(k)}>${reformById(k)?.short || k}</button>`,
               )}
             </div>`}
+            ${funnel && html`<${MapFunnelSteps} state=${sc.state} reform=${shown} overrides=${sc.overrides} fips=${fips} countyName=${name} />`}
             <${TractMap} county=${data} reformKey=${shown} />
             <p class="card-sub">${res.title}, run alone. Middle estimate per tract.</p>
             <${TractTable} res=${res} formula=${res.formula} />
           </div>`
-        : html`<p class="card-sub">
+        : html`${funnel && sc.reforms.length > 0 && html`<${MapFunnelSteps} state=${sc.state} reform=${sc.reforms[0]} overrides=${sc.overrides} fips=${fips} countyName=${name} />`}
+          <p class="card-sub">
             ${sc.reforms.length
               ? "The reforms switched on work county by county, so there are no tract values to shade."
               : "Switch a reform on to see the homes it adds in each census tract."}

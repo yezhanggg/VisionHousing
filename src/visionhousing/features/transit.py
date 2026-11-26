@@ -2,7 +2,7 @@
 
 Plain-language summary
 ----------------------
-Decision D-07 defines a **major transit stop** as a fixed-guideway station
+A **major transit stop** is a fixed-guideway station
 (subway, light rail or trolley, commuter or regional rail, and similar), or a
 bus stop with at least 64 scheduled departures on a representative weekday
 (about one every 15 minutes for 16 hours). A home is "near transit" when its
@@ -20,10 +20,10 @@ This module does three things, with numpy only:
    formula, which is accurate at short range. This is exact (no grid or
    approximation) and takes a few seconds for Pennsylvania's 337,000 blocks.
 2. **Tract totals.** For each tract: housing units and land within 1/4, 1/2 and
-   3/4 mile of any major stop, and within the D-07 distance, as counts and as
+   3/4 mile of any major stop, and within the major-stop distance, as counts and as
    shares of the tract's block totals (2020 Census units and land).
 3. **Transit-rich flag.** The parking reform's rule: at least half of the
-   tract's homes within the D-07 distance (``parking.transit_rich_min_share``),
+   tract's homes within the major-stop distance (``parking.transit_rich_min_share``),
    or a major stop inside the tract.
 
 Units in these shares are 2020 Census block counts, not the ACS estimates in
@@ -60,7 +60,7 @@ EARTH_RADIUS_MILES = 3958.7613
 """Mean Earth radius (IUGG), in miles."""
 
 DISTANCE_CHOICES_MILES = (0.25, 0.5, 0.75)
-"""The straight-line distances the interface offers (decision D-07)."""
+"""The straight-line distances the interface offers."""
 
 FIXED_GUIDEWAY = "rail"
 FREQUENT_BUS = "bus"
@@ -88,7 +88,7 @@ FEATURE_COLUMNS: tuple[str, ...] = (
 
 
 class TransitRule:
-    """The D-07 rule's numbers, read from the ledger by the caller.
+    """The major-stop rule's numbers, read from the ledger by the caller.
 
     Args:
         min_bus_departures: Weekday departures a bus stop needs to be major.
@@ -249,7 +249,7 @@ def points_in_polygons(
 
 
 def major_stop_table(stops: pd.DataFrame, rule: TransitRule) -> pd.DataFrame:
-    """Keep the major stops of decision D-07, with a ``kind`` column (``rail`` or ``bus``).
+    """Keep the major stops, with a ``kind`` column (``rail`` or ``bus``).
 
     A stop is major when its mode is ``rail`` (any fixed guideway), or its mode
     is ``bus`` and its counted weekday departures reach the rule's minimum. Bus
@@ -305,7 +305,7 @@ def tract_transit_features(
         blocks: Blocks with ``tract``, ``housing_units``, ``land_area_m2``,
             ``lat`` and ``lon``.
         stops: Stop table with ``lat``, ``lon``, ``mode``, ``weekday_departures``.
-        rule: The D-07 numbers (see :class:`TransitRule`).
+        rule: The major-stop rule's numbers (see :class:`TransitRule`).
         stop_tracts: The tract holding each stop, aligned with ``stops`` (from
             :func:`points_in_polygons` or a ``tract`` column). Without it the
             "major stop inside the tract" test is skipped.

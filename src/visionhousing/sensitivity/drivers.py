@@ -36,8 +36,9 @@ from visionhousing.engine.montecarlo import (
 from visionhousing.ledger import sample
 from visionhousing.sensitivity.importance import importance
 from visionhousing.sensitivity.tornado import Swing, pin_central, tornado
+from visionhousing.sensitivity.variance import AGENDA_ID, BINS_ID, Narrowing, narrowing
 
-__all__ = ["TOP", "Driver", "Drivers", "drivers", "uncertain_ids"]
+__all__ = ["TOP", "Driver", "Drivers", "drivers", "input_draws", "uncertain_ids", "uncertainty"]
 
 TOP = 5
 """How many drivers the summary lists."""
@@ -178,3 +179,64 @@ def drivers(result: Result, key: str, top: int = TOP) -> Drivers:
         for r in rows
     )
     return Drivers(reform=key, tornado=swings, importance=imp, top=best)
+
+
+def input_draws(result: Result, key: str) -> tuple[dict[str, np.ndarray], dict[str, str]]:
+    """The draws of every uncertain input behind a reform, exactly as the run used them.
+
+    The reform's ledger sampled with the run's seed (each parameter has its own
+    stream), plus the baseline's position in its range.
+
+    Args:
+        result: An engine result.
+        key: Reform key in the result.
+
+    Returns:
+        ``(input id -> draws, input id -> plain label)``.
+    """
+    res = result.reforms[key].result
+    if res is None or res.ledger is None:
+        raise ValueError(f"reform '{key}' carries no ledger; rerun it with engine.run")
+    ledger = res.ledger
+    ids = uncertain_ids(result, key)
+    draws = sample(ledger, n=result.draws, seed=result.seed, ids=ids)
+    draws[BASELINE_STREAM] = baseline_positions(result.draws, result.seed)
+    labels = {i: ledger[i].label for i in ids} | {BASELINE_STREAM: BASELINE_LABEL}
+    return draws, labels
+
+
+def uncertainty(result: Result, key: str) -> Narrowing:
+    """What would narrow the range of one reform's state total (no new run).
+
+    Each input's first-order variance share of the reform's state added units,
+    from the run's own draws (see ``sensitivity.variance``). The number of bins
+    and the length of the research agenda come from the run's ledger.
+
+    Args:
+        result: An engine result (from ``engine.run``).
+        key: A reform key in ``result.reforms``.
+
+    Returns:
+        The shares, largest first, and the leftover.
+    """
+    if key not in result.reforms:
+        raise KeyError(f"reform '{key}' is not in this result; it has {list(result.reforms)}")
+    outcome = result.reforms[key]
+    ledger = outcome.result.ledger if outcome.result is not None else None
+    if ledger is None or result.draws_obj is None:
+        raise ValueError("this result has no run context; rerun it with engine.run")
+    run_ledger = result.draws_obj.ledger
+    bins = int(run_ledger[BINS_ID].central) if BINS_ID in run_ledger else 10
+    agenda = int(run_ledger[AGENDA_ID].central) if AGENDA_ID in run_ledger else 3
+    bins = max(2, min(bins, result.draws))
+    draws, labels = input_draws(result, key)
+    return narrowing(
+        draws,
+        np.asarray(outcome.state_draws),
+        labels,
+        reform=key,
+        what=f"added units, {outcome.title}, state",
+        bins=bins,
+        agenda=agenda,
+        ids={BASELINE_STREAM: tuple(result.baseline.assumption_ids)},
+    )

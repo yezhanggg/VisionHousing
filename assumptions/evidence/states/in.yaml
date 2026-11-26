@@ -1,0 +1,52 @@
+# Cross-state comparison records: IN.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: in.hea1001_2026_housing
+  kind: policy
+  state: IN
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - fees
+  title: 'Indiana HEA 1001 (2026): housing approvals and limits on local permit fee increases (not read in
+    official text)'
+  citation: Indiana HEA 1001 (2026), 124th General Assembly, Second Regular Session (chapter not read)
+  url: https://iga.in.gov/legislative/2026/bills/house/1001
+  session: 124th General Assembly, 2026 Second Regular Session
+  bill: HB 1001
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Not read; described in a search lead as statewide limits on housing approval times and
+    local permit fee increases.
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: unknown
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Scope, thresholds and dates are unknown until the enrolled act is read.
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: iga.in.gov returns only a JavaScript shell (691 bytes, 'You need to enable JavaScript')
+    to scripted requests for the bill page, the bill PDFs and even the site script, so no bill status, enrolled
+    text, signing date, public law number or effective date was read. The official API needs a key. Not worked
+    around; needs a manual read by Ye.
+  sources:
+  - label: HB 1001 (2026) bill page (Indiana General Assembly)
+    url: https://iga.in.gov/legislative/2026/bills/house/1001
+    official: true
+  discovered_via: search

@@ -1,0 +1,213 @@
+# Retrospective reform panel: the design, declared before any estimate was run.
+#
+# What this file is: the rules for `visionhousing evidence-retro`, written down
+# on 2026-11-24 before the first estimate, so the choices cannot be bent to fit
+# the answer. Any later change is logged in `changes:` with its date and reason.
+# Method: docs/modules/evidence_retro.md. Code: src/visionhousing/evidence/retro.py.
+#
+# The results (assumptions/evidence/retro_results.yaml) are evidence only. They
+# can inform the range of a stage parameter (for example how many lots take up
+# a 2-4 unit option). They are never a multiplier applied to a model run.
+
+version: 1
+id: retro_bps_2026_11
+declared_on: 2026-11-24
+
+data:
+  permits: bps_place_annual  # Census Building Permits Survey, place (permit office) annual files
+  housing_units: acs5_summary_file  # ACS 2020-2024 5-year table B25001 (total housing units)
+  housing_units_table: b25001
+  years: [2012, 2025]  # first and last calendar year read
+  # Estimated counts (the "1-unit", "2-units", ... columns), which include the Bureau's
+  # imputation for months an office did not report. The reported-only columns are kept
+  # for the reporting check below.
+  counts: estimated
+
+unit_of_analysis: >-
+  A permit office in the BPS place files, keyed by state code and the six-digit office id.
+  An office is matched to its census place (state + five-digit place code) for its housing
+  units; an office with place code 00000 that covers a whole county (for example Arlington
+  County, Virginia) is matched to the county.
+
+outcomes:
+  # Each outcome is housing units authorized by building permits in one calendar year,
+  # per 1,000 housing units in the office's area (ACS 2020-2024; one fixed denominator).
+  primary: units_2_4
+  all:
+    units_1: Units in 1-unit buildings
+    units_2: Units in 2-unit buildings
+    units_3_4: Units in 3- and 4-unit buildings
+    units_2_4: Units in 2- to 4-unit buildings (the sum of the two above)
+    units_5plus: Units in buildings with 5 or more units
+  scale: per 1,000 housing units per year
+
+timing:
+  # The treatment year g is the first calendar year mostly under the new rule.
+  rule: g = year of the effective date if it falls on or before June 30, else the next year
+  horizon_years: 5  # event times e = 0..4 at most; fewer where the data end sooner
+  min_post_years: 2  # fewer post years than this -> descriptive only
+  base_years: 3  # the comparison base is the mean of years g-3, g-2, g-1
+  pretrend_event_times: [-6, -5, -4]  # pre-years outside the base, each tested against the base
+  placebo_shift_years: 3  # a fake reform 3 years early, using only years before g
+  anticipation: >-
+    None assumed in the main estimate. Plans were public before they took effect, so builders
+    may have waited (a dip before g) or rushed (a spike before g); both show up in the base
+    years and are named as caveats, not corrected.
+
+cases:
+  # Only reforms whose effective date was read on an official page and is in a verified
+  # comparison record in assumptions/evidence/states/.
+  - record: mn.minneapolis_2040_plan
+    office: {state_fips: '27', place_fips: '43000'}
+    name: Minneapolis
+    effective_date: 2020-01-01
+    g: 2020
+    concurrent: [mn.minneapolis_parking_2021]
+  - record: mn.saint_paul_1to4_units
+    office: {state_fips: '27', place_fips: '58000'}
+    name: Saint Paul
+    effective_date: 2022-03-05  # Phase 1; Phase 2 (2023-11-26) falls inside the horizon
+    g: 2022
+    concurrent: [mn.saint_paul_parking_2021]
+  - record: or.portland_rip_2021
+    office: {state_fips: '41', place_fips: '59000'}
+    name: Portland
+    effective_date: 2021-08-01
+    g: 2022
+    concurrent: []  # Oregon HB 2001 (2019) named in the record caveats
+  - record: nc.raleigh_missing_middle_2021
+    office: {state_fips: '37', place_fips: '55000'}
+    name: Raleigh
+    effective_date: 2021-08-05
+    g: 2022
+    concurrent: []
+  - record: wa.spokane_boca_2022
+    office: {state_fips: '53', place_fips: '67000'}
+    name: Spokane
+    effective_date: 2022-08-27
+    g: 2023
+    concurrent: [wa.hb1110_2023, wa.hb1337_2023]
+  - record: va.arlington_eho_2023
+    office: {state_fips: '51', county_fips: '013', place_fips: '00000'}
+    name: Arlington County
+    effective_date: 2023-07-01
+    g: 2024
+    concurrent: []  # halted by a court 2024-09-27; capped at 58 permits a year
+
+not_cases:
+  # Named in the brief but not estimated, and why.
+  nc.durham_expanding_housing_choices_2019: effective date not read on an official page (city site refused automated reading)
+  ca_statewide_adu_2020: >-
+    statewide law with no untreated California comparison and no verified record of its 2020
+    effective date; California ADU evidence comes from the APR validation instead
+  auckland_2016: outside the United States (no BPS data)
+  walla_walla: no official effective date read
+  arlington_texas_name_clash: not a case (the BPS file also has Arlington, Texas; offices are matched by code, not name)
+
+comparison_pool:
+  rule: >-
+    Never-treated offices plus not-yet-treated cases. A never-treated office must (1) have a
+    BPS population of at least 100,000 in the 2019 file; (2) appear in every year 2012-2025;
+    (3) report all 12 months in at least 12 of the 14 years; (4) have ACS housing units; (5) lie
+    outside the excluded states; (6) not be a listed local reformer. A later case is a
+    comparison for an earlier one only in years before its own g.
+  min_population: 100000
+  population_year: 2019
+  min_full_report_years: 12
+  # States with a statewide ADU or middle-housing law in force by 2025 are left out of the
+  # pool. The code adds every state with a verified statewide adu or missing_middle record
+  # whose first effective date is on or before law_in_force_by; these are added by name
+  # because they are not yet records.
+  law_in_force_by: 2025-12-31
+  excluded_states_extra:
+    CA: ADU laws effective 2017 and 2020 (Gov. Code ADU sections), SB 9 2022
+    OR: HB 2001 (2019) middle housing
+    ME: LD 2003 (2022) ADU and density
+  excluded_local_reformers:
+    # Cities known to have changed single-family rules in the window whose dates are not
+    # verified; kept out of the pool so they do not hide an effect.
+    - {state_fips: '37', place_fips: '19000', name: Durham}
+    - {state_fips: '37', place_fips: '12000', name: Charlotte}
+    - {state_fips: '48', place_fips: '05000', name: Austin}
+    - {state_fips: '51', place_fips: '01000', name: Alexandria}
+    - {state_fips: '12', place_fips: '25175', name: Gainesville}
+    - {state_fips: '48', place_fips: '35000', name: Houston}
+
+estimators:
+  group_time_att: >-
+    Callaway-Sant'Anna style, one treated office per case: ATT(g, t) = change in the case's
+    outcome from its base (mean of g-3..g-1) to year t, minus the mean change of the
+    comparison offices over the same years. Event time e = t - g. The case's headline is the
+    mean of ATT over e = 0 .. min(4, 2025 - g).
+  pooled: >-
+    All cases together, each case's event-time ATT averaged with equal weight per case; a
+    summary across different reforms, labelled as such.
+  inference_single_case: >-
+    Placebo-in-space (Conley-Taber style): run the same estimator on every never-treated
+    office as if it reformed in year g. The 90% interval is the estimate minus the 95th and
+    5th percentiles of those placebo estimates; the p-value is the share of placebo
+    estimates at least as large in absolute value.
+  inference_pooled: >-
+    Cluster bootstrap by office (999 draws, seed 20261124): cases and comparison offices are
+    resampled with replacement, each group separately.
+  ci_level: 0.90
+  bootstrap_draws: 999
+  seed: 20261124
+  pretrend_test: >-
+    For e in pretrend_event_times, the same ATT(g, t) as above (a pre-year against the base).
+    Statistic: sum of squares of each coefficient divided by the placebo standard deviation
+    at that event time. p = share of placebo offices with a statistic at least as large.
+  placebo_date_test: >-
+    Pretend the reform came placebo_shift_years early; use only years before g; base = the 3
+    years before the fake date; effect = mean ATT over the 3 fake post years. p from the
+    placebo-in-space distribution of the same quantity.
+  synthetic_control:
+    case: mn.minneapolis_2040_plan
+    outcomes: [units_2_4, units_1, units_5plus]
+    method: >-
+      Non-negative donor weights summing to one that minimise the squared gap to Minneapolis
+      in 2012-2019 (projected gradient on the simplex). Donors are the never-treated pool.
+    fit_metric: pre-period root mean squared gap divided by the mean of Minneapolis's pre-period
+      outcome
+    placebo: every donor in turn treated as Minneapolis; post/pre RMSPE ratio rank reported
+
+thresholds:
+  pretrend_p_min: 0.10
+  placebo_date_p_min: 0.10
+  min_comparisons: 30
+  donor_fit_max: 0.25  # synthetic control only
+
+identification_rule:
+  causal: >-
+    pretrend p >= pretrend_p_min AND placebo-date p >= placebo_date_p_min AND at least
+    min_comparisons comparison offices AND at least min_post_years post years (and, for the
+    synthetic-control case, donor fit <= donor_fit_max).
+  matched: a comparison pool was used but at least one of the checks above failed.
+  descriptive: fewer than min_post_years post years or fewer than min_comparisons comparisons.
+
+caveats_always:
+  - Permits are units authorized, not built; a reform can move permits between years or places (diversion
+    to nearby suburbs is not measured).
+  - 2020-2021 pandemic and 2022-2023 interest-rate shocks hit all offices; the comparison removes the shared
+    part only.
+  - One treated city per case; the interval reflects how much ordinary cities move, not sampling of many
+    reforms.
+  - The housing-unit denominator is 2020-2024, partly after some reforms; the stock moves a few percent at
+    most, so the bias is small and toward zero.
+  - Comparison cities may have made local changes not recorded here; that would pull estimates toward zero.
+  - BPS counts townhouses (attached single-family homes) as 1-unit buildings, so middle housing built as
+    townhouses shows up in units_1, not units_2_4.
+  - The identification label grades the design checks, not the size of the effect; a 'causal' record whose
+    interval includes zero means no change could be told apart from ordinary cities.
+
+changes:
+  - date: 2026-11-24
+    what: Added the last two caveats_always lines (townhouses count as 1-unit; what the label means).
+    why: Wording only, added after the first run while reading Arlington County's zero 2-4 unit base; no
+      outcome, threshold, date or pool rule changed.
+  - date: 2026-11-24
+    what: Moved the cut-off date for statewide laws (2025-12-31) from the code into
+      comparison_pool.law_in_force_by.
+    why: Every rule of the design belongs in this file, where its fingerprint covers it. Same
+      date, so the pool and every estimate are unchanged; the fingerprint changes and is
+      recorded again in assumptions/preregistration.yaml.

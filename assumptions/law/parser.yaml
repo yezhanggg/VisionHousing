@@ -1,0 +1,129 @@
+# Rule-based ordinance reader: keywords, patterns and limits.
+#
+# Read by visionhousing.law.text and visionhousing.law.extract. The reader only
+# drafts rows for a person to check (status: draft, method: rule); it never
+# marks a row verified. There is no AI step: every value comes from a pattern
+# below, and every draft row carries the quote and character offset it came from.
+#
+# Editing this file changes what the reader drafts, never a verified row.
+
+version: 1
+
+# Only ordinances a municipality publishes on its own website are read.
+# Commercial code hosts' terms forbid bulk or automated use: we keep deep links
+# to them, but the reader refuses a document whose address is on one of them.
+blocked_hosts:
+  - ecode360.com
+  - municode.com
+  - library.municode.com
+  - amlegal.com
+  - codelibrary.amlegal.com
+  - generalcode.com
+  - pacodeandbulletin.gov
+
+# A line that starts a section. Group 1 is the section number, group 2 the heading.
+heading_patterns:
+  - '^\s*(?:§|Section|SECTION|Sec\.)\s*((?:\d+[-.])*\d+[A-Z]?(?:\.\d+)*)\.?\s+(.{0,120})$'
+  - '^\s*(ARTICLE\s+[IVXLC0-9]+[A-Z]?)\.?\s*(.{0,120})$'
+
+# The longest quote kept as evidence (characters). The schema caps it at 300.
+quote_chars: 240
+
+# Keywords that rank sections for each topic. A section scores one point per
+# keyword hit in its heading x heading_weight, plus one per hit in its text.
+heading_weight: 5
+topics:
+  adu:
+    - accessory dwelling
+    - accessory apartment
+    - accessory residential unit
+    - in-law
+    - granny flat
+    - carriage house
+  lot:
+    - minimum lot area
+    - minimum lot size
+    - lot area, minimum
+    - area and bulk
+    - dimensional
+  parking:
+    - off-street parking
+    - parking spaces
+    - parking requirements
+    - spaces per dwelling
+  residential_district:
+    - residential district
+    - residence district
+    - single-family
+  impact_fee:
+    - transportation impact fee
+    - impact fee
+
+# How the ADU rule is read: in the section ranked first for ADUs, the status
+# phrase that appears first from adu_window_before characters before the first
+# ADU keyword to adu_window characters after it gives the status (ties go to
+# the order below).
+adu_window_before: 150
+adu_window: 600
+# Sections tried, best first, until one has a status phrase (the best is often
+# the definitions, which say what an ADU is, not where it is allowed).
+adu_sections_tried: 5
+adu_status_phrases:
+  prohibited:
+    - accessory dwelling units are prohibited
+    - accessory dwelling units shall be prohibited
+    - shall not be permitted
+    - are not permitted
+    - is prohibited
+  special_exception:
+    - special exception to permit
+    - by special exception
+    - as a special exception
+  conditional:
+    - as a conditional use
+    - by conditional use
+    - conditional use approval
+  by_right:
+    - permitted by right
+    - by right
+    - as a permitted use
+    - permitted as an accessory use
+    - shall be a permitted use
+
+adu_detached_yes:
+  - detached accessory dwelling
+  - may be detached
+  - in a detached
+  - separate accessory building
+adu_detached_no:
+  - shall be located within the principal
+  - within the principal dwelling
+  - attached to the principal
+
+adu_owner_occupancy:
+  - owner shall reside
+  - owner shall occupy
+  - owner must reside
+  - owner-occupied
+  - owner occupied
+  - occupied by the owner
+
+# Housing types searched for, with the words that mark each one.
+housing_types:
+  single_family_detached: [single-family detached, single family detached]
+  single_family_attached: [semi-detached, twin dwelling, single-family attached]
+  two_family: [two-family, duplex]
+  townhouse: [townhouse, rowhouse, row house]
+  multifamily: [multi-family, multifamily, apartment building, apartment dwelling]
+  mobile_home: [mobile home, manufactured home park]
+  accessory_dwelling: [accessory dwelling]
+
+# Numbers written as words in parking tables.
+number_words: {one: 1, two: 2, three: 3, four: 4, one-half: 0.5, "one and one-half": 1.5}
+
+# Square feet in an acre, to turn "1 acre" lot minimums into square feet.
+sqft_per_acre: 43560
+
+# Confidence of a drafted row: high when every field it filled has evidence in
+# a section ranked first for its topic, medium when at least half do, else low.
+confidence_medium_share: 0.5

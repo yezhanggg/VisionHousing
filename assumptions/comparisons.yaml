@@ -1,0 +1,205 @@
+# VisionHousing comparisons: how reforms add up, how much reform, and how robust.
+#
+# Read by visionhousing.engine.comparisons (settings.py checks this file on load).
+# Method: docs/methods/comparisons.md. Module: docs/modules/comparisons.md.
+#
+# Rules for this file:
+#   - No estimate lives here. Policy levels, multipliers, targets, thresholds and
+#     words only; every number a reader sees is worked out by the engine.
+#   - Every dial, level, rule and threshold has an id, so a record can cite it
+#     (for example comparisons.dials.fees_cut.levels.l75).
+#   - A dial level changes only reform options or ledger entries of its own reform.
+#     Ledger values here are policy definitions (what the law would say), not
+#     uncertain inputs; uncertain inputs stay in assumptions/parameters.yaml.
+
+version: 1
+id: comparisons_2026_11
+
+# ---------------------------------------------------------------- B3 interactions
+interactions:
+  # Stated ordering for the allocation: reforms enter one at a time in this
+  # order and each is credited with what it adds to the package so far. It is
+  # the Handbook's benchmark numbering (1 ADU ... 5 fees). Another order gives
+  # another split; the last-in effects below do not depend on any order.
+  ordering: [adu, missing_middle, tod, parking, fees]
+  # A mechanism whose state P50 is below this many homes is reported as "about zero".
+  zero_homes: 0.5
+  # Plain names of the mechanisms the engine measures (package rules, engine.packages).
+  mechanisms:
+    "fees -> adu":
+      id: comparisons.mechanisms.fees_adu
+      words: "The fee cut makes more ADU projects pay: the ADU's permit and connection fees fall by the same share"
+    "fees -> missing_middle":
+      id: comparisons.mechanisms.fees_missing_middle
+      words: "The fee cut makes more 2-6 unit projects pay: their fee line falls by the same share"
+    "parking -> adu":
+      id: comparisons.mechanisms.parking_adu
+      words: "Parking reform lowers the ADU's parking line (the benchmark ADU needs no added parking)"
+    "parking -> missing_middle":
+      id: comparisons.mechanisms.parking_missing_middle
+      words: "Parking reform lowers the spaces a 2-6 unit building must build"
+    overlap:
+      id: comparisons.mechanisms.adu_mm_lots
+      words: "ADUs and missing middle compete for the same single-family lots: lots ADUs use leave the missing-middle pool"
+    parking_tod:
+      id: comparisons.mechanisms.parking_tod
+      words: "Parking reform and TOD overlap near stations: the TOD pro forma already builds reduced parking and the parking reform counts baseline production only, so no home is counted twice"
+
+# ---------------------------------------------------------------- A4 policy dials
+# Each dial is varied one at a time with every other reform at its benchmark,
+# on the same seed (common random numbers). Levels run from least to most
+# generous. `x` places a level on the dial's axis for the per-step readouts.
+# `cache` names the cached stage the dial's level is worked out from:
+#   late_stage   from the benchmark run's cached tract stages (no funnel rerun)
+#   reform       the reform's own funnel reruns; data, baseline, shared samples
+#                and transit features come from the run's cache
+dials:
+  adu_lot_share:
+    reform: adu
+    title: "Share of eligible single-family lots an ADU rule reaches"
+    unit: "share of eligible lots"
+    cache: late_stage
+    benchmark: l100
+    levels:
+      l25:  {x: 0.25, label: "a quarter of eligible lots", options: {lot_reach: 0.25}}
+      l50:  {x: 0.50, label: "half of eligible lots", options: {lot_reach: 0.50}}
+      l75:  {x: 0.75, label: "three quarters of eligible lots", options: {lot_reach: 0.75}}
+      l100: {x: 1.00, label: "every eligible lot (benchmark)", options: {}}
+  adu_owner_rule:
+    reform: adu
+    title: "Owner-occupancy rule for ADUs"
+    unit: "rule"
+    cache: late_stage
+    benchmark: none
+    levels:
+      owner: {x: 0, label: "owner must live on the lot (owner-occupied share of each tract's households)", options: {lot_reach: owner_occupied}}
+      none:  {x: 1, label: "no owner rule (benchmark)", options: {}}
+  missing_middle_units:
+    reform: missing_middle
+    title: "Homes allowed on a single-family lot"
+    unit: "homes per lot"
+    cache: reform
+    benchmark: u6
+    levels:
+      u2: {x: 2, label: "up to 2 homes", overrides: {missing_middle.max_units: 2}}
+      u3: {x: 3, label: "up to 3 homes", overrides: {missing_middle.max_units: 3}}
+      u4: {x: 4, label: "up to 4 homes", overrides: {missing_middle.max_units: 4}}
+      u6: {x: 6, label: "up to 6 homes (benchmark)", overrides: {}}
+  tod_distance:
+    reform: tod
+    title: "Distance from a major transit stop"
+    unit: "miles"
+    cache: reform
+    benchmark: d07
+    levels:
+      q:   {x: 0.25, label: "1/4 mile from any major stop", options: {distance: 0.25}}
+      d07: {x: 0.375, label: "1/2 mile from rail, 1/4 mile from frequent bus (benchmark)", options: {}}
+      h:   {x: 0.50, label: "1/2 mile from any major stop", options: {distance: 0.5}}
+  tod_height:
+    reform: tod
+    title: "Height allowed near major stops"
+    unit: "storeys"
+    cache: reform
+    benchmark: s5
+    # Height and floor area move together: floor area ratio = 0.5 x storeys,
+    # so the benchmark's 5 storeys keep its FAR of 2.5 (tod.upzoned_far).
+    levels:
+      s4: {x: 4, label: "4 storeys (FAR 2.0)", overrides: {tod.upzoned_storeys: 4, tod.upzoned_far: 2.0}}
+      s5: {x: 5, label: "5 storeys, FAR 2.5 (benchmark)", overrides: {}}
+      s6: {x: 6, label: "6 storeys (FAR 3.0)", overrides: {tod.upzoned_storeys: 6, tod.upzoned_far: 3.0}}
+      s8: {x: 8, label: "8 storeys (FAR 4.0)", overrides: {tod.upzoned_storeys: 8, tod.upzoned_far: 4.0}}
+  parking_minimum:
+    reform: parking
+    title: "Parking minimum left in force"
+    unit: "share of today's minimum removed"
+    cache: reform
+    benchmark: zero
+    levels:
+      current: {x: 0.0, label: "today's minimum (no change)", options: {minimum_share_kept: 1.0}}
+      half:    {x: 0.5, label: "minimum halved", options: {minimum_share_kept: 0.5}}
+      zero:    {x: 1.0, label: "no minimum (benchmark)", options: {}}
+  fees_cut:
+    reform: fees
+    title: "Cut to every development fee category"
+    unit: "share of fees cut"
+    cache: reform
+    benchmark: l50
+    levels:
+      l25:  {x: 0.25, label: "25% cut", overrides: {fees.fee_cut_share: 0.25}}
+      l50:  {x: 0.50, label: "50% cut (benchmark)", overrides: {}}
+      l75:  {x: 0.75, label: "75% cut", overrides: {fees.fee_cut_share: 0.75}}
+      l100: {x: 1.00, label: "fees waived (100% cut)", overrides: {fees.fee_cut_share: 1.0}}
+
+readouts:
+  # Diminishing return: the first level after which a step adds less, per unit
+  # of the dial's axis, than this share of what the first step added per unit.
+  diminishing_step_share:
+    id: comparisons.readouts.diminishing_step_share
+    value: 0.5
+  # Targets the target seeker answers ("what level reaches N homes statewide").
+  targets:
+    id: comparisons.readouts.targets
+    homes: [250, 500, 1000, 2500, 5000, 10000, 20000]
+
+# ADU adoption threshold: the annual take-up rate (ledger adu.takeup_feasible_annual
+# scaled) at which the state P50 (and P10) of added ADUs reaches each target.
+adoption:
+  id: comparisons.adoption
+  parameter: adu.takeup_feasible_annual
+  # Search range for the multiplier on the take-up range, and the bisection tolerance (homes).
+  max_multiplier: 100
+  tolerance_homes: 0.5
+
+# ---------------------------------------------------------------- two-variable matrix
+matrix:
+  id: comparisons.matrix
+  reform: adu
+  # Rows: the take-up range times each multiplier (worked out from the cached
+  # feasible stage, no rerun). Columns: construction cost per square foot times
+  # each multiplier (one ADU funnel run per column). The range is scaled as a
+  # whole, so each draw keeps its place in the range (paired with the benchmark).
+  takeup:
+    parameter: adu.takeup_feasible_annual
+    multipliers: [0.5, 0.75, 1.0, 1.5, 2.0]
+  cost:
+    parameter: adu.hard_cost_per_sqft
+    multipliers: [0.8, 0.9, 1.0, 1.1, 1.2]
+
+# ---------------------------------------------------------------- ranking stability
+ranking:
+  id: comparisons.ranking
+  # The inputs tested: for each reform, its most important uncertain inputs by
+  # rank correlation with the reform's state total (sensitivity.importance), this many each.
+  top_per_reform: 2
+
+# ---------------------------------------------------------------- TOD factorial (opt-in part)
+# Read by visionhousing.engine.comparisons.tod_factorial. The TOD benchmark (major stop =
+# fixed guideway or >= 64 scheduled weekday bus departures; rail 1/2 mile, bus 1/4 mile,
+# straight line; FAR 2.5 five-storey prototype) is never changed here: every cell is a
+# separate run on the same stop table and the same seeded draws, compared with it draw by
+# draw. Asked for by name only (part=tod_factorial); not in part=all.
+tod_factorial:
+  id: comparisons.tod_factorial
+  benchmark: {service: daily, access: straight, distance: d07}
+  # Service rules, in order; their words are written by the engine from the ledger
+  # (parking.transit_bus_min_departures, tod.frequent_bus_*), so no number is typed here.
+  services: [daily, peak_average, peak_max_gap]
+  accesses:
+    straight: "straight line from 2020 block internal points (the benchmark)"
+    network: "walk on the mapped street and path network (OpenStreetMap), overlaps dissolved"
+  # d07 = 1/2 mile from rail, 1/4 mile from a frequent bus stop (the benchmark).
+  distances: [d07, 0.25, 0.5, 0.75]
+  # The access contrast is not defined at the benchmark (the pack's walksheds are drawn
+  # around peak-rule stops at single distances only), so it is measured at this anchor:
+  # the same stops, the same walkshed grid, straight-line circle against network walk.
+  access_anchor: {service: peak_average, distance: 0.5}
+  max_gap:
+    # Written convention: the gaps in a peak window are window start -> first departure,
+    # departure -> next departure, last departure -> window end; window = [start, end).
+    edge_rule: window_edges
+    # Departures at one platform side closer than this are one bus (shared or
+    # interlined trips listed twice).
+    dedupe_minutes: 1
+  # A cell whose P50 is above zero but below this many homes is reported as a small,
+  # rounded estimate (its own outcome), never as zero and never as an ordinary estimate.
+  small_estimate_homes: 10

@@ -61,6 +61,7 @@ Each bracket is a half-open interval `[low, high)`. `rent_800_899` is
 | `share_above(counts, edges, threshold, top_rule=..., alpha=...)` | `ShareResult`: `value`, `in_top_bracket`, `bound`, `rule`, `total`, `reason` |
 | `share_below(...)` | the same, `1 − share_above`, with the bound flipped |
 | `share_above_many(counts_2d, edges, thresholds)` / `share_below_many` | `ShareArrays`, one entry per tract; equal to a loop of the scalar version |
+| `share_above_grid(counts_2d, edges, thresholds_grid)` / `share_below_grid` | the share for a whole grid of thresholds (draws × tracts) at once, as an array (`NaN` where undefined). A threshold falls in one bracket `j`: share above = (units in brackets above `j` + count_j × frac_j) / total, with the running sum worked out once per tract, so the counts are never copied per draw. Equal to `share_above_many` within a relative 1e-12 (only where one fractional term is added differs) |
 | `median_from_brackets(counts, edges)` | `MedianResult`: the grouped-data median, the bracket that holds it, and `bound="lower"` if it falls in the top bracket |
 | `check_labels(labels, table, vintage)` | a list of problems; empty means the ACS variable numbering matches these edges |
 | `VALUE.variables()`, `RENT.variables()` | ACS variable id → column name, for the fetcher |

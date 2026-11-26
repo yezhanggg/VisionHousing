@@ -1,0 +1,212 @@
+# "What this law changes": the map of what each reform or bill changes in each
+# place, and the "read next" bounds (visionhousing.api.law_changes).
+#
+# Every place gets one of four answers for the reform shown:
+#
+#   already_allowed    the rule in force already gives what the reform gives;
+#                      the reform adds nothing there
+#   newly_allowed      the rule in force does not allow it; the reform makes it legal
+#   changed_condition  allowed today, but behind a hearing, a size, occupancy or
+#                      parking condition, or a fee the reform removes or cuts
+#   unresolved         no verified rule in force answers the question; the engine
+#                      uses its statewide fallback (a ledger range)
+#
+# A place a bill does not reach (Philadelphia and Pittsburgh under a
+# Municipalities Planning Code bill; places with no zoning under a bill that
+# amends zoning) is "outside": it is left out of the denominator and reported
+# on its own. The four shares of the denominator always add up to 100%.
+#
+# Nothing here is a model number. Unit increments per lot come from the ledger
+# (adu.units_per_lot, missing_middle.max_units). Which rows count as read comes
+# from the law layer (visionhousing.law.inforce and law.coverage), unchanged.
+# See docs/modules/api.md and docs/modules/web.md.
+
+version: 1
+
+classes:
+  - id: already_allowed
+    word: "Already allowed"
+    meaning: "The rule in force already allows what the reform allows. The reform adds nothing here."
+  - id: changed_condition
+    word: "Allowed, condition changed"
+    meaning: "Allowed today, but behind a hearing, a size, occupancy or parking condition, or a fee that the reform removes or cuts."
+  - id: newly_allowed
+    word: "Newly allowed"
+    meaning: "The rule in force does not allow it. The reform makes it legal."
+  - id: unresolved
+    word: "Unresolved"
+    meaning: "No verified rule in force answers the question. The engine uses its statewide fallback range here."
+outside:
+  id: outside
+  word: "Outside this bill"
+  meaning: "The bill does not reach this place, so today's rules stay."
+
+# The county's map answer: the class holding the largest share of its
+# denominator. Ties go to the first class in this order (unresolved first, so
+# a tie never makes a county look more settled than it is). A county whose whole
+# denominator is outside the reform is "outside".
+answer_tie_order: [unresolved, newly_allowed, changed_condition, already_allowed]
+
+# The weights each reform's shares are counted in.
+denominators:
+  sf_lots:
+    label: "single-family lots"
+    unit: "lots"
+    meaning: "One-unit detached homes (ACS), split among municipalities by 2020 housing units in each tract."
+    source_ids: [acs5_api, census_baf_2020_mcd]
+  residents:
+    label: "residents"
+    unit: "people"
+    meaning: "Residents of the municipality (2024 estimates)."
+    source_ids: [census_subcounty_pop, pa_dced_munstats]
+  station_homes:
+    label: "homes near a major transit stop"
+    unit: "homes"
+    meaning: "Housing units inside the default transit catchment (1/2 mile of rail, 1/4 mile of frequent bus)."
+    source_ids: [acs5_api, gtfs_agency_feeds]
+
+# Per reform: which reading answers the question, the denominator, the ledger
+# entries behind the fallback and behind the capacity per lot, and the stage of
+# the model each class changes. `rule` is one of adu_category, max_units,
+# parking_min, impact_fee, not_read (no reading answers the question yet).
+reforms:
+  adu:
+    rule: adu_category
+    denominator: sf_lots
+    capacity_param: adu.units_per_lot
+    fallback_params: [adu.already_legal_share]
+    condition_params: [adu.conditions_exposure_share]
+    state_provisions: [mpc_adu_silent]
+    stages:
+      already_allowed: "Lots in scope: these lots are taken out as already legal; the reform adds nothing on them."
+      changed_condition: "Lots in scope: a by-right rule with conditions keeps a ledger share of its lots exposed (adu.conditions_exposure_share); a hearing route counts as not yet legal by right."
+      newly_allowed: "Lots in scope: every lot here enters the funnel (not already legal)."
+      unresolved: "Lots in scope: the statewide already-legal share (adu.already_legal_share) is applied to these lots."
+  pa_hb2186:
+    rule: adu_category
+    bill: pa_hb2186
+    denominator: sf_lots
+    capacity_param: adu.units_per_lot
+    fallback_params: [adu.already_legal_share]
+    condition_params: [adu.conditions_exposure_share]
+    state_provisions: [mpc_adu_silent]
+    stages:
+      already_allowed: "Lots in scope: these lots are taken out as already legal; the bill adds nothing on them."
+      changed_condition: "Lots in scope: the bill removes the hearing or the owner rule (adu.conditions_exposure_share of by-right-with-conditions lots stay exposed)."
+      newly_allowed: "Lots in scope: every lot here enters the funnel (not already legal)."
+      unresolved: "Lots in scope: the statewide already-legal share (adu.already_legal_share) is applied to these lots."
+  pa_sb1346:
+    rule: adu_category
+    bill: pa_sb1346
+    denominator: sf_lots
+    capacity_param: adu.units_per_lot
+    fallback_params: [adu.already_legal_share]
+    condition_params: [adu.conditions_exposure_share]
+    state_provisions: [mpc_adu_silent]
+    stages:
+      already_allowed: "Lots in scope: these lots are taken out as already legal; the bill adds nothing on them."
+      changed_condition: "Lots in scope: the bill removes the hearing or the owner rule (adu.conditions_exposure_share of by-right-with-conditions lots stay exposed)."
+      newly_allowed: "Lots in scope: every lot here enters the funnel (not already legal)."
+      unresolved: "Lots in scope: the statewide already-legal share (adu.already_legal_share) is applied to these lots."
+  missing_middle:
+    rule: max_units
+    denominator: sf_lots
+    capacity_param: missing_middle.max_units
+    fallback_params: [missing_middle.sf_only_zoned_share]
+    condition_params: []
+    state_provisions: [mpc_604_4]
+    stages:
+      already_allowed: "Lots in scope: the single-family district already allows the reform's top unit count; no legal increment."
+      changed_condition: "Lots in scope: only the unit counts above today's by-right maximum are new (law.rights.legal_increment)."
+      newly_allowed: "Lots in scope: a single-family-only district; every unit count from 2 up is new."
+      unresolved: "Lots in scope: the statewide share of lots in single-family-only zones (missing_middle.sf_only_zoned_share) is applied."
+  parking:
+    rule: parking_min
+    denominator: residents
+    capacity_param: null
+    fallback_params: [parking.required_spaces_per_unit_multifamily, parking.required_spaces_per_unit_attached]
+    condition_params: []
+    state_provisions: [mpc_604_1]
+    stages:
+      already_allowed: "County reach: a parking minimum of zero is read here; the reform removes nothing (the county's parking estimate is scaled down where it qualifies)."
+      changed_condition: "Saved parking cost per new home: a minimum above zero is read here and the reform removes it."
+      newly_allowed: "Not used: removing a parking minimum makes no use newly legal."
+      unresolved: "Saved parking cost per new home: the statewide assumption that a minimum applies (ledger required spaces per unit)."
+  fees:
+    rule: impact_fee
+    denominator: residents
+    capacity_param: null
+    fallback_params: [fees.fee_total_per_unit, fees.fee_cut_share]
+    condition_params: []
+    state_provisions: [mpc_503_a, mpc_504_a, mpc_507_a, mpc_503_1]
+    stages:
+      already_allowed: "Not used: every place charges some fee, so none is already at the cut."
+      changed_condition: "Cost per new home: the fee read here is cut."
+      newly_allowed: "Not used: a fee cut makes no use newly legal."
+      unresolved: "Cost per new home: the benchmark's assumed fee total (fees.fee_total_per_unit) is cut by fees.fee_cut_share everywhere."
+  tod:
+    rule: not_read
+    denominator: station_homes
+    capacity_param: null
+    fallback_params: [tod.current_far_allowed, tod.upzoned_far]
+    condition_params: []
+    state_provisions: [mpc_605_2_i]
+    stages:
+      already_allowed: "Station-area capacity: today's floor area already reaches the upzoned floor area."
+      changed_condition: "Station-area capacity: more height or floor area than today's rule."
+      newly_allowed: "Station-area capacity: housing not allowed today near the stop."
+      unresolved: "Station-area capacity: today's floor area is the statewide assumption (tod.current_far_allowed)."
+
+# "Read next": bounding runs for the highest-ranked unread review units
+# (visionhousing.law.priorities). Each unit's rows are set once to a permissive
+# reading and once to a restrictive one; the engine then runs the reform and
+# the other option on the same seed and draws, so the difference is the
+# reading alone. Only reforms whose county values come from local readings
+# are bounded; for the others the list says a reading changes no number yet.
+read_next:
+  top: 5
+  seed: 0
+  draws: 2000
+  # The two options compared for "would the preferred action switch?", in the
+  # same decision unit: statewide added homes, middle (P50) of the draws.
+  other_option:
+    adu: fees
+    pa_hb2186: fees
+    pa_sb1346: fees
+    parking: fees
+  # Plain names of the options in the sentences.
+  labels:
+    adu: "the ADU reform"
+    pa_hb2186: "HB 2186"
+    pa_sb1346: "SB 1346"
+    parking: "the parking reform"
+    fees: "the fee cut"
+  # Rows written into the unit's municipalities for each bound. A bound is a
+  # reading the unit could plausibly have; it is never shown as a reading.
+  treatments:
+    adu_category:
+      permissive:
+        adu_status: by_right
+        adu_detached: "1"
+        adu_owner_occupancy: "0"
+        occupancy_restriction: ""
+      restrictive:
+        adu_status: prohibited
+        adu_detached: ""
+        adu_owner_occupancy: ""
+        occupancy_restriction: ""
+    parking_min:
+      permissive:
+        parking_min_per_unit_sf: "0"
+        parking_min_per_unit_mf: "0"
+      restrictive:
+        parking_min_per_unit_sf: "2"
+        parking_min_per_unit_mf: "2"
+  # The bound rows count as verified and in force from this date (before every
+  # run's as-of date), so the engine's own in-force test admits them.
+  treated_effective_date: "2000-01-01"
+
+# Static site: the payload is exported per reform as
+# data/<ST>/law_changes/<reform>.json when it fits the folder's size budget.
+static:
+  folder: law_changes

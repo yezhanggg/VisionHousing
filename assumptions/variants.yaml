@@ -1,0 +1,353 @@
+# VisionHousing named variants of the benchmark reforms.
+#
+# The five benchmark presets (assumptions/scenarios.yaml) stay exactly as the
+# Challenge Handbook defines them. A variant is a named alternative run of one
+# reform: the same code, the same seed and the same draws, with a few ledger
+# entries swapped and, where needed, an engine option set.
+#
+#   reform     the reform family the variant belongs to (adu, missing_middle,
+#              parking, fees, tod)
+#   title      plain name shown to users
+#   question   the question the variant answers
+#   overrides  target ledger id -> source ledger id: the target entry takes the
+#              source entry's range (central, low, high, shape, kind, source,
+#              status). Every number stays in assumptions/parameters.yaml.
+#   options    engine options for the reform (see docs/modules/engine.md)
+#
+# Run one with the reform option {"variant": "<name>"}, for example
+#   run("PA", {"parking": {"variant": "parking_no_response"}})
+# Checked on load by visionhousing.engine.variants.
+
+version: 1
+
+variants:
+
+  adu_financing_tight:
+    reform: adu
+    title: "ADUs with tight homeowner financing"
+    question: "How many fewer ADUs if owners can borrow less, at a higher rate?"
+    overrides:
+      adu.loan_share: adu.financing_tight_loan_share
+      adu.loan_rate_spread: adu.financing_tight_rate_spread
+    options: {}
+
+  adu_financing_easy:
+    reform: adu
+    title: "ADUs with easy homeowner financing"
+    question: "How many more ADUs if owners can borrow nearly all of the cost near the mortgage rate?"
+    overrides:
+      adu.loan_share: adu.financing_easy_loan_share
+      adu.loan_rate_spread: adu.financing_easy_rate_spread
+    options: {}
+
+  adu_full_installed_cost:
+    reform: adu
+    title: "ADUs at full installed cost (own meters, service upgrades)"
+    question: "What if every ADU needs a new electric service, its own utility laterals and new-home tap fees?"
+    overrides:
+      adu.site_utility_cost: adu.site_utility_cost_full
+      adu.utility_connection_fee: adu.utility_connection_fee_full
+    options: {}
+
+  missing_middle_prototype_choice:
+    reform: missing_middle
+    title: "Missing middle: builder picks the most profitable prototype on each lot"
+    question: "If a builder chooses a duplex, fourplex or six-unit building, whichever pays most where the lot fits it, how many homes?"
+    overrides: {}
+    options:
+      method: prototypes
+
+  parking_provided_spaces:
+    reform: parking
+    title: "Parking: spaces avoided from what builders would provide anyway"
+    question: "If builders provide a set number of spaces per home with no minimum (by transit access and building type), how many spaces does the reform really avoid?"
+    overrides: {}
+    options:
+      response: provided
+
+  parking_no_response:
+    reform: parking
+    title: "Parking: builders keep every space (no response)"
+    question: "What if builders keep building every space the old minimum required?"
+    overrides:
+      parking.share_still_built_transit_rich: parking.no_response_share_still_built
+      parking.share_still_built_elsewhere: parking.no_response_share_still_built
+    options: {}
+
+  parking_all_surface:
+    reform: parking
+    title: "Parking: every space avoided is a surface space"
+    question: "How large is the saving if every space avoided would have been a cheap surface space?"
+    overrides:
+      parking.mix_structured_transit_rich: parking.variant_share_none
+      parking.mix_underground_transit_rich: parking.variant_share_none
+      parking.mix_structured_elsewhere: parking.variant_share_none
+      parking.mix_underground_elsewhere: parking.variant_share_none
+      parking.mix_surface_attached: parking.variant_share_all
+    options: {}
+
+  parking_all_structured:
+    reform: parking
+    title: "Parking: every space avoided is a structured space"
+    question: "How large is the saving if every space avoided would have been in an above-ground garage?"
+    overrides:
+      parking.mix_structured_transit_rich: parking.variant_share_all
+      parking.mix_underground_transit_rich: parking.variant_share_none
+      parking.mix_structured_elsewhere: parking.variant_share_all
+      parking.mix_underground_elsewhere: parking.variant_share_none
+      parking.mix_surface_attached: parking.variant_share_none
+    options: {}
+
+  parking_voluntary_floor:
+    reform: parking
+    title: "Parking: the minimum binds only where projects want fewer spaces"
+    question: "If each project would provide its own number of spaces with no minimum (some above the old minimum, some below), how many spaces does the reform avoid, and how many more homes follow? Spaces avoided = max(v, old minimum) - max(v, minimum left), project by project."
+    overrides: {}
+    options:
+      response: voluntary
+
+  parking_verified_minimums:
+    reform: parking
+    title: "Parking: verified local minimums in place of the default"
+    question: "Where a municipality's parking minimum has been read and verified (and is in force), what does removing it add, using that minimum instead of the 1.5 / 2.0 default? Unread places keep the labelled default. A verified minimum at or below what projects would build anyway (or zero, as in Pittsburgh since October 29, 2026) avoids nothing."
+    overrides: {}
+    options:
+      minimums: verified
+
+  parking_baseline_window_pa_2022_2025:
+    reform: parking
+    title: "Parking reform under the 2022-2025 Pennsylvania baseline window (sensitivity)"
+    question: "If the Pennsylvania baseline used the 2022-2025 mean instead of the shipped window (which includes the 2021 spike), how many homes would parking reform add? Shown as a sensitivity, never subtracted. Pennsylvania only."
+    overrides: {}
+    options:
+      baseline_window: baseline_pa_window_2022_2025
+
+  fees_baseline_window_pa_2022_2025:
+    reform: fees
+    title: "Fee cut under the 2022-2025 Pennsylvania baseline window (sensitivity)"
+    question: "If the Pennsylvania baseline used the 2022-2025 mean instead of the shipped window (which includes the 2021 spike), how many homes would the fee cut add, and what would it cost? Shown as a sensitivity, never subtracted. Pennsylvania only."
+    overrides: {}
+    options:
+      baseline_window: baseline_pa_window_2022_2025
+
+  fees_funded_backfill:
+    reform: fees
+    title: "Fee cut with a funded state backfill"
+    question: "If a state appropriation replaces every dollar of fee revenue the cut gives up, what does the state pay, and what do the places (and utilities) that charge fees keep?"
+    overrides:
+      fees.replacement_funding_share: fees.funded_backfill_share
+    options: {}
+
+  fees_delayed_capacity:
+    reform: fees
+    title: "Fee cut that delays fee-funded water and sewer capacity"
+    question: "If the water and sewer part of the fees is cut and not replaced, so capacity comes later, how many of the added homes wait past 2031?"
+    overrides: {}
+    options:
+      capacity_case: delayed
+
+  fees_deferral:
+    reform: fees
+    title: "Fees deferred to occupancy instead of cut"
+    question: "What if fees are paid at occupancy instead of at permit: the builder saves the carry, the public gives up only the time value?"
+    overrides: {}
+    options:
+      view: deferral
+
+  tod_network_half_mile:
+    reform: tod
+    title: "TOD within a 1/2-mile walk (peak frequent-bus rule)"
+    question: "What if major stops are rail plus buses every 15 minutes in both weekday peaks, and land counts within a 1/2-mile walk on the street network?"
+    overrides: {}
+    options:
+      walk: network
+      distance: 0.5
+
+  tod_network_quarter_mile:
+    reform: tod
+    title: "TOD within a 1/4-mile walk (peak frequent-bus rule)"
+    question: "How much smaller is the effect if only land within a 1/4-mile walk counts?"
+    overrides: {}
+    options:
+      walk: network
+      distance: 0.25
+
+  tod_network_three_quarter_mile:
+    reform: tod
+    title: "TOD within a 3/4-mile walk (peak frequent-bus rule)"
+    question: "How much larger is the effect if land within a 3/4-mile walk counts?"
+    overrides: {}
+    options:
+      walk: network
+      distance: 0.75
+
+  tod_lowrise:
+    reform: tod
+    title: "TOD with a 3-4 storey walk-up prototype"
+    question: "Would a cheaper three- to four-storey walk-up with surface parking pencil where the mid-rise does not?"
+    overrides:
+      tod.upzoned_storeys: tod.lowrise_storeys
+      tod.upzoned_far: tod.lowrise_far
+      multifamily.hard_cost_per_sqft: tod.lowrise_hard_cost_per_sqft
+      parking.cost_per_space_structured: parking.cost_per_space_surface
+    options: {}
+
+  tod_ma_acre_share:
+    reform: tod
+    title: "TOD with the older acre-share rule for land already zoned by right (Massachusetts 3A)"
+    question: "What did the TOD estimate say when a share of each 3A district's acres was taken out of the land that could become a mid-rise site, instead of counting only the capacity above what the district already allows?"
+    overrides: {}
+    options:
+      existing_capacity: acre_share
+
+  adu_timing_reliable:
+    reform: adu
+    title: "ADUs with predictable approval (slow reviews pulled to the median)"
+    question: "If the slowest ADU reviews got faster, how many permits move into 2027-2031? Same applicants, same chance of a permit (timing only; lag illustrative/transferred)."
+    overrides:
+      adu.timing_tail_pull_share: adu.timing_reliable_tail_pull_share
+    options: {}
+
+  adu_financing_access:
+    reform: adu
+    title: "ADUs with homeowner financing access (state program + counted rent)"
+    question: "If a state program pays part of the owner's cash share and lenders count part of the ADU's rent, how many more ADUs become feasible?"
+    overrides:
+      adu.financing_program_amount: adu.financing_access_program_amount
+      adu.financing_rent_income_share: adu.financing_access_rent_income_share
+    options: {}
+
+  adu_both:
+    reform: adu
+    title: "ADUs with predictable approval and financing access"
+    question: "With both levers on the same draws: how many authorizations move into 2027-2031, and how many are newly feasible?"
+    overrides:
+      adu.timing_tail_pull_share: adu.timing_reliable_tail_pull_share
+      adu.financing_program_amount: adu.financing_access_program_amount
+      adu.financing_rent_income_share: adu.financing_access_rent_income_share
+    options: {}
+
+  # ---------------------------------------------------------------- ADU program budget and timing on a finite stock
+  # scenarios/adu_budget.py, docs/methods/adu_levers.md. These runs use the
+  # yearly hazard on surviving eligible sites with an application-to-permit lag;
+  # the benchmark keeps its linear take-up. The appropriation, award and loan
+  # share are illustrative scenario settings.
+
+  adu_hazard_reference:
+    reform: adu
+    title: "ADU benchmark worked out with the hazard on surviving sites (method check)"
+    question: "How much does the benchmark move when take-up uses up a finite stock of eligible sites and permits follow applications after a lag? (A disclosed method sensitivity; the benchmark headline is unchanged.)"
+    overrides:
+      adu.lever_hazard_method: adu.lever_hazard_method_on
+    options: {}
+
+  adu_timing_conserved:
+    reform: adu
+    title: "ADUs with predictable approval, projects conserved over an extended horizon"
+    question: "If the slowest ADU reviews got faster, how many permits move into 2027-2031, and do all projects still show up once later years are counted? (Timing only; lag illustrative/transferred.)"
+    overrides:
+      adu.lever_hazard_method: adu.lever_hazard_method_on
+      adu.timing_tail_pull_share: adu.timing_reliable_tail_pull_share
+    options: {}
+
+  adu_finance_budget:
+    reform: adu
+    title: "ADUs with a budget-capped state grant program (illustrative $20 million, $25,000 awards)"
+    question: "With a fixed appropriation, how many owners are served, how many additional ADUs are authorized in 2027-2031 beyond those who would build anyway, and at what net public cost?"
+    overrides:
+      adu.lever_hazard_method: adu.lever_hazard_method_on
+      adu.budget_appropriation: adu.budget_appropriation_illustrative
+      adu.budget_award_amount: adu.budget_award_amount_illustrative
+    options: {}
+
+  adu_finance_budget_loan:
+    reform: adu
+    title: "ADUs with a budget-capped state loan program (illustrative $20 million, $25,000 loans)"
+    question: "The same capped program paid as loans: how many additional ADUs, and what is the net public cost once repayments and losses are counted?"
+    overrides:
+      adu.lever_hazard_method: adu.lever_hazard_method_on
+      adu.budget_appropriation: adu.budget_appropriation_illustrative
+      adu.budget_award_amount: adu.budget_award_amount_illustrative
+      adu.budget_loan_share: adu.budget_loan_share_loan
+    options: {}
+
+  # ---------------------------------------------------------------- practical capacity
+  # The same reform with its added homes screened for sewer service, FEMA flood
+  # zone and steep slope (engine/capacity.py, assumptions/capacity.yaml; ledger
+  # capacity.*). The benchmark preset is the "not screened" case.
+
+  adu_capacity_screen:
+    reform: adu
+    title: "ADUs screened for practical capacity (sewer, flood zone, steep slope)"
+    question: "How many of the ADUs can be built in practice once lots without public sewer, lots in the flood zone and steep lots are screened?"
+    overrides: {}
+    options:
+      capacity_screen: true
+
+  missing_middle_capacity_screen:
+    reform: missing_middle
+    title: "Missing middle screened for practical capacity (sewer, flood zone, steep slope)"
+    question: "How many of the 2-6 unit homes can be built in practice once lots without public sewer, lots in the flood zone and steep lots are screened?"
+    overrides: {}
+    options:
+      capacity_screen: true
+
+  tod_capacity_screen:
+    reform: tod
+    title: "TOD screened for practical capacity (sewer, flood zone, steep slope)"
+    question: "How many of the station-area homes can be built in practice once land without public sewer, in the flood zone or on steep slopes is screened?"
+    overrides: {}
+    options:
+      capacity_screen: true
+
+  parking_capacity_screen:
+    reform: parking
+    title: "Parking reform screened for practical capacity (sewer, flood zone, steep slope)"
+    question: "If part of the added homes land on new sites rather than sites like today's, how many fewer once those sites are screened for sewer, flood zone and slope?"
+    overrides: {}
+    options:
+      capacity_screen: true
+
+  fees_capacity_screen:
+    reform: fees
+    title: "Fee cut screened for practical capacity (sewer, flood zone, steep slope)"
+    question: "If part of the added homes land on new sites rather than sites like today's, how many fewer once those sites are screened for sewer, flood zone and slope?"
+    overrides: {}
+    options:
+      capacity_screen: true
+
+  # ---------------------------------------------------------------- extra scenarios
+
+  transit_infrastructure_financed:
+    reform: transit_zoning_funded_infrastructure
+    title: "Transit zoning with financed (not granted) infrastructure"
+    question: "If station-area capacity is financed and builders repay part of it, how many fewer homes than with a grant, and at what public cost?"
+    overrides: {}
+    options:
+      funding: financed
+
+  starter_home_lots_appraisal_binding:
+    reform: starter_home_lots
+    title: "Starter-home lots where appraisal gaps stop the loan"
+    question: "If no starter home is financed where few comparable sales exist nearby, how many fewer homes?"
+    overrides: {}
+    options:
+      appraisal: binding
+
+  fee_waiver_with_affordability:
+    reform: fee_deferral_with_affordability
+    title: "Fee waiver (instead of deferral) with affordability terms"
+    question: "If the fees are waived rather than deferred for projects that keep homes affordable, how many more homes and restricted homes, at what public cost?"
+    overrides: {}
+    options:
+      mode: waiver
+
+# Settings of the TOD zero decomposition (the `decompose` option of the TOD reform):
+# which variant is the cheaper prototype and which wider coverage is tested, on the
+# same draws as the benchmark. Read by visionhousing.engine.variants (tod_decomposition).
+decomposition:
+  tod:
+    id: variants.decomposition.tod
+    lowrise_variant: tod_lowrise
+    # Miles from any major stop for the "wider coverage" case (one of 0.25, 0.5, 0.75).
+    wider_distance: 0.75

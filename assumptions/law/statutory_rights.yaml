@@ -1,0 +1,109 @@
+# State floors on local zoning, by dated version (visionhousing.law.rights).
+#
+# Each version names the timeline record (assumptions/law/timeline.yaml) that
+# says when it applies; the record carries the citation, source, fingerprint
+# and excerpt locator. The values here are the operative terms of each version
+# in our own words, as parameters, so the code holds no legal numbers.
+#
+# Convention: a version applies on the dates its timeline record is in force.
+# Enacted changes with a future effective date apply from that date in both
+# forecast arms (current law). The "freeze today's rules" comparison
+# (freeze_on) keeps the version in force on that date throughout and is shown
+# separately. A pending bill never appears here.
+#
+# Unknown stays unknown: a district whose service, year-round status or unit
+# requirement is not known gets no state floor and no denial, only "unknown".
+
+version: 1
+
+freeze_comparison:
+  name: "Freeze today's rules"
+  freeze_on: 2026-11-25
+  note: >-
+    A separately named comparison, not a forecast arm: the rules in force on
+    freeze_on are held on every date of the window.
+
+provisions:
+  vt_24vsa_4412_1_d:
+    state: VT
+    housing_type: missing_middle
+    versions:
+      vt_4412_1d_act179:
+        duplex:
+          units: 2
+          requires: [year_round_residential]
+          lot: "no more land or lot area than a single-unit dwelling"
+        small_multiunit:
+          max_units: 4
+          requires: [allows_residential, municipal_water, municipal_sewer]
+          lot: "same size lot as a single-unit dwelling"
+          exception_min_units_above: null
+      vt_4412_1d_act179_9a:
+        duplex:
+          units: 2
+          requires: [year_round_residential]
+          lot: "no more land or lot area than a single-unit dwelling"
+        small_multiunit:
+          max_units: 4
+          requires: [allows_residential, municipal_water, municipal_sewer]
+          lot: "same size lot as a single-unit dwelling"
+          # The right does not apply in a district that specifically requires
+          # multiunit structures to have more than this many units.
+          exception_min_units_above: 4
+  vt_24vsa_4412_1_e:
+    state: VT
+    housing_type: adu
+    versions:
+      vt_4412_adu_act179:
+        adu:
+          units: 1
+          attached_to: single_family_dwelling
+          owner_occupied_lot_required: false  # the protection no longer depends on it (Act 179)
+          # The protection yields to flood hazard and fluvial erosion area
+          # bylaws adopted under 24 V.S.A. § 4424.
+          yields_to: [flood_hazard_bylaw, fluvial_erosion_bylaw]
+
+# How the missing-middle funnel applies the § 4412(1)(D) floor
+# (visionhousing.law.rights.middle_floor_schedule, used by
+# visionhousing.scenarios.missing_middle in the states listed).
+#
+# The reform reaches single-family lots in districts whose own bylaw, read
+# without the state floor, allows one home. On those lots the floor already
+# allows a duplex (year-round residential) and up to four units where
+# municipal water AND sewer serve. The reform adds only the building sizes
+# above what is already allowed, and on a lot where the already-allowed
+# design also pencils it adds only the extra homes (a six-unit building
+# instead of a fourplex adds two). Production under rights the baseline's
+# permit history already reflects stays in the baseline and is not counted
+# again.
+missing_middle_application:
+  states: [VT]
+  provision: vt_24vsa_4412_1_d
+  # Each window year's rights are read on this day (mid-year).
+  read_on: "07-01"
+  # What is known about a district whose own bylaw allows one home: it allows
+  # year-round residential use, it cannot require multiunit buildings of more
+  # than four homes (it allows none), and its own by-right maximum is one.
+  district:
+    year_round_residential: true
+    allows_residential: true
+    required_min_units: 0
+    local_max_units: 1
+  # Service of the lot. "unknown" is kept as unknown by the rights test; the
+  # funnel turns it into a likely range with the two shares below.
+  service_classes:
+    served: {municipal_water: true, municipal_sewer: true}
+    unserved: {municipal_water: false, municipal_sewer: false}
+    unknown: {municipal_water: null, municipal_sewer: null}
+  # Ledger entries (assumptions/parameters.yaml) that split each tract's lots
+  # into served and unserved, from the pack's mapped sewer share (infra_tract).
+  service_share:
+    water_share_in_sewer_area: missing_middle.floor_water_share_in_sewer_area
+    served_share_no_sewer_record: missing_middle.floor_served_share_no_sewer_record
+  # The rights the baseline's permit history already reflects: Act 47 of 2023
+  # (evidence record vt.act47_2023_home) put the duplex and four-unit rights in
+  # force on July 1, 2023 with the operative terms coded for vt_4412_1d_act179,
+  # so the permits since mid-2023 already include building under them.
+  history:
+    version: vt_4412_1d_act179
+    since: 2023-07-01

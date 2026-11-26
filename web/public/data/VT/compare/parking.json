@@ -1,0 +1,1 @@
+{"$packed":1,"$pool":[],"$data":{"state":"VT","seed":0,"draws":2000,"columns":[{"label":"this scenario","reforms":["parking"],"overrides":{},"cycle":"typical","baseline":{"$s":36},"reform_results":{"parking":{"$s":7938}},"package":{"reforms":["parking"],"combined":{"$s":7864},"pct_change":{"$s":7866},"waterfall":{"$s":7902}},"total":{"$s":7905},"hashes":{"$s":3}}]},"$shared":1}

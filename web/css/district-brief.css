@@ -1,0 +1,391 @@
+/*
+ * The district view: the layer's controls and key, "Find my district", the district panel,
+ * and its one-page printed brief. Colours are the shared tokens (css/tokens.css) only.
+ * Loaded with web/js/ui/district-panel.js.
+ */
+
+/* ---------- Map controls: the search; the map key: the chamber switch ---------- */
+.district-find {
+  position: relative;
+}
+
+/* On a laptop screen the map controls row is tight: the button keeps its icon and its
+   spoken name (the label is hidden from sight only). */
+@media (min-width: 768px) and (max-width: 1399px) {
+  .district-btn .district-btn-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
+.district-chamber {
+  margin-bottom: var(--space-2);
+}
+
+.district-find-list {
+  position: absolute;
+  bottom: calc(100% + 6px);
+  left: 0;
+  z-index: 20;
+  width: 300px;
+  max-width: calc(100vw - 32px);
+  max-height: 280px;
+  margin: 0;
+  padding: 4px;
+  overflow-y: auto;
+  list-style: none;
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface);
+  box-shadow: var(--shadow-2);
+  pointer-events: auto;
+}
+
+.district-find-opt,
+.district-find-none {
+  display: flex;
+  flex-direction: column;
+  gap: 1px;
+  padding: 6px 8px;
+  border-radius: var(--radius-sm);
+  font-size: var(--text-xs);
+  color: var(--text);
+  cursor: pointer;
+}
+
+.district-find-none {
+  color: var(--text-muted);
+  cursor: default;
+}
+
+.district-find-opt.is-on {
+  background: var(--accent-soft);
+}
+
+.district-find-hint {
+  color: var(--text-muted);
+}
+
+/* ---------- The hatch swatch: the split-share caveat ---------- */
+.key-swatch.is-hatch {
+  width: 14px;
+  min-width: 14px;
+  border: 1px solid var(--line-strong);
+  background: repeating-linear-gradient(-45deg, var(--text-muted) 0 1px, transparent 1px 4px);
+}
+
+/* ---------- The map key's district part ---------- */
+.district-key .key-list {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  margin: var(--space-2) 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.district-key .key-list li {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.district-note {
+  color: var(--notice-text);
+}
+
+/* ---------- The district panel ---------- */
+.hud.has-district .hud-mode .dock-right {
+  display: none;
+}
+
+.district-brief {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  outline: none;
+}
+
+.district-print-head {
+  display: none;
+}
+
+.district-label {
+  margin: 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.district-big {
+  margin: 2px 0;
+  font-size: var(--text-2xl);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+  color: var(--text);
+}
+
+.district-mid,
+.district-meta,
+.district-note {
+  margin: 0;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.district-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: var(--space-2);
+  font-size: var(--text-xs);
+}
+
+.district-caveat {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  margin: 0;
+  padding: var(--space-3);
+  border: 1px solid var(--notice-line);
+  border-radius: var(--radius-sm);
+  background: var(--notice-bg);
+  font-size: var(--text-sm);
+  color: var(--notice-text);
+}
+
+.district-caveat .key-swatch {
+  flex: none;
+  margin-top: 3px;
+}
+
+.district-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+}
+
+.district-h {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--text);
+}
+
+.district-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--text-xs);
+}
+
+.district-table th,
+.district-table td {
+  padding: 5px 4px;
+  border-bottom: 1px solid var(--line);
+  text-align: left;
+  vertical-align: top;
+}
+
+.district-table thead th {
+  font-weight: var(--weight-medium);
+  color: var(--text-muted);
+}
+
+.district-table tbody th {
+  font-weight: var(--weight-regular);
+}
+
+.district-table tr.is-pkg th,
+.district-table tr.is-pkg td {
+  font-weight: var(--weight-bold);
+}
+
+.district-bar {
+  display: block;
+  margin-top: 4px;
+}
+
+.district-drivers,
+.district-counties {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+
+.district-driver {
+  display: inline;
+  margin: 0;
+  color: var(--text);
+}
+
+.district-driver.is-none {
+  color: var(--text-muted);
+}
+
+.district-load {
+  align-self: flex-start;
+}
+
+.district-counties li {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-3);
+  font-size: var(--text-xs);
+}
+
+.district-share {
+  color: var(--text-muted);
+  text-align: right;
+}
+
+.district-foot {
+  padding-top: var(--space-2);
+  border-top: 1px solid var(--line);
+  font-size: var(--text-xs);
+  color: var(--text-quiet);
+}
+
+.district-foot p {
+  margin: 0 0 2px;
+}
+
+/* ---------- The printed brief: the district panel alone, on one page ---------- */
+/* The page size is set only while the brief prints (ui/district-panel.js printBrief), so the
+   slides keep their landscape page. */
+@media print {
+  :root[data-print="district"] body {
+    background: #fff;
+  }
+
+  :root[data-print="district"] .hud-mode,
+  :root[data-print="district"] .dock-left,
+  :root[data-print="district"] .district-dock .dock-head,
+  :root[data-print="district"] .toast-region,
+  :root[data-print="district"] .skip-link,
+  :root[data-print="district"] .district-load,
+  :root[data-print="district"] .district-hover {
+    display: none !important;
+  }
+
+  :root[data-print="district"] .dock-right {
+    animation: none;
+    border: 0;
+    box-shadow: none;
+  }
+
+  :root[data-print="district"] .district-print-head {
+    display: block;
+    padding-bottom: 6px;
+    border-bottom: 2px solid var(--text);
+  }
+
+  .district-print-kicker,
+  .district-print-sub {
+    margin: 0;
+    font-size: 9pt;
+    color: var(--text-muted);
+  }
+
+  .district-print-title {
+    margin: 2px 0;
+    font-size: 17pt;
+    color: var(--text);
+  }
+
+  /* Smaller type on paper so the whole brief, with every reform's limits, fits one page. */
+  :root[data-print="district"] .district-brief {
+    gap: 6px;
+    font-size: 9pt;
+    zoom: 0.74;
+  }
+
+  :root[data-print="district"] .district-big {
+    font-size: 18pt;
+  }
+
+  :root[data-print="district"] .district-table {
+    font-size: 8.5pt;
+  }
+
+  :root[data-print="district"] .district-table th,
+  :root[data-print="district"] .district-table td {
+    padding: 2px 4px;
+  }
+
+  :root[data-print="district"] .district-bar {
+    display: none;
+  }
+
+  :root[data-print="district"] .is-limits {
+    display: block;
+    columns: 3;
+    column-gap: 18px;
+  }
+
+  :root[data-print="district"] .is-limits .district-h {
+    column-span: all;
+    margin-bottom: 2px;
+  }
+
+  :root[data-print="district"] .district-limits {
+    margin: 0 0 4px;
+    padding: 0;
+    border: 0;
+    background: none;
+    break-inside: avoid;
+  }
+
+  :root[data-print="district"] .district-limits summary {
+    padding: 0;
+    font-size: 8.5pt;
+    font-weight: var(--weight-bold);
+    list-style: none;
+  }
+
+  :root[data-print="district"] .district-limits .limit-count {
+    display: none;
+  }
+
+  :root[data-print="district"] .limits-list {
+    margin: 1px 0 0;
+    padding-left: 12px;
+    gap: 1px;
+    font-size: 7.5pt;
+    line-height: 1.25;
+  }
+
+  :root[data-print="district"] .limits-list li {
+    margin: 0 0 1px;
+    padding: 0;
+  }
+
+  :root[data-print="district"] .district-note,
+  :root[data-print="district"] .district-drivers {
+    font-size: 8pt;
+  }
+
+  :root[data-print="district"] .district-counties {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    column-gap: 16px;
+    row-gap: 1px;
+  }
+
+  :root[data-print="district"] .district-caveat {
+    break-inside: avoid;
+  }
+
+  :root[data-print="district"] .key-swatch {
+    print-color-adjust: exact;
+    -webkit-print-color-adjust: exact;
+  }
+}

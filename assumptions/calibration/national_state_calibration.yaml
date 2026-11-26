@@ -1,0 +1,583 @@
+# Calibration (validation): national state-total calibration (generated; do not edit).
+# Written by `visionhousing validate-national-state-calibration` from the Census
+# Building Permits Survey county files of every state. A pre-registered test (block
+# national_state_calibration in assumptions/backtest.yaml) of a state range built
+# from every state's earlier state-total errors. The baseline reads decision.outcome
+# and production_ends. Method: docs/modules/baseline.md.
+
+version: 1
+id: national_state_calibration_2026_11
+label: National state-total calibration of the baseline state range (pre-registered test)
+status: validation
+use: 'If decision.outcome is ''adopt'', the baseline''s STATE range is the state''s point projection times
+  production_ends[rule][variant], holding the P50; county ranges are unchanged. With ''keep_current''
+  nothing changes. Method: docs/modules/baseline.md.'
+provenance:
+  summary: How often a state range built from every state's earlier state-total errors caught the real
+    five-year total, out of time.
+  measured_on: '2026-11-25'
+  method: National county panel from the BPS annual county files (the donor-pool study's cache); visionhousing.validation.national_state;
+    settings in assumptions/backtest.yaml (national_state_calibration).
+  generated_by: visionhousing validate-national-state-calibration
+  sources:
+  - id: bps_county_annual
+    citation: U.S. Census Bureau, Building Permits Survey, county annual files
+    url: https://www2.census.gov/econ/bps/County/
+    licence: Public domain (U.S. government work)
+  limits:
+  - Every state's errors at one start year share the national housing cycle, so the pool holds far fewer
+    independent periods than cases.
+  - Each named state is scored at a handful of overlapping five-year windows; its own coverage moves in
+    steps of one case.
+  - Each named state's rule is the one its contest picks today on the full record, which saw the same
+    target years, so its coverage is slightly favourable.
+preregistration:
+  block: national_state_calibration
+  file: assumptions/backtest.yaml
+  sha256: 9c74cf2d20535af5f95f9bb0c3897bcd16dc0509d72ad0671b5459fb0ca4819e
+  recorded_on: '2026-11-25'
+  verified: true
+settings:
+  lead_years: 2
+  horizon_years: 5
+  origins:
+  - 1999
+  - 2019
+  rules:
+    PA: top_down_share
+    VT: shrink_to_group
+    MA: last_3_mean
+    WY: last_3_mean
+  other_rule: last_3_mean
+  states_scored: 51
+variants:
+  pooled:
+    pooled:
+      cases: 408
+      covered: 283
+      coverage: 0.6936
+      width: 1.0931
+      above: 123
+      below: 2
+    named_states:
+      PA:
+        cases: 8
+        covered: 7
+        coverage: 0.875
+        width: 1.0469
+        above: 1
+        below: 0
+      VT:
+        cases: 8
+        covered: 8
+        coverage: 1.0
+        width: 1.0469
+        above: 0
+        below: 0
+      MA:
+        cases: 8
+        covered: 6
+        coverage: 0.75
+        width: 1.095
+        above: 2
+        below: 0
+      WY:
+        cases: 8
+        covered: 8
+        coverage: 1.0
+        width: 1.095
+        above: 0
+        below: 0
+    named_detail:
+      PA:
+      - origin: 2012
+        actual: 117125.0
+        low: 39201.964
+        p50: 96355.0
+        high: 136593.4536
+        pool_cases: 408
+      - origin: 2013
+        actual: 115605.0
+        low: 34072.2125
+        p50: 93428.0
+        high: 130104.287
+        pool_cases: 459
+      - origin: 2014
+        actual: 118457.0
+        low: 36546.2662
+        p50: 100212.0
+        high: 138933.9795
+        pool_cases: 510
+      - origin: 2015
+        actual: 143048.0
+        low: 39737.8139
+        p50: 103326.0
+        high: 142532.4565
+        pool_cases: 561
+      - origin: 2016
+        actual: 148613.0
+        low: 43735.1189
+        p50: 111662.0
+        high: 153379.2516
+        pool_cases: 612
+      - origin: 2017
+        actual: 150608.0
+        low: 46355.2276
+        p50: 115450.0
+        high: 163938.6274
+        pool_cases: 663
+      - origin: 2018
+        actual: 151879.0
+        low: 48207.6416
+        p50: 117125.0
+        high: 176750.9574
+        pool_cases: 714
+      - origin: 2019
+        actual: 151882.0
+        low: 48318.4974
+        p50: 115605.0
+        high: 189630.2924
+        pool_cases: 765
+      VT:
+      - origin: 2012
+        actual: 9144.0
+        low: 2738.0958
+        p50: 6730.0
+        high: 9540.4903
+        pool_cases: 408
+      - origin: 2013
+        actual: 9399.0
+        low: 2474.4184
+        p50: 6785.0
+        high: 9448.5335
+        pool_cases: 459
+      - origin: 2014
+        actual: 9478.0
+        low: 2539.6978
+        p50: 6964.0
+        high: 9654.894
+        pool_cases: 510
+      - origin: 2015
+        actual: 10026.0
+        low: 2939.3968
+        p50: 7643.0
+        high: 10543.0924
+        pool_cases: 561
+      - origin: 2016
+        actual: 10680.0
+        low: 3178.4357
+        p50: 8115.0
+        high: 11146.7879
+        pool_cases: 612
+      - origin: 2017
+        actual: 11056.0
+        low: 3438.1967
+        p50: 8563.0
+        high: 12159.4324
+        pool_cases: 663
+      - origin: 2018
+        actual: 11909.0
+        low: 3763.5917
+        p50: 9144.0
+        high: 13799.0246
+        pool_cases: 714
+      - origin: 2019
+        actual: 12126.0
+        low: 3928.4249
+        p50: 9399.0
+        high: 15417.457
+        pool_cases: 765
+      MA:
+      - origin: 2012
+        actual: 82970.0
+        low: 18076.5716
+        p50: 46518.3333
+        high: 64156.5458
+        pool_cases: 408
+      - origin: 2013
+        actual: 85849.0
+        low: 20385.408
+        p50: 55675.0
+        high: 76305.0176
+        pool_cases: 459
+      - origin: 2014
+        actual: 85450.0
+        low: 25233.3028
+        p50: 66943.3333
+        high: 91085.1637
+        pool_cases: 510
+      - origin: 2015
+        actual: 89015.0
+        low: 30081.361
+        p50: 77465.0
+        high: 102921.039
+        pool_cases: 561
+      - origin: 2016
+        actual: 88117.0
+        low: 32293.4801
+        p50: 80330.0
+        high: 113867.3686
+        pool_cases: 612
+      - origin: 2017
+        actual: 84287.0
+        low: 35011.857
+        p50: 85733.3333
+        high: 134533.5903
+        pool_cases: 663
+      - origin: 2018
+        actual: 81260.0
+        low: 35355.6187
+        p50: 85100.0
+        high: 147072.7083
+        pool_cases: 714
+      - origin: 2019
+        actual: 76712.0
+        low: 36461.6141
+        p50: 86895.0
+        high: 153923.815
+        pool_cases: 765
+      WY:
+      - origin: 2012
+        actual: 9269.0
+        low: 4223.9762
+        p50: 10870.0
+        high: 14991.5443
+        pool_cases: 408
+      - origin: 2013
+        actual: 9076.0
+        low: 3981.2723
+        p50: 10873.3333
+        high: 14902.3779
+        pool_cases: 459
+      - origin: 2014
+        actual: 9301.0
+        low: 3964.7307
+        p50: 10518.3333
+        high: 14311.5687
+        pool_cases: 510
+      - origin: 2015
+        actual: 10280.0
+        low: 3950.5288
+        p50: 10173.3333
+        high: 13516.4272
+        pool_cases: 561
+      - origin: 2016
+        actual: 11359.0
+        low: 3705.8641
+        p50: 9218.3333
+        high: 13066.9409
+        pool_cases: 612
+      - origin: 2017
+        actual: 11228.0
+        low: 3781.6073
+        p50: 9260.0
+        high: 14530.8831
+        pool_cases: 663
+      - origin: 2018
+        actual: 11655.0
+        low: 3784.1452
+        p50: 9108.3333
+        high: 15741.3308
+        pool_cases: 714
+      - origin: 2019
+        actual: 11765.0
+        low: 3808.6186
+        p50: 9076.6667
+        high: 16078.1997
+        pool_cases: 765
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    judged:
+      pooled_coverage: 0.6936
+      pooled_cases: 408
+      short_states: []
+      passes: false
+      reason: under_band
+  shock:
+    pooled:
+      cases: 408
+      covered: 358
+      coverage: 0.8775
+      width: 1.6059
+      above: 49
+      below: 1
+    named_states:
+      PA:
+        cases: 8
+        covered: 8
+        coverage: 1.0
+        width: 1.5146
+        above: 0
+        below: 0
+      VT:
+        cases: 8
+        covered: 8
+        coverage: 1.0
+        width: 1.5146
+        above: 0
+        below: 0
+      MA:
+        cases: 8
+        covered: 7
+        coverage: 0.875
+        width: 1.6096
+        above: 1
+        below: 0
+      WY:
+        cases: 8
+        covered: 8
+        coverage: 1.0
+        width: 1.6096
+        above: 0
+        below: 0
+    named_detail:
+      PA:
+      - origin: 2012
+        actual: 117125.0
+        low: 29816.7943
+        p50: 96355.0
+        high: 163181.5691
+        pool_cases: 408
+      - origin: 2013
+        actual: 115605.0
+        low: 28764.5965
+        p50: 93428.0
+        high: 158337.3961
+        pool_cases: 459
+      - origin: 2014
+        actual: 118457.0
+        low: 30853.2532
+        p50: 100212.0
+        high: 169998.4657
+        pool_cases: 510
+      - origin: 2015
+        actual: 143048.0
+        low: 31973.9514
+        p50: 103326.0
+        high: 175281.0189
+        pool_cases: 561
+      - origin: 2016
+        actual: 148613.0
+        low: 34378.4772
+        p50: 111662.0
+        high: 189239.5248
+        pool_cases: 612
+      - origin: 2017
+        actual: 150608.0
+        low: 35544.726
+        p50: 115450.0
+        high: 205206.8522
+        pool_cases: 663
+      - origin: 2018
+        actual: 151879.0
+        low: 36060.4247
+        p50: 117125.0
+        high: 244504.6281
+        pool_cases: 714
+      - origin: 2019
+        actual: 151882.0
+        low: 35564.0628
+        p50: 115605.0
+        high: 259213.3081
+        pool_cases: 765
+      VT:
+      - origin: 2012
+        actual: 9144.0
+        low: 2082.5803
+        p50: 6730.0
+        high: 11397.5607
+        pool_cases: 408
+      - origin: 2013
+        actual: 9399.0
+        low: 2088.9646
+        p50: 6785.0
+        high: 11498.9
+        pool_cases: 459
+      - origin: 2014
+        actual: 9478.0
+        low: 2144.0751
+        p50: 6964.0
+        high: 11813.6482
+        pool_cases: 510
+      - origin: 2015
+        actual: 10026.0
+        low: 2365.1057
+        p50: 7643.0
+        high: 12965.4959
+        pool_cases: 561
+      - origin: 2016
+        actual: 10680.0
+        low: 2498.4448
+        p50: 8115.0
+        high: 13752.9217
+        pool_cases: 612
+      - origin: 2017
+        actual: 11056.0
+        low: 2636.375
+        p50: 8563.0
+        high: 15220.3229
+        pool_cases: 663
+      - origin: 2018
+        actual: 11909.0
+        low: 2815.2531
+        p50: 9144.0
+        high: 19088.5833
+        pool_cases: 714
+      - origin: 2019
+        actual: 12126.0
+        low: 2891.4547
+        p50: 9399.0
+        high: 21074.7449
+        pool_cases: 765
+      MA:
+      - origin: 2012
+        actual: 82970.0
+        low: 14026.8738
+        p50: 46518.3333
+        high: 76501.3099
+        pool_cases: 408
+      - origin: 2013
+        actual: 85849.0
+        low: 16787.923
+        p50: 55675.0
+        high: 91559.8243
+        pool_cases: 459
+      - origin: 2014
+        actual: 85450.0
+        low: 20185.7122
+        p50: 66943.3333
+        high: 110484.8558
+        pool_cases: 510
+      - origin: 2015
+        actual: 89015.0
+        low: 23356.6649
+        p50: 77465.0
+        high: 127850.0626
+        pool_cases: 561
+      - origin: 2016
+        actual: 88117.0
+        low: 24196.0598
+        p50: 80330.0
+        high: 152216.4212
+        pool_cases: 612
+      - origin: 2017
+        actual: 84287.0
+        low: 25823.5884
+        p50: 85733.3333
+        high: 193944.9412
+        pool_cases: 663
+      - origin: 2018
+        actual: 81260.0
+        low: 25658.7127
+        p50: 85100.0
+        high: 194205.6966
+        pool_cases: 714
+      - origin: 2019
+        actual: 76712.0
+        low: 26201.8243
+        p50: 86895.0
+        high: 196332.1458
+        pool_cases: 765
+      WY:
+      - origin: 2012
+        actual: 9269.0
+        low: 3277.678
+        p50: 10870.0
+        high: 17876.1615
+        pool_cases: 408
+      - origin: 2013
+        actual: 9076.0
+        low: 3278.6831
+        p50: 10873.3333
+        high: 17881.6433
+        pool_cases: 459
+      - origin: 2014
+        actual: 9301.0
+        low: 3171.6384
+        p50: 10518.3333
+        high: 17359.7053
+        pool_cases: 510
+      - origin: 2015
+        actual: 10280.0
+        low: 3067.387
+        p50: 10173.3333
+        high: 16790.3092
+        pool_cases: 561
+      - origin: 2016
+        actual: 11359.0
+        low: 2776.6382
+        p50: 9218.3333
+        high: 17467.717
+        pool_cases: 612
+      - origin: 2017
+        actual: 11228.0
+        low: 2789.1885
+        p50: 9260.0
+        high: 20947.8634
+        pool_cases: 663
+      - origin: 2018
+        actual: 11655.0
+        low: 2746.2762
+        p50: 9108.3333
+        high: 20786.019
+        pool_cases: 714
+      - origin: 2019
+        actual: 11765.0
+        low: 2736.9265
+        p50: 9076.6667
+        high: 20507.986
+        pool_cases: 765
+    origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    judged:
+      pooled_coverage: 0.8775
+      pooled_cases: 408
+      short_states: []
+      passes: false
+      reason: over_band
+decision:
+  outcome: keep_current
+  variant: null
+  reason: no variant passes
+production_ends:
+  top_down_share:
+    pooled:
+      low: 0.4495
+      high: 1.6631
+    shock:
+      low: 0.3148
+      high: 2.0324
+    pool_cases: 1071
+    pool_origins: 21
+  shrink_to_group:
+    pooled:
+      low: 0.4495
+      high: 1.6631
+    shock:
+      low: 0.3148
+      high: 2.0324
+    pool_cases: 1071
+    pool_origins: 21
+  last_3_mean:
+    pooled:
+      low: 0.4524
+      high: 1.6626
+    shock:
+      low: 0.327
+      high: 2.0953
+    pool_cases: 1071
+    pool_origins: 21

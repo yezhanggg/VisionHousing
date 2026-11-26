@@ -12,6 +12,11 @@ that the interface, the report writer and the slides all read:
 - ``funnels``: each reform's steps, each with its range, formula and a plain
   sentence on what the step means;
 - ``drivers``: the top inputs from the sensitivity tornado, with sentences;
+- ``readouts``: per reform, the frequency wording ("In eight of ten simulated
+  futures ..."), the paired sentence, the chance of adding at least N homes,
+  the share of the baseline and what the reform costs (``explain.readouts``);
+- ``narrowing``: per reform, each input's share of the uncertainty and the
+  research agenda ("Knowing X would shrink the range by about Y%");
 - ``waterfall``: how the reforms add up as a package;
 - ``limits``: what each estimate cannot tell you (``assumptions/limits.yaml``);
 - ``numbers``: the "explain this number" payload for every record id
@@ -55,7 +60,7 @@ __all__ = [
 ]
 
 DISCLAIMER = "Decision support, not a forecast. Not an official state document."
-"""Printed on every brief and every slide (decision D-15)."""
+"""Printed on every brief and every slide."""
 
 VERDICT_WORDS = ("Adds a lot", "Adds some", "Little effect", "Overlaps")
 """The four verdict words, strongest first; "Overlaps" applies only in a package."""
@@ -328,12 +333,15 @@ def headline(result: Any) -> dict[str, Any]:
     b = result.baseline
     b_lo, b_hi = _cite("baseline", "p10", b.p10), _cite("baseline", "p90", b.p90)
     keys = list(result.package.reforms) if result.package is not None else []
-    numbers = [
-        {
-            "key": "baseline",
-            **_range_item("baseline", b, _plain("Baseline: homes permitted under today's rules")),
-        }
-    ]
+    from visionhousing.baseline.reliability import range_tag
+
+    words = "Baseline: homes permitted under today's rules"
+    tag = range_tag(b.formula)
+    # A real state's baseline range says how often ranges like it caught past totals.
+    b_label = (
+        _label("baseline", "formula", f"{words}, {tag}", source=b.formula) if tag else _plain(words)
+    )
+    numbers = [{"key": "baseline", **_range_item("baseline", b, b_label)}]
     if not keys:
         text = (
             f"Over {years}, {state} would likely permit between {b_lo.shown} and "
@@ -370,7 +378,11 @@ def headline(result: Any) -> dict[str, Any]:
     numbers.append(
         {
             "key": "added",
-            **_range_item("package.combined", p.combined, _plain("Homes added by the reforms")),
+            **_range_item(
+                "package.combined",
+                p.combined,
+                _plain(w.added_label(keys, "Homes added by the reforms")),
+            ),
         }
     )
     numbers.append(
@@ -691,12 +703,39 @@ def waterfall(result: Any) -> dict[str, Any] | None:
 # ---------------------------------------------------------------- limits
 
 
+def weakest_places(result: Any) -> str | None:
+    """One sentence naming where the baseline's back-test has been weakest, or ``None``.
+
+    Written by rule from the chosen rule's back-test by kind of place
+    (``baseline.places``), with no figures, so it can sit in every "what the
+    model cannot tell you" list. ``None`` when the run kept no context.
+    """
+    rc = getattr(result, "run_context", None)
+    if rc is None:
+        return None
+    from visionhousing.baseline.places import place_backtest_for_context
+    from visionhousing.ledger.loader import ROOT
+
+    where = ROOT / str(rc.state.source)
+    folder = where if rc.state.source and where != ROOT and where.is_dir() else None
+    return place_backtest_for_context(rc.state, rc.baseline.rule, folder).limits
+
+
 def limits_block(result: Any) -> dict[str, Any]:
-    """What the estimates cannot tell you: general, baseline, package and each reform."""
+    """What the estimates cannot tell you: general, baseline, package and each reform.
+
+    The baseline and every reform also get the sentence of :func:`weakest_places`:
+    a reform's change rests on the baseline, so where the baseline has been least
+    accurate, the change is least certain too.
+    """
+    weak = weakest_places(result)
 
     def one(key: str) -> dict[str, Any]:
         lim = limits_for(key)
-        return {"key": key, "title": lim.title, "items": [_plain(t) for t in lim.items]}
+        items = [_plain(t) for t in lim.items]
+        if weak and key not in ("general", "package"):
+            items.append(_plain(weak))
+        return {"key": key, "title": lim.title, "items": items}
 
     out = {"general": one("general"), "baseline": one("baseline")}
     if result.package is not None and len(result.package.reforms) > 1:
@@ -768,6 +807,11 @@ def explain(result: Any, *, with_drivers: bool = True, numbers: bool = True) -> 
         The explanation (see the module summary for its keys). Same result in,
         same dictionary out.
     """
+    from visionhousing.explain.readouts import (
+        headline_frequency,
+        narrowing_block,
+        reform_readouts,
+    )
     from visionhousing.explain.slides import slides
 
     index = record_index(result)
@@ -777,8 +821,10 @@ def explain(result: Any, *, with_drivers: bool = True, numbers: bool = True) -> 
     out: dict[str, Any] = {
         "stamp": stamp(result),
         "span": span(result)[0] if span(result) else None,
-        "headline": headline(result),
+        "headline": {**headline(result), "frequency": headline_frequency(result)},
         "verdicts": verdicts(result),
+        "readouts": {k: reform_readouts(result, k) for k in result.reforms},
+        "narrowing": {k: narrowing_block(result, k) for k in result.reforms},
         "funnels": {k: funnel(result, k) for k in result.reforms},
         "drivers": {k: top_drivers(result, k) for k in result.reforms} if with_drivers else {},
         "waterfall": waterfall(result),

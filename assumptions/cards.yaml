@@ -1,0 +1,129 @@
+# VisionHousing: words and choices behind the explanation cards (visionhousing.api.cards).
+#
+# Nothing here is a model number. This file says which named variants
+# (assumptions/variants.yaml) give the lever card its grounded range, the one next
+# check to make for each reform, the reform-type names the confidence panel shows,
+# and the words of the implementation-status rows. Every number the cards show is
+# worked out by the engine or the API from these choices.
+
+version: 1
+
+# ------------------------------------------------------------------ confidence panel
+# Names for the evidence panel's policy types (assumptions/evidence/states/).
+# The five benchmark reforms come first, in this order.
+type_labels:
+  adu: Accessory dwelling units
+  missing_middle: Missing middle
+  tod: Transit-oriented density
+  parking: Parking reduction
+  fees: Fee reduction
+  commercial_land_housing: Homes on commercial land
+  adaptive_reuse: Adaptive reuse
+  starter_lots: Starter-home lots
+  permit_timing: Permit timing
+  infrastructure_finance: Infrastructure finance
+  water_compliance: Water and sewer compliance
+  court_decision: Court decisions
+benchmark_types: [adu, missing_middle, tod, parking, fees]
+
+# ------------------------------------------------------------------ lever card
+# For each reform: the named variants whose paired difference from the benchmark
+# run is the "effect within a grounded range", and the one next check a reader
+# can make to narrow it. A variant runs on the same seed and draws as the
+# benchmark, so the difference is taken draw by draw (P10 / P50 / P90 of
+# variant minus benchmark).
+lever:
+  id: cards.lever_2026_11
+  rule: >-
+    The binding factor is the funnel stage that loses the largest share of the
+    step before it (assumptions/decision.yaml). The effect range is the paired
+    difference, draw by draw, between a named variant (assumptions/variants.yaml)
+    and the benchmark run of the same reform, on the same seed and draws.
+  reforms:
+    adu:
+      # The last three use the hazard take-up method (scenarios/adu_budget.py); their
+      # paired change against the benchmark includes that method's disclosed difference
+      # (docs/methods/adu_levers.md). adu_financing_access has no appropriation limit.
+      variants: [adu_financing_tight, adu_financing_easy, adu_timing_reliable, adu_financing_access, adu_both,
+                 adu_timing_conserved, adu_finance_budget, adu_finance_budget_loan]
+      verify: >-
+        Ask two or three lenders active in the county what share of an ADU's
+        cost they lend against the home, and at what rate above a mortgage;
+        place the answers between the tight and easy financing cases.
+    missing_middle:
+      variants: [missing_middle_prototype_choice]
+      verify: >-
+        Price one recent sale of a single-family lot large enough for a
+        fourplex, and compare it with the land value the model's prototype
+        test allows.
+    tod:
+      variants: [tod_lowrise]
+      verify: >-
+        List the parcels within a half-mile walk of the busiest stop and check
+        which could be assembled for a walk-up or mid-rise under today's code.
+    parking:
+      variants: [parking_provided_spaces]
+      verify: >-
+        Count the spaces built per home in the last few multifamily projects
+        near transit and elsewhere; set them against the minimum the code required.
+    fees:
+      variants: [fees_deferral]
+      verify: >-
+        Collect the fee schedule of the largest municipality and school
+        district in the county and total what a new home pays at permit.
+
+# ------------------------------------------------------------------ implementation rows
+# Which law-timeline housing types (assumptions/law/timeline.yaml) count for each
+# reform, and the words of each step of a row.
+implementation:
+  housing_types:
+    adu: [adu, all]
+    missing_middle: [missing_middle, multifamily, all]
+    tod: [tod, multifamily, all]
+    parking: [parking, all]
+    fees: [fees, all]
+  legal_words:
+    pending: Pending bill (not law)
+    enacted: Enacted, effective date not recorded
+    legally_effective: Legally effective
+    stayed: Stayed by a court
+    locally_implemented: Legally effective
+    practically_usable: Legally effective
+    ended: No longer in force
+  local_words:
+    done: local guidance issued
+    missing: local guidance not recorded
+    not_yet: no local step while not law
+  permit_words:
+    done: permit results published
+    missing: permit results not yet published
+    not_yet: no permit results while not law
+  pending_note: A pending bill does not change the baseline; the model counts it only in its own bill run.
+  none_text: No verified rule record for this place and reform yet; the status is unknown, not "no rule".
+
+# ------------------------------------------------------------------ budget and target
+# Words and choices of the Pennsylvania budget-and-target panel and the question box's
+# budget answers (visionhousing.api.budget_view, web/js/ui/budget-target.js). Every number
+# the panel shows is a cell of the ADU budget grid (assumptions/adu_budget_grid.yaml,
+# scenarios/adu_budget.py) written as text by the API; nothing is interpolated.
+budget_target:
+  id: cards.budget_target_2026_11
+  # Accepted chance: the smallest share of modeled draws a reader will accept (choices only).
+  accept_levels: [0.5, 0.8, 0.9]
+  arm_words:
+    law_only: Law change only
+    finance_only: Program only, today's law
+    both: Law change and program
+  lever_words:
+    law: The law change (who gains a legal right to build)
+    program: The program money (owners the award brings in)
+  flag_words:
+    input_missing: "Input missing: give a target to compare options."
+    outside_tested_range: "Outside the tested range: the grid has no cell there, and it does not extrapolate."
+    between_tested_values: "Between tested values: shown as a bracket of the two tested cells, never interpolated."
+    budget_exceeded: "Budget exceeded: some tested options cost more than the ceiling and are listed apart."
+    no_tested_option_meets_both: "No tested option meets both the target (at the accepted share of draws) and the budget."
+  uncapped_note: >-
+    The original financing variant has no appropriation limit: every owner who wants help
+    gets it. Its paired change is a scenario difference under that assumption, never the
+    result of a budget-capped program.

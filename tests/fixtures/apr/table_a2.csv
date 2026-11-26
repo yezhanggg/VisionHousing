@@ -1,0 +1,12 @@
+JURIS_NAME,CNTY_NAME,YEAR,PRIOR_APN,APN,STREET_ADDRESS,PROJECT_NAME,JURS_TRACKING_ID,UNIT_CAT,TENURE,ENT_APPROVE_DT1,NO_ENTITLEMENTS,BP_ISSUE_DT1,NO_BUILDING_PERMITS,CO_ISSUE_DT1,NO_OTHER_FORMS_OF_READINESS,APPROVE_SB35,NOTES
+ALPHA,Test,2019,,111-111-111,1 Example St,,B1,ADU,Renter,,0,2019-06-01,1,,0,N,earlier ADU on the same lot
+ALPHA,Test,2020,,111-111-111,1 Example St,,B2,ADU,Renter,,0,2020-04-09,1,,0,N,synthetic row
+ALPHA,Test,2021,,111-111-111,1 Example St,,B2,ADU,Renter,,0,,0,2021-01-04,1,N,synthetic row
+ALPHA,Test,2022,,333-333-333,3 Example St,,B3,SFD,Owner,2022-05-01,2,2022-08-01,2,,0,SB 9 (2021) - Duplex in SF Zone,synthetic row
+ALPHA,Test,2021,,444-444-444,4 Example St,,B4,5+,Renter,2021-09-01,40,,0,,0,SB 35 (2017),synthetic row
+ALPHA,Test,2023,,444-444-444,4 Example St,,B4,5+,Renter,,0,2023-03-01,40,,0,NONE,synthetic row
+ALPHA,Test,2025,,777-777-777,7 Example St,,B5,ADU,Renter,,0,2024-12-15,1,,0,N,permit date outside the reporting year
+BETA,Test,2019,,666-666-666,6 Example St,,B6,2 to 4,Owner,2019-10-01,3,2020-02-01,3,,0,N,permit reported in the entitlement year row
+BETA,Test,2020,,666-666-666,6 Example St,,B6,2 to 4,Owner,,0,2020-02-01,3,,0,N,synthetic row
+BETA,Test,2019,,121-121-121,12 Example St,,B7,ADU,Renter,,0,2019-03-01,2,,0,N,synthetic row
+BETA,Test,2020,,131-131-131,13 Example St,,B8,SFD,Owner,2020-06-01,1,2020-01-01,1,,0,N,permit before entitlement

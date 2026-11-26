@@ -1,0 +1,573 @@
+# Policy implementation timeline (visionhousing.law.timeline).
+#
+# One record = one status of one provision, for one jurisdiction (state code,
+# 5-digit county or 10-digit municipality code) or one mapped area inside it
+# (area_id, a GeoJSON polygon), for one housing type, over one period.
+#
+# Status ladder: pending -> enacted -> legally_effective -> locally_implemented
+# -> practically_usable; "stayed" pauses a rule (a court order). A pending or
+# enacted-but-not-yet-effective rule leaves the baseline unchanged.
+#
+# Two kinds of date, so older runs reproduce:
+#   start / end                 when the status held in law ("took effect")
+#   verified_on / end_verified_on  when a person confirmed it from the source
+# A run made as of an earlier date ignores records verified after it, and an
+# end verified after it.
+#
+# review: verified records count; unverified ones (for example bill changes
+# found automatically, visionhousing.law.timeline.bill_review_queue) count for
+# nothing until a person checks them against the authoritative source.
+#
+# Unknown stays unknown: a date the source does not give is left empty. A
+# verified record with an empty start must say start_unknown: true. Such a
+# record counts only on or after its verified_on date (the first day a person
+# saw it in force), never earlier: no start date is guessed, and no rule is
+# made to look older than the evidence shows.
+
+version: 1
+
+records:
+  # ------------------------------------------------------------------ Pennsylvania
+  # Bills of the 2025-2026 session: pending, so the baseline is unchanged. Each
+  # page was read on palegis.us on 2026-11-24. A bill not enacted by the
+  # session's last day (2026-11-30) lapses; that end is recorded only once
+  # verified after that date.
+  - record_id: pa_hb2186_pending
+    provision_id: pa_hb2186
+    citation: "HB 2186 (2025-2026), Printer's No. 3373"
+    jurisdiction: PA
+    housing_type: adu
+    status: pending
+    start: 2026-02-02
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    text_version: "PN 3373 (May 6, 2026)"
+    scope: Every municipality with zoning where a home is a permitted use
+    agency: Pennsylvania General Assembly
+    sources: ["https://www.palegis.us/legislation/bills/2025/hb2186"]
+    version_state: draft
+    last_checked_on: 2026-11-25
+    source_fingerprint: "sha256:eb63104280e5f0435cd1e19074d526a27c3b29b1d058a8b9936d82ef507f63fe (13 dated actions as read by legislation.read_bill_status, 2026-11-25)"
+    excerpt_locator: "Bill page, Actions: last action 'Referred to URBAN AFFAIRS AND HOUSING, June 5, 2026' (In the Senate)"
+    note: >-
+      Passed the House 139-62 on June 1, 2026; last action: referred to the
+      Senate Urban Affairs and Housing committee, June 5, 2026.
+  - record_id: pa_sb1346_pending
+    provision_id: pa_sb1346
+    citation: "SB 1346 (2025-2026), Printer's No. 1747"
+    jurisdiction: PA
+    housing_type: adu
+    status: pending
+    start: 2026-05-26
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    text_version: "PN 1747"
+    scope: Municipalities under the Municipalities Planning Code, with zoning
+    agency: Pennsylvania General Assembly
+    sources: ["https://www.palegis.us/legislation/bills/2025/sb1346"]
+    version_state: draft
+    last_checked_on: 2026-11-25
+    source_fingerprint: "sha256:f25941089bd018ddb8472e07046c2a8170e772785bdadcc514b548527721d548 (4 dated actions as read by legislation.read_bill_status, 2026-11-25)"
+    excerpt_locator: "Bill page, Actions: last action 'Laid on the table (Pursuant to Senate Rule 9), Nov. 17, 2026'"
+    note: >-
+      Reported as committed July 12, 2026; last action: laid on the table
+      (Pursuant to Senate Rule 9), November 17, 2026.
+  - record_id: pa_hb2155_pending
+    provision_id: pa_hb2155
+    citation: "HB 2155 (2025-2026), Printer's No. 2789"
+    jurisdiction: PA
+    housing_type: parking
+    status: pending
+    start: 2026-01-26
+    verified_on: 2026-11-23
+    retrieved_on: 2026-11-23
+    agency: Pennsylvania General Assembly
+    sources: ["https://www.palegis.us/legislation/bills/2025/hb2155"]
+    note: Referred to House Housing and Community Development, January 26, 2026.
+  - record_id: pa_hb1459_pending
+    provision_id: pa_hb1459
+    citation: "HB 1459 (2025-2026), Printer's No. 1712"
+    jurisdiction: PA
+    housing_type: multifamily
+    status: pending
+    start: 2025-05-13
+    verified_on: 2026-11-23
+    retrieved_on: 2026-11-23
+    agency: Pennsylvania General Assembly
+    sources: ["https://www.palegis.us/legislation/bills/2025/hb1459"]
+    note: Referred to House Local Government, May 13, 2025.
+
+  # Local ordinances that change the ADU rule. The effective date is recorded
+  # only where an authoritative source states it.
+  #
+  # Pittsburgh, file 2025-1545 (Ordinance 31 of 2026). Read by script on
+  # 2026-11-25 from the City's own legislative system: the Legistar record
+  # (web page, field "Effective date: 10/29/2026") and the Legistar web API
+  # (matter 31504: MatterEnactmentDate 2026-10-27, MatterEnactmentNumber 31,
+  # MatterDate2 2026-10-29, the field the web page labels "Effective date";
+  # history: passed finally as amended 2026-10-27, signed by the Mayor
+  # 2026-10-29; seven text versions). The final text is version 7 (API text
+  # key 35471, last modified 2026-10-27). The attachment server
+  # (pittsburgh.legistar1.com) disallows all robots, so the version 7 PDF
+  # attachment is not used; the operative clauses were read from the API's
+  # version 7 text, with strike-through and underline marks read from its RTF.
+  # Fingerprints: SHA-256 of the version's plain text with white space
+  # collapsed. Earlier drafts are kept for history (version_state: draft).
+  - record_id: pgh_ord31_v1_pending
+    provision_id: pgh_ord_2025_1545
+    citation: "City of Pittsburgh Bill 2025-1545, Version 1"
+    section: "Pittsburgh Code Title Nine (Zoning), Chapters 903-925"
+    jurisdiction: "4200361000"
+    housing_type: adu
+    status: pending
+    version_state: draft
+    start: 2025-07-15
+    end: 2025-10-15
+    verified_on: 2026-11-25
+    end_verified_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    text_version: "Version 1 (API text key 33051, last modified 2025-02-21)"
+    source_fingerprint: "sha256:882bf0d924902000020fc633c32c6bdc0a1f5522e591b7b961d8e5b545f20299 (plain text, white space collapsed)"
+    excerpt_locator: "Legistar history: 2025-07-15 City Council, Read and referred (version 1)"
+    agency: City of Pittsburgh (City Council)
+    sources:
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/33051"
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504/histories"
+    note: File created 2025-02-21; read and referred 2025-07-15; replaced by the substitute (version 2) on 2025-10-15.
+  - record_id: pgh_ord31_v2_pending
+    provision_id: pgh_ord_2025_1545
+    citation: "City of Pittsburgh Bill 2025-1545, Version 2 (substitute)"
+    section: "Pittsburgh Code Title Nine (Zoning), Chapters 903-925"
+    jurisdiction: "4200361000"
+    housing_type: adu
+    status: pending
+    version_state: draft
+    start: 2025-10-15
+    end: 2026-10-21
+    verified_on: 2026-11-25
+    end_verified_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    text_version: "Version 2 (API text key 33906, last modified 2025-10-15)"
+    source_fingerprint: "sha256:498e9356536963147f906e4d6b550b9a2fe80fbc6dcc138b2645edf7db011652 (plain text, white space collapsed)"
+    excerpt_locator: "Legistar history: 2025-10-15 Standing Committees, AMENDED BY SUBSTITUTE (version 2)"
+    agency: City of Pittsburgh (City Council)
+    sources:
+      - "https://pittsburgh.legistar.com/LegislationDetail.aspx?GUID=C15553FF-85B6-480E-ACFF-53F40EF99EA9&ID=7147499&Options=&Search="
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/33906"
+    note: >-
+      The version-specific web display linked in the plan shows version 2
+      (status "Held In Council"); the same page lists the effective date of
+      the enacted file.
+  - record_id: pgh_ord31_v6_pending
+    provision_id: pgh_ord_2025_1545
+    citation: "City of Pittsburgh Bill 2025-1545, Versions 3-6 (committee amendments)"
+    section: "Pittsburgh Code Title Nine (Zoning), Chapters 903-925"
+    jurisdiction: "4200361000"
+    housing_type: adu
+    status: pending
+    version_state: draft
+    start: 2026-10-21
+    end: 2026-10-27
+    verified_on: 2026-11-25
+    end_verified_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    text_version: "Versions 3-6 (API text keys 35434-35437, all last modified 2026-10-22); version 6 shown"
+    source_fingerprint: "sha256:501fe6bb654969cace0dd4cf54a7e36b089deb23ababcf069203287127e6c0b3 (version 6 plain text, white space collapsed)"
+    excerpt_locator: "Legistar history: 2026-10-21 Standing Committees, amended by substitute, amended, affirmatively recommended as amended (version 6)"
+    agency: City of Pittsburgh (City Council)
+    sources:
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/35437"
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504/histories"
+    note: >-
+      Version 3 and 4 texts are identical (sha256 c916a660...); version 5
+      aed83e09...; version 6 as fingerprinted. Council amended version 6 and
+      passed it finally on 2026-10-27, giving version 7.
+  - record_id: pgh_ord_31_2026_enacted
+    provision_id: pgh_ord_2025_1545
+    citation: "City of Pittsburgh Ordinance 31 of 2026 (Bill 2025-1545), Version 7"
+    section: "Pittsburgh Code Title Nine (Zoning), Chapters 903-925"
+    jurisdiction: "4200361000"
+    housing_type: adu
+    status: enacted
+    version_state: final
+    start: 2026-10-27
+    end: 2026-10-29
+    adopted_on: 2026-10-27
+    verified_on: 2026-11-24
+    end_verified_on: 2026-11-25
+    last_checked_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    text_version: "Version 7 FINAL (API text key 35471, last modified 2026-10-27)"
+    source_fingerprint: "sha256:b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67 (plain text, white space collapsed)"
+    excerpt_locator: "Legistar record: Final action 10/27/2026; Enactment date 10/27/2026; Enactment # 31; history 2026-10-27 Passed Finally, As Amended"
+    agency: City of Pittsburgh
+    sources:
+      - "https://pittsburgh.legistar.com/LegislationDetail.aspx?GUID=C15553FF-85B6-480E-ACFF-53F40EF99EA9&ID=7147499&Options=&Search="
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504"
+    note: >-
+      Passed finally (enacted) on October 27, 2026; the Mayor signed it at
+      00:01 on October 29, 2026, the date the record gives as effective, so
+      the enacted-not-effective status lasts two days.
+  - record_id: pgh_adu_overlay_before_ord31
+    provision_id: pgh_zc_912_08
+    citation: "Pittsburgh Zoning Code § 912.08 (Accessory Dwelling Unit Overlay District), before Ordinance 31 of 2026"
+    section: "§ 912.08"
+    jurisdiction: "4200361000"
+    housing_type: adu
+    status: legally_effective
+    version_state: final
+    start_unknown: true
+    end: 2026-10-29
+    verified_on: 2026-11-25
+    end_verified_on: 2026-11-25
+    superseded_by: pgh_ord31_adu_effective
+    scope: ADUs only inside an interim or permanent ADU Overlay District mapped on the Zoning District Map
+    exclusions: Lots outside an ADU overlay; structures with more than one dwelling unit
+    source_fingerprint: "sha256:b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67 (Version 7 text, struck passages)"
+    excerpt_locator: "Version 7 text, Section 37, § 912.08 struck sub-sections B-E (plain-text offset 234859 onward)"
+    agency: City of Pittsburgh
+    sources: ["https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/35471"]
+    note: >-
+      Read from the struck text of Ordinance 31: one ADU per lot, owner on
+      site, at most 800 sq ft, 30-day minimum lease, parking exemption, overlay
+      districts only. Its own start is not stated there (start_unknown), so it
+      applies on no date and is kept for the supersession link.
+  - record_id: pgh_ord31_adu_effective
+    provision_id: pgh_zc_912_08
+    citation: "Pittsburgh Zoning Code § 912.08, as amended by Ordinance 31 of 2026 (Version 7, Section 37)"
+    section: "§ 912.08.B.1, § 912.08.C.1-C.9; § 925.06.G.1(i)"
+    jurisdiction: "4200361000"
+    housing_type: adu
+    status: legally_effective
+    version_state: final
+    start: 2026-10-29
+    adopted_on: 2026-10-27
+    verified_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    supersedes: pgh_adu_overlay_before_ord31
+    text_version: "Version 7 FINAL (API text key 35471)"
+    higher_law_floor: >-
+      None in state law: the Municipalities Planning Code does not reach
+      Pittsburgh (a second-class city); pending HB 2186 would set one.
+    source_fingerprint: "sha256:b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67 (plain text, white space collapsed)"
+    excerpt_locator: >-
+      Version 7 plain text offset 237803 ("Accessory Dwelling Units are
+      permitted to be located on any lot where a primary use is a Residential
+      use, Community Center, or Religious Assembly use"); Section 37, § 912.08.C
+    scope: >-
+      Citywide: any lot whose primary use is Residential, Community Center or
+      Religious Assembly (C.2); ADU up to 1,000 sq ft, inside the main
+      building, detached, or in an existing accessory structure (B.1); up to
+      2 per zoning lot accessory to a residential use (C.8), no maximum for a
+      community center or religious assembly, site plan review above 10 units
+      (C.9); 30 ft height (C.3); exempt from the residential compatibility
+      standards (C.4); garage conversions in a setback need no exception (C.5,
+      C.6); no owner-occupancy rule
+    exclusions: >-
+      Lots whose primary use is not residential, community center or
+      religious assembly. Detached ADUs in side or rear setbacks other than
+      above an existing garage on a way need an administrator's exception
+      (§ 925.06.G.1(i)).
+    agency: City of Pittsburgh, Department of City Planning (zoning)
+    sources:
+      - "https://pittsburgh.legistar.com/LegislationDetail.aspx?GUID=C15553FF-85B6-480E-ACFF-53F40EF99EA9&ID=7147499&Options=&Search="
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504"
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/35471"
+    source_id: pgh_legistar
+    note: >-
+      Effective October 29, 2026 (Legistar "Effective date: 10/29/2026"). The
+      ADU overlay geography, owner-occupancy rule, one-per-lot cap, 800 sq ft
+      cap, 30-day lease rule and the old ADU parking exemption are struck. The
+      old overlay was the only geographic limit; the new text has none.
+  - record_id: pgh_ord31_parking_effective
+    provision_id: pgh_zc_914_02
+    citation: "Pittsburgh Zoning Code § 914.02.A (Maximum Parking Schedule), as amended by Ordinance 31 of 2026 (Version 7, Section 40)"
+    section: "§ 914.01.B-C, § 914.02.A"
+    jurisdiction: "4200361000"
+    housing_type: parking
+    status: legally_effective
+    version_state: final
+    start: 2026-10-29
+    adopted_on: 2026-10-27
+    verified_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    text_version: "Version 7 FINAL (API text key 35471)"
+    higher_law_floor: None (the Municipalities Planning Code does not reach Pittsburgh)
+    source_fingerprint: "sha256:b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67 (plain text, white space collapsed)"
+    excerpt_locator: >-
+      Version 7 plain text offset 306671 (maximum schedule, "Parking Max,
+      Outside the PRT Frequent Service Walkshed"); § 914.02.A "Off-street
+      parking spaces shall be limited to no more than the maximum standards"
+    scope: >-
+      Citywide: Chapter 914 is replaced; the old Schedule A of minimum
+      automobile spaces is struck and only maximums remain (single-unit
+      detached 4 per home; multi-unit 2 per home, 1 inside the PRT Frequent
+      Service Walkshed)
+    exclusions: >-
+      Geographic split: lower maximums inside the PRT Frequent Service
+      Walkshed shown on the City's zoning map. Bicycle parking and loading
+      minimums remain.
+    agency: City of Pittsburgh, Department of City Planning (zoning)
+    sources:
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/35471"
+      - "https://webapi.legistar.com/v1/pittsburgh/matters/31504"
+    source_id: pgh_legistar
+    effect: allows
+    note: >-
+      No residential automobile parking minimum after October 29, 2026; the
+      parking benchmark changes nothing required in Pittsburgh from then on.
+  - record_id: allentown_ord_16166_effective
+    provision_id: allentown_lehigh_zo_16166
+    citation: "City of Allentown Ordinance No. 16166 (Zoning Ordinance, Chapter 660)"
+    jurisdiction: "4207702000"
+    housing_type: adu
+    status: legally_effective
+    start: 2026-01-01
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    scope: House B and House C building types (one ADU in the house or an outbuilding)
+    exclusions: Some rowhouse and twin types (inside only or none)
+    agency: City of Allentown
+    sources: ["https://www.allentownpa.gov/Portals/0/files/Departments/PlanningZoning/Zoning%20Ordinance.pdf"]
+    note: Adopted October 15, 2025; effective January 1, 2026 (as the ordinance states).
+
+  # ------------------------------------------------------------------ Vermont
+  # Registry source for all four records: vt_acts_2026 (text and bill status
+  # pages re-read on legislature.vermont.gov on 2026-11-25; dates unchanged).
+  # Act 152 of 2026 (S.325) extended the Act 250 interim exemption for housing
+  # projects of 75 units or fewer (10 V.S.A. § 6081(dd)) from January 1, 2027
+  # to January 1, 2028, effective July 1, 2026. The earlier version ends on
+  # that date (superseded); the new one ends on its own sunset.
+  - record_id: vt_6081dd_before_act152
+    provision_id: vt_10vsa_6081_dd
+    citation: "10 V.S.A. § 6081(dd), as in force before Act 152 of 2026"
+    jurisdiction: VT
+    housing_type: multifamily
+    status: legally_effective
+    start_unknown: true
+    end: 2026-07-01
+    verified_on: 2026-11-24
+    end_verified_on: 2026-11-24
+    superseded_by: vt_6081dd_act152
+    scope: Housing projects of 75 units or fewer in designated areas (no Act 250 permit)
+    agency: Vermont Natural Resources Board (Act 250)
+    sources: ["https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT152/ACT152%20As%20Enacted.pdf"]
+    source_id: vt_acts_2026
+    note: >-
+      The exemption ran "until January 1, 2027" before Act 152 (struck in the
+      act's text). Its start is not stated in Act 152 (start_unknown), so it
+      counts only from verified_on, which is after its end: it applies on no
+      date and is kept for the supersession link.
+  - record_id: vt_6081dd_act152
+    provision_id: vt_10vsa_6081_dd
+    citation: "10 V.S.A. § 6081(dd), as amended by Act 152 of 2026 (S.325)"
+    jurisdiction: VT
+    housing_type: multifamily
+    status: legally_effective
+    start: 2026-07-01
+    end: 2028-01-01
+    verified_on: 2026-11-24
+    end_verified_on: 2026-11-24
+    supersedes: vt_6081dd_before_act152
+    text_version: "Act 152 As Enacted (signed June 16, 2026)"
+    retrieved_on: 2026-11-24
+    scope: Housing projects of 75 units or fewer in designated areas (no Act 250 permit)
+    agency: Vermont Natural Resources Board (Act 250)
+    sources:
+      - "https://legislature.vermont.gov/bill/status/2026/S.325"
+      - "https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT152/ACT152%20As%20Enacted.pdf"
+    source_id: vt_acts_2026
+    note: >-
+      "until January 1, 2027 2028, no permit or permit amendment is required
+      for the construction of housing projects ... with 75 units or fewer"
+      (struck and inserted dates). Act effective July 1, 2026 (Sec. 23).
+
+  # Act 179 of 2026 (S.328) removed "on an owner-occupied lot" from the ADU
+  # rule in 24 V.S.A. § 4412(1)(E), effective July 1, 2026 (Sec. 14). Read from
+  # the strike-through marks of the enacted PDF.
+  - record_id: vt_4412_adu_before_act179
+    provision_id: vt_24vsa_4412_1_e
+    citation: "24 V.S.A. § 4412(1)(E), as in force before Act 179 of 2026"
+    jurisdiction: VT
+    housing_type: adu
+    status: legally_effective
+    start_unknown: true
+    end: 2026-07-01
+    verified_on: 2026-11-24
+    end_verified_on: 2026-11-24
+    superseded_by: vt_4412_adu_act179
+    scope: One ADU within or appurtenant to a single-family dwelling on an owner-occupied lot
+    agency: Municipalities (bylaws); Vermont Department of Housing and Community Development
+    sources: ["https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT179/ACT179%20As%20Enacted.pdf"]
+    source_id: vt_acts_2026
+    note: >-
+      Bylaws could not exclude one ADU on an owner-occupied lot. Its start is
+      not stated in Act 179 (start_unknown), so it counts only from
+      verified_on, which is after its end: it applies on no date and is kept
+      for the supersession link.
+  - record_id: vt_4412_adu_act179
+    provision_id: vt_24vsa_4412_1_e
+    citation: "24 V.S.A. § 4412(1)(E), as amended by Act 179 of 2026 (S.328), Sec. 9"
+    jurisdiction: VT
+    housing_type: adu
+    status: legally_effective
+    start: 2026-07-01
+    verified_on: 2026-11-24
+    supersedes: vt_4412_adu_before_act179
+    text_version: "Act 179 As Enacted (signed June 18, 2026)"
+    retrieved_on: 2026-11-24
+    scope: One ADU within or appurtenant to a single-family dwelling; no owner-occupancy test
+    agency: Municipalities (bylaws); Vermont Department of Housing and Community Development
+    sources:
+      - "https://legislature.vermont.gov/bill/status/2026/S.328"
+      - "https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT179/ACT179%20As%20Enacted.pdf"
+    source_id: vt_acts_2026
+    note: >-
+      "no bylaw shall have the effect of excluding as a permitted use one
+      accessory dwelling unit that is located within or appurtenant to a
+      single-family dwelling" (owner-occupancy words struck). Sec. 9a (from
+      January 1, 2028) does not reverse the ADU change.
+
+  # 24 V.S.A. § 4412(1)(D): two versions on the statute page (read by script
+  # on legislature.vermont.gov, 2026-11-25; robots allow it, crawl delay 30 s
+  # kept). The current text came from Act 179 of 2026 (S.328) Sec. 9, effective
+  # July 1, 2026 (Sec. 14); the text effective January 1, 2028 from Sec. 9a
+  # adds the exception for districts that specifically require multiunit
+  # structures to have more than four units. Both forecast arms apply the
+  # 2028 text from its date (current-law convention); the "freeze today's
+  # rules" comparison keeps the current text (visionhousing.law.rights).
+  - record_id: vt_4412_1d_act179
+    provision_id: vt_24vsa_4412_1_d
+    citation: "24 V.S.A. § 4412(1)(D), as amended by Act 179 of 2026 (S.328), Sec. 9"
+    section: "§ 4412(1)(D)"
+    jurisdiction: VT
+    housing_type: missing_middle
+    status: legally_effective
+    version_state: final
+    start: 2026-07-01
+    end: 2028-01-01
+    verified_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    superseded_by: vt_4412_1d_act179_9a
+    published_on: 2026-06-18
+    text_version: "Statute page version '[Subdivision (1)(D) effective until January 1, 2028]'"
+    scope: >-
+      Duplexes a permitted use in any district that allows year-round
+      residential development; 4 or fewer units a permitted use on a
+      single-unit lot in any district served by municipal sewer and water that
+      allows residential development
+    higher_law_floor: "State floor on municipal bylaws (24 V.S.A. § 4412, notwithstanding any existing bylaw)"
+    source_fingerprint: "sha256:09ce4dfb281595f4b16aeb07e3789db5a19e967bf8965a9152586e589b187566 (statute page section text from '(Cite as' to the history note, white space collapsed)"
+    excerpt_locator: "Section text offset 1539, '[Subdivision (1)(D) effective until January 1, 2028 ...]'; Act 179 As Enacted p. 18-19 (Sec. 9), effective date Sec. 14"
+    agency: Municipalities (bylaws); Vermont Department of Housing and Community Development
+    sources:
+      - "https://legislature.vermont.gov/statutes/section/24/117/04412"
+      - "https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT179/ACT179%20As%20Enacted.pdf"
+    source_id: vt_acts_2026
+    note: >-
+      Ends on January 1, 2028, a date written in the act itself (Sec. 14), so
+      the end is a scheduled change known since verification. Act 179's PDF
+      (sha256 1ff17fd9...) was read by script; the struck words of Sec. 9 are
+      not in its text layer, so the version split is taken from the statute
+      page's own version notes.
+  - record_id: vt_4412_1d_act179_9a
+    provision_id: vt_24vsa_4412_1_d
+    citation: "24 V.S.A. § 4412(1)(D), as amended by Act 179 of 2026 (S.328), Sec. 9a"
+    section: "§ 4412(1)(D)"
+    jurisdiction: VT
+    housing_type: missing_middle
+    status: legally_effective
+    version_state: final
+    start: 2028-01-01
+    verified_on: 2026-11-25
+    retrieved_on: 2026-11-25
+    supersedes: vt_4412_1d_act179
+    published_on: 2026-06-18
+    text_version: "Statute page version '[Subdivision (1)(D) effective January 1, 2028]'"
+    scope: >-
+      As before, but the 4-or-fewer-unit right does not apply in a district
+      that specifically requires multiunit structures to have more than four
+      dwelling units
+    higher_law_floor: "State floor on municipal bylaws (24 V.S.A. § 4412, notwithstanding any existing bylaw)"
+    source_fingerprint: "sha256:09ce4dfb281595f4b16aeb07e3789db5a19e967bf8965a9152586e589b187566 (statute page section text from '(Cite as' to the history note, white space collapsed)"
+    excerpt_locator: "Section text offset 2419 ('[Subdivision (1)(D) effective January 1, 2028 ...]') and 3298 ('unless that district specifically requires'); Act 179 As Enacted p. 19-20 (Sec. 9a)"
+    agency: Municipalities (bylaws); Vermont Department of Housing and Community Development
+    sources:
+      - "https://legislature.vermont.gov/statutes/section/24/117/04412"
+      - "https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT179/ACT179%20As%20Enacted.pdf"
+    source_id: vt_acts_2026
+    note: >-
+      Enacted (signed June 18, 2026) and effective January 1, 2028 (Act 179
+      Sec. 14). Under the current-law convention it applies in both forecast
+      arms from that date; a pending bill would not.
+
+  # --- G2b readings (allegheny), 2026-11-24
+  - record_id: mt_lebanon_zo_effective
+    provision_id: mt_lebanon_allegheny_ch20_zoning
+    citation: "Mt. Lebanon Code Chapter XX (Zoning), § 108"
+    jurisdiction: "4200351696"
+    housing_type: adu
+    status: legally_effective
+    start: 2005-09-26
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    scope: All zoning districts; ADUs not provided for as a use
+    agency: Municipality of Mt. Lebanon
+    sources: ["https://ebooks.mtlebanon.org/codebook/MunicipalCode/"]
+    text_version: "Municipal e-book, pages updated through March 2022"
+    note: >-
+      § 108: the chapter is effective from adoption, and "effective date" means
+      September 26, 2005. Later amendments are in the posted text through 2022.
+  # --- G2b readings (central), 2026-11-24
+  - record_id: harrisburg_adu_by_right_2021
+    provision_id: harrisburg_zo_2014_am2021
+    citation: "City of Harrisburg Zoning Code § 7-305 use table (accessory dwelling unit), as amended (city copy of July 19, 2021)"
+    jurisdiction: "4204332800"
+    housing_type: adu
+    status: legally_effective
+    start_unknown: true
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    text_version: "2014 Zoning Code as amended (city file dated 07.19.2021)"
+    scope: By right in RL, RM and RF; special exception in CN
+    agency: City of Harrisburg
+    sources: ["https://harrisburgpa.gov/Documents/Services/Planning/2014-Zoning-Code-AS-AMENDED-07.19.2021.pdf"]
+    note: >-
+      Start date not stated in the city's text (the amending ordinance is not
+      on its site); the city file is dated July 19, 2021. start_unknown: the
+      record counts only from verified_on (2026-11-24).
+  # --- G2b readings (counties), 2026-11-24
+  - record_id: schuylkill_county_zo_2010_effective
+    provision_id: schuylkill_county_zo_2010_1
+    citation: "Schuylkill County Zoning Ordinance, Ordinance No. 2010-1"
+    jurisdiction: "42107"
+    housing_type: adu
+    status: legally_effective
+    start: 2010-12-27
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    scope: Municipalities without their own zoning ordinance (county zoning, MPC § 602)
+    agency: County of Schuylkill, Planning and Zoning
+    sources: ["https://services.co.schuylkill.pa.us/mapviewercontent/Ordinance/Schuylkill%20County%20Zoning%20Ordinance.pdf"]
+    note: >-
+      Enacted December 22, 2010; effective December 27, 2010 (Title, § 6). It
+      does not provide for accessory apartments as a use (not addressed).
+  # --- G2b readings (east_sw), 2026-11-24
+  - record_id: lackawaxen_accessory_apartment_cu
+    provision_id: lackawaxen_pike_zo_1992
+    citation: "Lackawaxen Township Zoning Ordinance § 513 and § 513.3 (accessory apartment by conversion)"
+    jurisdiction: "4210340776"
+    housing_type: adu
+    status: legally_effective
+    start_unknown: true
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    text_version: "Ordinance of February 19, 1992, revised through Ordinance #113 (January 18, 2021)"
+    scope: Accessory apartment inside an existing single-family house, by conditional use
+    exclusions: Detached units; enlarged houses; houses built after the ordinance
+    agency: Lackawaxen Township Board of Supervisors (conditional use)
+    sources: ["https://lackawaxentownshippa.gov/s/ZONING-ORDINANCE-REVISED-1993-20212343.pdf"]
+    note: >-
+      Start left empty: the section's own adoption date is not stated (the
+      ordinance is dated February 19, 1992, with revisions to January 18,
+      2021). start_unknown: the record counts only from verified_on (2026-11-24).

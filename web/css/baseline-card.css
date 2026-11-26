@@ -1,0 +1,216 @@
+/* Baseline card, headline scope note, hearing brief button, link notes and profile coverage
+   notes (js/ui/baseline-card.js, js/ui/static-note.js, js/screens/place.js). Tokens only. */
+
+.bc-rows {
+  display: grid;
+  gap: var(--space-2);
+  margin: 0;
+}
+
+.bc-row {
+  display: grid;
+  gap: var(--space-1);
+  padding-bottom: var(--space-2);
+  border-bottom: 1px solid var(--line);
+}
+
+.bc-row:last-child {
+  border-bottom: 0;
+}
+
+.bc-label {
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+  color: var(--text);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.bc-text {
+  margin: 0;
+  font-size: var(--text-sm);
+  line-height: var(--leading);
+  color: var(--text-muted);
+}
+
+.bc-tag {
+  display: inline-block;
+  padding: 1px 8px;
+  border-radius: var(--radius-pill);
+  background: var(--surface-3);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+.bc-tag.is-diagnostic,
+.bc-tag.is-sensitivity {
+  background: var(--notice-bg);
+  color: var(--notice-text);
+  border: 1px solid var(--notice-line);
+}
+
+.bc-tag.is-matched {
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+
+.bc-tag.is-not-matched {
+  background: var(--notice-bg);
+  color: var(--notice-text);
+  border: 1px solid var(--notice-line);
+}
+
+.bc-more {
+  margin-top: var(--space-1);
+}
+
+.bc-more summary,
+.bc-fold > summary {
+  cursor: pointer;
+  color: var(--accent);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+}
+
+.bc-more summary:focus-visible,
+.bc-fold > summary:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+  border-radius: var(--radius-sm);
+}
+
+.bc-formula,
+.bc-ids,
+.bc-source {
+  margin: var(--space-1) 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-quiet);
+  overflow-wrap: anywhere;
+}
+
+.bc-ids span {
+  font-weight: var(--weight-medium);
+}
+
+.bc-fold {
+  margin: var(--space-3) 0;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+}
+
+.bc-fold > summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+  color: var(--text);
+}
+
+.bc-fold[open] > summary {
+  margin-bottom: var(--space-2);
+}
+
+.bc-sum-title {
+  font-weight: var(--weight-bold);
+}
+
+/* What a reform's headline counts (outcome accounting). */
+.scope-note {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-2) 0;
+  padding: var(--space-1) var(--space-2);
+  border-left: 3px solid var(--accent);
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.scope-key {
+  font-weight: var(--weight-medium);
+}
+
+/* Hearing brief button and its reason when it cannot open. */
+.hearing {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-2);
+}
+
+.hearing .is-disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.hearing-why {
+  font-size: var(--text-xs);
+  color: var(--text-quiet);
+  max-width: 280px;
+}
+
+/* The link notes stack (js/ui/static-note.js). */
+.link-notes {
+  position: fixed;
+  top: calc(var(--bar-h) + var(--space-2));
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  width: max-content;
+  max-width: min(560px, calc(100vw - 32px));
+  pointer-events: auto;
+}
+
+.link-notes .static-note {
+  position: static;
+  transform: none;
+  max-width: none;
+}
+
+.link-note.is-custom p {
+  margin: 0 0 var(--space-2);
+}
+
+/* Profile sections with no data: what the sources cover (js/screens/place.js). */
+.coverage-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.coverage-item h4 {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.coverage-item p {
+  margin: 0 0 var(--space-1);
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+
+.coverage-sources {
+  margin: 0;
+  padding-left: var(--space-4);
+  font-size: var(--text-xs);
+  color: var(--text-quiet);
+}
+
+/* In the screen overlay the notes sit in the top column, under the mode switcher. */
+.hud .link-notes {
+  position: static;
+  transform: none;
+  max-width: min(520px, calc(100vw - 32px));
+}

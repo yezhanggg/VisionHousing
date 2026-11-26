@@ -3,7 +3,7 @@
 # The share of existing lots with room for one 600 sq ft detached ADU, by the
 # kind of home already on the lot and by the tract's area type. This file holds
 # aggregated shares only. No lot-level data, imagery or image model is part of
-# the product (decision D-19).
+# the product.
 #
 # Each cell has a central value, a likely low and high, and a "basis":
 #   measured          read directly from the lot samples described below

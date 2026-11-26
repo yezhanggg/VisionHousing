@@ -7,12 +7,12 @@ These sources exist only for Pennsylvania, or only for Philadelphia and Alleghen
 | Section | Pack tables | Sources | Places |
 |---|---|---|---|
 | `zoning` | `municipal_planning`, `tract_municipalities` | PA DCED Municipal Statistics; Census subcounty population estimates; 2020 block assignment file | Every Pennsylvania county and tract |
-| `plans` | `municipal_planning`, `tract_municipalities`; `assumptions/plans.yaml` | Same; county plan pages (cited) | Every Pennsylvania county and tract; county plans for 17 large counties |
+| `plans` | `municipal_planning`, `tract_municipalities`; `assumptions/plans.yaml` | Same; county plan pages (cited) | Every Pennsylvania county and tract; county plans and commission links for all 67 counties (34 confirmed). The ADU, lot and parking rules and the new `state_law` section are described in [law.md](law.md) |
 | `parcels` | `parcels_area` | Philadelphia OPA; Allegheny assessments, sales and WPRDC parcel centroids | Philadelphia and Allegheny |
 | `owners` | `owners_area`, `owners_deeds_year`; `_owners` in `assumptions/evidence.yaml` | Philadelphia OPA and transfer records; Allegheny assessments | Philadelphia and Allegheny (deed flow: Philadelphia) |
 | `pipeline_local` | `pipeline_tract_year`, `lihtc_awards` | Philadelphia L&I permits; Pittsburgh PLI permits; PHFA award lists; Census Geocoder | Philadelphia and Pittsburgh (permits); all Pennsylvania (awards) |
 
-`visionhousing.data.local.fetch_local_tables` runs every source on its own: when one city service is down the others still go in and the failure is written in the build notes. `make data` calls it through `pack.load_inputs`. `local.add_to_pack(folder, cache)` adds the tables to a pack that is already built and rebuilds its dictionary and manifest.
+Massachusetts has its own local tables (MBTA Communities Section 3A districts and status, and the state ADU survey), described in [ma_intake.md](ma_intake.md). `visionhousing.data.local.fetch_local_tables` runs every source on its own: when one city service is down the others still go in and the failure is written in the build notes. `make data` calls it through `pack.load_inputs`. `local.add_to_pack(folder, cache)` adds the tables to a pack that is already built and rebuilds its dictionary and manifest.
 
 ## Terms
 

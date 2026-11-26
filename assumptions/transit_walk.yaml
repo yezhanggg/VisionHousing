@@ -1,0 +1,106 @@
+# Transit walksheds and the frequent-bus rule: the rules that are words, not numbers.
+#
+# Read by visionhousing.features.transit_walk (and data/sources/osm.py for the
+# map query). The numbers of the rule (peak windows, headway threshold, snap
+# distance, edge buffer, smallest network piece, opposite-heading angle) are ledger
+# entries in assumptions/parameters.yaml, ids tod.frequent_bus_* and tod.walk_*.
+# Method: docs/modules/transit_walk.md.
+
+version: 1
+
+frequent_bus:
+  # tod.walk.day_rule: the weekday the peak departures are counted on.
+  day_rule:
+    id: tod.walk.day_rule
+    value: pinned_then_busiest_midweek
+    text: >-
+      The representative weekday already recorded for the feed (its daily counts
+      under the major-stop rule) when the feed fetched now still runs trips that day and the day is
+      regular; else the regular Tuesday, Wednesday or Thursday with the most scheduled
+      trips. A day is not regular when it is a US federal holiday (or the weekday it is
+      observed on) or falls between December 24 and January 1, when many agencies run a
+      holiday or reduced schedule.
+  # tod.walk.direction_rule: what is counted together, and when a stop is split by direction.
+  direction_rule:
+    id: tod.walk.direction_rule
+    value: same_platform_side_both_windows
+    text: >-
+      Departures are counted per platform-level stop (the stop_id trips call at: one
+      pole or platform), all routes added, whatever their GTFS direction_id, because
+      direction_id is defined route by route (route A's direction 0 and route B's
+      direction 0 need not point the same way). A pole is split into two sides only
+      when it serves both directions of travel: each trip's heading is the bearing
+      from its previous stop to its next stop, the pole's main heading is the
+      30-degree sector with the most trips, and trips more than
+      tod.frequent_bus_opposite_heading_deg (120 degrees) from it are the other side.
+      A trip with no heading takes the side of the same route and direction at the
+      pole (direction_id, else the headsign with any "via ..." or bracketed part cut,
+      so "Downtown" and "Downtown via X" are one direction), else the main side.
+      At a station (parent_station) each platform is counted on its own and never
+      added to the others. A stop is frequent when one platform side meets the
+      threshold in both the morning and the afternoon window; a station is frequent
+      when any one of its platform sides does. A commuter-only stop with 8
+      departures one way in the morning and 8 the other way in the afternoon does
+      not qualify: the benchmark means all-day frequent service in both peaks.
+  # tod.walk.headway_measure: how "every 15 minutes" is measured.
+  headway_measure:
+    id: tod.walk.headway_measure
+    value: average_in_window
+    text: >-
+      Average scheduled headway = window length / departures in the window. A stop
+      passes when the average is at or below the threshold in both windows on the
+      same platform side, that is at least (window minutes / threshold) departures
+      in each.
+  # Rail and other fixed-guideway stops are major by mode, whatever their frequency.
+  rail_rule:
+    id: tod.walk.rail_rule
+    value: mode_only
+    text: "Every fixed-guideway stop (the major-stop rule's mode classes) is major."
+
+network:
+  # The distances tested, in miles: 1/4, 1/2 (headline) and 3/4.
+  distances_miles: [0.25, 0.5, 0.75]
+  headline_miles: 0.5
+  # Grid cell (metres) the walksheds are drawn on, in the local equal-area projection. A cell
+  # is inside a shape when its centre is; areas are cells x cell_m^2. A method resolution,
+  # not a judgement about walking: at 10 m a 1/4-mile circle is within 0.2% of pi r^2, one
+  # 50 m street buffer within 1%, and PA/VT county totals within 0.5% of an exact polygon
+  # method (docs/modules/transit_walk.md).
+  cell_m: 10
+  fallback_rule:
+    id: tod.walk.fallback_rule
+    value: straight_line_when_incomplete
+    text: >-
+      A stop whose map tile could not be fetched, that has no walkable network node
+      within the snap distance, or whose nearest nodes belong to a network piece
+      shorter than the minimum, uses its straight-line circle instead. That area is
+      counted in network_acres and also reported as fallback_acres, so it can be
+      taken out.
+
+osm:
+  # Overpass servers, tried in order. Both are public and keyless.
+  endpoints:
+    - https://overpass-api.de/api/interpreter
+    - https://overpass.private.coffee/api/interpreter
+  tile_deg: 0.1
+  timeout_s: 180
+  # Ways tagged highway=<one of these> are not walkable (motorways, ways being built or
+  # planned or gone, race tracks, bus-only roads, lifts).
+  exclude_highway:
+    - motorway
+    - motorway_link
+    - construction
+    - proposed
+    - planned
+    - abandoned
+    - disused
+    - razed
+    - raceway
+    - bus_guideway
+    - busway
+    - escape
+    - elevator
+  # A way whose foot= or access= tag is one of these is closed to people on foot.
+  closed_access:
+    - "no"
+    - private

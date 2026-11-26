@@ -6,6 +6,12 @@
  *   group "benchmark"  the five Challenge reforms; together they are "the package"
  *   group "bill"       Pennsylvania bills. Each reaches the same lots as the ADU reform
  *                      (same `family`), so only one of them can be on at a time.
+ *   group "extra"      the extra scenarios (`kind: "extra"` in GET /api/v1/reforms): questions
+ *                      the benchmarks leave open. Never part of a default (the switches, "All
+ *                      five reforms", Compare and the package stay on the benchmarks). The
+ *                      screens list them only when the engine does, with its own title and
+ *                      description (GET /api/v1/scenarios); which reforms each may not share a
+ *                      package with also comes from there (ui/extras.js).
  */
 export const REFORMS = [
   {
@@ -64,6 +70,46 @@ export const REFORMS = [
     short: "SB 1346",
     line: "One ADU per single-family house, outside Philadelphia and Pittsburgh. Replaces the ADU switch.",
   },
+  {
+    id: "transit_zoning_funded_infrastructure",
+    family: "transit_zoning_funded_infrastructure",
+    group: "extra",
+    name: "Transit zoning with funded infrastructure",
+    short: "Funded transit zoning",
+    line: "The transit upzoning, plus public money for the water, sewer and power it needs.",
+  },
+  {
+    id: "commercial_land_housing",
+    family: "commercial_land_housing",
+    group: "extra",
+    name: "Housing by right on commercial land",
+    short: "Commercial land",
+    line: "Apartment buildings allowed by right on land used for shops and offices.",
+  },
+  {
+    id: "adaptive_reuse",
+    family: "adaptive_reuse",
+    group: "extra",
+    name: "Adaptive reuse (office and retail conversions)",
+    short: "Adaptive reuse",
+    line: "Existing offices and shops converted into homes; counted outside the permit measure.",
+  },
+  {
+    id: "starter_home_lots",
+    family: "starter_home_lots",
+    group: "extra",
+    name: "Starter-home lots",
+    short: "Starter lots",
+    line: "Smaller minimum lots for new subdivisions on single-family land.",
+  },
+  {
+    id: "fee_deferral_with_affordability",
+    family: "fee_deferral_with_affordability",
+    group: "extra",
+    name: "Fee deferral or waiver with affordability terms",
+    short: "Fee deferral",
+    line: "Fees paid at occupancy (or waived) for rental projects that keep homes affordable.",
+  },
 ];
 
 export const REFORM_IDS = REFORMS.map((r) => r.id);
@@ -81,7 +127,10 @@ export function reformById(id) {
   return REFORMS.find((r) => r.id === key);
 }
 
-/** The reforms offered for a state: the benchmarks, plus its bills. */
+/** The extra scenarios this interface knows (ui/extras.js keeps those the engine lists). */
+export const EXTRA_IDS = REFORMS.filter((r) => r.group === "extra").map((r) => r.id);
+
+/** The reforms offered for a state: the benchmarks, plus its bills (the extras are listed apart). */
 export function reformsFor(state) {
-  return REFORMS.filter((r) => r.group === "benchmark" || BILL_STATES.includes(state));
+  return REFORMS.filter((r) => r.group === "benchmark" || (r.group === "bill" && BILL_STATES.includes(state)));
 }

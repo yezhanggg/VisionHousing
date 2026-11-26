@@ -1,0 +1,51 @@
+# Which unread zoning ordinances to read next (visionhousing.law.priorities).
+#
+# score = unknown lots x sensitivity x representativeness / effort
+#
+# - unknown lots: single-family lots in the review unit whose rule is not
+#   verified (muni_zoning_rules.sf_lots). A review unit is one municipality
+#   with its own (or joint) zoning, or one county ordinance with every
+#   municipality it zones (read once, counts for all).
+# - sensitivity: how much the statewide ADU result moves per lot in this
+#   county (the county's added ADU homes per single-family lot in the latest
+#   exported ADU run, divided by the state's), times the switch factor: a
+#   county's readings reach the engine only once they cover min_coverage of
+#   its residents (hooks.yaml), so in a county below the bar a unit counts by
+#   the share of the missing residents it would add (never below
+#   switch_floor).
+# - representativeness: 1 + how far the unit's place type (the tract typology
+#   most of its homes are in) is below target_lot_coverage of lots read,
+#   as a share of the target. Range 1 to 2.
+# - effort: relative review effort; 1 = one own-site PDF with a text layer.
+#
+# See docs/modules/law.md. Every value is a judgement for ranking only; none
+# changes an estimate.
+
+version: 1
+
+target_lot_coverage: 0.5
+switch_floor: 0.1
+
+# Effort by what is known about the unit's ordinance
+# (assumptions/law/review_sources.yaml). commercial_only cannot be read here
+# (the host forbids automated or bulk use): the unit is listed with score 0.
+# not_general_zoning: the DCED record says "county" but the county has only
+# topic ordinances (solar, wind, towers) or airport zoning, so there is no
+# general zoning text to read for ADUs: listed with score 0.
+effort:
+  own_pdf_text: 1.0
+  own_html: 1.0
+  own_pdf_scan: 3.0
+  # Text is posted but the operative part cannot be read yet: the use table
+  # is a placeholder page, or the text is undated and a later update is a
+  # scan. Needs a newer copy or a records request, so it ranks well below a
+  # readable PDF (and below a scan that can at least be read by eye).
+  own_text_incomplete: 5.0
+  not_searched: 2.0
+  commercial_only: null
+  not_general_zoning: null
+
+# The exported ADU benchmark run the sensitivity reads (per county P50 added
+# homes). When it is missing, sensitivity uses 1 for every county and the CSV
+# says so.
+adu_run: web/public/data/{state}/runs/adu.json

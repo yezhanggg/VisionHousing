@@ -1,0 +1,119 @@
+# Cross-state comparison records: KY.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ky.hb333_2026_religious_land_housing
+  kind: policy
+  state: KY
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - adaptive_reuse
+  title: 'Kentucky HB 333 (2026): affordable housing by religious developers as a permitted use'
+  citation: 2026 Ky. Acts ch. 37 (HB 333); new section of KRS Chapter 100
+  url: https://apps.legislature.ky.gov/record/26rs/hb333.html
+  session: 2026 regular session
+  bill: HB 333
+  enacted_date: 2026-04-07
+  effective_dates:
+  - date: 2026-07-15
+    applies_to: Whole act (no emergency or special effective date; the 2026 regular session normal effective
+      date)
+  geographic_scope: All planning units. Affordable housing (80% of area median income or less) built by
+    or for a religious institution is a permitted use with only ministerial review, on land the institution
+    bought before 2026-01-01, on a commercial or business-zoned parcel, a residential parcel on a state
+    primary road next to commercial, business or industrial zoning, or in a former school building.
+  exclusions:
+  - Projects over 24 units, or that would put more than 24 such units on the parcel, contiguous parcels
+    or the institution's parcels within half a mile
+  - Mixed-income projects (the development must be entirely affordable)
+  - All other permits, including building permits, are still required
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Affordability must last 15 years and be recorded; a project that stops qualifying must seek ordinary
+    approvals.
+  - Religious-run homeless shelters become a permitted use in commercial, business and industrial zones.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The LRC bill record shows 'signed by Governor (Acts Ch. 37)' on 04/07/26. The Acts
+    chapter 37 text (apps.legislature.ky.gov) ends 'Signed by Governor April 7, 2026' with no effective-date
+    section. The LRC Normal Effective Dates page gives July 15, 2026 for the 2026 regular session (per OAG
+    26-03).
+  sources:
+  - label: HB 333 bill record (Kentucky General Assembly)
+    url: https://apps.legislature.ky.gov/record/26rs/hb333.html
+    official: true
+  - label: 2026 Acts ch. 37 text
+    url: https://apps.legislature.ky.gov/law/acts/26RS/documents/0037.pdf
+    official: true
+  - label: Normal effective dates by session (LRC)
+    url: https://legislature.ky.gov/Law/Statutes/Pages/KrsEffDates.aspx
+    official: true
+  discovered_via: pew_2026
+- id: ky.hb160_2025_manufactured_home_parity  # secret-scan: allow (public record id)
+  kind: policy
+  state: KY
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  title: 'Kentucky HB 160 (2025): manufactured homes zoned like single-family homes'
+  citation: 2025 Ky. Acts ch. 154 (HB 160); amends KRS 100.348
+  url: https://apps.legislature.ky.gov/record/25rs/hb160.html
+  session: 2025 regular session
+  bill: HB 160
+  enacted_date: 2025-04-01
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act (section 2 delayed effective date)
+  geographic_scope: All local governments with zoning. Zoning may not treat a qualified manufactured home
+    differently from a single-family home; only listed architectural compatibility standards may be applied,
+    and the same standards must apply to site-built single-family homes.
+  exclusions:
+  - A qualified manufactured home must be installed within five years of manufacture, with transport
+    parts removed, and meet KRS 227.570
+  - Recorded deed restrictions, covenants and subdivision restrictions are not affected
+  - Historic property and historic district rules are not limited
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Non-conforming local rules are void. A smaller manufactured home may be allowed where a larger one
+    would not fit the lot.
+  - It widens where factory-built homes can go; it does not change minimum lot sizes.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The LRC bill record shows 'signed by Governor (Acts Ch. 154)' on 04/01/25 and the
+    enacted summary 'EFFECTIVE July 1, 2026'. The Acts chapter 154 text (apps.legislature.ky.gov) has 'Section
+    2. This Act takes effect July 1, 2026' and 'Signed by Governor April 1, 2025'.
+  sources:
+  - label: HB 160 bill record (Kentucky General Assembly)
+    url: https://apps.legislature.ky.gov/record/25rs/hb160.html
+    official: true
+  - label: 2025 Acts ch. 154 text
+    url: https://apps.legislature.ky.gov/law/acts/25RS/documents/0154.pdf
+    official: true
+  discovered_via: search

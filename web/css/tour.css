@@ -1,0 +1,193 @@
+/*
+ * The guided tour (js/ui/tour.js): a dark veil with one spotlight cut out, and a small card
+ * beside it. Colours, radii, shadows and timings come from tokens.css. Reduced motion (the
+ * system setting, or .tour--still) turns every slide and fade off.
+ */
+.tour {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+}
+
+/* Catches clicks on the page while the tour is open; it is see-through. */
+.tour-blocker {
+  position: fixed;
+  inset: 0;
+  pointer-events: auto;
+  background: transparent;
+}
+
+/* The spotlight: a clear box whose huge shadow is the veil around it. */
+.tour-hole {
+  position: fixed;
+  border-radius: var(--radius);
+  box-shadow:
+    0 0 0 3px var(--accent-ring),
+    0 0 0 200vmax rgb(23 33 43 / 0.55);
+  transition:
+    left var(--dur-slow) var(--ease-out),
+    top var(--dur-slow) var(--ease-out),
+    width var(--dur-slow) var(--ease-out),
+    height var(--dur-slow) var(--ease-out);
+}
+
+/* A step whose element is not on screen: veil only, card in the middle. */
+.tour-dim {
+  position: fixed;
+  inset: 0;
+  background: rgb(23 33 43 / 0.55);
+}
+
+.tour-card {
+  position: fixed;
+  width: min(340px, calc(100vw - 24px));
+  pointer-events: auto;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-3);
+  padding: 16px 18px 12px;
+  font-family: var(--font-sans);
+  transition:
+    left var(--dur-slow) var(--ease-out),
+    top var(--dur-slow) var(--ease-out);
+  animation: tour-in var(--dur) var(--ease-out);
+}
+
+.tour-count {
+  margin: 0 0 4px;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.tour-title {
+  margin: 0 0 6px;
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+  line-height: var(--leading-tight);
+}
+
+.tour-body {
+  margin: 0 0 12px;
+  font-size: var(--text-md);
+  line-height: var(--leading);
+  color: var(--text);
+}
+
+.tour-dots {
+  display: flex;
+  gap: 5px;
+  margin-bottom: 12px;
+}
+
+.tour-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: var(--radius-pill);
+  background: var(--line-strong);
+  opacity: 0.45;
+}
+
+.tour-dot.is-on {
+  width: 16px;
+  background: var(--accent);
+  opacity: 1;
+}
+
+.tour-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.tour-spacer {
+  flex: 1;
+}
+
+.tour-card button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+.tour-keys {
+  margin: 10px 0 0;
+  font-size: var(--text-xs);
+  color: var(--text-quiet);
+}
+
+@keyframes tour-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+
+.tour--still .tour-hole,
+.tour--still .tour-card {
+  transition: none;
+  animation: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-hole,
+  .tour-card {
+    transition: none;
+    animation: none;
+  }
+}
+
+/*
+ * The first-visit offer (js/ui/shell.js `TourOffer`): a small note under the mode switcher,
+ * in the middle column, so it never sits over the chat box or the legend.
+ */
+.tour-offer {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  max-width: min(460px, 100%);
+  margin: 0;
+  padding: 6px 6px 6px 14px;
+  border: 1px solid var(--line);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--shadow-2);
+  font-size: var(--text-sm);
+  pointer-events: auto;
+  animation: tour-in var(--dur) var(--ease-out);
+}
+
+.tour-offer-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.tour-offer .btn {
+  flex: none;
+}
+
+.tour-offer button:focus-visible {
+  outline: none;
+  box-shadow: var(--focus-ring);
+}
+
+@media (max-width: 767px) {
+  .tour-offer {
+    max-width: 100%;
+  }
+  .hud .tour-offer-close {
+    min-width: 44px;
+    justify-content: center;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .tour-offer {
+    animation: none;
+  }
+}

@@ -1,0 +1,75 @@
+# Cross-state comparison records: KS.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ks.sb418_2026_by_right_housing
+  kind: policy
+  state: KS
+  jurisdiction: statewide (cities, counties and other regulatory authorities)
+  policy_types:
+  - starter_lots
+  - permit_timing
+  - adu
+  - missing_middle
+  title: 'Kansas SB 418 (2026): By-right Housing Development Act, 3,000 sq ft lots for small homes, third-party
+    review'
+  citation: Kansas SB 418 (2026), By-right Housing Development Act; repeals K.S.A. 12-757 and 12-758
+  url: https://www.kslegislature.gov/li/b2025_26/measures/sb418/
+  session: 2025-2026 biennium, 2026 session
+  bill: SB 418
+  enacted_date: 2026-04-07
+  effective_dates: []
+  geographic_scope: Statewide. By-right approval for single-family homes, townhouse projects of up to 12
+    attached units and ADUs that meet existing zoning; small-home building rules apply in all political subdivisions;
+    all city land zoned for any residential use also counts as zoned single-family.
+  exclusions:
+  - Registered historic districts or projects subject to historic preservation review
+  - Projects that would add impervious surface draining harmfully into a special flood hazard area
+  - Restrictive covenants and homeowner or condominium association rules are not affected
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Complete by-right applications are deemed approved unless denied within 30 days, 60 days for plats,
+    or 90 days for plats of more than 40 homes.
+  - 'New single-family homes under 2,500 sq ft on their own lot: localities must allow a 3,000 sq ft minimum
+    lot (with reasonable setbacks), the 2018 IRC, single-car garages and one side of architectural finish.'
+  - Third-party review or inspection after 15 days applies only where the governing body adopts a resolution
+    allowing it. Owner-initiated rezonings to single-family are exempt from protest petitions.
+  - 'Effective date: Sec. 7 says the act takes effect on publication in the statute book. That date was not
+    read on an official page, so none is recorded; Kansas statute-book acts usually take effect July 1.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Kansas Legislature bill status (official kslegislature.gov API behind the bill page)
+    shows 'Approved by Governor on Tuesday, April 7, 2026'. The enrolled bill PDF (kslegislature.gov) shows
+    the deemed-approval periods, the 3,000 sq ft lot rule and Sec. 7 (effective on statute-book publication).
+    The Kansas Legislative Research Department 2026 summary (kslegislature.gov) matches. No calendar effective
+    date was read, so none is recorded.
+  sources:
+  - label: SB 418 bill page (Kansas Legislature)
+    url: https://www.kslegislature.gov/li/b2025_26/measures/sb418/
+    official: true
+  - label: SB 418 enrolled bill
+    url: https://www.kslegislature.gov/b2025_26/bills/download/?apn=b2025_26/year2/ready_for_publication/sb_418/sb418_enrolled.pdf  # secret-scan: allow (public web address)
+    official: true
+  - label: KLRD 2026 Summary of Legislation, SB 418
+    url: https://www.kslegislature.gov/b2025_26/bills/download/?apn=b2025_26/ds_docs_li/summary_sb_418_2026.pdf
+    official: true
+  - label: SB 418 bill status (Kansas Legislature API)
+    url: https://www.kslegislature.gov/li/api/v13/rev-1/bill_status/sb418/
+    official: true
+  discovered_via: pew_2026

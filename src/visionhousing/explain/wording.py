@@ -67,9 +67,9 @@ STEP_MEANINGS: tuple[tuple[str, str], ...] = (
         "build one for family anyway.",
     ),
     (
-        "ADUs built",
-        "Of those, the ones expected to be built over the five years, with a slow start "
-        "while owners learn about the new right.",
+        "ADUs authorized",
+        "Of those, the ones expected to get a building permit over the five years, with a "
+        "slow start while owners learn about the new right.",
     ),
     # Missing middle
     (
@@ -86,9 +86,35 @@ STEP_MEANINGS: tuple[tuple[str, str], ...] = (
         "and the cost of building it.",
     ),
     ("lots redeveloped", "Of those, the ones expected to be rebuilt over the five years."),
-    ("new units in", "Homes in the new buildings on those lots."),
-    ("net new units after demolition", "New homes minus the houses torn down to make room."),
-    # Shared last step
+    ("new units authorized in", "Homes in the new buildings on those lots, each one a permit."),
+    # Transit-oriented density
+    ("land within", "Land near a major transit stop, within the chosen walking distance."),
+    ("land that could become", "Of that land, the share that could realistically be rebuilt."),
+    (
+        "land where a mid-rise building pencils",
+        "Of that, land where a mid-rise building would be worth more than the homes on it.",
+    ),
+    (
+        "added homes the upzoning allows",
+        "Homes the extra height or floor area allows there, beyond what would be permitted "
+        "on those sites anyway.",
+    ),
+    (
+        "mid-rise homes permitted",
+        "Of those, the ones expected to get a permit over the five years, within what the "
+        "region's apartment market can absorb.",
+    ),
+    # Shared headline and net steps
+    (
+        "added units authorized",
+        "Permits the reform adds: what is left after taking out permits that would have "
+        "been issued anyway, on the same sites or elsewhere. The headline.",
+    ),
+    (
+        "net added homes after demolition",
+        "The change in the number of homes: permits added, minus the existing homes torn "
+        "down that would not have been torn down anyway.",
+    ),
     (
         "net added units",
         "What is left after taking out homes that would have been built anyway: the "
@@ -211,3 +237,29 @@ def reform_phrase(key: str, title: str) -> str:
     if len(first) > 1 and first[1:].islower():
         return head[0].lower() + head[1:]
     return head
+
+
+ADU_FAMILY = frozenset({"adu", "pa_hb2186", "pa_sb1346"})
+"""Reforms whose added homes are accessory dwelling units."""
+
+ADU_MEASUREMENT = "of which some may not appear in permit statistics"
+"""Said wherever ADU homes added are shown: permit statistics do not count ADUs
+consistently (some towns permit them as alterations, not as new homes)."""
+
+FREQUENCY_LEAD = "In eight of ten simulated futures"
+"""Frequency wording of a P10-P90 range: eight in ten draws fall between P10 and P90."""
+
+
+def added_label(keys: Sequence[str] | str, base: str = "Homes added") -> str:
+    """The label for homes added; ADU reforms carry the permit-statistics caveat.
+
+    ``added_label("adu")`` -> ``Homes added, of which some may not appear in
+    permit statistics``; a package with an ADU reform says the ADUs among them may not.
+    """
+    keys = [keys] if isinstance(keys, str) else list(keys)
+    adu = [k for k in keys if k in ADU_FAMILY]
+    if not adu:
+        return base
+    if len(keys) == 1:
+        return f"{base}, {ADU_MEASUREMENT}"
+    return f"{base}, of which some ADUs may not appear in permit statistics"

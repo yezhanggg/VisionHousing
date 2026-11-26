@@ -1,0 +1,117 @@
+# Cross-state comparison records: NJ.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: nj.pl2024_c2_fourth_round
+  kind: policy
+  state: NJ
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - court_decision
+  title: New Jersey Fair Housing Act amendments for the fourth round (P.L.2024, c.2)
+  citation: P.L.2024, c.2 (A4 2R / S50); C.52:27D-304.1 et al.
+  url: https://pub.njleg.gov/Bills/2024/PL24/2_.HTM
+  session: 2024-2025 regular session
+  bill: A4
+  enacted_date: 2024-03-20
+  effective_dates:
+  - date: 2024-03-20
+    applies_to: Act takes effect immediately and applies to each new round of obligations
+  - date: 2025-01-31
+    applies_to: Deadline for each municipality's binding resolution setting its fourth-round present and
+      prospective obligation
+  - date: 2025-06-30
+    applies_to: Deadline to adopt the housing element and fair share plan, propose implementing ordinances,
+      and file with the Program to keep immunity
+  - date: 2025-07-01
+    applies_to: Fourth round begins (runs 2025-07-01 to 2035-06-30)
+  - date: 2025-08-31
+    applies_to: Deadline for interested-party challenges to filed plans
+  geographic_scope: All New Jersey municipalities. DCA calculates regional need and non-binding municipal
+    obligations by formula. Municipalities set their own number by resolution, with disputes handled by
+    the new Affordable Housing Dispute Resolution Program and the courts.
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: Process runs through the Dispute Resolution Program and the courts. Individual challenges to
+      the act were not reviewed.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Fair-share obligations are planning and zoning targets, NOT permits or completions.
+  - Abolishes COAH. DCA had to publish its calculations by the earlier of 7 months after enactment or
+    2024-12-01. Municipalities that meet the deadlines get immunity from exclusionary zoning (builder's
+    remedy) litigation.
+  - Appropriates $12M to the Dispute Resolution Program and $4M to DCA.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chaptered text on pub.njleg.gov shows 'Approved March 20, 2024', § 39 (takes effect
+    immediately), the fourth round starting 2025-07-01 and running through 2035-06-30, and the 2025-01-31,
+    2025-06-30 and 2025-08-31 deadlines.
+  sources:
+  - label: P.L.2024, c.2 chaptered text
+    url: https://pub.njleg.gov/Bills/2024/PL24/2_.HTM
+    official: true
+  discovered_via: addendum
+- id: nj.s1786_2026_adu
+  kind: policy
+  state: NJ
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - permit_timing
+  title: 'New Jersey S 1786 / A 3488 (2026): ADUs on one- and two-family lots, ministerial approval (pending)'
+  citation: S 1786 / A 3488, 222nd Legislature (2026-2027 session), not enacted
+  url: https://www.njleg.state.nj.us/bill-search/2026/S1786
+  session: 2026-2027 session
+  bill: S 1786
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Would apply to all municipalities, on land zoned for single- or two-family homes.
+  exclusions: []
+  implementation_status: pending
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'As introduced: towns must adopt one of two state model ADU ordinances (or get approval for a different
+    one); ADU applications are ministerial, without hearing, decided in 60 days or deemed approved; homeowner
+    associations may not bar ADUs.'
+  - The committee amendments of 2026-06-01 were not read; the summary above is of the introduced text.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'NJ Legislature bill history (njleg.state.nj.us data service): S 1786 introduced
+    1/13/2026 and referred to Senate Community and Urban Affairs; reported with amendments 6/1/2026 and
+    referred to Senate Budget and Appropriations. A 3488 introduced 1/13/2026 and referred to Assembly
+    Housing. No later action. Introduced text read on pub.njleg.gov.'
+  sources:
+  - label: S 1786 bill page (NJ Legislature)
+    url: https://www.njleg.state.nj.us/bill-search/2026/S1786
+    official: true
+  - label: S 1786 bill history (NJ Legislature data service)
+    url: https://www.njleg.state.nj.us/api/billDetail/billHistory/S1786/2026
+    official: true
+  - label: S 1786 introduced text
+    url: https://pub.njleg.gov/bills/2026/S2000/1786_I1.HTM
+    official: true
+  discovered_via: search

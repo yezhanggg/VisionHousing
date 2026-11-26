@@ -191,3 +191,65 @@ def test_baseline_cycle_moves_the_baseline_only(ctx):
     strong = compute(ctx, "adu", seed=1, draws=200, cycle="strong")
     assert weak.baseline.p50 < strong.baseline.p50
     assert np.array_equal(weak.reforms["adu"].state_draws, strong.reforms["adu"].state_draws)
+
+
+# The tract-level part of a package (the statewide tract columns read it).
+
+
+def _to_counties(result, rows, row_counties):
+    at = {c: i for i, c in enumerate(result.county_ids)}
+    out = np.zeros((len(result.county_ids), rows.shape[1]))
+    for county, row in zip(row_counties, rows, strict=True):
+        out[at[county]] += row
+    return out
+
+
+def test_tract_part_plus_county_reforms_is_the_package_in_every_draw(with_middle):
+    pkg = with_middle.package
+    assert pkg.tract_reforms == ("adu", "missing_middle")
+    assert pkg.county_reforms == ("fees", "parking")
+    assert pkg.tract_draws.shape == (len(pkg.tract_geoids), DRAWS)
+    summed = _to_counties(with_middle, pkg.tract_draws, pkg.tract_counties)
+    assert np.allclose(summed, pkg.tract_county_draws, rtol=0, atol=1e-9)
+    rest = sum(with_middle.reforms[k].county_draws for k in pkg.county_reforms)
+    assert np.allclose(pkg.tract_county_draws + rest, pkg.county_draws, rtol=0, atol=1e-9)
+    # Tract by tract: each reform alone, minus the ADU-lot overlap, plus the interactions.
+    alone = sum(with_middle.reforms[k].state_draws for k in pkg.tract_reforms)
+    expected = alone - pkg.overlap_draws + pkg.interaction_draws
+    assert np.allclose(pkg.tract_draws.sum(axis=0), expected, rtol=0, atol=1e-9)
+    assert np.all(pkg.tract_draws >= -1e-9)
+    assert pkg.tract_combined.p50 == pytest.approx(np.percentile(expected, 50), abs=1e-9)
+    assert "missing_middle.adu_lot_overlap_share" in pkg.tract_combined.assumption_ids
+
+
+def test_one_tract_reform_alone_is_its_own_tract_part(ctx):
+    res = compute(ctx, "adu", seed=3, draws=300)
+    pkg, adu = res.package, res.reforms["adu"]
+    assert pkg.county_reforms == () and pkg.tract_reforms == ("adu",)
+    assert np.array_equal(pkg.tract_draws, adu.result.added)
+    assert pkg.tract_combined.p50 == pytest.approx(adu.added.p50, rel=1e-12)
+    county_only = compute(ctx, "fees", seed=3, draws=300).package
+    assert county_only.tract_draws is None and county_only.county_reforms == ("fees",)
+
+
+def test_step_summaries_come_from_the_module_stages(ctx):
+    res = compute(ctx, ["adu", "fees"], seed=3, draws=300)
+    adu = res.reforms["adu"]
+    detail = adu.result.detail
+    steps = adu.tract_steps()
+    assert [s.stage for s in steps] == list(detail.stages)
+    for s, record in zip(steps, adu.steps, strict=True):
+        assert s.record == record and s.level == "tract"
+        assert np.all(s.p10 <= s.p50) and np.all(s.p50 <= s.p90)
+        assert np.allclose(s.p50, np.median(detail.stages[s.stage], axis=0))
+    by_county = {s.stage: s for s in adu.county_steps()}
+    for stage in ("eligible", "built"):
+        own = detail.county_records(stage)  # the module's own county records
+        step = by_county[stage]
+        for i, county in enumerate(step.geoids):
+            assert step.p50[i] == pytest.approx(own[county].p50, rel=1e-9)
+    one = adu.tract_steps(["fit"], county="99001")
+    assert [s.stage for s in one] == ["fit"]
+    mine = {g for g, c in zip(detail.geoids, detail.counties, strict=True) if c == "99001"}
+    assert set(one[0].geoids) == mine
+    assert res.reforms["fees"].tract_steps() == () and res.reforms["fees"].county_steps() == ()

@@ -1,0 +1,283 @@
+# Cross-state comparison records: RI.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+#
+# Rhode Island public law pages (webserver.rilegislature.gov/PublicLaws) give the
+# chapter, the bill and the date the act was enacted, and the act's own effective
+# date section. Insertions were read from the underlined text of those pages.
+
+version: 1
+records:
+- id: ri.pl2024_c284_adu
+  kind: policy
+  state: RI
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - fees
+  title: 'Rhode Island H 7062 (2024): one ADU by right in three cases, uniform ADU standards'
+  citation: R.I. Public Laws 2024, ch. 284 (H 7062 Sub A); R.I. Gen. Laws §§ 45-24-31, 45-24-37, 45-24-73
+  url: https://webserver.rilegislature.gov/PublicLaws/law24/law24284.htm
+  session: 2024 session
+  bill: H 7062
+  enacted_date: 2024-06-25
+  effective_dates:
+  - date: 2024-06-25
+    applies_to: Whole act (effective upon passage)
+  geographic_scope: 'All cities and towns. One ADU per lot by right: (1) on an owner-occupied property
+    as an accommodation for family members with disabilities, (2) on a residential lot of 20,000 sq ft
+    or more, or (3) inside the existing footprint of the home or an existing accessory structure.'
+  exclusions:
+  - Outside the three by-right cases, ADUs follow local rules (subject to the uniform standards)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Uniform standards: size caps must allow at least 900 sq ft or 60% of the main home (whichever is
+    less); no more than one off-street parking space per ADU bedroom; fees no higher than for a new single-family
+    home; up to two bedrooms; ADUs approved through an administrative building permit process.'
+  - Read from the public law page's marked-up text; the companion Senate bill S 2998 is ch. 285.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The public law page (webserver.rilegislature.gov) shows 'Chapter 284 2024 -- H 7062
+    SUBSTITUTE A Enacted 06/25/2024' and 'SECTION 3. This act shall take effect upon passage.'
+  sources:
+  - label: R.I. Public Laws 2024, ch. 284
+    url: https://webserver.rilegislature.gov/PublicLaws/law24/law24284.htm
+    official: true
+  discovered_via: search
+- id: ri.pl2025_c262_townhouses
+  kind: policy
+  state: RI
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - starter_lots
+  - parking
+  title: 'Rhode Island H 5798 (2025): attached single-family homes (townhouses) on their own lots'
+  citation: R.I. Public Laws 2025, ch. 262 (H 5798 Sub A as amended); R.I. Gen. Laws §§ 45-24-33(a)(25),
+    45-24-37(j)
+  url: https://webserver.rilegislature.gov/PublicLaws/law25/law25262.htm
+  session: 2025 session
+  bill: H 5798
+  enacted_date: 2025-06-27
+  effective_dates:
+  - date: 2026-01-01
+    applies_to: Whole act
+  geographic_scope: All cities and towns; residential districts that allow two or more units.
+  exclusions:
+  - Units need public water and sewer or approved private systems
+  - Number of attached units is limited to the district's residential density
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Each unit may sit on its own lot with a zero setback at the party wall and no larger lot size, width
+    or frontage than otherwise required.
+  - Local standards may not hold floor area ratio below one, cap bedrooms below three, or require more
+    than two off-street spaces for up to three bedrooms.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The public law page (webserver.rilegislature.gov) shows 'Chapter 262 2025 -- H 5798
+    SUBSTITUTE A AS AMENDED Enacted 06/27/2025' and 'SECTION 2. This act shall take effect on January 1,
+    2026.'
+  sources:
+  - label: R.I. Public Laws 2025, ch. 262
+    url: https://webserver.rilegislature.gov/PublicLaws/law25/law25262.htm
+    official: true
+  discovered_via: search
+- id: ri.pl2025_c276_residential_code
+  kind: policy
+  state: RI
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Rhode Island H 5804 (2025): buildings of up to four homes built under the residential code'
+  citation: R.I. Public Laws 2025, ch. 276 (H 5804 Sub B as amended); R.I. Gen. Laws § 23-27.3-100.1.5
+  url: https://webserver.rilegislature.gov/PublicLaws/law25/law25276.htm
+  session: 2025 session
+  bill: H 5804
+  enacted_date: 2025-06-27
+  effective_dates:
+  - date: 2025-06-27
+    applies_to: Whole act (effective upon passage)
+  geographic_scope: Statewide building code.
+  exclusions:
+  - Buildings with more than four residential units stay under the International Building Code
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Code change only; it lowers construction cost for 3-4 unit buildings but does not change zoning.
+  - The building code standards committee adopts the amended code; when the new residential code took
+    effect in practice was not read.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The public law page (webserver.rilegislature.gov) shows 'Chapter 276 2025 -- H 5804
+    SUBSTITUTE B AS AMENDED Enacted 06/27/2025' and 'SECTION 4. This act shall take effect upon passage.'
+  sources:
+  - label: R.I. Public Laws 2025, ch. 276
+    url: https://webserver.rilegislature.gov/PublicLaws/law25/law25276.htm
+    official: true
+  discovered_via: search
+- id: ri.pl2025_c260_commercial
+  kind: policy
+  state: RI
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  title: 'Rhode Island H 5800 (2025): zoning must provide for homes in commercial districts'
+  citation: R.I. Public Laws 2025, ch. 260 (H 5800 Sub A); R.I. Gen. Laws § 45-24-33(a)(25)
+  url: https://webserver.rilegislature.gov/PublicLaws/law25/law25260.htm
+  session: 2025 session
+  bill: H 5800
+  enacted_date: 2025-06-27
+  effective_dates:
+  - date: 2026-01-01
+    applies_to: Whole act
+  geographic_scope: All cities and towns; cities and towns over 40,000 people must allow housing in at
+    least 30% of the area of their commercial zoning districts.
+  exclusions:
+  - Smaller municipalities may choose all or only some commercial areas
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Ordinances must allow homes above ground-floor commercial uses, medium-to-high density housing in
+    those zones and flexible dimensional rules for mixed use.
+  - Companion Senate bill S 1090 is ch. 259 (same date). Whether towns have amended ordinances was not
+    checked.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The public law page (webserver.rilegislature.gov) shows 'Chapter 260 2025 -- H 5800
+    SUBSTITUTE A Enacted 06/27/2025' and 'SECTION 2. This act shall take effect on January 1, 2026.'
+  sources:
+  - label: R.I. Public Laws 2025, ch. 260
+    url: https://webserver.rilegislature.gov/PublicLaws/law25/law25260.htm
+    official: true
+  discovered_via: search
+- id: ri.pl2025_c289_subdivisions
+  kind: policy
+  state: RI
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - permit_timing
+  title: 'Rhode Island H 5794 (2025): oversized-lot subdivisions and faster completeness review'
+  citation: R.I. Public Laws 2025, ch. 289 (H 5794 Sub B as amended); R.I. Gen. Laws §§ 45-22-7, 45-23-32,
+    45-23-35, 45-23-36, 45-23-39
+  url: https://webserver.rilegislature.gov/PublicLaws/law25/law25289.htm
+  session: 2025 session
+  bill: H 5794
+  enacted_date: 2025-06-27
+  effective_dates:
+  - date: 2025-06-27
+    applies_to: Whole act (effective upon passage)
+  geographic_scope: All cities and towns; existing lots that can be split into vacant residential lots
+    at least as large as half of the developed lots within 200 feet.
+  exclusions:
+  - New lots must be at least 3,000 sq ft and have sewer and water or proven well and septic suitability
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Oversized-lot subdivisions are minor subdivisions and need no zoning relief only because the new lots
+    are smaller than the zone's minimum.
+  - Applications may be found incomplete only for items missing from the local checklist; pre-application
+    meetings become optional at the applicant's request.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The public law page (webserver.rilegislature.gov) shows 'Chapter 289 2025 -- H 5794
+    SUBSTITUTE B AS AMENDED Enacted 06/27/2025' and 'SECTION 5. This act shall take effect upon passage.'
+  sources:
+  - label: R.I. Public Laws 2025, ch. 289
+    url: https://webserver.rilegislature.gov/PublicLaws/law25/law25289.htm
+    official: true
+  discovered_via: search
+- id: ri.pl2025_c365_epermitting
+  kind: policy
+  state: RI
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Rhode Island H 5803 (2025): statewide electronic permitting for building, zoning and planning
+    applications'
+  citation: R.I. Public Laws 2025, ch. 365 (H 5803 Sub A as amended); R.I. Gen. Laws ch. 23-27.3
+  url: https://webserver.rilegislature.gov/PublicLaws/law25/law25365.htm
+  session: 2025 session
+  bill: H 5803
+  enacted_date: 2025-07-01
+  effective_dates:
+  - date: 2025-07-01
+    applies_to: Whole act (effective upon passage)
+  geographic_scope: State building code office platform for state and local building permits, municipal
+    zoning and planning applications, and DEM, DOT and coastal council permits.
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Sets up the platform and its fees; it sets no review deadlines, so any effect on approval times is
+    indirect.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: The public law page (webserver.rilegislature.gov) shows 'Chapter 365 2025 -- H 5803
+    SUBSTITUTE A AS AMENDED Enacted 07/01/2025' and 'SECTION 9. This act shall take effect upon passage.'
+  sources:
+  - label: R.I. Public Laws 2025, ch. 365
+    url: https://webserver.rilegislature.gov/PublicLaws/law25/law25365.htm
+    official: true
+  discovered_via: search

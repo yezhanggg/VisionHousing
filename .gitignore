@@ -66,3 +66,7 @@ web/dist/
 # --- OS noise ---
 .DS_Store
 Thumbs.db
+
+# iCloud conflict copies (e.g. "map 2.js", "PA 2")
+* 2
+* 2.*

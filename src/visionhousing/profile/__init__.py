@@ -28,7 +28,7 @@ from visionhousing.profile.context import (
     ProfileContext,
     load_profile_context,
 )
-from visionhousing.profile.model import Comparison, Fact, Profile, Section
+from visionhousing.profile.model import Chart, ChartItem, Comparison, Fact, Profile, Rank, Section
 from visionhousing.profile.registry import BUILT, RESERVED, SECTIONS
 from visionhousing.profile.render import FORMATS, render
 
@@ -37,12 +37,15 @@ __all__ = [
     "FORMATS",
     "RESERVED",
     "SECTIONS",
+    "Chart",
+    "ChartItem",
     "Comparison",
     "Fact",
     "MissingDataError",
     "PlaceNotFoundError",
     "Profile",
     "ProfileContext",
+    "Rank",
     "Section",
     "build_profile",
     "list_places",

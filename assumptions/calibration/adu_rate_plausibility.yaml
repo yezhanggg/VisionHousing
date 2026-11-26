@@ -1,0 +1,76 @@
+# Plausibility table: VisionHousing ADU rate vs California (generated; do not edit).
+# Written by `visionhousing validate-california`. Read by the plausibility card.
+# Method: docs/modules/validation_california.md.
+
+version: 1
+id: adu_rate_plausibility_2026_11
+state: PA
+label: 'ADU rate plausibility: VisionHousing result vs California observed rates'
+status: comparison; California rates are context, not a target
+provenance:
+  summary: VisionHousing's ADU result per 1,000 eligible lots per year next to California ADU permits
+    per 1,000 one-unit detached homes per year.
+  measured_on: '2026-11-24'
+  method: Table A and Table A2 streamed in chunks (settings in assumptions/validation_california.yaml);
+    projects joined on jurisdiction, parcel number and unit category; Kaplan-Meier in visionhousing.features.permit_timing;
+    see docs/modules/validation_california.md.
+  generated_by: visionhousing validate-california
+  sources:
+  - id: hcd_apr_table_a
+    citation: California Department of Housing and Community Development (via the California Open Data
+      Portal), Housing Element Annual Progress Report (APR) data, Table A (housing development applications
+      received)
+    url: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/c78b769d-cc02-4050-91ef-79ded665b5a8/download/tablea.csv
+    licence: Portal listing states "No restrictions on public use" (rights field); licence field "not
+      specified"; the state's open data handbook releases portal data in the public domain. Only aggregates
+      are kept.
+  - id: hcd_apr_table_a2
+    citation: California Department of Housing and Community Development (via the California Open Data
+      Portal), Housing Element Annual Progress Report (APR) data, Table A2 (entitled, permitted and completed
+      units)
+    url: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/fe505d9b-8c36-42ba-ba30-08bc4f34e022/download/tablea2.csv
+    licence: Portal listing states "No restrictions on public use" (rights field); licence field "not
+      specified"; the state's open data handbook releases portal data in the public domain. Only aggregates
+      are kept.
+  - id: acs5_profile_tables
+    citation: U.S. Census Bureau, American Community Survey 5-year tables for the place-profile charts
+      (2020-2024)
+    url: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/data/5YRData/acsdt5y2024-b25024.dat
+    licence: Public domain (U.S. government work)
+  limits:
+  - The lot denominator is one-unit detached homes in one ACS period (2020-2024) for every year; unincorporated
+    county areas get no place rate.
+  - The model's eligible lots include attached single-family homes; California's denominator counts detached
+    homes only, so the model's rate is lower than a like-for-like rate.
+  - California pairs strong state ADU law with very high rents; its rates are an upper reference, not
+    an expectation for Pennsylvania.
+model:
+  run: web/public/data/PA/runs/adu.json
+  state: PA
+  seed: 0
+  draws: 2000
+  hashes:
+    code: 57410fc88fcdb906d9eecd6f9b78f2e9e013b4faa4a89509b994071febff0e91
+    data: a3170211d86f782fe7781dd3b79adcad666c5d70c2be52f75858b5477b639421
+    assumptions: 0b1de168af606066a84e3368b6bf6dfd22d772eeb1f64ddc10d522480d9e8248
+  eligible_lots_p50: 3337990
+  eligible_name: 'eligible lots (adu: sf_detached, sf_attached)'
+  adus_built: {p10: 3985, p50: 9061, p90: 17676}
+  built_name: 'ADUs built 2027-2031 (adu: sf_detached, sf_attached)'
+  years: 5
+  per_1000_eligible_lots_per_year: {p10: 0.239, p50: 0.543, p90: 1.059}
+  formula: rate = ADUs built over 5 years (P10/P50/P90) / P50 eligible lots / 5 x 1,000
+california:
+  statewide_by_year: {2018: 1.067, 2019: 1.521, 2020: 1.529, 2021: 2.468, 2022: 3.05, 2023: 3.401, 2024: 3.663,
+    2025: 3.883}
+  statewide_range: {low: 1.067, high: 3.883, n: 8}
+  chosen_places_range: {low: 0.881, high: 13.292, n: 24}
+  chosen_places:
+    SAN DIEGO: {2018: 0.881, 2019: 2.557, 2020: 2.003, 2021: 3.549, 2022: 2.7, 2023: 7.786, 2024: 9.304,
+      2025: 8.831}
+    LOS ANGELES: {2018: 7.276, 2019: 8.547, 2020: 6.109, 2021: 9.036, 2022: 12.775, 2023: 11.605, 2024: 12.584,
+      2025: 13.292}
+    SAN JOSE: {2018: 1.085, 2019: 2.351, 2020: 1.871, 2021: 2.374, 2022: 2.532, 2023: 2.656, 2024: 3.154,
+      2025: 2.837}
+  unit: ADU homes permitted per 1,000 one-unit detached homes per year
+ratio_model_p50_to_statewide_mean: 0.211

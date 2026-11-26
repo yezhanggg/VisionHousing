@@ -1,0 +1,255 @@
+# State law and bills that bear on the five benchmark reforms (Pennsylvania).
+#
+# Read by visionhousing.law.state, which builds the state_law_provisions and
+# law_documents tables. Each provision cites a section of a text we fetch
+# (the Municipalities Planning Code, or a bill page on palegis.us); the build
+# checks that every cited MPC section heading is really in the fetched text
+# and fills each bill's last action and date from its page.
+#
+# summary_own_words is our plain-language summary, not a quotation. Every
+# section below was read in the fetched text on checked_on.
+#
+# Legislative records are public; licence recorded as "Public legislative record".
+# The Pennsylvania Code and Bulletin site disallows automated reading in its
+# robots file: it is listed as a link only and never fetched.
+
+version: 1
+state: PA
+
+# Bills of a two-year session that are not enacted when it ends must be
+# introduced again in the next session. After this date a bill whose page shows
+# no enactment is shown as lapsed.
+session_end: 2026-11-30
+
+# Who the planning code reaches. Its definition of "municipality" (section 107)
+# lists cities of the second class A and third class, boroughs, incorporated
+# towns, townships, counties of the second through eighth class and home rule
+# municipalities; Philadelphia (first class) and Pittsburgh (second class)
+# have their own zoning codes under other laws.
+mpc_applies_to: "Municipalities under the Municipalities Planning Code (all but Philadelphia and Pittsburgh)"
+# The two municipalities outside the code, as 10-digit Census codes (state,
+# county, county subdivision): Philadelphia city and Pittsburgh city.
+outside_mpc: ["4210160000", "4200361000"]
+
+documents:
+  - doc_id: pa_mpc_1968_247
+    title: "Pennsylvania Municipalities Planning Code (Act 247 of 1968), full text"
+    level: state
+    publisher: Pennsylvania General Assembly
+    url: https://www.palegis.us/statutes/unconsolidated/law-information?sessYr=1968&sessInd=0&actNum=247
+    text_url: https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?62&iFrame=true&txtType=HTM&SessYr=1968&ActNum=0247.&SessInd=0
+    licence: Public legislative record
+    access: fetched
+    source_id: pa_mpc
+  - doc_id: pa_code_bulletin
+    title: "Pennsylvania Code and Bulletin (regulations, including the Uniform Construction Code rules)"
+    level: state
+    publisher: Pennsylvania Legislative Reference Bureau
+    url: https://www.pacodeandbulletin.gov/
+    licence: Public legislative record; robots file disallows automated reading
+    access: link_only
+    source_id: pa_code_bulletin
+
+# Sections of the planning code. "section" is the heading number the build
+# looks for in the fetched text ("Section <section>.").
+provisions:
+  - provision_id: mpc_adu_silent
+    citation: "MPC Article VI (no accessory dwelling unit section)"
+    section: "603"
+    reform: adu
+    status: enacted
+    summary_own_words: >-
+      The planning code has no section on accessory dwelling units. Whether an
+      ADU is allowed is left to each municipality's zoning ordinance, which the
+      code lets regulate the uses of land and buildings (section 603).
+  - provision_id: mpc_604_4
+    citation: "MPC § 604(4)"
+    section: "604"
+    reform: missing_middle
+    status: enacted
+    summary_own_words: >-
+      Zoning must provide for housing of various dwelling types: single-family
+      and two-family homes, a reasonable range of multifamily homes in various
+      arrangements, and mobile homes. An ordinance is not invalid for leaving
+      out any other specific type.
+  - provision_id: mpc_301_a_2_1
+    citation: "MPC § 301(a)(2.1)"
+    section: "301"
+    reform: missing_middle
+    status: enacted
+    summary_own_words: >-
+      A comprehensive plan must include a plan to meet the housing needs of
+      present and expected residents, which may provide for new housing in
+      different dwelling types at densities suited to households of all incomes.
+  - provision_id: mpc_605_3
+    citation: "MPC § 605(3)"
+    section: "605"
+    reform: missing_middle
+    status: enacted
+    summary_own_words: >-
+      Zoning may allow more density or intensity than a district's base rule
+      when a project meets standards written in the ordinance (a density bonus).
+  - provision_id: mpc_art_vii_a
+    citation: "MPC Article VII-A, § 701-A"
+    section: "701-A"
+    reform: missing_middle
+    status: enacted
+    summary_own_words: >-
+      Municipalities may adopt traditional neighborhood development rules:
+      walkable, mixed-use neighbourhoods with a greater variety of dwelling
+      types than lot-by-lot zoning gives. It is optional.
+  - provision_id: mpc_605_2_i
+    citation: "MPC § 605(2)(i)"
+    section: "605"
+    reform: tod
+    status: enacted
+    summary_own_words: >-
+      Zoning may set special rules for land at or near major roads,
+      interchanges and rail or transit terminals. It allows, but does not
+      require, different density near transit.
+  - provision_id: mpc_604_1
+    citation: "MPC § 604(1)"
+    section: "604"
+    reform: parking
+    status: enacted
+    summary_own_words: >-
+      Vehicle parking and loading space is one of the purposes zoning may
+      serve. The code lets municipalities set parking rules but sets no
+      minimum or maximum itself.
+  - provision_id: mpc_301_a_3
+    citation: "MPC § 301(a)(3)"
+    section: "301"
+    reform: parking
+    status: enacted
+    summary_own_words: >-
+      A comprehensive plan must include a plan for moving people and goods,
+      which may cover parking facilities, transit routes, and walking and
+      cycling.
+  - provision_id: mpc_503_a
+    citation: "MPC Article V-A, § 503-A"
+    section: "503-A"
+    reform: fees
+    status: enacted
+    summary_own_words: >-
+      Municipalities other than counties may adopt an impact fee ordinance, but
+      only for off-site road (transportation) improvements listed in a
+      transportation capital improvements plan, charged as a condition of final
+      plat approval. The code authorizes no other kind of impact fee.
+  - provision_id: mpc_503_a_d
+    citation: "MPC § 503-A(d)"
+    section: "503-A"
+    reform: fees
+    status: enacted
+    summary_own_words: >-
+      Impact fees may pay only for road improvements caused by new development;
+      they may not pay for other municipal facilities, repair and upkeep, or
+      fixing existing shortfalls.
+  - provision_id: mpc_504_a
+    citation: "MPC § 504-A"
+    section: "504-A"
+    reform: fees
+    status: enacted
+    summary_own_words: >-
+      Before adopting a transportation impact fee, a municipality must appoint
+      an advisory committee and prepare a transportation capital improvements
+      plan built on land use assumptions and a roadway sufficiency analysis.
+  - provision_id: mpc_507_a
+    citation: "MPC § 507-A"
+    section: "507-A"
+    reform: fees
+    status: enacted
+    summary_own_words: >-
+      Sewer and water tap-in or connection fees must be worked out as the
+      Municipality Authorities Act provides.
+  - provision_id: mpc_503_1
+    citation: "MPC § 503(1)"
+    section: "503"
+    reform: fees
+    status: enacted
+    summary_own_words: >-
+      Subdivision and land development review fees must be reasonable and
+      necessary and set by a fee schedule adopted by ordinance or resolution.
+
+# scope: all | all_zoned | mpc | mpc_zoned | conditional (see visionhousing.law.schema.SCOPES);
+# the place profile uses it to say which residents a bill would reach.
+#
+# Bills of the 2025-2026 session. Status, last action, introduction date (the
+# first dated action: a bill is referred to committee the day it is
+# introduced) and any enactment date come from each bill's page at build
+# time; the values here are what the page said on checked_on and are used
+# when the page cannot be read. Only bills (not co-sponsorship memos).
+bills:
+  - provision_id: pa_hb2186
+    bill_id: "HB 2186"
+    citation: "HB 2186 (2025-2026), Printer's No. 3373, new 53 Pa.C.S. Chapter 63"
+    reform: adu
+    source_id: pa_hb2186
+    applies_to: "Every municipality with zoning where a residential building is permitted (cities included)"
+    scope: all_zoned
+    last_action: "Referred to URBAN AFFAIRS AND HOUSING (Senate)"
+    last_action_date: 2026-06-05
+    introduced_on: 2026-02-02  # first referral on the bill page
+    binding_conditions: >-
+      Where a home is a permitted use; one ADU per lot; size cap may be no lower
+      than 850 sq ft or half the house; effective date set by the bill, not read.
+    summary_own_words: >-
+      One ADU per lot, attached or detached, would be allowed by right wherever
+      a home is a permitted use. Municipalities could not require owner
+      occupancy, a family tie between occupants or extra parking, and could cap
+      size no lower than 850 square feet or half the house, whichever is less. Passed the House
+      139-62 on June 1, 2026.
+  - provision_id: pa_sb1346
+    bill_id: "SB 1346"
+    citation: "SB 1346 (2025-2026), Printer's No. 1747, new MPC § 603.2"
+    reform: adu
+    source_id: pa_sb1346
+    applies_to: "Municipalities under the Municipalities Planning Code (all but Philadelphia and Pittsburgh)"
+    scope: mpc_zoned
+    last_action: "Laid on the table (Pursuant to Senate Rule 9)"
+    last_action_date: 2026-11-17
+    introduced_on: 2026-05-26  # first referral on the bill page
+    binding_conditions: >-
+      MPC municipalities with zoning only; districts where single-family
+      detached homes are permitted; may be rented but not sold separately.
+    summary_own_words: >-
+      At least one ADU per single-family detached home would be a permitted use
+      by right in every district where such homes are permitted, approved
+      without a hearing. Owner occupancy and extra parking could not be
+      required; an ADU could be rented but not sold separately.
+  - provision_id: pa_hb2155
+    bill_id: "HB 2155"
+    citation: "HB 2155 (2025-2026), Printer's No. 2789, new 53 Pa.C.S. § 511"
+    reform: parking
+    source_id: pa_hb2155
+    applies_to: "Every county and municipality"
+    scope: all
+    last_action: "Referred to HOUSING AND COMMUNITY DEVELOPMENT"
+    last_action_date: 2026-01-26
+    introduced_on: 2026-01-26  # first referral on the bill page
+    binding_conditions: >-
+      Would take effect one year after enactment; spaces required by the
+      Americans with Disabilities Act still apply.
+    summary_own_words: >-
+      Counties and municipalities could not require a minimum number of parking
+      spaces for any development or building, whatever its use, except spaces
+      required by the Americans with Disabilities Act. It would take effect one
+      year after enactment.
+  - provision_id: pa_hb1459
+    bill_id: "HB 1459"
+    citation: "HB 1459 (2025-2026), Printer's No. 1712, new 53 Pa.C.S. § 602"
+    reform: missing_middle
+    source_id: pa_hb1459
+    applies_to: "Municipalities over 5,000 people in counties that grew between the last two censuses"
+    scope: conditional
+    last_action: "Referred to LOCAL GOVERNMENT"
+    last_action_date: 2025-05-13
+    introduced_on: 2025-05-13  # first referral on the bill page
+    binding_conditions: >-
+      Municipalities over 5,000 people in counties that grew between the last
+      two censuses; lots zoned office, commercial or mixed use with public water
+      and sewer.
+    summary_own_words: >-
+      Buildings of three or more homes, and mixed-use buildings with them,
+      would be permitted by right on lots zoned for office, commercial or mixed
+      use that have public water and sewer service. Parking could be required
+      at no more than one space per home.

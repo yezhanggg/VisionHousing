@@ -119,5 +119,8 @@ def test_rules_and_plan_citations():
     plans = zs.read_plan_citations()
     assert {"42101", "42003"} <= set(plans)
     for code, plan in plans.items():
-        assert len(code) == 5 and plan["url"].startswith("https://")
-        assert isinstance(plan["verified"], bool)
+        assert len(code) == 5 and isinstance(plan["verified"], bool)
+        # A link is given only when it was opened; a confirmed plan always has one.
+        for link in (plan["url"], plan.get("commission_url")):
+            assert link is None or link.startswith("https://")
+        assert not plan["verified"] or plan["url"]

@@ -1,0 +1,346 @@
+# Calibration (validation): baseline card and state reconciliation (generated; do not edit).
+# Written by `visionhousing baseline-card` from the Census Building Permits Survey
+# state annual files and monthly year-to-date files. What the baseline reads, the
+# shipped rule applied to each state's own totals (a release fixture), the
+# Pennsylvania window sensitivity and the 2026 nowcast. Changes no estimate
+# (settings: assumptions/baseline_card.yaml).
+# Method: docs/modules/baseline.md ("Baseline card").
+
+version: 1
+id: baseline_reconciliation_2026_11
+label: Baseline card and state reconciliation (Building Permits Survey state files)
+status: validation
+use: 'The API shows each state''s card beside the baseline; the release fixture test checks the reconciled
+  values. Changes no estimate. Method: docs/modules/baseline.md.'
+provenance:
+  summary: What the baseline reads (years, permit columns, data release, information cutoff, forecast
+    gap), the shipped rule applied to each state's own totals, a Pennsylvania window sensitivity and a
+    2026 nowcast diagnostic.
+  method: Census Building Permits Survey state annual and monthly year-to-date files; visionhousing.baseline.card;
+    settings in assumptions/baseline_card.yaml (baseline_card).
+  generated_by: visionhousing baseline-card
+  sources:
+  - id: bps_state_annual
+    citation: U.S. Census Bureau, Building Permits Survey, state annual files
+    url: https://www2.census.gov/econ/bps/State/
+    licence: Public domain (U.S. government work)
+  - id: bps_state_monthly_ytd
+    citation: U.S. Census Bureau, Building Permits Survey, state monthly year-to-date files
+    url: https://www2.census.gov/econ/bps/State/
+    licence: Public domain (U.S. government work)
+  limits:
+  - The state component checks the state-level arithmetic only; it does not check the county split, the
+    range or any reform.
+  - Vermont's middle value is not reproduced here (county shrinkage).
+  - Release dates are Last-Modified dates on the Census server.
+card:
+  unit_fields:
+  - est_1_units
+  - est_2_units
+  - est_3-4_units
+  - est_5+_units
+  unit_fields_label: Estimated units in 1-, 2-, 3-4 and 5+ unit buildings (Building Permits Survey)
+  data_release:
+    source: bps_state_annual
+    vintage: 2025 annual files (final)
+    last_full_year: 2025
+    release_date: '2026-05-14'
+    release_date_basis: Last-Modified date of the state annual file
+  information_cutoff: '2026-11-24'
+  information_cutoff_basis: as_of in assumptions/outcome.yaml
+  forecast_window:
+  - 2027
+  - 2031
+  forecast_gap:
+  - 2026
+  forecast_gap_text: 2026 has no full-year permit count by the cutoff; the baseline carries the 2025 rule
+    level through it.
+states:
+  PA:
+    rule: top_down_share
+    rule_text: state mean of 2021-2025 permits x the county's share of state permits in 2016-2025
+    annual:
+      2021: 47894
+      2022: 28149
+      2023: 25320
+      2024: 24810
+      2025: 25709
+    historical_years:
+      level_years:
+      - 2021
+      - 2025
+      backtest_years:
+      - 1990
+      - 2025
+      share_years:
+      - 2016
+      - 2025
+    role: reconciled
+    state_component: 151882
+    formula: state component = 5 x mean of 2021-2025 state units = 5 x (47,894 + 28,149 + 25,320 + 24,810
+      + 25,709) / 5 = 151,882 units (rule top_down_share, state series only; county shares do not change
+      the sum)
+    sources:
+    - bps_state_annual
+    assumption_ids:
+    - baseline.recent_window_years
+    - baseline.long_window_years
+    - baseline.horizon_years
+    - baseline.first_year
+  MA:
+    rule: last_3_mean
+    rule_text: mean of 2023-2025 permits
+    annual:
+      2021: 19853
+      2022: 16830
+      2023: 13214
+      2024: 14338
+      2025: 12477
+    historical_years:
+      level_years:
+      - 2023
+      - 2025
+      backtest_years:
+      - 1990
+      - 2025
+    role: reconciled
+    state_component: 66715
+    formula: state component = 5 x mean of 2023-2025 state units = 5 x (13,214 + 14,338 + 12,477) / 3
+      = 66,715 units (rule last_3_mean, state series only; county shares do not change the sum)
+    sources:
+    - bps_state_annual
+    assumption_ids:
+    - baseline.recent_window_years
+    - baseline.horizon_years
+    - baseline.first_year
+  WY:
+    rule: last_3_mean
+    rule_text: mean of 2023-2025 permits
+    annual:
+      2021: 2706
+      2022: 3005
+      2023: 1681
+      2024: 2135
+      2025: 2238
+    historical_years:
+      level_years:
+      - 2023
+      - 2025
+      backtest_years:
+      - 1990
+      - 2025
+    role: reconciled
+    state_component: 10090
+    formula: state component = 5 x mean of 2023-2025 state units = 5 x (1,681 + 2,135 + 2,238) / 3 = 10,090
+      units (rule last_3_mean, state series only; county shares do not change the sum)
+    sources:
+    - bps_state_annual
+    assumption_ids:
+    - baseline.recent_window_years
+    - baseline.horizon_years
+    - baseline.first_year
+  VT:
+    rule: shrink_to_group
+    rule_text: mean of 2021-2025 permits per home, pulled toward the county's place-type rate with weight
+      s / (s + 100) on its own rate (s = its mean yearly permits)
+    annual:
+      2021: 2319
+      2022: 2403
+      2023: 2456
+      2024: 2654
+      2025: 2294
+    historical_years:
+      level_years:
+      - 2021
+      - 2025
+      backtest_years:
+      - 1990
+      - 2025
+    role: control
+    note: The shipped middle value comes from county shrinkage toward place-type rates; county histories,
+      home counts and group assignments are needed to reproduce it, so the state series is an outside
+      control only.
+diagnostics:
+  baseline_pa_window_2022_2025:
+    label: 'Pennsylvania baseline window sensitivity: 2022-2025 mean instead of the shipped window'
+    state: PA
+    use: record_only
+    kind: judgement
+    years:
+    - 2022
+    - 2025
+    annual_mean: 25997
+    five_year: 129985
+    shipped_state_component: 151882
+    difference: -21897
+    difference_pct: -0.1442
+    formula: 5 x (28,149 + 25,320 + 24,810 + 25,709) / 4 = 5 x 25,997 = 129,985 units; difference from
+      the shipped state component 151,882 = -21,897 units (-14.4%)
+    sources:
+    - bps_state_annual
+    assumption_ids:
+    - baseline_pa_window_2022_2025
+    - baseline.horizon_years
+    status: Disclosed historical-window sensitivity. Named after the spike was seen, so not pre-registered.
+      Not a replacement baseline; never subtracted from any reform or package result.
+    rationale: Pennsylvania's 2021 total is far above 2022-2025, and the shipped rule's five-year window
+      includes it. Showing the four-year mean makes the effect of that one model choice visible. Named
+      after the spike was seen, so it is a disclosed sensitivity, not a pre-registered test or a replacement
+      baseline.
+bridge:
+  method: carry_annual
+  method_text: 'Carry annual through the gap: the rule''s yearly level from the last full year of data
+    is used unchanged for the gap year and each projected year. The gap year is not projected separately
+    and adds nothing to the five-year total.'
+  gap_years:
+  - 2026
+  nowcast:
+    id: baseline_bridge_nowcast_2026
+    label: 2026 nowcast from monthly year-to-date permits (diagnostic only)
+    use: record_only
+    status: available
+    year: 2026
+    through_month: 9
+    file: st2609y.txt
+    release_date: '2026-10-27'
+    next_file: st2610y.txt
+    next_release_date: '2026-11-25'
+    history_years:
+    - 2021
+    - 2022
+    - 2023
+    - 2024
+    - 2025
+    states:
+      PA:
+        ytd: 19096
+        ytd_history:
+          2021: 28483
+          2022: 18476
+          2023: 17909
+          2024: 18276
+          2025: 19460
+        shares:
+          2021: 0.5947
+          2022: 0.6564
+          2023: 0.7073
+          2024: 0.7366
+          2025: 0.7569
+        low: 25228
+        mid: 26998
+        high: 32110
+        carried_annual: 30376
+        formula: 'nowcast = YTD 2026 Jan-Sep / s; YTD = 19,096; s = YTD(y, Jan-Sep) / annual(y) for y
+          in 2021-2025 (2021 0.595, 2022 0.656, 2023 0.707, 2024 0.737, 2025 0.757); low / middle / high
+          use s = 0.757 / 0.707 / 0.595 = 25,228 / 26,998 / 32,110 units; the carried annual level is
+          30,376 units (the shipped rule''s state level, mean of 2021-2025). Diagnostic only: no estimate
+          uses it.'
+        carried_annual_basis: the shipped rule's state level, mean of 2021-2025
+        sources:
+        - bps_state_monthly_ytd
+        - bps_state_annual
+        assumption_ids:
+        - baseline_bridge_nowcast_2026
+        - baseline.first_year
+        - baseline.recent_window_years
+      MA:
+        ytd: 11156
+        ytd_history:
+          2021: 13270
+          2022: 14165
+          2023: 9809
+          2024: 10595
+          2025: 9091
+        shares:
+          2021: 0.6684
+          2022: 0.8417
+          2023: 0.7423
+          2024: 0.7389
+          2025: 0.7286
+        low: 13255
+        mid: 15097
+        high: 16690
+        carried_annual: 13343
+        formula: 'nowcast = YTD 2026 Jan-Sep / s; YTD = 11,156; s = YTD(y, Jan-Sep) / annual(y) for y
+          in 2021-2025 (2021 0.668, 2022 0.842, 2023 0.742, 2024 0.739, 2025 0.729); low / middle / high
+          use s = 0.842 / 0.739 / 0.668 = 13,255 / 15,097 / 16,690 units; the carried annual level is
+          13,343 units (the shipped rule''s state level, mean of 2023-2025). Diagnostic only: no estimate
+          uses it.'
+        carried_annual_basis: the shipped rule's state level, mean of 2023-2025
+        sources:
+        - bps_state_monthly_ytd
+        - bps_state_annual
+        assumption_ids:
+        - baseline_bridge_nowcast_2026
+        - baseline.first_year
+        - baseline.recent_window_years
+      WY:
+        ytd: 1354
+        ytd_history:
+          2021: 1999
+          2022: 2256
+          2023: 1174
+          2024: 1593
+          2025: 1585
+        shares:
+          2021: 0.7387
+          2022: 0.7507
+          2023: 0.6984
+          2024: 0.7461
+          2025: 0.7082
+        low: 1804
+        mid: 1833
+        high: 1939
+        carried_annual: 2018
+        formula: 'nowcast = YTD 2026 Jan-Sep / s; YTD = 1,354; s = YTD(y, Jan-Sep) / annual(y) for y in
+          2021-2025 (2021 0.739, 2022 0.751, 2023 0.698, 2024 0.746, 2025 0.708); low / middle / high
+          use s = 0.751 / 0.739 / 0.698 = 1,804 / 1,833 / 1,939 units; the carried annual level is 2,018
+          units (the shipped rule''s state level, mean of 2023-2025). Diagnostic only: no estimate uses
+          it.'
+        carried_annual_basis: the shipped rule's state level, mean of 2023-2025
+        sources:
+        - bps_state_monthly_ytd
+        - bps_state_annual
+        assumption_ids:
+        - baseline_bridge_nowcast_2026
+        - baseline.first_year
+        - baseline.recent_window_years
+      VT:
+        ytd: 1210
+        ytd_history:
+          2021: 1549
+          2022: 1761
+          2023: 1831
+          2024: 1877
+          2025: 2011
+        shares:
+          2021: 0.668
+          2022: 0.7328
+          2023: 0.7455
+          2024: 0.7072
+          2025: 0.8766
+        low: 1380
+        mid: 1651
+        high: 1811
+        carried_annual: 2425
+        formula: 'nowcast = YTD 2026 Jan-Sep / s; YTD = 1,210; s = YTD(y, Jan-Sep) / annual(y) for y in
+          2021-2025 (2021 0.668, 2022 0.733, 2023 0.746, 2024 0.707, 2025 0.877); low / middle / high
+          use s = 0.877 / 0.733 / 0.668 = 1,380 / 1,651 / 1,811 units; the carried annual level is 2,425
+          units (state-series mean of 2021-2025; the shipped level comes from county shrinkage). Diagnostic
+          only: no estimate uses it.'
+        carried_annual_basis: state-series mean of 2021-2025; the shipped level comes from county shrinkage
+        sources:
+        - bps_state_monthly_ytd
+        - bps_state_annual
+        assumption_ids:
+        - baseline_bridge_nowcast_2026
+        - baseline.first_year
+        - baseline.recent_window_years
+    caveats:
+    - A year-to-date count is never treated as a full year.
+    - Monthly and annual files differ in reporting and imputation; the share s absorbs that difference
+      as well as the season.
+    - Release dates are the files' Last-Modified dates on the Census server; a re-posted file shows a
+      later date than its first release.
+    - The history files are as posted now; earlier copies were not archived, so this is a revised-data
+      exercise.

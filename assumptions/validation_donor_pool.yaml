@@ -1,0 +1,299 @@
+# Donor-pool validation: settings for the hold-out-state test of the baseline's
+# error record. Read by visionhousing.validation.donor_pool; the command
+# `visionhousing validate-donor-pool` writes
+#   assumptions/calibration/donor_pool_errors.yaml   (results, with provenance)
+# Method: docs/modules/validation_donor_pool.md.
+#
+# The question. A state with few counties (Vermont: 14) has a short error record
+# of its own, so its baseline range is widened toward Pennsylvania's error record
+# (small_sample in assumptions/backtest.yaml). Would the errors of comparable
+# permit areas from all other states describe a small state's uncertainty
+# better? This file fixes the donor rule, the held-out states, the scoring and
+# the decision rule. Every rule below was written before any donor-pool score
+# was computed. Changing a rule changes the study; record why in the decision log.
+
+version: 1
+
+# ---------------------------------------------------------------- data
+# The national county panel: every county-equivalent of the 50 states and DC in
+# the Census Building Permits Survey annual county files (Puerto Rico left out).
+# Files are cached in data/raw/bps_national/ (one per year, under 1 MB each).
+source: bps_county_annual
+first_year: 1990
+last_year: 2025
+states: [AL, AK, AZ, AR, CA, CO, CT, DE, DC, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD,
+         MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD,
+         TN, TX, UT, VT, VA, WA, WV, WI, WY]
+
+# ---------------------------------------------------------------- the rule scored
+# The contest's winner for Pennsylvania (assumptions/backtest.yaml, contest), the
+# rule the small-sample prior is measured with. Horizon, lead and minimum history
+# come from the Assumption Ledger (baseline.horizon_years, baseline.first_year,
+# baseline.long_window_years), as in the baseline's own back-test.
+rule: last_3_mean
+
+# ---------------------------------------------------------------- what is scored
+# The held-out target is the state's own yearly total (the counties added up),
+# because the state total's range is what the small-sample widening changes.
+# One case per state and origin: ratio = actual five-year units / projected.
+#
+# A range is P50 x ratio P10 / ratio P50 to P50 x ratio P90 / ratio P50, the form
+# the baseline uses since its P50 correction was dropped. So the methods differ
+# only in their ranges; the P50 is the rule's projection in every method.
+quantiles: [0.1, 0.2, 0.5, 0.8, 0.9]
+target_coverage: 0.80
+coverage_band: [0.75, 0.85]
+
+# Two ways of choosing which past cases a method may use for an origin:
+#   out_of_time    only cases whose five target years were all observed by the
+#                  scored origin (origin' <= origin - lead - horizon + 1), as in a
+#                  real run. The decision uses this variant.
+#   other_origins  cases from other origins whose five target years do not overlap
+#                  the scored case's (|origin' - origin| >= horizon), later ones too:
+#                  in sample in time. Shown for context; never decides. (Until
+#                  2026-11-24 the code used every other origin, overlapping ones too.)
+variants: [out_of_time, other_origins]
+primary_variant: out_of_time
+# Every method needs at least this many ratios for an origin, or the origin is
+# not scored for any method (all methods are scored on identical cases).
+min_cases: 5
+
+# ---------------------------------------------------------------- methods
+# own            the held-out state's own state-total ratios
+# pa             Pennsylvania's state-total ratios (the current prior, used alone)
+# pa_blend       the current rule: own ends blended toward Pennsylvania's with
+#                w = min(1, n / full_weight_cases), n = the state's usable
+#                county-origin cases, and only ever widened (backtest.yaml small_sample)
+# national_states  all other states' state-total ratios, pooled
+# national_counties  all counties of all other states, pooled, unmatched
+# donor          the donor pool below, used alone
+# donor_blend    the current rule with the donor pool in place of Pennsylvania
+methods: [own, pa, pa_blend, national_states, national_counties, donor, donor_blend]
+prior_state: PA
+full_weight_cases: 1000   # the same value as small_sample.full_weight_cases
+
+# ---------------------------------------------------------------- donor rule
+# Donor cases are county-origin back-test cases from counties outside the target
+# state. Each is described at its own origin, and the target state's total at the
+# scored origin, by three features computed only from years up to that origin:
+#   size          mean yearly units, last size_years years (all structure types)
+#   growth        log((mean of the last growth_recent_years + 1) /
+#                     (mean of the growth_base_years before them + 1))
+#   completeness  units reported by permit offices / units in the Census estimate
+#                 (which adds imputed figures), summed over the last
+#                 completeness_years years
+# Distance = log_size x |log size - log size'| + growth x |growth - growth'|
+#            + completeness x |completeness - completeness'|.
+# The k nearest cases are the pool, at most max_cases_per_county from one county
+# (its nearest ones), ties broken by county id then origin. A county with no
+# permits in the size window, or with completeness below min_completeness, is
+# never a donor.
+donor:
+  size_years: 5
+  growth_recent_years: 3
+  growth_base_years: 7
+  completeness_years: 10
+  weights:
+    log_size: 1.0
+    growth: 1.0
+    completeness: 1.0
+  k: 200
+  max_cases_per_county: 3
+  min_completeness: 0.0
+
+# ---------------------------------------------------------------- held-out states
+# Small and mostly rural states with few counties (each has fewer usable
+# county-origin cases than full_weight_cases, so the widening rule acts on it),
+# plus Pennsylvania as a sanity check: Pennsylvania has more than
+# full_weight_cases cases in a real run, so it is not sparse; it is reported but
+# left out of the decision. (At early out-of-time origins fewer of its county
+# cases are complete, so its blends are not exactly its own record there.) Connecticut is not used: its
+# counties were replaced by planning regions in the recent files.
+held_out: [VT, NH, ME, RI, DE, WY, NM, NV, PA]
+
+# ---------------------------------------------------------------- decision rule
+# Adopt donor-pool errors for sparse states only if, on the primary variant and
+# over the held-out states that are sparse (fewer than full_weight_cases cases):
+#   1. closer to 80%: the mean over states of |coverage - target_coverage| is
+#      lower for donor_blend than for pa_blend (a tie keeps the current rule); and
+#   2. not wider than needed: if donor_blend's mean range width (P90 - P10 as a
+#      share of P50, averaged over cases) is larger than pa_blend's, donor_blend's
+#      pooled coverage must not be above the coverage band's upper end.
+# Otherwise keep the current widening toward Pennsylvania. The pure methods
+# (donor vs pa) are reported beside the decision but do not decide it.
+decision:
+  candidate: donor_blend
+  current: pa_blend
+
+# ---------------------------------------------------------------- confidence signals
+# Two separate signals for the interface (never combined into one score):
+#   baseline_performance  how well the baseline's ranges did in past years, for
+#                         this state, from its back-test (own record, or the
+#                         record it borrows)
+#   reform_evidence       how much outside evidence exists for each reform type,
+#                         from the cross-state comparison records
+#                         (assumptions/evidence/states/)
+confidence:
+  # Baseline: "back-tested" when the state's own record has full weight and its
+  # held-out coverage (or the contest coverage) is inside coverage_band;
+  # "borrowed" when the range leans on another record (w < 1); "limited" when
+  # no held-out coverage is available or coverage is outside the band.
+  # Reform evidence grade, by the best verified record with an observed result:
+  #   causal or matched -> "tested elsewhere"; descriptive -> "observed elsewhere";
+  #   verified law records only -> "law on record"; nothing -> "no records".
+  evidence_grades:
+    causal: tested elsewhere
+    matched: tested elsewhere
+    descriptive: observed elsewhere
+    law_only: law on record
+    none: no records
+
+# ================================================================ second test
+# Pooled state totals for sparse states, on a fresh set of held-out states.
+# Why: in the first test above, the pooled record of every other state's total
+# came closest to 80% coverage, but it was not the pre-stated candidate, so that
+# result decides nothing. This block states a new test of it before any score
+# of it on these states is computed. Its fingerprint (SHA-256 of the block, see
+# fingerprint below) is written into the results, so anyone can check the rule
+# was not changed after the scores were seen. Changing anything in this block
+# changes the fingerprint and makes it a new study.
+#
+# fingerprint: SHA-256 of json.dumps(block, sort_keys=True, separators=(",", ":"))
+# where block is this mapping as read by yaml.safe_load (comments do not count).
+pooled_states_test:
+  # The candidate. states_blend: the current small-sample rule (own ends
+  # blended toward a prior on the log scale with w = min(1, n / full_weight_cases),
+  # only ever widened) with the prior's ratios = every other area's state-total
+  # ratios in the state table (all states in `states` but the held-out one, DC
+  # and Connecticut included), pooled with equal weight per case. No similarity
+  # weighting: the test is of the pool the first test found, unchanged. The same
+  # origin restriction as every other method (primary_variant) applies.
+  candidate: states_blend
+  current: pa_blend
+  # Reported beside the decision; they do not decide it.
+  context_methods: [own, national_states]
+  variant: out_of_time
+  # The fresh held-out set, chosen by this rule (applied by
+  # donor_pool.select_fresh_states; nothing is typed by hand):
+  #   1. start from `states`;
+  #   2. drop the first test's held-out states (held_out above, Pennsylvania too);
+  #   3. drop exclude below: DC (not a state) and every state with a substantial
+  #      county change between first_year and last_year in the Census Bureau's
+  #      list of changes to counties (Alaska boroughs; Broomfield, Colorado;
+  #      Connecticut planning regions; Miami-Dade, Florida; Yellowstone National
+  #      Park, Montana; Oglala Lakota, South Dakota; Clifton Forge and Bedford,
+  #      Virginia);
+  #   4. keep sparse states only: fewer usable county-origin cases (whole record)
+  #      than full_weight_cases, since only there does the widening act (with full
+  #      weight every blend is the state's own record, so no method could differ);
+  #   5. rank by mean yearly units permitted (state total, all structure types,
+  #      first_year..last_year), smallest first, ties by postal code; keep the
+  #      first n_states.
+  exclude: [DC, AK, CO, CT, FL, MT, SD, VA]
+  n_states: 8
+  size_measure: mean_yearly_units
+  # At least this many fresh states must be scored, or the test is inconclusive
+  # and the current rule stays.
+  min_states_scored: 6
+  # Scoring, over the fresh states, on the variant above (out of time: only
+  # cases whose five target years were observed by the scored origin):
+  #   gap   = mean over states of |coverage - target_coverage|;
+  #   width = mean (P90 - P10) / P50 over all scored cases;
+  #   pooled coverage = share of all scored cases inside the range.
+  # Decision. Adopt states_blend in place of pa_blend only if both hold:
+  #   1. it beats the current rule: gap(candidate) < gap(current) after rounding
+  #      both to gap_decimals; when they are equal after rounding, the narrower
+  #      mean width wins (the candidate is adopted only if strictly narrower);
+  #   2. it is not wider than needed: if width(candidate) is more than
+  #      width_margin above width(current) (width_c > (1 + width_margin) x width_k),
+  #      its pooled coverage must be inside coverage_band.
+  # Otherwise keep the current widening toward Pennsylvania.
+  gap_decimals: 3
+  width_margin: 0.10
+
+# The state whose likely range for a real run is shown under the current rule
+# and the second test's candidate (outside the pre-registered block above).
+range_example_state: VT
+
+# ================================================================ third test
+# Growth-aware coverage. Why: in the second test every method caught the real
+# total far less often than 80% on the fresh states, worst in fast-growing ones.
+# The guess: a state that has grown for years keeps building above the rule's
+# trailing mean, so its misses fall on one side (above the range). This block
+# fixes (1) the growth classes used to describe that, and (2) a candidate
+# growth-aware widening, its held-out evaluation and its adoption rule, written
+# and fingerprinted before the candidate was scored. Same fingerprint method as
+# pooled_states_test (canonical JSON of the block; comments do not count).
+growth_coverage_test:
+  # Growth class of a state total at an origin, from years up to the origin only:
+  #   growth = log((mean yearly units, the recent_years to the origin + 1) /
+  #                (mean yearly units, the base_years before them + 1))
+  # (all structure types; a year counts when any county reported). At each
+  # origin the listed states are ranked by growth (smallest first, ties by postal
+  # code) and cut into n_classes equal groups: rank r of n -> class
+  # floor(n_classes x r / n), 0 = slowest. DC (not a state) and Connecticut
+  # (counties replaced by planning regions in the recent files) are not ranked.
+  classes:
+    recent_years: 5
+    base_years: 5
+    n_classes: 3
+    names: [slow, middle, fast]
+    states: [AL, AK, AZ, AR, CA, CO, DE, FL, GA, HI, ID, IL, IN, IA, KS, KY, LA, ME, MD,
+             MA, MI, MN, MS, MO, MT, NE, NV, NH, NJ, NM, NY, NC, ND, OH, OK, OR, PA, RI, SC, SD,
+             TN, TX, UT, VT, VA, WA, WV, WI, WY]
+  # ---- the candidate (written after the descriptive diagnosis of the current
+  # rule by class, before any score of the candidate).
+  # growth_widen: the current range (pa_blend: own record blended toward
+  # Pennsylvania's, only widened) widened further, never narrowed, toward the
+  # error record of states in the same growth class:
+  #   pool  = state-total ratios (actual / projected) of every ranked state other
+  #           than the held-out one, from origins whose five target years were all
+  #           observed by the scored origin (out of time), whose growth class at
+  #           their own origin equals the held-out state's class at the scored
+  #           origin; equal weight per case;
+  #   ends  = log P10 and log P90 of the pool's raw ratios (not divided by the
+  #           pool's median, so a class that runs above the projection keeps that
+  #           shift and the widening can be one-sided);
+  #   range = low  = min(cur_low,  w x cur_low  + (1 - w) x pool_low),
+  #           high = max(cur_high, w x cur_high + (1 - w) x pool_high),
+  #           cur = the current range's log ends around the P50, w = min(1, n /
+  #           full_weight_cases) as in the current rule (n = the state's usable
+  #           county-origin cases out of time). So a state with full weight keeps
+  #           its current range exactly.
+  #   A pool with fewer than min_pool_cases ratios leaves the current range as is.
+  candidate:
+    method: growth_widen
+    min_pool_cases: 5
+  # ---- held-out evaluation: leave one state out, out of time. Scored: every
+  # state in `states` with fewer usable county-origin cases (whole record) than
+  # full_weight_cases, except `exclude`; each scored state's own cases are never
+  # in its pool. Pennsylvania (the prior state) is scored the same way, reported,
+  # and used only in clause 3. Both methods are scored on identical cases with the
+  # same P50 (the rule's projection); a case needs at least min_cases ratios in
+  # the state's own record and in Pennsylvania's.
+  evaluation:
+    variant: out_of_time
+    exclude: [DC, CT]
+  # ---- adoption rule. Over the scored sparse states, out of time:
+  #   gap(m)            = mean over states of |coverage of state s under m - target_coverage|;
+  #   pooled coverage   = share of all scored cases whose real total fell inside the range.
+  # Adopt growth_widen in place of the current rule only if all three hold:
+  #   1. gap(candidate) < gap(current), both rounded to gap_decimals; equal after
+  #      rounding keeps the current rule;
+  #   2. pooled coverage(candidate) <= max_pooled_coverage. This clause only stops
+  #      ranges wider than needed: coverage below the coverage band does NOT, on
+  #      its own, reject the candidate;
+  #   3. Pennsylvania: let k and c be its out-of-time coverage under the current
+  #      rule and the candidate. If k is inside pa_band (ends included), c must be
+  #      inside pa_band too. If k is already outside pa_band, |c - target_coverage|
+  #      must not be larger than |k - target_coverage|. If Pennsylvania cannot be
+  #      scored, this clause fails.
+  # At least min_states_scored sparse states must be scored, or the test is
+  # inconclusive and the current rule stays.
+  decision:
+    gap_decimals: 3
+    max_pooled_coverage: 0.85
+    pa_band: [0.75, 0.85]
+    min_states_scored: 10
+  # States whose real-run likely range is shown under both methods.
+  range_states: [VT, PA]

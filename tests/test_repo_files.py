@@ -29,12 +29,12 @@ def test_workflows_have_minimal_permissions_and_pinned_actions():
                     assert ref.startswith("v") and ref[1:].isdigit(), step["uses"]
 
 
-def test_ci_runs_make_verify_on_python_312():
-    steps = load(WORKFLOWS / "ci.yml")["jobs"]["verify"]["steps"]
-    runs = [s.get("run") for s in steps]
-    assert "make setup" in runs and "make verify" in runs
-    uv = next(s for s in steps if s.get("uses", "").startswith("astral-sh/setup-uv"))
-    assert uv["with"]["python-version"] == "3.12"
+def test_ci_runs_the_checks_on_python_312():
+    jobs = load(WORKFLOWS / "ci.yml")["jobs"]
+    runs = [s.get("run") for job in jobs.values() for s in job["steps"]]
+    assert "make lint" in runs and "make test-unit" in runs and "make test-browser" in runs
+    uvs = [s for job in jobs.values() for s in job["steps"] if "setup-uv" in s.get("uses", "")]
+    assert uvs and all(uv["with"]["python-version"] == "3.12" for uv in uvs)
 
 
 def test_codeql_languages():
@@ -45,7 +45,7 @@ def test_codeql_languages():
 def test_dependabot_ecosystems():
     cfg = yaml.safe_load((ROOT / ".github" / "dependabot.yml").read_text(encoding="utf-8"))
     pairs = {(u["package-ecosystem"], u["directory"]) for u in cfg["updates"]}
-    assert pairs == {("pip", "/"), ("npm", "/web"), ("github-actions", "/")}
+    assert pairs == {("uv", "/"), ("npm", "/web"), ("github-actions", "/")}
 
 
 def test_every_package_has_a_plain_docstring():

@@ -20,9 +20,12 @@ from collections.abc import Callable
 
 from visionhousing.profile.context import Area, Measure, MissingDataError, ProfileContext
 from visionhousing.profile.format import compare_words, fmt, is_missing
-from visionhousing.profile.model import Comparison, Fact, Section
+from visionhousing.profile.model import Chart, Comparison, Fact, Headline, Section
 
-__all__ = ["FactMaker", "finish", "sentence", "with_words"]
+__all__ = ["MAX_POINTS", "FactMaker", "finish", "headline", "point", "sentence", "with_words"]
+
+MAX_POINTS = 3
+"""Most short summary points a section shows."""
 
 
 class FactMaker:
@@ -121,15 +124,66 @@ class FactMaker:
         return None
 
 
-def finish(key: str, title: str, summary: str, facts: list[Fact], limits: str) -> Section:
-    """Build an ``ok`` section (or ``no_data`` when no fact has a value)."""
+def finish(
+    key: str,
+    title: str,
+    summary: str,
+    facts: list[Fact],
+    limits: str,
+    *,
+    charts: list[Chart | None] | None = None,
+    lead: Fact | None = None,
+    points: list[str] | None = None,
+) -> Section:
+    """Build an ``ok`` section (or ``no_data`` when no fact has a value).
+
+    Args:
+        key: The section key.
+        title: The section title.
+        summary: One plain sentence.
+        facts: The facts, in display order.
+        limits: What the section cannot tell you.
+        charts: Charts to attach; ``None`` entries (no data) are dropped.
+        lead: The headline fact; default: the first fact with a value.
+        points: Short summary points; empty ones are dropped and at most
+            :data:`MAX_POINTS` are kept.
+    """
     if not facts or all(f.value is None for f in facts):
         return Section.no_data(key, title)
+    kept = tuple(c for c in (charts or []) if c is not None)
     sources: list[str] = []
-    for f in facts:
-        if f.source not in sources:
-            sources.append(f.source)
-    return Section(key, title, summary, tuple(facts), limits, tuple(sources), "ok")
+    for src in (*(f.source for f in facts), *(s for c in kept for s in c.source_ids)):
+        if src not in sources:
+            sources.append(src)
+    if lead is None or lead.value is None:
+        lead = next((f for f in facts if f.value is not None), None)
+    return Section(
+        key, title, summary, tuple(facts), limits, tuple(sources), "ok",
+        charts=kept,
+        headline=headline(lead),
+        summary_points=tuple(p for p in (points or []) if p)[:MAX_POINTS],
+    )  # fmt: skip
+
+
+def headline(fact: Fact | None) -> Headline | None:
+    """A headline that repeats a fact (``None`` without a value)."""
+    if fact is None or fact.value is None:
+        return None
+    words = fact.comparison.words if fact.comparison else ""
+    return Headline(fact.id, fact.label, fact.text, words)
+
+
+def point(fact: Fact | None, template: str) -> str:
+    """Fill ``template`` with a fact's ``{text}`` and ``{words}``; "" without a value.
+
+    ``{words}`` becomes `` (higher than the state)`` or nothing.
+    """
+    if fact is None or fact.value is None:
+        return ""
+    words = ""
+    if fact.comparison and fact.comparison.words:
+        words = f" ({fact.comparison.words})"
+    return template.format(text=fact.text, words=words)
 
 
 def with_words(fact: Fact | None) -> str:

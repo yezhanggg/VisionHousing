@@ -1,0 +1,189 @@
+# Calibration (validation): measured reliability of the baseline range (generated; do not edit).
+# Written by `visionhousing validate-baseline-reliability` from the Census Building
+# Permits Survey county files in the state packs. How often ranges built like the
+# shipped baseline range caught the real five-year total in past years (out of
+# time). Descriptive (block baseline_reliability in assumptions/backtest.yaml);
+# the engine shows it beside the range and changes no estimate.
+# Method: docs/modules/baseline.md ("Measured reliability").
+
+version: 1
+id: baseline_reliability_2026_11
+label: Measured reliability of the baseline range (out of time)
+status: validation
+use: 'The engine adds each state''s and county group''s sentence to the baseline records'' formulas and
+  labels the baseline range with its measured share. Changes no estimate. Method: docs/modules/baseline.md.'
+provenance:
+  summary: How often ranges built the way the baseline builds them caught the real five-year total in
+    past years, using only errors known at each start year.
+  method: Census Building Permits Survey county files in each state pack; visionhousing.baseline.reliability;
+    settings in assumptions/backtest.yaml (baseline_reliability).
+  generated_by: visionhousing validate-baseline-reliability
+  sources:
+  - id: bps_county_annual
+    citation: U.S. Census Bureau, Building Permits Survey, county annual files
+    url: https://www2.census.gov/econ/bps/County/
+    licence: Public domain (U.S. government work)
+  limits:
+  - The past start years hold about one housing cycle, so these shares rest on few independent periods.
+  - The state range's widening inputs (the small-sample prior and the growth-class pool) were set from
+    the full record, so the state share is slightly favourable to the widened states.
+  - The rule scored here (and its bias-correction choice) was chosen by the contest on the full record,
+    which saw the same target years, so the shares are slightly favourable.
+preregistration:
+  block: baseline_reliability
+  file: assumptions/backtest.yaml
+  sha256: 3207b76a91e6ca9502791bc8ad9b01aab4d1d68f35f055538820edfaedc704a5
+  recorded_on: '2026-11-25'
+  verified: true
+sentence: In past years, ranges like this caught the real five-year total in {covered} of {cases} cases
+  (out of time).
+range_label: range (caught {pct}% of past totals)
+states:
+  PA:
+    rule: top_down_share
+    bias_correction_kept: false
+    growth_widening: false
+    state_range:
+      cases: 8
+      covered: 8
+      coverage: 1.0
+      width: 0.9621
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_origins: 8
+    county_ranges:
+      all:
+        cases: 1004
+        covered: 545
+        coverage: 0.5428
+      groups:
+        small:
+          cases: 344
+          covered: 204
+          coverage: 0.593
+        medium:
+          cases: 330
+          covered: 174
+          coverage: 0.5273
+        large:
+          cases: 330
+          covered: 167
+          coverage: 0.5061
+  VT:
+    rule: shrink_to_group
+    bias_correction_kept: false
+    growth_widening: true
+    state_range:
+      cases: 8
+      covered: 8
+      coverage: 1.0
+      width: 1.2794
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_origins: 8
+    county_ranges:
+      all:
+        cases: 210
+        covered: 103
+        coverage: 0.4905
+      groups:
+        small:
+          cases: 75
+          covered: 37
+          coverage: 0.4933
+        medium:
+          cases: 75
+          covered: 33
+          coverage: 0.44
+        large:
+          cases: 60
+          covered: 33
+          coverage: 0.55
+  MA:
+    rule: last_3_mean
+    bias_correction_kept: false
+    growth_widening: true
+    state_range:
+      cases: 8
+      covered: 7
+      coverage: 0.875
+      width: 1.2982
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_origins: 8
+    county_ranges:
+      all:
+        cases: 210
+        covered: 97
+        coverage: 0.4619
+      groups:
+        small:
+          cases: 75
+          covered: 24
+          coverage: 0.32
+        medium:
+          cases: 75
+          covered: 47
+          coverage: 0.6267
+        large:
+          cases: 60
+          covered: 26
+          coverage: 0.4333
+  WY:
+    rule: last_3_mean
+    bias_correction_kept: false
+    growth_widening: true
+    state_range:
+      cases: 8
+      covered: 8
+      coverage: 1.0
+      width: 1.3786
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_origins: 8
+    county_ranges:
+      all:
+        cases: 340
+        covered: 205
+        coverage: 0.6029
+      groups:
+        small:
+          cases: 115
+          covered: 66
+          coverage: 0.5739
+        medium:
+          cases: 120
+          covered: 73
+          coverage: 0.6083
+        large:
+          cases: 105
+          covered: 66
+          coverage: 0.6286

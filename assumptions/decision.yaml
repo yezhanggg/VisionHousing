@@ -1,0 +1,167 @@
+# The decision view: who acts at each step of a reform's funnel, the question to ask next,
+# the evidence-coverage rule for the county map, and the fixed class breaks of the map's
+# other measures.
+#
+# Read by visionhousing.api.views (decision_view, county_coverage, measure classes).
+#
+# Rules for this file:
+#   - No estimate lives here. Words, ids and fixed class breaks only; every number a reader
+#     sees comes from the engine.
+#   - Every stage and rule has an id, so a screen can cite where a word came from.
+#   - A stage is found by words in the engine's step name (`match`, lower case), not by its
+#     position, so a reform that adds a step does not shift the mapping.
+
+version: 1
+
+# The five kinds of actor a funnel loss is grouped by.
+actors:
+  state:
+    word: "State"
+    who: "the legislature and state agencies"
+  municipality:
+    word: "Municipality"
+    who: "local zoning, permitting and review"
+  utility:
+    word: "Utility"
+    who: "water, sewer and power providers"
+  builder:
+    word: "Builder"
+    who: "builders, lenders and the market for new homes"
+  household:
+    word: "Household"
+    who: "owners and households deciding whether to build"
+
+# Funnel stages by reform family. A stage's loss is the share of the step before it that
+# does not reach it (worked out by the API from the engine's middle estimates). `from` and
+# `match` name the step before and the step itself.
+stages:
+  adu:
+    - id: decision.stage.adu.fit
+      from: "eligible lots"
+      match: "lots with room"
+      name: "Room on the lot"
+      actor: municipality
+      why: "Lot size, setbacks and yard space decide whether a backyard home fits."
+      question: "Which lot-size, setback and coverage rules keep an ADU from fitting, and how many lots would a smaller minimum reach?"
+    - id: decision.stage.adu.feasible
+      from: "lots with room"
+      match: "lots where an adu is feasible"
+      name: "Rent pays for building"
+      actor: household
+      why: "On most lots the rent an ADU would earn does not cover building it, and few owners build for family use alone."
+      question: "Would low-cost financing or preapproved plans make an ADU pay on more lots in this area?"
+    - id: decision.stage.adu.takeup
+      from: "lots where an adu is feasible"
+      match: "adus authorized by building permits"
+      name: "Owners decide to build"
+      actor: household
+      why: "Even where an ADU pays, only a small share of owners apply for a permit in any year."
+      question: "How many owners here have asked about an ADU, and what stopped them: cost, financing, or the permit process?"
+  missing_middle:
+    - id: decision.stage.missing_middle.lot_size
+      from: "eligible single-family lots"
+      match: "lots large enough"
+      name: "Lot large enough"
+      actor: municipality
+      why: "Many single-family lots are too small for a two-to-six-unit building."
+      question: "Would a smaller minimum lot size for two to four units reach more lots without changing the building form?"
+    - id: decision.stage.missing_middle.pencils
+      from: "lots large enough"
+      match: "lots where redevelopment pencils"
+      name: "Redevelopment pays"
+      actor: builder
+      why: "Buying and clearing an existing home costs more than the new homes are worth on most lots."
+      question: "What land price or construction cost would make a fourplex pay here, and is any public land available?"
+    - id: decision.stage.missing_middle.timing
+      from: "lots where redevelopment pencils"
+      match: "lots redeveloped"
+      name: "Redeveloped within five years"
+      actor: builder
+      why: "Lots where redevelopment pays turn over slowly; few are rebuilt in five years."
+      question: "Which owners of lots that pay would sell in the next five years, and to whom?"
+  tod:
+    - id: decision.stage.tod.site
+      from: "land within"
+      match: "land that could become a mid-rise site"
+      name: "Land that could take a mid-rise"
+      actor: municipality
+      why: "Most land near a stop is already built up, protected or too small to assemble."
+      question: "Which parcels near the stops could be assembled, and which local rules block a mid-rise there?"
+    - id: decision.stage.tod.pencils
+      from: "land that could become a mid-rise site"
+      match: "land where a mid-rise building pencils"
+      name: "A mid-rise pays"
+      actor: builder
+      why: "Mid-rise construction costs more per home than rents near most stops support."
+      question: "What rent or construction cost would make a mid-rise pay near these stops?"
+    - id: decision.stage.tod.absorption
+      from: "before the absorption cap"
+      match: "within regional absorption"
+      name: "Regional demand absorbs it"
+      actor: household
+      why: "The region can only rent or buy so many new mid-rise homes each year."
+      question: "How many mid-rise homes has this region filled in a year in the past?"
+  # Reforms without a site funnel work through one lever; the card names it.
+  parking:
+    - id: decision.stage.parking.still_built
+      lever: "spaces still built per unit"
+      name: "Parking builders still provide"
+      actor: builder
+      why: "Lenders and buyers still expect parking, so builders keep most spaces even without a minimum."
+      question: "How many spaces do lenders here require on a small apartment building, whatever the zoning says?"
+  fees:
+    - id: decision.stage.fees.passthrough
+      lever: "share of a fee cut that reaches the decision to build"
+      name: "A fee cut reaching the decision to build"
+      actor: builder
+      why: "Part of a fee cut goes to land prices or margins rather than to more homes, and most of it goes to homes that would be built anyway."
+      question: "Would targeting the cut to the places or building types that respond most cost less per added home?"
+
+# The words of the binding-constraint card.
+binding:
+  id: decision.binding.rule
+  rule: "The binding constraint is the funnel stage that loses the largest share of the step before it, using the engine's middle estimates. A stage whose step before is zero is skipped."
+
+# Evidence coverage of one county: three checks, each met or not.
+#   local_data   the county's number uses data at `local_tier` or richer (see the data tier)
+#   rules_read   verified local rules cover at least the law hook's minimum share of the
+#                county's single-family lots
+#   backtest     the baseline has a scored back-test case here and its typical error is
+#                within `name_few_cases_beyond` of assumptions/backtest.yaml
+coverage:
+  id: decision.coverage.rule
+  local_tier: 1
+  rule: "A county's evidence coverage counts three checks: local data behind its number, verified local rules read for most of its lots, and a baseline back-test that was not far off there."
+  classes:
+    - id: cov_good
+      word: "Good"
+      label: "two or three checks met"
+      min_checks: 2
+    - id: cov_partial
+      word: "Partial"
+      label: "one check met"
+      min_checks: 1
+    - id: cov_thin
+      word: "Thin"
+      label: "no check met"
+      min_checks: 0
+
+# Fixed class breaks of the map's other measures (they never move with the scenario).
+measures:
+  per_1000:
+    id: decision.measure.per_1000
+    title: "Homes added per 1,000 existing homes (middle estimate)"
+    breaks: [0.5, 2, 5]
+  added:
+    id: decision.measure.added
+    title: "Homes added over five years (middle estimate)"
+    breaks: [10, 100, 1000]
+
+# Past permits year by year (the map key's year slider): homes authorized in one year per
+# 1,000 existing homes, in four fixed classes; the first past year shown. The projected years
+# 2027-2031 use the same breaks on the baseline's yearly middle estimate.
+permit_years:
+  id: decision.permit_years
+  title: "Homes permitted in the year per 1,000 existing homes"
+  first_year: 2000
+  breaks: [1, 2.5, 5]

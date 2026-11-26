@@ -1,0 +1,625 @@
+# Calibration (validation): growth-aware coverage study (generated; do not edit).
+# Written by `visionhousing validate-growth-coverage` from the Census Building
+# Permits Survey county files of every state. How often the baseline's state
+# range caught the real five-year total, by growth class; a pre-registered test
+# of a growth-aware widening for sparse states. If the decision is 'adopt', the
+# baseline reads decision.outcome and sparse_states (growth_widen in backtest.yaml).
+# Method: docs/modules/validation_donor_pool.md.
+
+version: 1
+id: growth_coverage_2026_11
+label: Growth-aware coverage study (hold-out-state back-test)
+status: validation
+use: If decision.outcome is 'adopt', the baseline widens each listed sparse state's range toward its growth
+  class's pooled error record (sparse_states; growth_widen in assumptions/backtest.yaml; docs/modules/baseline.md).
+provenance:
+  summary: Coverage and signed error of the baseline's state range by pre-origin growth class, all states,
+    out of time; and a pre-registered test of a growth-aware widening for sparse states.
+  measured_on: '2026-11-24'
+  method: National county panel from the BPS annual county files (settings in assumptions/validation_donor_pool.yaml,
+    block growth_coverage_test); back-test cases from visionhousing.baseline (read-only); see docs/modules/validation_donor_pool.md.
+  generated_by: visionhousing validate-growth-coverage
+  limits:
+  - The sparse states were already seen by the two earlier tests, so this test is not on fresh states;
+    only the candidate and its rule are new.
+  - Origins share the national housing cycle (one boom and bust), so growth classes and errors move together
+    across states.
+  - Each state is scored on about a dozen overlapping five-year windows.
+preregistration:
+  block: growth_coverage_test
+  sha256: 52500257051aec27b8bf40b303c0db488c1f85cac7106b1224c2c5a3999ce080
+  fingerprint: SHA-256 of the block as JSON, keys sorted, separators (',', ':')
+  checks:
+  - block: donor_pool_rules
+    file: assumptions/validation_donor_pool.yaml
+    sha256: 4b23d3a44df092756d22058f30c8e7a296af0ce8260deabf857324b602476e24
+    recorded_on: '2026-11-24'
+    verified: true
+  - block: growth_coverage_test
+    file: assumptions/validation_donor_pool.yaml
+    sha256: 52500257051aec27b8bf40b303c0db488c1f85cac7106b1224c2c5a3999ce080
+    recorded_on: '2026-11-24'
+    verified: true
+settings:
+  rule: last_3_mean
+  lead_years: 2
+  horizon_years: 5
+  origins:
+  - 1999
+  - 2019
+  full_weight_cases: 1000
+decision_states:
+- AK
+- AZ
+- DE
+- HI
+- ID
+- MA
+- MD
+- ME
+- MT
+- NH
+- NJ
+- NM
+- NV
+- OR
+- RI
+- SC
+- UT
+- VT
+- WA
+- WY
+diagnosis:
+  all_states:
+    slow:
+      cases: 187
+      states: 39
+      coverage: 0.6524
+      above_share: 0.3369
+      below_share: 0.0107
+      misses_above_share_of_misses: 0.9692
+      mean_signed_log_error: 0.3268
+      median_signed_log_error: 0.2894
+      width: 1.016
+    middle:
+      cases: 176
+      states: 45
+      coverage: 0.6477
+      above_share: 0.3295
+      below_share: 0.0227
+      misses_above_share_of_misses: 0.9355
+      mean_signed_log_error: 0.2413
+      median_signed_log_error: 0.2512
+      width: 0.8756
+    fast:
+      cases: 176
+      states: 36
+      coverage: 0.6818
+      above_share: 0.267
+      below_share: 0.0511
+      misses_above_share_of_misses: 0.8393
+      mean_signed_log_error: 0.1841
+      median_signed_log_error: 0.2085
+      width: 0.991
+    all:
+      cases: 539
+      states: 49
+      coverage: 0.6605
+      above_share: 0.3117
+      below_share: 0.0278
+      misses_above_share_of_misses: 0.918
+      mean_signed_log_error: 0.2523
+      median_signed_log_error: 0.2537
+      width: 0.962
+  sparse_states:
+    slow:
+      cases: 80
+      states: 14
+      coverage: 0.625
+      above_share: 0.3625
+      below_share: 0.0125
+      misses_above_share_of_misses: 0.9667
+      mean_signed_log_error: 0.3384
+      median_signed_log_error: 0.3376
+      width: 1.1092
+    middle:
+      cases: 66
+      states: 17
+      coverage: 0.5758
+      above_share: 0.3939
+      below_share: 0.0303
+      misses_above_share_of_misses: 0.9286
+      mean_signed_log_error: 0.2711
+      median_signed_log_error: 0.2515
+      width: 0.8425
+    fast:
+      cases: 74
+      states: 16
+      coverage: 0.7838
+      above_share: 0.2027
+      below_share: 0.0135
+      misses_above_share_of_misses: 0.9375
+      mean_signed_log_error: 0.2072
+      median_signed_log_error: 0.2247
+      width: 1.0782
+    all:
+      cases: 220
+      states: 20
+      coverage: 0.6636
+      above_share: 0.3182
+      below_share: 0.0182
+      misses_above_share_of_misses: 0.9459
+      mean_signed_log_error: 0.2741
+      median_signed_log_error: 0.2688
+      width: 1.0188
+decision:
+  outcome: adopt
+  states_scored: 20
+  beats_current: true
+  pooled_coverage_not_above_cap: true
+  prior_state_ok: true
+  methods:
+    current:
+      states: 20
+      cases: 220
+      mean_gap: 0.2091
+      coverage: 0.6636
+      width: 1.0188
+    candidate:
+      states: 20
+      cases: 220
+      mean_gap: 0.1827
+      coverage: 0.7227
+      width: 1.1502
+    prior_state_current:
+      states: 1
+      cases: 11
+      mean_gap: 0.1091
+      coverage: 0.9091
+      width: 0.7414
+    prior_state_candidate:
+      states: 1
+      cases: 11
+      mean_gap: 0.1091
+      coverage: 0.9091
+      width: 0.8526
+  reason: candidate beats the current rule (mean gap 0.183 vs 0.209), pooled coverage 72.3% is not above
+    85%, and the prior state's coverage stays allowed
+by_class:
+  current:
+    slow:
+      cases: 80
+      states: 14
+      coverage: 0.625
+      above_share: 0.3625
+      below_share: 0.0125
+      misses_above_share_of_misses: 0.9667
+      mean_signed_log_error: 0.3384
+      median_signed_log_error: 0.3376
+      width: 1.1092
+    middle:
+      cases: 66
+      states: 17
+      coverage: 0.5758
+      above_share: 0.3939
+      below_share: 0.0303
+      misses_above_share_of_misses: 0.9286
+      mean_signed_log_error: 0.2711
+      median_signed_log_error: 0.2515
+      width: 0.8425
+    fast:
+      cases: 74
+      states: 16
+      coverage: 0.7838
+      above_share: 0.2027
+      below_share: 0.0135
+      misses_above_share_of_misses: 0.9375
+      mean_signed_log_error: 0.2072
+      median_signed_log_error: 0.2247
+      width: 1.0782
+    all:
+      cases: 220
+      states: 20
+      coverage: 0.6636
+      above_share: 0.3182
+      below_share: 0.0182
+      misses_above_share_of_misses: 0.9459
+      mean_signed_log_error: 0.2741
+      median_signed_log_error: 0.2688
+      width: 1.0188
+  candidate:
+    slow:
+      cases: 80
+      states: 14
+      coverage: 0.7125
+      above_share: 0.275
+      below_share: 0.0125
+      misses_above_share_of_misses: 0.9565
+      mean_signed_log_error: 0.3384
+      median_signed_log_error: 0.3376
+      width: 1.273
+    middle:
+      cases: 66
+      states: 17
+      coverage: 0.6667
+      above_share: 0.303
+      below_share: 0.0303
+      misses_above_share_of_misses: 0.9091
+      mean_signed_log_error: 0.2711
+      median_signed_log_error: 0.2515
+      width: 0.9877
+    fast:
+      cases: 74
+      states: 16
+      coverage: 0.7838
+      above_share: 0.2027
+      below_share: 0.0135
+      misses_above_share_of_misses: 0.9375
+      mean_signed_log_error: 0.2072
+      median_signed_log_error: 0.2247
+      width: 1.1622
+    all:
+      cases: 220
+      states: 20
+      coverage: 0.7227
+      above_share: 0.2591
+      below_share: 0.0182
+      misses_above_share_of_misses: 0.9344
+      mean_signed_log_error: 0.2741
+      median_signed_log_error: 0.2688
+      width: 1.1502
+by_state:
+  AK:
+    cases: 11
+    current_coverage: 0.6364
+    candidate_coverage: 0.7273
+    current_width: 1.2316
+    candidate_width: 1.3355
+    gap_current: 0.1636
+    gap_candidate: 0.0727
+  AZ:
+    cases: 11
+    current_coverage: 0.4545
+    candidate_coverage: 0.4545
+    current_width: 1.2683
+    candidate_width: 1.361
+    gap_current: 0.3455
+    gap_candidate: 0.3455
+  DE:
+    cases: 11
+    current_coverage: 0.6364
+    candidate_coverage: 0.7273
+    current_width: 0.9373
+    candidate_width: 1.0693
+    gap_current: 0.1636
+    gap_candidate: 0.0727
+  HI:
+    cases: 11
+    current_coverage: 0.9091
+    candidate_coverage: 0.9091
+    current_width: 1.289
+    candidate_width: 1.3695
+    gap_current: 0.1091
+    gap_candidate: 0.1091
+  ID:
+    cases: 11
+    current_coverage: 0.3636
+    candidate_coverage: 0.3636
+    current_width: 1.1611
+    candidate_width: 1.2341
+    gap_current: 0.4364
+    gap_candidate: 0.4364
+  MA:
+    cases: 11
+    current_coverage: 0.5455
+    candidate_coverage: 0.6364
+    current_width: 0.865
+    candidate_width: 0.9944
+    gap_current: 0.2545
+    gap_candidate: 0.1636
+  MD:
+    cases: 11
+    current_coverage: 0.7273
+    candidate_coverage: 0.9091
+    current_width: 0.7922
+    candidate_width: 1.0378
+    gap_current: 0.0727
+    gap_candidate: 0.1091
+  ME:
+    cases: 11
+    current_coverage: 0.9091
+    candidate_coverage: 1.0
+    current_width: 0.994
+    candidate_width: 1.1517
+    gap_current: 0.1091
+    gap_candidate: 0.2
+  MT:
+    cases: 11
+    current_coverage: 0.6364
+    candidate_coverage: 0.6364
+    current_width: 0.935
+    candidate_width: 0.9964
+    gap_current: 0.1636
+    gap_candidate: 0.1636
+  NH:
+    cases: 11
+    current_coverage: 1.0
+    candidate_coverage: 1.0
+    current_width: 1.2263
+    candidate_width: 1.36
+    gap_current: 0.2
+    gap_candidate: 0.2
+  NJ:
+    cases: 11
+    current_coverage: 0.5455
+    candidate_coverage: 0.6364
+    current_width: 0.882
+    candidate_width: 1.0254
+    gap_current: 0.2545
+    gap_candidate: 0.1636
+  NM:
+    cases: 11
+    current_coverage: 0.7273
+    candidate_coverage: 0.9091
+    current_width: 1.0075
+    candidate_width: 1.1649
+    gap_current: 0.0727
+    gap_candidate: 0.1091
+  NV:
+    cases: 11
+    current_coverage: 0.5455
+    candidate_coverage: 0.6364
+    current_width: 1.3354
+    candidate_width: 1.4258
+    gap_current: 0.2545
+    gap_candidate: 0.1636
+  OR:
+    cases: 11
+    current_coverage: 0.6364
+    candidate_coverage: 0.6364
+    current_width: 1.0341
+    candidate_width: 1.1323
+    gap_current: 0.1636
+    gap_candidate: 0.1636
+  PA:
+    cases: 11
+    current_coverage: 0.9091
+    candidate_coverage: 0.9091
+    current_width: 0.7414
+    candidate_width: 0.8526
+    gap_current: 0.1091
+    gap_candidate: 0.1091
+  RI:
+    cases: 11
+    current_coverage: 0.6364
+    candidate_coverage: 0.8182
+    current_width: 0.8232
+    candidate_width: 1.0704
+    gap_current: 0.1636
+    gap_candidate: 0.0182
+  SC:
+    cases: 11
+    current_coverage: 0.5455
+    candidate_coverage: 0.5455
+    current_width: 0.9087
+    candidate_width: 0.9745
+    gap_current: 0.2545
+    gap_candidate: 0.2545
+  UT:
+    cases: 11
+    current_coverage: 0.2727
+    candidate_coverage: 0.3636
+    current_width: 0.8887
+    candidate_width: 0.9933
+    gap_current: 0.5273
+    gap_candidate: 0.4364
+  VT:
+    cases: 11
+    current_coverage: 1.0
+    candidate_coverage: 1.0
+    current_width: 0.9024
+    candidate_width: 1.1716
+    gap_current: 0.2
+    gap_candidate: 0.2
+  WA:
+    cases: 11
+    current_coverage: 0.6364
+    candidate_coverage: 0.6364
+    current_width: 0.8287
+    candidate_width: 0.9419
+    gap_current: 0.1636
+    gap_candidate: 0.1636
+  WY:
+    cases: 11
+    current_coverage: 0.9091
+    candidate_coverage: 0.9091
+    current_width: 1.0648
+    candidate_width: 1.1938
+    gap_current: 0.1091
+    gap_candidate: 0.1091
+implied_range:
+  VT:
+    years:
+    - 2027
+    - 2031
+    origin: 2025
+    growth_class: fast
+    growth_log: 0.2463
+    weight_own: 0.294
+    class_pool_cases: 330
+    p50_units: 12340
+    current:
+      low_units: 5481
+      high_units: 14765
+      low_ratio: 0.4442
+      high_ratio: 1.1965
+      width: 0.7523
+    candidate:
+      low_units: 5481
+      high_units: 17656
+      low_ratio: 0.4442
+      high_ratio: 1.4308
+      width: 0.9866
+  PA:
+    years:
+    - 2027
+    - 2031
+    origin: 2025
+    growth_class: fast
+    growth_log: 0.2485
+    weight_own: 1.0
+    class_pool_cases: 336
+    p50_units: 126398
+    current:
+      low_units: 55887
+      high_units: 153628
+      low_ratio: 0.4421
+      high_ratio: 1.2154
+      width: 0.7733
+    candidate:
+      low_units: 55887
+      high_units: 153628
+      low_ratio: 0.4421
+      high_ratio: 1.2154
+      width: 0.7733
+sparse_states:
+  AK:
+    growth_class: slow
+    growth_log: -0.4574
+    weight_own: 0.429
+    pool_cases: 349
+    pool_ratio_p10: 0.459
+    pool_ratio_p90: 1.7968
+  AZ:
+    growth_class: fast
+    growth_log: 0.2818
+    weight_own: 0.315
+    pool_cases: 327
+    pool_ratio_p10: 0.4484
+    pool_ratio_p90: 1.5334
+  DE:
+    growth_class: slow
+    growth_log: 0.0263
+    weight_own: 0.063
+    pool_cases: 355
+    pool_ratio_p10: 0.4581
+    pool_ratio_p90: 1.8177
+  HI:
+    growth_class: slow
+    growth_log: -0.0094
+    weight_own: 0.084
+    pool_cases: 346
+    pool_ratio_p10: 0.4557
+    pool_ratio_p90: 1.8072
+  ID:
+    growth_class: middle
+    growth_log: 0.1729
+    weight_own: 0.923
+    pool_cases: 332
+    pool_ratio_p10: 0.4425
+    pool_ratio_p90: 1.5052
+  MA:
+    growth_class: slow
+    growth_log: -0.1079
+    weight_own: 0.294
+    pool_cases: 350
+    pool_ratio_p10: 0.4611
+    pool_ratio_p90: 1.8207
+  MD:
+    growth_class: slow
+    growth_log: 0.018
+    weight_own: 0.504
+    pool_cases: 344
+    pool_ratio_p10: 0.4552
+    pool_ratio_p90: 1.8278
+  ME:
+    growth_class: fast
+    growth_log: 0.3499
+    weight_own: 0.357
+    pool_cases: 330
+    pool_ratio_p10: 0.4497
+    pool_ratio_p90: 1.5414
+  MT:
+    growth_class: middle
+    growth_log: 0.1143
+    weight_own: 0.884
+    pool_cases: 334
+    pool_ratio_p10: 0.443
+    pool_ratio_p90: 1.5036
+  NH:
+    growth_class: middle
+    growth_log: 0.1462
+    weight_own: 0.21
+    pool_cases: 330
+    pool_ratio_p10: 0.4445
+    pool_ratio_p90: 1.533
+  NJ:
+    growth_class: middle
+    growth_log: 0.0833
+    weight_own: 0.441
+    pool_cases: 328
+    pool_ratio_p10: 0.4407
+    pool_ratio_p90: 1.4954
+  NM:
+    growth_class: fast
+    growth_log: 0.4892
+    weight_own: 0.442
+    pool_cases: 335
+    pool_ratio_p10: 0.4493
+    pool_ratio_p90: 1.5399
+  NV:
+    growth_class: slow
+    growth_log: 0.0555
+    weight_own: 0.291
+    pool_cases: 348
+    pool_ratio_p10: 0.4563
+    pool_ratio_p90: 1.7971
+  OR:
+    growth_class: slow
+    growth_log: -0.1168
+    weight_own: 0.655
+    pool_cases: 348
+    pool_ratio_p10: 0.4608
+    pool_ratio_p90: 1.8017
+  RI:
+    growth_class: middle
+    growth_log: 0.1415
+    weight_own: 0.105
+    pool_cases: 330
+    pool_ratio_p10: 0.4417
+    pool_ratio_p90: 1.533
+  SC:
+    growth_class: fast
+    growth_log: 0.2458
+    weight_own: 0.964
+    pool_cases: 324
+    pool_ratio_p10: 0.4492
+    pool_ratio_p90: 1.5418
+  UT:
+    growth_class: middle
+    growth_log: 0.0955
+    weight_own: 0.607
+    pool_cases: 330
+    pool_ratio_p10: 0.4445
+    pool_ratio_p90: 1.4987
+  VT:
+    growth_class: fast
+    growth_log: 0.2463
+    weight_own: 0.294
+    pool_cases: 330
+    pool_ratio_p10: 0.4475
+    pool_ratio_p90: 1.5414
+  WA:
+    growth_class: slow
+    growth_log: -0.0636
+    weight_own: 0.819
+    pool_cases: 349
+    pool_ratio_p10: 0.459
+    pool_ratio_p90: 1.8219
+  WY:
+    growth_class: fast
+    growth_log: 0.2349
+    weight_own: 0.475
+    pool_cases: 325
+    pool_ratio_p10: 0.4474
+    pool_ratio_p90: 1.5399

@@ -1,0 +1,37 @@
+# VisionHousing: the ADU budget-and-target grid (illustrative scenario settings).
+#
+# The grid runs the ADU reform on the same draws in three arms:
+#   law_only      the benchmark law change, no program
+#   finance_only  today's law, a capped state program on lots where an ADU is
+#                 already legal
+#   both          the law change and the program (the program reaches both
+#                 newly legal and already legal lots)
+# for every appropriation x award below. Each cell reports the share of draws
+# that meet each target, the net public cost, and a Pareto flag. Nothing is
+# interpolated between tested values; a value between or outside them is
+# marked as such (scenarios/adu_budget.py, docs/methods/adu_levers.md).
+#
+# These are policy settings a user chooses, not estimates. Every behavioural
+# input (eligibility, award take-up, administration share, ...) comes from the
+# ledger (assumptions/parameters.yaml, adu.budget_*).
+
+version: 1
+id: adu_budget_grid_v1
+label: "Illustrative scenario settings: appropriations, award sizes and targets tested on the same draws"
+
+variant: adu_finance_budget
+# The engine variant whose run supplies the inputs (its lever ids and draws).
+
+arms: [law_only, finance_only, both]
+
+appropriations: [5000000, 10000000, 20000000, 50000000, 100000000]
+# Dollars, one-time, 2027-2031.
+
+awards: [10000, 25000, 40000]
+# Dollars per funded project (never more than the owner's own cash share).
+
+loan_share: 0
+# 0 = every award is a grant.
+
+targets: [500, 1000, 2500, 5000, 10000]
+# Additional ADU authorizations in 2027-2031 against no change (headline scope).

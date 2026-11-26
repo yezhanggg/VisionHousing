@@ -1,0 +1,92 @@
+# Calibration table: share of Massachusetts lots where the benchmark ADU reform
+# is already legal under state law.
+#
+# Since February 2, 2025, M.G.L. c. 40A § 3 (as amended by St. 2024, c. 150,
+# § 8) bars zoning from prohibiting, unreasonably restricting, or requiring a
+# special permit for one accessory dwelling unit in a single-family residential
+# zoning district. An ADU is a self-contained home no larger than half the
+# principal dwelling or 900 sq ft, whichever is smaller (§ 1A). Towns may still
+# apply reasonable rules (Title 5 septic, site plan review, setbacks, bulk and
+# height), may require at most one added parking space (none within 0.5 miles
+# of a station), and may not require owner occupancy. Boston is not subject to
+# chapter 40A.
+#
+# So most of what the ADU benchmark allows is already allowed. The benchmark
+# (a detached or semi-detached ADU of at least 600 sq ft, no added parking)
+# still adds homes where:
+#   - the half-of-the-house cap is below 600 sq ft (principal homes under
+#     1,200 sq ft);
+#   - a town requires the one parking space (outside 0.5 miles of transit);
+#   - a single-family home stands outside a single-family zoning district
+#     (the statute covers single-family districts only);
+#   - the lot is in Boston;
+#   - practice lags the statute (bylaws not yet aligned with 760 CMR 71).
+#
+# None of these has been measured lot by lot, so the range below is documented
+# judgement, not a measurement, and it stops well short of 100%. HLC's ADU
+# survey (pack table ma_adu_survey) shows the law in use: building officials
+# reported ADU building permits in 246 municipalities from January 2025 to
+# June 2026 (2,084 approvals statewide).
+#
+# The engine turns this into an override of adu.already_legal_share for
+# Massachusetts runs only (visionhousing.scenarios.adu.legal_share_override).
+# Read by visionhousing.scenarios.adu.load_legal_shares; see
+# docs/TECHNICAL_APPENDIX.md section G.3 (Massachusetts). The missing-middle share is NOT
+# replaced: Massachusetts has no statewide two-to-six-unit law. Section 3A
+# districts allow multi-family homes as of right, but only in one district per
+# MBTA community (about 17,400 acres in the 3A atlas on 2026-11-24).
+
+version: 1
+id: already_legal_ma_2026_11
+state: MA
+parameter: adu.already_legal_share
+unit: "share of lots"
+kind: judgement
+
+provenance:
+  summary: >-
+    State law read on the General Court's website (malegislature.gov) on
+    2026-11-24: M.G.L. c. 40A § 1A (definition of accessory dwelling unit) and
+    § 3 (ADU paragraph), and Acts of 2024, chapter 150, sections 7, 8 and 143
+    (approved August 6, 2024 as an emergency law; section 8 effective 180 days
+    later, February 2, 2025).
+  read_between: "2026-11-24"
+  sources:
+    - id: ma_gl_40a
+      citation: >-
+        Massachusetts General Laws, chapter 40A, § 1A (definition of accessory
+        dwelling unit) and § 3 (ADU paragraph)
+      url: https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3
+    - id: ma_acts_2024_c150
+      citation: >-
+        Acts of 2024, chapter 150 (the Affordable Homes Act), sections 7, 8 and 143
+      url: https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter150
+
+# The range written into the ledger for adu.already_legal_share in Massachusetts.
+range:
+  low: 0.55
+  central: 0.70
+  high: 0.82
+  shape: pert
+  how:
+    low: >-
+      The statute makes one ADU an as-of-right use in every single-family
+      district outside Boston. The low end assumes that almost half of lots
+      still fall short of the benchmark: single-family homes outside
+      single-family districts (common in older cities), homes under 1,200 sq
+      ft (where the half-size cap keeps an ADU under 600 sq ft), towns that
+      require the one parking space, and bylaws not yet aligned in practice.
+    central: >-
+      Seven in ten lots: the statute applies statewide and the state survey
+      shows permits issued in most towns, but its scope (single-family districts
+      only, the half-size cap, one parking space) is narrower than the
+      benchmark's. Team judgement.
+    high: >-
+      Most lots, but not all: Boston is outside chapter 40A and the half-size
+      cap and parking rule remain, so the high end stops at 82%, below
+      Vermont's 85% (whose statute has no size cap tied to the house).
+
+limits:
+  - "No lot-level measure of single-family district coverage, house sizes under 1,200 sq ft or local parking rules; the range is team judgement."
+  - "A share of lots is assumed for every tract; Boston's lots are not told apart."
+  - "The missing-middle share keeps the ledger's national default (no statewide 2-6 unit law)."

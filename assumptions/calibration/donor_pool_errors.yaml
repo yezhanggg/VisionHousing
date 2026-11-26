@@ -1,0 +1,2562 @@
+# Calibration (validation): donor-pool error record for sparse states (generated; do not edit).
+# Written by `visionhousing validate-donor-pool` from the Census Building Permits
+# Survey county files of every state. Hold-out-state back-tests of the baseline's
+# state range, the pre-stated decision, and ratio quantiles a sparse state could
+# borrow. The baseline reads none of it unless the decision says "adopt" and the
+# engine is wired to it. Method: docs/modules/validation_donor_pool.md.
+
+version: 1
+id: donor_pool_errors_2026_11
+label: Donor-pool error record for sparse states (hold-out-state back-test)
+status: validation
+use: Not read by the baseline. If decision.outcome is 'adopt', the engine may use sparse_states.<ST>.ratio_quantiles
+  in place of the Pennsylvania prior of the small-sample widening (assumptions/backtest.yaml, small_sample).
+provenance:
+  summary: 'Hold-out-state back-tests of the baseline''s state range (rule last_3_mean): for each held-out
+    state and past origin, ranges from the state''s own errors, Pennsylvania''s, all other states'', all
+    other counties'', and a matched pool of counties in other states, scored on coverage of the real five-year
+    total; and donor-pool ratio quantiles for each sparse state.'
+  measured_on: '2026-11-24'
+  method: National county panel from the BPS annual county files 1990-2025 (settings in assumptions/validation_donor_pool.yaml);
+    back-test cases from visionhousing.baseline (read-only); see docs/modules/validation_donor_pool.md.
+  generated_by: visionhousing validate-donor-pool
+  sources:
+  - id: bps_county_annual
+    citation: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    url: https://www2.census.gov/econ/bps/County/co{year}a.txt
+    licence: Public domain (U.S. government work)
+  limits:
+  - Each held-out state is scored on about a dozen overlapping five-year windows, so one state's coverage
+    moves in steps of several points.
+  - Origins share the national housing cycle; held-out states' errors move together.
+  - The 2003 county file reports no imputation (reported equals estimated), so completeness is overstated
+    for windows holding 2003.
+settings:
+  rule: last_3_mean
+  lead_years: 2
+  horizon_years: 5
+  origins:
+  - 1999
+  - 2019
+  donor:
+    size_years: 5
+    growth_recent_years: 3
+    growth_base_years: 7
+    completeness_years: 10
+    weights:
+      log_size: 1.0
+      growth: 1.0
+      completeness: 1.0
+    k: 200
+    max_cases_per_county: 3
+    min_completeness: 0.0
+  held_out:
+  - VT
+  - NH
+  - ME
+  - RI
+  - DE
+  - WY
+  - NM
+  - NV
+  - PA
+  full_weight_cases: 1000
+  primary_variant: out_of_time
+decision:
+  outcome: keep_current
+  variant: out_of_time
+  decision_states:
+  - VT
+  - NH
+  - ME
+  - RI
+  - DE
+  - WY
+  - NM
+  - NV
+  candidate:
+    method: donor_blend
+    mean_gap: 0.1773
+    coverage: 0.9773
+    width: 1.4652
+    states: 8
+    cases: 88
+  current:
+    method: pa_blend
+    mean_gap: 0.1591
+    coverage: 0.7955
+    width: 1.0364
+    states: 8
+    cases: 88
+  closer_to_target: false
+  wider_than_current: true
+  wider_than_needed: true
+  reason: donor_blend coverage is not closer to 80% than pa_blend (mean gap 0.177 vs 0.159); the current
+    widening stays
+pooled:
+  out_of_time:
+    own:
+      cases: 88
+      coverage: 0.7614
+      mean_gap: 0.1932
+      width: 1.0075
+      median_abs_log_error: 0.2494
+    pa:
+      cases: 88
+      coverage: 0.625
+      mean_gap: 0.2023
+      width: 0.7414
+      median_abs_log_error: 0.2494
+    pa_blend:
+      cases: 88
+      coverage: 0.7955
+      mean_gap: 0.1591
+      width: 1.0364
+      median_abs_log_error: 0.2494
+    national_states:
+      cases: 88
+      coverage: 0.8636
+      mean_gap: 0.1455
+      width: 1.1102
+      median_abs_log_error: 0.2494
+    national_counties:
+      cases: 88
+      coverage: 0.9886
+      mean_gap: 0.1886
+      width: 1.9561
+      median_abs_log_error: 0.2494
+    donor:
+      cases: 88
+      coverage: 0.9773
+      mean_gap: 0.1773
+      width: 1.5156
+      median_abs_log_error: 0.2494
+    donor_blend:
+      cases: 88
+      coverage: 0.9773
+      mean_gap: 0.1773
+      width: 1.4652
+      median_abs_log_error: 0.2494
+  other_origins:
+    own:
+      cases: 168
+      coverage: 0.5179
+      mean_gap: 0.2821
+      width: 0.8405
+      median_abs_log_error: 0.3187
+    pa:
+      cases: 168
+      coverage: 0.4286
+      mean_gap: 0.3714
+      width: 0.6184
+      median_abs_log_error: 0.3187
+    pa_blend:
+      cases: 168
+      coverage: 0.5595
+      mean_gap: 0.2405
+      width: 0.875
+      median_abs_log_error: 0.3187
+    national_states:
+      cases: 168
+      coverage: 0.6548
+      mean_gap: 0.1452
+      width: 0.9658
+      median_abs_log_error: 0.3187
+    national_counties:
+      cases: 168
+      coverage: 0.8869
+      mean_gap: 0.0964
+      width: 1.9522
+      median_abs_log_error: 0.3187
+    donor:
+      cases: 168
+      coverage: 0.7798
+      mean_gap: 0.0274
+      width: 1.509
+      median_abs_log_error: 0.3187
+    donor_blend:
+      cases: 168
+      coverage: 0.7679
+      mean_gap: 0.0393
+      width: 1.397
+      median_abs_log_error: 0.3187
+holdout:
+  out_of_time:
+    VT:
+    - method: own
+      cases: 11
+      coverage: 1.0
+      width: 0.8995
+      median_abs_log_error: 0.2437
+      median_abs_log_error_corrected: 0.3504
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.7273
+      width: 0.7414
+      median_abs_log_error: 0.2437
+      median_abs_log_error_corrected: 0.3998
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 1.0
+      width: 0.9024
+      median_abs_log_error: 0.2437
+      median_abs_log_error_corrected: 0.3504
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 1.0
+      width: 1.116
+      median_abs_log_error: 0.2437
+      median_abs_log_error_corrected: 0.2757
+      median_pool: 500.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.9603
+      median_abs_log_error: 0.2437
+      median_abs_log_error_corrected: 0.4278
+      median_pool: 28829.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 1.0
+      width: 1.5685
+      median_abs_log_error: 0.2437
+      median_abs_log_error_corrected: 0.5401
+      median_pool: 200.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.4659
+      median_abs_log_error: 0.2437
+      median_abs_log_error_corrected: 0.3504
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    NH:
+    - method: own
+      cases: 11
+      coverage: 1.0
+      width: 1.2263
+      median_abs_log_error: 0.2382
+      median_abs_log_error_corrected: 0.5675
+      median_pool: 10.0
+      w: 0.1
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.6364
+      width: 0.7414
+      median_abs_log_error: 0.2382
+      median_abs_log_error_corrected: 0.4604
+      median_pool: 10.0
+      w: 0.1
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.2263
+      median_abs_log_error: 0.2382
+      median_abs_log_error_corrected: 0.5675
+      median_pool: 10.0
+      w: 0.1
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.8182
+      width: 1.1102
+      median_abs_log_error: 0.2382
+      median_abs_log_error_corrected: 0.3709
+      median_pool: 500.0
+      w: 0.1
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.959
+      median_abs_log_error: 0.2382
+      median_abs_log_error_corrected: 0.4571
+      median_pool: 28869.0
+      w: 0.1
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 1.0
+      width: 1.4021
+      median_abs_log_error: 0.2382
+      median_abs_log_error_corrected: 0.5465
+      median_pool: 200.0
+      w: 0.1
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.418
+      median_abs_log_error: 0.2382
+      median_abs_log_error_corrected: 0.5675
+      median_pool: 10.0
+      w: 0.1
+      first_origin: 2009
+      last_origin: 2019
+    ME:
+    - method: own
+      cases: 11
+      coverage: 0.9091
+      width: 0.9886
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.5035
+      median_pool: 10.0
+      w: 0.17
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.5455
+      width: 0.7414
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.5244
+      median_pool: 10.0
+      w: 0.17
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 0.9091
+      width: 0.994
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.5035
+      median_pool: 10.0
+      w: 0.17
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 1.0
+      width: 1.1133
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.4042
+      median_pool: 500.0
+      w: 0.17
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.9617
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.5414
+      median_pool: 28799.0
+      w: 0.17
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 1.0
+      width: 1.4092
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.7117
+      median_pool: 200.0
+      w: 0.17
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.3411
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.5035
+      median_pool: 10.0
+      w: 0.17
+      first_origin: 2009
+      last_origin: 2019
+    RI:
+    - method: own
+      cases: 11
+      coverage: 0.3636
+      width: 0.6905
+      median_abs_log_error: 0.2552
+      median_abs_log_error_corrected: 0.4913
+      median_pool: 10.0
+      w: 0.05
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.6364
+      width: 0.7414
+      median_abs_log_error: 0.2552
+      median_abs_log_error_corrected: 0.4528
+      median_pool: 10.0
+      w: 0.05
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 0.6364
+      width: 0.8232
+      median_abs_log_error: 0.2552
+      median_abs_log_error_corrected: 0.4913
+      median_pool: 10.0
+      w: 0.05
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.9091
+      width: 1.1097
+      median_abs_log_error: 0.2552
+      median_abs_log_error_corrected: 0.4062
+      median_pool: 500.0
+      w: 0.05
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.957
+      median_abs_log_error: 0.2552
+      median_abs_log_error_corrected: 0.4596
+      median_pool: 28919.0
+      w: 0.05
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 1.0
+      width: 1.4958
+      median_abs_log_error: 0.2552
+      median_abs_log_error_corrected: 0.4637
+      median_pool: 200.0
+      w: 0.05
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.4517
+      median_abs_log_error: 0.2552
+      median_abs_log_error_corrected: 0.4913
+      median_pool: 10.0
+      w: 0.05
+      first_origin: 2009
+      last_origin: 2019
+    DE:
+    - method: own
+      cases: 11
+      coverage: 0.6364
+      width: 0.9324
+      median_abs_log_error: 0.3508
+      median_abs_log_error_corrected: 0.2968
+      median_pool: 10.0
+      w: 0.03
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.5455
+      width: 0.7414
+      median_abs_log_error: 0.3508
+      median_abs_log_error_corrected: 0.5532
+      median_pool: 10.0
+      w: 0.03
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 0.6364
+      width: 0.9373
+      median_abs_log_error: 0.3508
+      median_abs_log_error_corrected: 0.2968
+      median_pool: 10.0
+      w: 0.03
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.7273
+      width: 1.1112
+      median_abs_log_error: 0.3508
+      median_abs_log_error_corrected: 0.4431
+      median_pool: 500.0
+      w: 0.03
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.956
+      median_abs_log_error: 0.3508
+      median_abs_log_error_corrected: 0.5436
+      median_pool: 28939.0
+      w: 0.03
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 0.9091
+      width: 1.4247
+      median_abs_log_error: 0.3508
+      median_abs_log_error_corrected: 0.6892
+      median_pool: 200.0
+      w: 0.03
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 0.9091
+      width: 1.4104
+      median_abs_log_error: 0.3508
+      median_abs_log_error_corrected: 0.2968
+      median_pool: 10.0
+      w: 0.03
+      first_origin: 2009
+      last_origin: 2019
+    WY:
+    - method: own
+      cases: 11
+      coverage: 0.9091
+      width: 0.988
+      median_abs_log_error: 0.1927
+      median_abs_log_error_corrected: 0.4188
+      median_pool: 10.0
+      w: 0.227
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.9091
+      width: 0.7414
+      median_abs_log_error: 0.1927
+      median_abs_log_error_corrected: 0.3418
+      median_pool: 10.0
+      w: 0.227
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 0.9091
+      width: 1.0648
+      median_abs_log_error: 0.1927
+      median_abs_log_error_corrected: 0.4188
+      median_pool: 10.0
+      w: 0.227
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.9091
+      width: 1.0986
+      median_abs_log_error: 0.1927
+      median_abs_log_error_corrected: 0.2416
+      median_pool: 500.0
+      w: 0.227
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.947
+      median_abs_log_error: 0.1927
+      median_abs_log_error_corrected: 0.3023
+      median_pool: 28742.0
+      w: 0.227
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 1.0
+      width: 1.4805
+      median_abs_log_error: 0.1927
+      median_abs_log_error_corrected: 0.4219
+      median_pool: 200.0
+      w: 0.227
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.3956
+      median_abs_log_error: 0.1927
+      median_abs_log_error_corrected: 0.4188
+      median_pool: 10.0
+      w: 0.227
+      first_origin: 2009
+      last_origin: 2019
+    NM:
+    - method: own
+      cases: 11
+      coverage: 0.7273
+      width: 1.0036
+      median_abs_log_error: 0.1268
+      median_abs_log_error_corrected: 0.4809
+      median_pool: 10.0
+      w: 0.212
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.6364
+      width: 0.7414
+      median_abs_log_error: 0.1268
+      median_abs_log_error_corrected: 0.4149
+      median_pool: 10.0
+      w: 0.212
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 0.7273
+      width: 1.0075
+      median_abs_log_error: 0.1268
+      median_abs_log_error_corrected: 0.4809
+      median_pool: 10.0
+      w: 0.212
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 1.0
+      width: 1.1137
+      median_abs_log_error: 0.1268
+      median_abs_log_error_corrected: 0.3516
+      median_pool: 500.0
+      w: 0.212
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.9538
+      median_abs_log_error: 0.1268
+      median_abs_log_error_corrected: 0.3856
+      median_pool: 28757.0
+      w: 0.212
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 1.0
+      width: 1.6857
+      median_abs_log_error: 0.1268
+      median_abs_log_error_corrected: 0.6969
+      median_pool: 200.0
+      w: 0.212
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.5217
+      median_abs_log_error: 0.1268
+      median_abs_log_error_corrected: 0.4809
+      median_pool: 10.0
+      w: 0.212
+      first_origin: 2009
+      last_origin: 2019
+    NV:
+    - method: own
+      cases: 11
+      coverage: 0.5455
+      width: 1.3308
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.677
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.3636
+      width: 0.7414
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.565
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 0.5455
+      width: 1.3354
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.677
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.5455
+      width: 1.1094
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.5204
+      median_pool: 500.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 0.9091
+      width: 1.9536
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.5556
+      median_pool: 28829.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 0.9091
+      width: 1.6584
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.9253
+      median_pool: 200.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 0.9091
+      width: 1.7175
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.677
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    PA:
+    - method: own
+      cases: 11
+      coverage: 0.9091
+      width: 0.7414
+      median_abs_log_error: 0.2248
+      median_abs_log_error_corrected: 0.484
+      median_pool: 10.0
+      w: 0.67
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa
+      cases: 11
+      coverage: 0.9091
+      width: 0.7414
+      median_abs_log_error: 0.2248
+      median_abs_log_error_corrected: 0.484
+      median_pool: 10.0
+      w: 0.67
+      first_origin: 2009
+      last_origin: 2019
+    - method: pa_blend
+      cases: 11
+      coverage: 0.9091
+      width: 0.7414
+      median_abs_log_error: 0.2248
+      median_abs_log_error_corrected: 0.484
+      median_pool: 10.0
+      w: 0.67
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 1.0
+      width: 1.1183
+      median_abs_log_error: 0.2248
+      median_abs_log_error_corrected: 0.3528
+      median_pool: 500.0
+      w: 0.67
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_counties
+      cases: 11
+      coverage: 1.0
+      width: 1.9719
+      median_abs_log_error: 0.2248
+      median_abs_log_error_corrected: 0.4456
+      median_pool: 28300.0
+      w: 0.67
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor
+      cases: 11
+      coverage: 1.0
+      width: 1.5832
+      median_abs_log_error: 0.2248
+      median_abs_log_error_corrected: 1.0028
+      median_pool: 200.0
+      w: 0.67
+      first_origin: 2009
+      last_origin: 2019
+    - method: donor_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.0062
+      median_abs_log_error: 0.2248
+      median_abs_log_error_corrected: 0.484
+      median_pool: 10.0
+      w: 0.67
+      first_origin: 2009
+      last_origin: 2019
+  other_origins:
+    VT:
+    - method: own
+      cases: 21
+      coverage: 0.4762
+      width: 0.618
+      median_abs_log_error: 0.2564
+      median_abs_log_error_corrected: 0.3032
+      median_pool: 12.0
+      w: 0.168
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.5238
+      width: 0.6184
+      median_abs_log_error: 0.2564
+      median_abs_log_error_corrected: 0.3729
+      median_pool: 12.0
+      w: 0.168
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.5714
+      width: 0.6579
+      median_abs_log_error: 0.2564
+      median_abs_log_error_corrected: 0.3032
+      median_pool: 12.0
+      w: 0.168
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.7143
+      width: 0.9716
+      median_abs_log_error: 0.2564
+      median_abs_log_error_corrected: 0.2991
+      median_pool: 600.0
+      w: 0.168
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.9524
+      width: 1.9554
+      median_abs_log_error: 0.2564
+      median_abs_log_error_corrected: 0.4078
+      median_pool: 34456.0
+      w: 0.168
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.8095
+      width: 1.4326
+      median_abs_log_error: 0.2564
+      median_abs_log_error_corrected: 0.5997
+      median_pool: 200.0
+      w: 0.168
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.8095
+      width: 1.2657
+      median_abs_log_error: 0.2564
+      median_abs_log_error_corrected: 0.3032
+      median_pool: 12.0
+      w: 0.168
+      first_origin: 1999
+      last_origin: 2019
+    NH:
+    - method: own
+      cases: 21
+      coverage: 0.5238
+      width: 0.8384
+      median_abs_log_error: 0.3215
+      median_abs_log_error_corrected: 0.4498
+      median_pool: 12.0
+      w: 0.12
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.381
+      width: 0.6184
+      median_abs_log_error: 0.3215
+      median_abs_log_error_corrected: 0.4486
+      median_pool: 12.0
+      w: 0.12
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.5714
+      width: 0.8558
+      median_abs_log_error: 0.3215
+      median_abs_log_error_corrected: 0.4498
+      median_pool: 12.0
+      w: 0.12
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.5714
+      width: 0.9691
+      median_abs_log_error: 0.3215
+      median_abs_log_error_corrected: 0.4131
+      median_pool: 600.0
+      w: 0.12
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.8571
+      width: 1.9556
+      median_abs_log_error: 0.3215
+      median_abs_log_error_corrected: 0.4585
+      median_pool: 34504.0
+      w: 0.12
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.8095
+      width: 1.4508
+      median_abs_log_error: 0.3215
+      median_abs_log_error_corrected: 0.6716
+      median_pool: 200.0
+      w: 0.12
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.8095
+      width: 1.3738
+      median_abs_log_error: 0.3215
+      median_abs_log_error_corrected: 0.4498
+      median_pool: 12.0
+      w: 0.12
+      first_origin: 1999
+      last_origin: 2019
+    ME:
+    - method: own
+      cases: 21
+      coverage: 0.381
+      width: 0.7074
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.4858
+      median_pool: 12.0
+      w: 0.204
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.2857
+      width: 0.6184
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.4624
+      median_pool: 12.0
+      w: 0.204
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.381
+      width: 0.7402
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.4858
+      median_pool: 12.0
+      w: 0.204
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.7619
+      width: 0.9687
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.4285
+      median_pool: 600.0
+      w: 0.204
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.8571
+      width: 1.9575
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.509
+      median_pool: 34420.0
+      w: 0.204
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.7619
+      width: 1.4777
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.7594
+      median_pool: 200.0
+      w: 0.204
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.7619
+      width: 1.2782
+      median_abs_log_error: 0.3545
+      median_abs_log_error_corrected: 0.4858
+      median_pool: 12.0
+      w: 0.204
+      first_origin: 1999
+      last_origin: 2019
+    RI:
+    - method: own
+      cases: 21
+      coverage: 0.5238
+      width: 0.7938
+      median_abs_log_error: 0.316
+      median_abs_log_error_corrected: 0.5013
+      median_pool: 12.0
+      w: 0.06
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.619
+      width: 0.6184
+      median_abs_log_error: 0.316
+      median_abs_log_error_corrected: 0.4656
+      median_pool: 12.0
+      w: 0.06
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.619
+      width: 0.8239
+      median_abs_log_error: 0.316
+      median_abs_log_error_corrected: 0.5013
+      median_pool: 12.0
+      w: 0.06
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.6667
+      width: 0.9646
+      median_abs_log_error: 0.316
+      median_abs_log_error_corrected: 0.4013
+      median_pool: 600.0
+      w: 0.06
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.8571
+      width: 1.9523
+      median_abs_log_error: 0.316
+      median_abs_log_error_corrected: 0.4676
+      median_pool: 34564.0
+      w: 0.06
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.7619
+      width: 1.496
+      median_abs_log_error: 0.316
+      median_abs_log_error_corrected: 0.4991
+      median_pool: 200.0
+      w: 0.06
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.7619
+      width: 1.4538
+      median_abs_log_error: 0.316
+      median_abs_log_error_corrected: 0.5013
+      median_pool: 12.0
+      w: 0.06
+      first_origin: 1999
+      last_origin: 2019
+    DE:
+    - method: own
+      cases: 21
+      coverage: 0.4286
+      width: 0.7242
+      median_abs_log_error: 0.3514
+      median_abs_log_error_corrected: 0.3641
+      median_pool: 12.0
+      w: 0.036
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.4286
+      width: 0.6184
+      median_abs_log_error: 0.3514
+      median_abs_log_error_corrected: 0.3981
+      median_pool: 12.0
+      w: 0.036
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.5238
+      width: 0.7605
+      median_abs_log_error: 0.3514
+      median_abs_log_error_corrected: 0.3641
+      median_pool: 12.0
+      w: 0.036
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.619
+      width: 0.968
+      median_abs_log_error: 0.3514
+      median_abs_log_error_corrected: 0.3994
+      median_pool: 600.0
+      w: 0.036
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.9524
+      width: 1.9519
+      median_abs_log_error: 0.3514
+      median_abs_log_error_corrected: 0.4016
+      median_pool: 34588.0
+      w: 0.036
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.8095
+      width: 1.5139
+      median_abs_log_error: 0.3514
+      median_abs_log_error_corrected: 0.6944
+      median_pool: 200.0
+      w: 0.036
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.8095
+      width: 1.4804
+      median_abs_log_error: 0.3514
+      median_abs_log_error_corrected: 0.3641
+      median_pool: 12.0
+      w: 0.036
+      first_origin: 1999
+      last_origin: 2019
+    WY:
+    - method: own
+      cases: 21
+      coverage: 0.5714
+      width: 0.9305
+      median_abs_log_error: 0.2465
+      median_abs_log_error_corrected: 0.4337
+      median_pool: 12.0
+      w: 0.272
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.4762
+      width: 0.6184
+      median_abs_log_error: 0.2465
+      median_abs_log_error_corrected: 0.3488
+      median_pool: 12.0
+      w: 0.272
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.5714
+      width: 1.0206
+      median_abs_log_error: 0.2465
+      median_abs_log_error_corrected: 0.4337
+      median_pool: 12.0
+      w: 0.272
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.619
+      width: 0.9586
+      median_abs_log_error: 0.2465
+      median_abs_log_error_corrected: 0.2893
+      median_pool: 600.0
+      w: 0.272
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 1.0
+      width: 1.9491
+      median_abs_log_error: 0.2465
+      median_abs_log_error_corrected: 0.3987
+      median_pool: 34352.0
+      w: 0.272
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.7619
+      width: 1.4284
+      median_abs_log_error: 0.2465
+      median_abs_log_error_corrected: 0.4775
+      median_pool: 200.0
+      w: 0.272
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.7619
+      width: 1.28
+      median_abs_log_error: 0.2465
+      median_abs_log_error_corrected: 0.4337
+      median_pool: 12.0
+      w: 0.272
+      first_origin: 1999
+      last_origin: 2019
+    NM:
+    - method: own
+      cases: 21
+      coverage: 0.6667
+      width: 0.8723
+      median_abs_log_error: 0.2841
+      median_abs_log_error_corrected: 0.4142
+      median_pool: 12.0
+      w: 0.252
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.4286
+      width: 0.6184
+      median_abs_log_error: 0.2841
+      median_abs_log_error_corrected: 0.4435
+      median_pool: 12.0
+      w: 0.252
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.6667
+      width: 0.8769
+      median_abs_log_error: 0.2841
+      median_abs_log_error_corrected: 0.4142
+      median_pool: 12.0
+      w: 0.252
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.7619
+      width: 0.9663
+      median_abs_log_error: 0.2841
+      median_abs_log_error_corrected: 0.3601
+      median_pool: 600.0
+      w: 0.252
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.8571
+      width: 1.9481
+      median_abs_log_error: 0.2841
+      median_abs_log_error_corrected: 0.3863
+      median_pool: 34375.0
+      w: 0.252
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.7619
+      width: 1.6801
+      median_abs_log_error: 0.2841
+      median_abs_log_error_corrected: 0.7191
+      median_pool: 200.0
+      w: 0.252
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.7619
+      width: 1.4174
+      median_abs_log_error: 0.2841
+      median_abs_log_error_corrected: 0.4142
+      median_pool: 12.0
+      w: 0.252
+      first_origin: 1999
+      last_origin: 2019
+    NV:
+    - method: own
+      cases: 21
+      coverage: 0.5714
+      width: 1.2395
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.6583
+      median_pool: 12.0
+      w: 0.166
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.2857
+      width: 0.6184
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.5685
+      median_pool: 12.0
+      w: 0.166
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.5714
+      width: 1.264
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.6583
+      median_pool: 12.0
+      w: 0.166
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.5238
+      width: 0.9595
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.5698
+      median_pool: 600.0
+      w: 0.166
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.7619
+      width: 1.9475
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.5339
+      median_pool: 34458.0
+      w: 0.166
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.7619
+      width: 1.5925
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 1.0264
+      median_pool: 200.0
+      w: 0.166
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.6667
+      width: 1.6266
+      median_abs_log_error: 0.4198
+      median_abs_log_error_corrected: 0.6583
+      median_pool: 12.0
+      w: 0.166
+      first_origin: 1999
+      last_origin: 2019
+    PA:
+    - method: own
+      cases: 21
+      coverage: 0.6667
+      width: 0.6184
+      median_abs_log_error: 0.2681
+      median_abs_log_error_corrected: 0.3796
+      median_pool: 12.0
+      w: 0.801
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa
+      cases: 21
+      coverage: 0.6667
+      width: 0.6184
+      median_abs_log_error: 0.2681
+      median_abs_log_error_corrected: 0.3796
+      median_pool: 12.0
+      w: 0.801
+      first_origin: 1999
+      last_origin: 2019
+    - method: pa_blend
+      cases: 21
+      coverage: 0.6667
+      width: 0.6184
+      median_abs_log_error: 0.2681
+      median_abs_log_error_corrected: 0.3796
+      median_pool: 12.0
+      w: 0.801
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_states
+      cases: 21
+      coverage: 0.7619
+      width: 0.9707
+      median_abs_log_error: 0.2681
+      median_abs_log_error_corrected: 0.3044
+      median_pool: 600.0
+      w: 0.801
+      first_origin: 1999
+      last_origin: 2019
+    - method: national_counties
+      cases: 21
+      coverage: 0.9524
+      width: 1.9625
+      median_abs_log_error: 0.2681
+      median_abs_log_error_corrected: 0.4016
+      median_pool: 33824.0
+      w: 0.801
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor
+      cases: 21
+      coverage: 0.8095
+      width: 1.5124
+      median_abs_log_error: 0.2681
+      median_abs_log_error_corrected: 0.9275
+      median_pool: 200.0
+      w: 0.801
+      first_origin: 1999
+      last_origin: 2019
+    - method: donor_blend
+      cases: 21
+      coverage: 0.7143
+      width: 0.7269
+      median_abs_log_error: 0.2681
+      median_abs_log_error_corrected: 0.3796
+      median_pool: 12.0
+      w: 0.801
+      first_origin: 1999
+      last_origin: 2019
+county_cases:
+  AK: 429
+  AL: 1326
+  AR: 1466
+  AZ: 315
+  CA: 1217
+  CO: 1325
+  CT: 144
+  DC: 21
+  DE: 63
+  FL: 1407
+  GA: 3106
+  HI: 84
+  IA: 2077
+  ID: 923
+  IL: 1941
+  IN: 1898
+  KS: 1963
+  KY: 1799
+  LA: 1260
+  MA: 294
+  MD: 504
+  ME: 357
+  MI: 1762
+  MN: 1815
+  MO: 2256
+  MS: 1534
+  MT: 884
+  NC: 2096
+  ND: 1011
+  NE: 1712
+  NH: 210
+  NJ: 441
+  NM: 442
+  NV: 291
+  NY: 1302
+  OH: 1807
+  OK: 1466
+  OR: 655
+  PA: 1398
+  RI: 105
+  SC: 964
+  SD: 1214
+  TN: 1844
+  TX: 4370
+  UT: 607
+  VA: 2790
+  VT: 294
+  WA: 819
+  WI: 1509
+  WV: 1035
+  WY: 475
+sparse_states:
+  AK:
+    county_cases: 429
+    weight_own: 0.429
+    features_at: 2025
+    size_units_per_year: 989.4
+    growth_log: -0.4141
+    completeness: 0.4975
+    donor_cases: 200
+    donor_counties: 135
+    donor_states: 37
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.3898
+      0.2: 0.5197
+      0.5: 1.0861
+      0.8: 1.4919
+      0.9: 1.8368
+    own_state_ratio_quantiles:
+      0.1: 0.3883
+      0.2: 0.5794
+      0.5: 0.8124
+      0.8: 1.3083
+      0.9: 1.832
+  AZ:
+    county_cases: 315
+    weight_own: 0.315
+    features_at: 2025
+    size_units_per_year: 59289.2
+    growth_log: 0.1213
+    completeness: 0.9483
+    donor_cases: 200
+    donor_counties: 82
+    donor_states: 24
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1792
+      0.2: 0.2562
+      0.5: 0.4574
+      0.8: 0.764
+      0.9: 0.931
+    own_state_ratio_quantiles:
+      0.1: 0.2704
+      0.2: 0.4349
+      0.5: 1.2367
+      0.8: 1.8149
+      0.9: 1.9239
+  CT:
+    county_cases: 144
+    weight_own: 0.144
+    features_at: 2025
+    size_units_per_year: 6009.6
+    growth_log: 0.2116
+    completeness: 0.8842
+    donor_cases: 200
+    donor_counties: 84
+    donor_states: 30
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.2561
+      0.2: 0.3592
+      0.5: 0.6338
+      0.8: 1.1641
+      0.9: 1.4517
+    own_state_ratio_quantiles:
+      0.1: 0.4362
+      0.2: 0.6088
+      0.5: 0.9999
+      0.8: 1.1849
+      0.9: 1.2523
+  DC:
+    county_cases: 21
+    weight_own: 0.021
+    features_at: 2025
+    size_units_per_year: 3758.6
+    growth_log: -1.0203
+    completeness: 1.0
+    donor_cases: 200
+    donor_counties: 102
+    donor_states: 28
+    donor_origins:
+    - 2007
+    - 2014
+    ratio_quantiles:
+      0.1: 0.5022
+      0.2: 0.717
+      0.5: 1.4003
+      0.8: 2.1918
+      0.9: 2.6352
+    own_state_ratio_quantiles:
+      0.1: 0.8603
+      0.2: 0.961
+      0.5: 1.389
+      0.8: 2.5756
+      0.9: 3.4997
+  DE:
+    county_cases: 63
+    weight_own: 0.063
+    features_at: 2025
+    size_units_per_year: 6858.2
+    growth_log: -0.0666
+    completeness: 0.9709
+    donor_cases: 200
+    donor_counties: 91
+    donor_states: 27
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.22
+      0.2: 0.3024
+      0.5: 0.63
+      0.8: 1.3937
+      0.9: 1.6618
+    own_state_ratio_quantiles:
+      0.1: 0.5433
+      0.2: 0.798
+      0.5: 1.2144
+      0.8: 1.4524
+      0.9: 1.5753
+  HI:
+    county_cases: 84
+    weight_own: 0.084
+    features_at: 2025
+    size_units_per_year: 3828.0
+    growth_log: -0.0199
+    completeness: 0.8705
+    donor_cases: 200
+    donor_counties: 95
+    donor_states: 33
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.2952
+      0.2: 0.39
+      0.5: 0.7133
+      0.8: 1.2322
+      0.9: 1.4847
+    own_state_ratio_quantiles:
+      0.1: 0.4564
+      0.2: 0.6663
+      0.5: 0.9958
+      0.8: 1.3479
+      0.9: 1.7538
+  ID:
+    county_cases: 923
+    weight_own: 0.923
+    features_at: 2025
+    size_units_per_year: 18786.2
+    growth_log: 0.0439
+    completeness: 0.948
+    donor_cases: 200
+    donor_counties: 82
+    donor_states: 25
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1976
+      0.2: 0.269
+      0.5: 0.4993
+      0.8: 0.8556
+      0.9: 1.1498
+    own_state_ratio_quantiles:
+      0.1: 0.344
+      0.2: 0.5733
+      0.5: 1.4021
+      0.8: 1.9787
+      0.9: 2.3037
+  MA:
+    county_cases: 294
+    weight_own: 0.294
+    features_at: 2025
+    size_units_per_year: 15342.4
+    growth_log: -0.2682
+    completeness: 0.8059
+    donor_cases: 200
+    donor_counties: 83
+    donor_states: 25
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.2009
+      0.2: 0.2848
+      0.5: 0.4919
+      0.8: 0.8838
+      0.9: 1.2621
+    own_state_ratio_quantiles:
+      0.1: 0.5086
+      0.2: 0.7626
+      0.5: 1.0969
+      0.8: 1.2765
+      0.9: 1.6479
+  MD:
+    county_cases: 504
+    weight_own: 0.504
+    features_at: 2025
+    size_units_per_year: 17998.0
+    growth_log: -0.1339
+    completeness: 0.992
+    donor_cases: 200
+    donor_counties: 82
+    donor_states: 23
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1742
+      0.2: 0.2486
+      0.5: 0.4825
+      0.8: 0.8735
+      0.9: 1.182
+    own_state_ratio_quantiles:
+      0.1: 0.5399
+      0.2: 0.6537
+      0.5: 1.0118
+      0.8: 1.134
+      0.9: 1.276
+  ME:
+    county_cases: 357
+    weight_own: 0.357
+    features_at: 2025
+    size_units_per_year: 6564.0
+    growth_log: 0.1977
+    completeness: 0.7292
+    donor_cases: 200
+    donor_counties: 85
+    donor_states: 28
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.238
+      0.2: 0.3394
+      0.5: 0.6295
+      0.8: 1.1825
+      0.9: 1.5003
+    own_state_ratio_quantiles:
+      0.1: 0.4297
+      0.2: 0.5715
+      0.5: 1.2686
+      0.8: 1.4303
+      0.9: 1.4843
+  MT:
+    county_cases: 884
+    weight_own: 0.884
+    features_at: 2025
+    size_units_per_year: 5732.8
+    growth_log: -0.1204
+    completeness: 0.8073
+    donor_cases: 200
+    donor_counties: 91
+    donor_states: 30
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.2033
+      0.2: 0.2848
+      0.5: 0.5395
+      0.8: 1.1924
+      0.9: 1.5877
+    own_state_ratio_quantiles:
+      0.1: 0.5873
+      0.2: 0.8352
+      0.5: 1.3159
+      0.8: 1.6881
+      0.9: 2.079
+  NH:
+    county_cases: 210
+    weight_own: 0.21
+    features_at: 2025
+    size_units_per_year: 4845.0
+    growth_log: 0.1037
+    completeness: 0.8559
+    donor_cases: 200
+    donor_counties: 87
+    donor_states: 33
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.2958
+      0.2: 0.371
+      0.5: 0.6422
+      0.8: 1.1734
+      0.9: 1.3912
+    own_state_ratio_quantiles:
+      0.1: 0.417
+      0.2: 0.5839
+      0.5: 1.1754
+      0.8: 1.3792
+      0.9: 1.4796
+  NJ:
+    county_cases: 441
+    weight_own: 0.441
+    features_at: 2025
+    size_units_per_year: 33886.6
+    growth_log: -0.0319
+    completeness: 0.8447
+    donor_cases: 200
+    donor_counties: 84
+    donor_states: 24
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1865
+      0.2: 0.2594
+      0.5: 0.4836
+      0.8: 0.8297
+      0.9: 1.0843
+    own_state_ratio_quantiles:
+      0.1: 0.4947
+      0.2: 0.7438
+      0.5: 1.0937
+      0.8: 1.3304
+      0.9: 1.7282
+  NM:
+    county_cases: 442
+    weight_own: 0.442
+    features_at: 2025
+    size_units_per_year: 8043.2
+    growth_log: 0.3036
+    completeness: 0.8221
+    donor_cases: 200
+    donor_counties: 84
+    donor_states: 26
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.2269
+      0.2: 0.3655
+      0.5: 0.7568
+      0.8: 1.2519
+      0.9: 1.4669
+    own_state_ratio_quantiles:
+      0.1: 0.4226
+      0.2: 0.5944
+      0.5: 1.0766
+      0.8: 1.3286
+      0.9: 1.4843
+  NV:
+    county_cases: 291
+    weight_own: 0.291
+    features_at: 2025
+    size_units_per_year: 20084.4
+    growth_log: -0.0403
+    completeness: 0.887
+    donor_cases: 200
+    donor_counties: 86
+    donor_states: 23
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1957
+      0.2: 0.2753
+      0.5: 0.5018
+      0.8: 0.8355
+      0.9: 1.1095
+    own_state_ratio_quantiles:
+      0.1: 0.2718
+      0.2: 0.4601
+      0.5: 1.1836
+      0.8: 1.5748
+      0.9: 2.0305
+  OR:
+    county_cases: 655
+    weight_own: 0.655
+    features_at: 2025
+    size_units_per_year: 17878.8
+    growth_log: -0.26
+    completeness: 0.9594
+    donor_cases: 200
+    donor_counties: 80
+    donor_states: 22
+    donor_origins:
+    - 2000
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1831
+      0.2: 0.2753
+      0.5: 0.491
+      0.8: 0.8665
+      0.9: 1.206
+    own_state_ratio_quantiles:
+      0.1: 0.3912
+      0.2: 0.5903
+      0.5: 1.0566
+      0.8: 1.4321
+      0.9: 1.8573
+  RI:
+    county_cases: 105
+    weight_own: 0.105
+    features_at: 2025
+    size_units_per_year: 1485.6
+    growth_log: 0.1667
+    completeness: 0.9046
+    donor_cases: 200
+    donor_counties: 119
+    donor_states: 40
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.3753
+      0.2: 0.4696
+      0.5: 0.8349
+      0.8: 1.2706
+      0.9: 1.5202
+    own_state_ratio_quantiles:
+      0.1: 0.4383
+      0.2: 0.5683
+      0.5: 0.8926
+      0.8: 1.2907
+      0.9: 1.4266
+  SC:
+    county_cases: 964
+    weight_own: 0.964
+    features_at: 2025
+    size_units_per_year: 46425.2
+    growth_log: 0.127
+    completeness: 0.8105
+    donor_cases: 200
+    donor_counties: 83
+    donor_states: 24
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1792
+      0.2: 0.2562
+      0.5: 0.4626
+      0.8: 0.764
+      0.9: 0.9493
+    own_state_ratio_quantiles:
+      0.1: 0.4941
+      0.2: 0.7624
+      0.5: 1.3224
+      0.8: 1.4513
+      0.9: 1.732
+  UT:
+    county_cases: 607
+    weight_own: 0.607
+    features_at: 2025
+    size_units_per_year: 29369.0
+    growth_log: -0.1409
+    completeness: 0.9043
+    donor_cases: 200
+    donor_counties: 83
+    donor_states: 23
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1742
+      0.2: 0.2486
+      0.5: 0.4732
+      0.8: 0.8184
+      0.9: 1.0855
+    own_state_ratio_quantiles:
+      0.1: 0.4853
+      0.2: 0.6908
+      0.5: 1.2169
+      0.8: 1.7418
+      0.9: 1.8551
+  VT:
+    county_cases: 294
+    weight_own: 0.294
+    features_at: 2025
+    size_units_per_year: 2425.2
+    growth_log: 0.196
+    completeness: 0.7622
+    donor_cases: 200
+    donor_counties: 102
+    donor_states: 34
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.3456
+      0.2: 0.4381
+      0.5: 0.7729
+      0.8: 1.1632
+      0.9: 1.3728
+    own_state_ratio_quantiles:
+      0.1: 0.5357
+      0.2: 0.6821
+      0.5: 1.1929
+      0.8: 1.2923
+      0.9: 1.3746
+  WA:
+    county_cases: 819
+    weight_own: 0.819
+    features_at: 2025
+    size_units_per_year: 43151.8
+    growth_log: -0.2709
+    completeness: 0.9479
+    donor_cases: 200
+    donor_counties: 83
+    donor_states: 25
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.1838
+      0.2: 0.2541
+      0.5: 0.4759
+      0.8: 0.807
+      0.9: 1.0856
+    own_state_ratio_quantiles:
+      0.1: 0.5547
+      0.2: 0.7382
+      0.5: 1.0843
+      0.8: 1.4525
+      0.9: 1.6578
+  WY:
+    county_cases: 475
+    weight_own: 0.475
+    features_at: 2025
+    size_units_per_year: 2353.0
+    growth_log: -0.0608
+    completeness: 0.913
+    donor_cases: 200
+    donor_counties: 109
+    donor_states: 39
+    donor_origins:
+    - 1999
+    - 2019
+    ratio_quantiles:
+      0.1: 0.331
+      0.2: 0.3843
+      0.5: 0.7538
+      0.8: 1.2413
+      0.9: 1.4019
+    own_state_ratio_quantiles:
+      0.1: 0.6351
+      0.2: 0.8215
+      0.5: 1.0105
+      0.8: 1.4794
+      0.9: 1.779
+pooled_states_test:
+  preregistration:
+    block: pooled_states_test
+    sha256: c657753f5bbd3b6580258e97a564f6664fc2cb583f04b9f300ab13c7c810f3f7
+    fingerprint: SHA-256 of the block as JSON, keys sorted, separators (',', ':')
+  fresh_states:
+  - HI
+  - ID
+  - MA
+  - OR
+  - UT
+  - MD
+  - NJ
+  - SC
+  selection:
+    eligible:
+    - state: HI
+      size: 5123.7
+      county_cases: 84
+    - state: ID
+      size: 12455.1
+      county_cases: 923
+    - state: MA
+      size: 16031.7
+      county_cases: 294
+    - state: OR
+      size: 19670.2
+      county_cases: 655
+    - state: UT
+      size: 20345.8
+      county_cases: 607
+    - state: MD
+      size: 22247.8
+      county_cases: 504
+    - state: NJ
+      size: 27306.3
+      county_cases: 441
+    - state: SC
+      size: 32542.9
+      county_cases: 964
+    - state: WA
+      size: 40108.5
+      county_cases: 819
+    - state: AZ
+      size: 47568.8
+      county_cases: 315
+    dropped:
+      first_test:
+      - DE
+      - ME
+      - NH
+      - NM
+      - NV
+      - PA
+      - RI
+      - VT
+      - WY
+      excluded:
+      - AK
+      - CO
+      - CT
+      - DC
+      - FL
+      - MT
+      - SD
+      - VA
+      not_sparse:
+      - AL
+      - AR
+      - CA
+      - GA
+      - IA
+      - IL
+      - IN
+      - KS
+      - KY
+      - LA
+      - MI
+      - MN
+      - MO
+      - MS
+      - NC
+      - ND
+      - NE
+      - NY
+      - OH
+      - OK
+      - TN
+      - TX
+      - WI
+      - WV
+  decision:
+    outcome: keep_current
+    states_scored: 8
+    gap_tie: false
+    beats_current: true
+    wider_than_margin: true
+    coverage_in_band: false
+    coverage_below_band: true
+    methods:
+      pa_blend:
+        states: 8
+        cases: 88
+        mean_gap: 0.2591
+        coverage: 0.5682
+        width: 0.9776
+      states_blend:
+        states: 8
+        cases: 88
+        mean_gap: 0.2068
+        coverage: 0.6477
+        width: 1.1185
+      own:
+        states: 8
+        cases: 88
+        mean_gap: 0.2818
+        coverage: 0.5455
+        width: 0.921
+      national_states:
+        states: 8
+        cases: 88
+        mean_gap: 0.1841
+        coverage: 0.6932
+        width: 1.1122
+    reason: 'states_blend is closer to 80% (mean gap 0.207 vs 0.259) but more than 10% wider (width 1.12
+      vs 0.98) with pooled coverage 64.8% outside 75%-85%; the current widening stays (note: coverage
+      is below the band, so the extra width was not more than needed; the clause as stated rejects it
+      all the same, and the outcome follows the clause)'
+  holdout:
+    HI:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.9091
+      width: 1.289
+      median_abs_log_error: 0.1279
+      median_abs_log_error_corrected: 0.172
+      median_pool: 10.0
+      w: 0.04
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 1.0
+      width: 1.3336
+      median_abs_log_error: 0.1279
+      median_abs_log_error_corrected: 0.172
+      median_pool: 10.0
+      w: 0.04
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.9091
+      width: 1.289
+      median_abs_log_error: 0.1279
+      median_abs_log_error_corrected: 0.172
+      median_pool: 10.0
+      w: 0.04
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 1.0
+      width: 1.0987
+      median_abs_log_error: 0.1279
+      median_abs_log_error_corrected: 0.1649
+      median_pool: 500.0
+      w: 0.04
+      first_origin: 2009
+      last_origin: 2019
+    ID:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.3636
+      width: 1.1611
+      median_abs_log_error: 0.5917
+      median_abs_log_error_corrected: 0.6612
+      median_pool: 10.0
+      w: 0.439
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 0.3636
+      width: 1.2338
+      median_abs_log_error: 0.5917
+      median_abs_log_error_corrected: 0.6612
+      median_pool: 10.0
+      w: 0.439
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.3636
+      width: 1.1534
+      median_abs_log_error: 0.5917
+      median_abs_log_error_corrected: 0.6612
+      median_pool: 10.0
+      w: 0.439
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.3636
+      width: 1.1017
+      median_abs_log_error: 0.5917
+      median_abs_log_error_corrected: 0.752
+      median_pool: 500.0
+      w: 0.439
+      first_origin: 2009
+      last_origin: 2019
+    MA:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.5455
+      width: 0.865
+      median_abs_log_error: 0.1664
+      median_abs_log_error_corrected: 0.3049
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 0.7273
+      width: 1.0693
+      median_abs_log_error: 0.1664
+      median_abs_log_error_corrected: 0.3049
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.5455
+      width: 0.7641
+      median_abs_log_error: 0.1664
+      median_abs_log_error_corrected: 0.3049
+      median_pool: 10.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.7273
+      width: 1.1182
+      median_abs_log_error: 0.1664
+      median_abs_log_error_corrected: 0.3668
+      median_pool: 500.0
+      w: 0.14
+      first_origin: 2009
+      last_origin: 2019
+    OR:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.6364
+      width: 1.0341
+      median_abs_log_error: 0.2302
+      median_abs_log_error_corrected: 0.3887
+      median_pool: 10.0
+      w: 0.307
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 0.6364
+      width: 1.1583
+      median_abs_log_error: 0.2302
+      median_abs_log_error_corrected: 0.3887
+      median_pool: 10.0
+      w: 0.307
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.6364
+      width: 0.9947
+      median_abs_log_error: 0.2302
+      median_abs_log_error_corrected: 0.3887
+      median_pool: 10.0
+      w: 0.307
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.6364
+      width: 1.113
+      median_abs_log_error: 0.2302
+      median_abs_log_error_corrected: 0.4581
+      median_pool: 500.0
+      w: 0.307
+      first_origin: 2009
+      last_origin: 2019
+    UT:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.2727
+      width: 0.8887
+      median_abs_log_error: 0.5471
+      median_abs_log_error_corrected: 0.467
+      median_pool: 10.0
+      w: 0.288
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 0.3636
+      width: 1.0395
+      median_abs_log_error: 0.5471
+      median_abs_log_error_corrected: 0.467
+      median_pool: 10.0
+      w: 0.288
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.2727
+      width: 0.8152
+      median_abs_log_error: 0.5471
+      median_abs_log_error_corrected: 0.467
+      median_pool: 10.0
+      w: 0.288
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.5455
+      width: 1.1189
+      median_abs_log_error: 0.5471
+      median_abs_log_error_corrected: 0.6369
+      median_pool: 500.0
+      w: 0.288
+      first_origin: 2009
+      last_origin: 2019
+    MD:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.7273
+      width: 0.7922
+      median_abs_log_error: 0.1253
+      median_abs_log_error_corrected: 0.3493
+      median_pool: 10.0
+      w: 0.24
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 0.8182
+      width: 1.0238
+      median_abs_log_error: 0.1253
+      median_abs_log_error_corrected: 0.3493
+      median_pool: 10.0
+      w: 0.24
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.7273
+      width: 0.7211
+      median_abs_log_error: 0.1253
+      median_abs_log_error_corrected: 0.3493
+      median_pool: 10.0
+      w: 0.24
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.9091
+      width: 1.116
+      median_abs_log_error: 0.1253
+      median_abs_log_error_corrected: 0.2725
+      median_pool: 500.0
+      w: 0.24
+      first_origin: 2009
+      last_origin: 2019
+    NJ:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.5455
+      width: 0.882
+      median_abs_log_error: 0.2488
+      median_abs_log_error_corrected: 0.3532
+      median_pool: 10.0
+      w: 0.21
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 0.6364
+      width: 1.0563
+      median_abs_log_error: 0.2488
+      median_abs_log_error_corrected: 0.3532
+      median_pool: 10.0
+      w: 0.21
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.5455
+      width: 0.7802
+      median_abs_log_error: 0.2488
+      median_abs_log_error_corrected: 0.3532
+      median_pool: 10.0
+      w: 0.21
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.7273
+      width: 1.1175
+      median_abs_log_error: 0.2488
+      median_abs_log_error_corrected: 0.4122
+      median_pool: 500.0
+      w: 0.21
+      first_origin: 2009
+      last_origin: 2019
+    SC:
+    - method: pa_blend
+      cases: 11
+      coverage: 0.5455
+      width: 0.9087
+      median_abs_log_error: 0.3654
+      median_abs_log_error_corrected: 0.406
+      median_pool: 10.0
+      w: 0.459
+      first_origin: 2009
+      last_origin: 2019
+    - method: states_blend
+      cases: 11
+      coverage: 0.6364
+      width: 1.0331
+      median_abs_log_error: 0.3654
+      median_abs_log_error_corrected: 0.406
+      median_pool: 10.0
+      w: 0.459
+      first_origin: 2009
+      last_origin: 2019
+    - method: own
+      cases: 11
+      coverage: 0.3636
+      width: 0.8503
+      median_abs_log_error: 0.3654
+      median_abs_log_error_corrected: 0.406
+      median_pool: 10.0
+      w: 0.459
+      first_origin: 2009
+      last_origin: 2019
+    - method: national_states
+      cases: 11
+      coverage: 0.6364
+      width: 1.1137
+      median_abs_log_error: 0.3654
+      median_abs_log_error_corrected: 0.4915
+      median_pool: 500.0
+      w: 0.459
+      first_origin: 2009
+      last_origin: 2019
+  implied_range:
+    state: VT
+    years:
+    - 2027
+    - 2031
+    origin: 2025
+    p50_units: 12340
+    weight_own: 0.294
+    note: P50 is the rule's projection of the state total from the national county panel; the range is
+      P50 x P10/P50 to P50 x P90/P50 of the blended error record.
+    own:
+      low_ratio: 0.4491
+      high_ratio: 1.1524
+      low_units: 5542
+      high_units: 14220
+      width: 0.7032
+    pa_blend:
+      low_ratio: 0.4442
+      high_ratio: 1.1965
+      low_units: 5481
+      high_units: 14765
+      width: 0.7523
+    states_blend:
+      low_ratio: 0.4176
+      high_ratio: 1.3855
+      low_units: 5153
+      high_units: 17097
+      width: 0.9679
+preregistration_checks:
+- block: donor_pool_rules
+  file: assumptions/validation_donor_pool.yaml
+  sha256: 4b23d3a44df092756d22058f30c8e7a296af0ce8260deabf857324b602476e24
+  recorded_on: '2026-11-24'
+  verified: true
+- block: pooled_states_test
+  file: assumptions/validation_donor_pool.yaml
+  sha256: c657753f5bbd3b6580258e97a564f6664fc2cb583f04b9f300ab13c7c810f3f7
+  recorded_on: '2026-11-24'
+  verified: true

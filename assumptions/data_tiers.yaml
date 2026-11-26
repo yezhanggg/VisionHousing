@@ -1,0 +1,96 @@
+# VisionHousing data tiers: which inputs a state needs, and what the engine does without them.
+#
+# Read by visionhousing.engine.comparisons.ablation (the data-ablation test) and by
+# `visionhousing run --data-tier 0|1|2`. Method: docs/methods/comparisons.md.
+#
+#   Tier 0  national sources only: Census building permits (BPS), the American
+#           Community Survey, 2020 census blocks, the National Transit Map stops
+#           and the Assumption Ledger. Every state has these.
+#   Tier 1  plus state-level sources: a state's own already-legal table (state law
+#           or a statewide town-rule index) and state construction pay.
+#   Tier 2  plus local sources: verified municipal ordinance readings, lot
+#           measurements, network walksheds and county construction pay.
+#
+# Running at tier t masks every input whose tier is above t, so the fallback the
+# engine already uses for a state without that input fires. Nothing is invented:
+# a masked input is simply absent. Each input names its fallback in words.
+#
+# `effect` is what the engine does when the input is masked:
+#   law_hooks_off         the local-law hooks are off: every county uses the
+#                         statewide already-legal ADU share and full parking reach
+#   transfer_widening_on  the borrowed calibration is widened as for a state
+#                         without its own measurement (assumptions/transfer.yaml)
+#   walksheds_off         no network walkshed table: TOD uses straight-line
+#                         distance (the benchmark already does)
+#   state_table_off       the state's own already-legal table is not applied:
+#                         the ledger's national range is used
+#   pay_county_mean       a tract cost factor, if the pack has one, becomes its
+#                         county's mean
+#   pay_national          a tract cost factor, if the pack has one, becomes 1
+#                         (national average)
+
+version: 1
+id: data_tiers_2026_11
+
+tiers:
+  0: "National sources only"
+  1: "National plus state-level sources"
+  2: "National, state and local sources (full data)"
+
+inputs:
+  local_law:
+    tier: 2
+    title: "Verified municipal ordinance readings"
+    effect: law_hooks_off
+    fallback: "statewide already-legal ADU share; parking minimums reach every county's baseline"
+    sources: [pa_municipal_ordinances]
+  lot_measurements:
+    tier: 2
+    title: "ADU physical fit measured on the state's own lots"
+    effect: transfer_widening_on
+    fallback: "the fit range is borrowed and widened by half on each side (assumptions/transfer.yaml)"
+    sources: []
+  network_walksheds:
+    tier: 2
+    title: "Network walksheds around major stops"
+    effect: walksheds_off
+    fallback: "straight-line distance from major stops (the benchmark preset already uses it)"
+    sources: [osm_overpass_walk]
+  county_construction_pay:
+    tier: 2
+    title: "County construction pay (BLS QCEW)"
+    effect: pay_county_mean
+    fallback: "county mean of the tract cost factor; the engine reads a cost factor only where the pack has one"
+    sources: [bls_qcew_construction]
+  state_legal_table:
+    tier: 1
+    title: "The state's own already-legal table (state law or town-rule index)"
+    effect: state_table_off
+    fallback: "the ledger's national range for the already-legal share"
+    sources: []
+  state_construction_pay:
+    tier: 1
+    title: "State construction pay (BLS QCEW)"
+    effect: pay_national
+    fallback: "national average cost (factor 1)"
+    sources: [bls_qcew_construction]
+
+# The four measures, each tier against full data (tier 2), per reform:
+#   middle_shift      P50 over draws of (ablated / full - 1), state; same seed, so
+#                     draw d of one run is paired with draw d of the other (the
+#                     paired difference and the per-draw ratio are shown with
+#                     their P10 / P50 / P90)
+#   range_widening    (P90 - P10) ablated / (P90 - P10) full, state
+#   rank_agreement    Spearman rank correlation of county P50s
+#   coverage          share of counties whose full-data P50 lies inside the
+#                     ablated P10-P90
+# "Which missing dataset hurts most": each input masked alone, ranked by the
+# package's |middle_shift| (the package of all compared reforms, paired per draw;
+# the one reform's when only one is compared), then by the package's
+# range_widening. The mean over reforms is shown beside it, not ranked on.
+# still_shift: a middle shift smaller than this (as a share) is written as
+# "does not move" in the sentences; a display rule, no estimate.
+measures:
+  id: data_tiers.measures
+  hurt_rule: "the package's absolute middle shift (P50 over draws of ablated / full - 1), then the package's range widening"
+  still_shift: 0.0005

@@ -280,6 +280,41 @@ def test_context_reads_a_boundaries_folder(tmp_path):
         f["properties"]["geoid"] for f in feats
     )
     flat = load_context("TL")
-    a = compute(ctx, "parking", draws=100, seed=1).reforms["parking"].state_draws
+    # QQ counts as a real state, so its baseline range would be widened for few cases;
+    # mark it synthetic so only the outlines differ from Testland's.
+    a = compute(replace(ctx, synthetic=True), "parking", draws=100, seed=1)
+    a = a.reforms["parking"].state_draws
     b = compute(flat, "parking", draws=100, seed=1).reforms["parking"].state_draws
     assert np.allclose(a, b)
+
+
+def test_optional_tables_enter_the_data_hash_and_cache_keys(tmp_path):
+    """A pack retrofit that adds or changes an optional table changes every key (review R5 F3)."""
+    from visionhousing.api.runner import Runner
+
+    for name in ("tracts.csv", "permits_county_year.csv", "blocks.csv", "transit_stops.csv"):
+        (tmp_path / name).write_bytes((TESTLAND_DIR / name).read_bytes())
+    plain = load_context("QQ", folder=tmp_path)
+    assert load_context("QQ", folder=tmp_path).data_hash == plain.data_hash  # absent: unchanged
+    counties = sorted(set(plain.tracts["county"].astype(str)))
+    limits = pd.DataFrame({"county": counties, "l50_3": 500000.0})
+    limits.to_csv(tmp_path / "afford_income_limits.csv", index=False)
+    rich = load_context("QQ", folder=tmp_path)
+    assert rich.data_hash != plain.data_hash
+    limits.assign(l50_3=20000.0).to_csv(tmp_path / "afford_income_limits.csv", index=False)
+    changed = load_context("QQ", folder=tmp_path)
+    assert changed.data_hash not in {plain.data_hash, rich.data_hash}
+    # The engine's run cache and the API's run key both carry the data hash.
+    keys = {engine._key(c, ["fee_deferral_with_affordability"], None, 0, 50, "typical")
+            for c in (plain, rich, changed)}  # fmt: skip
+    assert len(keys) == 3
+    api = {Runner.key("run", c.state, c.data_hash, c.calibration_hash, c.ledger.hash())
+           for c in (plain, rich, changed)}  # fmt: skip
+    assert len(api) == 3
+    # And the cached result is not reused: the table is read from the context's own folder.
+    reform = "fee_deferral_with_affordability"
+    first = run("QQ", reform, draws=50, seed=0, context=rich)
+    second = run("QQ", reform, draws=50, seed=0, context=changed)
+    assert second is not first
+    assert second.hashes.data != first.hashes.data
+    assert not any("no HUD income-limits table" in n for n in second.reforms[reform].notes)

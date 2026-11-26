@@ -1,0 +1,1260 @@
+# Evidence: California Housing Element Annual Progress Reports (generated; do not edit).
+# Written by `visionhousing validate-california`. Comparison records, stage tables
+# and ADU permit rates for California and jurisdictions chosen by a stated rule.
+# Evidence only: nothing here is a Pennsylvania input. Blank (null) figures mean
+# too few projects or a Kaplan-Meier curve that never reached that level.
+# Method: docs/modules/validation_california.md.
+
+version: 1
+id: california_apr_2026_11
+state: CA
+label: 'California APR: stage attrition, elapsed time and ADU permit rates'
+use: evidence and validation only; not a Pennsylvania input
+provenance:
+  summary: Application, entitlement, permit and completion stages from California's Housing Element Annual
+    Progress Reports, by project group, for the state and jurisdictions chosen by a stated rule; ADU permits
+    per 1,000 one-unit detached homes.
+  measured_on: '2026-11-24'
+  method: Table A and Table A2 streamed in chunks (settings in assumptions/validation_california.yaml);
+    projects joined on jurisdiction, parcel number and unit category; Kaplan-Meier in visionhousing.features.permit_timing;
+    see docs/modules/validation_california.md.
+  generated_by: visionhousing validate-california
+  sources:
+  - id: hcd_apr_table_a
+    citation: California Department of Housing and Community Development (via the California Open Data
+      Portal), Housing Element Annual Progress Report (APR) data, Table A (housing development applications
+      received)
+    url: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/c78b769d-cc02-4050-91ef-79ded665b5a8/download/tablea.csv
+    licence: Portal listing states "No restrictions on public use" (rights field); licence field "not
+      specified"; the state's open data handbook releases portal data in the public domain. Only aggregates
+      are kept.
+  - id: hcd_apr_table_a2
+    citation: California Department of Housing and Community Development (via the California Open Data
+      Portal), Housing Element Annual Progress Report (APR) data, Table A2 (entitled, permitted and completed
+      units)
+    url: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/fe505d9b-8c36-42ba-ba30-08bc4f34e022/download/tablea2.csv
+    licence: Portal listing states "No restrictions on public use" (rights field); licence field "not
+      specified"; the state's open data handbook releases portal data in the public domain. Only aggregates
+      are kept.
+  - id: acs5_profile_tables
+    citation: U.S. Census Bureau, American Community Survey 5-year tables for the place-profile charts
+      (2020-2024)
+    url: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/data/5YRData/acsdt5y2024-b25024.dat
+    licence: Public domain (U.S. government work)
+  limits:
+  - Self-reported by each city and county; HCD does not verify the reports. Missing or late reports lower
+    counts; revisions change past years in later downloads.
+  - Applications are joined to later stages by jurisdiction, parcel number and unit category. Applications
+    that never join count as not reaching the stage, so reached shares are lower bounds; the share that
+    ever joins is reported beside each figure.
+  - Several projects on one parcel with the same unit category (for example two ADUs years apart) merge
+    into one project.
+  - Entitlement dates are reported only where a discretionary approval exists; ADUs and ministerial projects
+    mostly have none.
+  - Completion is a certificate of occupancy reported in the APR; some jurisdictions report it unevenly,
+    so permit-to-completion shares are lower bounds.
+  - The lot denominator is one-unit detached homes in one ACS period (2020-2024) for every year; unincorporated
+    county areas get no place rate.
+groups:
+  adu: Accessory dwelling units (ADU, JADU)
+  sb9: SB 9 duplex or lot split (flagged on the APR)
+  ministerial_5_plus: 5+ homes, streamlined or ministerial approval
+  mf_2_4: 2-4 homes (not SB 9)
+  mf_5_plus_other: 5+ homes, other approval path
+  single_family: Single-family and mobile homes (SFD, SFA, MH)
+selection:
+  rule: Cities with at least 100,000 one-unit detached homes; focal cities named for a documented pathway
+    difference; each focal city's peer = the candidate with the closest pre-period (2018-2019) ADU permit
+    rate, within 25%, else no peer. Only pre-period rates were passed to the selection step.
+  chosen:
+  - name: SAN DIEGO
+    role: focal
+    pathway: 'local legal pathway: ADU Bonus Program (extra ADUs in the transit-served Sustainable Development
+      Area)'
+    change: ADU Bonus Program added to the municipal code in the 2020 Housing Legislative Package
+    change_date: '2020'
+    source_url: https://www.sandiego.gov/development-services/housing-toolkit
+    pre_period_rate: 1.719
+    lots: 245168
+    peer: SAN JOSE
+  - name: LOS ANGELES
+    role: focal
+    pathway: 'process pathway: ministerial ADU plan check at scale, with a pre-approved standard-plan
+      program'
+    change: Pre-approved ADU standard plans offered by the Department of Building and Safety (start date
+      not verified here)
+    change_date: after 2019 (not verified)
+    source_url: https://dbs.lacity.gov/standard-plan-program
+    pre_period_rate: 7.912
+    lots: 560632
+    peer: null
+    peer_note: no candidate within 25% of its pre-period rate; compared with its own earlier years only
+  - name: SAN JOSE
+    role: peer
+    peer_of: SAN DIEGO
+    pathway: state-law ADU pathway; local programme not reviewed
+    change: none recorded
+    change_date: null
+    source_url: null
+    pre_period_rate: 1.718
+    lots: 176932
+    reason: closest pre-period ADU permit rate to San Diego (1.719 per 1,000 lots; gap 0.1%)
+  candidates:
+    LOS ANGELES: {lots: 560632, pre_period_rate: 7.912}
+    SAN DIEGO: {lots: 245168, pre_period_rate: 1.719}
+    SAN JOSE: {lots: 176932, pre_period_rate: 1.718}
+    SACRAMENTO: {lots: 125664, pre_period_rate: 0.39}
+    FRESNO: {lots: 115742, pre_period_rate: 0.026}
+link_quality: {applications: 327470, duplicates_dropped: 30422, with_parcel_number: 0.984, ever_linked_share: 0.742,
+  table_a2_rows: 927075, table_a2_projects: 574382}
+records:
+- id: ca_apr.adu.statewide_2020
+  what_changed: 'State ADU laws (AB 68, AB 881, SB 13) took effect: ministerial approval within 60 days,
+    no owner-occupancy rule until 2025, limits on parking, fees and lot-size rules'
+  where: California, every reporting city and county
+  date: '2020-01-01'
+  outcome:
+    measure: ADU homes permitted per 1,000 one-unit detached homes per year
+    before: 1.294
+    after: 2.999
+    change: 1.705
+  denominator: one-unit detached homes (ACS 2020-2024 5-year, B25024_002)
+  horizon: 2020-2025 vs 2018-2019
+  identification: descriptive
+  caveats:
+  - 'Before/after only: rents, interest rates, the pandemic and later state laws (2023, 2024) changed
+    at the same time.'
+  - The 2018-2019 base already follows the 2017 state ADU laws.
+  - Jurisdictions report themselves; late or missing reports lower a year's count.
+- id: ca_apr.adu.san_diego_vs_san_jose
+  what_changed: 'ADU Bonus Program added to the municipal code in the 2020 Housing Legislative Package
+    (local legal pathway: ADU Bonus Program (extra ADUs in the transit-served Sustainable Development
+    Area))'
+  where: San Diego compared with San Jose (peer chosen on the pre-period rate)
+  date: '2020'
+  outcome:
+    measure: ADU homes permitted per 1,000 one-unit detached homes per year
+    focal_before: 1.719
+    focal_after: 5.695
+    peer_before: 1.718
+    peer_after: 2.571
+    difference_in_change: 3.123
+  denominator: one-unit detached homes (ACS 2020-2024 5-year, B25024_002)
+  horizon: 2020-2025 vs 2018-2019
+  identification: matched
+  caveats:
+  - Matched on two pre-period years only; no test of parallel trends.
+  - Both cities had the 2020 state law change; the difference reflects local pathway, market and reporting
+    together.
+  - The local change date is taken from the city's own pages; where it says 'not verified' it was not
+    confirmed for this study.
+- id: ca_apr.adu.los_angeles_before_after
+  what_changed: 'Pre-approved ADU standard plans offered by the Department of Building and Safety (start
+    date not verified here) (process pathway: ministerial ADU plan check at scale, with a pre-approved
+    standard-plan program)'
+  where: Los Angeles (no peer with a similar pre-period rate)
+  date: after 2019 (not verified)
+  outcome:
+    measure: ADU homes permitted per 1,000 one-unit detached homes per year
+    before: 7.912
+    after: 10.9
+    change: 2.988
+    statewide_change: 1.705
+  denominator: one-unit detached homes (ACS 2020-2024 5-year, B25024_002)
+  horizon: 2020-2025 vs 2018-2019
+  identification: descriptive
+  caveats:
+  - no candidate within 25% of its pre-period rate; compared with its own earlier years only
+  - The state law change of 2020 applies here too; the statewide change is shown for scale, not as a control.
+  - The local change date is taken from the city's own pages; where it says 'not verified' it was not
+    confirmed for this study.
+- id: ca_apr.sb9.take_through
+  what_changed: 'SB 9 (2021): by-right duplex and urban lot split on single-family lots'
+  where: California, every reporting city and county
+  date: '2022-01-01'
+  outcome:
+    measure: share of applications with a building permit within 1 / 2 / 3 years (Kaplan-Meier, censored
+      at the end of the data)
+    sb9:
+    - 0.364
+    - 0.438
+    - 0.461
+    mf_2_4_not_sb9:
+    - 0.36
+    - 0.458
+    - 0.499
+    single_family:
+    - 0.595
+    - 0.643
+    - 0.66
+    sb9_applications: 2196
+  denominator: applications reported in Table A (application cohorts 2018 on; SB 9 from 2022)
+  horizon: 1-3 years after application
+  identification: descriptive
+  caveats:
+  - SB 9 is known only from the APR's streamlining field; jurisdictions that leave it blank hide SB 9
+    projects among single-family and 2-4 projects.
+  - Applications that never join a Table A2 row count as not permitted, so all shares are lower bounds.
+- id: ca_apr.mf.ministerial_vs_other
+  what_changed: Streamlined or ministerial approval of 5+ home projects (SB 35 2017, AB 2011 2022, SB
+    423 2023 and local ministerial paths)
+  where: California, every reporting city and county
+  date: '2018-01-01'
+  outcome:
+    measure: 'application to building permit: median days and share permitted within 2 years'
+    ministerial_median_days: null
+    other_median_days: null
+    ministerial_within_2y: 0.265
+    other_within_2y: 0.169
+  denominator: 5+ home applications reported in Table A
+  horizon: application cohorts 2018 on, followed to the end of the data
+  identification: descriptive
+  caveats:
+  - 'Projects choose their path: streamlined projects differ in size, place and affordability, so the
+    gap is not the effect of the path.'
+  - Applications that never join a Table A2 row count as not permitted.
+adu_rates:
+  CALIFORNIA:
+    lots: 8354468
+    adu_permits: {2018: 8915, 2019: 12706, 2020: 12775, 2021: 20622, 2022: 25482, 2023: 28413, 2024: 30605,
+      2025: 32442}
+    per_1000_lots: {2018: 1.067, 2019: 1.521, 2020: 1.529, 2021: 2.468, 2022: 3.05, 2023: 3.401, 2024: 3.663,
+      2025: 3.883}
+  SAN DIEGO:
+    lots: 245168
+    adu_permits: {2018: 216, 2019: 627, 2020: 491, 2021: 870, 2022: 662, 2023: 1909, 2024: 2281, 2025: 2165}
+    per_1000_lots: {2018: 0.881, 2019: 2.557, 2020: 2.003, 2021: 3.549, 2022: 2.7, 2023: 7.786, 2024: 9.304,
+      2025: 8.831}
+  LOS ANGELES:
+    lots: 560632
+    adu_permits: {2018: 4079, 2019: 4792, 2020: 3425, 2021: 5066, 2022: 7162, 2023: 6506, 2024: 7055,
+      2025: 7452}
+    per_1000_lots: {2018: 7.276, 2019: 8.547, 2020: 6.109, 2021: 9.036, 2022: 12.775, 2023: 11.605, 2024: 12.584,
+      2025: 13.292}
+  SAN JOSE:
+    lots: 176932
+    adu_permits: {2018: 192, 2019: 416, 2020: 331, 2021: 420, 2022: 448, 2023: 470, 2024: 558, 2025: 502}
+    per_1000_lots: {2018: 1.085, 2019: 2.351, 2020: 1.871, 2021: 2.374, 2022: 2.532, 2023: 2.656, 2024: 3.154,
+      2025: 2.837}
+stage_tables:
+  CALIFORNIA:
+    adu:
+      applications: 161631
+      application_units: 185239
+      ever_linked_share: 0.751
+      reported_status_share: {approved: 0.474, pending: 0.306, withdrawn: 0.005, disapproved: 0.001}
+      application_to_entitlement:
+        projects: 161530
+        reached: 46076
+        censored_share: 0.715
+        end_before_start_dropped: 0
+        days: {p10: 5, p25: 173, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.278, 2: 0.291, 3: 0.295, 4: 0.298, 5: 0.3}
+      application_to_permit:
+        projects: 161530
+        reached: 102743
+        censored_share: 0.364
+        end_before_start_dropped: 0
+        days: {p10: 43, p25: 122, p50: 299, p75: null, p90: null}
+        reached_by_years: {1: 0.551, 2: 0.667, 3: 0.699, 4: 0.714, 5: 0.723}
+      application_to_completion:
+        projects: 161530
+        reached: 59550
+        censored_share: 0.631
+        end_before_start_dropped: 0
+        days: {p10: 317, p25: 564, p50: 1583, p75: null, p90: null}
+        reached_by_years: {1: 0.131, 2: 0.329, 3: 0.435, 4: 0.489, 5: 0.518}
+      entitlement_to_permit:
+        projects: 53772
+        reached: 38480
+        censored_share: 0.284
+        end_before_start_dropped: 963
+        days: {p10: 0, p25: 31, p50: 187, p75: 944, p90: null}
+        reached_by_years: {1: 0.639, 2: 0.731, 3: 0.757, 4: 0.768, 5: 0.776}
+      permit_to_completion:
+        projects: 153182
+        reached: 82948
+        censored_share: 0.459
+        end_before_start_dropped: 501
+        days: {p10: 160, p25: 276, p50: 572, p75: null, p90: null}
+        reached_by_years: {1: 0.351, 2: 0.562, 3: 0.634, 4: 0.664, 5: 0.679}
+    sb9:
+      applications: 2196
+      application_units: 2886
+      ever_linked_share: 0.543
+      reported_status_share: {approved: 0.56, pending: 0.432, withdrawn: 0.005, disapproved: 0.003}
+      application_to_entitlement:
+        projects: 2196
+        reached: 513
+        censored_share: 0.766
+        end_before_start_dropped: 0
+        days: {p10: 29, p25: 478, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.234, 2: 0.257, 3: 0.26, 4: 0.26, 5: 0.26}
+      application_to_permit:
+        projects: 2196
+        reached: 794
+        censored_share: 0.638
+        end_before_start_dropped: 0
+        days: {p10: 80, p25: 195, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.364, 2: 0.438, 3: 0.461, 4: 0.461, 5: 0.461}
+      application_to_completion:
+        projects: 2196
+        reached: 262
+        censored_share: 0.881
+        end_before_start_dropped: 0
+        days: {p10: 412, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.071, 2: 0.179, 3: 0.215, 4: 0.215, 5: 0.215}
+      entitlement_to_permit:
+        projects: 708
+        reached: 285
+        censored_share: 0.597
+        end_before_start_dropped: 17
+        days: {p10: 16, p25: 182, p50: 859, p75: 1072, p90: 2269}
+        reached_by_years: {1: 0.385, 2: 0.474, 3: 0.781, 4: 0.781, 5: 0.883}
+      permit_to_completion:
+        projects: 1881
+        reached: 669
+        censored_share: 0.644
+        end_before_start_dropped: 2
+        days: {p10: 212, p25: 315, p50: 491, p75: 1182, p90: null}
+        reached_by_years: {1: 0.329, 2: 0.637, 3: 0.736, 4: 0.78, 5: 0.78}
+    ministerial_5_plus:
+      applications: 2437
+      application_units: 163620
+      ever_linked_share: 0.524
+      reported_status_share: {approved: 0.363, pending: 0.591, withdrawn: 0.006, disapproved: 0.001}
+      application_to_entitlement:
+        projects: 2425
+        reached: 718
+        censored_share: 0.704
+        end_before_start_dropped: 0
+        days: {p10: 62, p25: 275, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.283, 2: 0.331, 3: 0.354, 4: 0.368, 5: 0.371}
+      application_to_permit:
+        projects: 2425
+        reached: 597
+        censored_share: 0.754
+        end_before_start_dropped: 0
+        days: {p10: 194, p25: 660, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.17, 2: 0.265, 3: 0.337, 4: 0.381, 5: 0.409}
+      application_to_completion:
+        projects: 2425
+        reached: 201
+        censored_share: 0.917
+        end_before_start_dropped: 0
+        days: {p10: 1072, p25: 1724, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.014, 2: 0.043, 3: 0.108, 4: 0.178, 5: 0.263}
+      entitlement_to_permit:
+        projects: 279
+        reached: 115
+        censored_share: 0.588
+        end_before_start_dropped: 1
+        days: {p10: 348, p25: 624, p50: 1650, p75: null, p90: null}
+        reached_by_years: {1: 0.12, 2: 0.315, 3: 0.414, 4: 0.476, 5: 0.511}
+      permit_to_completion:
+        projects: 188
+        reached: 64
+        censored_share: 0.66
+        end_before_start_dropped: 1
+        days: {p10: 616, p25: 823, p50: 1202, p75: null, p90: null}
+        reached_by_years: {1: 0.033, 2: 0.165, 3: 0.444, 4: 0.521, 5: 0.521}
+    mf_2_4:
+      applications: 11879
+      application_units: 71552
+      ever_linked_share: 0.601
+      reported_status_share: {approved: 0.267, pending: 0.352, withdrawn: 0.004, disapproved: 0.001}
+      application_to_entitlement:
+        projects: 11819
+        reached: 2336
+        censored_share: 0.802
+        end_before_start_dropped: 0
+        days: {p10: 104, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.176, 2: 0.2, 3: 0.205, 4: 0.209, 5: 0.211}
+      application_to_permit:
+        projects: 11819
+        reached: 5563
+        censored_share: 0.529
+        end_before_start_dropped: 0
+        days: {p10: 69, p25: 201, p50: 1111, p75: null, p90: null}
+        reached_by_years: {1: 0.36, 2: 0.458, 3: 0.499, 4: 0.519, 5: 0.527}
+      application_to_completion:
+        projects: 11819
+        reached: 3538
+        censored_share: 0.701
+        end_before_start_dropped: 0
+        days: {p10: 430, p25: 846, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.072, 2: 0.213, 3: 0.308, 4: 0.363, 5: 0.392}
+      entitlement_to_permit:
+        projects: 3269
+        reached: 1589
+        censored_share: 0.514
+        end_before_start_dropped: 152
+        days: {p10: 19, p25: 193, p50: 1195, p75: null, p90: null}
+        reached_by_years: {1: 0.338, 2: 0.445, 3: 0.491, 4: 0.542, 5: 0.55}
+      permit_to_completion:
+        projects: 9284
+        reached: 5272
+        censored_share: 0.432
+        end_before_start_dropped: 43
+        days: {p10: 205, p25: 330, p50: 667, p75: null, p90: null}
+        reached_by_years: {1: 0.281, 2: 0.533, 3: 0.62, 4: 0.651, 5: 0.666}
+    mf_5_plus_other:
+      applications: 9043
+      application_units: 836586
+      ever_linked_share: 0.571
+      reported_status_share: {approved: 0.189, pending: 0.34, withdrawn: 0.005, disapproved: 0.002}
+      application_to_entitlement:
+        projects: 8950
+        reached: 3683
+        censored_share: 0.588
+        end_before_start_dropped: 0
+        days: {p10: 81, p25: 273, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.298, 2: 0.387, 3: 0.415, 4: 0.429, 5: 0.437}
+      application_to_permit:
+        projects: 8950
+        reached: 2247
+        censored_share: 0.749
+        end_before_start_dropped: 0
+        days: {p10: 433, p25: 1252, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.087, 2: 0.169, 3: 0.231, 4: 0.269, 5: 0.29}
+      application_to_completion:
+        projects: 8950
+        reached: 1131
+        censored_share: 0.874
+        end_before_start_dropped: 0
+        days: {p10: 1448, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.015, 2: 0.032, 3: 0.061, 4: 0.102, 5: 0.14}
+      entitlement_to_permit:
+        projects: 6356
+        reached: 2112
+        censored_share: 0.668
+        end_before_start_dropped: 79
+        days: {p10: 265, p25: 601, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.14, 2: 0.283, 3: 0.355, 4: 0.387, 5: 0.407}
+      permit_to_completion:
+        projects: 8511
+        reached: 3797
+        censored_share: 0.554
+        end_before_start_dropped: 55
+        days: {p10: 245, p25: 556, p50: 1539, p75: null, p90: null}
+        reached_by_years: {1: 0.18, 2: 0.319, 3: 0.434, 4: 0.493, 5: 0.52}
+    single_family:
+      applications: 140284
+      application_units: 559475
+      ever_linked_share: 0.762
+      reported_status_share: {approved: 0.437, pending: 0.171, withdrawn: 0.003, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 139492
+        reached: 28795
+        censored_share: 0.794
+        end_before_start_dropped: 0
+        days: {p10: 13, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.197, 2: 0.207, 3: 0.21, 4: 0.211, 5: 0.213}
+      application_to_permit:
+        projects: 139492
+        reached: 88894
+        censored_share: 0.363
+        end_before_start_dropped: 0
+        days: {p10: 0, p25: 19, p50: 158, p75: null, p90: null}
+        reached_by_years: {1: 0.595, 2: 0.643, 3: 0.66, 4: 0.668, 5: 0.672}
+      application_to_completion:
+        projects: 139492
+        reached: 64046
+        censored_share: 0.541
+        end_before_start_dropped: 0
+        days: {p10: 160, p25: 266, p50: 1152, p75: null, p90: null}
+        reached_by_years: {1: 0.333, 2: 0.45, 3: 0.495, 4: 0.517, 5: 0.53}
+      entitlement_to_permit:
+        projects: 57449
+        reached: 44478
+        censored_share: 0.226
+        end_before_start_dropped: 1838
+        days: {p10: 0, p25: 5, p50: 141, p75: 786, p90: null}
+        reached_by_years: {1: 0.626, 2: 0.738, 3: 0.8, 4: 0.821, 5: 0.829}
+      permit_to_completion:
+        projects: 286445
+        reached: 175314
+        censored_share: 0.388
+        end_before_start_dropped: 1532
+        days: {p10: 142, p25: 192, p50: 325, p75: null, p90: null}
+        reached_by_years: {1: 0.528, 2: 0.623, 3: 0.647, 4: 0.657, 5: 0.661}
+  SAN DIEGO:
+    adu:
+      applications: 7315
+      application_units: 9629
+      ever_linked_share: 0.72
+      reported_status_share: {approved: 0.582, pending: 0.417, withdrawn: 0.001, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 7315
+        reached: 42
+        censored_share: 0.994
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.004, 2: 0.005, 3: 0.006, 4: 0.007, 5: 0.007}
+      application_to_permit:
+        projects: 7315
+        reached: 4952
+        censored_share: 0.323
+        end_before_start_dropped: 0
+        days: {p10: 94, p25: 163, p50: 321, p75: 973, p90: null}
+        reached_by_years: {1: 0.546, 2: 0.719, 3: 0.756, 4: 0.764, 5: 0.779}
+      application_to_completion:
+        projects: 7315
+        reached: 2337
+        censored_share: 0.681
+        end_before_start_dropped: 0
+        days: {p10: 378, p25: 658, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.092, 2: 0.281, 3: 0.378, 4: 0.424, 5: 0.443}
+      entitlement_to_permit:
+        projects: 88
+        reached: 51
+        censored_share: 0.42
+        end_before_start_dropped: 4
+        days: {p10: 94, p25: 234, p50: 687, p75: null, p90: null}
+        reached_by_years: {1: 0.398, 2: 0.517, 3: 0.588, 4: 0.588, 5: 0.613}
+      permit_to_completion:
+        projects: 6299
+        reached: 2391
+        censored_share: 0.62
+        end_before_start_dropped: 16
+        days: {p10: 196, p25: 360, p50: 1290, p75: null, p90: null}
+        reached_by_years: {1: 0.255, 2: 0.422, 3: 0.488, 4: 0.504, 5: 0.513}
+    sb9:
+      applications: 0
+      application_units: 0
+      ever_linked_share: null
+      reported_status_share: {approved: null, pending: null, withdrawn: null, disapproved: null}
+      application_to_entitlement:
+        projects: 0
+        reached: 0
+        censored_share: null
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      application_to_permit:
+        projects: 0
+        reached: 0
+        censored_share: null
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      application_to_completion:
+        projects: 0
+        reached: 0
+        censored_share: null
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      entitlement_to_permit:
+        projects: 0
+        reached: 0
+        censored_share: null
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      permit_to_completion:
+        projects: 1
+        reached: 0
+        censored_share: 1.0
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+    ministerial_5_plus:
+      applications: 335
+      application_units: 22742
+      ever_linked_share: 0.531
+      reported_status_share: {approved: 0.352, pending: 0.648, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 335
+        reached: 15
+        censored_share: 0.955
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.04, 2: 0.043, 3: 0.049, 4: 0.049, 5: 0.049}
+      application_to_permit:
+        projects: 335
+        reached: 167
+        censored_share: 0.501
+        end_before_start_dropped: 0
+        days: {p10: 161, p25: 312, p50: 863, p75: null, p90: null}
+        reached_by_years: {1: 0.294, 2: 0.461, 3: 0.563, 4: 0.604, 5: 0.604}
+      application_to_completion:
+        projects: 335
+        reached: 77
+        censored_share: 0.77
+        end_before_start_dropped: 0
+        days: {p10: 741, p25: 1317, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.025, 2: 0.093, 3: 0.183, 4: 0.286, 5: 0.375}
+      entitlement_to_permit:
+        projects: 0
+        reached: 0
+        censored_share: null
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      permit_to_completion:
+        projects: 0
+        reached: 0
+        censored_share: null
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+    mf_2_4:
+      applications: 349
+      application_units: 1079
+      ever_linked_share: 0.421
+      reported_status_share: {approved: 0.358, pending: 0.642, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 349
+        reached: 11
+        censored_share: 0.968
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.023, 2: 0.029, 3: 0.033, 4: 0.033, 5: 0.033}
+      application_to_permit:
+        projects: 349
+        reached: 114
+        censored_share: 0.673
+        end_before_start_dropped: 0
+        days: {p10: 139, p25: 518, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.225, 2: 0.294, 3: 0.336, 4: 0.34, 5: 0.353}
+      application_to_completion:
+        projects: 349
+        reached: 95
+        censored_share: 0.728
+        end_before_start_dropped: 0
+        days: {p10: 436, p25: 1099, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.073, 2: 0.171, 3: 0.249, 4: 0.301, 5: 0.32}
+      entitlement_to_permit:
+        projects: 39
+        reached: 9
+        censored_share: 0.769
+        end_before_start_dropped: 1
+        days: {p10: 343, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.103, 2: 0.182, 3: 0.209, 4: 0.238, 5: 0.238}
+      permit_to_completion:
+        projects: 170
+        reached: 80
+        censored_share: 0.529
+        end_before_start_dropped: 2
+        days: {p10: 258, p25: 538, p50: 884, p75: null, p90: null}
+        reached_by_years: {1: 0.179, 2: 0.457, 3: 0.512, 4: 0.533, 5: 0.533}
+    mf_5_plus_other:
+      applications: 191
+      application_units: 16586
+      ever_linked_share: 0.597
+      reported_status_share: {approved: 0.738, pending: 0.262, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 191
+        reached: 8
+        censored_share: 0.958
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.031, 2: 0.042, 3: 0.042, 4: 0.042, 5: null}
+      application_to_permit:
+        projects: 191
+        reached: 97
+        censored_share: 0.492
+        end_before_start_dropped: 0
+        days: {p10: 235, p25: 439, p50: 1056, p75: null, p90: null}
+        reached_by_years: {1: 0.204, 2: 0.419, 3: 0.516, 4: 0.55, 5: null}
+      application_to_completion:
+        projects: 191
+        reached: 35
+        censored_share: 0.817
+        end_before_start_dropped: 0
+        days: {p10: 648, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.042, 2: 0.118, 3: 0.179, 4: 0.211, 5: null}
+      entitlement_to_permit:
+        projects: 88
+        reached: 30
+        censored_share: 0.659
+        end_before_start_dropped: 3
+        days: {p10: 199, p25: 489, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.193, 2: 0.308, 3: 0.333, 4: 0.333, 5: 0.35}
+      permit_to_completion:
+        projects: 411
+        reached: 135
+        censored_share: 0.672
+        end_before_start_dropped: 2
+        days: {p10: 491, p25: 801, p50: 1990, p75: null, p90: null}
+        reached_by_years: {1: 0.059, 2: 0.215, 3: 0.391, 4: 0.452, 5: 0.489}
+    single_family:
+      applications: 1441
+      application_units: 1754
+      ever_linked_share: 0.509
+      reported_status_share: {approved: 0.229, pending: 0.771, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 1441
+        reached: 38
+        censored_share: 0.974
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.022, 2: 0.026, 3: 0.026, 4: 0.026, 5: 0.027}
+      application_to_permit:
+        projects: 1441
+        reached: 672
+        censored_share: 0.534
+        end_before_start_dropped: 0
+        days: {p10: 101, p25: 273, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.333, 2: 0.453, 3: 0.477, 4: 0.484, 5: 0.486}
+      application_to_completion:
+        projects: 1441
+        reached: 398
+        censored_share: 0.724
+        end_before_start_dropped: 0
+        days: {p10: 486, p25: 982, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.065, 2: 0.191, 3: 0.269, 4: 0.299, 5: 0.314}
+      entitlement_to_permit:
+        projects: 88
+        reached: 43
+        censored_share: 0.511
+        end_before_start_dropped: 2
+        days: {p10: 92, p25: 214, p50: 1770, p75: null, p90: null}
+        reached_by_years: {1: 0.301, 2: 0.424, 3: 0.467, 4: 0.498, 5: 0.519}
+      permit_to_completion:
+        projects: 1468
+        reached: 754
+        censored_share: 0.486
+        end_before_start_dropped: 0
+        days: {p10: 203, p25: 267, p50: 762, p75: null, p90: null}
+        reached_by_years: {1: 0.357, 2: 0.491, 3: 0.534, 4: 0.544, 5: 0.55}
+  LOS ANGELES:
+    adu:
+      applications: 47045
+      application_units: 61186
+      ever_linked_share: 0.796
+      reported_status_share: {approved: 0.391, pending: 0.354, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 47042
+        reached: 4265
+        censored_share: 0.909
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.084, 2: 0.092, 3: 0.095, 4: 0.096, 5: 0.097}
+      application_to_permit:
+        projects: 47042
+        reached: 35546
+        censored_share: 0.244
+        end_before_start_dropped: 0
+        days: {p10: 31, p25: 83, p50: 196, p75: 591, p90: null}
+        reached_by_years: {1: 0.666, 2: 0.775, 3: 0.808, 4: 0.824, 5: 0.835}
+      application_to_completion:
+        projects: 47042
+        reached: 22335
+        censored_share: 0.525
+        end_before_start_dropped: 0
+        days: {p10: 309, p25: 508, p50: 991, p75: null, p90: null}
+        reached_by_years: {1: 0.143, 2: 0.39, 3: 0.533, 4: 0.607, 5: 0.647}
+      entitlement_to_permit:
+        projects: 3412
+        reached: 2601
+        censored_share: 0.238
+        end_before_start_dropped: 74
+        days: {p10: 16, p25: 54, p50: 160, p75: 578, p90: null}
+        reached_by_years: {1: 0.689, 2: 0.773, 3: 0.802, 4: 0.819, 5: 0.827}
+      permit_to_completion:
+        projects: 39975
+        reached: 26161
+        censored_share: 0.346
+        end_before_start_dropped: 37
+        days: {p10: 193, p25: 301, p50: 522, p75: 1190, p90: null}
+        reached_by_years: {1: 0.338, 2: 0.625, 3: 0.734, 4: 0.781, 5: 0.806}
+    sb9:
+      applications: 724
+      application_units: 828
+      ever_linked_share: 0.753
+      reported_status_share: {approved: 0.536, pending: 0.464, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 724
+        reached: 82
+        censored_share: 0.887
+        end_before_start_dropped: 0
+        days: {p10: 294, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.108, 2: 0.129, 3: null, 4: null, 5: null}
+      application_to_permit:
+        projects: 724
+        reached: 506
+        censored_share: 0.301
+        end_before_start_dropped: 0
+        days: {p10: 57, p25: 115, p50: 203, p75: 531, p90: null}
+        reached_by_years: {1: 0.667, 2: 0.783, 3: null, 4: null, 5: null}
+      application_to_completion:
+        projects: 724
+        reached: 166
+        censored_share: 0.771
+        end_before_start_dropped: 0
+        days: {p10: 348, p25: 499, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.124, 2: 0.333, 3: null, 4: null, 5: null}
+      entitlement_to_permit:
+        projects: 108
+        reached: 74
+        censored_share: 0.315
+        end_before_start_dropped: 3
+        days: {p10: 11, p25: 49, p50: 163, p75: 677, p90: 1816}
+        reached_by_years: {1: 0.675, 2: 0.772, 3: 0.772, 4: 0.772, 5: null}
+      permit_to_completion:
+        projects: 1335
+        reached: 500
+        censored_share: 0.625
+        end_before_start_dropped: 2
+        days: {p10: 213, p25: 309, p50: 476, p75: 847, p90: null}
+        reached_by_years: {1: 0.346, 2: 0.69, 3: 0.807, 4: null, 5: null}
+    ministerial_5_plus:
+      applications: 815
+      application_units: 46973
+      ever_linked_share: 0.501
+      reported_status_share: {approved: 0.244, pending: 0.744, withdrawn: 0.001, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 815
+        reached: 237
+        censored_share: 0.709
+        end_before_start_dropped: 0
+        days: {p10: 93, p25: 266, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.28, 2: 0.304, 3: 0.347, 4: 0.369, 5: 0.369}
+      application_to_permit:
+        projects: 815
+        reached: 181
+        censored_share: 0.778
+        end_before_start_dropped: 0
+        days: {p10: 155, p25: 803, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.165, 2: 0.238, 3: 0.281, 4: 0.321, 5: 0.321}
+      application_to_completion:
+        projects: 815
+        reached: 37
+        censored_share: 0.955
+        end_before_start_dropped: 0
+        days: {p10: 1406, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.005, 2: 0.02, 3: 0.07, 4: 0.118, 5: 0.118}
+      entitlement_to_permit:
+        projects: 37
+        reached: 18
+        censored_share: 0.514
+        end_before_start_dropped: 0
+        days: {p10: 399, p25: 534, p50: 1274, p75: null, p90: null}
+        reached_by_years: {1: 0.081, 2: 0.383, 3: 0.44, 4: 0.51, 5: 0.51}
+      permit_to_completion:
+        projects: 21
+        reached: 9
+        censored_share: 0.571
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+    mf_2_4:
+      applications: 5303
+      application_units: 45443
+      ever_linked_share: 0.656
+      reported_status_share: {approved: 0.188, pending: 0.408, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 5300
+        reached: 479
+        censored_share: 0.91
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.075, 2: 0.091, 3: 0.094, 4: 0.096, 5: 0.096}
+      application_to_permit:
+        projects: 5300
+        reached: 3258
+        censored_share: 0.385
+        end_before_start_dropped: 0
+        days: {p10: 92, p25: 165, p50: 379, p75: null, p90: null}
+        reached_by_years: {1: 0.492, 2: 0.607, 3: 0.648, 4: 0.671, 5: 0.678}
+      application_to_completion:
+        projects: 5300
+        reached: 2326
+        censored_share: 0.561
+        end_before_start_dropped: 0
+        days: {p10: 392, p25: 639, p50: 1303, p75: null, p90: null}
+        reached_by_years: {1: 0.078, 2: 0.3, 3: 0.452, 4: 0.529, 5: 0.57}
+      entitlement_to_permit:
+        projects: 480
+        reached: 262
+        censored_share: 0.454
+        end_before_start_dropped: 26
+        days: {p10: 30, p25: 92, p50: 672, p75: null, p90: null}
+        reached_by_years: {1: 0.443, 2: 0.508, 3: 0.546, 4: 0.556, 5: 0.562}
+      permit_to_completion:
+        projects: 3642
+        reached: 2681
+        censored_share: 0.264
+        end_before_start_dropped: 0
+        days: {p10: 209, p25: 313, p50: 521, p75: 906, p90: null}
+        reached_by_years: {1: 0.316, 2: 0.678, 3: 0.796, 4: 0.834, 5: 0.854}
+    mf_5_plus_other:
+      applications: 2801
+      application_units: 179712
+      ever_linked_share: 0.684
+      reported_status_share: {approved: 0.029, pending: 0.315, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 2772
+        reached: 1379
+        censored_share: 0.503
+        end_before_start_dropped: 0
+        days: {p10: 117, p25: 266, p50: 1606, p75: null, p90: null}
+        reached_by_years: {1: 0.319, 2: 0.437, 3: 0.474, 4: 0.494, 5: 0.506}
+      application_to_permit:
+        projects: 2772
+        reached: 919
+        censored_share: 0.668
+        end_before_start_dropped: 0
+        days: {p10: 441, p25: 1018, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.082, 2: 0.185, 3: 0.266, 4: 0.318, 5: 0.344}
+      application_to_completion:
+        projects: 2772
+        reached: 418
+        censored_share: 0.849
+        end_before_start_dropped: 0
+        days: {p10: 1628, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.002, 2: 0.007, 3: 0.031, 4: 0.078, 5: 0.126}
+      entitlement_to_permit:
+        projects: 1913
+        reached: 552
+        censored_share: 0.711
+        end_before_start_dropped: 24
+        days: {p10: 306, p25: 793, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.125, 2: 0.229, 3: 0.3, 4: 0.337, 5: 0.363}
+      permit_to_completion:
+        projects: 1572
+        reached: 742
+        censored_share: 0.528
+        end_before_start_dropped: 0
+        days: {p10: 745, p25: 987, p50: 1385, p75: null, p90: null}
+        reached_by_years: {1: 0.012, 2: 0.093, 3: 0.324, 4: 0.538, 5: 0.624}
+    single_family:
+      applications: 9279
+      application_units: 18737
+      ever_linked_share: 0.641
+      reported_status_share: {approved: 0.231, pending: 0.395, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 9234
+        reached: 1104
+        censored_share: 0.88
+        end_before_start_dropped: 0
+        days: {p10: 455, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.087, 2: 0.12, 3: 0.131, 4: 0.137, 5: 0.141}
+      application_to_permit:
+        projects: 9234
+        reached: 5178
+        censored_share: 0.439
+        end_before_start_dropped: 0
+        days: {p10: 89, p25: 172, p50: 455, p75: null, p90: null}
+        reached_by_years: {1: 0.456, 2: 0.56, 3: 0.602, 4: 0.624, 5: 0.636}
+      application_to_completion:
+        projects: 9234
+        reached: 2974
+        censored_share: 0.678
+        end_before_start_dropped: 0
+        days: {p10: 520, p25: 772, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.024, 2: 0.231, 3: 0.361, 4: 0.422, 5: 0.448}
+      entitlement_to_permit:
+        projects: 1274
+        reached: 565
+        censored_share: 0.557
+        end_before_start_dropped: 15
+        days: {p10: 105, p25: 355, p50: 1570, p75: null, p90: null}
+        reached_by_years: {1: 0.259, 2: 0.363, 3: 0.434, 4: 0.488, 5: 0.522}
+      permit_to_completion:
+        projects: 7326
+        reached: 4908
+        censored_share: 0.33
+        end_before_start_dropped: 8
+        days: {p10: 284, p25: 382, p50: 607, p75: 1186, p90: null}
+        reached_by_years: {1: 0.225, 2: 0.578, 3: 0.727, 4: 0.795, 5: 0.833}
+  SAN JOSE:
+    adu:
+      applications: 2330
+      application_units: 2336
+      ever_linked_share: 0.513
+      reported_status_share: {approved: 0.216, pending: 0.782, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 2330
+        reached: 1
+        censored_share: 1.0
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.0}
+      application_to_permit:
+        projects: 2330
+        reached: 1077
+        censored_share: 0.538
+        end_before_start_dropped: 0
+        days: {p10: 99, p25: 161, p50: 670, p75: null, p90: null}
+        reached_by_years: {1: 0.429, 2: 0.51, 3: 0.54, 4: 0.547, 5: 0.547}
+      application_to_completion:
+        projects: 2330
+        reached: 493
+        censored_share: 0.788
+        end_before_start_dropped: 0
+        days: {p10: 399, p25: 752, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.082, 2: 0.242, 3: 0.344, 4: 0.376, 5: 0.376}
+      entitlement_to_permit:
+        projects: 7
+        reached: 3
+        censored_share: 0.571
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      permit_to_completion:
+        projects: 3205
+        reached: 1460
+        censored_share: 0.544
+        end_before_start_dropped: 7
+        days: {p10: 221, p25: 366, p50: 930, p75: null, p90: null}
+        reached_by_years: {1: 0.249, 2: 0.46, 3: 0.528, 4: 0.554, 5: 0.567}
+    sb9:
+      applications: 43
+      application_units: 26
+      ever_linked_share: 0.047
+      reported_status_share: {approved: 0.093, pending: 0.907, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 43
+        reached: 0
+        censored_share: 1.0
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.0, 2: 0.0, 3: null, 4: null, 5: null}
+      application_to_permit:
+        projects: 43
+        reached: 2
+        censored_share: 0.953
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.049, 2: 0.049, 3: null, 4: null, 5: null}
+      application_to_completion:
+        projects: 43
+        reached: 0
+        censored_share: 1.0
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.0, 2: 0.0, 3: null, 4: null, 5: null}
+      entitlement_to_permit:
+        projects: 0
+        reached: 0
+        censored_share: null
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      permit_to_completion:
+        projects: 6
+        reached: 0
+        censored_share: 1.0
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+    ministerial_5_plus:
+      applications: 17
+      application_units: 3252
+      ever_linked_share: 0.765
+      reported_status_share: {approved: 0.235, pending: 0.706, withdrawn: 0.0, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 17
+        reached: 11
+        censored_share: 0.353
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      application_to_permit:
+        projects: 17
+        reached: 3
+        censored_share: 0.824
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      application_to_completion:
+        projects: 17
+        reached: 0
+        censored_share: 1.0
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      entitlement_to_permit:
+        projects: 28
+        reached: 8
+        censored_share: 0.714
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      permit_to_completion:
+        projects: 12
+        reached: 1
+        censored_share: 0.917
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+    mf_2_4:
+      applications: 26
+      application_units: 170
+      ever_linked_share: 0.423
+      reported_status_share: {approved: 0.115, pending: 0.5, withdrawn: 0.077, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 26
+        reached: 9
+        censored_share: 0.654
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      application_to_permit:
+        projects: 26
+        reached: 2
+        censored_share: 0.923
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      application_to_completion:
+        projects: 26
+        reached: 3
+        censored_share: 0.885
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      entitlement_to_permit:
+        projects: 16
+        reached: 2
+        censored_share: 0.875
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+      permit_to_completion:
+        projects: 12
+        reached: 0
+        censored_share: 1.0
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}
+    mf_5_plus_other:
+      applications: 193
+      application_units: 43718
+      ever_linked_share: 0.326
+      reported_status_share: {approved: 0.026, pending: 0.544, withdrawn: 0.005, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 193
+        reached: 54
+        censored_share: 0.72
+        end_before_start_dropped: 0
+        days: {p10: 364, p25: 785, p50: 2793, p75: null, p90: null}
+        reached_by_years: {1: 0.105, 2: 0.25, 3: 0.295, 4: 0.303, 5: 0.312}
+      application_to_permit:
+        projects: 193
+        reached: 12
+        censored_share: 0.938
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.0, 2: 0.018, 3: 0.054, 4: 0.071, 5: 0.071}
+      application_to_completion:
+        projects: 193
+        reached: 4
+        censored_share: 0.979
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.0, 2: 0.0, 3: 0.0, 4: 0.0, 5: 0.02}
+      entitlement_to_permit:
+        projects: 121
+        reached: 17
+        censored_share: 0.86
+        end_before_start_dropped: 0
+        days: {p10: 629, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.051, 2: 0.118, 3: 0.155, 4: 0.186, 5: 0.186}
+      permit_to_completion:
+        projects: 217
+        reached: 32
+        censored_share: 0.853
+        end_before_start_dropped: 0
+        days: {p10: 720, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.039, 2: 0.107, 3: 0.143, 4: 0.154, 5: 0.161}
+    single_family:
+      applications: 263
+      application_units: 1772
+      ever_linked_share: 0.316
+      reported_status_share: {approved: 0.494, pending: 0.445, withdrawn: 0.008, disapproved: 0.0}
+      application_to_entitlement:
+        projects: 263
+        reached: 12
+        censored_share: 0.954
+        end_before_start_dropped: 0
+        days: {p10: null, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.043, 2: 0.055, 3: 0.065, 4: 0.065, 5: 0.065}
+      application_to_permit:
+        projects: 263
+        reached: 73
+        censored_share: 0.722
+        end_before_start_dropped: 0
+        days: {p10: 75, p25: 400, p50: 2816, p75: null, p90: null}
+        reached_by_years: {1: 0.244, 2: 0.321, 3: 0.374, 4: 0.374, 5: 0.374}
+      application_to_completion:
+        projects: 263
+        reached: 37
+        censored_share: 0.859
+        end_before_start_dropped: 0
+        days: {p10: 326, p25: 1373, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.104, 2: 0.169, 3: 0.23, 4: 0.267, 5: 0.306}
+      entitlement_to_permit:
+        projects: 52
+        reached: 10
+        censored_share: 0.808
+        end_before_start_dropped: 0
+        days: {p10: 329, p25: 2583, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.125, 2: 0.174, 3: 0.204, 4: 0.204, 5: 0.204}
+      permit_to_completion:
+        projects: 774
+        reached: 116
+        censored_share: 0.85
+        end_before_start_dropped: 0
+        days: {p10: 498, p25: null, p50: null, p75: null, p90: null}
+        reached_by_years: {1: 0.086, 2: 0.137, 3: 0.155, 4: 0.163, 5: 0.165}
+adu_application_cohorts_statewide:
+  2018:
+    projects: 6884
+    reached: 4694
+    censored_share: 0.318
+    end_before_start_dropped: 0
+    days: {p10: 35, p25: 113, p50: 351, p75: null, p90: null}
+    reached_by_years: {1: 0.51, 2: 0.614, 3: 0.643, 4: 0.659, 5: 0.667}
+  2019:
+    projects: 12877
+    reached: 9746
+    censored_share: 0.243
+    end_before_start_dropped: 0
+    days: {p10: 10, p25: 63, p50: 215, p75: 1878, p90: null}
+    reached_by_years: {1: 0.604, 2: 0.693, 3: 0.723, 4: 0.74, 5: 0.749}
+  2020:
+    projects: 16993
+    reached: 12043
+    censored_share: 0.291
+    end_before_start_dropped: 0
+    days: {p10: 56, p25: 139, p50: 340, p75: null, p90: null}
+    reached_by_years: {1: 0.517, 2: 0.642, 3: 0.68, 4: 0.695, 5: 0.705}
+  2021:
+    projects: 19291
+    reached: 13761
+    censored_share: 0.287
+    end_before_start_dropped: 0
+    days: {p10: 66, p25: 141, p50: 310, p75: null, p90: null}
+    reached_by_years: {1: 0.544, 2: 0.664, 3: 0.694, 4: 0.709, 5: null}
+  2022:
+    projects: 25279
+    reached: 17565
+    censored_share: 0.305
+    end_before_start_dropped: 0
+    days: {p10: 57, p25: 140, p50: 341, p75: null, p90: null}
+    reached_by_years: {1: 0.519, 2: 0.651, 3: 0.687, 4: null, 5: null}
+  2023:
+    projects: 26754
+    reached: 17810
+    censored_share: 0.334
+    end_before_start_dropped: 0
+    days: {p10: 53, p25: 139, p50: 328, p75: null, p90: null}
+    reached_by_years: {1: 0.527, 2: 0.646, 3: null, 4: null, 5: null}
+  2024:
+    projects: 25447
+    reached: 16975
+    censored_share: 0.333
+    end_before_start_dropped: 0
+    days: {p10: 39, p25: 113, p50: 256, p75: null, p90: null}
+    reached_by_years: {1: 0.595, 2: null, 3: null, 4: null, 5: null}
+  2025:
+    projects: 28005
+    reached: 10149
+    censored_share: 0.638
+    end_before_start_dropped: 0
+    days: {p10: 40, p25: 109, p50: 259, p75: null, p90: null}
+    reached_by_years: {1: null, 2: null, 3: null, 4: null, 5: null}

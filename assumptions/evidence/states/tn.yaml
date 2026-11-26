@@ -1,0 +1,209 @@
+# Cross-state comparison records: TN.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: tn.hb2552_2026_development_review_deadlines
+  kind: policy
+  state: TN
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Tennessee HB 2552 / SB 2237 (2026): development review deadlines with deemed approval'
+  citation: Tenn. Pub. Ch. 1044 (2026) (HB 2552); new T.C.A. 7-51-2204 and T.C.A. Title 7, Chapter 70
+  url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=HB2552&GA=114
+  session: 114th General Assembly, 2026
+  bill: HB 2552
+  enacted_date: 2026-05-27
+  effective_dates:
+  - date: 2027-01-01
+    applies_to: Whole act
+  geographic_scope: 'All municipalities, counties and metro governments reviewing a developer''s development
+    application, development plan or site inspection: within 60 business days approve it or put it on
+    the next planning commission or governing body agenda; within 30 business days send one consolidated
+    deficiency report or request information. If none of these happens in time, the submission is deemed
+    approved. At most two deficiency reports; a later denial must give written reasons and refund 50% of
+    review fees.'
+  exclusions:
+  - Days when local offices are closed during a declared state of emergency do not count
+  - Does not apply to or modify contracts in effect before the act
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Deemed approval can be avoided by putting the item on an agenda, so it guarantees a hearing date
+    more than an approval.
+  - Also sets deadlines for releasing completion bonds after an independent engineer's inspection.
+  - Enacted text read as House Amendment 2 (HA1200), adopted 2026-04-21; the Senate substituted the House
+    bill and passed it. The Secretary of State public chapter PDF could not be read (HTTP 403).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.tn.gov bill page shows 'Signed by Governor' 05/27/2026, Pub. Ch. 1044, effective
+    date 01/01/2027, and the 'as enacted' summary. House Amendment 2 (capitol.tn.gov) has the operative
+    text and 'This act takes effect on January 1, 2027'.
+  sources:
+  - label: HB 2552 bill information (Tennessee General Assembly)
+    url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=HB2552&GA=114
+    official: true
+  - label: House Amendment 2 (HA1200) to HB 2552
+    url: https://capitol.tn.gov/Bills/114/Amend/HA1200.pdf
+    official: true
+  discovered_via: search
+- id: tn.sb2131_2026_adu
+  kind: policy
+  state: TN
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'Tennessee SB 2131 / HB 2031 (2026): regulation of accessory dwelling units (not enacted)'
+  citation: Tenn. SB 2131 / HB 2031, 114th General Assembly, not enacted
+  url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=SB2131&GA=114
+  session: 114th General Assembly, 2026
+  bill: SB 2131 / HB 2031
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Proposed statewide rules on local regulation of accessory dwelling units.
+  exclusions: []
+  implementation_status: lapsed
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The bill text was not read; scope comes from the official caption ('provides for the regulation of
+    accessory dwelling units').
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'capitol.tn.gov bill page read: SB 2131 last action 03/10/2026, assigned to the General
+    Subcommittee of Senate State and Local Government; HB 2031 taken off notice in the House Cities and
+    Counties Subcommittee on 03/11/2026. No later action; the 114th General Assembly has ended, so the
+    bill died.'
+  sources:
+  - label: SB 2131 / HB 2031 bill information (Tennessee General Assembly)
+    url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=SB2131&GA=114
+    official: true
+  discovered_via: search
+- id: tn.sb2100_2024_third_party_review
+  kind: policy
+  state: TN
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Tennessee SB 2100 / HB 1892 (2024): third-party plan examiners and inspectors in place of local
+    or state staff'
+  citation: Tenn. Pub. Ch. 771 (2024) (SB 2100); amends T.C.A. 68-120, 68-221 and 69-3-1
+  url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=SB2100&GA=113
+  session: 113th General Assembly, 2024
+  bill: SB 2100
+  enacted_date: 2024-05-01
+  effective_dates:
+  - date: 2024-10-01
+    applies_to: Whole act
+  geographic_scope: Statewide. Applicants may use qualified third-party examiners, inspectors, engineers
+    and other professionals instead of a local or state reviewer for listed permit processes (building
+    plan review and inspections, and subsurface sewage permits), with response deadlines for the local
+    jurisdiction.
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - House Amendment 1 (adopted) adds that a local jurisdiction or the state fire marshal that accepts
+    a final third-party inspection must issue a certificate of occupancy, and lets a certified soil scientist
+    file small subsurface sewage permit applications.
+  - The full enacted text was not read; the Secretary of State public chapter PDF returned HTTP 403.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.tn.gov bill page shows 'Signed by Governor' 05/01/2024, Pub. Ch. 771, effective
+    date 10/01/2024, and the 'as enacted' summary; House Amendment 1 (HA0749) read on capitol.tn.gov.
+  sources:
+  - label: SB 2100 bill information (Tennessee General Assembly)
+    url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=SB2100&GA=113
+    official: true
+  - label: House Amendment 1 (HA0749) to SB 2100 / HB 1892
+    url: https://capitol.tn.gov/Bills/113/Amend/HA0749.pdf
+    official: true
+  discovered_via: search
+- id: tn.sb2834_2024_single_stair_local_option
+  kind: policy
+  state: TN
+  jurisdiction: statewide (local option)
+  policy_types:
+  - missing_middle
+  - infrastructure_finance
+  title: 'Tennessee SB 2834 / HB 2925 (2024): local option for single-exit apartment buildings; limits
+    on offsite utility charges'
+  citation: Tenn. Pub. Ch. 820 (2024) (SB 2834); amends T.C.A. 68-120-101 and adds 7-82-709
+  url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=SB2834&GA=113
+  session: 113th General Assembly, 2024
+  bill: SB 2834
+  enacted_date: 2024-05-09
+  effective_dates:
+  - date: 2024-04-29
+    applies_to: Whole act (the act takes effect on becoming law; the bill page lists 04/29/2024 as the
+      effective date, before the 05/09/2024 signature entry)
+  geographic_scope: 'Statewide code rule, local option: a local government may adopt by resolution or ordinance
+    an exception allowing Group R-2 residential buildings under six stories to be served by a single exit
+    stair, with at most four units per floor, travel distance limits and fire-separation conditions. Utility
+    districts may not make an owner next to an existing line pay for offsite improvements, except to keep
+    current service levels or under a cost-sharing deal.'
+  exclusions:
+  - The single-stair exception applies only where a local government adopts it
+  - Other occupancies may not share the single stair (accessory parking and occupied roofs excepted)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Which localities have adopted the single-stair option was not checked.
+  - The bill page shows the effective date (04/29/2024) earlier than the signature entry (05/09/2024);
+    both are recorded as shown.
+  - Enacted text read as Senate Amendment 1 (SA0909, adopted 2024-04-09); the Secretary of State public
+    chapter PDF returned HTTP 403.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: capitol.tn.gov bill page shows 'Signed by Governor' 05/09/2024, Pub. Ch. 820, effective
+    date 04/29/2024. Senate Amendment 1 (capitol.tn.gov) has the operative text and 'This act takes effect
+    upon becoming a law'.
+  sources:
+  - label: SB 2834 bill information (Tennessee General Assembly)
+    url: https://wapp.capitol.tn.gov/apps/BillInfo/Default.aspx?BillNumber=SB2834&GA=113
+    official: true
+  - label: Senate Amendment 1 (SA0909) to SB 2834
+    url: https://capitol.tn.gov/Bills/113/Amend/SA0909.pdf
+    official: true
+  discovered_via: search

@@ -1,0 +1,1 @@
+{"$packed":1,"$pool":[],"$data":{"state":"MA","seed":0,"draws":2000,"columns":[{"label":"this scenario","reforms":["tod"],"overrides":{},"cycle":"typical","baseline":{"$s":36},"reform_results":{"tod":{"$s":8182}},"package":{"reforms":["tod"],"combined":{"$s":8142},"pct_change":{"$s":8144},"waterfall":{"$s":8175}},"total":{"$s":8178},"hashes":{"$s":3}}]},"$shared":1}

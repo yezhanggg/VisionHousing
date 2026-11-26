@@ -1,0 +1,117 @@
+# Cross-state comparison records: NV.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: nv.ab396_2025_adu
+  kind: policy
+  state: NV
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  title: 'Nevada AB 396 (2025): large counties and cities must adopt ADU ordinances, or ADUs are allowed
+    without restriction'
+  citation: Statutes of Nevada 2025, ch. 365 (AB 396); new section in NRS chapter 278
+  url: https://www.leg.state.nv.us/App/NELIS/REL/83rd2025/Bill/12561/Overview
+  session: 83rd (2025) regular session
+  bill: AB 396
+  enacted_date: 2025-06-06
+  effective_dates:
+  - date: 2025-06-06
+    applies_to: Sections 13-14, and sections 1-12 for regulations and preparatory tasks
+  - date: 2026-07-01
+    applies_to: 'Sections 1-12 for all other purposes; covered governments without a compliant ordinance
+      by this date: ADUs allowed on any residentially zoned parcel without restriction (section 11)'
+  geographic_scope: Counties of 100,000+ (Clark, Washoe) and cities of 60,000+ (Las Vegas, Henderson, North
+    Las Vegas, Reno, Sparks); residential property means areas zoned single-family
+  exclusions:
+  - Areas under an interstate regional planning agency whose plan regulates housing (Tahoe basin)
+  - Smaller counties and cities
+  - No more than two ADUs per property are authorized
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'The ordinance may not: bar a separate kitchen; require more than one extra parking space (when existing
+    and street parking suffice); impose side or rear setbacks stricter than for the main home; require
+    street work beyond repair or safety; or bar long-term rental (short-term/transient use may be barred).'
+  - ADUs need only residential (not commercial) building and fire codes.
+  - Most of the bill also changes common-interest community (HOA) rules.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: NELIS bill history (Overview tab) shows enrolled 2025-05-29 and 'Approved by the
+    Governor. Chapter 365' on 2025-06-06 with the split effective dates (2025-06-06; 2026-07-01). Enrolled
+    text read for scope and limits.
+  sources:
+  - label: AB 396 bill overview and history (NELIS)
+    url: https://www.leg.state.nv.us/App/NELIS/REL/83rd2025/Bill/12561/Overview
+    official: true
+  - label: AB 396 enrolled text
+    url: https://www.leg.state.nv.us/Session/83rd2025/Bills/AB/AB396_EN.pdf
+    official: true
+  discovered_via: search
+- id: nv.ab241_2025_commercial_byright
+  kind: policy
+  state: NV
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  title: 'Nevada AB 241 (2025): every county and city must allow multifamily and mixed-use by right on
+    commercial land'
+  citation: Statutes of Nevada 2025, ch. 174 (AB 241); new section in NRS chapter 278
+  url: https://www.leg.state.nv.us/App/NELIS/REL/83rd2025/Bill/AB241
+  session: 83rd (2025) regular session
+  bill: AB 241
+  enacted_date: 2025-05-31
+  effective_dates:
+  - date: 2025-10-01
+    applies_to: Whole act
+  - date: 2026-03-01
+    applies_to: Deadline for each county and city to adopt the by-right ordinance
+  geographic_scope: All counties and cities; property zoned for commercial use (not industrial)
+  exclusions:
+  - Property zoned for or in relation to an airport
+  - The Tahoe Regional Planning Compact region
+  - Industrial zones
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Local ordinances may set standards and requirements to qualify for by-right approval, so how much
+    land opens up depends on local terms; conflicting local rules are declared void.
+  - Also authorizes two state land transfers in Reno to charities.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: NELIS bill history (Overview tab, bill key 12262) shows enrolled 2025-05-29, 'Approved
+    by the Governor. Chapter 174' on 2025-05-31, effective October 1, 2025. Enrolled text read for the
+    2026-03-01 deadline and exclusions.
+  sources:
+  - label: AB 241 bill page and history (NELIS)
+    url: https://www.leg.state.nv.us/App/NELIS/REL/83rd2025/Bill/AB241
+    official: true
+  - label: AB 241 enrolled text
+    url: https://www.leg.state.nv.us/Session/83rd2025/Bills/AB/AB241_EN.pdf
+    official: true
+  discovered_via: search

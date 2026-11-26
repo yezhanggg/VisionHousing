@@ -1,0 +1,304 @@
+# Cross-state comparison records: NC.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: nc.sl2026_59_commercial
+  kind: policy
+  state: NC
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  title: Residential use by right on redeveloped commercial and light industrial land in large cities
+  citation: S.L. 2026-59 (SB 445), sec. 43; G.S. 160D-703.1
+  url: https://ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-59.html
+  session: 2025-2026 session
+  bill: SB 445
+  enacted_date: 2026-08-11
+  effective_dates:
+  - date: 2026-08-11
+    applies_to: Section 43 effective when the act became law (no separate date given)
+  geographic_scope: Cities of 80,000+ located in counties of 1,000,000+ (most recent decennial census);
+    land zoned nonagricultural commercial, business or light industrial undergoing redevelopment
+  exclusions:
+  - Property on or next to unremediated known contamination
+  - Vacant parcels never previously developed
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'By-right uses: Residential Code buildings, multifamily over 4 units, and the residential part of
+    mixed-use buildings'
+  - Maximum height may not be set below 60 ft
+  - Population thresholds mean only a few cities qualify
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Session law text on ncleg.gov: ratified 2026-08-06, approved by Governor 2026-08-11;
+    sec. 43 text and sec. 53(b) general effective clause read.'
+  sources:
+  - label: S.L. 2026-59 text (ncleg.gov)
+    url: https://ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-59.html
+    official: true
+  discovered_via: search
+- id: nc.sl2026_59_adu
+  kind: policy
+  state: NC
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - fees
+  title: At least one ADU per single-family home in cities of 50,000+
+  citation: S.L. 2026-59 (SB 445), sec. 44; G.S. 160D-917
+  url: https://ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-59.html
+  session: 2025-2026 session
+  bill: SB 445
+  enacted_date: 2026-08-11
+  effective_dates:
+  - date: 2026-08-11
+    applies_to: Sec. 44(b)-(c) effective when act became law
+  - date: 2027-01-15
+    applies_to: G.S. 160D-917 effective; applies to ADU permit applications on or after this date
+  - date: 2027-07-01
+    applies_to: Deadline to adopt implementing regulations; if missed, ADUs allowed without any limitations
+  geographic_scope: Cities of 50,000+ not in the coastal area (G.S. 113A-103); residential zones allowing
+    single-family detached homes
+  exclusions:
+  - Historic preservation districts
+  - National Historic Landmarks
+  - ADUs not connected to water and sewer/septic
+  - Private covenants unaffected
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - No parking minimums, no conditional zoning, long-term rental of both units allowed, fees capped at
+    single-family level
+  - Max size cap must be set between 800 and 1,000 sq ft
+  - Setback may be required up to 10 ft
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Session law text on ncleg.gov: sec. 44(a)-(d) dates read; approved by Governor 2026-08-11.'
+  sources:
+  - label: S.L. 2026-59 text (ncleg.gov)
+    url: https://ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-59.html
+    official: true
+  discovered_via: search
+- id: nc.raleigh_missing_middle_2021
+  kind: policy
+  state: NC
+  jurisdiction: Raleigh
+  policy_types:
+  - missing_middle
+  title: Raleigh Missing Middle Housing text change (duplexes, townhouses, small apartments in residential
+    districts)
+  citation: Raleigh text change TC-5-20, Ordinance 263-TC-451
+  url: https://raleighnc.gov/node/40066
+  session: null
+  bill: null
+  enacted_date: 2021-07-06
+  effective_dates:
+  - date: 2021-08-05
+    applies_to: TC-5-20 Missing Middle Housing in effect
+  geographic_scope: Citywide residential districts (R-2, R-4, R-6, R-10)
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A follow-up text change (TC-20-21, 'Missing Middle 2.0') was reported to take effect in 2022; its date
+    was not read on the official table
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'City of Raleigh Adopted Text Changes table: TC-5-20 (263-TC-451) Missing Middle Housing,
+    adopted 7-6-21, effective 8-5-21.'
+  sources:
+  - label: City of Raleigh, Adopted Text Changes
+    url: https://raleighnc.gov/node/40066
+    official: true
+  discovered_via: search
+- id: nc.durham_expanding_housing_choices_2019
+  kind: policy
+  state: NC
+  jurisdiction: Durham
+  policy_types:
+  - missing_middle
+  - adu
+  title: Durham Expanding Housing Choices UDO text amendment (duplexes, ADUs, small lots)
+  citation: Durham UDO text amendment TC1800007 (Expanding Housing Choices)
+  url: https://www.durhamnc.gov/DocumentCenter/View/27599/Attachment-B-An-Ordinance-to-Amend-the-Unified-Development-Ordinance-Regarding-Expanding-Housing-Choices-TC1800007
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates:
+  - date: 2019-10-01
+    applies_to: Amendments effective within the city limits (date from a search excerpt, not read)
+  geographic_scope: City of Durham (county jurisdiction approved separately)
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: unknown
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Not used as a case in the retrospective panel until the date is read on the city page; Durham is also
+    left out of that panel's comparison pool
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: The city site returned HTTP 403 to automated reading on 2026-11-24; the 2019-10-01 effective
+    date and the adoption date come only from search-result excerpts of the ordinance and a city timeline.
+  sources:
+  - label: Durham ordinance TC1800007, Attachment B (city document center)
+    url: https://www.durhamnc.gov/DocumentCenter/View/27599/Attachment-B-An-Ordinance-to-Amend-the-Unified-Development-Ordinance-Regarding-Expanding-Housing-Choices-TC1800007
+    official: true
+  discovered_via: search
+- id: nc.sl2026_39_parking
+  kind: policy
+  state: NC
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  title: 'North Carolina Session Law 2026-39 (HB 162): no minimum number of off-street parking spaces'
+  citation: N.C. Session Law 2026-39 (HB 162), amending G.S. 160D-702(c)
+  url: https://www.ncleg.gov/BillLookUp/2025/H162
+  session: 2025-2026 session
+  bill: HB 162
+  enacted_date: 2026-07-06
+  effective_dates:
+  - date: 2026-07-06
+    applies_to: Part II stormwater limits for redevelopment (G.S. 143-214.7(b3)); local ordinances must conform
+      within 12 months
+  - date: 2027-01-01
+    applies_to: 'Part I: G.S. 160D-702(c)(2a), no zoning or development rule may require a minimum number
+      of off-street parking spaces per development or structure, for any use'
+  geographic_scope: All North Carolina local governments that regulate development under Chapter 160D,
+    for every occupancy or use. In the coastal area (as defined in G.S. 113A-103) the ban
+    reaches only listed historic properties and districts.
+  exclusions:
+  - Local governments in the coastal area keep parking minimums except on properties in National Register
+    or local historic districts, individually listed or designated landmarks, and Study List properties
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The ban is on minimums only. Developers may still build parking, and lenders or markets may still require
+    it.
+  - Our reading of the coastal exception (minimums survive there except on historic properties) comes
+    from the session law wording; no state guidance on it was read.
+  - The same law limits stormwater controls on redevelopment of already built-on sites.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: ncleg.gov bill page shows ratified 2026-07-01, signed by the Governor 2026-07-06,
+    Ch. SL 2026-39. The session law text on ncleg.gov shows 'Approved 3:04 p.m. this 6th day of July,
+    2026', Section 1.(b) effective January 1, 2027, and Part II effective when it becomes law.
+  sources:
+  - label: HB 162 bill lookup (NC General Assembly)
+    url: https://www.ncleg.gov/BillLookUp/2025/H162
+    official: true
+  - label: Session Law 2026-39 text
+    url: https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2025-2026/SL2026-39.html
+    official: true
+  discovered_via: pew_2026
+- id: nc.sl2023_108_residential_code
+  kind: policy
+  state: NC
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - permit_timing
+  title: 'North Carolina Session Law 2023-108 (HB 488): Residential Code to cover triplexes and fourplexes;
+    building code council reorganization'
+  citation: N.C. Session Law 2023-108 (HB 488), Section 9 (three- and four-family dwellings)
+  url: https://www.ncleg.gov/BillLookUp/2023/H488
+  session: 2023-2024 session
+  bill: HB 488
+  enacted_date: 2023-08-16
+  effective_dates:
+  - date: 2023-08-16
+    applies_to: Section 9 (Council must adopt rules bringing triplex and quadplex dwellings under the Residential
+      Code) and the act generally, except as otherwise provided
+  - date: 2023-10-01
+    applies_to: Section 2 (inspections changes), per Section 2.(j)
+  - date: 2025-01-01
+    applies_to: Residential Code Council takes over as the rule-making body for Section 9 (Section 9.(a)
+      definition of 'Council')
+  geographic_scope: Statewide building code. Section 9 tells the code council to bring three- and four-family
+    dwellings within the North Carolina Residential Code.
+  exclusions:
+  - The rules may not require more than a 2-hour fire-resistance rating for separations between units, nor
+    automatic sprinklers, for triplexes and quadplexes under the Residential Code
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The law orders rule-making; it does not itself change zoning. Whether the Residential Code Council
+    has adopted the triplex and quadplex rules, and their effective date, was not checked.
+  - Became law over the Governor's veto (Senate override 2023-08-16).
+  - The act also reorganizes the Building Code Council, creates the Residential Code Council and changes
+    plan review and inspection rules.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: ncleg.gov bill page shows ratified 2023-06-27, vetoed, veto overridden 2023-08-16,
+    Ch. SL 2023-108. The session law text on ncleg.gov shows 'Became law notwithstanding the objections
+    of the Governor at 6:21 p.m. this 16th day of August, 2023', Section 9 effective when it becomes law,
+    Section 2.(j) effective October 1, 2023, and Section 15 (effective when it becomes law unless otherwise
+    provided).
+  sources:
+  - label: HB 488 bill lookup (NC General Assembly)
+    url: https://www.ncleg.gov/BillLookUp/2023/H488
+    official: true
+  - label: Session Law 2023-108 text
+    url: https://www.ncleg.gov/EnactedLegislation/SessionLaws/HTML/2023-2024/SL2023-108.html
+    official: true
+  discovered_via: search

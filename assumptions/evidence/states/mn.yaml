@@ -1,0 +1,290 @@
+# Cross-state comparison records: MN.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: mn.minneapolis_2040_plan
+  kind: policy
+  state: MN
+  jurisdiction: Minneapolis
+  policy_types:
+  - missing_middle
+  title: Minneapolis 2040 Comprehensive Plan and zoning implementation (end of single-family-only zoning)
+  citation: Minneapolis 2040 Comprehensive Plan; Land Use Rezoning Study (2023)
+  url: https://minneapolis2040.com/overview/
+  session: null
+  bill: null
+  enacted_date: 2018-12-07
+  effective_dates:
+  - date: 2020-01-01
+    applies_to: Minneapolis 2040 policies and action steps took effect
+  - date: 2023-07-01
+    applies_to: Land Use Rezoning Study (adopted 2023-05-25) took effect, replacing 23 districts with
+      15 tied to the future land use map
+  geographic_scope: Citywide
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: challenged
+    note: Environmental-rights (MERA) suit by Smart Growth Minneapolis; see mn.minneapolis_2040_litigation
+      (not verified on a court page).
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - City page lists 'eliminating single-family exclusive zoning' (up to 3 units) as an implementation
+    action, but the triplex ordinance's adoption/effective date was not readable on an official page (link
+    redirects)
+  - enacted_date is the council resolution sending the plan to Met Council; final approval came in October
+    2019
+  - A further 1-3 unit housing rules update had a City Council vote scheduled for 2026-12-03 (not yet
+    adopted)
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'minneapolis2040.com overview: council resolution 2018-12-07, Met Council approval
+    Oct 2019, effective 2020-01-01; implementation page: rezoning study adopted 2023-05-25, effective
+    2023-07-01. Triplex ordinance date deliberately omitted (not confirmed).'
+  sources:
+  - label: Minneapolis 2040 overview
+    url: https://minneapolis2040.com/overview/
+    official: true
+  - label: Minneapolis 2040 land use regulations
+    url: https://minneapolis2040.com/implementation/land-use-regulations/
+    official: true
+  - label: 'City of Minneapolis: housing with 1 to 3 units (2026 update)'
+    url: https://www.minneapolismn.gov/business-services/planning-zoning/amendments/proposed-adopted/housing-1-3-units/
+    official: true
+  discovered_via: search
+- id: mn.minneapolis_parking_2021
+  kind: policy
+  state: MN
+  jurisdiction: Minneapolis
+  policy_types:
+  - parking
+  title: Citywide elimination of off-street parking minimums
+  citation: Minneapolis parking, loading and travel demand management zoning amendment (2021)
+  url: https://minneapolis2040.com/implementation/parking-loading-and-mobility-regulations/
+  session: null
+  bill: null
+  enacted_date: 2021-05-14
+  effective_dates:
+  - date: 2021-05-22
+    applies_to: 'Ordinance effective: parking minimums eliminated citywide; maximums lowered; bike parking,
+      EV and TDM rules expanded'
+  geographic_scope: Citywide
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Ordinance number not shown on the page read
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'minneapolis2040.com parking page: adopted by City Council 2021-05-14, effective
+    2021-05-22.'
+  sources:
+  - label: Minneapolis 2040 parking, loading and mobility regulations
+    url: https://minneapolis2040.com/implementation/parking-loading-and-mobility-regulations/
+    official: true
+  discovered_via: search
+- id: mn.minneapolis_2040_litigation
+  kind: policy
+  state: MN
+  jurisdiction: Minneapolis
+  policy_types:
+  - court_decision
+  - missing_middle
+  title: Smart Growth Minneapolis environmental-rights suit over the 2040 Plan
+  citation: State by Smart Growth Minneapolis v. City of Minneapolis (Minn. S. Ct. A19-0999, 2021; Minn.
+    Ct. App. A23-1382, 2024)
+  url: https://law.justia.com/cases/minnesota/supreme-court/2021/a19-0999.html
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Citywide
+  exclusions: []
+  implementation_status: unknown
+  litigation:
+    status: challenged
+    note: 'Secondary reports: 2021 Supreme Court let the MERA claim proceed; district court injunction
+      (Sept 2023); Court of Appeals reversed the injunction (reported 2024-05-13); 2024 legislation addressed
+      comprehensive-plan MERA claims; Supreme Court reportedly denied review (Aug 2024) and the case returned
+      to district court. None of these dates read on a court page.'
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Current status after remand unknown
+  retrieved: 2026-11-24
+  verified: false
+  verification_note: No Minnesota court opinion or docket page was read; all dates and holdings come from
+    news and law-firm summaries only.
+  sources:
+  - label: Justia copy of 2021 Minn. S. Ct. opinion A19-0999
+    url: https://law.justia.com/cases/minnesota/supreme-court/2021/a19-0999.html
+    official: false
+  - label: MPR News on 2024 review denial
+    url: https://www.mprnews.org/story/2024/08/21/2040-plan-continues-after-minnesota-supreme-court-decides-not-to-look-into-lawsuit
+    official: false
+  discovered_via: search
+- id: mn.saint_paul_parking_2021
+  kind: policy
+  state: MN
+  jurisdiction: Saint Paul
+  policy_types:
+  - parking
+  title: Saint Paul eliminates minimum parking requirements citywide
+  citation: Saint Paul Ordinance 21-27
+  url: https://www.stpaul.gov/departments/planning-and-economic-development/planning/completed-projects/parking-study
+  session: null
+  bill: null
+  enacted_date: 2021-08-18
+  effective_dates:
+  - date: 2021-10-01
+    applies_to: Minimum parking regulations eliminated
+  geographic_scope: Citywide
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Recommended option required travel demand management for projects over 25 units or 20,000 sq ft; final
+    adopted TDM details not confirmed on the page read
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'stpaul.gov parking study page: Ordinance 21-27 adopted 2021-08-18, effective 2021-10-01.'
+  sources:
+  - label: Saint Paul parking study page
+    url: https://www.stpaul.gov/departments/planning-and-economic-development/planning/completed-projects/parking-study
+    official: true
+  discovered_via: search
+- id: mn.saint_paul_1to4_units
+  kind: policy
+  state: MN
+  jurisdiction: Saint Paul
+  policy_types:
+  - missing_middle
+  - adu
+  title: Saint Paul 1-4 unit housing zoning (Phase 1 ADU/small homes; Phase 2 up to fourplexes)
+  citation: Saint Paul Ordinance 22-1 (Phase 1); Ordinance 23-43 (Phase 2)
+  url: https://www.stpaul.gov/departments/planning-and-economic-development/planning/completed-projects/1-4-unit-housing-study
+  session: null
+  bill: null
+  enacted_date: 2023-10-18
+  effective_dates:
+  - date: 2022-03-05
+    applies_to: 'Phase 1 (Ord. 22-1, adopted 2022-01-19): smaller homes, looser ADU rules, multiple residential
+      buildings per lot'
+  - date: 2023-11-26
+    applies_to: 'Phase 2 (Ord. 23-43): duplexes, triplexes and fourplexes allowed in more places; cluster,
+      townhouse and ADU options'
+  geographic_scope: Citywide residential districts
+  exclusions: []
+  implementation_status: locally_implemented
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Request described this as a 2024 action; the city page shows Phase 2 adopted October 2023 and effective
+    November 2023, with no 2024 action listed
+  - District-by-district unit counts not given on the page read
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'stpaul.gov 1-4 unit housing study page: Ord. 22-1 adopted 2022-01-19 effective 2022-03-05;
+    Ord. 23-43 adopted 2023-10-18 effective 2023-11-26.'
+  sources:
+  - label: Saint Paul 1-4 Unit Housing Study page
+    url: https://www.stpaul.gov/departments/planning-and-economic-development/planning/completed-projects/1-4-unit-housing-study
+    official: true
+  discovered_via: search
+- id: mn.sf4123_2026_starter_homes
+  kind: policy
+  state: MN
+  jurisdiction: statewide (bill)
+  policy_types:
+  - starter_lots
+  - missing_middle
+  - adu
+  - commercial_land_housing
+  title: 'Minnesota SF 4123 / HF 3895 (2026): local zoning limits for starter homes, mixed housing, ADUs
+    and multifamily in commercial zones (not passed)'
+  citation: Minn. SF 4123 / HF 3895, 94th Legislature (2025-2026), proposed Minn. Stat. 462.3572
+  url: https://www.revisor.mn.gov/bills/bill.php?b=senate&f=SF4123&ssn=0&y=2026
+  session: 94th Legislature, 2026 session
+  bill: SF 4123; HF 3895 (companion)
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: 'As introduced: municipalities of 5,000+ people, and metro-area municipalities over 1,000;
+    design, HOA, ADU and infrastructure parts would apply to all. Proposed effective date January 1, 2028.'
+  exclusions: []
+  implementation_status: lapsed
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'As introduced: mixed housing (2-4 units, townhouses) permitted on at least 33% of single-family land;
+    greenfield minimum lots no larger than 1/8 acre; one ADU by right on any single-family lot; multifamily
+    permitted on at least 33% of commercial land; bans on many design mandates.'
+  - '''Lapsed'' is our reading: the official status pages show only introduction and committee referral
+    (Senate 2026-03-04, House 2026-03-02) and no later action; the end of the 2026 session was not read on
+    an official page.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Senate and House status pages on revisor.mn.gov show introduction and referral only
+    (SF 4123 to State and Local Government 2026-03-04; HF 3895 to Elections Finance and Government Operations
+    2026-03-02). Introduced text read on revisor.mn.gov. No enactment, so no dates beyond these.
+  sources:
+  - label: SF 4123 status (Minnesota Legislature)
+    url: https://www.revisor.mn.gov/bills/bill.php?b=senate&f=SF4123&ssn=0&y=2026
+    official: true
+  - label: HF 3895 status (Minnesota Legislature)
+    url: https://www.revisor.mn.gov/bills/bill.php?b=house&f=HF3895&ssn=0&y=2026
+    official: true
+  - label: SF 4123 introduced text
+    url: https://www.revisor.mn.gov/bills/text.php?number=SF4123&version=0&session=ls94&session_year=2026&session_number=0
+    official: true
+  discovered_via: search

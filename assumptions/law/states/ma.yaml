@@ -1,0 +1,236 @@
+# Massachusetts state law snapshot: the provisions that bear on the benchmark
+# reforms, as rows the law layer can import.
+#
+# Two blocks:
+#   provisions  one row per provision, in the layout of
+#               assumptions/law/state_provisions.yaml (citation, reform,
+#               status, our own summary);
+#   records     one row per status of a provision over a period, in the layout
+#               of assumptions/law/timeline.yaml (visionhousing.law.timeline:
+#               load_timeline reads this file as it is).
+#
+# Every text was read on malegislature.gov on 2026-11-24 (registry sources
+# ma_gl_40a and ma_acts_2024_c150) and re-read there on 2026-11-25 (checked_on
+# of each provision): the section 1A ADU definition, the section 3 ADU
+# paragraph, section 3A, St. 2024 c. 150 sections 7, 8 and 143 (approved
+# August 6, 2024) and St. 2020 c. 358 section 18 (approved in part January 14,
+# 2021) read as summarised below; no date changed. summary_own_words and scope are our own
+# plain-language summaries, not quotations. Regulations and guidance on
+# www.mass.gov (760 CMR 71 for ADUs, 760 CMR 72 for Section 3A) are listed as
+# links only: that site refuses scripted requests.
+#
+# Not yet wired into a run: the law layer imports this file later. The
+# Massachusetts already-legal ADU range the engine reads today is in
+# assumptions/calibration/already_legal_ma.yaml.
+#
+# Per-town Section 3A districts are not listed here one by one: the pack table
+# mbta_3a_districts holds every compliant district with its outline and
+# submission date, and mbta_3a_status each town's status and deadline, so
+# mapped-area records (like tests/fixtures/law/timeline_ma.yaml) can be made
+# from them. The district's submission date is not its adoption or compliance
+# date; that date is in HLC's letter, which could not be read by script.
+
+version: 1
+state: MA
+
+documents:
+  - doc_id: ma_gl_40a_1a
+    title: "M.G.L. c. 40A § 1A (definitions, including accessory dwelling unit)"
+    level: state
+    publisher: The General Court of the Commonwealth of Massachusetts
+    url: https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section1A
+    licence: Public legislative record
+    access: fetched
+    source_id: ma_gl_40a
+  - doc_id: ma_gl_40a_3
+    title: "M.G.L. c. 40A § 3 (subjects that zoning may not prohibit; ADU paragraph)"
+    level: state
+    publisher: The General Court of the Commonwealth of Massachusetts
+    url: https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3
+    licence: Public legislative record
+    access: fetched
+    source_id: ma_gl_40a
+  - doc_id: ma_gl_40a_3a
+    title: "M.G.L. c. 40A § 3A (multi-family zoning in MBTA communities)"
+    level: state
+    publisher: The General Court of the Commonwealth of Massachusetts
+    url: https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3A
+    licence: Public legislative record
+    access: fetched
+    source_id: ma_gl_40a
+  - doc_id: ma_acts_2024_c150
+    title: "Acts of 2024, chapter 150 (Affordable Homes Act), sections 7, 8 and 143"
+    level: state
+    publisher: The General Court of the Commonwealth of Massachusetts
+    url: https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter150
+    licence: Public legislative record
+    access: fetched
+    source_id: ma_acts_2024_c150
+  - doc_id: ma_acts_2020_c358
+    title: "Acts of 2020, chapter 358, section 18 (inserting § 3A into chapter 40A)"
+    level: state
+    publisher: The General Court of the Commonwealth of Massachusetts
+    url: https://malegislature.gov/Laws/SessionLaws/Acts/2020/Chapter358
+    licence: Public legislative record
+    access: fetched
+    source_id: ma_gl_40a
+  - doc_id: ma_760_cmr_71
+    title: "760 CMR 71.00 (Protected use accessory dwelling units), HLC regulations"
+    level: state
+    publisher: Executive Office of Housing and Livable Communities
+    url: https://www.mass.gov/doc/760-cmr-7100-protected-use-adus-final-version/download
+    licence: Public record; www.mass.gov refuses scripted requests
+    access: link_only
+    source_id: ""
+  - doc_id: ma_760_cmr_72
+    title: "760 CMR 72.00 (Multi-family zoning requirement for MBTA communities), HLC regulations"
+    level: state
+    publisher: Executive Office of Housing and Livable Communities
+    url: https://www.mass.gov/doc/760-cmr-72-multi-family-zoning-requirement-for-mbta-communities/download
+    licence: Public record; www.mass.gov refuses scripted requests
+    access: link_only
+    source_id: ""
+
+provisions:
+  - provision_id: ma_40a_1a_adu_definition
+    citation: "M.G.L. c. 40A § 1A, definition of accessory dwelling unit (St. 2024, c. 150, § 7)"
+    section: "1A"
+    reform: adu
+    status: enacted
+    effective: 2024-08-06
+    checked_on: 2026-11-25
+    summary_own_words: >-
+      An accessory dwelling unit is a self-contained home with its own sleeping,
+      cooking and sanitary space on the same lot as a principal dwelling, with a
+      separate entrance, no larger than half the principal dwelling's gross
+      floor area or 900 square feet, whichever is smaller. A town may add size
+      limits and limit short-term rentals, but may not unreasonably restrict
+      creating or renting an ADU that is not a short-term rental.
+  - provision_id: ma_40a_3_adu
+    citation: "M.G.L. c. 40A § 3, ADU paragraph (St. 2024, c. 150, § 8; effective by § 143)"
+    section: "3"
+    reform: adu
+    status: enacted
+    effective: 2025-02-02
+    checked_on: 2026-11-25
+    summary_own_words: >-
+      Zoning may not prohibit, unreasonably restrict, or require a special
+      permit or other discretionary approval for one ADU, or renting it, in a
+      single-family residential zoning district. Reasonable rules still apply:
+      Title 5 septic rules (310 CMR 15.000), site plan review, setbacks, bulk
+      and height, and limits on short-term rental. No owner-occupancy
+      requirement. At most one added parking space may be required, and none
+      within 0.5 miles of a commuter rail, subway, ferry or bus station. A
+      second ADU needs a special permit.
+    benchmark_gap: >-
+      The benchmark allows a detached or semi-detached ADU of at least 600 sq ft
+      with no added parking. The statute already allows one ADU by right in
+      single-family districts; it falls short of the benchmark where the
+      half-of-the-house cap is below 600 sq ft (principal homes under 1,200 sq
+      ft), where a town requires the one parking space (outside 0.5 miles of
+      transit), on single-family lots outside single-family districts, and in
+      Boston, which chapter 40A does not cover.
+  - provision_id: ma_40a_3a
+    citation: "M.G.L. c. 40A § 3A (St. 2020, c. 358, § 18)"
+    section: "3A"
+    reform: tod
+    status: enacted
+    effective: 2021-01-14
+    checked_on: 2026-11-25
+    summary_own_words: >-
+      Each MBTA community (177 cities and towns; Boston is exempt from chapter
+      40A) must have at least one zoning district of reasonable size where
+      multi-family housing is allowed as of right, without age limits and
+      suitable for families: a minimum gross density of 15 units per acre and,
+      where applicable, within 0.5 miles of a commuter rail, subway or ferry
+      station or bus station. A community that fails to comply loses
+      eligibility for named state grant programs (Housing Choice, Local
+      Capital Projects, MassWorks, HousingWorks). HLC sets the compliance
+      guidelines (now the regulations 760 CMR 72).
+    benchmark_gap: >-
+      Close to the transit-oriented density benchmark but narrower: one district
+      per town, sized by HLC's capacity formula, not all land near every stop.
+      Towns choose where the district goes, and most districts are overlays.
+      Districts already adopted and found compliant are in the pack table
+      mbta_3a_districts.
+
+records:
+  - record_id: ma_adu_by_right_enacted
+    provision_id: ma_40a_3_adu
+    citation: "St. 2024, c. 150, § 8 (adding the ADU paragraph to M.G.L. c. 40A § 3)"
+    jurisdiction: MA
+    housing_type: adu
+    status: enacted
+    start: 2024-08-06
+    end: 2025-02-02
+    verified_on: 2026-11-24
+    end_verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    text_version: "Acts of 2024, chapter 150 (approved August 6, 2024; emergency law)"
+    scope: Single-family residential zoning districts in every city and town under chapter 40A
+    exclusions: Boston (not subject to chapter 40A)
+    agency: The General Court; Executive Office of Housing and Livable Communities
+    sources:
+      - "https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter150"
+    note: >-
+      Signed August 6, 2024 with an emergency preamble. Section 143 makes
+      section 8 take effect 180 days after the act's effective date: 2025-02-02.
+  - record_id: ma_adu_by_right_effective
+    provision_id: ma_40a_3_adu
+    citation: "M.G.L. c. 40A § 3, ADU paragraph"
+    jurisdiction: MA
+    housing_type: adu
+    status: legally_effective
+    start: 2025-02-02
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    text_version: "General Laws text read 2026-11-24"
+    scope: >-
+      One ADU (no larger than half the principal home or 900 sq ft) by right in
+      single-family residential zoning districts; at most one added parking
+      space, none within 0.5 miles of a station; no owner-occupancy rule
+    exclusions: >-
+      Boston; a second ADU needs a special permit; Title 5 septic, site plan
+      review, setbacks, bulk, height and short-term-rental limits still apply
+    agency: Executive Office of Housing and Livable Communities (760 CMR 71)
+    implementation_evidence: >-
+      HLC's ADU survey (pack table ma_adu_survey) reports ADU building permits
+      issued in 246 municipalities, January 2025 to June 2026
+    court_status: none_known
+    sources:
+      - "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3"
+      - "https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter150"
+    note: >-
+      HLC's housing production page says the law went into effect on
+      February 3, 2025; the statute's 180 days from August 6, 2024 end on
+      February 2, 2025 (a Sunday). The statutory date is kept.
+  - record_id: ma_3a_effective
+    provision_id: ma_40a_3a
+    citation: "M.G.L. c. 40A § 3A (St. 2020, c. 358, § 18)"
+    jurisdiction: MA
+    housing_type: multifamily
+    status: legally_effective
+    start: 2021-01-14
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    text_version: "Acts of 2020, chapter 358 (approved in part January 14, 2021; emergency law)"
+    scope: >-
+      The 177 MBTA communities: at least one district of reasonable size with
+      multi-family housing as of right at 15 or more units per acre, within 0.5
+      miles of a station where applicable
+    exclusions: Boston (not subject to chapter 40A)
+    agency: Executive Office of Housing and Livable Communities (760 CMR 72)
+    implementation_evidence: >-
+      Districts adopted and found compliant are in the MassGIS 3A District Atlas
+      (pack table mbta_3a_districts); each town's status and deadline in
+      mbta_3a_status
+    court_status: upheld
+    sources:
+      - "https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section3A"
+      - "https://malegislature.gov/Laws/SessionLaws/Acts/2020/Chapter358"
+    note: >-
+      The duty to comply is enforceable: Attorney General v. Town of Milton,
+      SJC-13580, decided January 8, 2025, upheld section 3A and held that the
+      guidelines needed re-issuing as regulations (now 760 CMR 72). Town
+      deadlines (2023-12-31 to 2025-12-31, with 2025-07-14 for late filers)
+      are in mbta_3a_status.

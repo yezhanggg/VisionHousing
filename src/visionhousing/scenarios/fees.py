@@ -44,8 +44,8 @@ Channel B, not added to it.
 
 The second view
 ---------------
-``view="state"`` replaces the $50,000 benchmark with documented Pennsylvania
-fee levels (``fees.pa_documented_fee_per_unit``). That parameter is still a
+``view="state"`` replaces the $50,000 benchmark with an assumed Pennsylvania
+fee level (``fees.pa_assumed_fee_per_unit_judgement``). That parameter is a
 draft judgement with a wide range until per-unit impact, tap and permit fees are
 sourced; the result says so.
 
@@ -71,11 +71,14 @@ from visionhousing.baseline.panel import STRUCTURE_LABELS, STRUCTURE_TYPES
 from visionhousing.baseline.project import BaselineResult
 from visionhousing.engine import records as rec
 from visionhousing.engine.records import Record
-from visionhousing.features.brackets import RENT, VALUE, median_from_brackets, share_above_many
-from visionhousing.ledger import DEFAULT_DRAWS, Ledger, apply_overrides, sample
+from visionhousing.features.brackets import RENT, VALUE, median_from_brackets
+from visionhousing.ledger import DEFAULT_DRAWS, Ledger, LedgerError, apply_overrides, sample
+from visionhousing.ledger.loader import ROOT, read_yaml
 from visionhousing.proforma import MIDRISE, REDEVELOPMENT, Intensity, residual_proforma
 
 __all__ = [
+    "CAPACITY_CASES",
+    "COST_SETTINGS_PATH",
     "CROSSCHECK_IDS",
     "FEE_IDS",
     "VIEWS",
@@ -87,10 +90,12 @@ __all__ = [
     "channel_b",
     "fee_reform",
     "fee_saving",
+    "load_cost_settings",
     "market_from_tracts",
     "proforma_crosscheck",
     "swing_table",
     "value_per_unit",
+    "window_factor",
 ]
 
 TIER = 0
@@ -99,8 +104,11 @@ TIER = 0
 DATA_SOURCES: tuple[str, ...] = ("bps_county_annual", "acs5_summary_file")
 """Registry ids behind the baseline and the county medians."""
 
-VIEWS = ("benchmark", "state")
-"""``benchmark``: $50,000 per unit cut by 50%. ``state``: documented state fee levels."""
+VIEWS = ("benchmark", "state", "deferral")
+"""``benchmark``: $50,000 per unit cut by 50%. ``state``: an assumed state fee level
+(team judgement).
+``deferral`` (variant ``fees_deferral``): the $50,000 is paid at occupancy instead
+of at permit; the builder saves the construction-loan interest on it."""
 
 ELASTICITY = "supply.elasticity_medium_run"
 PREMIUM = "supply.new_construction_value_premium"
@@ -109,7 +117,27 @@ PARETO_ALPHA = "supply.crosscheck_pareto_alpha"
 FEE_K = "fees.passthrough_k"
 FEE_TOTAL = "fees.fee_total_per_unit"
 FEE_CUT = "fees.fee_cut_share"
-FEE_STATE = "fees.pa_documented_fee_per_unit"
+FEE_STATE = "fees.pa_assumed_fee_per_unit_judgement"
+DEFER_MONTHS = "fees.deferral_months"
+LOAN_RATE = "fees.construction_loan_rate"
+EARMARK = "fees.utility_earmark_share"
+DELAYED = "fees.delayed_capacity_share"
+DELAYED_IDS = (EARMARK, DELAYED)
+"""Ledger ids of the delayed-capacity case (variant ``fees_delayed_capacity``)."""
+
+CAPACITY_CASES = ("none", "delayed")
+"""Fee-funded capacity: ``none`` (benchmark: capacity timing unchanged) or
+``delayed`` (variant ``fees_delayed_capacity``: the earmarked water and sewer
+share of the revenue given up is not replaced, so capacity comes later and a
+share of the added homes that need it are not permitted inside 2027-2031).
+The funded-backfill case (variant ``fees_funded_backfill``) is a ledger swap
+of the replacement share, read by the fiscal screen (``engine.readouts``)."""
+
+COST_SETTINGS_PATH = ROOT / "assumptions" / "cost_reforms.yaml"
+"""Non-numeric settings of the parking and fee reforms (curve levels, windows, fiscal words)."""
+
+DEFERRAL_IDS = (FEE_TOTAL, DEFER_MONTHS, LOAN_RATE)
+"""Ledger ids behind the deferral saving per unit."""
 
 VALUE_IDS: tuple[str, ...] = (
     PREMIUM,
@@ -123,6 +151,7 @@ VALUE_IDS: tuple[str, ...] = (
 FEE_IDS: dict[str, tuple[str, ...]] = {
     "benchmark": (FEE_TOTAL, FEE_CUT, ELASTICITY, FEE_K, *VALUE_IDS),
     "state": (FEE_STATE, FEE_CUT, ELASTICITY, FEE_K, *VALUE_IDS),
+    "deferral": (*DEFERRAL_IDS, ELASTICITY, FEE_K, *VALUE_IDS),
 }
 """Ledger ids behind the Channel B fee estimate, by view."""
 
@@ -144,6 +173,78 @@ def _proforma_ids() -> tuple[str, ...]:
 
 CROSSCHECK_IDS: tuple[str, ...] = (*_proforma_ids(), PREMIUM, LAND_SHARE, PARETO_ALPHA)
 """Ledger ids read by the pro-forma cross-check (besides the saving itself)."""
+
+
+# ---------------------------------------------------------------- settings
+
+
+_COST_CACHE: dict[tuple[str, int], dict[str, Any]] = {}
+
+
+def load_cost_settings(path: Any = None) -> dict[str, Any]:
+    """Read ``assumptions/cost_reforms.yaml`` (once per file version) and check it.
+
+    Raises:
+        LedgerError: A block or field is missing, or a curve level is outside 0-1.
+    """
+    from pathlib import Path
+
+    p = Path(path) if path is not None else COST_SETTINGS_PATH
+    key = (str(p), p.stat().st_mtime_ns)
+    if key in _COST_CACHE:
+        return _COST_CACHE[key]
+    data = read_yaml(p)
+    problems = []
+    curve = (data or {}).get("binding_curve") or {}
+    levels = curve.get("kept_shares") or []
+    if not curve.get("id") or not levels:
+        problems.append("binding_curve needs id and kept_shares")
+    elif any(not 0.0 <= float(x) <= 1.0 for x in levels):
+        problems.append("binding_curve.kept_shares must be shares between 0 and 1")
+    windows = (data or {}).get("baseline_windows") or {}
+    if not windows.get("id") or not windows.get("file"):
+        problems.append("baseline_windows needs id and file")
+    fiscal = (data or {}).get("fiscal") or {}
+    if not fiscal.get("id") or not fiscal.get("recipients_text") or not fiscal.get("years_text"):
+        problems.append("fiscal needs id, recipients_text and years_text")
+    if problems:
+        raise LedgerError("cost_reforms.yaml: " + " | ".join(problems))
+    _COST_CACHE[key] = data
+    return data
+
+
+def window_factor(name: str, state: str | None = None) -> tuple[float, dict[str, Any]]:
+    """Baseline factor of a named baseline-window sensitivity: five-year total / shipped total.
+
+    Reads the diagnostic that ``visionhousing baseline-card`` writes
+    (``assumptions/calibration/baseline_reconciliation.yaml``). The fee and
+    parking estimates are linear in the baseline, so scaling every county's
+    baseline by this factor re-runs them under that window exactly (the
+    state's rule keeps each county's share; only the state level changes).
+
+    Args:
+        name: The diagnostic id, for example ``baseline_pa_window_2022_2025``.
+        state: The run's state code; the diagnostic must belong to it.
+
+    Returns:
+        ``(factor, the diagnostic entry)``.
+
+    Raises:
+        ValueError: The name is not allowed, not in the file, or for another state.
+    """
+    cfg = load_cost_settings()["baseline_windows"]
+    if name not in (cfg.get("allowed") or []):
+        raise ValueError(f"baseline window '{name}' is not allowed (assumptions/cost_reforms.yaml)")
+    doc = read_yaml(ROOT / str(cfg["file"])) or {}
+    entry = (doc.get("diagnostics") or {}).get(name)
+    if not entry:
+        raise ValueError(f"baseline window '{name}' is not in {cfg['file']}")
+    if state is not None and str(entry.get("state", "")).upper() != str(state).upper():
+        raise ValueError(f"baseline window '{name}' belongs to {entry.get('state')}, not {state}")
+    shipped = float(entry["shipped_state_component"])
+    if shipped <= 0:
+        raise ValueError(f"baseline window '{name}': shipped total must be above 0")
+    return float(entry["five_year"]) / shipped, dict(entry)
 
 
 # ---------------------------------------------------------------- results
@@ -183,6 +284,12 @@ class ChannelBResult:
         parts: Named components of ``added`` (for parking: cost channel and site
             yield), same shape.
         notes: Plain statements a reader needs, for example draft inputs.
+        per_unit: Per-draw inputs behind the cost readouts (``engine.readouts``):
+            ``base`` (baseline units the saving reaches, by county, type and
+            draw), ``saving`` ($ saved per unit, same shape) and, for parking,
+            ``avoided`` (spaces avoided per unit, same shape).
+        records: Other records by name (parking: spaces before and after in
+            matched prototypes; fee deferral: the carry saving).
     """
 
     reform: str
@@ -198,6 +305,8 @@ class ChannelBResult:
     added: np.ndarray = field(repr=False)
     parts: dict[str, np.ndarray] = field(default_factory=dict, repr=False)
     notes: tuple[str, ...] = ()
+    per_unit: dict[str, np.ndarray] = field(default_factory=dict, repr=False, compare=False)
+    records: dict[str, Record] = field(default_factory=dict, repr=False, compare=False)
 
     def state_draws(self) -> np.ndarray:
         """Return the state's added units in each draw (sum over counties and types)."""
@@ -390,15 +499,25 @@ def channel_b(
 def fee_saving(params: Mapping[str, np.ndarray], view: str) -> np.ndarray:
     """Cost saved per unit by the fee cut, by draw: fees per unit x cut share.
 
+    Under ``deferral`` the saving is the carry on fees paid at permit instead
+    of at occupancy: fees per unit x construction-loan rate x deferral months / 12.
+
     Args:
         params: Ledger id to draws.
-        view: ``benchmark`` ($50,000) or ``state`` (documented state fee levels).
+        view: ``benchmark`` ($50,000), ``state`` (assumed state fee level, a judgement)
+            or ``deferral``.
 
     Returns:
         Array of shape (draws,), $ per unit.
     """
     if view not in VIEWS:
         raise ValueError(f"view must be one of {VIEWS}, got {view!r}")
+    if view == "deferral":
+        months = np.asarray(params[DEFER_MONTHS], dtype=float)
+        rate = np.asarray(params[LOAN_RATE], dtype=float)
+        if np.any(months < 0) or np.any(rate < 0):
+            raise ValueError("deferral months and the loan rate cannot be negative")
+        return np.asarray(params[FEE_TOTAL], dtype=float) * rate * months / 12.0
     fee = FEE_TOTAL if view == "benchmark" else FEE_STATE
     cut = np.asarray(params[FEE_CUT], dtype=float)
     if np.any((cut < 0) | (cut > 1)):
@@ -407,6 +526,57 @@ def fee_saving(params: Mapping[str, np.ndarray], view: str) -> np.ndarray:
 
 
 # ---------------------------------------------------------------- pro-forma cross-check
+
+
+def _pareto_shares(
+    threshold: np.ndarray,
+    counts: np.ndarray,
+    table: Any,
+    alpha: np.ndarray,
+    chunk: int = 256,
+) -> np.ndarray:
+    """County shares above thresholds, all draws at once (Pareto top bracket, alpha per draw).
+
+    The same sum, bracket by bracket, as
+    :func:`~visionhousing.features.brackets.share_above_many` with
+    ``top_rule="pareto"``, done for a block of draws at a time instead of one
+    draw at a time, so the numbers are the same to the last digit. Blank shares
+    (no units in the brackets) count as 0, as before.
+
+    Args:
+        threshold: Thresholds, shape (counties, types, draws).
+        counts: County bracket counts, shape (counties, brackets).
+        table: The bracket table (``VALUE`` or ``RENT``).
+        alpha: Pareto shape per draw, shape (draws,).
+        chunk: Draws handled at a time, to bound memory.
+
+    Returns:
+        Shares, shaped like ``threshold``.
+    """
+    lows = np.asarray(table.lows, dtype=float)
+    highs = np.asarray(table.highs, dtype=float)
+    finite_high = np.where(np.isfinite(highs), highs, 0.0)
+    width = np.where(np.isfinite(highs), highs - lows, 1.0)
+    top = np.isinf(highs)
+    c = np.asarray(counts, dtype=float)
+    if np.any(c < 0):
+        raise ValueError("bracket counts cannot be negative")
+    total = c.sum(axis=1)
+    bad = (np.isnan(c).any(axis=1) | ~(total > 0))[:, None, None]
+    out = np.empty(threshold.shape)
+    n = threshold.shape[-1]
+    for start in range(0, n, chunk):
+        t = threshold[:, :, start : start + chunk]
+        tt = t[..., None]  # (counties, types, draws, 1) against brackets
+        a = np.asarray(alpha[start : start + chunk], dtype=float)[None, None, :, None]
+        with np.errstate(invalid="ignore", divide="ignore"):
+            frac = np.clip((finite_high - tt) / width, 0.0, 1.0)
+            frac = np.where(top, np.where(tt <= lows, 1.0, (lows / tt) ** a), frac)
+            value = (c[:, None, None, :] * frac).sum(axis=-1) / total[:, None, None]
+        out[:, :, start : start + chunk] = np.nan_to_num(
+            np.where(bad | np.isnan(t), np.nan, value), nan=0.0
+        )
+    return out
 
 
 def proforma_crosscheck(
@@ -462,22 +632,12 @@ def proforma_crosscheck(
         after[:, j, :] = be_new
     share_before = np.empty_like(before)
     share_after = np.empty_like(after)
-    owner_types = [0]
-    rent_types = [1, 2, 3]
-    for d in range(n):
-        for idx, counts, table in (
-            (owner_types, market.value_counts, VALUE),
-            (rent_types, market.rent_counts, RENT),
-        ):
-            rows = np.concatenate([before[:, idx, d].T.ravel(), after[:, idx, d].T.ravel()])
-            tiled = np.tile(counts, (2 * len(idx), 1))
-            shares = share_above_many(
-                tiled, table, rows, top_rule="pareto", alpha=float(alpha[d])
-            ).value
-            shares = np.nan_to_num(shares, nan=0.0)
-            half = len(idx) * n_c
-            share_before[:, idx, d] = shares[:half].reshape(len(idx), n_c).T
-            share_after[:, idx, d] = shares[half:].reshape(len(idx), n_c).T
+    for idx, counts, table in (
+        ([0], market.value_counts, VALUE),  # 1-unit homes: sale values
+        ([1, 2, 3], market.rent_counts, RENT),  # rented types: rents
+    ):
+        share_before[:, idx, :] = _pareto_shares(before[:, idx, :], counts, table, alpha)
+        share_after[:, idx, :] = _pareto_shares(after[:, idx, :], counts, table, alpha)
     with np.errstate(divide="ignore", invalid="ignore"):
         uplift = np.where(share_before > 0, share_after / share_before - 1.0, 0.0)
     uplift = np.maximum(uplift, 0.0)
@@ -750,7 +910,11 @@ def funnel_steps(
 
 
 def _fee_core(
-    params: Mapping[str, np.ndarray], base: np.ndarray, market: Market, view: str
+    params: Mapping[str, np.ndarray],
+    base: np.ndarray,
+    market: Market,
+    view: str,
+    capacity_case: str = "none",
 ) -> dict[str, np.ndarray]:
     saving = fee_saving(params, view)[None, None, :]
     value = value_per_unit(market, params)
@@ -761,7 +925,16 @@ def _fee_core(
         value,
         np.asarray(params[FEE_K])[None, None, :],
     )
-    return {"saving": saving, "value": value, "added": added}
+    out = {"saving": saving, "value": value, "added": added}
+    if capacity_case == "delayed":
+        earmark = np.asarray(params[EARMARK], dtype=float)
+        delayed = np.asarray(params[DELAYED], dtype=float)
+        if np.any((earmark < 0) | (earmark > 1)) or np.any((delayed < 0) | (delayed > 1)):
+            raise ValueError("the earmarked and delayed shares must be between 0 and 1")
+        lost = (earmark * delayed)[None, None, :]
+        out["delayed"] = added * lost
+        out["added"] = added * (1.0 - lost)
+    return out
 
 
 def _scaled(base: np.ndarray, scale: np.ndarray | None, n: int) -> np.ndarray:
@@ -785,6 +958,7 @@ def fee_reform(
     seed: int = 0,
     overrides: Mapping[str, Any] | None = None,
     baseline_scale: np.ndarray | None = None,
+    capacity_case: str = "none",
 ) -> ChannelBResult:
     """Benchmark reform 5: added permitted units in 2027-2031 from a 50% fee cut.
 
@@ -793,12 +967,15 @@ def fee_reform(
             structure type (see :func:`baseline_by_type`).
         tracts: Tract table with ``county`` and the ACS bracket columns.
         ledger: The Assumption Ledger.
-        view: ``benchmark`` ($50,000 x 50%) or ``state`` (documented state fees x 50%).
+        view: ``benchmark`` ($50,000 x 50%) or ``state`` (assumed state fees x 50%).
         n_draws: Monte Carlo draws.
         seed: Run seed; the same seed gives the same result.
         overrides: Ledger overrides for this run (see ``ledger.apply_overrides``).
         baseline_scale: Optional baseline multipliers by county and draw, shape
             (counties, draws), so baseline uncertainty is carried through.
+        capacity_case: ``none`` (benchmark) or ``delayed`` (see
+            :data:`CAPACITY_CASES`): added units x (1 - earmarked share x
+            delayed share).
 
     Returns:
         The result: records by county and state, the cross-check, the funnel and
@@ -806,17 +983,30 @@ def fee_reform(
     """
     if view not in VIEWS:
         raise ValueError(f"view must be one of {VIEWS}, got {view!r}")
+    if capacity_case not in CAPACITY_CASES:
+        raise ValueError(f"capacity case must be one of {CAPACITY_CASES}, got {capacity_case!r}")
+    if capacity_case == "delayed" and view == "deferral":
+        raise ValueError("the delayed-capacity case applies to a fee cut, not to deferral")
     ledger = apply_overrides(ledger, overrides)
     counties = tuple(str(c) for c in baseline.index)
     base = baseline_array(baseline, counties)
     market = market_from_tracts(tracts, counties)
-    ids = FEE_IDS[view]
+    ids = (*FEE_IDS[view], *(DELAYED_IDS if capacity_case == "delayed" else ()))
     xids = tuple(sorted({*CROSSCHECK_IDS, *ids}))
     params = _draws(ledger, xids, n_draws, seed)
     based = _scaled(base, baseline_scale, n_draws)
-    core = _fee_core(params, based, market, view)
+    core = _fee_core(params, based, market, view, capacity_case)
     expression = "baseline units x e x (fees per unit x cut share / value per new unit) x k"
+    if capacity_case == "delayed":
+        expression += " x (1 - earmarked water and sewer share x delayed-capacity share)"
+    if view == "deferral":
+        expression = (
+            "baseline units x e x (fees per unit x construction-loan rate x deferral months / 12 "
+            "/ value per new unit) x k"
+        )
     what = "added units from the fee cut" + (" (state fee levels)" if view == "state" else "")
+    if view == "deferral":
+        what = "added units from fee deferral"
     counties_rec, state, by_type = range_records(
         core["added"], counties, what=what, expression=expression, ledger=ledger, ids=ids
     )
@@ -833,17 +1023,34 @@ def fee_reform(
 
     # Funnel and swings at central values.
     central = _central(ledger, ids)
-    c_core = _fee_core(central, base[:, :, None], market, view)
-    fee_id = FEE_TOTAL if view == "benchmark" else FEE_STATE
-    saving_rec = rec.mul(
-        rec.from_parameter(fee_id, ledger[fee_id]),
-        rec.from_parameter(FEE_CUT, ledger[FEE_CUT]),
-        name="fee saving per unit",
-        unit="$/unit",
-    )
+    c_core = _fee_core(central, base[:, :, None], market, view, capacity_case)
+    fee_id = FEE_STATE if view == "state" else FEE_TOTAL
+    if view == "deferral":
+        saving_rec = rec.div(
+            rec.product(
+                [
+                    rec.from_parameter(FEE_TOTAL, ledger[FEE_TOTAL]),
+                    rec.from_parameter(LOAN_RATE, ledger[LOAN_RATE]),
+                    rec.from_parameter(DEFER_MONTHS, ledger[DEFER_MONTHS]),
+                ],
+                name="fees x loan rate x months",
+            ),
+            rec.quantity("months per year", 12.0, "months/year", formula="12 months per year"),
+            name="fee deferral saving per unit (carry not paid)",
+            unit="$/unit",
+        )
+    else:
+        saving_rec = rec.mul(
+            rec.from_parameter(fee_id, ledger[fee_id]),
+            rec.from_parameter(FEE_CUT, ledger[FEE_CUT]),
+            name="fee saving per unit",
+            unit="$/unit",
+        )
     steps = _fee_steps(ledger, base, c_core, saving_rec)
     swing = swing_table(
-        lambda p: float(_fee_core(p, base[:, :, None], market, view)["added"].sum()), ledger, ids
+        lambda p: float(_fee_core(p, base[:, :, None], market, view, capacity_case)["added"].sum()),
+        ledger,
+        ids,
     )
     notes = [
         "Channel B and the pro-forma cross-check use the same saving and the same k; "
@@ -853,8 +1060,35 @@ def fee_reform(
     ]
     if view == "state":
         notes.append(
-            f"State view: fee levels come from {FEE_STATE}, a draft judgement with a wide "
-            "range, not yet sourced from documented Pennsylvania fee schedules."
+            f"State view: the fee level is {FEE_STATE}, an assumed statewide figure (a draft "
+            "team judgement with a wide range), not a surveyed one: no reproducible inventory of "
+            "Pennsylvania fee schedules stands behind it yet."
+        )
+    records: dict[str, Record] = {}
+    if capacity_case == "delayed":
+        notes.append(
+            "Delayed-capacity case (a policy option, not the benchmark): the earmarked water "
+            f"and sewer share ({EARMARK}) of the revenue given up is not replaced, so capacity "
+            f"comes later and a share ({DELAYED}) of the added homes that need it are not "
+            "permitted inside 2027-2031."
+        )
+        records["delayed_by_capacity"] = rec.from_draws(
+            "added homes the cut would make that wait for delayed capacity (past 2031), state",
+            core["delayed"].sum(axis=(0, 1)),
+            "units",
+            expression=(
+                "baseline units x e x (fees per unit x cut share / value per new unit) x k x "
+                "earmarked water and sewer share x delayed-capacity share, summed"
+            ),
+            assumption_ids=tuple(sorted(set(ids))),
+            source_ids=_sources(ledger, ids),
+            tier=TIER,
+        )
+    if view == "deferral":
+        notes.append(
+            "Deferral view: fees are not cut; they are paid at occupancy instead of at permit. "
+            "The builder saves the interest on carrying them through construction; the public "
+            "gives up only the time value of the delay and a small collection loss."
         )
     draft = sorted(i for i in ids if ledger[i].status == "draft")
     if draft:
@@ -873,6 +1107,11 @@ def fee_reform(
         added=core["added"],
         parts={"channel_b": core["added"]},
         notes=tuple(notes),
+        per_unit={
+            "base": based,
+            "saving": np.broadcast_to(core["saving"], core["added"].shape),
+        },
+        records=records,
     )
 
 

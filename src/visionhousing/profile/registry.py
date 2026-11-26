@@ -43,19 +43,31 @@ SECTIONS: tuple[tuple[str, str], ...] = (
     ("housing", "Homes"),
     ("jobs", "Jobs and employers"),
     ("permits", "Permits"),
+    ("affordability", "Cost and affordability"),
     ("pipeline_local", "Local permit pipeline"),
     ("zoning", "Zoning and overlays"),
     ("plans", "Comprehensive plans"),
+    ("state_law", "State law and bills"),
     ("incentives", "Tax credits and incentive areas"),
     ("transit", "Transit"),
+    ("infrastructure", "Water and sewer readiness"),
+    ("hazards", "Hazards and land"),
     ("safety", "Safety"),
+    ("typology", "Places like this one"),
     ("owners", "Institutional buyers"),
     ("parcels", "Parcels and property"),
     ("data_quality", "Data quality"),
 )
 """Every section key and its title, in display order."""
 
-BUILT: tuple[str, ...] = ("people", "housing", "permits", "transit", "data_quality")
+BUILT: tuple[str, ...] = (
+    "people",
+    "housing",
+    "permits",
+    "transit",
+    "typology",
+    "data_quality",
+)
 """Sections built from the data already in the state pack."""
 
 RESERVED: tuple[str, ...] = (
@@ -67,8 +79,12 @@ RESERVED: tuple[str, ...] = (
     "parcels",
     "owners",
     "plans",
+    "state_law",
+    "affordability",
+    "infrastructure",
+    "hazards",
 )
-"""Keys kept for sections other modules will add."""
+"""Keys kept for sections other modules will add (built where the pack has their tables)."""
 
 _TITLES = dict(SECTIONS)
 PACKAGE = "visionhousing.profile.sections"

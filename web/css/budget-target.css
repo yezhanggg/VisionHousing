@@ -1,0 +1,367 @@
+/*
+ * The budget-and-target panel and its demo path (web/js/ui/budget-target.js).
+ * Every colour, size and timing is a token from tokens.css; class names start with "bt-".
+ * Motion runs only when the reader has not asked for reduced motion.
+ */
+
+.bt-card .card-body {
+  display: grid;
+  gap: var(--space-3);
+  min-width: 0;
+}
+
+.bt-illustrative {
+  margin: 0;
+  font-size: var(--text-xs);
+}
+
+.bt-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: var(--space-3);
+  margin: 0;
+}
+
+.bt-field {
+  display: grid;
+  gap: var(--space-1);
+  min-width: 0;
+  font-size: var(--text-sm);
+}
+
+.bt-field label,
+.bt-field legend {
+  font-weight: var(--weight-medium);
+  color: var(--text);
+}
+
+.bt-field .input {
+  width: 100%;
+  min-width: 0;
+}
+
+.bt-hint {
+  color: var(--text-quiet);
+  font-size: var(--text-xs);
+}
+
+.bt-arms {
+  grid-column: 1 / -1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2) var(--space-4);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: var(--space-2) var(--space-3);
+  margin: 0;
+}
+
+.bt-arms legend {
+  padding: 0 var(--space-1);
+}
+
+.bt-radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  font-weight: var(--weight-regular);
+}
+
+.bt-result {
+  margin: 0;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  background: var(--surface-2);
+  font-size: var(--text-sm);
+}
+
+.bt-flags {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+}
+
+.bt-flag {
+  display: flex;
+  gap: var(--space-2);
+  align-items: flex-start;
+  padding: var(--space-2) var(--space-3);
+  border-radius: var(--radius);
+  border: 1px solid var(--notice-line);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+  font-size: var(--text-sm);
+}
+
+/* Each flag has its own mark shape, so they differ without colour alone. */
+.bt-flag-mark {
+  flex: none;
+  width: 12px;
+  height: 12px;
+  margin-top: 3px;
+  border: 2px solid currentColor;
+}
+
+.bt-flag.is-input_missing .bt-flag-mark {
+  border-style: dashed;
+  border-radius: var(--radius-pill);
+}
+
+.bt-flag.is-outside_tested_range .bt-flag-mark {
+  border-radius: 0;
+}
+
+.bt-flag.is-between_tested_values .bt-flag-mark {
+  border-left-width: 4px;
+  border-right-width: 4px;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+
+.bt-flag.is-budget_exceeded .bt-flag-mark {
+  transform: rotate(45deg);
+}
+
+.bt-flag.is-no_tested_option_meets_both .bt-flag-mark {
+  border-radius: var(--radius-pill);
+  background: currentColor;
+}
+
+.bt-block {
+  display: grid;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.bt-table-wrap {
+  overflow-x: auto;
+  max-width: 100%;
+}
+
+.bt-table-wrap:focus-visible {
+  outline: var(--focus-ring);
+}
+
+.bt-table {
+  font-size: var(--text-xs);
+  min-width: 860px;
+}
+
+.bt-table th,
+.bt-table td {
+  vertical-align: top;
+}
+
+.bt-sub {
+  display: block;
+  color: var(--text-quiet);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-regular);
+}
+
+.bt-row.is-over {
+  color: var(--text-muted);
+}
+
+.bt-row.is-pareto th {
+  box-shadow: inset 3px 0 0 var(--accent);
+}
+
+.bt-status {
+  display: inline-block;
+  padding: 1px var(--space-2);
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--line-strong);
+  white-space: nowrap;
+}
+
+.bt-status.is-meets {
+  border-color: var(--accent);
+  color: var(--accent-strong);
+}
+
+.bt-status.is-over {
+  border-style: dashed;
+}
+
+.bt-pareto-tag {
+  color: var(--accent-strong);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.bt-arm {
+  font-weight: var(--weight-medium);
+}
+
+.bt-chart .chart-draw {
+  position: relative;
+}
+
+.bt-svg {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 10 / 3;
+}
+
+.bt-axis {
+  stroke: var(--line-strong);
+  stroke-width: 0.3;
+  vector-effect: non-scaling-stroke;
+}
+
+.bt-front {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.bt-dot {
+  fill: var(--surface);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+
+.bt-dot.is-law_only,
+.bt-dot-key.is-law_only {
+  stroke: var(--seq-6);
+  border-color: var(--seq-6);
+}
+
+.bt-dot.is-finance_only,
+.bt-dot-key.is-finance_only {
+  stroke: var(--seq-3);
+  border-color: var(--seq-3);
+}
+
+.bt-dot.is-both,
+.bt-dot-key.is-both {
+  stroke: var(--seq-5);
+  border-color: var(--seq-5);
+}
+
+.bt-dot.is-pareto {
+  fill: var(--accent);
+}
+
+.bt-axes {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin: 0;
+  color: var(--text-quiet);
+  font-size: var(--text-xs);
+}
+
+.bt-legend {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-3);
+  margin: 0;
+  padding: 0;
+  font-size: var(--text-xs);
+  color: var(--text-muted);
+}
+
+.bt-legend li {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+}
+
+.bt-dot-key {
+  width: 10px;
+  height: 10px;
+  border-radius: var(--radius-pill);
+  border: 2px solid var(--line-strong);
+  background: var(--surface);
+}
+
+.bt-dot-key.is-pareto {
+  border-color: var(--accent);
+  background: var(--accent);
+}
+
+.bt-covered {
+  display: grid;
+  gap: var(--space-1);
+  font-size: var(--text-sm);
+}
+
+.bt-covered-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-1) var(--space-4);
+}
+
+.bt-steps {
+  list-style: none;
+  margin: 0;
+  display: grid;
+  gap: var(--space-3);
+}
+
+.bt-step {
+  padding-left: var(--space-3);
+  border-left: 2px solid var(--line);
+  font-size: var(--text-sm);
+}
+
+.bt-step p {
+  margin: var(--space-1) 0 0;
+}
+
+.bt-step-title {
+  margin: 0;
+  font-size: var(--text-sm);
+  font-weight: var(--weight-bold);
+}
+
+.bt-uncapped {
+  padding: var(--space-1) var(--space-2);
+  border-radius: var(--radius-sm);
+  border: 1px dashed var(--notice-line);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+}
+
+.bt-link {
+  margin: 0;
+  font-size: var(--text-sm);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .bt-dot {
+    animation: bt-in var(--dur) var(--ease-out) both;
+    animation-delay: calc(var(--i, 0) * var(--stagger));
+  }
+
+  .bt-front {
+    stroke-dasharray: 400;
+    animation: bt-draw var(--dur-slow) var(--ease-out) both;
+  }
+}
+
+@keyframes bt-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes bt-draw {
+  from {
+    stroke-dashoffset: 400;
+  }
+
+  to {
+    stroke-dashoffset: 0;
+  }
+}

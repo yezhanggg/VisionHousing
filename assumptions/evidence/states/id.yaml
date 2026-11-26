@@ -1,0 +1,329 @@
+# Cross-state comparison records: ID.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: id.s1354_2026_adu
+  kind: policy
+  state: ID
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - fees
+  title: 'Idaho S 1354 (2026): cities over 10,000 must allow one ADU per single-family lot'
+  citation: Idaho Laws 2026, ch. 265 (S 1354, as amended); Idaho Code 67-6541 and 55-3212
+  url: https://legislature.idaho.gov/sessioninfo/2026/legislation/S1354/
+  session: 2026 regular session (68th Legislature, 2nd regular session)
+  bill: S 1354
+  enacted_date: 2026-03-31
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act (cities may not ban ADUs in residential zones; HOAs may not newly restrict ADUs
+      without the owner's written consent)
+  - date: 2027-02-01
+    applies_to: Deadline for each covered city to amend its comprehensive plan and land use rules for
+      single-family zones
+  geographic_scope: Cities with more than 10,000 people, on all land zoned for single-family use. The
+    homeowners' association limit (55-3212) applies statewide.
+  exclusions:
+  - Historic districts and designated historic properties
+  - Cities of 10,000 or fewer people
+  - Building, fire, floodplain, water, sewer, road-access, environmental-hazard and right-of-way setback
+    rules still apply
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'One ADU per lot: either internal or detached (rear yard or primary-dwelling setbacks). No off-street
+    parking may be required unless the main home has none, the street is unpaved, or the home is within
+    a quarter mile of transit, jobs or shops (an unusual reverse exemption).'
+  - Impact and utility connection fees may not exceed those on other single-family homes; size cap may
+    not be below 1,000 sq ft or 75% of the main home; no owner-occupancy rule; approval is administrative
+    and by right.
+  - Detached ADUs allowed one per lot, so the reform's 600 sq ft detached-ADU assumption fits; the 10,000-population
+    threshold leaves small cities and counties out.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Idaho Legislature bill page shows governor signed 2026-03-31, Session Law Chapter
+    265, effective 07/01/2026. Engrossed text (S1354E1) read for scope, the 2027-02-01 deadline and the
+    emergency clause. The Idaho Code chapter 65 index lists 67-6541 'Accessory dwelling units'.
+  sources:
+  - label: S 1354 bill status (Idaho Legislature)
+    url: https://legislature.idaho.gov/sessioninfo/2026/legislation/S1354/
+    official: true
+  - label: S 1354 engrossed text
+    url: https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2026/legislation/S1354E1.pdf
+    official: true
+  - label: Idaho Code Title 67 chapter 65 index
+    url: https://legislature.idaho.gov/statutesrules/idstat/Title67/T67CH65/
+    official: true
+  discovered_via: pew_2026
+- id: id.s1352_2026_starter_home_subdivisions
+  kind: policy
+  state: ID
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - fees
+  title: 'Idaho S 1352 (2026): starter-home subdivisions with 1,500 sq ft minimum lots in cities over
+    10,000'
+  citation: Idaho Laws 2026, ch. 264 (S 1352, as amended); Idaho Code 67-6542
+  url: https://legislature.idaho.gov/sessioninfo/2026/legislation/S1352/
+  session: 2026 regular session (68th Legislature, 2nd regular session)
+  bill: S 1352
+  enacted_date: 2026-03-31
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act (no city may ban starter-home subdivisions in residential zones)
+  - date: 2027-02-01
+    applies_to: Deadline for covered cities to amend plans and land use rules to allow them
+  geographic_scope: Cities with more than 10,000 people, residential zoning districts; subdivisions of
+    at least 4 acres of detached single-family homes
+  exclusions:
+  - Historic districts and designated historic properties
+  - Cities of 10,000 or fewer people
+  - Cities may condition or deny where existing or planned infrastructure is inadequate, to the same
+    standard used for other subdivisions
+  - Lot-size cap yields where infrastructure, lot shape or environmental limits make it unfeasible
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'In these subdivisions cities may not require: minimum lots over 1,500 sq ft; front or rear setbacks
+    over 15 ft or side setbacks over 5 ft; lot width over 30 ft for narrow lots; lot depth over 70 ft;
+    or permit, impact or connection fees above those for other single-family subdivisions.'
+  - The bill text names the new section 67-6541; it was codified as 67-6542 because S 1354 also created
+    67-6541.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Idaho Legislature bill page shows governor signed 2026-03-31, Session Law Chapter
+    264, effective 07/01/2026. Engrossed text (S1352E1) read for scope and limits. The Idaho Code chapter
+    65 index lists 67-6542 'Starter home subdivisions'.
+  sources:
+  - label: S 1352 bill status (Idaho Legislature)
+    url: https://legislature.idaho.gov/sessioninfo/2026/legislation/S1352/
+    official: true
+  - label: S 1352 engrossed text
+    url: https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2026/legislation/S1352E1.pdf
+    official: true
+  - label: Idaho Code Title 67 chapter 65 index
+    url: https://legislature.idaho.gov/statutesrules/idstat/Title67/T67CH65/
+    official: true
+  discovered_via: pew_2026
+- id: id.h706_2026_single_stair
+  kind: policy
+  state: ID
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'Idaho H 706 (2026): local option for single-stair apartment buildings up to six storeys'
+  citation: Idaho Laws 2026, ch. 320 (H 706); Idaho Code 39-4109C, 39-4116
+  url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0706/
+  session: 2026 regular session (68th Legislature, 2nd regular session)
+  bill: H 706
+  enacted_date: 2026-04-10
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act
+  geographic_scope: Statewide, but only where a local government chooses to allow single-stair R-2 apartment
+    buildings
+  exclusions:
+  - Optional for local governments (they 'may allow'); no change where a city keeps the two-exit rule
+  - Buildings over six storeys (five with an occupiable roof), more than four units per floor or over
+    6,000 sq ft per storey
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Conditions include full NFPA 13 sprinklers, a 2-hour rated stair and elevator shaft, a 48-inch stair,
+    at most 20 ft from unit doors to the stair, 125 ft exit-access travel and at most two single-exit
+    buildings per lot.
+  - A building-code change, not zoning; it lowers the cost of small apartment buildings on narrow lots
+    but does not by itself allow more units on a parcel.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Idaho Legislature bill page shows delivered to the governor 2026-04-02, reported signed
+    by the governor on 2026-04-10, Session Law Chapter 320, effective 07/01/2026. Bill text read for
+    the conditions.
+  sources:
+  - label: H 706 bill status (Idaho Legislature)
+    url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0706/
+    official: true
+  - label: H 706 bill text
+    url: https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2026/legislation/H0706.pdf
+    official: true
+  discovered_via: pew_2026
+- id: id.h585_2026_inspection_timing
+  kind: policy
+  state: ID
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Idaho H 585 (2026): 48-business-hour inspection clock with third-party fallback for electrical,
+    plumbing and HVAC'
+  citation: Idaho Laws 2026, ch. 232 (H 585); Idaho Code 54-1004A, 54-2626A, 54-5020A
+  url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0585/
+  session: 2026 regular session (68th Legislature, 2nd regular session)
+  bill: H 585
+  enacted_date: 2026-03-31
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act
+  geographic_scope: Statewide; electrical, plumbing and HVAC (mechanical) inspections by the state Division
+    of Occupational and Professional Licenses or a local government
+  exclusions:
+  - Does not cover general building, zoning or plan-review timelines
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - If a requested inspection is not done within 48 business hours, the permit holder may hire a qualified
+    third-party inspector and gets the inspection fee refunded. A 10% fee refund applies when a failed
+    inspection is not explained within 3 business days.
+  - Trade inspections, not permit approval; any effect on permit counts is indirect (shorter build time).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Idaho Legislature bill page shows delivered to the governor 2026-03-27, reported signed
+    by the governor on 2026-03-31, Session Law Chapter 232, effective 07/01/2026. Bill text read for the
+    48-hour and refund rules.
+  sources:
+  - label: H 585 bill status (Idaho Legislature)
+    url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0585/
+    official: true
+  - label: H 585 bill text
+    url: https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2026/legislation/H0585.pdf
+    official: true
+  discovered_via: pew_2026
+- id: id.h707_2026_adu_financing_split
+  kind: policy
+  state: ID
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - adu
+  title: 'Idaho H 707 (2026): optional administrative land division to finance a home and its ADU separately'
+  citation: Idaho Laws 2026, ch. 170 (H 707); Idaho Code 50-1335
+  url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0707/
+  session: 2026 regular session (68th Legislature, 2nd regular session)
+  bill: H 707
+  enacted_date: 2026-03-26
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act
+  geographic_scope: Statewide; cities and counties may (not must) set up the process
+  exclusions:
+  - Optional for cities and counties
+  - Only for financing; a lender letter is required; no added density, no further splits, recorded restriction
+  - Agricultural land-division protections unchanged
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Aimed at mortgage access for ADUs, not at new building lots; the stated intent rules out 'subdivisions
+    by another name'.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Idaho Legislature bill page shows delivered to the governor 2026-03-26, reported signed
+    by the governor on March 26, 2026, Session Law Chapter 170, effective 07/01/2026. Bill text read.
+  sources:
+  - label: H 707 bill status (Idaho Legislature)
+    url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0707/
+    official: true
+  - label: H 707 bill text
+    url: https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2026/legislation/H0707.pdf
+    official: true
+  discovered_via: pew_2026
+- id: id.h800_2026_manufactured_homes
+  kind: policy
+  state: ID
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  title: 'Idaho H 800 (2026): manufactured homes sited where single-family homes are allowed, with smaller
+    size floors'
+  citation: Idaho Laws 2026, ch. 171 (H 800); Idaho Code 39-4105, 67-6509A
+  url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0800/
+  session: 2026 regular session (68th Legislature, 2nd regular session)
+  bill: H 800
+  enacted_date: 2026-03-26
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Whole act
+  geographic_scope: Statewide; all land zoned for single-family use
+  exclusions:
+  - Historic districts
+  - Recorded restrictive covenants are not overridden
+  - Multi-unit manufactured homes only where multifamily is allowed
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Local minimum size for a manufactured home outside parks drops from 1,000 sq ft to 400 sq ft (single
+    section) or 800 sq ft (multisection); single-section homes allowed; definition extended to multi-unit
+    HUD-code homes.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Idaho Legislature bill page shows delivered to the governor 2026-03-26, reported signed
+    by the governor on March 26, 2026, Session Law Chapter 171, effective 07/01/2026. Bill text read.
+  sources:
+  - label: H 800 bill status (Idaho Legislature)
+    url: https://legislature.idaho.gov/sessioninfo/2026/legislation/H0800/
+    official: true
+  - label: H 800 bill text
+    url: https://legislature.idaho.gov/wp-content/uploads/sessioninfo/2026/legislation/H0800.pdf
+    official: true
+  discovered_via: pew_2026

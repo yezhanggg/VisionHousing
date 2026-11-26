@@ -39,8 +39,14 @@ USERS = frozenset(
         "parking",
         "fees",
         "packages",
+        "districts",
         "pa_hb2186",
         "pa_sb1346",
+        "transit_zoning_funded_infrastructure",
+        "commercial_land_housing",
+        "adaptive_reuse",
+        "starter_home_lots",
+        "fee_deferral_with_affordability",
     }
 )
 

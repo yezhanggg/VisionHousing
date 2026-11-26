@@ -1,0 +1,48 @@
+# State confidence check: how well the baseline's CURRENT range method did for a
+# few named states when each was held out of time. Read by
+# visionhousing.validation.state_holdouts; the command
+# `visionhousing validate-state-holdouts` writes
+#   assumptions/calibration/state_holdouts.yaml   (results, with provenance)
+# and `visionhousing state-readiness` reads that file (step 3, "validation hold-out").
+# Method: docs/modules/validation_donor_pool.md ("A state confidence check").
+#
+# Why: the readiness check asks whether a validation set holds the state out. The
+# first donor-pool test held out VT, NH, ME, RI, DE, WY, NM, NV (and PA); MA was
+# only scored in the second test, under other methods. This check scores the
+# current method itself for each listed state, so every state the tool publishes
+# has its own held-out record.
+#
+# This is descriptive. It decides nothing and changes no baseline run: there is no
+# candidate and no adoption rule. The block below was written, and its fingerprint
+# recorded in assumptions/preregistration.yaml and the decision log, before any
+# score of it was computed. Same fingerprint method as the other blocks
+# (canonical JSON of the block; comments do not count).
+
+version: 1
+
+state_holdout_check:
+  # The states scored. VT is included for consistency with the first test (its
+  # result there is the same method, so the two numbers should agree).
+  states: [MA, WY, VT]
+  # The method scored: the baseline's range as it runs today, i.e. the state's own
+  # state-total error record blended toward Pennsylvania's on the log scale with
+  # w = min(1, n / full_weight_cases), only ever widened (small_sample in
+  # assumptions/backtest.yaml; pa_blend in the donor-pool tests). The growth-aware
+  # widening adopted by the third test is NOT part of it until the engine is wired
+  # to it; scoring that would need a new block.
+  method: pa_blend
+  # Out of time only: for each origin, only cases whose five target years were all
+  # observed by that origin (as in a real run). Rule, quantiles, min_cases,
+  # prior_state, full_weight_cases, target_coverage and coverage_band are the
+  # first test's (donor_pool_rules in assumptions/validation_donor_pool.yaml),
+  # checked against their own fingerprint before scoring.
+  variant: out_of_time
+  # Reported per state: scored cases, coverage (share of cases whose real
+  # five-year total fell inside P10-P90), misses above and below the range, mean
+  # width ((P90 - P10) / P50), the origins scored, and whether coverage sits
+  # inside coverage_band. None of these is turned into a pass or a fail of the
+  # method.
+  # Readiness reads only this: a state counts as held out when at least
+  # min_cases_scored of its cases were scored here. Coverage is shown beside it
+  # and never gates readiness.
+  min_cases_scored: 5

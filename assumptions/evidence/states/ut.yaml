@@ -1,0 +1,308 @@
+# Cross-state comparison records: UT.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ut.htrz
+  kind: policy
+  state: UT
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - infrastructure_finance
+  - missing_middle
+  title: 'Housing and Transit Reinvestment Zones: dense mixed-use housing at rail/BRT stations funded
+    by tax increment'
+  citation: Housing and Transit Reinvestment Zone Act, SB 217 (2021); now Utah Code Title 63N, Ch. 23,
+    Part 2 (§§ 63N-23-201 to -207), renumbered from 63N-3-6 by SB 39 (2026), Laws of Utah 2026, Ch. 94;
+    sunset added by HB 507 (2026)
+  url: https://le.utah.gov/xcode/Title63N/Chapter23/63N-23-P2.html
+  session: 2026 General Session (recodification); 2021 General Session (original act)
+  bill: SB 217 (2021); SB 39 (2026); HB 507 (2026)
+  enacted_date: 2021-03-22
+  effective_dates:
+  - date: 2026-05-06
+    applies_to: Current Part 2 (63N-23-2) text, renumbered and amended by Ch. 94 (SB 39)
+  - date: 2027-12-31
+    applies_to: Last date to propose an HTRZ (proposals pending on this date may still be amended and
+      reviewed)
+  - date: 2028-01-01
+    applies_to: No new HTRZ proposals; zones existing on this date continue
+  geographic_scope: Municipalities and public transit counties at commuter rail stations (up to 1/3 mile
+    radius, max 125 noncontiguous acres) and light rail or BRT stations (generally 1/4 mile, max 100 acres)
+  exclusions:
+  - 12% affordable requirement does not apply where HUD affordability guidelines (under 60% AMI) are already
+    met
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Zoning side: at least 51% of developable area residential, average 50+ units/acre (39-49 allowed
+    for some BRT/transit-hub zones at 60% capture), 12% affordable units (up to 9% at <= 80% county median
+    income, at least 3% at <= 60%), at least 25% of units with more than one bedroom, mixed use.'
+  - 'Finance side: up to 80% of each taxing entity''s property tax increment for up to 25 years per parcel
+    within 45 years (commuter rail) or 15 years within 30 years (light rail); at most three trigger dates;
+    committee approval required.'
+  - Original 2021 act's effective date was not read on an official page; only its signing date (2021-03-22)
+    was.
+  - GOEO program page lists committee meetings (e.g., Sandy, Vineyard, South Jordan, Farmington, Salt
+    Lake Central, Kimball Junction) but not confirmed approvals.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'le.utah.gov current code: 63N-23-201 and 63N-23-202 marked ''Effective 5/6/2026'',
+    history ''Renumbered and Amended by Chapter 94, 2026 General Session''; 63N-23-202(1) and (6) give
+    the Dec. 31, 2027 / Jan. 1, 2028 cutoffs; 63N-23-201 gives density, affordability and increment terms.
+    Enrolled SB 39 (2026) lists renumbering 63N-3-603 -> 63N-23-201 etc. le.utah.gov bill data: SB 39
+    (2026) Governor Signed 2026-03-17; HB 507 (2026) Governor Signed 2026-03-25; SB 217 (2021) ''Housing
+    and Transit Reinvestment Zone Act'' Governor Signed 2021-03-22.'
+  sources:
+  - label: Utah Code 63N-23 Part 2 (le.utah.gov)
+    url: https://le.utah.gov/xcode/Title63N/Chapter23/63N-23-P2.html
+    official: true
+  - label: SB 39 (2026) enrolled, Investment Zones Amendments
+    url: https://le.utah.gov/Session/2026/bills/enrolled/SB0039.pdf
+    official: true
+  - label: HB 507 (2026) enrolled
+    url: https://le.utah.gov/Session/2026/bills/enrolled/HB0507.pdf
+    official: true
+  - label: le.utah.gov bill data SB 217 (2021)
+    url: https://le.utah.gov/data/2021GS/SB0217.json
+    official: true
+  - label: Utah GOEO HTRZ program page
+    url: https://business.utah.gov/recruitment/htrz
+    official: true
+  discovered_via: addendum
+- id: ut.hb82_2021_internal_adu
+  kind: policy
+  state: UT
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  title: 'Utah HB 82 (2021): internal ADUs are a permitted use in primarily residential zones'
+  citation: Laws of Utah 2021, ch. 102 (HB 82); Utah Code 10-9a-530 and 17-27a-526 (as enacted)
+  url: https://le.utah.gov/~2021/bills/static/HB0082.html
+  session: 2021 General Session
+  bill: HB 82
+  enacted_date: 2021-03-16
+  effective_dates:
+  - date: 2021-05-05
+    applies_to: Most of the act
+  - date: 2021-10-01
+    applies_to: Internal ADU sections for municipalities (10-9a-530) and counties (17-27a-526), short-term
+      rental and HOA sections (10-8-85.4, 17-50-338, 57-8a-209, 57-8a-218)
+  geographic_scope: All municipalities and counties; areas zoned primarily residential; one internal ADU
+    inside an owner-occupied detached single-family home
+  exclusions:
+  - Internal ADUs only (within the house footprint); detached ADUs not covered
+  - Localities may bar them on lots of 6,000 sq ft or less, in homes on failing septic, in mobile homes,
+    and in zones covering up to 25% of residential land (67% in some university towns)
+  - Localities may require one extra parking space, owner occupancy, a rental permit and no rentals under
+    30 days
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Later recodified (2025 renumbering of Title 10 land use code); 2022 HB 462 barred impact fees on some
+    internal ADUs, and 2026 SB 284 added a detached-ADU rule (ut.sb284_2026_detached_adu).
+  - Narrower than benchmark reform 1 (no detached ADU, parking may be required).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Utah Legislature bill page shows 'Governor Signed' 16 Mar 2021, effective date 5
+    May 2021, Session Law Chapter 102. Enrolled text section 16 gives the October 1, 2021 date for the
+    listed sections; section 10-9a-530 read for the limits.
+  sources:
+  - label: HB 82 (2021) bill status (Utah Legislature)
+    url: https://le.utah.gov/~2021/bills/static/HB0082.html
+    official: true
+  - label: HB 82 enrolled text
+    url: https://le.utah.gov/~2021/bills/hbillenr/HB0082.pdf
+    official: true
+  discovered_via: search
+- id: ut.hb462_2022_station_area_plans
+  kind: policy
+  state: UT
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - fees
+  title: 'Utah HB 462 (2022): station area plans required around fixed-guideway transit stations'
+  citation: Laws of Utah 2022, ch. 406 (HB 462); Utah Code 10-9a-403.1 (as enacted)
+  url: https://le.utah.gov/~2022/bills/static/HB0462.html
+  session: 2022 General Session
+  bill: HB 462
+  enacted_date: 2022-03-24
+  effective_dates:
+  - date: 2022-06-01
+    applies_to: Whole act
+  - date: 2025-12-31
+    applies_to: Deadline for municipalities with existing fixed-guideway stations to adopt station area
+      plans (cities with more than four stations - four by this date, then at least two more a year)
+  geographic_scope: Municipalities with a fixed-guideway public transit station; station area is a half
+    mile around a rail station platform or a quarter mile around a bus-only fixed-guideway station
+  exclusions:
+  - A municipality may skip some requirements for a station area by resolution finding them impracticable
+    (existing development, entitlements, environment, market readiness)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A planning mandate tied to moderate-income housing reports and state funding priority, not a direct
+    upzoning; the plan must promote housing near the station but sets no height or density floor.
+  - Also bars impact fees on certain internal ADUs and requires some counties to propose housing and transit
+    reinvestment zones (see ut.htrz).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Utah Legislature bill page shows 'Governor Signed' 24 Mar 2022, effective date 1
+    Jun 2022, Session Law Chapter 406. Enrolled text read for the station-area radius, the December 31,
+    2025 deadline and the impracticability exception.
+  sources:
+  - label: HB 462 (2022) bill status (Utah Legislature)
+    url: https://le.utah.gov/~2022/bills/static/HB0462.html
+    official: true
+  - label: HB 462 enrolled text
+    url: https://le.utah.gov/~2022/bills/hbillenr/HB0462.pdf
+    official: true
+  discovered_via: search
+- id: ut.sb284_2026_detached_adu
+  kind: policy
+  state: UT
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - parking
+  - permit_timing
+  title: 'Utah SB 284 (2026): larger cities must permit a detached ADU on single-family lots of 11,000
+    sq ft or more'
+  citation: Utah SB 284 (2026 General Session), Local Land and Water Modifications; Utah Code 10-21-304
+    (new)
+  url: https://le.utah.gov/Session/2026/bills/enrolled/SB0284.pdf
+  session: 2026 General Session
+  bill: SB 284
+  enacted_date: 2026-03-18
+  effective_dates:
+  - date: 2026-05-06
+    applies_to: Most of the act (land use appeals, development agreements, planning commission timing,
+      water exactions)
+  - date: 2026-10-01
+    applies_to: Detached ADU rule (10-21-304)
+  - date: 2028-01-01
+    applies_to: Written plan required before a local government imposes a water exaction
+  geographic_scope: Specified municipalities (cities of the first to fourth class, and fifth-class cities
+    of 5,000+ in first- to third-class counties); lots of 11,000 sq ft or more with a permitted single-family
+    home
+  exclusions:
+  - Lots under 11,000 sq ft (cities may go further)
+  - Development agreements signed on or before 2026-05-06 that restrict detached ADUs
+  - Cities may require owner occupancy, bar rentals under 90 days, bar front-yard placement, limit to
+    one ADU per lot, and deny where utility capacity is lacking
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - No conditional use permit in primarily residential zones; parking capped at one space (under 650 sq
+    ft) or two (650 sq ft or more).
+  - Session-law chapter number not read (the 2026 bill status page renders by script and did not show
+    it).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Enrolled text (le.utah.gov) section 52 gives effective dates May 6, 2026 and October
+    1, 2026 for 10-21-304, and 10-21-304 read for scope. Governor's signing release (governor.utah.gov,
+    2026-03-18, 72 bills) lists S.B. 284. Chapter number not confirmed.
+  sources:
+  - label: SB 284 enrolled text
+    url: https://le.utah.gov/Session/2026/bills/enrolled/SB0284.pdf
+    official: true
+  - label: Governor's release, 72 bills signed (2026-03-18)
+    url: https://governor.utah.gov/uncategorized/gov-cox-signs-72-bills-in-the-2026-general-legislative-session/
+    official: true
+  discovered_via: search
+- id: ut.hb436_2026_mih_infrastructure
+  kind: policy
+  state: UT
+  jurisdiction: statewide
+  policy_types:
+  - infrastructure_finance
+  title: 'Utah HB 436 (2026): transportation funding priority for cities whose housing stock grows 2.5%
+    a year'
+  citation: Utah HB 436 (2026 General Session), Moderate Income Housing Infrastructure Amendments; Utah
+    Code 10-21-202, 17-80-202, 72-1-304, 72-2-124
+  url: https://le.utah.gov/Session/2026/bills/enrolled/HB0436.pdf
+  session: 2026 General Session
+  bill: HB 436
+  enacted_date: 2026-03-23
+  effective_dates:
+  - date: 2026-05-06
+    applies_to: Most of the act
+  - date: 2026-07-01
+    applies_to: Changes to 72-2-124 (transportation fund)
+  geographic_scope: Specified municipalities and counties that file moderate-income housing reports
+  exclusions:
+  - Places that do not file compliant reports
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Reports must state whether new homes in the last 12 months grew the stock by 2.5% or more; if so the
+    Transportation Commission must give priority to a significant regional project benefiting that place.
+    Some strategies (HTRZ, home ownership zones, density bonuses) count as three strategies.
+  - A reward for growth, not a direct funding source for water or sewer.
+  - Session-law chapter number not read.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Enrolled text section 9 gives effective dates May 6, 2026 and July 1, 2026 (72-2-124).
+    Governor's signing release (governor.utah.gov, 2026-03-23, 87 bills) lists H.B. 436. Chapter number
+    not confirmed (2026 bill status page renders by script).
+  sources:
+  - label: HB 436 enrolled text
+    url: https://le.utah.gov/Session/2026/bills/enrolled/HB0436.pdf
+    official: true
+  - label: Governor's release, 87 bills signed (2026-03-23)
+    url: https://governor.utah.gov/press/news-release-gov-cox-signs-87-bills-in-the-2026-general-legislative-session/
+    official: true
+  discovered_via: search

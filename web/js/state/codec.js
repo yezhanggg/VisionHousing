@@ -1,7 +1,7 @@
 /**
  * Scenario codec: the full scenario lives in the address, after the route.
  *
- *   #/reform/adu?v=1&s=PA&r=adu,fees&a=adu.takeup~h,fees.cut~0.5&p=policymaker
+ *   #/reform/adu?v=1&s=PA&r=adu,fees&a=adu.takeup~h,fees.cut~0.5
  *
  *   v  codec version (always written; links from a newer version fall back to defaults)
  *   s  state, a two-letter postal code from the known list
@@ -10,11 +10,16 @@
  *      their new id, so earlier share links keep working
  *   a  assumption overrides, `ledger.id~choice`, where choice is l / c / h (low, central,
  *      high) or a plain decimal number (a custom value)
- *   p  preset name (for example a slide-deck preset)
+ *   preset  the baseline housing cycle preset: `low` (weak cycle) or `high` (strong cycle);
+ *      `central` (typical) is the default and is not written. The back end reads the same
+ *      `preset` field (src/visionhousing/api/models.py, PRESET_CYCLE)
+ *
+ * Older links may also carry `p`, a "view preset" that no screen ever read. It is no longer
+ * written; a link that has it opens the same view without it, and `dropped` says so.
  *
  * Every field is checked against a pattern and a length limit. Anything unknown or out of
- * bounds is dropped and reported in `dropped`, never guessed. The module is pure: no
- * browser globals, so it is easy to test.
+ * bounds is dropped and reported in `dropped`, never guessed (the shell shows that list, see
+ * js/ui/static-note.js). The module is pure: no browser globals, so it is easy to test.
  */
 
 export const CODEC_VERSION = 1;
@@ -25,7 +30,6 @@ export const LIMITS = Object.freeze({
   overrides: 40,
   keyChars: 64,
   valueChars: 16,
-  presetChars: 24,
 });
 
 export const DEFAULT_STATE = "PA";
@@ -33,12 +37,14 @@ export const DEFAULT_STATE = "PA";
 const KEY = /^[a-z][a-z0-9_]*(?:\.[a-z0-9_]+){0,3}$/;
 const CHOICE = /^[lch]$/;
 const NUMBER = /^-?\d{1,9}(?:\.\d{1,6})?$/;
-const PRESET = /^[a-z0-9][a-z0-9-]*$/;
 const STATE = /^[A-Z]{2}$/;
+
+/** The housing-cycle presets a link may carry; `central` is the default. */
+export const PRESETS = ["low", "central", "high"];
 
 /** A fresh default scenario. */
 export function defaultScenario() {
-  return { state: DEFAULT_STATE, reforms: [], overrides: {}, preset: "" };
+  return { state: DEFAULT_STATE, reforms: [], overrides: {}, preset: "central" };
 }
 
 /** Split `a=1&b=2` into a Map, keeping the first value of each key. */
@@ -117,14 +123,17 @@ export function decodeScenario(query, known) {
     }
   }
 
-  const preset = pairs.get("p");
-  if (preset) {
-    if (preset.length <= LIMITS.presetChars && PRESET.test(preset)) scenario.preset = preset;
-    else dropped.push("preset");
+  const preset = pairs.get("preset");
+  if (preset !== undefined) {
+    if (PRESETS.includes(preset)) scenario.preset = preset;
+    else dropped.push(`housing cycle ${preset.slice(0, 12)}`);
   }
 
+  // The retired view preset: never read by any screen, so it is left out and said so.
+  if (pairs.has("p")) dropped.push("view preset (no longer used; the view is the same without it)");
+
   for (const key of pairs.keys()) {
-    if (!["v", "s", "r", "a", "p"].includes(key)) dropped.push(`field ${key.slice(0, 8)}`);
+    if (!["v", "s", "r", "a", "p", "preset"].includes(key)) dropped.push(`field ${key.slice(0, 8)}`);
   }
   return { scenario, dropped };
 }
@@ -140,7 +149,7 @@ export function encodeScenario(scenario, known) {
   if (reforms.length) parts.push(`r=${reforms.join(",")}`);
   const keys = Object.keys(scenario.overrides || {}).sort();
   if (keys.length) parts.push(`a=${keys.map((k) => `${k}~${scenario.overrides[k]}`).join(",")}`);
-  if (scenario.preset) parts.push(`p=${scenario.preset}`);
+  if (scenario.preset && scenario.preset !== "central" && PRESETS.includes(scenario.preset)) parts.push(`preset=${scenario.preset}`);
   return parts.join("&");
 }
 

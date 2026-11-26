@@ -56,6 +56,34 @@ units), B25002 (vacancy), B25003 (tenure), B25024 (units in structure), B25031
   `EXPECTED_LABELS` in the code. Any mismatch stops the run.
 - **Special codes become missing.** Every negative value is turned into NaN.
 
+## Profile tables and bands (`fetch_acs_profile`, `features/acs_bands.py`)
+
+The place profile's charts need more tables than the model does. `fetch_acs_profile`
+fetches seven more: B03002 (race and ethnicity), B08301 (how workers get to work),
+B11016 (household size), B15003 (education, aged 25 or older), B19001 (household income
+brackets), B25004 (why vacant homes are empty) and B25070 (rent as a share of income).
+The charts also reuse B01001, B19013, B25003, B25024, B25034 and B25064 from the main fetch.
+
+- **Which path.** `method="auto"` (the default) uses the API when `CENSUS_API_KEY` is
+  set, because it moves a few hundred KB instead of streaming seven national files, and
+  the keyless summary files otherwise. No key is ever required. Both paths give the same
+  cells: on 2026-11-24 the API and summary-file answers for Vermont (B25004, B25070) and
+  for Pennsylvania and Vermont (B01001) matched in every cell.
+- **Saved once.** The state's cells go to `data/raw/acs/2024/acs5_profile_{fips}.csv.gz`,
+  whichever path fetched them, so the pack is built from the same file either way and a
+  second run uses no network. The download manifest records it as `acs5_profile_tables`.
+- **Labels are checked** against `PROFILE_LABELS` before any cell is used.
+- **Bands.** `features/acs_bands.py` adds the published cells into 2 to 6 bands per table
+  (for example 6 age bands, 6 income bands, 5 education levels). The bands of a table do
+  not overlap and cover its whole universe, so they add up to the published total. Each
+  band keeps its margin of error: the published one for a single cell, the Bureau's
+  square-root-of-squares approximation for several. Only the bands are stored, in the pack
+  table `acs_bands` (one row for the state, each county and each tract).
+- **Tracts carry fewer tables** to keep the Pennsylvania pack small (budget 12 MB): age, race and
+  ethnicity, income, commute mode and rent burden. Owners and renters, building type and
+  year built for a tract come from the tract table, which already holds those cells.
+  County and state rows carry every table plus the published medians B19013 and B25064.
+
 ## Tract features (`features/acs.py`)
 
 Column names follow the Testland data dictionary (`tests/fixtures/testland/`),
@@ -115,3 +143,5 @@ In Pennsylvania (2020-2024) the tract's own median is used for 441 (studio),
   more; income "250,001" means $250,000 or more).
 - Only the 2020-2024 vintage is wired; another vintage needs new URLs and a fresh
   label check.
+- Collapsed bands hide detail (for example the split of "Some college" by years); the
+  band definitions are in `features/acs_bands.py`.

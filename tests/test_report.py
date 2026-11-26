@@ -52,15 +52,25 @@ def _allowed(blocks) -> set[str]:
 
 
 def test_golden_brief_opening_on_testland(blocks):
+    """Golden brief lines.
+
+    Updated with the outcome contract: the pre-stated bias-correction rule dropped
+    Testland's P50 pool-ratio correction, so the baseline (and the fee and parking
+    reforms that act on it) moved; the ADU range is unchanged, its share is not.
+    Moved again when the contest's ranges began to use earlier origins only.
+    """
     md = to_markdown(blocks)
     lines = md.splitlines()
     assert lines[0] == "# Housing reforms in Testland: homes permitted, 2027\u20132031"
     assert lines[2].startswith("> **Decision support, not a forecast. Not an official state")
-    assert "| Homes added by the reforms | 186 to 612 | 366 |" in lines
-    assert "| Change from the baseline | 5.7% to 15% | 9.3% |" in lines
     assert (
-        "| Accessory dwelling units | Adds some | 34 to 174 | 0.8% to 5.8% | Middle estimate: "
-        "2.1% more homes than the baseline. “Adds some” means 1% to under 5%. |"
+        "| Homes added by the reforms, of which some ADUs may not appear in permit statistics "
+        "| 164 to 562 | 329 |"
+    ) in lines
+    assert "| Change from the baseline | 6% to 16% | 9.7% |" in lines
+    assert (
+        "| Accessory dwelling units | Adds some | 34 to 174 | 0.93% to 7.3% | Middle estimate: "
+        "2.4% more homes than the baseline. “Adds some” means 1% to under 5%. |"
     ) in lines
     for heading in (
         "## In one sentence",

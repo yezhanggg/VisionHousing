@@ -1,0 +1,578 @@
+# Calibration (validation): out-of-time calibrated baseline ranges (generated; do not edit).
+# Written by `visionhousing validate-baseline-calibration` from the Census Building
+# Permits Survey county files in the state packs. A pre-registered test (block
+# oot_calibration in assumptions/backtest.yaml) of ranges built only from errors
+# known at each past start year. The baseline reads decision.outcome.
+# Method: docs/modules/baseline.md ("Out-of-time calibrated ranges").
+
+version: 1
+id: baseline_calibration_2026_11
+label: Out-of-time calibrated baseline ranges (pre-registered test)
+status: validation
+use: 'If decision.outcome is ''adopt'', the baseline''s P10 and P90 use the calibrated ends (oot_calibration
+  in assumptions/backtest.yaml); with ''keep_current'' nothing in the engine changes. Method: docs/modules/baseline.md.'
+provenance:
+  summary: How often each baseline rule's P10-P90 range caught the real five-year county total when the
+    range is built only from errors known at the time.
+  method: Census Building Permits Survey county files in each state pack; visionhousing.baseline.calibrate;
+    settings in assumptions/backtest.yaml (oot_calibration).
+  generated_by: visionhousing validate-baseline-calibration
+  sources:
+  - id: bps_county_annual
+    citation: U.S. Census Bureau, Building Permits Survey, county annual files
+    url: https://www2.census.gov/econ/bps/County/
+    licence: Public domain (U.S. government work)
+  limits:
+  - The first scored origins can draw only on errors made in the boom before the national bust, and are
+    asked to cover the bust and the recovery; no ranking of past errors can see a new housing cycle coming.
+  - Rolling origins overlap (each shares four of its five target years with the next), so the scored cases
+    hold far fewer independent periods.
+  - The state-total check scores few origins per state and is descriptive.
+preregistration:
+  block: oot_calibration
+  file: assumptions/backtest.yaml
+  sha256: db14162cf48cb3d740da26617da54e72147aa5dec122c5cec3f7f8b8fd0cba34
+  recorded_on: '2026-11-25'
+  verified: true
+states:
+  PA:
+    counties: 67
+    origins:
+    - 1999
+    - 2019
+    scored_origins:
+    - 2005
+    - 2006
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    winner_before: top_down_share
+    winner_before_reason: closest coverage
+    winner_after: top_down_share
+    winner_after_reason: closest coverage
+    before:
+      rule: top_down_share
+      coverage: 0.5428
+      width: 0.8315
+      median_abs_error: 0.3932
+      note: today's contest coverage (other counties' past errors, raw ratios) and the projection's error
+        on the calibrated scored cases
+    after:
+      rule: top_down_share
+      cases: 993
+      covered: 575
+      coverage: 0.5791
+      width: 0.9154
+      median_abs_error: 0.3932
+      pooled_all_share: 0.0675
+    rules:
+      last_5_mean:
+        complexity: 1
+        contest_error: 0.3326
+        before_coverage: 0.4985
+        before_width: 0.8199
+        cases: 993
+        covered: 537
+        coverage: 0.5408
+        width: 0.9174
+        median_abs_error: 0.3694
+        pooled_all_share: 0.0675
+      last_3_mean:
+        complexity: 1
+        contest_error: 0.306
+        before_coverage: 0.5211
+        before_width: 0.803
+        cases: 992
+        covered: 555
+        coverage: 0.5595
+        width: 0.9022
+        median_abs_error: 0.3265
+        pooled_all_share: 0.0675
+      median_5:
+        complexity: 1
+        contest_error: 0.3199
+        before_coverage: 0.512
+        before_width: 0.8623
+        cases: 992
+        covered: 545
+        coverage: 0.5494
+        width: 0.9644
+        median_abs_error: 0.3561
+        pooled_all_share: 0.0675
+      damped_trend:
+        complexity: 3
+        contest_error: 0.3783
+        before_coverage: 0.4213
+        before_width: 0.8698
+        cases: 993
+        covered: 451
+        coverage: 0.4542
+        width: 0.9769
+        median_abs_error: 0.4278
+        pooled_all_share: 0.0675
+      shrink_to_group:
+        complexity: 3
+        contest_error: 0.365
+        before_coverage: 0.5184
+        before_width: 0.8428
+        cases: 993
+        covered: 562
+        coverage: 0.566
+        width: 0.9418
+        median_abs_error: 0.4286
+        pooled_all_share: 0.0675
+      top_down_share:
+        complexity: 2
+        contest_error: 0.3423
+        before_coverage: 0.5428
+        before_width: 0.8315
+        cases: 993
+        covered: 575
+        coverage: 0.5791
+        width: 0.9154
+        median_abs_error: 0.3932
+        pooled_all_share: 0.0675
+      average:
+        complexity: 4
+        contest_error: 0.3214
+        before_coverage: 0.5065
+        before_width: 0.8084
+        cases: 993
+        covered: 550
+        coverage: 0.5539
+        width: 0.9019
+        median_abs_error: 0.3533
+        pooled_all_share: 0.0675
+    state_total_check:
+      cases: 8
+      covered: 0
+      coverage: 0.0
+      width: 0.7424
+      median_abs_error: 0.2628
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_cases: 8
+  VT:
+    counties: 14
+    origins:
+    - 1999
+    - 2019
+    scored_origins:
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    winner_before: shrink_to_group
+    winner_before_reason: closest coverage
+    winner_after: last_3_mean
+    winner_after_reason: closest coverage
+    before:
+      rule: shrink_to_group
+      coverage: 0.4905
+      width: 1.1015
+      median_abs_error: 0.3568
+      note: today's contest coverage (other counties' past errors, raw ratios) and the projection's error
+        on the calibrated scored cases
+    after:
+      rule: last_3_mean
+      cases: 182
+      covered: 112
+      coverage: 0.6154
+      width: 1.2432
+      median_abs_error: 0.3167
+      pooled_all_share: 0.2747
+    rules:
+      last_5_mean:
+        complexity: 1
+        contest_error: 0.394
+        before_coverage: 0.4524
+        before_width: 1.0703
+        cases: 182
+        covered: 107
+        coverage: 0.5879
+        width: 1.3096
+        median_abs_error: 0.373
+        pooled_all_share: 0.2747
+      last_3_mean:
+        complexity: 1
+        contest_error: 0.3705
+        before_coverage: 0.4714
+        before_width: 1.0359
+        cases: 182
+        covered: 112
+        coverage: 0.6154
+        width: 1.2432
+        median_abs_error: 0.3167
+        pooled_all_share: 0.2747
+      median_5:
+        complexity: 1
+        contest_error: 0.4052
+        before_coverage: 0.4429
+        before_width: 1.1649
+        cases: 182
+        covered: 109
+        coverage: 0.5989
+        width: 1.4396
+        median_abs_error: 0.4052
+        pooled_all_share: 0.2747
+      damped_trend:
+        complexity: 3
+        contest_error: 0.4921
+        before_coverage: 0.3714
+        before_width: 1.1902
+        cases: 182
+        covered: 91
+        coverage: 0.5
+        width: 1.4548
+        median_abs_error: 0.5176
+        pooled_all_share: 0.2747
+      shrink_to_group:
+        complexity: 3
+        contest_error: 0.3829
+        before_coverage: 0.4905
+        before_width: 1.1015
+        cases: 182
+        covered: 111
+        coverage: 0.6099
+        width: 1.3232
+        median_abs_error: 0.3568
+        pooled_all_share: 0.2747
+      top_down_share:
+        complexity: 2
+        contest_error: 0.3575
+        before_coverage: 0.481
+        before_width: 0.9971
+        cases: 182
+        covered: 111
+        coverage: 0.6099
+        width: 1.2316
+        median_abs_error: 0.3448
+        pooled_all_share: 0.2747
+      average:
+        complexity: 4
+        contest_error: 0.3824
+        before_coverage: 0.4571
+        before_width: 1.06
+        cases: 182
+        covered: 109
+        coverage: 0.5989
+        width: 1.2998
+        median_abs_error: 0.3716
+        pooled_all_share: 0.2747
+    state_total_check:
+      cases: 8
+      covered: 6
+      coverage: 0.75
+      width: 0.9387
+      median_abs_error: 0.2501
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_cases: 8
+  MA:
+    counties: 14
+    origins:
+    - 1999
+    - 2019
+    scored_origins:
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    winner_before: last_3_mean
+    winner_before_reason: closest coverage
+    winner_after: last_3_mean
+    winner_after_reason: closest coverage
+    before:
+      rule: last_3_mean
+      coverage: 0.4619
+      width: 0.8326
+      median_abs_error: 0.2719
+      note: today's contest coverage (other counties' past errors, raw ratios) and the projection's error
+        on the calibrated scored cases
+    after:
+      rule: last_3_mean
+      cases: 182
+      covered: 105
+      coverage: 0.5769
+      width: 1.0488
+      median_abs_error: 0.2719
+      pooled_all_share: 0.2747
+    rules:
+      last_5_mean:
+        complexity: 1
+        contest_error: 0.2978
+        before_coverage: 0.3952
+        before_width: 0.8611
+        cases: 182
+        covered: 97
+        coverage: 0.533
+        width: 1.0155
+        median_abs_error: 0.3053
+        pooled_all_share: 0.2747
+      last_3_mean:
+        complexity: 1
+        contest_error: 0.2745
+        before_coverage: 0.4619
+        before_width: 0.8326
+        cases: 182
+        covered: 105
+        coverage: 0.5769
+        width: 1.0488
+        median_abs_error: 0.2719
+        pooled_all_share: 0.2747
+      median_5:
+        complexity: 1
+        contest_error: 0.3057
+        before_coverage: 0.4095
+        before_width: 0.9178
+        cases: 182
+        covered: 101
+        coverage: 0.5549
+        width: 1.077
+        median_abs_error: 0.3092
+        pooled_all_share: 0.2747
+      damped_trend:
+        complexity: 3
+        contest_error: 0.3946
+        before_coverage: 0.3619
+        before_width: 0.87
+        cases: 182
+        covered: 79
+        coverage: 0.4341
+        width: 1.0681
+        median_abs_error: 0.4525
+        pooled_all_share: 0.2747
+      shrink_to_group:
+        complexity: 3
+        contest_error: 0.3005
+        before_coverage: 0.3952
+        before_width: 0.8675
+        cases: 182
+        covered: 98
+        coverage: 0.5385
+        width: 1.027
+        median_abs_error: 0.3239
+        pooled_all_share: 0.2747
+      top_down_share:
+        complexity: 2
+        contest_error: 0.2556
+        before_coverage: 0.4476
+        before_width: 0.9134
+        cases: 182
+        covered: 97
+        coverage: 0.533
+        width: 1.0692
+        median_abs_error: 0.2677
+        pooled_all_share: 0.2747
+      average:
+        complexity: 4
+        contest_error: 0.3033
+        before_coverage: 0.4095
+        before_width: 0.8612
+        cases: 182
+        covered: 98
+        coverage: 0.5385
+        width: 1.0213
+        median_abs_error: 0.3154
+        pooled_all_share: 0.2747
+    state_total_check:
+      cases: 8
+      covered: 5
+      coverage: 0.625
+      width: 1.0996
+      median_abs_error: 0.1318
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_cases: 8
+  WY:
+    counties: 23
+    origins:
+    - 1999
+    - 2019
+    scored_origins:
+    - 2006
+    - 2007
+    - 2008
+    - 2009
+    - 2010
+    - 2011
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    winner_before: last_3_mean
+    winner_before_reason: closest coverage
+    winner_after: last_3_mean
+    winner_after_reason: closest coverage
+    before:
+      rule: last_3_mean
+      coverage: 0.6029
+      width: 2.4378
+      median_abs_error: 0.4963
+      note: today's contest coverage (other counties' past errors, raw ratios) and the projection's error
+        on the calibrated scored cases
+    after:
+      rule: last_3_mean
+      cases: 315
+      covered: 202
+      coverage: 0.6413
+      width: 2.8694
+      median_abs_error: 0.4963
+      pooled_all_share: 0.1937
+    rules:
+      last_5_mean:
+        complexity: 1
+        contest_error: 0.5108
+        before_coverage: 0.5248
+        before_width: 2.4199
+        cases: 318
+        covered: 177
+        coverage: 0.5566
+        width: 3.014
+        median_abs_error: 0.5108
+        pooled_all_share: 0.1667
+      last_3_mean:
+        complexity: 1
+        contest_error: 0.5074
+        before_coverage: 0.6029
+        before_width: 2.4378
+        cases: 315
+        covered: 202
+        coverage: 0.6413
+        width: 2.8694
+        median_abs_error: 0.4963
+        pooled_all_share: 0.1937
+      median_5:
+        complexity: 1
+        contest_error: 0.5075
+        before_coverage: 0.549
+        before_width: 3.1404
+        cases: 312
+        covered: 187
+        coverage: 0.5994
+        width: 3.7707
+        median_abs_error: 0.4706
+        pooled_all_share: 0.1955
+      damped_trend:
+        complexity: 3
+        contest_error: 0.5349
+        before_coverage: 0.5117
+        before_width: 2.2933
+        cases: 317
+        covered: 166
+        coverage: 0.5237
+        width: 3.7665
+        median_abs_error: 0.5564
+        pooled_all_share: 0.1672
+      shrink_to_group:
+        complexity: 3
+        contest_error: 0.6141
+        before_coverage: 0.5043
+        before_width: 1.6774
+        cases: 320
+        covered: 190
+        coverage: 0.5938
+        width: 2.0615
+        median_abs_error: 0.6954
+        pooled_all_share: 0.1656
+      top_down_share:
+        complexity: 2
+        contest_error: 0.5616
+        before_coverage: 0.5188
+        before_width: 2.2399
+        cases: 320
+        covered: 176
+        coverage: 0.55
+        width: 2.6525
+        median_abs_error: 0.576
+        pooled_all_share: 0.1656
+      average:
+        complexity: 4
+        contest_error: 0.5179
+        before_coverage: 0.5304
+        before_width: 2.129
+        cases: 320
+        covered: 184
+        coverage: 0.575
+        width: 2.481
+        median_abs_error: 0.5332
+        pooled_all_share: 0.1656
+    state_total_check:
+      cases: 8
+      covered: 8
+      coverage: 1.0
+      width: 1.4665
+      median_abs_error: 0.1867
+      origins:
+      - 2012
+      - 2013
+      - 2014
+      - 2015
+      - 2016
+      - 2017
+      - 2018
+      - 2019
+      min_past_cases: 8
+decision:
+  pooled_coverage: 0.5945
+  pooled_cases: 1672
+  short_states:
+  - PA
+  - VT
+  - MA
+  - WY
+  outcome: keep_current
+  reason: under_band

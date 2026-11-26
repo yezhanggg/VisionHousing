@@ -7,11 +7,22 @@
  * - `Term`: a glossary word. The word is the button; the panel gives the plain definition.
  * - `Explain` and `Num`: the "Explain this number" panel: the formula, inputs, assumptions,
  *   sources and likely range the engine attaches to every result.
+ *
+ * The panel is drawn in a layer at the end of `<body>` (a portal), not next to its button.
+ * The side panels are glass cards (backdrop-filter, transforms while they fold), and such a card
+ * becomes the containing block of every `position: fixed` element inside it: a panel placed in
+ * window coordinates there landed off screen (offset again by the card's own position) or was
+ * clipped by the card's scroll box. In the body layer, window coordinates are window coordinates.
+ * Keyboard order is kept by hand: Tab on the open button moves into the panel, Tab past the
+ * panel's last control (or Shift+Tab before its first) goes back to the button, so the reading
+ * order is the same as when the panel sat after the button.
  */
 import { GLOSSARY } from "../content/glossary.js";
 import { lookups } from "../lib/data.js";
+import { createPortal } from "preact/compat";
 import { html, useId, useLayoutEffect, useRef, useState } from "../lib/html.js";
 import { Icon } from "./icons.js";
+import { closingProps, Ticker, usePresence } from "./motion.js";
 
 export function Popover({ trigger, triggerClass, title, label, children, wide = false }) {
   const [open, setOpen] = useState(false);
@@ -21,6 +32,8 @@ export function Popover({ trigger, triggerClass, title, label, children, wide = 
   const button = useRef(null);
   const panel = useRef(null);
   const hoverTimer = useRef(0);
+  // A closing panel stays for its short exit, hidden from assistive technology.
+  const [shown, closing] = usePresence(open);
 
   useLayoutEffect(() => {
     if (!open) return undefined;
@@ -32,7 +45,8 @@ export function Popover({ trigger, triggerClass, title, label, children, wide = 
       }
     };
     const onDown = (e) => {
-      if (root.current && !root.current.contains(e.target)) setOpen(false);
+      if (root.current?.contains(e.target) || panel.current?.contains(e.target)) return;
+      setOpen(false);
     };
     document.addEventListener("keydown", onKey, true);
     document.addEventListener("pointerdown", onDown);
@@ -70,8 +84,14 @@ export function Popover({ trigger, triggerClass, title, label, children, wide = 
     }
     el.style.left = `${left}px`;
     el.style.top = `${top}px`;
+    // Only a scroll that really moves the trigger closes it. A scroll elsewhere (another
+    // panel), or the late scroll event of the scroll that brought the trigger into view just
+    // before the click, leaves it open.
     const away = (e) => {
-      if (!el.contains(e.target)) setOpen(false);
+      if (e.type === "resize") return setOpen(false);
+      if (el.contains(e.target) || !button.current) return;
+      const r = button.current.getBoundingClientRect();
+      if (Math.abs(r.top - t.top) > 2 || Math.abs(r.left - t.left) > 2) setOpen(false);
     };
     window.addEventListener("scroll", away, true);
     window.addEventListener("resize", away);
@@ -100,16 +120,50 @@ export function Popover({ trigger, triggerClass, title, label, children, wide = 
     setByHover(false);
     setOpen(byHover ? true : !open);
   };
+  // Tab order across the portal (see the module note).
+  const focusables = () =>
+    [...(panel.current?.querySelectorAll("a[href], button:not([disabled]), input, select, textarea, summary, [tabindex]:not([tabindex='-1'])") || [])];
+  const buttonKey = (e) => {
+    if (e.key !== "Tab" || e.shiftKey || !open || !panel.current) return;
+    e.preventDefault();
+    const list = focusables();
+    (list[0] || panel.current).focus();
+  };
+  const panelKey = (e) => {
+    if (e.key !== "Tab" || !panel.current) return;
+    const list = focusables();
+    const first = list[0] || panel.current;
+    const last = list[list.length - 1] || panel.current;
+    const at = document.activeElement;
+    if (e.shiftKey && (at === first || at === panel.current)) {
+      e.preventDefault();
+      button.current?.focus();
+    } else if (!e.shiftKey && at === last) {
+      // Leave the panel forward: back on the button, then on to whatever follows it.
+      e.preventDefault();
+      setOpen(false);
+      button.current?.focus();
+      const zone = button.current?.closest("[data-zone]") || document.body;
+      const all = [...zone.querySelectorAll("a[href], button:not([disabled]), input, select, textarea, summary, [tabindex]:not([tabindex='-1'])")]
+        .filter((el) => el.offsetParent !== null || el === button.current);
+      const next = all[all.indexOf(button.current) + 1];
+      if (next) next.focus();
+    }
+  };
 
-  return html`<span class="pop" ref=${root} onPointerEnter=${enter} onPointerLeave=${leave}>
-    <button type="button" ref=${button} class=${triggerClass} aria-expanded=${open ? "true" : "false"}
-      aria-controls=${id} aria-label=${label} onClick=${click}>${trigger}</button>
-    ${open &&
-    html`<div id=${id} ref=${panel} class=${`pop-panel ${wide ? "is-wide" : ""}`} role="dialog"
-        aria-label=${title}>
+  const layer = typeof document !== "undefined" ? document.body : null;
+  const body =
+    shown &&
+    html`<div id=${closing ? undefined : id} ref=${panel} class=${`pop-panel ${wide ? "is-wide" : ""} ${closing ? "is-closing" : ""}`}
+        role=${closing ? undefined : "dialog"} aria-label=${closing ? undefined : title} tabindex="-1"
+        onKeyDown=${panelKey} onPointerEnter=${enter} onPointerLeave=${leave} ...${closingProps(closing)}>
       <p class="pop-title">${title}</p>
       ${children}
-    </div>`}
+    </div>`;
+  return html`<span class="pop" ref=${root} onPointerEnter=${enter} onPointerLeave=${leave}>
+    <button type="button" ref=${button} class=${triggerClass} aria-expanded=${open ? "true" : "false"}
+      aria-controls=${id} aria-label=${label} onClick=${click} onKeyDown=${buttonKey}>${trigger}</button>
+    ${body && (layer ? createPortal(body, layer) : body)}
   </span>`;
 }
 
@@ -190,12 +244,15 @@ export function Explain({ of, n = null }) {
 
 /**
  * A number that explains itself: the engine's text (for example "34 to 170 units") as a
- * button; pressing it opens the same panel as Explain.
+ * button; pressing it opens the same panel as Explain. When the scenario changes, its changed
+ * digits roll from the old text to the new one (`Ticker`) and end on the engine's exact text.
  */
 export function Num({ of, n, text, size = "md" }) {
+  // Never a live region: each screen's one lead number (`.lead-number`) announces the new
+  // value, so a scenario change is read out once, not once per number.
   const shown = text ?? rangeText(n);
   if (!n || !shown) return html`<span class=${`value value-${size} is-empty`} aria-label="Not available">—</span>`;
-  return html`<${Popover} trigger=${shown} triggerClass=${`value value-${size} num-btn`}
+  return html`<${Popover} trigger=${html`<${Ticker} text=${shown} />`} triggerClass=${`value value-${size} num-btn`}
       label=${`${of}: ${shown}. Explain this number`} title=${`Explain: ${of}`} wide=${true}>
     <${ExplainBody} n=${n} />
   <//>`;

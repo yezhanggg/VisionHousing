@@ -1,0 +1,97 @@
+# Cost and affordability settings (read by visionhousing.features.affordability).
+#
+# Plain words: these are the fixed conventions the affordability tables and the
+# place profile's "Cost and affordability" section use. They are not estimated;
+# each one is a published federal convention, named with its source. Change one
+# here and every table and profile number that uses it changes with it.
+
+rent_share_of_income: 0.30
+# A home is "affordable" to a household when housing costs are at most 30% of
+# its income (HUD's standard; the same line CHAS uses for "cost burden").
+# Source: HUD CHAS data dictionary, "Variable List" (cost burden).
+
+severe_share_of_income: 0.50
+# "Severe" cost burden: housing costs over 50% of income (CHAS, same source).
+
+derived_limit_multiples:
+  # Income levels HUD does not publish in the Section 8 file are derived from the
+  # published 50% (very low income) limit, the convention HUD uses for the
+  # Multifamily Tax Subsidy Project limits (60% = 1.2 x the 50% limit). 100% is
+  # 2 x the 50% limit. Source: HUD, "FY2026 Multifamily Tax Subsidy Income Limits"
+  # methodology, https://www.huduser.gov/portal/datasets/mtsp.html
+  60: 1.2
+  100: 2.0
+  120: 2.4
+
+persons_per_bedroom:
+  # Household size assumed for a home with this many bedrooms when a rent is
+  # compared with an income limit: 1.5 people per bedroom, 1 person for a studio.
+  # This is the imputed household size of the tax-credit rent rule (Internal
+  # Revenue Code section 42(g)(2)(C)); half-person sizes take the average of the
+  # two neighbouring limits.
+  0: 1.0
+  1: 1.5
+  2: 3.0
+  3: 4.5
+  4: 6.0
+
+expiry_windows_years: [5, 10]
+# Assisted homes are counted as "expiring" when their contract (project-based
+# rental assistance) or their tax-credit restriction ends within these many
+# years of the day the HUD lists were read.
+
+lihtc_extended_use_years: 30
+# Tax-credit homes must stay income-restricted for at least 30 years from the
+# year placed in service (15-year compliance period plus 15-year extended use;
+# Internal Revenue Code section 42(h)(6)). The restriction is counted as ending
+# 30 years after the year placed in service; one ending in the year the lists
+# were read still counts (only the year is known). Some states require longer; that
+# is not modelled, so this is an early bound.
+
+at_risk_dedup:
+  # A property can be on both HUD lists: a tax-credit project that also holds a
+  # project-based rental assistance contract. Its ending units would then be
+  # counted twice in "homes at risk". HUD's two lists share no property id, so a
+  # tax-credit project and a contract property are taken to be the same property
+  # when both hold:
+  match_distance_m: 50
+  # their map points are at most 50 metres apart (one building or one small
+  # site; both lists geocode the street address, so the same address lands at
+  # nearly the same point), and
+  unit_count_max_diff_share: 0.10
+  # their total unit counts differ by at most 10% of the larger count (the two
+  # lists can count a manager's unit or a later renovation differently). A
+  # judgement, not a published rule; a stricter value counts fewer overlaps and
+  # so gives a higher, more cautious "at risk" count.
+  # Units counted twice in a window = the smaller of the pair's two ending
+  # counts. Rows that cannot be tested (no point, no unit count) leave the count
+  # labelled "upper bound".
+
+lihtc_compliance_years: 15
+# End of the federal compliance period; shown as context only.
+
+pre1980_built_bands: ["1960_1979", "1940_1959", "pre1940"]
+# CHAS Table 12 year-built bands counted as "older rental stock" (built before 1980).
+
+gap_context:
+  # Quoted state figures from NLIHC, "The Gap: A Shortage of Affordable Homes"
+  # (2026 edition), state pages read on 2026-11-24. Cited with credit as context
+  # only; never used in a calculation (source id nlihc_gap_2026). NLIHC's state
+  # pages do not name the ACS year behind the figures.
+  national:
+    affordable_available_per_100_eli: 35
+    locator: https://nlihc.org/gap
+  PA:
+    affordable_available_per_100_eli: 39
+    affordable_available_per_100_le50: 64
+    eli_renter_households: 434197
+    eli_shortage: -262753
+    eli_severe_burden_share: 0.72
+    locator: https://nlihc.org/gap/state/pa
+  VT:
+    affordable_available_per_100_eli: 36
+    affordable_available_per_100_le50: 63
+    eli_renter_households: 18079
+    eli_shortage: -11597
+    eli_severe_burden_share: 0.68
+    locator: https://nlihc.org/gap/state/vt

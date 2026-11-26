@@ -15,7 +15,13 @@ FILES = [
     "transit_stops.csv",
     "boundaries.geojson",
     "data_dictionary.json",
+    "acs_bands.csv",
+    "infra_tract.csv",
+    "hazard_tract.csv",
+    "parcels_area.csv",
+    "afford_income_limits.csv",
 ]
+OPTIONAL = ["infra_tract", "hazard_tract", "parcels_area", "afford_income_limits"]
 
 
 def read(name: str) -> list[dict]:
@@ -133,3 +139,88 @@ def test_boundaries_cover_every_county_and_tract():
     assert {("county", r["geoid"]) for r in read("counties.csv")} <= ids
     assert {("tract", r["geoid"]) for r in read("tracts.csv")} <= ids
     assert len(ids) == 44
+
+
+# ------------------------------------------------------------------ the optional extra tables
+
+
+def header(name: str) -> list[str]:
+    with (FIXTURES / f"{name}.csv").open(encoding="utf-8") as f:
+        return f.readline().strip().split(",")
+
+
+def test_optional_tables_use_the_real_pack_columns():
+    """Same columns, same order, as the builders of a real state pack write."""
+    from visionhousing.features import affordability, hazards, infrastructure, parcels
+    from visionhousing.scenarios.extra_common import OPTIONAL_TABLES
+
+    assert set(OPTIONAL) <= set(OPTIONAL_TABLES)
+    assert header("infra_tract") == list(infrastructure.TRACT_COLUMNS)
+    assert header("hazard_tract") == list(hazards.TRACT_COLUMNS)
+    assert header("parcels_area") == parcels.parcel_columns(parcels.load_rules())
+    limits = header("afford_income_limits")
+    assert limits[:5] == ["county", "hud_area_code", "hud_area_name", "areas_in_county", "median"]
+    assert limits[5:] == list(affordability.LIMIT_COLUMNS)
+
+
+def test_optional_tables_cover_every_tract_and_county():
+    tracts = {r["geoid"] for r in read("tracts.csv")}
+    counties = {r["geoid"] for r in read("counties.csv")}
+    assert [r["geoid"] for r in read("infra_tract.csv")] == sorted(tracts)
+    assert [r["geoid"] for r in read("hazard_tract.csv")] == sorted(tracts)
+    assert {r["county"] for r in read("afford_income_limits.csv")} == counties
+    parcels = read("parcels_area.csv")
+    assert {r["geoid"] for r in parcels if r["level"] == "tract"} <= tracts
+    measured = {make_testland.STATE_FIPS + c for c in make_testland.PARCEL_COUNTIES}
+    assert {r["county"] for r in parcels} == measured < counties  # the rest: not measured
+
+
+def share(v: str) -> float | None:
+    return None if v == "" else float(v)
+
+
+def test_readiness_has_every_answer_and_shares_stay_in_range():
+    rows = read("infra_tract.csv")
+    assert {r["sewer_status"] for r in rows} == {"verified", "outside", "constraint", "unknown"}
+    for r in rows:
+        for c in ("sewer_share", "sewer_known", "constraint_share", "water_share", "epa_share"):
+            v = share(r[c])
+            assert v is None or 0.0 <= v <= 1.0, (r["geoid"], c)
+        if r["sewer_status"] == "unknown":
+            assert r["sewer_share"] == "" and float(r["sewer_known"]) == 0.0
+
+
+def test_hazards_leave_unmapped_flood_blank_not_zero():
+    rows = read("hazard_tract.csv")
+    blank = [r for r in rows if r["sfha_share"] == ""]
+    assert blank and all(r["geoid"].startswith("99007") for r in blank)
+    for r in rows:
+        for c in ("sfha_share", "sfha_dev_share", "developed_share", "impervious_share",
+                  "steep_share"):  # fmt: skip
+            v = share(r[c])
+            assert v is None or 0.0 <= v <= 1.0
+
+
+def test_parcel_counts_add_up():
+    from visionhousing.features import parcels as pc
+
+    classes = [f"lu_{c}" for c in pc.load_rules()["land_use_classes"]]
+    rows = read("parcels_area.csv")
+    for r in rows:
+        assert sum(int(r[c]) for c in classes) == int(r["parcels"])
+        assert int(r["sf_parcels"]) == int(r["lu_single_family"])
+        built = [c for c in r if c.startswith("sf_built_")]
+        assert sum(int(r[c]) for c in built) == int(r["sf_parcels"])
+    for county in {r["county"] for r in rows}:
+        top = next(r for r in rows if r["level"] == "county" and r["geoid"] == county)
+        mine = [r for r in rows if r["level"] == "tract" and r["county"] == county]
+        for c in ("parcels", *classes):
+            assert sum(int(r[c]) for r in mine) == int(top[c])
+
+
+def test_income_limits_rise_with_household_size_and_income_level():
+    for r in read("afford_income_limits.csv"):
+        for pct in (30, 50, 80):
+            row = [int(r[f"l{pct}_{s}"]) for s in range(1, 9)]
+            assert row == sorted(row) and all(v % 50 == 0 for v in row)
+        assert int(r["l30_4"]) < int(r["l50_4"]) < int(r["l80_4"]) < int(r["median"])

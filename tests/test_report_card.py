@@ -87,11 +87,31 @@ def test_pack_with_transit_is_deterministic(tmp_path):
     assert hashes[0] == hashes[1]
 
 
+# Testland's small synthetic optional tables (scripts/make_testland.py). Tests that use
+# Testland as a stand-in for a pack without them drop them first.
+OPTIONAL = ("infra_tract", "hazard_tract", "parcels_area", "afford_income_limits")
+
+
+def _plain_testland() -> dict:
+    files = rc.load_pack_files(TESTLAND)
+    files["tables"] = {k: v for k, v in files["tables"].items() if k not in OPTIONAL}
+    return files
+
+
 def test_report_card_renders_for_testland_from_the_fixture_alone():
-    card = rc.report_card(rc.load_pack_files(TESTLAND))
+    files = rc.load_pack_files(TESTLAND)
+    card = rc.report_card(files)
     assert card["state"] == "TL" and card["synthetic"]
     by_id = {r["id"]: r for r in card["inputs"]}
-    assert [r["id"] for r in card["inputs"]] == [i.id for i in rc.INPUTS]
+    # A state-only input is still shown where its table is present (Testland's parcels).
+    shown = {i.id for i in rc.INPUTS if i.states and i.table in files["tables"]}
+    assert "parcels" in shown
+    assert [r["id"] for r in card["inputs"]] == [
+        i.id for i in rc.INPUTS if not i.states or i.id in shown
+    ]
+    assert {r["id"] for r in card["not_applicable"]} == {
+        i.id for i in rc.INPUTS if i.states and i.id not in shown
+    }
     assert by_id["permits"]["status"] == "used" and by_id["permits"]["vintage"] == "synthetic"
     assert by_id["transit_access"]["status"] == "used"  # computed from blocks and stops
     assert by_id["zoning_single_family"]["status"] == "assumed"
@@ -136,3 +156,163 @@ def test_command_line_writes_json_and_markdown(tmp_path):
     card = json.loads((tmp_path / "TL_report_card.json").read_text())
     assert card["state"] == "TL"
     assert (tmp_path / "TL_report_card.md").read_text().startswith("# State data report card")
+
+
+def _card_for(folder, state, extra=None):
+    files = _plain_testland() if folder == TESTLAND else rc.load_pack_files(folder)
+    files["dictionary"] = {**files["dictionary"], "state": state}
+    files["tables"] = {**files["tables"], **(extra or {})}
+    return rc.report_card(files)
+
+
+def test_state_only_inputs_are_listed_only_for_their_states():
+    for state in ("PA", "VT", "MA"):
+        card = _card_for(TESTLAND, state)
+        listed = {r["id"] for r in card["inputs"]}
+        other = {r["id"] for r in card["not_applicable"]}
+        for item in rc.INPUTS:
+            if item.states and state not in item.states:
+                assert item.id in other and item.id not in listed, (state, item.id)
+            else:
+                assert item.id in listed and item.id not in other, (state, item.id)
+        assert all(r["value_state"] == "not_applicable" for r in card["not_applicable"])
+        md = rc.to_markdown(card)
+        missing_rows = [r["label"] for r in card["inputs"] if r["status"] == "missing"]
+        assert not any("Massachusetts" in label for label in missing_rows) or state == "MA"
+        if state != "MA":
+            assert "Massachusetts ADU survey" in md and "(MA only)" in md
+    pa = {r["id"] for r in _card_for(TESTLAND, "PA")["inputs"]}
+    assert {"municipal_rules", "parcels", "state_bills"} <= pa
+    assert not {"ma_3a_districts", "ma_adu_survey"} & pa
+
+
+def test_state_only_input_keeps_missing_and_feed_failure_apart(tmp_path):
+    # MA without the survey (never promised): missing, not a feed failure
+    card = _card_for(TESTLAND, "MA")
+    by_id = {r["id"]: r for r in card["inputs"]}
+    assert by_id["ma_adu_survey"]["value_state"] == "missing"
+    assert by_id["ma_adu_survey"]["status"] == "missing"
+    # promised by the dictionary but empty: a feed failure, never 0%
+    files = _plain_testland()
+    files["dictionary"] = {
+        **files["dictionary"],
+        "state": "MA",
+        "tables": [*files["dictionary"].get("tables", []), {"table": "mbta_3a_districts"}],
+    }
+    files["tables"]["mbta_3a_districts"] = pd.DataFrame(columns=["capacity_district", "acres"])
+    card = rc.report_card(files)
+    row = {r["id"]: r for r in card["inputs"]}["ma_3a_districts"]
+    assert row["value_state"] == "feed_failure"
+    line = next(
+        x
+        for x in rc.to_markdown(card).splitlines()
+        if x.startswith("| Massachusetts Section 3A districts")
+    )
+    assert "0%" not in line and "source failed to load" in line
+
+
+def test_state_only_table_present_elsewhere_is_still_shown():
+    frame = pd.DataFrame({"capacity_district": [120.0], "acres": [10.0]})
+    card = _card_for(TESTLAND, "PA", {"mbta_3a_districts": frame})
+    row = {r["id"]: r for r in card["inputs"]}["ma_3a_districts"]
+    assert row["status"] == "available" and row["value_state"] == "observed"
+
+
+def test_a_skipped_add_on_is_a_feed_failure_in_a_real_pack():
+    # a real state's full build adds the hazard tables; absent, they failed to load
+    files = _plain_testland()
+    files["dictionary"] = {**files["dictionary"], "state": "MA", "synthetic": False}
+    files["manifest"] = {"provenance": []}
+    card = rc.report_card(files)
+    by_id = {r["id"]: r for r in card["inputs"]}
+    for ident in ("flood_zones", "land_cover", "slope"):
+        assert by_id[ident]["value_state"] == "feed_failure", ident
+    assert by_id["ma_adu_survey"]["value_state"] == "missing"  # not an add-on: no data
+    md = rc.to_markdown(card)
+    assert "3 input(s) failed to load" in md
+    # Testland (synthetic, no manifest) never claims the add-ons: without its synthetic
+    # hazard table land cover is missing, not a feed failure; with it, observed
+    tl = {r["id"]: r for r in rc.report_card(_plain_testland())["inputs"]}
+    assert tl["land_cover"]["value_state"] == "missing"
+    own = {r["id"]: r for r in rc.report_card(rc.load_pack_files(TESTLAND))["inputs"]}
+    assert own["land_cover"]["value_state"] == "observed"
+
+
+def test_a_hand_saved_table_is_flagged_with_its_edition():
+    status = pd.DataFrame(
+        {
+            "compliance_status": ["Compliant", "Noncompliant"],
+            "status_route": ["hand_saved", "hand_saved"],
+            "status_as_of": ["2026-11-24", "2026-11-24"],
+            "categories_route": ["hand_saved", "hand_saved"],
+            "categories_as_of": ["", ""],
+            "tracker_route": ["publisher", "publisher"],
+            "tracker_as_of": ["2026-09-11", "2026-09-11"],
+        }
+    )
+    survey = pd.DataFrame(
+        {"approvals": [3], "survey_route": ["publisher"], "survey_as_of": ["2026-08-12"]}
+    )
+    card = _card_for(TESTLAND, "MA", {"mbta_3a_status": status, "ma_adu_survey": survey})
+    by_id = {r["id"]: r for r in card["inputs"]}
+    row = by_id["ma_3a_status"]
+    assert row["hand_saved"] is True
+    hand = [x for x in row["limits"] if x.startswith("hand-saved")]
+    assert len(hand) == 2  # status sheet and categories, not the tracker
+    assert any("status file" in x and "as of 2026-11-24" in x for x in hand)
+    assert any("categories file" in x and "edition unknown" in x for x in hand)
+    assert by_id["ma_adu_survey"]["hand_saved"] is False
+    line = next(
+        x for x in rc.to_markdown(card).splitlines() if x.startswith("| Massachusetts Section 3A c")
+    )
+    assert "(hand-saved)" in line
+    assert all(r["hand_saved"] is False for r in card["inputs"] if r["id"] != "ma_3a_status")
+
+
+def test_optional_hand_saved_files_not_supplied_are_said_so():
+    # a clean build with every hand-saved MA file absent: the status list comes from
+    # the atlas alone, categories and tracker are blank, and the survey table is absent
+    status = pd.DataFrame(
+        {
+            "compliance_status": ["Compliant", "Compliant"],
+            "status_source": ["atlas", "atlas"],
+            "status_route": ["atlas", "atlas"],
+            "status_as_of": ["2026-11-24", "2026-11-24"],
+            "categories_route": [None, None],
+            "tracker_route": [None, None],
+        }
+    )
+    files = _plain_testland()
+    files["dictionary"] = {
+        **files["dictionary"],
+        "state": "MA",
+        "columns": [
+            *files["dictionary"].get("columns", []),
+            {
+                "table": "mbta_3a_status",
+                "name": "compliance_status",
+                "source": "massgis_mbta3a_atlas, ma_3a_compliance_status, ma_3a_categories, "
+                "ma_3a_development_tracker",
+                "tier": "2",
+            },
+        ],
+    }
+    files["tables"] = {**files["tables"], "mbta_3a_status": status}
+    card = rc.report_card(files)
+    by_id = {r["id"]: r for r in card["inputs"]}
+    row = by_id["ma_3a_status"]
+    assert row["status"] == "available" and row["not_supplied"] is True
+    absent = [x for x in row["limits"] if x.startswith("not supplied")]
+    assert len(absent) == 3
+    assert all("data/raw/local/ma/" in x for x in absent)
+    # an unread file's source is never listed or dated as if it were read
+    assert row["sources"] == ["massgis_mbta3a_atlas"]
+    survey = by_id["ma_adu_survey"]
+    assert survey["value_state"] == "missing" and survey["not_supplied"] is True
+    assert any("ma_adu_survey.csv" in x for x in survey["limits"] if x.startswith("not supplied"))
+    # a table read from the publisher or a hand-saved copy is not flagged
+    read = status.assign(status_route="hand_saved", categories_route="publisher")
+    read["tracker_route"] = "publisher"
+    files["tables"]["mbta_3a_status"] = read
+    again = {r["id"]: r for r in rc.report_card(files)["inputs"]}["ma_3a_status"]
+    assert again["not_supplied"] is False

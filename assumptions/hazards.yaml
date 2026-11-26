@@ -1,0 +1,54 @@
+# Hazards and land screen: the rules that define each screening share.
+#
+# Read by visionhousing.features.hazards and features/hazards_build.py.
+# Method: docs/modules/hazards.md. These are definitions of screening measures,
+# not model parameters: nothing here changes an estimate until a later step
+# (practical versus nominal capacity) chooses to use the shares.
+
+version: 1
+
+grid:
+  # One 30 m grid in Conus Albers (EPSG:5070), aligned with the NLCD cells.
+  crs: EPSG:5070
+  cell_m: 30
+  # A corner of the NLCD grid (cell edges fall on these coordinates plus multiples of 30 m).
+  origin: [-2415585, 3314805]
+  # Metres added around each county's tracts so slope at the county edge has neighbours.
+  pad_m: 90
+
+landcover:
+  # Annual NLCD (USGS, Collection 1). The coverage service's time list ran to 2025 when read
+  # on 2026-11-24; 2025 is the latest year.
+  year: 2025
+  developed_classes: [21, 22, 23, 24]  # open space, low, medium, high intensity
+  water_classes: [11]                  # open water
+  empty_classes: [0, 250]              # outside the map / no data
+
+slope:
+  # hazards.steep_percent: a cell is steep when its slope is above this, in percent
+  # (rise over run x 100). 15% is a common limit for building on a slope without major
+  # grading (about 8.5 degrees).
+  steep_percent: 15
+  text: >-
+    Slope from the USGS 3DEP elevation service resampled to the 30 m grid (bilinear), by
+    central differences over 60 m. A 30 m grid smooths short steep banks, so the share of
+    steep land is a lower bound for small sites.
+
+flood:
+  # Flood-zone polygons: FEMA flags the Special Flood Hazard Area with SFHA_TF = 'T'.
+  where: "SFHA_TF = 'T'"
+  # Polygon vertices closer than this (metres) are thinned by FEMA's server before download.
+  max_offset_m: 5
+  # A tract's flood shares are blank when less than this share of its homes lies inside
+  # FEMA's digital flood map (the NFHL availability polygons). A tract with no homes is
+  # judged by the share of its land instead.
+  min_nfhl_coverage: 0.5
+  coverage_rule:
+    id: hazards.flood_coverage_rule
+    value: homes_inside_map
+    text: >-
+      Flood shares count only what FEMA has mapped. sfha_share = homes in the SFHA / homes
+      inside the digital flood map (nfhl_homes); sfha_dev_share = developed cells in the
+      SFHA / developed cells inside the map. A tract shows flood shares when at least
+      min_nfhl_coverage of its homes are inside the map (of its land, when it has no
+      homes); otherwise both are blank. Counties add only the tracts that show them.

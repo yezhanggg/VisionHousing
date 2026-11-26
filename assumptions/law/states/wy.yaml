@@ -1,0 +1,153 @@
+# Wyoming state law snapshot: the provisions that bear on the benchmark
+# reforms, as rows the law layer can import.
+#
+# Two blocks, in the layout of assumptions/law/states/ma.yaml:
+#   provisions  one row per provision (citation, reform, status, our own summary);
+#   records     dated statuses of a provision (assumptions/law/timeline.yaml layout).
+#
+# Every text was read on wyoleg.gov on 2026-11-24 (registry source wy_statutes):
+# Title 15, chapter 1, article 6 (city and town zoning, W.S. 15-1-601 to
+# 15-1-611), Title 18, chapter 5, articles 2 and 3 (county zoning and
+# subdivisions), and the 2025 and 2026 session subject indexes and bill digests.
+# summary_own_words is our plain-language summary, not a quotation.
+#
+# Finding: Wyoming has NO state statute that allows accessory dwelling units,
+# two-to-six-unit homes, transit-area density, lower parking minimums or lower
+# development fees in place of local rules. Zoning is enabling law only: cities,
+# towns and counties may zone, and the statute says what they may regulate, not
+# what they must allow. The few limits on local zoning (minerals, private
+# schools, family land divisions) do not bear on the benchmark reforms, except
+# that a county may not use a minimum lot size to stop a home on an
+# immediate-family land division (W.S. 18-5-201 with 18-5-303(a)(i)).
+#
+# Bills read and not enacted (so no record below):
+#   - 2024 interim working draft "Accessory residential units-permits" (county
+#     permits within 90 days, no owner-occupancy rule): not introduced as a bill
+#     in the 2025 session (the 2025 subject index lists no ADU bill).
+#   - 2025 HB0088 "Multi-family dwelling single stairwell exits": did not get a
+#     vote for introduction (2025-02-03).
+#   - 2025 HB0056 "Cities and towns notice for zoning changes": not considered
+#     for introduction (2025-02-03).
+#   - 2026 SF0042 "County zoning authority-amendments": failed introduction
+#     (2026-02-10).
+#   - 2026 HB0077 "Zoning protest petition-repeal": failed introduction
+#     (2026-02-10).
+#   - 2026 SF0117 "Zoning protest petition-amendments": died in House committee
+#     (2026-03-03).
+#
+# So no already-legal calibration is written for Wyoming: with no state ADU or
+# missing-middle law, Wyoming runs keep the ledger's national default for
+# adu.already_legal_share and missing_middle.sf_only_zoned_share. Some cities
+# allow ADUs in their own codes; those are local rules and are not read here.
+
+version: 1
+state: WY
+
+documents:
+  - doc_id: wy_title15_ch1_art6
+    title: "W.S. 15-1-601 to 15-1-611 (city and town zoning)"
+    level: state
+    publisher: Wyoming State Legislature
+    url: https://wyoleg.gov/statutes/compress/title15.pdf
+    licence: Public legislative record
+    access: fetched
+    source_id: wy_statutes
+  - doc_id: wy_title18_ch5
+    title: "W.S. 18-5-201 to 18-5-208 (county zoning) and 18-5-303 (subdivision exemptions)"
+    level: state
+    publisher: Wyoming State Legislature
+    url: https://wyoleg.gov/statutes/compress/title18.pdf
+    licence: Public legislative record
+    access: fetched
+    source_id: wy_statutes
+  - doc_id: wy_2025_2026_subject_index
+    title: "2025 and 2026 session subject indexes and bill digests"
+    level: state
+    publisher: Wyoming State Legislature
+    url: https://wyoleg.gov/2026/Index/subjectindex.pdf
+    licence: Public legislative record
+    access: fetched
+    source_id: wy_statutes
+
+provisions:
+  - provision_id: wy_adu_silent
+    citation: "W.S. 15-1-601 and 18-5-201 (no accessory dwelling unit section)"
+    section: "15-1-601"
+    reform: adu
+    status: enacted
+    checked_on: 2026-11-24
+    source_id: wy_statutes
+    url: https://wyoleg.gov/statutes/compress/title15.pdf
+    summary_own_words: >-
+      Wyoming's zoning statutes do not mention accessory dwelling units. Whether
+      one may be added to a single-family lot is left to each city, town and
+      county zoning code.
+    benchmark_gap: >-
+      The whole benchmark is new at state level: no lot is opened to an ADU by
+      state law. The share already legal comes from local codes, which are not
+      read for Wyoming, so the national default range is used.
+  - provision_id: wy_15_1_601_enabling
+    citation: "W.S. 15-1-601 (city and town zoning powers)"
+    section: "15-1-601"
+    reform: missing_middle
+    status: enacted
+    checked_on: 2026-11-24
+    source_id: wy_statutes
+    url: https://wyoleg.gov/statutes/compress/title15.pdf
+    summary_own_words: >-
+      A city or town may regulate building height, size, lot coverage, yards,
+      population density and land use, by districts, uniform within each
+      district, in line with a comprehensive plan. The statute permits local
+      rules; it does not require any district to allow more than one home.
+    benchmark_gap: >-
+      No state rule allows two to six homes on single-family lots; the
+      benchmark would be new everywhere it applies.
+  - provision_id: wy_15_1_603_protest
+    citation: "W.S. 15-1-603 (zoning protest petition)"
+    section: "15-1-603"
+    reform: missing_middle
+    status: enacted
+    checked_on: 2026-11-24
+    source_id: wy_statutes
+    url: https://wyoleg.gov/statutes/compress/title15.pdf
+    summary_own_words: >-
+      If owners of 20% or more of the land in a proposed zoning change, or
+      within 140 feet of it, protest, the change needs three-quarters of the
+      whole city or town council. Bills to repeal or amend this failed in 2026.
+    benchmark_gap: >-
+      A higher bar for town-by-town upzoning; it does not apply to a state
+      reform. Shown as context for how slowly local rules change without one.
+  - provision_id: wy_18_5_201_county
+    citation: "W.S. 18-5-201 with 18-5-303(a)(i) (county zoning; family land divisions)"
+    section: "18-5-201"
+    reform: missing_middle
+    status: enacted
+    checked_on: 2026-11-24
+    source_id: wy_statutes
+    url: https://wyoleg.gov/statutes/compress/title18.pdf
+    summary_own_words: >-
+      A county may zone its unincorporated land, but may not use a minimum lot
+      size or other rule to stop a home or farm use on a land division that is
+      exempt from subdivision review because it is a single gift or sale to an
+      immediate family member.
+    benchmark_gap: >-
+      Narrow: it protects one home on a family land division, not more homes
+      on an existing lot.
+  - provision_id: wy_parking_fees_silent
+    citation: "Wyoming statutes (no residential parking-minimum or development impact fee section)"
+    section: "15-1-601"
+    reform: fees
+    status: enacted
+    checked_on: 2026-11-24
+    source_id: wy_statutes
+    url: https://wyoleg.gov/statutes/compress/title15.pdf
+    summary_own_words: >-
+      No Wyoming statute sets, caps or forbids residential parking minimums,
+      and none sets a framework for development impact fees; both are local
+      choices where they exist.
+    benchmark_gap: >-
+      The parking and fee benchmarks would be new at state level.
+
+# No dated records: no state provision that bears on the benchmark reforms has
+# been enacted, so the law timeline has nothing to switch on for Wyoming.
+records: []

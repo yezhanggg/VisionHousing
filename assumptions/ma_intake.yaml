@@ -1,0 +1,215 @@
+# Massachusetts intake: the published files behind the Massachusetts-only pack
+# tables (mbta_3a_districts, mbta_3a_status, ma_adu_survey), how each is read,
+# and what each count measures.
+#
+# Read by visionhousing.data.sources.ma_intake (fetch and parse) and
+# visionhousing.features.ma_intake (pack tables). Explained in
+# docs/modules/ma_intake.md and docs/TECHNICAL_APPENDIX.md section G.3 (Massachusetts).
+#
+# The MassGIS atlas is read by script from its map service. The three HLC lists
+# and the ADU survey are CSV files on www.mass.gov, which answers scripted
+# requests with HTTP 403 "Not allowed" (checked 2026-11-24). We respect that
+# and do not work around it: a build asks the publisher's address once, and
+# when refused it reads a copy a person downloaded in a browser from the page
+# named in "page" and saved as data/raw/local/ma/<file> (hand_saved: true).
+# The table records which edition it holds (as_of) and how it was read
+# (route: publisher or hand_saved). The as_of below belongs to the publisher's
+# address only: a hand-saved copy takes its edition from a note the person
+# writes next to it (<file>.edition.yaml: "as_of: YYYY-MM-DD"), else from an
+# "as of" date in the file's title or header, else it is left unknown.
+#
+# Without a copy:
+#   - mbta_3a_status is built from the atlas alone: only the towns HLC found
+#     compliant, with no category, deadline or required capacity;
+#   - ma_adu_survey is left out.
+# The build notes say which. The rest of the pack is unaffected.
+
+version: 1
+state: MA
+
+files:
+  compliance_status:
+    source: ma_3a_compliance_status
+    page: https://www.mass.gov/info-details/multi-family-zoning-requirement-for-mbta-communities
+    file: mbta3a_compliance_status.csv
+    hand_saved: true
+    copies:
+      - route: publisher
+        url: https://www.mass.gov/files/csv/2026-11/Compliance%20Status%20Sheet%20as%20of%2011-24-26.csv  # secret-scan: allow (public web address)
+        as_of: 2026-11-24
+
+  categories:
+    source: ma_3a_categories
+    page: https://www.mass.gov/info-details/multi-family-zoning-requirement-for-mbta-communities
+    file: mbta3a_categories.csv
+    hand_saved: true
+    copies:
+      - route: publisher
+        url: https://www.mass.gov/files/csv/2025-06/MBTA%20Communities%20Community%20Categories%20and%20Capacity%20Calculations%20for%20web_June2025.csv  # secret-scan: allow (public web address)
+        as_of: 2025-06-09
+
+  development_tracker:
+    source: ma_3a_development_tracker
+    page: https://www.mass.gov/info-details/multi-family-zoning-requirement-for-mbta-communities
+    file: mbta3a_development_tracker.csv
+    hand_saved: true
+    copies:
+      - route: publisher
+        url: https://www.mass.gov/files/csv/2026-09/3A%20Development%20Tracker%20as%20of%209-11-26.csv  # secret-scan: allow (public web address)
+        as_of: 2026-09-11
+
+  adu_survey:
+    source: ma_adu_survey_file
+    page: https://www.mass.gov/info-details/accessory-dwelling-unit-tracker
+    file: ma_adu_survey.csv
+    hand_saved: true
+    copies:
+      - route: publisher
+        url: https://www.mass.gov/files/csv/2026-08/ADUSurvey2026Midyear_DownloadableComposite.csv  # secret-scan: allow (public web address)
+        as_of: 2026-08-12
+
+# MassGIS / HLC MBTA Communities (3A) District Atlas, layer 0 (districts).
+# The map service generalises each outline on the server: vertices closer than
+# simplify_degrees (about 20 m) to the line are dropped, and coordinates are
+# rounded to "precision" decimals (about 1 m). Enough to map and to place a
+# district in a tract; not a legal boundary (the atlas says so too).
+atlas:
+  source: massgis_mbta3a_atlas
+  layer: 0
+  simplify_degrees: 0.0002
+  precision: 5
+  page: 1000
+
+# Which tracts each 3A district reaches (pack table mbta_3a_district_tracts,
+# made by `visionhousing ma-3a-tracts` and by a full build's add-on steps).
+# The outline and the tracts are drawn on a flat grid of cell_m cells; a cell
+# belongs to a shape when its centre is inside it. A tract other than the
+# district's centre tract is kept when it holds at least min_share of the
+# district: the outlines are simplified by about 20 m, so a thinner sliver is
+# most likely the outline wandering over a tract line it follows in law.
+district_tracts:
+  cell_m: 10
+  min_share: 0.02
+
+# Existing Section 3A modeled capacity (pack tables mbta_3a_capacity_tract and
+# mbta_3a_capacity_district, made by `visionhousing ma-capacity` and by a full
+# build's add-on steps). Read from the atlas's parcel layer (layer 1) and its
+# station half-mile radii (layer 2), each by object id with a fixed column list.
+# Owner names and addresses are never asked for.
+#
+# The common unit is gross homes of zoning capacity as the compliance model
+# counts them: a parcel's F_L_M__ ("Final Lot Multi-Family Unit Capacity").
+# Summed over a district's parcels it equals the district's reported capacity
+# (MFUC_DIST) within a few units (2026-11-25 read: 534,479 vs 534,680 over the
+# 490 districts that have parcels). So a district counts EITHER its parcels OR,
+# only when the atlas has no parcel for it, its own MFUC_DIST spread over its
+# outline: never both. MDL_U_C (capacity before the lot limits) and RB_RSDN
+# (homes already on the parcel) are carried as context, not added.
+capacity:
+  parcels:
+    source: massgis_mbta3a_parcels
+    layer: 1
+    file: mbta3a_parcels.json.gz
+    fields: [LOC_ID, ZONECOD, MUNIID, MUNI, STATUS, TRNSTST, PRCLACR, RB_RSDN, MDL_U_C, F_L_M__]
+    # server-side simplification of parcel outlines, degrees (about 1 m)
+    simplify_degrees: 0.00001
+  station_radii:
+    source: massgis_mbta3a_station_radii
+    layer: 2
+    file: mbta3a_station_radii.json.gz
+    fields: []
+    simplify_degrees: 0.00005
+  # How a parcel (or a district without parcels) is split across 2020 tracts.
+  # A shape whose corners all fall in one tract goes wholly to it. Otherwise
+  # it is drawn on a grid of cells_per_side x cells_per_side cells over its
+  # bounding box (cells no smaller than min_cell_m metres); a cell belongs to
+  # a tract when its centre is inside the tract. A piece holding less than
+  # min_piece_share of the shape is a sliver: the tract outlines are the
+  # Census 1:500,000 cartographic file (generalised by tens of metres), so a
+  # thin piece is most likely the generalised line crossing the parcel, not a
+  # real split. Slivers are folded into the shape's largest piece and their
+  # total is reported. Area outside every tract (water, coast) is reported as
+  # unmatched, never dropped silently.
+  split:
+    cells_per_side: 40
+    min_cell_m: 0.5
+    min_piece_share: 0.05
+  # A parcel listed twice (same LOC_ID in two overlapping districts) keeps
+  # only its row with the larger capacity: the same land cannot hold both.
+  duplicate_parcels: keep_largest
+
+# MassDEP estimated sewer service areas (pack table ma_sewer_estimated_tract,
+# made by `visionhousing ma-capacity`). Its own evidence class, "estimated
+# service": never mixed with infra_tract's verified answers and not read by
+# the capacity screen. Homes are 2020 Census blocks placed by internal point.
+# MassDEP marks some unmapped systems with a small placeholder circle around
+# the plant's estimated location; such a shape is not a service area. A
+# polygon is read as such a circle when its isoperimetric ratio
+# (4 * pi * area / perimeter^2; 1 for a perfect circle) is at least
+# circle_ratio and it is smaller than circle_max_acres. On the 2026-11-25 read
+# nine shapes pass (ratios 0.955 to 0.988: rings of 17 to 33 corners, 15 to
+# 97 acres); the next most round shape, a real service area, scores 0.898.
+sewer_estimated:
+  source: massdep_sewer_service_areas
+  file: massdep_sewer_service_areas.json.gz
+  edition: "PubV2025_10 (MassDEP Water Utility Resilience Program, published October 2025; item updated 2025-12-15)"
+  simplify_degrees: 0.00005
+  circle_ratio: 0.95
+  circle_max_acres: 200
+  layers:
+    non_potw:
+      layer: 1
+      fields: [SEWER_ID, SYSTNAME, TOWNNAME, FAC_TYPE, SECTOR, SERVCECONF, SERVCEYEAR, SA_ACRES]
+    potw:
+      layer: 2
+      fields: [SEWER_ID, SYSTNAME, TOWNNAME, FAC_TYPE, SECTOR, SERVCECONF, SERVCEYEAR, SA_ACRES]
+    unlocated:
+      layer: 3
+      geometry: false
+      fields: [SEWER_ID, SYSTNAME, TOWN_NAME]
+
+# Municipality names: the intake files use the town's common name
+# ("Manchester"), the Census Bureau its legal name with a type word
+# ("Manchester-by-the-Sea town"). Names are compared lower case without type
+# words, spaces or punctuation; these pairs are the ones that still differ.
+# key: name as written in the intake files; value: Census name without type word.
+name_overrides:
+  Manchester: Manchester-by-the-Sea
+  North Attleboro: North Attleborough
+
+# What the ADU survey's columns measure. HLC asks municipal building officials
+# (760 CMR 71.04 makes them record ADU applications and permits). One wave a
+# half-year: July 2025 (January-June 2025), January 2026 (all of 2025), July
+# 2026 (January-June 2026). The composite file keeps, for 2025, the fullest
+# answer a town gave ("Source_25": End-of-year beats Mid-year) and, for 2026,
+# the mid-year answer. So the 2025 period differs by town: these are cohorts.
+# Each period's "suffix" names its columns (Submitted_25, Approved_25, ...); the
+# reader and the totals check take the periods from this list alone.
+adu_survey:
+  periods:
+    - suffix: "25"
+      source_column: Source_25
+      answers:
+        End-of-year: {cohort: "2025 full year", start: 2025-01-01, end: 2025-12-31}
+        Mid-year: {cohort: "2025 first half", start: 2025-01-01, end: 2025-06-30}
+    - suffix: "26"
+      source_column: Source_26
+      answers:
+        Mid-year: {cohort: "2026 first half", start: 2026-01-01, end: 2026-06-30}
+  no_answer: No response
+  measures:
+    applications: >-
+      ADU building-permit applications submitted ("Submitted"). Counts
+      applications, not homes; some are later withdrawn or refused.
+    approvals: >-
+      ADUs approved: building permits issued for an ADU ("Approved"). This is
+      the closest measure to an authorization, but it is not the Census
+      Building Permits Survey: an attached or interior ADU in an existing
+      house is usually filed as an alteration, which that survey leaves out.
+    certificates_of_occupancy: >-
+      Certificates of occupancy issued ("CoO"): ADUs finished and ready to
+      live in.
+    detached: "Detached ADUs (a separate building on the lot)."
+    attached: >-
+      Attached or interior ADUs (added onto the house, or made inside it).
+      The file does not separate the two.

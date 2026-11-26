@@ -18,11 +18,16 @@ Facts:
 - units permitted in each of the last ten years, latest first.
 
 The pace and the single-family share are compared with the state (the sum of
-its counties). Years the Census Bureau partly estimated ("imputed") are named
+its counties). The summary ends with how this tool's own baseline did for the
+county in the back-test ("ran about 53% low; its ranges caught the real total
+in 5 of 21 years"), from :func:`visionhousing.baseline.places.county_note`.
+Years the Census Bureau partly estimated ("imputed") are named
 in the limits.
 """
 
 from __future__ import annotations
+
+from pathlib import Path
 
 import pandas as pd
 
@@ -134,4 +139,26 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
     if flagged:
         years = ", ".join(map(str, flagged))
         limits += f" The Census Bureau partly estimated these years for this county: {years}."
-    return finish(KEY, TITLE, sentence(parts), fm.facts, limits)
+    summary = sentence(parts)
+    note = _backtest_note(ctx, county.geoid)
+    if note and summary:
+        lead = "i" if place.level == "county" else "for its county, i"
+        summary = f"{summary[:-1]}; {lead}{note[1:]}"
+    return finish(KEY, TITLE, summary, fm.facts, limits)
+
+
+def _backtest_note(ctx: ProfileContext, county: str) -> str | None:
+    """The county's back-test sentence (``baseline.places.county_note``), or ``None``.
+
+    Only for a context read from the state's own pack (or Testland), so the
+    sentence describes the same data the engine runs on.
+    """
+    from visionhousing.baseline.places import county_notes_for_state
+    from visionhousing.engine.context import pack_dir
+
+    try:
+        if Path(ctx.folder).resolve() != pack_dir(ctx.state).resolve():
+            return None
+        return county_notes_for_state(ctx.state).get(county)
+    except (FileNotFoundError, KeyError, ValueError):
+        return None

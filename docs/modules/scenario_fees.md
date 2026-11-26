@@ -70,3 +70,14 @@ central-value total exactly.
   cut never lowers units in any draw; P10 ≤ P50 ≤ P90; same seed, same result;
   counties add to the state in every draw.
 - `test_passthrough_tops_the_fee_tornado`: k is the widest input of the benchmark view.
+
+
+## What the fee cut costs
+
+`ChannelBResult.per_unit` keeps the per-draw baseline homes reached and the saving per unit, and `engine.readouts` turns them into the public cost: revenue given up = fee cut per unit × (baseline homes + added homes), county by county, and cost per added home = revenue given up ÷ added homes, in each draw. A cut applies to every permitted home, so most of the revenue goes to homes that would be built anyway. The state-fee-level variant reruns this module once in its `state` view; the targeted variant sums the same counties' draws within one group of similar counties (no rerun). See [engine.md](engine.md#readouts-from-the-paired-draws-readoutspy).
+
+## Fiscal screen and the deferral view
+
+`engine.readouts.fiscal_split` splits a cut's money in every draw: waived on homes built anyway, waived on the added homes (the two add up to the revenue given up), fees still paid by the added homes, replacement funding (`fees.replacement_funding_share`, none by default) and the net change. `fee_reform(..., view="deferral")` (variant `fees_deferral`) keeps the fee but moves payment to occupancy: saving per unit = fees x construction-loan rate x deferral months / 12; `engine.readouts.deferral_readouts` gives its public cost (time value and collection loss), the fees the added homes pay, and the net change. Method: [fees](../methods/fees.md#fiscal-screen-who-gives-up-what). Tested in `tests/test_benchmark_variants.py`: the split adds up to the revenue given up; the replacement share scales it; the deferral adds fewer homes than the cut at a smaller public cost; the saving by hand.
+
+The fiscal identity per paired draw is `revenue change = (F′ − F) × B + F′ × A` (records `fiscal_revenue_before`, `fiscal_revenue_after`, `fiscal_revenue_change`), with `fiscal_net_loss_per_added_home` (draws that add homes) beside `fiscal_zero_gain_share` (share of draws that add none, with its Monte Carlo standard error). `fee_reform(..., capacity_case="delayed")` (variant `fees_delayed_capacity`) multiplies the added homes by 1 − `fees.utility_earmark_share` × `fees.delayed_capacity_share` and records `delayed_by_capacity`; variant `fees_funded_backfill` swaps the replacement share to 1. Option `baseline_window` (variant `fees_baseline_window_pa_2022_2025`, Pennsylvania only) scales the baseline, and the fiscal B with it, to the baseline card's window diagnostic. `load_cost_settings` reads `assumptions/cost_reforms.yaml`; `window_factor` reads the diagnostic. Tested in `tests/test_fee_fiscal.py` (the plan's B = 100, A = 5 case; zero incidence adds nothing but still shows the revenue lost; the named cases).

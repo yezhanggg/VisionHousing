@@ -1,0 +1,480 @@
+# Back-test error by kind of place.
+#
+# Read by visionhousing.baseline.places. The rolling-origin back-test of the
+# baseline (visionhousing.baseline.backtest) gives one case per county and past
+# start year: what the chosen rule projected for five years, and what was
+# actually permitted. This file says how those cases are grouped by kind of
+# place, when a group is too small to read as a pattern, and how the county
+# error map is shaded. Those parts change no estimate; they only describe where
+# the baseline has been right or wrong in the past. One part does change an
+# estimate: small_sample (at the end) widens the state's baseline range when
+# the state's back-test rests on few county-origins.
+
+version: 1
+
+# A group with fewer counties, or fewer scored cases, than these is still shown,
+# with a "few cases" flag: its numbers describe a handful of places, not a pattern.
+min_counties: 5
+min_cases: 30
+
+# A median signed error closer to zero than this (as a share, 0.05 = 5%) is
+# described as "about right" rather than "high" or "low".
+about_right: 0.05
+
+# The groupings, in the order they are shown. A grouping whose input table is
+# missing from the state pack (a state with less complete data) is listed as
+# "not available" with the reason; the others still run.
+dimensions: [size_class, typology, urban_rural, qct, named]
+
+# Urban or rural. A county's urban share is the share of its homes in
+# Census-defined urban areas (tract column urban_unit_share, weighted by homes).
+# A pack without that column counts the homes in tracts whose area_type is in
+# urban_area_types instead. Below rural_below the county is "rural": most of its
+# homes lie outside urban areas.
+urban_rural:
+  rural_below: 0.5
+  urban_area_types: [urban, suburban]
+
+# Qualified Census Tract share: tracts that HUD names as Qualified Census Tracts
+# over all tracts in the county (pack table incentives_county). Counties are
+# split at the state's median county share: above it is "higher", at or below
+# it "lower". The median keeps the two groups about the same size in any state.
+qct:
+  split: median
+
+# Named counties, shown one by one, with every other county in one group.
+# Keys are state codes; a state not listed has no named grouping.
+named_counties:
+  PA:
+    "42101": "Philadelphia"
+    "42003": "Allegheny"
+  TL:
+    "99001": "Harbor County"
+rest_label: "rest of the state"
+
+# County error map: breaks on the county's median signed error (share). Five
+# classes, from "runs well low" to "runs well high", symmetric around zero.
+map_breaks: [0.1, 0.25]
+
+# "What the model cannot tell you": name this many of the worst groups (largest
+# median absolute error, groups flagged "few cases" left out).
+limits_worst_groups: 2
+
+# A single named county is always flagged "few cases", so the rule above never
+# names it. It is named anyway, before the worst groups, when its typical error
+# (exp(median signed error) - 1) is at least this far from zero, as a share:
+# one big county that the baseline misses by a third or more is worth a warning
+# even though it is one place, not a pattern (Philadelphia in Pennsylvania).
+name_few_cases_beyond: 0.33
+
+# Small-sample widening of the state baseline range.
+#
+# The state's P10-P90 range comes from the back-test of its own yearly totals
+# (visionhousing.baseline.project). In a small state that back-test rests on few
+# county histories (Vermont: 14 counties), so its spread is itself uncertain and
+# can look narrower than a large state's. The rule, for any state:
+#
+#   n = usable county-origin cases in the state's back-test
+#   w = min(1, n / full_weight_cases)
+#   for each end (P10, P90), on the log scale and measured from the cycle
+#   quantile: blended = w x own + (1 - w) x prior
+#   the end used is the wider of own and blended (the range only widens)
+#
+# A state with at least full_weight_cases cases keeps its own range exactly.
+# The prior is the ratio quantiles of Pennsylvania's state back-test with the
+# rule the contest below picks for Pennsylvania (rule "top-down share": the
+# state's five-year mean times each county's ten-year share; origins 1999-2019,
+# 21 cases; data of November 2026; ratio = actual / projected five-year state
+# units), the largest back-test the tool has. The winner changed from "mean of
+# the last three years" when the contest's coverage began to use earlier
+# origins only; the prior followed it.
+# tests/test_baseline_small_sample.py checks the values, and that the rule is
+# still Pennsylvania's winner, against the Pennsylvania pack when it is built.
+# Quantiles in between are read by straight-line interpolation of the log ratios.
+small_sample:
+  full_weight_cases: 1000
+  prior:
+    source: "Pennsylvania state back-test, rule top_down_share, 21 origins (BPS 1990-2025)"
+    state: PA
+    rule: top_down_share
+    ratio_quantiles:
+      0.1: 0.4877
+      0.2: 0.6028
+      0.5: 1.038
+      0.8: 1.2967
+      0.9: 1.3138
+
+# Growth-aware widening of the state baseline range (sparse states only).
+#
+# A test written before it was scored (block growth_coverage_test in
+# assumptions/validation_donor_pool.yaml; results in the source file below)
+# found that a sparse state's range misses the real total mostly on the high
+# side, and that widening each end toward the past errors of the other states
+# in the same growth class brings coverage closer to 80%. Its decision is
+# "adopt", so the engine applies it after the small-sample widening:
+#
+#   w = min(1, n / small_sample.full_weight_cases)        (the same w)
+#   g_low = log(pool ratio P10), g_high = log(pool ratio P90)
+#       (the pool's raw ratios of real to projected totals, not centred on the
+#        pool median, so a class that built more than projected widens the top)
+#   new end = the wider of the end after small-sample widening and
+#             w x that end + (1 - w) x g
+#
+# Only states listed under sparse_states in the source file, with at least
+# min_pool_cases other-state cases in their pool, are widened; a state with a
+# full record (w = 1) keeps its range. The range only ever widens. The test
+# scored the typical cycle only; other cycles get the same ends and say so.
+# Ledger switch: baseline.growth_widen (1 = on, 0 = off).
+growth_widen:
+  enabled: true
+  source: assumptions/calibration/growth_coverage.yaml
+  min_pool_cases: 5
+
+# Baseline rule contest.
+#
+# Seven simple rules are back-tested on the same rolling origins and the same
+# county cases (visionhousing.baseline.contest). Each is scored on four things:
+# median signed error and median absolute error of the five-year projection
+# (log of projected / actual), the share of cases whose P10-P90 range caught the
+# actual total (each range built from other counties' errors only), and the mean
+# range width (P90 - P10 as a share of the projection).
+#
+# The choosing rule below was written here before any contest score was
+# computed, and the engine applies it as written:
+#   1. Eligible rules: P10-P90 coverage inside coverage_band.
+#   2. Among them, the lowest median absolute error is the best.
+#   3. The simplest eligible rule (lowest complexity) whose error is at most
+#      best x (1 + baseline.selection_tolerance) wins; ties go to the lower
+#      error, then to the order of the list.
+#   4. If no rule's coverage is inside the band, the rule whose coverage is
+#      closest to the 80% a P10-P90 range aims for wins; ties go to the lower
+#      error, then to the order of the list.
+contest:
+  rules: [last_5_mean, last_3_mean, median_5, damped_trend, shrink_to_group, top_down_share, average]
+  coverage_band: [0.75, 0.85]
+  # Rule settings that are not in parameters.yaml.
+  short_window_years: 3       # last_3_mean
+  median_window_years: 5      # median_5: the median of the last five years
+  # shrink_to_group: each county's recent permits per home (last five years)
+  # are pulled toward its group's rate. Weight on the county's own rate:
+  #   w = s / (s + half_weight_units), s = the county's mean yearly permits
+  # in the window. A county building half_weight_units a year gets half its own
+  # rate and half its group's; smaller counties are pulled more.
+  half_weight_units: 100
+  # top_down_share: state projection (mean of the state's last five years) x
+  # the county's share of state permits over the last share_window_years.
+  share_window_years: 10
+  # complexity, for "simplest": lower is simpler.
+  complexity:
+    last_5_mean: 1
+    last_3_mean: 1
+    median_5: 1
+    top_down_share: 2
+    damped_trend: 3
+    shrink_to_group: 3
+    average: 4
+
+# Place type: the grouping used by shrink_to_group, by the bias correction and
+# by the per-place-type ranges. The first grouping the state's pack supports is
+# used: typology is the "places like this one" county type; size_class (small,
+# medium, large by recent permits) needs only the permit table, so every state
+# has it.
+place_type: [typology, size_class]
+
+# Bias correction and per-place-type ranges.
+#
+# The baseline's middle value is the rule's projection times the median ratio
+# of actual to projected units in past cases; its P10 and P90 use the 10th and
+# 90th percentile ratios. Those ratios correct the rule's typical bias and set
+# the range width. "Pools" says whose past cases are used:
+#   size_class  - the county's size class (the earlier method);
+#   place_type  - the county's place type, if that group has at least
+#                 min_group_cases past cases; otherwise all counties pooled.
+# Out-of-time test: for each origin, only cases whose five target years had
+# all been observed by that origin are used (origin' <= origin - lead -
+# horizon + 1), so no later information leaks in. Origins with fewer than
+# min_group_cases earlier cases in total are not scored.
+#
+# Adoption rule, written before any score was computed: the engine uses
+# place_type pools if, in the out-of-time test, their middle value has a lower
+# median absolute error than size_class pools and their P10-P90 coverage is
+# inside contest.coverage_band (or, when neither is inside, closer to 80%).
+# Otherwise it keeps size_class pools.
+calibration:
+  min_group_cases: 30
+  # A county whose own back-test is far off gets a wider range from its own
+  # errors: when it has at least min_own_cases own cases and its typical error
+  # (exp(median signed error) - 1) is at least name_few_cases_beyond away from
+  # zero, each end of its range is the wider of its pool's ratio and its own.
+  min_own_cases: 10
+
+# Surge years. A county-year is a surge year when its units exceed
+# surge_factor x the median of the county's other years in the same five-year
+# window (the window the baseline reads, or a back-test case's five target
+# years). The tool names surge years in the baseline window and reports the
+# back-test error with and without the cases whose target years contain one.
+surge_factor: 3
+
+# Stress settings. Each back-test origin is a "slump" when the state's actual
+# units in its five target years were below the state's units in the five
+# years up to the origin, and a "boom" otherwise. The alternative baseline
+# ranges use only one kind of origin's errors.
+stress: [slump, boom]
+
+# Keep or drop the P50 bias correction.
+#
+# The baseline's middle value is the rule's projection times the median past
+# ratio of actual to projected units in the county's pool ("the P50 pool-ratio
+# correction"). The rule below was written here before any score of it was
+# computed, and the engine applies it as written
+# (visionhousing.baseline.contest.bias_correction_decision):
+#
+#   Out of time (for each origin, the pools hold only cases whose five target
+#   years were all observed by that origin; later origins are scored), compare
+#     corrected   - P50 = projection x pool median ratio;
+#                   P10, P90 = projection x pool 10th, 90th percentile ratios;
+#     uncorrected - P50 = the rule's own projection;
+#                   P10, P90 = projection x (pool 10th, 90th percentile ratio
+#                   / pool median ratio), the same range shape centred on it.
+#   Keep the correction only if BOTH
+#     1. its median absolute error, median of |log(P50 / actual)|, is lower
+#        than the uncorrected projection's, and
+#     2. its P10-P90 coverage is inside coverage_band (inclusive).
+#   Otherwise drop it: the engine's P50 becomes the rule's own projection and
+#   the range keeps the uncorrected shape. Coverage is computed for both.
+#   With no out-of-time cases the correction is kept and the reason says so.
+bias_correction:
+  coverage_band: [0.75, 0.85]
+  pools: adopted        # the pools the calibration rule above adopts
+
+# Out-of-time calibrated ranges (written 2026-11-25, BEFORE any score of it).
+#
+# Why: once the back-test stopped borrowing errors from later years, every
+# rule's P10-P90 range caught the real five-year total in only about 40-60% of
+# past county cases, so a range called "likely (P10-P90)" was too narrow. This
+# block fixes, in advance, a calibration of the range, how it is tested, and
+# when the engine uses it. Its fingerprint is recorded in
+# assumptions/preregistration.yaml; the study (visionhousing
+# validate-baseline-calibration) refuses to run if the block has changed.
+#
+# Method (for one state, one rule, one origin o):
+#   1. Past cases: county cases of the same rule whose origin o' satisfies
+#      o' + lead + horizon - 1 <= o (all five target years observed by o).
+#      The county's own earlier cases count (they were known by o).
+#   2. Pool: past cases whose county was, at the case's own origin, in the
+#      size class the scored county is in at o. If that pool has fewer than
+#      min_pool_cases cases, all past cases of the state are pooled.
+#   3. Ends: with n pooled ratios r = actual / projected sorted from smallest,
+#      the low end is the k_lo-th smallest, k_lo = max(1, floor(0.1 x (n + 1))),
+#      and the high end the k_hi-th smallest, k_hi = min(n, ceil(0.9 x (n + 1)))
+#      (a finite-sample, conformal-style order statistic; the same as taking
+#      percentiles of the log errors log(r), with no interpolation).
+#   4. Own-error widening as today (calibration.min_own_cases,
+#      name_few_cases_beyond), from the county's own past cases only.
+#   5. P50 = the rule's own projection. P10 = projection x low end, P90 =
+#      projection x high end, then P10 = min(P10, P50), P90 = max(P90, P50) so
+#      the range always holds the P50.
+#
+# Test: every origin with at least min_past_cases past cases in the state is
+# scored, for every contest rule, in each listed state. Coverage = share of
+# scored cases (actual and projection above zero) with P10 <= actual <= P90.
+# Width = mean of (P90 - P10) / P50. Error = median of |log(P50 / actual)|.
+#
+# Contest: the pre-stated choosing rule (contest, above) is kept word for word
+# and re-run with each rule's coverage and width replaced by its calibrated
+# out-of-time coverage and width. The adoption test below is judged on each
+# state's winner of that re-run (the rule that would ship).
+#
+# Adoption: let C be the coverage of all scored cases of the four states'
+# winners pooled (each case counts once), and C_s each state's own coverage.
+#   adopt          C is inside [0.75, 0.85] (edges count) AND every C_s >= 0.70
+#   keep_current   otherwise, with the reason named:
+#                  under_band  C < 0.75
+#                  over_band   C > 0.85 (wider than an 80% range should be; not
+#                              adopted, and the levels are not re-tuned after
+#                              seeing this result)
+#                  state_short C in the band but some C_s < 0.70
+#                  A state with no scored case counts as C_s < 0.70.
+# With adopt the engine ships the calibrated ends (the county range as above;
+# the state range by the same steps 1, 3 and 5 on the state's own yearly
+# totals, all past origins in one pool), then the small-sample widening, then
+# the growth-aware widening, each only widening. With keep_current nothing in
+# the engine changes. Width, and the error before and after (today's winner
+# and contest coverage vs. the re-run winner), are reported either way.
+# The state-total version is checked out of time too, on origins with at least
+# state_check_min_past_cases past state cases; that check is descriptive (too
+# few cases to gate).
+oot_calibration:
+  written_on: 2026-11-25
+  states: [PA, VT, MA, WY]
+  levels: [0.1, 0.9]
+  past_rule: "o' + lead + horizon - 1 <= o"
+  own_cases_count: true
+  pool: size_class_at_case_origin
+  min_pool_cases: 30
+  fallback: all_past_cases_in_state
+  ends: conformal_order_statistic
+  own_widening: true
+  p50: rule_projection
+  contain_p50: true
+  min_past_cases: 30
+  coverage: "share of scored cases with P10 <= actual <= P90"
+  width: "mean of (P90 - P10) / P50"
+  error: "median of |log(P50 / actual)|"
+  contest: rerun_pre_stated_rule_with_calibrated_coverage
+  judged_on: each_state_winner_of_rerun
+  coverage_band: [0.75, 0.85]
+  min_state_coverage: 0.70
+  pooled: case_weighted
+  outcomes:
+    adopt: "C in [0.75, 0.85] and every C_s >= 0.70"
+    under_band: "C < 0.75 -> keep_current"
+    over_band: "C > 0.85 -> keep_current, no re-tuning"
+    state_short: "C in band, some C_s < 0.70 -> keep_current"
+    no_cases: "a state with no scored case counts as C_s < 0.70"
+  if_adopted:
+    order: [calibrated_ends, small_sample_widening, growth_widening]
+    state_range: same_steps_on_state_totals_all_past_origins_pooled
+  state_check_min_past_cases: 8
+  results: assumptions/calibration/baseline_calibration.yaml
+
+# Measured reliability of the shipped baseline range (written 2026-11-25,
+# BEFORE any score of it; descriptive: it changes no estimate).
+#
+# Why: the baseline's P10-P90 range is meant to catch the real five-year total
+# about 8 times in 10, but tested out of time it does so less often. Every
+# baseline range therefore states how often ranges built the same way caught
+# the real total in past years ("In past years, ranges like this caught the
+# real five-year total in N of M cases (out of time)").
+#
+# Method (for one state, with the rule and the bias-correction choice the
+# engine's contest picks today):
+#   County ranges: the contest's own out-of-time test
+#     (visionhousing.baseline.backtest.leave_one_county_out with the time cut):
+#     each county case at origin o gets a range from other counties' cases in
+#     its size class whose five target years were all observed by o. Caught =
+#     P10 <= actual <= P90 (edges count). Counted for the whole state and for
+#     each county group (size class at the case's own origin: small, medium,
+#     large).
+#   State range: the state range as shipped, rebuilt at each past origin o from
+#     past state-total cases only (o' + lead + horizon - 1 <= o): ratio
+#     quantiles q10, q50, q90 of those cases (straight-line interpolation, as
+#     shipped); P50 = state projection x q50 if the bias correction is kept,
+#     else the projection; P10 = P50 x q10 / q50, P90 = P50 x q90 / q50; then
+#     the small-sample widening with n = past county cases at o, and the
+#     growth-aware widening where the engine applies it to the state, each
+#     only widening. Origins with at least min_past_origins past state cases
+#     are scored. The widening inputs (prior, growth-class pool) were set from
+#     the full record; the results say so.
+# Never gates anything. Results in the file named by results.
+baseline_reliability:
+  written_on: 2026-11-25
+  states: [PA, VT, MA, WY]
+  county_method: contest_leave_one_county_out_out_of_time
+  county_groups: size_class_at_case_origin
+  state_method: shipped_state_range_rebuilt_from_past_state_cases
+  state_quantiles: [0.1, 0.5, 0.9]
+  state_widening: [small_sample, growth_widen]
+  past_rule: "o' + lead + horizon - 1 <= o"
+  min_past_origins: 8
+  caught: "P10 <= actual <= P90"
+  sentence: "In past years, ranges like this caught the real five-year total in {covered} of {cases} cases (out of time)."
+  label: "range (caught {pct}% of past totals)"
+  results: assumptions/calibration/baseline_reliability.yaml
+
+# National state-total calibration (written 2026-11-25, BEFORE any score of it).
+#
+# Why: the out-of-time calibration above (oot_calibration) was not adopted, and
+# its state-total check caught Pennsylvania's real total at none of its scored
+# origins: one state's own record holds one housing cycle, and its errors run
+# to one side. An earlier test found that pooling the state-total errors of
+# all states came closest to 80%. This block fixes, in advance, a calibration
+# of the STATE range from a national pool, how it is tested and when the
+# engine uses it. County ranges are not touched.
+#
+# Data: the national county panel of the donor-pool study (BPS annual county
+# files, the states in assumptions/validation_donor_pool.yaml, 50 states and
+# DC); a state's yearly total = its counties added up. Lead, horizon and
+# origins are the baseline's (as in that study).
+#
+# Rule: each state total is projected by one rule. For the four states with a
+# pack (PA, VT, MA, WY) it is the rule the engine's contest picks for that state
+# today (recorded in the results); for every other state it is other_rule. Each
+# state's total is a one-area series (a top-down share is then the state's own
+# five-year mean).
+#
+# Method (scored state s with rule R, origin o):
+#   1. Pool: the state-total cases of rule R of ALL states (s included) whose
+#      origin o' satisfies o' + lead + horizon - 1 <= o. Log error
+#      e = log(actual / projected), cases with both above zero.
+#   2. Variant "pooled": ends = rank-based order statistics of the pooled
+#      ratios exp(e): low = k_lo-th smallest, k_lo = max(1, floor(0.1 (n + 1))),
+#      high = k_hi-th smallest, k_hi = min(n, ceil(0.9 (n + 1))).
+#   3. Variant "shock" (a statewide shock component): for each past origin o',
+#      shock(o') = median over states of e at o'; residual = e - shock(o').
+#      low = exp(rank low end of the shocks + rank low end of the residuals),
+#      high = exp(rank high end of the shocks + rank high end of the residuals)
+#      (the same k rule, applied to the m shocks and to the n residuals). This
+#      counts each past origin once, so a run of one-sided years cannot pass
+#      for many independent draws.
+#   4. P50 = the rule's own state projection; P10 = P50 x low, P90 = P50 x high,
+#      then P10 = min(P10, P50), P90 = max(P90, P50).
+# Scored: origins whose pool holds cases from at least min_past_origins
+# distinct past origins. Coverage = share with P10 <= actual <= P90 (edges
+# count); width = mean (P90 - P10) / P50.
+#
+# Adoption (each variant judged alone, by the same rule): C = coverage of all
+# scored state cases of all states pooled (each case once), C_s = coverage of
+# each named state.
+#   pass        C in [0.75, 0.85] (edges count) AND C_s >= 0.70 for PA, VT, MA, WY
+#   under_band  C < 0.75 -> fail
+#   over_band   C > 0.85 -> fail: wider than an 80% range should be; the levels
+#               are not re-tuned after seeing it
+#   state_short C in the band, a named state below 0.70 (or with no case) -> fail
+# Decision: if exactly one variant passes it is adopted; if both pass, the one
+# whose C is closer to 0.80 (a tie goes to "pooled", the simpler); if neither,
+# keep_current.
+# If adopted, the engine's STATE range for any state = the state's point
+# projection (same rule, state totals) x the adopted variant's ends computed at
+# the real origin (all usable past origins, rule R's pool; written to the
+# results as production_ends), then P10 = min(P10, P50), P90 = max(P90, P50),
+# P50 = the sum of county P50s as today. Order: the national ends REPLACE the
+# state's own back-test ends, and the small-sample and growth-aware widening
+# are NOT applied on top (the test scored the national ends alone; both
+# widenings exist to cover a thin own record, which the national pool
+# replaces). A rule with no production ends keeps today's state range. County
+# ranges are unchanged. Weak and strong cycles get the same ends and say they
+# were not back-tested. With keep_current nothing in the engine changes.
+national_state_calibration:
+  written_on: 2026-11-25
+  data: national_county_panel_of_donor_pool_study
+  states_named: [PA, VT, MA, WY]
+  rule_named_states: engine_contest_winner
+  other_rule: last_3_mean
+  pool: all_states_same_rule_past_cases
+  past_rule: "o' + lead + horizon - 1 <= o"
+  own_cases_count: true
+  levels: [0.1, 0.9]
+  ends: rank_order_statistic
+  variants: [pooled, shock]
+  shock: median_log_error_over_states_by_origin
+  shock_combination: sum_of_rank_ends_of_shocks_and_residuals
+  p50: rule_state_projection
+  contain_p50: true
+  min_past_origins: 8
+  coverage: "share of scored cases with P10 <= actual <= P90"
+  width: "mean of (P90 - P10) / P50"
+  coverage_band: [0.75, 0.85]
+  min_state_coverage: 0.70
+  pooled: case_weighted_all_states
+  outcomes:
+    pass: "C in [0.75, 0.85] and C_s >= 0.70 for each named state"
+    under_band: "C < 0.75 -> fail"
+    over_band: "C > 0.85 -> fail, no re-tuning"
+    state_short: "C in band, a named state < 0.70 or no case -> fail"
+    choose: "one passes -> adopt it; both -> C closer to 0.80, tie -> pooled; none -> keep_current"
+  if_adopted:
+    state_range: point_projection_times_production_ends_contain_p50
+    replaces: [own_state_backtest_ends, small_sample_widening, growth_widening]
+    county_ranges: unchanged
+  results: assumptions/calibration/national_state_calibration.yaml

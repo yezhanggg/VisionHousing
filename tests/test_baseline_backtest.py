@@ -84,7 +84,10 @@ def test_coverage_is_near_80_percent_with_known_noise(settings):
     # interval built from other counties' errors should hold about 80% of cases.
     skill = validate_baseline(synthetic(60, 0.3, 7), [LAST_5], None, settings)
     row = skill.iloc[0]
-    assert row["coverage_cases"] == row["cases"] == 60 * len(range(1985, 2020))
+    assert row["cases"] == 60 * len(range(1985, 2020))
+    # Ranges use earlier origins only (o' <= o - lead - horizon + 1 = o - 6), so the
+    # first six origins have no range.
+    assert row["coverage_cases"] == 60 * len(range(1991, 2020))
     assert 0.75 <= row["coverage_80"] <= 0.85
     # Five-year totals of a flat series with sigma 0.3 a year are typically off by
     # well under 30%; the error measures must reflect noise, not bias.
@@ -131,3 +134,42 @@ def test_lead_comes_from_the_data_and_the_first_projected_year(settings):
         validate_baseline(late, [LAST_5], None, settings)
     assert to_panel(table).years[-1] == 2025
     assert set(STRUCTURE_TYPES) <= set(table.columns)
+
+
+def test_ranges_use_other_counties_at_earlier_origins_only():
+    from visionhousing.baseline.backtest import leave_one_county_out
+
+    # Three counties, origins 2000-2010. County 0's 2010 case may pool only the
+    # other counties' cases with origin <= 2010 - 2 - 5 + 1 = 2004.
+    rows = []
+    for o in range(2000, 2011):
+        for c in range(3):
+            ratio = 10.0 if o > 2004 else 1.0  # later cases would widen the range a lot
+            rows.append((c, o, 100.0, 100.0 * ratio, ratio))
+    cases = pd.DataFrame(rows, columns=["place", "origin", "projected", "actual", "ratio"])
+    classes = np.zeros(3, dtype=int)
+    timed = leave_one_county_out(cases, classes, lead=2, horizon=5)
+    assert timed["origin"].min() == 2006  # 2000-2005 have no earlier case
+    last = timed[(timed["place"] == 0) & (timed["origin"] == 2010)].iloc[0]
+    assert last["high"] == pytest.approx(100.0)  # only the ratio-1 cases of 2000-2004
+    plain = leave_one_county_out(cases, classes)  # geographic split only
+    assert len(plain) == len(cases)
+    assert plain[(plain["place"] == 0) & (plain["origin"] == 2010)].iloc[0]["high"] > 100.0
+
+
+def test_size_classes_at_an_origin_use_years_up_to_it_only():
+    from visionhousing.baseline.backtest import origin_size_classes, size_classes
+
+    # County 0 is small until 2015, then the largest.
+    rows = []
+    for y in range(2000, 2026):
+        for c, units in enumerate([5 if y <= 2015 else 500, 50, 100]):
+            rows.append(
+                {"county": 90000 + c, "year": y, "units_1": units, "units_2": 0,
+                 "units_3_4": 0, "units_5plus": 0}
+            )  # fmt: skip
+    panel = to_panel(pd.DataFrame(rows))
+    assert size_classes(panel, 5, 3).tolist() == [2, 0, 1]
+    at = origin_size_classes(panel, [2010, 2025], 5, 3)
+    assert at[2010].tolist() == [0, 1, 2]
+    assert at[2025].tolist() == [2, 0, 1]

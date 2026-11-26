@@ -1,0 +1,162 @@
+# Evidence grades: the published rule that gives every headline number a letter, A to D.
+#
+# Read by visionhousing.grades (rule.py scores, inputs.py gathers the inputs). Method:
+# docs/modules/grades.md.
+#
+# Rules for this file:
+#   - No estimate lives here. Only weights, thresholds, scores per class and words.
+#     Every input the rule scores comes from the engine run, the state pack, the
+#     calibration files, the back-test and the evidence records.
+#   - The rule is monotone: a better input never lowers a grade. Every component
+#     score is a non-decreasing function of its input, the weights are fixed per
+#     reform, and the letter is a fixed cut of the weighted score.
+#   - A grade describes how much evidence stands behind a number. It is not a
+#     probability and it does not widen or narrow any range.
+
+version: 1
+id: grades.evidence_rule_2026_11
+
+# The letter is the first grade whose minimum the weighted score reaches.
+thresholds:
+  - {grade: A, min_score: 0.75}
+  - {grade: B, min_score: 0.55}
+  - {grade: C, min_score: 0.35}
+  - {grade: D, min_score: 0.0}
+
+# Weights of the five components. A component that does not apply to a number
+# (see `applies`) is left out and the others are scaled to add up to 1; which
+# components apply is fixed per reform, so this never depends on the data.
+weights:
+  sources: 0.20
+  backtest: 0.25
+  law: 0.20
+  calibration: 0.15
+  evidence: 0.20
+
+# Which components apply to which kind of number. "baseline" is the no-reform
+# projection; reform keys not listed use `default`.
+applies:
+  default: [sources, backtest, law, calibration, evidence]
+  baseline: [sources, backtest]
+  fees: [sources, backtest, calibration, evidence]   # a fee cut needs no local zoning read
+
+components:
+  sources:
+    title: Source quality
+    how: >-
+      Each source id behind the number is put in one class: a source in the
+      registry (src/visionhousing/data/sources.yaml) takes its tier (2 local,
+      1 many states, 0 every state); a registry source that the state's pack did
+      not fetch counts as not in the pack; any other id is a published study,
+      benchmark or evidence entry. The score is the mean of the class scores.
+    class_scores:
+      local: 1.0
+      multi_state: 0.8
+      national: 0.6
+      study: 0.4
+      not_in_pack: 0.2
+    words:
+      local: local
+      multi_state: multi-state
+      national: national
+      study: published studies
+      not_in_pack: sources missing from the pack
+      none: no sources named
+  backtest:
+    title: Back-test coverage
+    how: >-
+      How often the baseline's past ranges (P10 to P90, built from other
+      counties) caught the real five-year total, for counties of the same place
+      type (the type the baseline itself uses; all counties for a state number).
+      score = min(1, coverage / target) x min(1, cases / full_cases).
+    target_coverage: 0.80
+    full_cases: 30
+  law:
+    title: Law coverage
+    how: >-
+      Share of the state's (or county's) single-family lots, or of its
+      residents, under verified local zoning reads (law coverage tables).
+      score = min(1, share / full_share). A state-level law reading on file for
+      the reform's legal-status parameter (assumptions/calibration, state law)
+      gives at least `state_law_credit`.
+    full_share: 0.80
+    state_law_credit: 0.50
+    measure:            # lots or residents, by reform; others use `default`
+      default: residents
+      adu: lots
+      pa_hb2186: lots
+      pa_sb1346: lots
+      missing_middle: lots
+    law_parameter:      # the parameter a state-level law reading calibrates
+      adu: adu.already_legal_share
+      pa_hb2186: adu.already_legal_share
+      pa_sb1346: adu.already_legal_share
+  calibration:
+    title: Local or transferred calibration
+    how: >-
+      For each of the reform's key behaviour and fit parameters: local when a
+      calibration file for that parameter was measured or read in this state
+      (assumptions/calibration, assumptions/transfer.yaml measured_in);
+      transferred when it was measured elsewhere and borrowed; sourced when the
+      ledger value is a published figure; judgement otherwise. The score is the
+      mean of the status scores.
+    status_scores:
+      local: 1.0
+      transferred: 0.5
+      sourced: 0.4
+      judgement: 0.2
+    parameters:
+      adu: &adu_cal
+        adu.fit_range_position: lot fit
+        adu.already_legal_share: legal share
+        adu.takeup_feasible_annual: take-up
+      pa_hb2186: *adu_cal
+      pa_sb1346: *adu_cal
+      missing_middle:
+        missing_middle.sf_only_zoned_share: single-family-only zoning share
+        missing_middle.fit_share: lot fit
+        missing_middle.redevelopment_hazard_annual: redevelopment rate
+      tod:
+        tod.developable_share_urban: developable land
+        tod.redevelopment_hazard_annual: redevelopment rate
+        tod.net_new_share: net-new share
+      parking:
+        parking.share_still_built_transit_rich: parking still built
+        supply.saving_passthrough_k: cost pass-through
+      fees:
+        fees.passthrough_k: fee pass-through
+        supply.elasticity_medium_run: supply response
+  evidence:
+    title: Reform evidence strength
+    how: >-
+      The best identification among verified outside records with an observed
+      result for the reform's policy type (cross-state comparison records in
+      assumptions/evidence/states/ and the retrospective panel in
+      assumptions/evidence/retro_results.yaml). A verified record with no
+      observed result counts as law on record.
+    identification_scores:
+      causal: 1.0
+      matched: 0.8
+      descriptive: 0.5
+      law_only: 0.25
+      none: 0.0
+    words:
+      causal: reform tested elsewhere (causal design)
+      matched: reform tested elsewhere (matched comparison)
+      descriptive: results observed elsewhere (descriptive only)
+      law_only: law on record elsewhere, no measured result
+      none: no outside evidence on file
+    policy_type:        # reform key to evidence policy type; others use the key itself
+      pa_hb2186: adu
+      pa_sb1346: adu
+
+# Number trace: which funnel step of a tract-level reform is the headline (the
+# first step whose name starts with this text). Steps after it (net added homes
+# after demolition) are shown as a side note, not part of the chain.
+trace:
+  headline_step_starts: added units authorized
+  rounding_tolerance: 0.5     # units; the check that steps reach the reported number
+  # County figures of the county-level reforms (fee cut, parking) are traced from the
+  # engine's per-draw arrays; these words find the state steps whose ids they cite.
+  base_step_starts: baseline units
+  saving_step_contains: saving per unit

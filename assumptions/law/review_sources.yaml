@@ -1,0 +1,892 @@
+# Where each unread municipality's zoning ordinance was looked for, and how hard
+# it is to read (visionhousing.law.priorities uses "effort").
+#
+# unit: a 10-digit municipality code, or "county:<5-digit code>" for a county
+#       ordinance that zones several municipalities.
+# effort: own_pdf_text (own-site PDF with a text layer), own_html,
+#       own_pdf_scan (no text layer), own_text_incomplete (a text layer, but
+#       the operative part cannot be read yet: a placeholder use table, or an
+#       undated text with a later update posted only as a scan), commercial_only (the only copy found is on
+#       a commercial code host, which forbids automated or bulk use: not read
+#       here), not_searched.
+# url: the own-site address found (empty when none).
+# checked_on: the date someone looked.
+#
+# Only places looked for and not (yet) verified are listed; a verified reading
+# lives in municipal_rules.yaml.
+
+version: 1
+sources:
+  - unit: "4210160000"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-23
+    note: >-
+      Philadelphia's Zoning Code is published only on a commercial code host;
+      the city's 2022 ADU checklist is a draft row, not the code.
+  - unit: "county:42111"
+    effort: not_general_zoning
+    checked_on: 2026-11-23
+    note: Somerset County has topic ordinances (solar, wind, towers), not general zoning.
+  - unit: "county:42105"
+    effort: not_general_zoning
+    checked_on: 2026-11-23
+    note: Potter County has topic or airport ordinances, not general zoning.
+  - unit: "county:42031"
+    effort: not_general_zoning
+    checked_on: 2026-11-23
+    note: Clarion County has topic or airport ordinances, not general zoning.
+  - unit: "county:42023"
+    effort: own_pdf_scan
+    url: https://www.cameroncountypa.com/Cameron%20County%20Zoning%20Ordinance%2012.1987.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Cameron County Ordinance No. 200 (1970, amended to 1987); covers Shippen,
+      Gibson, Lumber, Portage and Grove townships and Driftwood borough, not
+      Emporium. A scan with no text layer: not read.
+  - unit: "4202323600"
+    effort: own_pdf_text
+    url: https://www.cameroncountypa.com/Emporium%20Borough%20Zoning%20Ordinance.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Emporium's ordinance (1960, amended to 1999) is posted by the county
+      planning commission, not on a borough site; no ADU use found. Not
+      verified: wait for a borough-published copy.
+  - unit: "4204767344"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: St. Marys city links only to a commercial code host; its site has the zoning map only.
+  - unit: "4204764784"
+    effort: own_pdf_scan
+    url: https://ridgwayborough.com/wp-content/uploads/2024/11/BOROUGH-OF-RIDGWAY-Elk-County-ZONING-ORDINANCE.pdf
+    checked_on: 2026-11-24
+    note: A scan with no text layer; looks like accessory structure living units by special exception outside R-1.
+  - unit: "county:42093"
+    effort: own_pdf_scan
+    url: https://montourcounty.gov/getmedia/100f575c-6d2c-4ede-b14d-e0eccea3943f/combinedzoningordinance.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Montour County ordinance (2015) covers Anthony, Liberty and Mayberry
+      townships and Washingtonville borough; a 237-page scan with no text layer.
+  - unit: "4209346656"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Mahoning township links its ordinance only to a commercial code host.
+  - unit: "4209318136"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Danville borough posts only its zoning map; the ordinance is on a commercial code host.
+  - unit: "4209379552"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Valley township's site refused automated access; the code was found only on a commercial host.
+  - unit: "4204924000"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Erie city links its zoning ordinance only to a commercial code host.
+  - unit: "4206969000"
+    effort: commercial_only
+    url: https://scrantonpa.gov/wp-content/uploads/2023/05/2023-Proposed-Zoning-Ordinance-Final-452023-with-Council-amendments.pdf
+    checked_on: 2026-11-24
+    note: >-
+      The city's zoning page links "Current Zoning Ordinance" to a file whose
+      cover reads "Final Draft As Proposed by City Planning Commission" (draft
+      row kept). The 2025 amendment posted by the city amends the ordinance "as
+      adopted by File of Council 54 of 2023", but that adopted text was found
+      only on a commercial code host. Ask the city for its adopted copy.
+  - unit: "4206911232"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: Carbondale's site has permit forms only; no zoning ordinance found.
+  - unit: "4206956576"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Old Forge's ordinance page redirects to a commercial code host.
+  - unit: "4201344328"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Logan township links only to a commercial code host.
+  - unit: "4207744952"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Lower Macungie links its code only to a commercial host; amendments only on its site.
+  - unit: "4207779104"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: The township site refused automated access; the code was found only on a commercial host.
+  - unit: "4207772632"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: The township site refused automated access; the code was found only on a commercial host.
+  - unit: "4200366264"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Ross township links its zoning ordinance only to a commercial code host."
+  - unit: "4200306064"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Bethel Park links only to a commercial code host; single amendments on its site."
+  - unit: "4200345900"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "McCandless's zoning page redirects to a commercial code host."
+  - unit: "4200369584"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Shaler links only to a commercial code host."
+  - unit: "4200350784"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Moon's zoning code page redirects to a commercial code host."
+  - unit: "4200303928"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Baldwin borough links only to a commercial code host."
+  - unit: "4200383512"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "West Mifflin links only to a commercial code host; maps only on its site."
+  - unit: "4200372160"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "South Fayette links its code to a commercial host; single amendments on its site."
+  - unit: "4200368388"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Scott township links only to a commercial code host."
+  - unit: "4200355016"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "North Fayette links only to a commercial code host."
+  - unit: "4200327552"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Franklin Park links only to a commercial code host; map only on its site."
+  - unit: "4200385188"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Wilkinsburg links only to a commercial code host."
+  - unit: "4200372400"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "South Park links only to a commercial code host."
+  - unit: "4200323000"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Elizabeth township links only to a commercial code host."
+  - unit: "4200364528"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Richland links only to a commercial code host."
+  - unit: "4200352320"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "No reachable borough site; code found only on a commercial host."
+  - unit: "4200332832"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Harrison links only to a commercial code host; one excerpt on its site."
+  - unit: "4200308416"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Brentwood links only to a commercial code host."
+  - unit: "4200355488"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "North Versailles' site refused automated access; code found only on a commercial host."
+  - unit: "4200315216"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Collier posts only an August 2026 draft; the adopted ordinance is on a commercial host."
+  - unit: "4200361328"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Pleasant Hills links only to a commercial code host."
+  - unit: "4200319576"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Dormont links only to a commercial code host."
+  - unit: "4200384704"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "White Oak links only to a commercial code host."
+  - unit: "4200356088"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Oakmont posts single amendments; the ordinance is on a commercial host."
+  - unit: "4207779288"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Upper Saucon's site refused automated access; code found only on a commercial host."
+  - unit: "4207755576"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "North Whitehall links its code only to a commercial host."
+  - unit: "4207723584"
+    effort: own_pdf_text
+    checked_on: 2026-11-24
+    note: "Emmaus posts only the December 2024 draft; the adopted 2025 text is not on its site."
+  - unit: "4205512536"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Chambersburg links its code only to a commercial host."
+  - unit: "4205530944"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "No Greene township (Franklin) site found; code only on a commercial host."
+  - unit: "4205502696"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Antrim's code found only on a commercial host."
+  - unit: "4205581240"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Washington township (Franklin) links its code only to a commercial host."
+  - unit: "4207353368"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "New Castle links its code only to a commercial host; a vendor-hosted copy it does not link was not used."
+  - unit: "4207370080"
+    effort: own_pdf_scan
+    checked_on: 2026-11-24
+    note: "Shenango's posted ordinance is a scan with no text layer."
+  - unit: "4207323304"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: "Ellwood City's site refused automated access."
+  - unit: "4200316144"
+    effort: own_pdf_scan
+    checked_on: 2026-11-24
+    note: "Coraopolis's posted ordinance is a scan with no text layer."
+  - unit: "4200377912"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: "Turtle Creek's site lists other ordinances but no zoning ordinance."
+  - unit: "4200305312"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Bellevue links the joint ordinance only on a commercial host (Avalon posts the same text)."
+  - unit: "4200384144"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "West View links only to a commercial code host."
+  - unit: "4200374648"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Stowe links only to a commercial code host."
+  - unit: "4200326592"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Forest Hills links only to a commercial code host."
+  - unit: "4200385184"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Wilkins links only to a commercial code host."
+  - unit: "4200316848"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Crafton links only to a commercial code host."
+  - unit: "4200346264"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "McKees Rocks: no ordinance text on its site; code on a commercial host."
+  - unit: "4200327120"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Fox Chapel links only to a commercial code host."
+  - unit: "4200331256"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Green Tree links only to a commercial code host."
+  - unit: "4200308624"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Bridgeville links only to a commercial code host."
+  - unit: "4200329432"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Glassport's code found only on a commercial host."
+  - unit: "4200369376"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Sewickley links only to a commercial code host."
+  - unit: "4200362320"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Port Vue links only to a commercial code host."
+  - unit: "4200324160"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Etna links only to a commercial code host."
+  - unit: "4200372960"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Springdale links only to a commercial code host."
+  - unit: "4200351744"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Mount Oliver links only to a commercial code host."
+  - unit: "4200337000"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Ingram links only to a commercial code host."
+  - unit: "4200349920"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Millvale's code page redirects to a commercial host."
+  - unit: "4200326896"
+    effort: own_pdf_scan
+    checked_on: 2026-11-24
+    note: "Forward township's 1983 ordinance is a scan."
+  - unit: "4200325400"
+    effort: own_pdf_scan
+    checked_on: 2026-11-24
+    note: "Fawn township's ordinance is a scan."
+  - unit: "4200305504"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: "Ben Avon's site blocks automated access."
+  - unit: "4200307976"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: "Brackenridge posts only a zoning map."
+  - unit: "4204375528"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Susquehanna township's code is on a commercial host; its site blocks automated access."
+  - unit: "4202773808"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "State College posts only a public review draft; the enacted ordinance is on a commercial host."
+  - unit: "4202725624"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Ferguson links its code to a commercial host; only 2019 working drafts on its site."
+  - unit: "4202758440"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "Patton links its code to a commercial host; an ADU ordinance passed 2026-10-28 was not found on its site."
+  - unit: "4202715136"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: "College township's Chapter 200 is on a commercial host; single amendments on its site."
+  - unit: "4210342512"
+    effort: own_pdf_scan
+    checked_on: 2026-11-24
+    note: "Lehman township (Pike) posts a scan (2023-2) with no text layer."
+  # --- G2b readings (allegheny), 2026-11-24
+  - unit: "4200361536"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: >-
+      Plum's site (plumboro.com) answers automated requests with a bot
+      challenge (HTTP 403, checked 2026-11-24 with a browser user agent); no
+      own-site copy found by search. Read in a browser by hand.
+  - unit: "4200339312"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: >-
+      Kennedy's site (kennedytwp.com) answers automated requests with a bot
+      challenge (HTTP 403, checked 2026-11-24); no own-site copy found by
+      search. Read in a browser by hand.
+  - unit: "4200322520"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: >-
+      Edgewood's site (edgewoodboro.com) refuses automated connections (TLS
+      handshake failure, checked 2026-11-24); search finds Chapter 200 only on
+      a commercial code host. Read in a browser by hand.
+  # --- G2b readings (bucks), 2026-11-24
+  - unit: "4201708768"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Bristol Township's site (bristoltwppa.gov) links its code only to a
+      commercial code host; no zoning PDF on its own site.
+  - unit: "4201705616"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Bensalem's Building and Planning page links its code only to a commercial
+      code host; its own site posts the zoning map and fee schedule only.
+  - unit: "4201749120"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Middletown (Bucks) links Chapter 500 Zoning only to a commercial code
+      host; its own site posts single amending ordinances (e.g. Ord. 21-07,
+      25-01), not the whole chapter.
+  - unit: "4201744968"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Lower Makefield links Chapter 200 Zoning only to a commercial code host;
+      its own site posts single amendments (floodplain 2025, TND 2007, LID).
+  - unit: "4201725112"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Falls Township (Bucks, fallstwp.com) links Chapter 209 Zoning only to a
+      commercial code host; its own site posts the 2019 zoning map and a 2026
+      data-center curative amendment. fallspa.gov is a different Falls
+      Township (Wyoming County).
+  # --- G2b readings (central), 2026-11-24
+  - unit: "4201302184"
+    effort: commercial_only
+    url: https://www.altoonapa.gov/zoning
+    checked_on: 2026-11-24
+    note: >-
+      Altoona replaced Chapter 800 (Ordinance 5833, introduced September 8, 2025).
+      The zoning page's link is broken (href "http://FINAL_Altoona_Zoning_Sept2025.pdf");
+      no working copy found in the site map or council pages. ZHB packets show
+      only excerpts of Article 3 (no ADU text). Full text only on a commercial host.
+  - unit: "4204375672"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Swatara township links its Chapter 295 only to a commercial code host and a ZoningHub
+      portal; no ordinance PDF on its own site.
+  - unit: "4204132296"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Hampden township (Cumberland) links its code only to a commercial code host; its
+      site posts the zoning map and plan, not the ordinance.
+  - unit: "4201916920"
+    effort: commercial_only
+    url: https://agenda.cranberrytownship.org/agenda/cranberry/cranberry/file/getfile/24205
+    checked_on: 2026-11-24
+    note: >-
+      Cranberry (Butler) links Chapter 27 only to a commercial code host. Its agenda
+      system posts amendment bills (e.g. Bill 2020-07 on accessory dwelling units and
+      quarters, one per lot, attached or via breezeway), but bills are not the
+      consolidated enacted text, so not read as a rule.
+  - unit: "4212933792"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Hempfield township (Westmoreland) links its 2014 Zoning Ordinance (Chapter 87) only
+      to a commercial code host.
+  # --- G2b readings (counties), 2026-11-24
+  - unit: "county:42115"
+    effort: not_general_zoning
+    url: https://www.susqco.com/departments/planning-and-development/subdivision-and-land-development-ordinance
+    checked_on: 2026-11-24
+    note: >-
+      Susquehanna County's own site posts a county subdivision and land
+      development ordinance (Ord. 2005-1, effective January 26, 2011, amended
+      July 12, 2023) and topic ordinances, but no general county zoning
+      ordinance; the planning department's pages do not mention zoning. The
+      DCED record's 15 "county" municipalities likely reflect the county
+      SALDO. Treated as no county zoning to read until a county text is found.
+  - unit: "county:42063"
+    effort: not_general_zoning
+    url: https://www.icopd.org/zoning.html
+    checked_on: 2026-11-24
+    note: >-
+      Indiana County's only zoning is the Special Recreation and Conservation
+      Zoning Ordinance (1973, amended 2003): buffer and conservation zones
+      around Blue Spruce, Pine Ridge and Hemlock Lake parks and Yellow Creek
+      State Park, not general zoning of the 12 municipalities the DCED record
+      lists as county-zoned.
+  # --- G2b readings (east_sw), 2026-11-24
+  - unit: "4207784528"
+    effort: own_pdf_scan
+    url: https://whitehalltwp.org/documents/zoning-ordinance/
+    checked_on: 2026-11-24
+    note: >-
+      Rechecked 2026-11-24: of 33 article files only Article 4 (definitions),
+      Article 17 (April 2023, short) and Article 24 (supplemental rules) have a
+      text layer; the district use and lot articles are scans. Not read.
+  - unit: "4207767576"
+    effort: not_searched
+    url: https://salisburylehighpa.gov/township-government/departments/planningzoning/zoning-documents/
+    checked_on: 2026-11-24
+    note: >-
+      The township site (salisburylehighpa.gov) answers every automated request,
+      PDFs included, with a JavaScript challenge page, so nothing could be read;
+      not bypassed. The site lists a Complete Zoning Ordinance; read by hand.
+      Rechecked 2026-11-24 (G2c): the site has been rebuilt and no longer
+      challenges, but the old zoning-documents address is gone and the new
+      Zoning page loads its file list by script from /api/, which robots.txt
+      disallows; no file address was found to fetch.
+  - unit: "4208915960"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Coolbaugh's ordinances page links its zoning code (Chapter 400) only to a
+      commercial code host; the only zoning PDF on its own site is the 2023
+      zoning map (one map page, no text).
+  - unit: "4205172544"
+    effort: own_pdf_scan
+    url: "https://www.southuniontwp.com/index.php/information/ordinances/8-1974?download=13:ordinance-7-74"
+    checked_on: 2026-11-24
+    note: >-
+      South Union posts its base Zoning Ordinance 7-74 (October 1, 1974) as a scan
+      with a poor machine-read text layer, and about 60 later amendments
+      (1978-2025) as separate files; no consolidated copy. Not read: the current
+      rule cannot be fixed from the posted pieces.
+  - unit: "4205178528"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Uniontown zones itself (Fayette County's zoning page lists it among the 11
+      municipalities that do); the city's website (uniontowncity.com) posts no
+      zoning ordinance (pages and media searched). Ask the city for a copy.
+  # --- G2b readings (montdel), 2026-11-24
+  - unit: "4209144976"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Lower Merion's Zoning Code (Chapter 155, adopted February 26, 2020, Ord.
+      4181) is published on a commercial code host; the township's own site
+      returned 403 to automated requests, and only 2018-2019 draft articles
+      were found on it. Not read.
+  - unit: "4204533144"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Haverford's Planning and Zoning page links its Zoning Ordinance only to
+      a commercial code host; the township posts single amending ordinances,
+      not the consolidated text. A comprehensive zoning update is under way
+      on a consultant's site (drafts). Not read.
+  - unit: "4204579000"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Upper Darby's Zoning page links the Zoning Code (Chapter 550, Zoning
+      Ordinance of 2010) only to a commercial code host. Not read.
+  # --- G2c (fork A, C), 2026-11-24
+  - unit: "4209506096"
+    effort: commercial_only
+    url: https://bethlehemtownship.org/zoning
+    checked_on: 2026-11-24
+    note: >-
+      Bethlehem township (Northampton) links its zoning (Chapter 275) only to a
+      commercial code host; the township's own pages carry forms and the zoning
+      map (forms2/zonemap.pdf), not the ordinance text.
+  - unit: "4208974880"
+    effort: commercial_only
+    url: https://www.stroudtownship.org/zoning-department/
+    checked_on: 2026-11-24
+    note: >-
+      Stroud township (Monroe) links its zoning (Chapter 27) and use schedule
+      only to a commercial code host; its own ordinances page has other
+      ordinances and the zoning map; "Zoning-Districts.pdf" is a scan.
+  - unit: "4209145080"
+    effort: commercial_only
+    url: https://www.lowerprovidence.org/573/Zoning-Links
+    checked_on: 2026-11-24
+    note: >-
+      Lower Providence links Chapter 143 only to a commercial code host. A
+      combined draft rewrite (DocumentCenter/View/3232) is posted for review: a
+      draft, not enacted text. Re-check once the rewrite is adopted and posted.
+  - unit: "4209179136"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Upper Merion's site (umtownship.org) answered automated requests,
+      robots.txt included, with HTTP 403; not bypassed. Only separate amendment
+      ordinances were seen in search results. Read by hand.
+  - unit: "4208185312"
+    effort: own_text_incomplete
+    url: https://www.cityofwilliamsport.org/wp-content/uploads/2018/11/Williamsport13.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Williamsport's posted Part Thirteen (2018 upload) has a text layer, but
+      its Table of Use Regulations (§ 1333.05) is a placeholder ("Please include
+      WilliamsportTable1333-05.wpd here. 17 pages.") with blank pages, so the
+      uses by district cannot be read. Not read; ask the city for the table.
+  - unit: "4207985152"
+    effort: own_pdf_scan
+    url: https://www.wilkes-barre.city/DocumentCenter/View/112/2012-Zoning-Ordinance-PDF
+    checked_on: 2026-11-24
+    note: >-
+      Wilkes-Barre's 2012 Zoning Ordinance (File of Council No. 18 of 2012,
+      passed finally October 25, 2012) is posted as a 178-page scan with no
+      text layer. Not read.
+  - unit: "4201163624"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Reading's zoning and planning page links the Zoning Ordinance (Chapter
+      600) only to a commercial code host (American Legal); the city posts
+      amendment hearing notices only. Not read.
+  - unit: "4205115776"
+    effort: own_text_incomplete
+    url: https://www.connellsville.us/_files/ugd/5a68d4_72cbda40a8414ea4b5792462e2f7052b.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Connellsville posts "Zoning Ordinance 2012" (text calls itself the Zoning
+      Ordinance of 2010; no enactment page or date) with an accessory apartment
+      rule ("shall be permitted", 720 sq ft minimum, one per house; offset
+      26477), and a separate "Zoning Ordinance 2022" file that is an 8-page scan
+      with no text layer. Not verified: the 2022 document could amend it and
+      the 2012 text gives no adoption date.
+  - unit: "4207953960"
+    effort: not_searched
+    checked_on: 2026-11-24
+    note: >-
+      Newport township (Luzerne): DCED says county zoning, but Luzerne County's
+      zoning page (as of April 22, 2026) lists Newport among the municipalities
+      NOT under county jurisdiction. Left unknown until its own ordinance is found.
+  # --- G2c (fork B), 2026-11-24
+  - unit: "4201780952"
+    effort: commercial_only
+    url: https://warminstertownship.org/wp-content/uploads/2013/03/zoning_ord_adopted_100109.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Warminster's own site posts only the 2009 Chapter 27 (Ord. 689); search
+      results show it was superseded by Ord. No. 762 (May 7, 2020), whose text
+      is only on a commercial code host. The 2009 copy is not operative: not read.
+  - unit: "4202977344"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: >-
+      Tredyffrin's Chapter 208 Zoning is published only on a commercial code
+      host; the township site has agendas, minutes and hearing orders only.
+  - unit: "4202983080"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: >-
+      West Goshen's Chapter 84 Zoning is only on a commercial code host; the
+      township site posts single amendments (2024-2025) and a 2026 rewrite
+      draft under review, not the code.
+  - unit: "4212559608"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: >-
+      Peters township's zoning page links its Chapter 440 Zoning only to a
+      commercial code host; the site posts proposed amendments only.
+  # --- G2d (fork_A), 2026-11-24
+  - unit: "4200347696"
+    effort: commercial_only
+    url: https://b21267ba-8653-494d-b7f4-c7b15c105d18.filesusr.com/ugd/ca4e1d_72c23a3629004a49adbc53e231be9734.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Marshall's Ordinance Update page (twp.marshall.pa.us/321) links a
+      "Zoning.pdf" that is headed "45-Day Review Draft 04/07/2025" (text
+      sha256 94dc5a9d..., 526,926 chars), not the Chapter 208 adopted July 28,
+      2025 (Ord. No. 493) with later changes; the adopted text is only on a
+      commercial code host. Not read.
+  # --- G2d (fork_B), 2026-11-24
+  - unit: "4200337955"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Jefferson Hills' former address (jeffersonhillsboro.org) now redirects to an
+      unrelated betting site, so it is no longer the borough's own site; the
+      codified ordinance is found only on a commercial code host, which says
+      zoning copies come from the borough secretary. Not read.
+  - unit: "4200311680"
+    effort: own_text_incomplete
+    url: https://www.csboro.org/wp-content/uploads/2024/06/CSB-Zoning-Ordinance-7-2013.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Castle Shannon (now csboro.org) posts the "July 2013" zoning ordinance
+      (text sha256 df7e1e75..., 336,086 chars): no enactment page, ordinance
+      number or adoption date in the text, and its use table is headed "DRAFT"
+      (offset 104017). No own-site record of its adoption found. Not verified.
+  - unit: "4200311336"
+    effort: own_text_incomplete
+    url: https://www.carnegieborough.com/wp-content/uploads/2026/04/Chapter-27-Zoning.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Carnegie's rebuilt ordinances page posts Chapter 27 Zoning as "[Reserved]"
+      (editor's note: Ord. 995 of 1993 to be replaced by a separate ordinance);
+      the older links to Zoning Ordinance No. 2445 (2017, amended 10-1-19) now
+      return 404. Not read; ask the borough for the current text.
+  - unit: "4200336808"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Indiana township's site (indianatownship.com) posts permit forms, the
+      floodplain and timber ordinances and the joint comprehensive plan, but no
+      zoning ordinance; none found by search. Not read.
+  - unit: "4200364240"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: Reserve township's Chapter 430 Zoning (Ord. 610) was found only on commercial code hosts.
+  - unit: "4200369776"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: Sharpsburg's Chapter 27 Zoning (Ord. 16-03, 2016) was found only on commercial code hosts.
+  - unit: "4200313608"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: Churchill's Chapter 304 Zoning was found only on commercial code hosts.
+  - unit: "4200332624"
+    effort: commercial_only
+    url: ""
+    checked_on: 2026-11-24
+    note: >-
+      Harmar's township site links its Code of Ordinances (Ord. 432, 2018;
+      zoning Chapter 27 from Ord. 331 of 1999) to a commercial code host only.
+  # --- G2d (fork_C), 2026-11-24
+  - unit: "4200335424"
+    effort: not_searched
+    url: https://homesteadborough.com/government/administration/ordinances/
+    checked_on: 2026-11-24
+    note: >-
+      Homestead's ordinances page answered automated requests with a bot
+      check (a "ki-cf-botcl" challenge link), not bypassed; search found the
+      code only on third-party hosts. Read by hand.
+  - unit: "4200303320"
+    effort: commercial_only
+    url: https://www.aspinwallpa.gov/
+    checked_on: 2026-11-24
+    note: >-
+      Aspinwall links its code only to a commercial code host; the two PDFs on
+      its home page are a budget and a records-request form. A zoning update
+      was under way (public meeting November 2024); no adopted text posted.
+  - unit: "4200323616"
+    effort: commercial_only
+    url: https://emsworthborough.com/
+    checked_on: 2026-11-24
+    note: >-
+      Emsworth links its code only to a commercial code host; its own site has
+      the zoning map (image) and permit forms. A consultant's download page
+      has an undated copy, which is not the borough's own.
+  - unit: "4200380032"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Verona's own pages say all ordinances are on a commercial code host.
+  - unit: "4200317048"
+    effort: commercial_only
+    url: https://www.crescenttownship.com/
+    checked_on: 2026-11-24
+    note: Crescent township links its code, agendas and minutes only to a commercial code host.
+  - unit: "4200303932"
+    effort: commercial_only
+    url: https://baldwintownship.com/
+    checked_on: 2026-11-24
+    note: Baldwin township links its code only to a commercial code host.
+  - unit: "4200363408"
+    effort: commercial_only
+    url: https://rankinborough.com/departments/code-enforcement
+    checked_on: 2026-11-24
+    note: >-
+      Rankin links its code only to a commercial code host; its own documents
+      are the zoning map and a "general code" pointer. A 2019 state recovery
+      plan says a joint zoning update with Swissvale was adopted in 2016; the
+      Swissvale reading is not applied to Rankin without Rankin's own text.
+  - unit: "4200383200"
+    effort: commercial_only
+    url: https://westhomesteadpa.com/permit-zoning-guide/
+    checked_on: 2026-11-24
+    note: >-
+      West Homestead's robots.txt disallows all automated access (Disallow: /);
+      its pages link the code only to a commercial code host. Not read.
+  - unit: "4200300724"
+    effort: own_pdf_text
+    url: https://aleppotownship.com/wp-content/uploads/ZONING-ORDINANCE-2022-rev-0425.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Aleppo Ordinance 2022-02 (adopted August 15, 2022; text sha256
+      374de6c3..., re-fetched 2026-11-24): "Accessory Dwelling Unit" is an
+      accessory use in R-2, R-3 and MU (§ 312 Table 6, offset 247348; standards
+      offset 257868) and not listed in R-1 Single Family. The text does not say
+      which district holds most homes, so the main district is not settled.
+      Not verified.
+  - unit: "4200385496"
+    effort: commercial_only
+    url: http://wilmerdingboro.com/borough-history.html
+    checked_on: 2026-11-24
+    note: Wilmerding's ordinances page links only to a commercial code host.
+  - unit: "4200307992"
+    effort: own_pdf_scan
+    url: https://braddockborough.com/uploads/documents/policies/zoning-ordinacne-1174-20251217-163028.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Braddock's Zoning Ordinance No. 1174 is posted on its own site as a
+      182-page scan with no text layer. Not read.
+  - unit: "4200308008"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Braddock Hills' code (Chapter 27 Zoning) is found only on a commercial code publisher.
+  - unit: "4200322576"
+    effort: commercial_only
+    url: https://edgeworthborough.org/services/building-and-zoning/
+    checked_on: 2026-11-24
+    note: >-
+      Edgeworth's building and zoning page links the zoning ordinance only to a
+      commercial code host (Ordinance 564 of June 2026 amends accessory
+      structures); own site has the map and forms.
+  - unit: "4200313392"
+    effort: commercial_only
+    url: https://cheswick.us/zoning/
+    checked_on: 2026-11-24
+    note: Cheswick's zoning page links only to a commercial code host.
+  - unit: "4200342368"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: >-
+      Leet township links Chapter 27 Zoning only to a commercial code host; its
+      own site has single amendments (Ord. 2019-01, definitions).
+  - unit: "4200319856"
+    effort: commercial_only
+    url: https://dravosburg.org/residents/
+    checked_on: 2026-11-24
+    note: Dravosburg's residents page says all ordinances are on a commercial code host.
+  - unit: "4200372968"
+    effort: own_pdf_scan
+    url: https://springdaletwp.us/wp-content/uploads/2026/04/springdale_township_zoning_ordinance_-_april_2019.pdf
+    checked_on: 2026-11-24
+    note: >-
+      Springdale township posts its April 2019 Zoning Ordinance as a 146-page
+      scan with no text layer; the separate area-and-bulk table has only a
+      garbled text layer. Not read.
+  - unit: "4200305216"
+    effort: commercial_only
+    url: https://bellacresborough.org/borough-services/permits-code-enforcement/
+    checked_on: 2026-11-24
+    note: Bell Acres links Chapter 165 Zoning only to a commercial code host; own site has single amendments.
+  - unit: "4200307000"
+    effort: commercial_only
+    url: https://www.blawnox.com/building-zoning
+    checked_on: 2026-11-24
+    note: Blawnox's building and zoning page links Ordinance 624 only to a commercial code host.
+  - unit: "4200333592"
+    effort: commercial_only
+    checked_on: 2026-11-24
+    note: Heidelberg borough's zoning is found only on a commercial code host.
+  - unit: "4200342392"
+    effort: not_searched
+    url: https://www.leetsdaleboro.net/ordinances
+    checked_on: 2026-11-24
+    note: >-
+      Leetsdale's ordinances page (2024 amendment Ord. 690 listed; code kept on
+      a commercial host) did not return its listing to an automated request.
+      Read by hand.
+  # --- G2e readings, 2026-11-25
+  - unit: "4210382928"
+    effort: not_searched
+    url: https://westfalltownship.org/forms-fees/zoning-applications-ordinances/
+    checked_on: 2026-11-25
+    note: >-
+      Westfall township (Pike) posts its 1976 base ordinance (No. 76-1) and
+      each later amendment as separate files on its own site; no consolidated
+      text. Not read: every amendment would have to be checked for ADU
+      changes.
+  - unit: "4210307088"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-25
+    note: >-
+      Blooming Grove township (Pike): its site reset the connection to an
+      automated request (robots file could not be read), so nothing was
+      fetched; search found the code only on a commercial host.

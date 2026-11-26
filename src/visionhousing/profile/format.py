@@ -18,6 +18,13 @@ Every fact keeps its exact value; this module only decides how it is shown.
   These bands are display wording only, not model assumptions: they never
   change a number, only whether the words say "higher" or "about the same".
   The exact values are always shown next to the words.
+
+- :func:`tidy` shortens a raw number for the JSON reply: a float is cut to
+  :data:`RAW_DIGITS` significant digits (``105.62196741208714`` becomes
+  ``105.6``), but only when the shorter number still formats to exactly the same
+  text by :func:`fmt`; otherwise it keeps more digits, up to the exact value.
+  Every shown text is made from the exact value before this step, so no text
+  changes; the raw number only loses digits no one sees. Whole numbers are kept.
 """
 
 from __future__ import annotations
@@ -31,6 +38,7 @@ __all__ = [
     "compare_words",
     "fmt",
     "is_missing",
+    "tidy",
 ]
 
 SAME_SHARE_POINTS = 0.02
@@ -43,6 +51,9 @@ SAME_RELATIVE = 0.05
 """Other values within 5% of each other read "about the same"."""
 
 MISSING = "not available"
+
+RAW_DIGITS = 4
+"""Significant digits kept in a profile's raw numbers (JSON only; see :func:`tidy`)."""
 
 
 def is_missing(value: object) -> bool:
@@ -123,3 +134,27 @@ def compare_words(value: object, other: object, unit: str, against: str) -> str:
     if same:
         return f"about the same as the {against}"
     return f"{'higher' if diff > 0 else 'lower'} than the {against}"
+
+
+def tidy(value: object, unit: str) -> object:
+    """A raw float cut to :data:`RAW_DIGITS` significant digits where that shows the same.
+
+    Args:
+        value: The raw value (anything that is not a finite, non-whole float comes back
+            unchanged).
+        unit: The value's unit, as :func:`fmt` uses it.
+
+    Returns:
+        The shortest float with at least :data:`RAW_DIGITS` significant digits whose
+        :func:`fmt` text equals the exact value's, or ``value`` itself.
+    """
+    if not isinstance(value, float) or not math.isfinite(value) or value.is_integer():
+        return value
+    shown = fmt(value, unit)
+    for digits in range(RAW_DIGITS, 17):
+        short = float(f"{value:.{digits - 1}e}")
+        if short == value:
+            return value
+        if fmt(short, unit) == shown:
+            return short
+    return value

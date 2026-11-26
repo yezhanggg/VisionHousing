@@ -1,0 +1,34 @@
+# Test fixture: one Massachusetts MBTA Communities (M.G.L. c. 40A § 3A)
+# compliance district, to check that a mapped-area rule changes eligibility
+# only inside its polygon and only from its start date. The polygon is in
+# ma_3a_berkley.geojson (one MassGIS feature, 5 vertices).
+#
+# start is the layer's DATE_ field (the date the town submitted the district,
+# 2025-10-09), not a verified adoption or compliance date: neither could be
+# read on mass.gov. Good enough for a mechanics test; not a record for a run.
+
+version: 1
+
+records:
+  - record_id: ma_3a_berkley_rdod
+    provision_id: ma_40a_3a
+    citation: "M.G.L. c. 40A § 3A; Berkley Residential Development Overlay District"
+    jurisdiction: MA
+    area_id: ma_3a_berkley_rdod
+    housing_type: multifamily
+    status: locally_implemented
+    start: 2025-10-09
+    verified_on: 2026-11-24
+    retrieved_on: 2026-11-24
+    scope: Multi-family housing as of right in the district (15 units per acre, 2 storeys)
+    agency: Executive Office of Housing and Livable Communities
+    implementation_evidence: MassGIS 3A District Atlas lists the district as Compliant
+    court_status: upheld
+    note: >-
+      Section 3A's compliance duty was held enforceable by the Supreme
+      Judicial Court in Attorney General v. Town of Milton, SJC-13580, decided
+      January 8, 2025. (Massachusetts' by-right ADU law is a separate
+      provision, sections 7-8 of chapter 150 of the Acts of 2024; not in this
+      fixture.)
+    sources:
+      - "https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/MBTA_Communities_3A_District_Atlas/FeatureServer/0"

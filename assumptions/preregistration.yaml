@@ -1,0 +1,145 @@
+# Pre-registration record: the expected fingerprint of every block of rules that a
+# study fixed in advance. Read by visionhousing.validation.preregistration.
+#
+# Before a study scores anything it recomputes the fingerprint of the block it is
+# about to use and compares it with the one here. On a mismatch it refuses to run:
+#   visionhousing validate-donor-pool       (donor_pool_rules, pooled_states_test)
+#   visionhousing validate-growth-coverage  (donor_pool_rules, growth_coverage_test)
+#   visionhousing validate-state-holdouts   (donor_pool_rules, state_holdout_check)
+#   visionhousing validate-baseline-calibration (oot_calibration)
+#   visionhousing validate-baseline-reliability (baseline_reliability)
+#   visionhousing validate-national-state-calibration (national_state_calibration)
+#   visionhousing evidence-retro run        (retro_design)
+#   visionhousing evidence-retro check      (retro_design, and the results' design_sha256)
+#   visionhousing evidence-retro audit      (retro_design, retro_treatment_audit)
+#   visionhousing validate-cards            (validation_card_scores)
+#
+# Fingerprint: SHA-256 of json.dumps(block, sort_keys=True, separators=(",", ":"),
+# default=str), where block is the YAML as read by yaml.safe_load. Comments and layout
+# do not count; any changed value does.
+#
+# Be clear about what this file can and cannot show. It was first written on
+# 2026-11-24, AFTER each study had already been run once. It protects the rules from
+# being changed quietly from now on. It cannot prove what the rules were before that
+# day. Two blocks (pooled_states_test, growth_coverage_test) also had their
+# fingerprints written in the decision log before their first scores; those logged
+# values are the same as the ones below. The other two had no fingerprint logged
+# before their first run.
+#
+# To change a block on purpose: edit it, record its new fingerprint here with the
+# date and the reason, and move the old one to `history`. Method:
+# docs/modules/validation_donor_pool.md ("Pre-registration check").
+
+version: 1
+method: SHA-256 of json.dumps(block, sort_keys=True, separators=(',', ':'), default=str)
+first_recorded_on: 2026-11-24
+recorded_after_first_run: true
+
+blocks:
+  donor_pool_rules:
+    file: assumptions/validation_donor_pool.yaml
+    # The first test's rules: every top-level key written before its first score.
+    keys: [version, source, first_year, last_year, states, rule, quantiles, target_coverage,
+           coverage_band, variants, primary_variant, min_cases, methods, prior_state,
+           full_weight_cases, donor, held_out, decision, confidence]
+    sha256: 4b23d3a44df092756d22058f30c8e7a296af0ce8260deabf857324b602476e24
+    recorded_on: 2026-11-24
+    logged_before_first_score: false
+    note: >-
+      Recorded after the first run. On 2026-11-24 the code's reading of the context
+      variant other_origins was tightened (cases whose five target years overlap the
+      scored case are no longer used); the key and its values here did not change, and
+      the decision uses out_of_time only.
+  pooled_states_test:
+    file: assumptions/validation_donor_pool.yaml
+    key: pooled_states_test
+    sha256: c657753f5bbd3b6580258e97a564f6664fc2cb583f04b9f300ab13c7c810f3f7
+    recorded_on: 2026-11-24
+    logged_before_first_score: true
+    note: The same value was written in the decision log before the first score.
+  growth_coverage_test:
+    file: assumptions/validation_donor_pool.yaml
+    key: growth_coverage_test
+    sha256: 52500257051aec27b8bf40b303c0db488c1f85cac7106b1224c2c5a3999ce080
+    recorded_on: 2026-11-24
+    logged_before_first_score: true
+    note: The same value was written in the decision log before the candidate was scored.
+  state_holdout_check:
+    file: assumptions/validation_state_holdouts.yaml
+    key: state_holdout_check
+    sha256: bb09229bc08c972a1ca937746341013c5e256e1dd82d430fa38fcdc6b7ef9127
+    recorded_on: 2026-11-24
+    logged_before_first_score: true
+    note: >-
+      Descriptive state confidence check (no candidate, no adoption rule). Recorded here
+      and in the decision log before its first score.
+  oot_calibration:
+    file: assumptions/backtest.yaml
+    key: oot_calibration
+    sha256: db14162cf48cb3d740da26617da54e72147aa5dec122c5cec3f7f8b8fd0cba34
+    recorded_on: 2026-11-25
+    logged_before_first_score: true
+    note: >-
+      Out-of-time calibrated baseline ranges. Written, fingerprinted here and logged in
+      the decision log (2026-11-25 05:18Z) before the study code existed or any score
+      was computed.
+  baseline_reliability:
+    file: assumptions/backtest.yaml
+    key: baseline_reliability
+    sha256: 3207b76a91e6ca9502791bc8ad9b01aab4d1d68f35f055538820edfaedc704a5
+    recorded_on: 2026-11-25
+    logged_before_first_score: true
+    note: >-
+      Measured reliability of the shipped baseline range (descriptive; never gates).
+      Written, fingerprinted here and logged in the decision log (2026-11-25 05:48Z)
+      before the study code existed or any score was computed.
+  national_state_calibration:
+    file: assumptions/backtest.yaml
+    key: national_state_calibration
+    sha256: 9c74cf2d20535af5f95f9bb0c3897bcd16dc0509d72ad0671b5459fb0ca4819e
+    recorded_on: 2026-11-25
+    logged_before_first_score: true
+    note: >-
+      State-total range calibrated from a national pool of state-total errors (two
+      variants, one adoption rule). Written, fingerprinted here and logged in the
+      decision log (2026-11-25 05:48Z) before the study code existed or any score was
+      computed.
+  retro_design:
+    file: assumptions/evidence/retro_design.yaml
+    # the whole design file
+    sha256: 8cd8ea6fae830de67ff57d9aca7a403ec82a3a538aed8684ea40462583ab388d
+    recorded_on: 2026-11-24
+    logged_before_first_score: false
+    note: >-
+      Recorded after the first run and after one change: the cut-off date for statewide
+      laws (2025-12-31) moved from the code into comparison_pool.law_in_force_by (see the
+      design's changes list). Same date, so no estimate changed.
+    history:
+      - sha256: f41099de19a6d6e7218413ea660823cef3d0389cd7474a080ae6249df2a2854d
+        until: 2026-11-24
+        why: >-
+          The design as first run (cut-off date still in the code). Computed on
+          2026-11-24 from that version; never checked by a run before this file existed.
+  retro_treatment_audit:
+    file: assumptions/evidence/retro_audit.yaml
+    key: retro_treatment_audit
+    sha256: 6df46e11f705316757c269c474867ac458ad3c83f5ccd7b473a15de7e70fe76f
+    recorded_on: 2026-11-25
+    logged_before_first_score: true
+    note: >-
+      Treatment-date audit of the retrospective panel (Saint Paul Phase 2, Portland
+      RIP1/RIP2, year convention, four variants). Written, fingerprinted here and logged
+      in the decision log (2026-11-25 18:02Z) before any of its estimates was computed.
+      The original panel's results had been seen. retro_design is unchanged.
+  validation_card_scores:
+    file: assumptions/validation_cards.yaml
+    key: validation_card_scores
+    sha256: 0085f334612a5d5e856392e2bfb7f40ef27c0c02c4d019e16d13db0c1c8962f8
+    recorded_on: 2026-11-25
+    logged_before_first_score: true
+    note: >-
+      Validation cards: interval score, signed error, error by size, non-overlapping
+      subset and fold timeline for re-derived cases of baseline_reliability and
+      state_holdout_check. Written, fingerprinted here and logged in the decision log
+      (2026-11-25 18:02Z) before any of these scores was computed; the coverage counts
+      themselves were already published by their own studies.

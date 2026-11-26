@@ -1,0 +1,140 @@
+# VisionHousing practical capacity screen (package option "capacity_screen" and the
+# "<reform>_capacity_screen" variants).
+#
+# Read by visionhousing.engine.capacity (it checks this file on load).
+# Method: docs/methods/capacity.md. Module: docs/modules/capacity.md.
+#
+# Rules for this file:
+#   - No estimate lives here. Screens, table columns, which reforms take which
+#     septic rule, and words only. Every uncertain number is a ledger entry
+#     (capacity.*) in assumptions/parameters.yaml.
+#   - Every rule has an id, so a record can cite it.
+#   - The five benchmark presets never change: the screen runs only when a run
+#     asks for capacity_screen, or a reform asks for a *_capacity_screen variant.
+#     The "not screened" case is today's numbers, draw for draw.
+
+version: 1
+id: capacity_2026_11
+title: "Practical capacity screen"
+question: >-
+  Of the homes a reform makes legal and profitable, how many can be built in
+  practice once lots without public sewer, lots in FEMA's flood zone and steep
+  lots are screened?
+
+# The screens, in the order they are reported. Each reads one optional pack
+# table (scenarios.extra_common.pack_table). A tract the table does not list, or
+# a blank value, is "not measured" and its value is drawn from a ledger range;
+# it is never assumed to pass.
+screens:
+  sewer:
+    id: capacity.screens.sewer
+    label: "public sewer service"
+    table: infra_tract
+    sources: [pa_montco_sewer_service_areas, pa_adams_sewer_service_areas, phl_pwd_wastewater, vt_accd_wastewater_service_areas]
+    # A published *estimate* of where sewer service is, kept as its own evidence
+    # class (never verified). It speaks only to homes no official answer covers.
+    # Inside an estimated polygon: capacity.estimated_sewer_served_share of homes
+    # drawn as served; outside every polygon: capacity.estimated_outside_served_share;
+    # homes inside only a placeholder circle stay unknown. Massachusetts only today.
+    estimated:
+      id: capacity.screens.sewer_estimated
+      label: "estimated sewer service"
+      table: ma_sewer_estimated_tract
+      sources: [massdep_sewer_service_areas, tiger_2020_tabblock]
+  flood:
+    id: capacity.screens.flood
+    label: "FEMA flood zone"
+    table: hazard_tract
+    column: sfha_share
+    sources: [fema_nfhl]
+  steep:
+    id: capacity.screens.steep
+    label: "steep slope"
+    table: hazard_tract
+    column: steep_share
+    sources: [usgs_3dep_dem, usgs_annual_nlcd]
+  wildfire:
+    id: capacity.screens.wildfire
+    label: "wildfire"
+    # No wildfire table is in any state pack yet. The screen is reported as not
+    # measured (coverage 0) and removes nothing; it is never hidden.
+    table: null
+    sources: []
+
+# Which septic rule a reform family takes on lots outside public sewer.
+# "single": one added home on a lot (an ADU, a starter home) can often get an
+# on-lot septic permit; "multi": a 2-6 unit building or an apartment rarely can.
+# Families not listed take "multi".
+septic_rule:
+  id: capacity.septic_rule
+  single: [adu, starter_home_lots]
+
+# Families whose own funnel already screens water and sewer readiness: the sewer
+# screen is skipped for them so nothing is counted twice.
+own_sewer_screen:
+  id: capacity.own_sewer_screen
+  families: [transit_zoning_funded_infrastructure]
+
+# Families whose own legal rule already removes some of the lots a screen would
+# remove: the screen works on the lots that are left, so nothing is excluded
+# twice. "sewer_outside": the rule already drops lots outside every mapped public
+# sewer area (starter-home lots need a public sewer lateral), so the sewer screen
+# is the share buildable among the lots not outside a mapped area.
+legal_exclusions:
+  id: capacity.legal_exclusions
+  families:
+    starter_home_lots: [sewer_outside]
+
+# How the screens combine within a tract. Each multiplier is a share of the same
+# eligible lots. The pack measures each screen on its own (marginal shares), not
+# where they coincide, so the screened result is a range: for pass shares a, b, c
+# the share passing all three lies between max(0, a + b + c - 2) (the excluded
+# lots never coincide) and min(a, b, c) (they coincide as much as they can).
+# Independence (a x b x c) is one case inside the range and stays the reported
+# middle case until a joint measured layer exists.
+dependence:
+  id: capacity.dependence
+  cases: [independent, disjoint, nested]
+  middle: independent
+
+# A county-level reform (parking, fees) adds homes by county, not by lot. Its
+# multiplier is the county's homes-weighted mean of the tract multipliers,
+# applied to the share capacity.county_reform_exposure of its added homes.
+county_level:
+  id: capacity.county_level
+  weight_column: housing_units
+
+# Rule-written sentences. {p50}, {p10}, {p90} are a record's P50 / P10 / P90 and
+# {u50}, {u10}, {u90} the not-screened record's, filled in by the engine and
+# rounded to whole homes; {share}, {homes} and {tracts} are whole percents.
+texts:
+  screened: >-
+    Screened for practical capacity, {title} adds {p50} homes authorized in
+    2027-2031 (likely range {p10} to {p90}), against {u50} not screened
+    ({u10} to {u90}).
+  binding: >-
+    The {label} screen binds most: on its own it removes {p50} homes (likely
+    range {p10} to {p90}), the most of any screen in {share} of the modeled
+    draws in which a screen removes homes (Monte Carlo standard error {se}
+    percentage points).
+  dependence_range: >-
+    How the sewer, flood and slope screens overlap is not measured, so the
+    screened result is a range: {lo} homes if the excluded lots never coincide
+    to {hi} if they coincide as much as they can (middle P50s); {mid} if the
+    screens are independent.
+  nothing_to_screen: >-
+    {title} adds no homes in most draws, so no screen binds.
+  coverage_measured: >-
+    {label_cap}: measured for {homes} of homes ({tracts} of tracts); the rest
+    is not measured and is drawn from a ledger range, never assumed to pass.
+  coverage_unmeasured: >-
+    {label_cap}: this state's data pack has no table for it, so every tract is
+    drawn from a ledger range, never assumed to pass.
+  coverage_sewer_split: >-
+    Sewer evidence by homes: {verified} official answers, {estimated} a
+    published estimate only ({inside} inside an estimated service area; drawn
+    as a range, never as verified), {unknown} no answer (homes inside only a
+    placeholder circle count here).
+  coverage_none: >-
+    {label_cap}: not measured in this state's data pack, so this screen removes
+    nothing; it is shown so the gap is not hidden.

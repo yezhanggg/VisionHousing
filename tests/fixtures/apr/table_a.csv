@@ -1,0 +1,11 @@
+JURIS_NAME,CNTY_NAME,YEAR,PRIOR_APN,APN,STREET_ADDRESS,PROJECT_NAME,UNIT_CAT,TENURE,APP_SUBMIT_DT,TOT_PROPOSED_UNITS,APP_SUBMITTED_SB35,APPLICATION_STATUS,PROJECT_TYPE,NOTES
+ALPHA,Test,2020,,111-111-111,1 Example St,,ADU,Renter,2020-01-10,1,No,Approved,Ministerial,synthetic row
+ALPHA,Test,2020,,222-222-222,2 Example St,,ADU,Renter,2020-03-01,1,No,Pending,Ministerial,synthetic row
+ALPHA,Test,2021,,222-222-222,2 Example St,,ADU,Renter,2020-03-01,1,No,Pending,Ministerial,duplicate of the row above
+ALPHA,Test,2022,,333-333-333,3 Example St,,SFD,Owner,2022-02-01,2,SB 9 (2021) - Duplex in SF Zone,Approved,Ministerial,synthetic row
+ALPHA,Test,2021,,444-444-444,4 Example St,,5+,Renter,2021-05-01,40,SB 35 (2017),Approved,Ministerial,synthetic row
+ALPHA,Test,2021,,555-555-555,5 Example St,,5+,Renter,2021-06-01,60,No,Pending,Discretionary,synthetic row
+BETA,Test,2019,,666-666-666,6 Example St,,2 to 4,Owner,2019-04-01,3,No,Approved,Discretionary,synthetic row
+BETA,Test,2019,,,7 Example St,,ADU,Renter,2019-07-01,1,No,Withdrawn,Ministerial,no parcel number
+BETA,Test,2017,,888-888-888,8 Example St,,SFD,Owner,2017-07-01,1,No,Approved,Ministerial,outside the study years
+BETA,Test,2020,,999-999-999,9 Example St,,ADU,Renter,not a date,1,No,Pending,Ministerial,bad date

@@ -38,10 +38,23 @@ Cleaning
 
 Turning these raw columns into the state-pack features is done by
 :mod:`visionhousing.features.acs`.
+
+Profile tables
+--------------
+:func:`fetch_acs_profile` fetches the extra tables behind the place profile's
+charts (:data:`PROFILE_TABLES`: race and ethnicity, commute mode, household
+size, education, income brackets, vacancy status, rent as a share of income).
+By default (``method="auto"``) it uses the API when ``CENSUS_API_KEY`` is set,
+because that moves a few hundred KB instead of streaming several national
+files, and the summary files otherwise. Both give the same numbers. The
+result is saved once as ``acs5_profile_{fips}.csv.gz``, so the pack is built
+from the same file whichever path fetched it. The cells are collapsed into a
+few bands each by :mod:`visionhousing.features.acs_bands`.
 """
 
 from __future__ import annotations
 
+import gzip
 import json
 import os
 from collections.abc import Callable, Iterable, Mapping
@@ -69,16 +82,22 @@ __all__ = [
     "API_BATCH",
     "EXPECTED_LABELS",
     "LEVELS",
+    "PROFILE_LABELS",
+    "PROFILE_TABLES",
     "TABLES",
     "VINTAGE",
     "api_variables",
+    "check_profile_labels",
     "check_shell_labels",
+    "choose_method",
     "fetch_acs",
+    "fetch_acs_profile",
     "geo_prefixes",
     "parse_api_rows",
     "parse_geos",
     "parse_summary_table",
     "parse_table_shells",
+    "profile_variables",
     "stream_filter",
 ]
 
@@ -407,7 +426,11 @@ def _fetch_labels(client: HttpClient, folder: Path, manifest: Path | None) -> di
 
 
 def _fetch_summary(
-    client: HttpClient, fips: str, folder: Path, manifest: Path | None
+    client: HttpClient,
+    fips: str,
+    folder: Path,
+    manifest: Path | None,
+    tables: tuple[str, ...] = TABLES,
 ) -> pd.DataFrame:
     keep = _geo_id_keep(geo_prefixes(fips))
     url = get_source("acs5_geos").url()
@@ -417,7 +440,7 @@ def _fetch_summary(
         _record("acs5_geos", url, dest, manifest)
     parts = [parse_geos(dest).set_index("GEO_ID")]
     source = get_source("acs5_summary_file")
-    for table in TABLES:
+    for table in tables:
         url = source.url(table=table.lower())
         dest = folder / f"acsdt5y{VINTAGE}-{table.lower()}_{fips}.dat"
         if not dest.exists():
@@ -436,9 +459,11 @@ def _api_get(client: HttpClient, url: str, params: dict[str, str]) -> list[list[
     return json.loads(client.get_bytes(url, params).decode("utf-8"))
 
 
-def _fetch_api(client: HttpClient, fips: str, key: str) -> pd.DataFrame:
+def _fetch_api(
+    client: HttpClient, fips: str, key: str, variables: list[str] | None = None
+) -> pd.DataFrame:
     url = get_source("acs5_api").url()
-    variables = api_variables()
+    variables = api_variables() if variables is None else variables
     size = API_BATCH - 2  # GEO_ID and NAME are sent with every batch
     batches = [variables[i : i + size] for i in range(0, len(variables), size)]
     levels = (
@@ -518,3 +543,187 @@ def fetch_acs(
     if missing:
         raise ValueError(f"ACS fetch: columns missing from the answer: {missing[:5]}...")
     return out[columns].sort_values(["level", "geoid"]).reset_index(drop=True)
+
+
+# --------------------------------------------------------------------------- profile tables
+
+PROFILE_TABLES = (
+    "B03002",  # Hispanic or Latino origin by race
+    "B08301",  # means of transportation to work
+    "B11016",  # household type by household size
+    "B15003",  # educational attainment, people aged 25 or older
+    "B19001",  # household income brackets
+    "B25004",  # vacancy status
+    "B25070",  # gross rent as a share of household income
+)
+"""Extra tables for the place profile's charts (see :mod:`visionhousing.features.acs_bands`).
+
+The charts also use B01001, B19013, B25003, B25024, B25034 and B25064, which
+:func:`fetch_acs` already fetches; their filtered files are reused."""
+
+_RACE = (
+    "White alone", "Black or African American alone",
+    "American Indian and Alaska Native alone", "Asian alone",
+    "Native Hawaiian and Other Pacific Islander alone", "Some other race alone",
+    "Two or more races", "Two races including Some other race",
+    "Two races excluding Some other race, and three or more races",
+)  # fmt: skip
+_GRADES = ("Nursery school", "Kindergarten", "1st grade", "2nd grade", "3rd grade",
+           "4th grade", "5th grade", "6th grade", "7th grade", "8th grade", "9th grade",
+           "10th grade", "11th grade")  # fmt: skip
+_SIZES = ("2-person household", "3-person household", "4-person household",
+          "5-person household", "6-person household")  # fmt: skip
+
+PROFILE_LABELS: dict[str, tuple[str, ...]] = {
+    "B03002": ("Total", "Not Hispanic or Latino", *_RACE, "Hispanic or Latino", *_RACE),
+    "B08301": (
+        "Total", "Car, truck, or van", "Drove alone", "Carpooled", "In 2-person carpool",
+        "In 3-person carpool", "In 4-person carpool", "In 5- or 6-person carpool",
+        "In 7-or-more-person carpool", "Public transportation", "Bus",
+        "Subway or elevated rail", "Long-distance train or commuter rail", None,
+        "Ferryboat", "Taxi or ride-hailing services", "Motorcycle", "Bicycle", "Walked",
+        "Other means", "Worked from home",
+    ),
+    "B11016": (
+        "Total", "Family households", *_SIZES, "7-or-more person household",
+        "Nonfamily households", "1-person household", *_SIZES, "7-or-more person household",
+    ),
+    "B15003": (
+        "Total", "No schooling completed", *_GRADES, "12th grade, no diploma",
+        "Regular high school diploma", "GED or alternative credential",
+        "Some college, less than 1 year", "Some college, 1 or more years, no degree",
+        "Associate's degree", "Bachelor's degree", "Master's degree",
+        "Professional school degree", "Doctorate degree",
+    ),
+    "B19001": (
+        "Total", "Less than $10,000", "$10,000 to $14,999", "$15,000 to $19,999",
+        "$20,000 to $24,999", "$25,000 to $29,999", "$30,000 to $34,999",
+        "$35,000 to $39,999", "$40,000 to $44,999", "$45,000 to $49,999",
+        "$50,000 to $59,999", "$60,000 to $74,999", "$75,000 to $99,999",
+        "$100,000 to $124,999", "$125,000 to $149,999", "$150,000 to $199,999",
+        "$200,000 or more",
+    ),
+    "B25004": (
+        "Total", "For rent", "Rented, not occupied", "For sale only", "Sold, not occupied",
+        "For seasonal, recreational, or occasional use", "For migrant workers", "Other vacant",
+    ),
+    "B25070": (
+        "Total", "Less than 10.0 percent", "10.0 to 14.9 percent", "15.0 to 19.9 percent",
+        "20.0 to 24.9 percent", "25.0 to 29.9 percent", "30.0 to 34.9 percent",
+        "35.0 to 39.9 percent", "40.0 to 49.9 percent", "50.0 percent or more", "Not computed",
+    ),
+}  # fmt: skip
+"""Expected label of every cell of :data:`PROFILE_TABLES`, cell 1 first (``None``: not
+checked, for a label with a non-ASCII character)."""
+
+PROFILE_EXTRACT = "acs5_profile_{fips}.csv.gz"
+"""The state's profile cells, saved once in ``cache/acs/{vintage}/`` whichever path fetched
+them, so the pack is built from the same file either way."""
+
+
+def profile_variables() -> list[str]:
+    """Every estimate and margin variable of :data:`PROFILE_TABLES`, API style."""
+    out = []
+    for table in PROFILE_TABLES:
+        for i in range(1, len(PROFILE_LABELS[table]) + 1):
+            out += [f"{table}_{i:03d}E", f"{table}_{i:03d}M"]
+    return out
+
+
+def check_profile_labels(labels: Mapping[str, str]) -> list[str]:
+    """Check every profile cell against :data:`PROFILE_LABELS`; return the problems."""
+    problems = []
+    for table, wanted in PROFILE_LABELS.items():
+        for i, want in enumerate(wanted, start=1):
+            var = f"{table}_{i:03d}E"
+            got = labels.get(var)
+            if got is None:
+                problems.append(f"{var}: missing, expected {want!r}")
+                continue
+            last = got.split("!!")[-1].strip().rstrip(":").strip()
+            if want is not None and last != want:
+                problems.append(f"{var}: label {got!r}, expected {want!r}")
+    return problems
+
+
+def choose_method(method: str = "auto", env: Mapping[str, str] | None = None) -> str:
+    """``"api"`` when asked for, or for ``"auto"`` when a key is set; else ``"summary"``.
+
+    The summary files need no key, so a run with no key always works.
+    """
+    if method not in ("auto", "summary", "api"):
+        raise ValueError("method must be 'auto', 'summary' or 'api'")
+    if method != "auto":
+        return method
+    key = (os.environ if env is None else env).get(KEY_ENV, "").strip()
+    return "api" if key else "summary"
+
+
+def fetch_acs_profile(
+    state: str,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    method: str = "auto",
+    env: Mapping[str, str] | None = None,
+    manifest: Path | None = mf.MANIFEST_PATH,
+) -> pd.DataFrame:
+    """Fetch :data:`PROFILE_TABLES` for a state's own row, its counties and its tracts.
+
+    The first run fetches the cells and saves them to one small file
+    (:data:`PROFILE_EXTRACT`); later runs read that file and use no network.
+
+    Args:
+        state: Postal code or FIPS code.
+        cache: Folder for raw files (``data/raw``).
+        client: The HTTP client; a default one is made when omitted.
+        method: ``"auto"`` (default: the API when ``CENSUS_API_KEY`` is set, else
+            the summary files), ``"summary"`` (no key) or ``"api"``.
+        env: Environment to read the key from; ``os.environ`` when omitted.
+        manifest: Manifest file to record downloads in; ``None`` records nothing.
+
+    Returns:
+        ``GEO_ID, level, geoid`` and every column of :func:`profile_variables`,
+        sorted by level and code. Both paths give the same table.
+
+    Raises:
+        ValueError: An unknown method, a missing key on the API path, or labels
+            that do not match this vintage.
+    """
+    fips = to_state_fips(state)
+    folder = Path(cache) / "acs" / str(VINTAGE)
+    dest = folder / PROFILE_EXTRACT.format(fips=fips)
+    columns = ["GEO_ID", "level", "geoid", *profile_variables()]
+    if dest.exists():
+        out = pd.read_csv(dest, dtype={"GEO_ID": str, "level": str, "geoid": str})
+        return out[columns]
+    how = choose_method(method, env)
+    client = client or HttpClient()
+    shells = folder / f"ACS{VINTAGE}5YR_Table_Shells_profile_subset.txt"
+    if not shells.exists():
+        url = get_source("acs5_table_shells").url()
+        stream_filter(client, url, shells, _first_field_keep(PROFILE_TABLES))
+        _record("acs5_table_shells", url, shells, manifest)
+    problems = check_profile_labels(parse_table_shells(shells, PROFILE_TABLES))
+    if problems:
+        raise ValueError("ACS labels do not match this vintage:\n" + "\n".join(problems))
+    if how == "api":
+        key = (os.environ if env is None else env).get(KEY_ENV, "").strip()
+        if not key:
+            raise ValueError(f"method='api' needs {KEY_ENV} in the environment")
+        out = _fetch_api(client, fips, key, profile_variables())
+        url = get_source("acs5_api").url()
+    else:
+        out = _fetch_summary(client, fips, folder, manifest, PROFILE_TABLES)
+        url = get_source("acs5_profile_tables").url(table="{table}")
+    missing = [c for c in columns if c not in out.columns]
+    if missing:
+        raise ValueError(f"ACS profile fetch: columns missing from the answer: {missing[:5]}...")
+    out = out[columns].sort_values(["level", "geoid"]).reset_index(drop=True)
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    part = dest.with_name(dest.name + ".part")
+    with part.open("wb") as raw, gzip.GzipFile(fileobj=raw, mode="wb", mtime=0) as gz:
+        gz.write(out.to_csv(index=False, lineterminator="\n").encode("utf-8"))
+    part.replace(dest)
+    _record("acs5_profile_tables", url, dest, manifest)
+    return pd.read_csv(dest, dtype={"GEO_ID": str, "level": str, "geoid": str})[columns]

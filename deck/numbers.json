@@ -1,0 +1,1226 @@
+{
+ "state": "PA",
+ "built": "2026-11-25",
+ "slides": [
+  {
+   "n": 1,
+   "title": "If the state changed the rules, how many more homes would be permitted?",
+   "sources": [],
+   "pending_export": false
+  },
+  {
+   "n": 2,
+   "title": "State analysts must answer a hard question quickly",
+   "sources": [],
+   "pending_export": false
+  },
+  {
+   "n": 3,
+   "title": "It answers two questions",
+   "sources": [],
+   "pending_export": false
+  },
+  {
+   "n": 4,
+   "title": "We count homes authorized by building permits over five years",
+   "sources": [
+    "web/public/data/PA/report-card.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/baseline.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 5,
+   "title": "Public data only, fetched by one script",
+   "sources": [
+    "GET /api/v1/states (live, 2026-11-25)",
+    "web/public/data/PA/provenance.json (saved 2026-11-25)",
+    "web/public/data/PA/report-card.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 6,
+   "title": "Four steps, each one simple enough to check",
+   "sources": [
+    "web/public/data/PA/runs/baseline.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 7,
+   "title": "With no reform, Pennsylvania would likely permit",
+   "sources": [
+    "web/public/data/PA/validation.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/baseline.json (saved 2026-11-25)",
+    "web/public/data/PA/baseline-card.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 8,
+   "title": "Where the baseline has missed, we say so by name",
+   "sources": [
+    "web/public/data/PA/validation.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 9,
+   "title": "Extra homes permitted in Pennsylvania, 2027\u20132031",
+   "sources": [
+    "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/package.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 10,
+   "title": "Accessory dwelling units: Adds a lot",
+   "sources": [
+    "web/public/data/PA/runs/adu.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 11,
+   "title": "Missing middle: Little effect",
+   "sources": [
+    "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 12,
+   "title": "Transit-oriented density: Little effect",
+   "sources": [
+    "web/public/data/PA/runs/tod.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 13,
+   "title": "Parking requirement reduction: Adds some",
+   "sources": [
+    "web/public/data/PA/runs/parking.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 14,
+   "title": "Development fee reduction: Adds some",
+   "sources": [
+    "web/public/data/PA/runs/fees.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 15,
+   "title": "The same engine scores bills now before the legislature",
+   "sources": [
+    "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/pa_hb2186.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/pa_sb1346.json (saved 2026-11-25)",
+    "web/public/data/PA/adu-budget-grid.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 16,
+   "title": "Reforms do not simply add up",
+   "sources": [
+    "web/public/data/PA/runs/package.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 17,
+   "title": "A fee cut has a price per extra home",
+   "sources": [
+    "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+    "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 18,
+   "title": "All five reforms together, county by county",
+   "sources": [
+    "web/public/data/PA/maps/package.json (saved 2026-11-25)",
+    "web/public/data/PA/outlines.json (saved 2026-11-25)",
+    "GET /api/v1/states/PA/districts (live, 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 19,
+   "title": "Which rules are in force, and since when",
+   "sources": [
+    "web/public/data/PA/implementation.json (saved 2026-11-25)",
+    "GET /api/v1/evidence/states (live, 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 20,
+   "title": "The same code runs where data is thin",
+   "sources": [
+    "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+    "web/public/data/PA/runs/baseline.json (saved 2026-11-25)",
+    "web/public/data/VT/runs/package.json (saved 2026-11-25)",
+    "web/public/data/VT/runs/baseline.json (saved 2026-11-25)",
+    "web/public/data/WY/runs/package.json (saved 2026-11-25)",
+    "web/public/data/WY/runs/baseline.json (saved 2026-11-25)",
+    "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 21,
+   "title": "Checked against the past and against other places",
+   "sources": [
+    "web/public/data/evidence.json (saved 2026-11-25)",
+    "web/public/data/PA/plausibility.json (saved 2026-11-25)",
+    "web/public/data/PA/confidence.json (saved 2026-11-25)",
+    "web/public/data/PA/grades/baseline.json (saved 2026-11-25)",
+    "web/public/data/PA/grades/adu.json (saved 2026-11-25)",
+    "web/public/data/PA/grades/missing_middle.json (saved 2026-11-25)",
+    "web/public/data/PA/grades/tod.json (saved 2026-11-25)",
+    "web/public/data/PA/grades/parking.json (saved 2026-11-25)",
+    "web/public/data/PA/grades/fees.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 22,
+   "title": "Every number shows its working",
+   "sources": [
+    "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+    "GET /api/v1/reproduce (live, 2026-11-25)",
+    "web/public/data/PA/ledger.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 23,
+   "title": "Five screens, one map, plain words",
+   "sources": [],
+   "pending_export": false
+  },
+  {
+   "n": 24,
+   "title": "One command from a clean machine",
+   "sources": [
+    "Makefile",
+    "sbom/visionhousing.cdx.json"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 25,
+   "title": "What these estimates cannot tell you",
+   "sources": [
+    "web/public/data/PA/runs/baseline.json (saved 2026-11-25)"
+   ],
+   "pending_export": false
+  },
+  {
+   "n": 26,
+   "title": "Where the tool goes from here",
+   "sources": [],
+   "pending_export": false
+  },
+  {
+   "n": 27,
+   "title": "VisionHousing",
+   "sources": [],
+   "pending_export": false
+  }
+ ],
+ "numbers": [
+  {
+   "slide": 4,
+   "shown": "2027\u20132031",
+   "what": "five-year window",
+   "source": "web/public/data/PA/runs/baseline.json (saved 2026-11-25)",
+   "ref": "explanation.span"
+  },
+  {
+   "slide": 4,
+   "shown": "bps_county_annual: 1990-2025 annual files (the 2025 file is the latest published)",
+   "what": "permit vintage",
+   "source": "web/public/data/PA/report-card.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 5,
+   "shown": "59",
+   "what": "PA sources at this tier",
+   "source": "web/public/data/PA/provenance.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 5,
+   "shown": "4",
+   "what": "PA sources at this tier",
+   "source": "web/public/data/PA/provenance.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 5,
+   "shown": "40",
+   "what": "PA sources at this tier",
+   "source": "web/public/data/PA/provenance.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 5,
+   "shown": "9",
+   "what": "inputs used",
+   "source": "web/public/data/PA/report-card.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 5,
+   "shown": "5",
+   "what": "inputs assumed",
+   "source": "web/public/data/PA/report-card.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 5,
+   "shown": "0",
+   "what": "inputs missing",
+   "source": "web/public/data/PA/report-card.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 6,
+   "shown": "2,000",
+   "what": "draws per run",
+   "source": "web/public/data/PA/runs/baseline.json (saved 2026-11-25)",
+   "ref": "draws"
+  },
+  {
+   "slide": 7,
+   "shown": "1395",
+   "what": "back-test cases",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "0.34",
+   "what": "typical miss",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "54%",
+   "what": "range caught",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "1394",
+   "what": "back-test cases",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "0.31",
+   "what": "typical miss",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "52%",
+   "what": "range caught",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "1394",
+   "what": "back-test cases",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "0.32",
+   "what": "typical miss",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "51%",
+   "what": "range caught",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "1395",
+   "what": "back-test cases",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "0.32",
+   "what": "typical miss",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "51%",
+   "what": "range caught",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "1395",
+   "what": "back-test cases",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "0.33",
+   "what": "typical miss",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "50%",
+   "what": "range caught",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "Shipped rule on the state's own yearly totals: 151,882 homes; matches the baseline middle value 151,882.",
+   "what": "baseline card: reconciliation",
+   "source": "web/public/data/PA/baseline-card.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "25,228 to 32,110 homes, middle 26,998, from 19,096 permits in January\u2013September (file st2609y.txt, posted 2026-10-27); the baseline carries 30,376 a year through the gap. No estimate uses the nowcast.",
+   "what": "baseline card: baseline_bridge_nowcast_2026",
+   "source": "web/public/data/PA/baseline-card.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 7,
+   "shown": "71,400 to 192,000",
+   "what": "baseline range",
+   "source": "web/public/data/PA/runs/baseline.json (saved 2026-11-25)",
+   "ref": "baseline"
+  },
+  {
+   "slide": 7,
+   "shown": "152,000",
+   "what": "baseline middle",
+   "source": "web/public/data/PA/runs/baseline.json (saved 2026-11-25)",
+   "ref": "baseline.p50"
+  },
+  {
+   "slide": 7,
+   "shown": "7",
+   "what": "rules in the contest",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 8,
+   "shown": "198 of 344 (58%)",
+   "what": "back-test coverage, small",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 8,
+   "shown": "184 of 330 (56%)",
+   "what": "back-test coverage, medium",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 8,
+   "shown": "163 of 330 (49%)",
+   "what": "back-test coverage, large",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 8,
+   "shown": "3 of 15 (20%)",
+   "what": "back-test coverage, Philadelphia",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 8,
+   "shown": "1 of 15 (7%)",
+   "what": "back-test coverage, Allegheny",
+   "source": "web/public/data/PA/validation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 9,
+   "shown": "3,480 to 15,700  (2.4% to 14.4%)",
+   "what": "added homes, adu",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 9,
+   "shown": "119 to 1,890  (0.1% to 1.6%)",
+   "what": "added homes, missing_middle",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 9,
+   "shown": "4 to 1,720  (0.0% to 1.4%)",
+   "what": "added homes, tod",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 9,
+   "shown": "1,230 to 5,050  (1.2% to 3.2%)",
+   "what": "added homes, parking",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 9,
+   "shown": "2,670 to 13,000  (2.3% to 8.6%)",
+   "what": "added homes, fees",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 9,
+   "shown": "12,400 to 31,300  (9.6% to 24.9%)",
+   "what": "added homes, package",
+   "source": "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 10,
+   "shown": "2,600 / 21,600",
+   "what": "driver adu.takeup_feasible_annual",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 10,
+   "shown": "16,800 / 4,520",
+   "what": "driver adu.hard_cost_per_sqft",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 10,
+   "shown": "5,980 / 15,300",
+   "what": "driver adu.nonfinancial_share",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 10,
+   "shown": "1,970 to 9,030",
+   "what": "comparable adu",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 10,
+   "shown": "4,570",
+   "what": "comparable middle adu",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 10,
+   "shown": "3,480 to 15,700",
+   "what": "added homes adu",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 10,
+   "shown": "8,010",
+   "what": "middle adu",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 10,
+   "shown": "2.4% to 14.4%",
+   "what": "share of baseline adu",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 10,
+   "shown": "Share of feasible lots that add an ADU each year: about 2,600 homes at its low value (0.3% a year), about 22,000 at its high value (2.5% a year).",
+   "what": "top driver adu",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 11,
+   "shown": "97 / 1,950",
+   "what": "driver missing_middle.redevelopment_hazard_annual",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 11,
+   "shown": "1,480 / 139",
+   "what": "driver missing_middle.cap_rate",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 11,
+   "shown": "200 / 1,480",
+   "what": "driver missing_middle.new_unit_rent_premium",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 11,
+   "shown": "119 to 1,890",
+   "what": "added homes missing_middle",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 11,
+   "shown": "560",
+   "what": "middle missing_middle",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 11,
+   "shown": "0.1% to 1.6%",
+   "what": "share of baseline missing_middle",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 11,
+   "shown": "Share of feasible lots redeveloped each year: about 97 homes at its low value (0.05% a year), about 1,900 at its high value (1% a year).",
+   "what": "top driver missing_middle",
+   "source": "web/public/data/PA/runs/missing_middle.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 12,
+   "shown": "1,620 / 1",
+   "what": "driver multifamily.cap_rate",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 12,
+   "shown": "1,430 / 4",
+   "what": "driver multifamily.hard_cost_per_sqft",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 12,
+   "shown": "1,460 / 192",
+   "what": "driver multifamily.unit_size_sqft",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 12,
+   "shown": "4 to 1,720",
+   "what": "added homes tod",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 12,
+   "shown": "367",
+   "what": "middle tod",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 12,
+   "shown": "0.0% to 1.4%",
+   "what": "share of baseline tod",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 12,
+   "shown": "Capitalisation rate used to value a finished mid-rise building: about 1,600 homes at its low value (4.5% a year), about 0.99 at its high value (7% a year).",
+   "what": "top driver tod",
+   "source": "web/public/data/PA/runs/tod.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 13,
+   "shown": "1,420 / 4,350",
+   "what": "driver supply.elasticity_medium_run",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 13,
+   "shown": "1,720 / 4,450",
+   "what": "driver parking.site_yield_gain",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 13,
+   "shown": "1,600 / 4,010",
+   "what": "driver supply.saving_passthrough_k",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 13,
+   "shown": "1,230 to 5,050",
+   "what": "added homes parking",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 13,
+   "shown": "2,630",
+   "what": "middle parking",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 13,
+   "shown": "1.2% to 3.2%",
+   "what": "share of baseline parking",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 13,
+   "shown": "Medium-run supply response to a change in profit per unit: about 1,400 homes at its low value (\u00d70.3), about 4,400 at its high value (\u00d72).",
+   "what": "top driver parking",
+   "source": "web/public/data/PA/runs/parking.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 14,
+   "shown": "736 / 14,700",
+   "what": "driver fees.passthrough_k",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 14,
+   "shown": "2,210 / 14,700",
+   "what": "driver supply.elasticity_medium_run",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 14,
+   "shown": "3,460 / 9,320",
+   "what": "driver engine.baseline_cycle_position",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 14,
+   "shown": "2,670 to 13,000",
+   "what": "added homes fees",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": "added"
+  },
+  {
+   "slide": 14,
+   "shown": "6,430",
+   "what": "middle fees",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 14,
+   "shown": "2.3% to 8.6%",
+   "what": "share of baseline fees",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 14,
+   "shown": "Share of a fee cut that reaches the decision to build: about 740 homes at its low value (5%), about 15,000 at its high value (100%).",
+   "what": "top driver fees",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 15,
+   "shown": "3,480 to 15,700",
+   "what": "ADU added",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 15,
+   "shown": "3,530 to 15,900",
+   "what": "pa_hb2186",
+   "source": "web/public/data/PA/runs/pa_hb2186.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 15,
+   "shown": "3,310 to 14,800",
+   "what": "pa_sb1346",
+   "source": "web/public/data/PA/runs/pa_sb1346.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 15,
+   "shown": "$100,000,000",
+   "what": "budget appropriation",
+   "source": "web/public/data/PA/adu-budget-grid.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 15,
+   "shown": "$40,000",
+   "what": "budget award",
+   "source": "web/public/data/PA/adu-budget-grid.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 15,
+   "shown": "211 to 1,200",
+   "what": "capped program added",
+   "source": "web/public/data/PA/adu-budget-grid.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 15,
+   "shown": "4,400 to 16,400",
+   "what": "capped program with law added",
+   "source": "web/public/data/PA/adu-budget-grid.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 16,
+   "shown": "12,000 to 30,600",
+   "what": "Each reform alone, added up",
+   "source": "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 16,
+   "shown": "2 to 30",
+   "what": "Minus lots counted twice",
+   "source": "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 16,
+   "shown": "208 to 1,170",
+   "what": "Plus savings that feed another reform",
+   "source": "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 16,
+   "shown": "12,400 to 31,300",
+   "what": "All reforms together",
+   "source": "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 17,
+   "shown": "$316,000 to $1.09 million",
+   "what": "cost per added home",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": "readouts.cost_per_added"
+  },
+  {
+   "slide": 17,
+   "shown": "$1.88 billion to $5.04 billion",
+   "what": "revenue given up",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 17,
+   "shown": "2% to 8%",
+   "what": "share to added homes",
+   "source": "web/public/data/PA/runs/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 17,
+   "shown": "1,340 to 6,490",
+   "what": "dial level",
+   "source": "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 17,
+   "shown": "2,670 to 13,000",
+   "what": "dial level",
+   "source": "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 17,
+   "shown": "4,010 to 19,500",
+   "what": "dial level",
+   "source": "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 17,
+   "shown": "5,340 to 26,000",
+   "what": "dial level",
+   "source": "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 17,
+   "shown": "Cut to every development fee category: from 25% cut to fees waived (100% cut), each step adds about 3,216 homes statewide over 2027-2031 (middle of the paired first-to-last difference per step; single steps range from 3,216 to 3,216).",
+   "what": "dial step sentence",
+   "source": "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 18,
+   "shown": "2,270 to 7,240",
+   "what": "county added",
+   "source": "web/public/data/PA/maps/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 18,
+   "shown": "1,450 to 3,700",
+   "what": "county added",
+   "source": "web/public/data/PA/maps/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 18,
+   "shown": "1,160 to 3,080",
+   "what": "county added",
+   "source": "web/public/data/PA/maps/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 18,
+   "shown": "763 to 2,080",
+   "what": "county added",
+   "source": "web/public/data/PA/maps/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 18,
+   "shown": "589 to 2,090",
+   "what": "county added",
+   "source": "web/public/data/PA/maps/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 18,
+   "shown": "203",
+   "what": "districts",
+   "source": "GET /api/v1/states/PA/districts (live, 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "HB 2186 (2025-2026), Printer's No. 3373: Pending bill (not law)",
+   "what": "law timeline row",
+   "source": "web/public/data/PA/implementation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "SB 1346 (2025-2026), Printer's No. 1747: Pending bill (not law)",
+   "what": "law timeline row",
+   "source": "web/public/data/PA/implementation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "Schuylkill County Zoning Ordinance, Ordinance No. 2010-1: Legally effective \u00b7 local guidance not recorded \u00b7 permit results not yet published",
+   "what": "law timeline row",
+   "source": "web/public/data/PA/implementation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "City of Allentown Ordinance No. 16166 (Zoning Ordinance, Chapter 660): Legally effective \u00b7 local guidance not recorded \u00b7 permit results not yet published",
+   "what": "law timeline row",
+   "source": "web/public/data/PA/implementation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "City of Harrisburg Zoning Code \u00a7 7-305 use table (accessory dwelling unit), as amended (city copy of July 19, 2021): Legally effective \u00b7 local guidance not recorded \u00b7 permit results not yet published",
+   "what": "law timeline row",
+   "source": "web/public/data/PA/implementation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "180",
+   "what": "policy records",
+   "source": "GET /api/v1/evidence/states (live, 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "166",
+   "what": "verified records",
+   "source": "GET /api/v1/evidence/states (live, 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 19,
+   "shown": "36",
+   "what": "states with records",
+   "source": "GET /api/v1/evidence/states (live, 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "71,400 to 192,000",
+   "what": "PA baseline",
+   "source": "web/public/data/PA/runs/baseline.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "12,400 to 31,300",
+   "what": "PA package",
+   "source": "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "9.6% to 24.9%",
+   "what": "PA package share",
+   "source": "web/public/data/PA/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "5,110 to 17,700",
+   "what": "VT baseline",
+   "source": "web/public/data/VT/runs/baseline.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "425 to 1,450",
+   "what": "VT package",
+   "source": "web/public/data/VT/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "4.5% to 12.1%",
+   "what": "VT package share",
+   "source": "web/public/data/VT/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "The package total counts transit-oriented density by its measured contribution only (partial footprint: 135 of 349 bus stops (38.6%) from 2 of 7 agencies have measured service); its statewide range is not shown.",
+   "what": "WY TOD status",
+   "source": "web/public/data/WY/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "4,930 to 17,800",
+   "what": "WY baseline",
+   "source": "web/public/data/WY/runs/baseline.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "480 to 1,420",
+   "what": "WY package",
+   "source": "web/public/data/WY/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "4.9% to 14.7%",
+   "what": "WY package share",
+   "source": "web/public/data/WY/runs/package.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "With national data only, the Accessory dwelling units middle estimate moves up by 4.3% and the likely range is 1.06 times as wide as with full data.",
+   "what": "ablation sentence",
+   "source": "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 20,
+   "shown": "With national data only, the Development fee reduction middle estimate does not move and the likely range is 1.00 times as wide as with full data.",
+   "what": "ablation sentence",
+   "source": "web/public/data/PA/comparisons/dials.json (saved 2026-11-25) + web/public/data/PA/comparisons/ablation.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "B",
+   "what": "grade baseline",
+   "source": "web/public/data/PA/grades/baseline.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "B",
+   "what": "grade adu",
+   "source": "web/public/data/PA/grades/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "C",
+   "what": "grade missing_middle",
+   "source": "web/public/data/PA/grades/missing_middle.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "C",
+   "what": "grade tod",
+   "source": "web/public/data/PA/grades/tod.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "C",
+   "what": "grade parking",
+   "source": "web/public/data/PA/grades/parking.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "C",
+   "what": "grade fees",
+   "source": "web/public/data/PA/grades/fees.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "21",
+   "what": "outside studies",
+   "source": "web/public/data/evidence.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "0.21 to 0.94",
+   "what": "ADU rate",
+   "source": "web/public/data/PA/plausibility.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "1.1 to 11",
+   "what": "observed",
+   "source": "web/public/data/PA/plausibility.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 21,
+   "shown": "In 11 past start years, the state's likely range caught the real five-year total 10 times (a range aims for about 8 in 10).",
+   "what": "held-out check",
+   "source": "web/public/data/PA/confidence.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 22,
+   "shown": "9",
+   "what": "ledger benchmark",
+   "source": "web/public/data/PA/ledger.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 22,
+   "shown": "1",
+   "what": "ledger calibrated",
+   "source": "web/public/data/PA/ledger.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 22,
+   "shown": "282",
+   "what": "ledger judgement",
+   "source": "web/public/data/PA/ledger.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 22,
+   "shown": "14",
+   "what": "ledger sourced",
+   "source": "web/public/data/PA/ledger.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 22,
+   "shown": "P10, P50, P90 of 2,000 seeded draws of the sum over counties of added units per tract, summed to the county in each draw; per draw: the sum over tracts of added units authorized = ADUs authorized x (1 - displacement share x) (no home removed, so also the net added homes) = 3,481 units, 8,011 units, 15,671 units",
+   "what": "ADU formula",
+   "source": "web/public/data/PA/runs/adu.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 22,
+   "shown": "uv run visionhousing report --state PA --reforms adu --seed 0 --draws 2000 --format json",
+   "what": "reproduce command",
+   "source": "GET /api/v1/reproduce (live, 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 22,
+   "shown": "306",
+   "what": "ledger parameters",
+   "source": "web/public/data/PA/ledger.json (saved 2026-11-25)",
+   "ref": ""
+  },
+  {
+   "slide": 24,
+   "shown": "124",
+   "what": "SBOM components",
+   "source": "sbom/visionhousing.cdx.json",
+   "ref": ""
+  }
+ ]
+}

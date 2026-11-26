@@ -1,0 +1,27 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-71.00917, 41.83719],
+            [-71.01085, 41.83592],
+            [-71.01303, 41.83734],
+            [-71.01136, 41.83824],
+            [-71.00917, 41.83719]
+          ]
+        ]
+      },
+      "properties": {
+        "area_id": "ma_3a_berkley_rdod",
+        "MUNI": "Berkley",
+        "ZONENAM": "Residential Development Overlay District",
+        "STATUS": "Compliant",
+        "source": "MassGIS MBTA Communities 3A District Atlas, layer 0 (MBTA 3A Districts), OBJECTID 346; WGS 84, 5 decimal places; retrieved 2026-11-24. Data are public; not a legal record of permitted uses."
+      }
+    }
+  ]
+}

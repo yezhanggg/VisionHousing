@@ -1,0 +1,142 @@
+/* The transit status ladder (web/js/ui/tod-status.js): the hidden-range block, the partial
+   label, the package note, the ladder chips and the status table. Colour tokens only
+   (css/tokens.css). "Unknown" (not measured) is dashed and hatched; "measured: none" is a
+   solid outline on the plain surface, so the two never look alike; each also carries its
+   word and its own mark, so colour is never the only cue. */
+
+.tod-hidden {
+  margin: var(--space-2) 0;
+  padding: var(--space-2) var(--space-3);
+  border-left: 4px solid var(--notice-line);
+  border-radius: var(--radius-sm);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+}
+.tod-hidden p { margin: 0 0 var(--space-1); }
+.tod-hidden .card-sub { color: var(--notice-text); }
+.tod-hidden-word {
+  font-size: var(--text-lg);
+  font-weight: var(--weight-bold);
+}
+.tod-measured { font-weight: var(--weight-medium); }
+
+.tod-badge {
+  display: inline-block;
+  padding: 0 var(--space-2);
+  border: 1px solid var(--notice-line);
+  border-radius: var(--radius-pill);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-medium);
+  white-space: nowrap;
+}
+
+.tod-partial,
+.tod-package-note {
+  margin: var(--space-1) 0 var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+.tod-package-note {
+  padding: var(--space-1) var(--space-2);
+  border-left: 3px solid var(--notice-line);
+  background: var(--notice-bg);
+  color: var(--notice-text);
+}
+
+.tod-ladder { margin: var(--space-3) 0; }
+.tod-steps {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-2) 0;
+  padding: 0;
+  list-style: none;
+}
+.tod-step {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-2);
+  font-size: var(--text-sm);
+}
+.tod-stage { color: var(--text); }
+
+.tod-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-1);
+  padding: 1px var(--space-2);
+  border: 1px solid var(--line-strong);
+  border-radius: var(--radius-pill);
+  background: var(--surface);
+  color: var(--text);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+.tod-mark { font-weight: var(--weight-bold); }
+.tod-chip.is-yes {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent-strong);
+}
+.tod-chip.is-partial {
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--accent-strong);
+}
+.tod-chip.is-no { border-color: var(--line-strong); }
+.tod-chip.is-unknown {
+  border: 1px dashed var(--notice-text);
+  background: repeating-linear-gradient(135deg, var(--notice-bg) 0 4px, var(--surface) 4px 8px);
+  color: var(--notice-text);
+}
+.tod-chip.is-measured_zero {
+  border: 2px solid var(--text);
+  background: var(--surface);
+  color: var(--text);
+}
+.tod-chip.is-not_reached {
+  border-color: var(--line);
+  background: var(--not-modelled);
+  color: var(--text-muted);
+}
+
+.tod-legend summary,
+.tod-counties summary {
+  cursor: pointer;
+  font-size: var(--text-sm);
+  color: var(--text-muted);
+}
+.tod-legend ul {
+  display: grid;
+  gap: var(--space-1);
+  margin: var(--space-2) 0;
+  padding: 0;
+  list-style: none;
+  font-size: var(--text-sm);
+}
+
+.table.tod-table th,
+.table.tod-table td { font-size: var(--text-xs); vertical-align: middle; }
+
+
+.tod-chip.is-compact { padding: 1px var(--space-1); min-width: 1.6em; justify-content: center; }
+.table.tod-table thead th {
+  white-space: normal;
+  line-height: var(--leading-tight);
+  letter-spacing: 0;
+  text-transform: none;
+}
+.table.tod-table tbody th {
+  min-width: 7rem;
+  white-space: normal;
+  font-weight: var(--weight-medium);
+}
+.table.tod-table th,
+.table.tod-table td { padding-inline: var(--space-1); }
+.table.tod-table .tod-foot {
+  display: block;
+  color: var(--text-muted);
+  font-weight: var(--weight-regular);
+}

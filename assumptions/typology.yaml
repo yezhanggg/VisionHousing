@@ -1,0 +1,108 @@
+# "Places like this one": the typology of counties and tracts.
+#
+# Read by visionhousing.features.typology. Places are grouped by k-means on
+# the features below, each turned into a z-score (distance from the state's
+# average in standard deviations), so every feature weighs the same. The group
+# names are made by the naming rules at the end, never typed per group.
+# These groups describe places; they do not change any reform estimate. They
+# will later be used to break back-test errors down by kind of place.
+
+version: 1
+
+seed: 20261123          # fixed seed: the same pack always gives the same groups
+n_init: 10              # k-means runs from 10 different starts; the tightest is kept
+max_iter: 300           # most Lloyd iterations per run
+
+# k is chosen by an elbow rule: the smallest k in k_range for which going to
+# k + 1 groups cuts the within-group sum of squares by less than min_gain of
+# the total sum of squares (all places in one group): one more group would
+# explain less than 5% more of the spread between places. When every step
+# still gains that much, the largest k is used.
+k_range: [3, 8]
+min_gain: 0.05
+
+# Places shown as "similar": the n nearest in the same z-score space (any group).
+n_similar: 3
+
+# Features. transform: log (natural log of value + 1, for skewed counts and
+# densities) or none. Each feature is worked out in the code from pack tables
+# (see docs/modules/typology.md for every formula).
+# permits_per_1000 is the average yearly homes permitted over the last
+# permit_years years in the pack, per 1,000 existing homes.
+# jobs_per_resident (jobs located in the place / residents) needs the pack's
+# jobs tables and qct_share (homes in HUD Qualified Census Tracts / homes) its
+# incentive tables; a pack without them leaves these features out.
+permit_years: 5
+county_features:
+  - {name: population, transform: log}
+  - {name: population_change, transform: none}
+  - {name: housing_density, transform: log}
+  - {name: median_rent, transform: none}
+  - {name: median_value, transform: log}
+  - {name: permits_per_1000, transform: log}
+  - {name: transit_share, transform: none}
+  - {name: renter_share, transform: none}
+  - {name: vacancy_rate, transform: none}
+  - {name: share_65plus, transform: none}
+  - {name: jobs_per_resident, transform: none}
+  - {name: qct_share, transform: none}
+
+# Tracts with fewer residents than this are left out (no group, no neighbours).
+tract_min_population: 100
+tract_features:
+  - {name: housing_density, transform: log}
+  - {name: median_rent, transform: none}
+  - {name: median_value, transform: log}
+  - {name: median_income, transform: log}
+  - {name: new_homes_share, transform: none}
+  - {name: transit_share, transform: none}
+  - {name: renter_share, transform: none}
+  - {name: vacancy_rate, transform: none}
+  - {name: share_65plus, transform: none}
+  - {name: jobs_per_resident, transform: log}  # a downtown tract has many jobs per resident
+
+# ---- naming rules --------------------------------------------------------
+# 1. Settlement word, from the group's typical housing density (homes per
+#    square kilometre, the geometric mean of its places): the first row whose
+#    minimum the density reaches. A county averages over its farmland and
+#    woods, so its thresholds are lower than a tract's.
+settlement:
+  county:
+    - [500, "Big-city"]
+    - [150, "Urban"]
+    - [50, "Suburban"]
+    - [15, "Small-town"]
+    - [0, "Rural"]
+  tract:
+    - [1000, "Big-city"]
+    - [300, "Urban"]
+    - [80, "Suburban"]
+    - [25, "Small-town"]
+    - [0, "Rural"]
+# 2. Growth word, from the mean z-score of the growth features: at least
+#    +threshold "growing", at most -threshold "slow-growth", else "steady".
+growth_features:
+  county: [permits_per_1000, population_change]
+  tract: [new_homes_share]
+growth_threshold: 0.5
+# 3. Cost word, from the mean z-score of rent and value: at least +threshold
+#    "higher-cost", at most -threshold "lower-cost", else no word.
+cost_features: [median_rent, median_value]
+cost_threshold: 0.5
+# 4. When two groups get the same name, each adds the phrase of its most
+#    unusual remaining feature (largest |z|), high or low.
+phrases:
+  renter_share: ["more renters", "more owners"]
+  vacancy_rate: ["more empty homes", "few empty homes"]
+  transit_share: ["near frequent transit", "far from frequent transit"]
+  share_65plus: ["older residents", "younger residents"]
+  population: ["large", "small"]
+  median_income: ["higher incomes", "lower incomes"]
+  housing_density: ["denser", "less dense"]
+  median_rent: ["higher rents", "lower rents"]
+  median_value: ["higher home values", "lower home values"]
+  permits_per_1000: ["more building", "less building"]
+  population_change: ["gaining people", "losing people"]
+  new_homes_share: ["more new homes", "fewer new homes"]
+  jobs_per_resident: ["more jobs per resident", "fewer jobs per resident"]
+  qct_share: ["more homes in low-income tax-credit tracts", "fewer homes in low-income tax-credit tracts"]

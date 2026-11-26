@@ -31,7 +31,19 @@ owners_area            tract, and county                              42101, 420
 owners_deeds_year      year                                           42101
 pipeline_tract_year    tract, year and city permit source             42101, 42003
 lihtc_awards           development awarded tax credits                PA
+law_documents          legal text read or linked                      PA
+state_law_provisions   state code section or bill bearing on a reform PA
+county_land_use        county: county zoning reach, county plan       PA
+muni_zoning_rules      municipality part: ADU, lot, parking rules     PA
+mbta_3a_districts      MBTA Communities (3A) zoning district          MA
+mbta_3a_status         MBTA community: 3A category, deadline, status  MA
+ma_adu_survey          town and survey period: ADU applications,      MA
+                       approvals and completions
 ====================== ============================================== ==========
+
+The four law tables are built by :mod:`visionhousing.law.tables`; the three
+Massachusetts tables by :mod:`visionhousing.features.ma_intake` from the files
+:mod:`visionhousing.data.sources.ma_intake` reads.
 """
 
 from __future__ import annotations
@@ -39,6 +51,7 @@ from __future__ import annotations
 import json
 from collections.abc import Callable, Iterable, Mapping
 from dataclasses import dataclass, field
+from datetime import date
 from pathlib import Path
 from typing import Any
 
@@ -48,10 +61,13 @@ import yaml
 from visionhousing.data import manifest as mf
 from visionhousing.data.http import HttpClient
 from visionhousing.data.sources import alle_assess, local_permits, munstats, phfa, phl_opa
+from visionhousing.data.sources import ma_intake as ma_src
+from visionhousing.features import ma_intake as ma_fx
 from visionhousing.features import owners as owners_fx
 from visionhousing.features import parcels as parcels_fx
 from visionhousing.features import pipeline_local as pipeline_fx
 from visionhousing.features import zoning_status as zoning_fx
+from visionhousing.law import tables as law_tables
 
 __all__ = [
     "COLUMNS",
@@ -64,7 +80,7 @@ __all__ = [
 
 ROOT = Path(__file__).resolve().parents[3]
 PIPELINE_RULES = ROOT / "assumptions" / "pipeline_local.yaml"
-STATES = ("PA",)
+STATES = ("PA", "MA")
 """States with local sources."""
 
 TABLES: dict[str, dict[str, object]] = {
@@ -130,7 +146,11 @@ TABLES: dict[str, dict[str, object]] = {
         "tier": "2",
     },
 }
-"""Every local table: key, source ids, description and tier."""
+TABLES.update(law_tables.TABLES)
+TABLES.update(ma_fx.TABLES)
+"""Every local table: key, source ids, description and tier (law tables included:
+see :mod:`visionhousing.law.tables`; Massachusetts tables:
+:mod:`visionhousing.features.ma_intake`)."""
 
 _COMMON: dict[str, tuple[str, str]] = {
     "county": ("code", "County code (5 digits)"),
@@ -186,6 +206,10 @@ _COMMON: dict[str, tuple[str, str]] = {
 
 def describe(table: str, name: str) -> tuple[str, str]:
     """Unit and plain description of a local table's column (for the data dictionary)."""
+    if table in law_tables.TABLES:
+        return law_tables.describe(name)
+    if table in ma_fx.TABLES:
+        return ma_fx.describe(table, name)
     if name in _COMMON:
         return _COMMON[name]
     if name.startswith("lu_"):
@@ -257,6 +281,10 @@ def fetch_local_tables(
     client = client or HttpClient(timeout=300)
     shapes = list(tract_shapes)
     notes = out.notes
+    if state.upper() == "MA":
+        _massachusetts(out, cache, shapes, client=client, manifest=manifest, refresh=refresh)
+        _cached_files(out, cache, state)
+        return out
 
     def zoning() -> None:
         rules = zoning_fx.load_rules()
@@ -392,7 +420,20 @@ def fetch_local_tables(
         for year, why in got.skipped.items():
             notes.append(f"PHFA {year} award list skipped: {why}")
 
+    def law() -> None:
+        built = law_tables.build_law_tables(
+            cache,
+            out.tables["municipal_planning"],
+            client=client,
+            manifest=manifest,
+            refresh=refresh,
+        )
+        out.tables.update(built.tables)
+        notes.extend(built.notes)
+
     _try(notes, "zoning status (DCED Munstats)", zoning)
+    if "municipal_planning" in out.tables:
+        _try(notes, "law, zoning and policy tables", law)
     _try(notes, "Philadelphia parcels and owners", philadelphia)
     _try(notes, "Allegheny parcels and owners", allegheny)
     _try(notes, "Philadelphia permits", phl_permits)
@@ -404,20 +445,183 @@ def fetch_local_tables(
         out.tables["owners_area"] = pd.concat(owner_parts, ignore_index=True)
     if pipe_parts:
         out.tables["pipeline_tract_year"] = pd.concat(pipe_parts, ignore_index=True)
-    local_dir = cache / "local"
-    if local_dir.is_dir():
-        for path in sorted(p for p in local_dir.rglob("*") if p.is_file()):
-            sid = _source_of(path)
-            if sid:
-                out.files.append((sid, path))
+    _cached_files(out, cache, state)
     return out
+
+
+def _cached_files(out: LocalTables, cache: Path, state: str) -> None:
+    """List the cached local files a build read, with their source ids, in ``out.files``.
+
+    Census files count only for their own state (``..._{fips}...``); the ``ma``
+    folder counts only for Massachusetts, and for Massachusetts only the census
+    and ``ma`` folders count.
+    """
+    from visionhousing.data.sources import state_fips
+
+    local_dir = Path(cache) / "local"
+    if not local_dir.is_dir():
+        return
+    code = state.upper()
+    fips = state_fips(code)
+    for path in sorted(p for p in local_dir.rglob("*") if p.is_file()):
+        folder = path.parent.name
+        if folder == "census" and f"_{fips}." not in path.name:
+            continue
+        keep = folder in ("ma", "census") if code == "MA" else folder != "ma"
+        if not keep:
+            continue
+        sid = _source_of(path)
+        if sid:
+            out.files.append((sid, path))
+
+
+def _massachusetts(
+    out: LocalTables,
+    cache: Path,
+    shapes: list[tuple[str, Mapping[str, Any]] | Any],
+    *,
+    client: HttpClient,
+    manifest: Path | None,
+    refresh: bool,
+) -> None:
+    """The three Massachusetts intake tables; each source is tried on its own.
+
+    A list that cannot be read leaves its table (or columns) out and says why in
+    the notes; the other tables still go in.
+    """
+    notes = out.notes
+    settings = ma_src.load_settings()
+    overrides = dict(settings.get("name_overrides") or {})
+    pairs = [
+        (str(s.geoid), s.geometry) if hasattr(s, "geoid") else (str(s[0]), s[1]) for s in shapes
+    ]
+    subdivisions = _try(
+        notes,
+        "Massachusetts tables (Census county subdivisions)",
+        lambda: munstats.fetch_subdivision_population(
+            "MA", cache, client=client, manifest=manifest
+        ),
+    )
+    if subdivisions is None:
+        return
+    lookup = ma_fx.muni_lookup(subdivisions)
+    kw = {"client": client, "manifest": manifest, "refresh": refresh}
+    copies: dict[str, ma_src.Copy] = {}
+
+    def copy(name: str) -> bytes | None:
+        try:
+            got = ma_src.fetch_copy(name, cache, settings, **kw)
+        except Exception as err:
+            notes.append(
+                f"Massachusetts {name}: not added ({type(err).__name__}: {str(err)[:240]})"
+            )
+            return None
+        copies[name] = got
+        if got.route != "publisher":
+            if got.as_of:
+                where = {"sidecar": "its edition note", "file": "the file"}.get(
+                    got.edition_from, got.edition_from
+                )
+                notes.append(
+                    f"Massachusetts {name}: read the {got.route} copy "
+                    f"(as of {got.as_of}, from {where})"
+                )
+            else:
+                notes.append(
+                    f"Massachusetts {name}: read the {got.route} copy (edition unknown; "
+                    f"write 'as_of: YYYY-MM-DD' in {got.path.name}{ma_src.EDITION_SUFFIX} "
+                    "next to it)"
+                )
+        return got.path.read_bytes()
+
+    def districts() -> None:
+        collection = ma_src.fetch_3a_districts(cache, settings, **kw)
+        path = ma_src.cache_dir(cache) / "mbta3a_districts.geojson.gz"
+        read_on = date.fromtimestamp(path.stat().st_mtime).isoformat() if path.exists() else ""
+        table, missing = ma_fx.districts_table(
+            ma_src.parse_3a_districts(collection),
+            lookup,
+            pairs,
+            read_on=read_on,
+            overrides=overrides,
+        )
+        out.tables["mbta_3a_districts"] = table
+        if missing:
+            notes.append("3A districts: no county for " + ", ".join(missing))
+
+    _try(notes, "Massachusetts 3A district atlas", districts)
+    raw_status = copy("compliance_status")
+    raw_cat = copy("categories")
+    raw_trk = copy("development_tracker")
+
+    def status() -> None:
+        atlas = out.tables.get("mbta_3a_districts")
+        first = "" if atlas is None or not len(atlas) else str(atlas["atlas_read_on"].iloc[0])
+        sheet = copies.get("compliance_status")
+        dates = {
+            "status_as_of": sheet.as_of if sheet else first,
+            "status_route": sheet.route if sheet else "atlas",
+            "categories_as_of": copies["categories"].as_of if raw_cat else "",
+            "categories_route": copies["categories"].route if raw_cat else "",
+            "tracker_as_of": copies["development_tracker"].as_of if raw_trk else "",
+            "tracker_route": copies["development_tracker"].route if raw_trk else "",
+        }
+        table, more = ma_fx.status_table(
+            ma_src.parse_compliance_status(raw_status) if raw_status else None,
+            ma_src.parse_categories(raw_cat) if raw_cat else None,
+            ma_src.parse_development_tracker(raw_trk) if raw_trk else None,
+            atlas,
+            lookup,
+            dates=dates,
+            overrides=overrides,
+        )
+        out.tables["mbta_3a_status"] = table
+        notes.extend(more)
+
+    _try(notes, "Massachusetts 3A status", status)
+    raw_survey = copy("adu_survey")
+    if raw_survey is not None:
+
+        def survey() -> None:
+            got = copies["adu_survey"]
+            table, missing = ma_fx.adu_survey_table(
+                ma_src.parse_adu_survey(raw_survey, settings),
+                lookup,
+                as_of=got.as_of,
+                route=got.route,
+                overrides=overrides,
+            )
+            out.tables["ma_adu_survey"] = table
+            if missing:
+                notes.append("ADU survey: no county for " + ", ".join(missing))
+            odd = ma_src.survey_totals_check(raw_survey, settings)
+            if odd:
+                notes.append("ADU survey: totals differ from the periods for " + ", ".join(odd))
+
+        _try(notes, "Massachusetts ADU survey", survey)
+
+
+_MA_FILES = {
+    "mbta3a_districts.geojson.gz": "massgis_mbta3a_atlas",
+    "mbta3a_compliance_status.csv": "ma_3a_compliance_status",
+    "mbta3a_categories.csv": "ma_3a_categories",
+    "mbta3a_development_tracker.csv": "ma_3a_development_tracker",
+    "ma_adu_survey.csv": "ma_adu_survey_file",
+}
+"""Massachusetts intake files in ``data/raw/local/ma`` and their source ids."""
 
 
 def _source_of(path: Path) -> str | None:
     """The source id of a cached local file, from its folder and name."""
     folder, name = path.parent.name, path.name
+    if folder == "ma":
+        return _MA_FILES.get(name)
     if folder == "munstats":
         return "pa_dced_munstats"
+    if folder == "law":
+        return "pa_mpc" if name.endswith(".htm") else None
+    if folder == "bills" and path.parent.parent.name == "law":
+        return path.stem
     if folder == "census":
         return "census_baf_2020_mcd" if name.startswith("block_cousub") else "census_subcounty_pop"
     if folder == "phl":

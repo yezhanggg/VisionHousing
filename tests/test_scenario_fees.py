@@ -207,7 +207,7 @@ def test_effect_is_a_plausible_small_share_of_baseline(baseline, central):
 def test_state_view_is_labelled_draft_and_smaller(baseline, tracts, ledger, central):
     state = run(baseline, tracts, ledger, view="state")
     assert state.view == "state"
-    assert "fees.pa_documented_fee_per_unit" in state.state.assumption_ids
+    assert "fees.pa_assumed_fee_per_unit_judgement" in state.state.assumption_ids
     assert any("draft" in n for n in state.notes)
     assert state.state.p50 < central.state.p50
     with pytest.raises(ValueError, match="view"):

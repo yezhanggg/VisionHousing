@@ -1,0 +1,102 @@
+# VisionHousing project choice and shared market (package option "market").
+#
+# Read by visionhousing.engine.market (it checks this file on load).
+# Method: docs/methods/market.md. Module: docs/modules/market.md.
+#
+# Rules for this file:
+#   - No estimate lives here. Rules, switches, windows and words only; the two
+#     uncertain numbers (conventional rebuild floor area, capacity multiple of
+#     the past peak) are ledger entries in assumptions/parameters.yaml.
+#   - Every rule has an id, so a record can cite it.
+#   - The benchmark package is unchanged: these rules run only when a package
+#     asks for market "choice" or "choice+capacity".
+
+version: 1
+id: market_2026_11
+
+# The package options. Each is a named alternative to today's package rules.
+modes:
+  choice:
+    id: market.modes.choice
+    title: "Project choice on shared lots"
+    question: >-
+      If a lot could take an ADU, a 2-6 unit building or a conventional new
+      house, and the owner or builder picks the use worth most, how many homes
+      does the package add, and how many projects switch from one reform to
+      another?
+  choice+capacity:
+    id: market.modes.choice_capacity
+    title: "Project choice with a shared market capacity limit"
+    question: >-
+      If, on top of project choice, builders, lenders and buyers in each group
+      of counties can only take on so many new homes a year, how many of the
+      package's homes are still authorized inside 2027-2031, and how many move
+      to later years?
+
+choice:
+  id: market.choice
+  # How a 2-6 unit building is priced under project choice: the best of the
+  # duplex / fourplex / six-unit prototypes on each lot (scenarios.prototypes),
+  # because a builder builds one building, not the benchmark's ledger mix.
+  middle_method: prototypes
+  # Compare the 2-6 unit building with a conventional single-family rebuild
+  # (ledger market.conventional_home_size_sqft) on every lot.
+  conventional_rebuild: true
+
+capacity:
+  id: market.capacity
+  # County groups that share builders, lenders and buyers: "typology" (the
+  # pack's "places like this one" groups, typology_county) or "state" (one group).
+  # A state without typology groups falls back to one group.
+  group_by: typology
+  # Group name for a county with no typology row.
+  ungrouped: "counties without a group"
+  # The past peak is the highest yearly total of all permits (every structure
+  # type) in the group, over the last this-many years of the permit table.
+  # A recent window: builder, lender and buyer capacity today reflects the
+  # industry since the 2008 crash, not the 2000s boom.
+  peak_window_years: 15
+  # Cap = market.capacity_peak_multiplier x past peak, per group and year.
+  # Room for the package = cap - the baseline's permits that year (never below 0).
+  # The package takes room with its local permits (each reform's homes after
+  # displacement / its kept share, 1 - displacement share): the cap counts
+  # permits in the area. What fits is scaled back by the same share.
+  # How the room is shared when the package wants more than there is:
+  #   proportional: every reform and county keeps the same share that year.
+  allocation: proportional
+  # Units over the cap are not lost: they wait for the next year's room
+  # (a soft cap). Units still waiting after 2031 are reported as pushed past
+  # the window.
+  carry_over: true
+
+# Rule-written sentences. {p50}, {p10}, {p90} are the record's P50 / P10 / P90,
+# filled in by the engine, rounded to whole homes or lots; {share} is a share
+# of draws worked out by the engine, as a whole percent.
+texts:
+  combined: >-
+    Under {mode_title_lower}, the package adds {p50} homes authorized in
+    2027-2031 (likely range {p10} to {p90}).
+  adu_to_middle: >-
+    On {p50} lots (likely range {p10} to {p90}) that would have added an ADU,
+    a 2-6 unit building is worth more, so the lot is redeveloped instead.
+  middle_to_adu: >-
+    On {p50} lots (likely range {p10} to {p90}) where a 2-6 unit building
+    pencils, the owner gains more by keeping the house and adding an ADU.
+  middle_to_conventional: >-
+    On {p50} lots (likely range {p10} to {p90}) where a 2-6 unit building
+    pencils, a conventional new house bids more for the lot.
+  shifted_later: >-
+    Homes moved to a later year inside 2027-2031 by the capacity limit: {p50}
+    (likely range {p10} to {p90}).
+  pushed_past: >-
+    Homes pushed past 2031 by the capacity limit: {p50} (likely range {p10}
+    to {p90}). The limit counts each reform's local permits (before
+    displacement), because the cap is a count of permits in the area; the
+    homes shown are after displacement.
+  full_market: >-
+    In {share} of the draws the baseline alone already fills the cap of at
+    least one county group where the package adds homes, so that group's
+    homes wait past the cap.
+  no_constraint: >-
+    Without a capacity limit (the no-constraint case) the package under
+    project choice adds {p50} homes (likely range {p10} to {p90}).

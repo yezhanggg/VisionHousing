@@ -1,4 +1,4 @@
-"""The slide deck spec (decision D-22): an ordered list of slides as plain data.
+"""The slide deck spec: an ordered list of slides as plain data.
 
 Plain-language summary
 ----------------------
@@ -27,6 +27,7 @@ from __future__ import annotations
 from collections.abc import Iterable, Mapping
 from typing import Any
 
+from visionhousing.explain import wording as w
 from visionhousing.explain.numbers import Cite, Text, num
 from visionhousing.explain.payload import DISCLAIMER, span
 
@@ -178,7 +179,7 @@ def slides(result: Any, explanation: Mapping[str, Any]) -> list[dict[str, Any]]:
                 "reform",
                 title,
                 kicker,
-                _big(added, "More homes permitted, this reform alone"),
+                _big(added, w.added_label(k, "More homes permitted, this reform alone")),
                 chart,
                 body,
                 explanation,
@@ -211,7 +212,7 @@ def slides(result: Any, explanation: Mapping[str, Any]) -> list[dict[str, Any]]:
                     "drivers",
                     title.to_dict(),
                     kicker,
-                    _big(added, "More homes permitted, this reform alone"),
+                    _big(added, w.added_label(k, "More homes permitted, this reform alone")),
                     chart,
                     [d["lead"], *(i["text"] for i in d["items"][:3])],
                     explanation,

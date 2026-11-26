@@ -1,0 +1,127 @@
+# Transit schedule feeds found outside the Mobility Database catalog, and the status rules
+# of the transit-oriented density (TOD) pipeline: the rules that are words, not numbers.
+#
+# Read by visionhousing.data.sources.transit (which feeds to fetch) and
+# visionhousing.features.transit_status (the status ladder). The one number of the
+# status rule is the ledger entry tod.status_min_measured_bus_share in
+# assumptions/parameters.yaml. Method: docs/modules/transit.md ("Feed discovery and
+# the status ladder") and docs/methods/tod.md.
+#
+# A feed listed here was found in the Transitland Atlas catalogue (CC-BY 4.0), read at
+# the pinned commit below. "read: true" means the build fetches the operator's own
+# static schedule address by script; "read: false" means the feed is only recorded as
+# discovered. The legal fields record what was checked and when; a feed whose terms
+# forbid reuse is never read.
+
+version: 1
+
+atlas:
+  # The Transitland Atlas commit the feed addresses were read from (main branch, 2026-11-25).
+  commit: c7f820b3a3574ce466399343262c64e1a6f1f446
+
+feeds:
+  # Wyoming. The Mobility Database catalog lists no Wyoming schedule feed, so before
+  # this list every Wyoming bus stop had an unknown frequency.
+  - id: tl-jackson-wy
+    state: WY
+    ntd_id: "80188"
+    agency: Southern Teton Area Rapid Transit (START Bus), Town of Jackson
+    atlas_file: feeds/cadavl.com.dmfr.json
+    onestop_id: f-jackson~wy~us
+    read: true
+    legal:
+      status: usable
+      checked_on: 2026-11-25
+      basis: >-
+        Published by the operator's scheduling vendor at a public, keyless address for
+        trip planners. No licence or terms of use are attached to the feed or stated on
+        the operator's START Bus page; the host has no robots.txt. Only per-stop counts
+        of scheduled departures (facts) are kept; the feed itself is not stored or
+        redistributed.
+      terms_url: https://www.jacksonwy.gov/698/START-Bus
+  - id: tl-cheyenne-wy
+    state: WY
+    ntd_id: "80020"
+    agency: Cheyenne Transit Program, City of Cheyenne
+    atlas_file: feeds/sparelabs.com.dmfr.json
+    onestop_id: f-thecityofcheyenne~wy~us
+    read: true
+    legal:
+      status: usable
+      checked_on: 2026-11-25
+      basis: >-
+        Published by the operator's scheduling vendor at a public, keyless address for
+        trip planners. No licence or terms of use are attached to the feed; the host has
+        no robots.txt and the city site refuses scripted reading, so no city terms page
+        could be read. Only per-stop counts of scheduled departures (facts) are kept;
+        the feed itself is not stored or redistributed.
+      terms_url: https://www.cheyennecity.org/
+  - id: tl-casper-wy
+    state: WY
+    ntd_id: "80013"
+    agency: Casper Area Transit
+    atlas_file: feeds/passio3.com.dmfr.json
+    onestop_id: f-casper~wy~us
+    read: false
+    legal:
+      status: not_reviewed
+      basis: Discovered in the catalogue; not read in this build, so its terms were not reviewed.
+  - id: tl-uwyo-wy
+    state: WY
+    ntd_id: "80140"
+    agency: University of Wyoming Transportation Services
+    atlas_file: feeds/nationalrtap.org.dmfr.json
+    onestop_id: f-universityofwyoming~wy~us
+    read: false
+    legal:
+      status: not_reviewed
+      basis: Discovered in the catalogue; not read in this build, so its terms were not reviewed.
+  - id: tl-sheridan-wy
+    state: WY
+    ntd_id: "80193"
+    agency: Goose Creek Transit (Senior Citizens Council), Sheridan
+    atlas_file: feeds/trilliumtransit.com.dmfr.json
+    onestop_id: f-sheridan~wy~us
+    read: false
+    legal:
+      status: not_reviewed
+      basis: >-
+        Discovered in the catalogue (its catalogue entry says use without attribution and
+        derived products are allowed); not read in this build.
+
+# The status ladder. Each stage is reported per county and for the state, and each
+# answer is one of the words in "values". "unknown" is never written as zero.
+status:
+  stages:
+    - id: discovered
+      text: >-
+        A static schedule feed (GTFS) for the agencies that serve the area is listed in a
+        catalogue (the Mobility Database or the Transitland Atlas list above).
+    - id: legal
+      text: >-
+        The feed's terms allow it to be read and the derived counts to be used. Feeds read
+        through the Mobility Database carry the terms recorded for gtfs_agency_feeds in
+        the source register; feeds from the list above carry their own legal record.
+    - id: coverage
+      text: >-
+        Bus stops whose scheduled weekday departures were counted from a current feed,
+        out of all bus stops in the National Transit Map. Rail stops count as measured
+        (they are major by mode).
+    - id: headway
+      text: >-
+        Stops that meet the benchmark rule (a fixed-guideway station, or a bus stop with
+        at least 64 scheduled weekday departures), and, as a variant, the peak rule (every
+        15 minutes or better in both weekday peaks). Zero is "measured zero" only where
+        every stop's service was measured; otherwise it is "unknown".
+    - id: feasible
+      text: >-
+        Whether the mid-rise prototype pencils on any eligible land (the TOD funnel's
+        feasible land, P50). Without eligible land the answer is "not reached".
+  values: ["yes", "partial", "no", "unknown", "not_reached", "measured_zero"]
+  rule: >-
+    A discovered feed adds no homes by itself: homes come only from the funnel, on land
+    near stops that were measured and qualify. When some bus stops' service is unknown,
+    the measured footprint is "partial". The statewide range is shown only when the
+    measured share of bus stops is at least tod.status_min_measured_bus_share; below it,
+    the unknown part has no defensible bound, the statewide range and percent change are
+    suppressed, and the run reports the measured contribution with its completeness label.

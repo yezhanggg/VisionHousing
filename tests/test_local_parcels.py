@@ -218,6 +218,7 @@ def test_owner_rules():
 def test_every_local_column_is_described():
     from visionhousing.data import local
     from visionhousing.features import pipeline_local, zoning_status
+    from visionhousing.law.schema import CountyLandUse, LawDocument, MuniRule, StateProvision
 
     columns = {
         "parcels_area": pc.parcel_columns(RULES),
@@ -227,7 +228,15 @@ def test_every_local_column_is_described():
         "lihtc_awards": pipeline_local.AWARD_COLUMNS,
         "municipal_planning": zoning_status.MUNICIPAL_COLUMNS,
         "tract_municipalities": zoning_status.TRACT_COLUMNS,
+        "law_documents": LawDocument.model_fields,
+        "state_law_provisions": StateProvision.model_fields,
+        "county_land_use": CountyLandUse.model_fields,
+        "muni_zoning_rules": MuniRule.model_fields,
     }
+    from visionhousing.features import ma_intake
+
+    # Massachusetts tables: every built column is checked in tests/test_ma_intake.py.
+    columns.update({table: () for table in ma_intake.TABLES})
     assert set(columns) == set(local.TABLES)
     for table, names in columns.items():
         for name in names:

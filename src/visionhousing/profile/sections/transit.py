@@ -2,7 +2,7 @@
 
 Plain-language summary
 ----------------------
-Decision D-07 defines a **major transit stop**: any rail station (subway,
+A **major transit stop** is any rail station (subway,
 light rail, trolley, commuter or regional rail and similar), or a bus stop with
 at least 64 scheduled departures on a weekday (about one every 15 minutes).
 A home is **near transit** when its 2020 census block's centre is within 1/2
@@ -12,7 +12,7 @@ Facts:
 
 - major transit stops inside the place (stop points as the National Transit
   Map lists them, so one station with several platforms counts several times);
-- the share of homes near transit by the D-07 rule;
+- the share of homes near transit by the major-stop rule;
 - the share of homes within 1/2 mile of any major stop.
 
 Shares are of 2020 Census block housing units. A county is compared with the
@@ -61,7 +61,9 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
     fm.add("major_stops", "Major transit stops inside the place", "stops", STOPS,
            "latest release", major_stops, compare=False,
            note="stop points as listed; one station can have several")  # fmt: skip
-    fm.add("homes_near_transit", "Homes near major transit (rule D-07)", "share", BLOCKS, "2020",
+    fm.add("homes_near_transit",
+           "Homes near major transit (1/2 mile of rail, 1/4 mile of frequent bus)",
+           "share", BLOCKS, "2020",
            near("transit_units_d07"),
            note="2020 block homes within 1/2 mile of rail or 1/4 mile of a frequent bus stop; "
            "stop data from the National Transit Map and agency schedules")  # fmt: skip

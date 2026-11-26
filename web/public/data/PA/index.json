@@ -1,4 +1,5 @@
 {
+ "schema_version": 2,
  "state": "PA",
  "seed": 0,
  "draws": 2000,
@@ -42,6 +43,26 @@
   "pa_hb2186",
   "pa_sb1346"
  ],
+ "tract_points": true,
+ "permit_years": true,
+ "tracts": [
+  "baseline",
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package",
+  "pa_hb2186",
+  "pa_sb1346"
+ ],
+ "tract_funnels": [
+  "adu",
+  "missing_middle",
+  "tod",
+  "pa_hb2186",
+  "pa_sb1346"
+ ],
  "exports": [
   "baseline",
   "adu",
@@ -53,6 +74,15 @@
   "pa_hb2186",
   "pa_sb1346"
  ],
+ "hearing_briefs": [
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees",
+  "package"
+ ],
+ "baseline_card": true,
  "explanations": true,
  "drivers": true,
  "counties": [
@@ -124,6 +154,37 @@
   "42131",
   "42133"
  ],
- "tract_profiles": false,
+ "tract_profiles": true,
+ "tract_profile_format": "compact",
+ "county_profile_format": "compact",
+ "comparisons": true,
+ "confidence": true,
+ "plausibility": true,
+ "lever": true,
+ "implementation": true,
+ "grades": true,
+ "districts": true,
+ "district_chambers": [
+  "lower",
+  "upper"
+ ],
+ "switch_ranges": [
+  "adu",
+  "missing_middle",
+  "tod",
+  "parking",
+  "fees"
+ ],
+ "switch_ranges_counties": false,
+ "law_changes": [
+  "adu",
+  "pa_hb2186",
+  "pa_sb1346",
+  "missing_middle",
+  "parking",
+  "fees",
+  "tod"
+ ],
+ "adu_budget_grid": true,
  "note": "Default assumptions only. Changing assumptions needs the local app (make app)."
 }

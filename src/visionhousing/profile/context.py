@@ -38,6 +38,7 @@ import pandas as pd
 from visionhousing.data.registry import Source, load_registry
 from visionhousing.engine.context import PACKS_DIR, TESTLAND, TESTLAND_DIR
 from visionhousing.features import brackets as br
+from visionhousing.paths import safe_child, state_code
 
 __all__ = [
     "Area",
@@ -217,6 +218,34 @@ class Area:
         return Measure(value, None, note)
 
 
+def _from_tract_table(
+    area: Area, group: str, bands: dict[str, tuple[str, ...]]
+) -> dict[str, float | None]:
+    """One tract's band values and margins for ``group``, from tract-table columns."""
+    cols = area.tracts.columns
+    out: dict[str, float | None] = {}
+    for band, names in bands.items():
+        present = [n for n in names if n in cols]
+        if not present:
+            return {}
+        value = 0.0
+        squares = 0.0
+        has_moe = True
+        for n in present:
+            v = _clean(area.tracts[n].iloc[0])
+            if v is None:
+                return {}
+            value += v
+            m = _clean(area.tracts[f"{n}_moe"].iloc[0]) if f"{n}_moe" in cols else None
+            if m is None:
+                has_moe = False
+            else:
+                squares += m * m
+        out[f"{group}_{band}"] = value
+        out[f"{group}_{band}_moe"] = round(math.sqrt(squares)) if has_moe else None
+    return out
+
+
 @dataclass
 class ProfileContext:
     """One state's pack, read once, for building place profiles.
@@ -247,7 +276,10 @@ class ProfileContext:
         """Read a pack table (``name.csv.gz`` or ``name.csv``); ``None`` when absent."""
         if name not in self._tables:
             frame = None
-            for path in (self.folder / f"{name}.csv.gz", self.folder / f"{name}.csv"):
+            for path in (
+                safe_child(self.folder, f"{name}.csv.gz"),
+                safe_child(self.folder, f"{name}.csv"),
+            ):
                 if path.is_file():
                     frame = pd.read_csv(path, dtype={c: str for c in _TEXT})
                     break
@@ -358,10 +390,52 @@ class ProfileContext:
             return area, self.county_area(geoid[:5])
         raise PlaceNotFoundError(geoid)
 
+    # ------------------------------------------------------------------ ACS bands
+
+    def bands(self, area: Area) -> tuple[dict[str, float | None], set[str]] | None:
+        """The collapsed ACS bands of an area, and which groups came from the tract table.
+
+        The state and counties read their own row of ``acs_bands`` (the Bureau's
+        published county and state figures). A tract reads its row for the
+        groups kept on tract rows, and builds owners and renters, building type
+        and year built from the tract table
+        (:data:`visionhousing.features.acs_bands.FROM_TRACT_TABLE`), with the
+        Bureau's approximation for the margin of a sum.
+
+        Returns:
+            ``({column: value}, {group keys read from the tract table})``, or
+            ``None`` when the pack has no ``acs_bands`` table or no row for the area.
+        """
+        from visionhousing.features import acs_bands as ab
+
+        key = f"bands:{area.level}:{area.geoid}"
+        if key in self._cache:
+            return self._cache[key]
+        table = self.table("acs_bands")
+        result = None
+        if table is not None and not table.empty:
+            if area.level == "state":
+                row = table[table["level"] == "state"]
+            else:
+                row = table[table["geoid"].astype(str) == area.geoid]
+            if not row.empty:
+                first = row.iloc[0]
+                values = {c: _clean(v) for c, v in first.items() if c not in ("geoid", "level")}
+                from_tracts: set[str] = set()
+                if area.single:
+                    for group, bands in ab.FROM_TRACT_TABLE.items():
+                        filled = _from_tract_table(area, group, bands)
+                        if filled:
+                            values.update(filled)
+                            from_tracts.add(group)
+                result = (values, from_tracts)
+        self._cache[key] = result
+        return result
+
     # ------------------------------------------------------------------ transit
 
     def transit_rule(self):
-        """The major-transit-stop rule (decision D-07), from the ledger's central values."""
+        """The major-transit-stop rule, from the ledger's central values."""
         if "rule" not in self._cache:
             from visionhousing.features.transit import TransitRule
             from visionhousing.ledger import load_ledger
@@ -416,7 +490,7 @@ class ProfileContext:
         """Transit stops with ``major`` (0/1), ``county`` and ``tract`` filled.
 
         A real pack stores all three. For Testland they are worked out here:
-        ``major`` by the D-07 rule and the county and tract by testing which
+        ``major`` by the major-stop rule and the county and tract by testing which
         outline holds each stop.
         """
         if "stops" in self._cache:
@@ -470,12 +544,13 @@ def load_profile_context(
 
     Raises:
         FileNotFoundError: There is no pack for the state.
+        ValueError: ``state`` is not a two-letter code.
     """
-    code = state.upper()
+    code = state_code(state)
     if folder is not None:
         where = Path(folder)
     else:
-        where = TESTLAND_DIR if code == TESTLAND else PACKS_DIR / code
+        where = TESTLAND_DIR if code == TESTLAND else safe_child(PACKS_DIR, code)
     if not where.is_dir():
         raise FileNotFoundError(
             f"no state pack for {code} at {where}; build it with `make data STATE={code}`"

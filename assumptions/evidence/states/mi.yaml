@@ -1,0 +1,64 @@
+# Cross-state comparison records: MI.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: mi.pa2026_28_29_single_stair
+  kind: policy
+  state: MI
+  jurisdiction: statewide (state construction code)
+  policy_types:
+  - missing_middle
+  title: 'Michigan Public Acts 28 and 29 of 2026 (HB 5570, HB 5571): single-stair apartment buildings up
+    to four levels'
+  citation: Mich. Pub. Acts 2026, No. 28 (HB 5570) and No. 29 (HB 5571); MCL 125.1504j, 125.1504k
+  url: https://legislature.mi.gov/Bills/Bill?ObjectName=2026-HB-5570
+  session: 103rd Legislature, 2026 regular session
+  bill: HB 5570; HB 5571 (tie-barred)
+  enacted_date: 2026-07-21
+  effective_dates:
+  - date: 2026-07-21
+    applies_to: Both acts (ordered to take immediate effect)
+  geographic_scope: Statewide through the Stille-DeRossett-Hale Single State Construction Code Act; multiple-family
+    dwellings of not more than four levels above grade plane.
+  exclusions:
+  - Section 4j stops applying once the state adopts the International Code Council's own single-stair provision
+    for buildings of four or more levels (PA 29)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Conditions include at most four units and 4,000 sq ft per level, at most 125 ft of exit travel, no elevator
+    opening into the stair, sprinklered stair, fire alarm and smoke detection, and a stair at least 48 in
+    wide.
+  - A building-code change, not zoning; it makes small apartment buildings on narrow lots easier to design
+    where zoning already allows them.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'legislature.mi.gov bill pages show both bills approved by the Governor 07/21/2026,
+    filed with the Secretary of State 07/21/2026, assigned PA 28''26 and PA 29''26 with immediate effect.
+    The public act texts on legislature.mi.gov show ''EFFECTIVE DATE: July 21, 2026'' and the conditions.'
+  sources:
+  - label: HB 5570 bill page (Michigan Legislature)
+    url: https://legislature.mi.gov/Bills/Bill?ObjectName=2026-HB-5570
+    official: true
+  - label: Public Act 28 of 2026 text
+    url: https://legislature.mi.gov/documents/2025-2026/publicact/htm/2026-PA-0028.htm
+    official: true
+  - label: Public Act 29 of 2026 text
+    url: https://legislature.mi.gov/documents/2025-2026/publicact/htm/2026-PA-0029.htm
+    official: true
+  discovered_via: pew_2026

@@ -23,6 +23,21 @@ Plausible shapes (not real values):
 - Permits rise to a mid-2000s peak, fall hard in 2008-2011, then recover with a
   recent rise.
 
+The collapsed survey bands behind the profile charts (``acs_bands.csv``, laid out as
+:mod:`visionhousing.features.acs_bands` describes) use a second generator seeded with
+``SEED + 1``, so adding them left every other file unchanged. A tract's bands add up to
+its population, households and homes; owners, renters and building types copy the tract
+table; county and state rows are the sums of their tracts, with margins combined by the
+Bureau's square-root-of-squares rule.
+
+Four optional tables (water and sewer readiness ``infra_tract``, hazard screening
+``hazard_tract``, parcel land use ``parcels_area`` and HUD-style income limits
+``afford_income_limits``) use a third generator seeded with ``SEED + 2``, so adding them
+left every earlier file unchanged. They have the real pack's columns; readiness and
+hazards go through the real pack's table functions. Their rules are the constants above
+:func:`_infra_rows`. They let the extra scenarios run their "table present" path on
+Testland; the benchmark reforms read none of them.
+
 Usage: ``uv run python scripts/make_testland.py --out tests/fixtures/testland``.
 """
 
@@ -339,6 +354,12 @@ def build(seed: int = SEED) -> dict[str, object]:
 
     permits = _permit_rows(rng, counties)
     stops = _stop_rows(rng)
+    bands = _band_rows(Rng(seed + 1), tracts)
+    extra = Rng(seed + 2)
+    infra = _infra_rows(extra, tracts)
+    hazard = _hazard_rows(extra, tracts)
+    parcels = _parcel_rows(extra, tracts)
+    limits = _income_limit_rows(extra, tracts)
     return {
         "counties.csv": _csv(["geoid", "name", "population", "housing_units"], counties),
         "tracts.csv": _csv(TRACT_COLUMNS, tracts),
@@ -352,6 +373,11 @@ def build(seed: int = SEED) -> dict[str, object]:
         "transit_stops.csv": _csv(["stop_id", "lat", "lon", "mode", "weekday_departures"], stops),
         "boundaries.geojson": _geojson(shapes),
         "data_dictionary.json": _dictionary(),
+        "acs_bands.csv": _csv(["geoid", "level", *_band_names()], bands),
+        "infra_tract.csv": _csv(list(_infra().TRACT_COLUMNS), infra),
+        "hazard_tract.csv": _csv(list(_hazards().TRACT_COLUMNS), hazard),
+        "parcels_area.csv": _csv(_parcel_columns(), parcels),
+        "afford_income_limits.csv": _csv(_limit_columns(), limits),
     }
 
 
@@ -397,6 +423,417 @@ def _tract_row(rng: Rng, geoid: str, county: str, area: str, prof: dict, cell) -
     row.update(zip(value_columns(), value_counts, strict=True))
     row.update(zip(rent_columns(), [*rent_counts, no_cash], strict=True))
     return row
+
+
+# Collapsed-band weights by area type (bands in the order of visionhousing.features.acs_bands).
+BAND_WEIGHTS = {
+    "age": {"urban": [0.20, 0.12, 0.18, 0.25, 0.12], "suburban": [0.23, 0.08, 0.12, 0.27, 0.14],
+            "rural": [0.20, 0.08, 0.11, 0.25, 0.15]},
+    "race": {"urban": [0.40, 0.35, 0.07, 0.13, 0.04, 0.01],
+             "suburban": [0.78, 0.06, 0.06, 0.07, 0.025, 0.005],
+             "rural": [0.92, 0.02, 0.01, 0.03, 0.015, 0.005]},
+    "hhsize": {"urban": [0.36, 0.31, 0.15, 0.11, 0.07], "suburban": [0.24, 0.36, 0.16, 0.15, 0.09],
+               "rural": [0.28, 0.38, 0.14, 0.12, 0.08]},
+    "edu": {"urban": [0.13, 0.32, 0.24, 0.18, 0.13], "suburban": [0.06, 0.26, 0.25, 0.25, 0.18],
+            "rural": [0.10, 0.44, 0.26, 0.12, 0.08]},
+    "commute": {"urban": [0.52, 0.08, 0.20, 0.10, 0.03, 0.07],
+                "suburban": [0.76, 0.07, 0.03, 0.02, 0.02, 0.10],
+                "rural": [0.80, 0.10, 0.005, 0.03, 0.025, 0.04]},
+    "built": {"urban": [0.06, 0.05, 0.09, 0.20, 0.25, 0.35],
+              "suburban": [0.12, 0.13, 0.25, 0.25, 0.15, 0.10],
+              "rural": [0.08, 0.10, 0.25, 0.22, 0.13, 0.22]},
+    "burden": {"urban": [0.48, 0.24, 0.23, 0.05], "suburban": [0.55, 0.22, 0.18, 0.05],
+               "rural": [0.56, 0.20, 0.18, 0.06]},
+    "vacancy": {"urban": [0.30, 0.10, 0.08, 0.04, 0.48], "suburban": [0.25, 0.18, 0.10, 0.12, 0.35],
+                "rural": [0.12, 0.12, 0.05, 0.40, 0.31]},
+}  # fmt: skip
+INCOME_EDGES = [0, 25000, 50000, 75000, 100000, 150000]
+
+
+def _band_names() -> list[str]:
+    from visionhousing.features import acs_bands as ab
+
+    cols = ab.band_columns()
+    return [*cols, *(f"{c}_moe" for c in cols)]
+
+
+def _moe(value: float) -> int:
+    """A made-up margin of error that grows with the square root of the count."""
+    return round(4.0 * math.sqrt(max(value, 0.0))) + 6
+
+
+def _band_rows(rng: Rng, tracts: list[dict]) -> list[dict]:
+    """Collapsed survey bands for every tract, county and the state (synthetic)."""
+    from visionhousing.features import acs_bands as ab
+
+    full: list[dict] = []
+    for t in tracts:
+        area = t["area_type"]
+        pop, hu = t["population"], t["housing_units"]
+        owners, renters = t["households_owner"], t["households_renter"]
+        hh = owners + renters
+        share65 = float(t["share_age_65plus"])
+        older = round(pop * share65)
+        counts: dict[str, list[int]] = {}
+        counts["age"] = [
+            *allocate(pop - older, [w * rng.jitter(0.15) for w in BAND_WEIGHTS["age"][area]]),
+            older,
+        ]
+        for key, total in (
+            ("race", pop),
+            ("hhsize", hh),
+            ("edu", round(pop * 0.68)),
+            ("commute", round(pop * 0.47)),
+            ("built", hu),
+            ("burden", renters),
+            ("vacancy", t["vacant_units"]),
+        ):
+            weights = [w * rng.jitter(0.2) for w in BAND_WEIGHTS[key][area]]
+            counts[key] = allocate(total, weights)
+        income = float(t["median_household_income"])
+        counts["income"] = allocate(hh, lognormal_shares(income, 0.75, INCOME_EDGES))
+        counts["tenure"] = [owners, renters]
+        u = [t[c] for c in STRUCTURE_COLUMNS]
+        counts["units"] = [u[0], u[1], u[2] + u[3], u[4] + u[5], u[6], u[7]]
+        row: dict[str, float] = {}
+        for g in ab.GROUPS:
+            values = counts[g.key]
+            row[g.column("total")] = sum(values)
+            row[f"{g.column('total')}_moe"] = _moe(sum(values)) // 3
+            for band, v in zip(g.bands, values, strict=True):
+                row[g.column(band.key)] = v
+                row[f"{g.column(band.key)}_moe"] = _moe(v)
+        full.append({"geoid": t["geoid"], "county": t["county"], "row": row,
+                     "income": income, "rent": float(t["median_gross_rent"]),
+                     "hh": hh, "renters": renters})  # fmt: skip
+
+    def combine(level: str, geoid: str, members: list[dict]) -> dict:
+        out: dict[str, object] = {"geoid": geoid, "level": level}
+        for name in ab.band_columns():
+            if name in ab.MEDIANS:
+                weight = "hh" if name == "median_household_income" else "renters"
+                key = "income" if name == "median_household_income" else "rent"
+                total = sum(m[weight] for m in members)
+                value = sum(m[key] * m[weight] for m in members) / total
+                out[name] = int(round(value, -2)) if key == "income" else round(value)
+                continue
+            out[name] = sum(m["row"][name] for m in members)
+        for name in ab.band_columns():
+            if name in ab.MEDIANS:
+                out[f"{name}_moe"] = round(float(out[name]) * 0.02)  # type: ignore[arg-type]
+            else:
+                out[f"{name}_moe"] = round(math.sqrt(sum(m["row"][f"{name}_moe"] ** 2
+                                                         for m in members)))  # fmt: skip
+        return out
+
+    rows = [combine("state", STATE_FIPS, full)]
+    for code, *_ in COUNTIES:
+        county = STATE_FIPS + code
+        rows.append(combine("county", county, [m for m in full if m["county"] == county]))
+    kept = {c for g in ab.GROUPS if g.key in ab.TRACT_GROUPS for c in g.columns()}
+    for m in full:
+        row: dict[str, object] = {"geoid": m["geoid"], "level": "tract"}
+        for name in ab.band_columns():
+            if name in kept:
+                row[name] = m["row"][name]
+                row[f"{name}_moe"] = m["row"][f"{name}_moe"]
+            else:
+                row[name] = row[f"{name}_moe"] = ""
+        rows.append(row)
+    return rows
+
+
+# ------------------------------------------------------------------ optional extra tables
+#
+# Four small tables the extra scenarios and the practical capacity screen read when a pack
+# has them (``visionhousing.scenarios.extra_common.OPTIONAL_TABLES``). They are made by the
+# rules below from a third generator seeded with ``SEED + 2``, so adding them left every
+# earlier file unchanged. Each one goes through the same table function a real pack uses
+# where one exists (readiness and hazards), so the columns and their meaning match.
+
+# Water and sewer readiness, per county: how the made-up official record covers it.
+# "statement": one utility serves the whole county; "map": a county service-area map
+# (homes inside it verified, the rest outside); "none": no record (every home unknown).
+SEWER_RECORD = {"001": "statement", "003": "map", "005": "none", "007": "map"}
+SEWER_IN = {"003": (0.72, 0.97), "007": (0.05, 0.35)}  # share of homes inside the map
+CONSTRAINT_TRACT = ("003", 3)  # one Maple tract (4th) has a documented moratorium area
+CONSTRAINT_SHARE = (0.30, 0.50)  # share of that tract's homes under the moratorium
+
+# Hazards, by area type: developed share of land, mean impervious percent of developed
+# cells, steep share of land, and the usual share of homes in the flood zone. One tract in
+# five sits on a river (FLOOD_RIVER). Half of Prairie County has no digital flood map.
+DEVELOPED = {"urban": (0.85, 0.98), "suburban": (0.45, 0.75), "rural": (0.05, 0.20)}
+IMPERVIOUS = {"urban": (55, 70), "suburban": (30, 45), "rural": (20, 35)}
+STEEP = {"urban": (0.00, 0.03), "suburban": (0.02, 0.12), "rural": (0.03, 0.20)}
+FLOOD = (0.00, 0.06)
+FLOOD_RIVER = (0.10, 0.25)
+FLOOD_UNMAPPED_COUNTY = "007"
+
+# Parcel land use: measured in Harbor and Maple counties only (the others stay "not
+# measured", as most real counties are). Parcels per home and land-use class weights
+# (order of assumptions/parcels.yaml land_use_classes), by area type.
+PARCEL_COUNTIES = ("001", "003")
+PARCELS_PER_HOME = {"urban": 0.75, "suburban": 0.85}
+LAND_USE_WEIGHTS = {
+    "urban": [0.72, 0.08, 0.02, 0.03, 0.03, 0.06, 0.01, 0.03, 0.01, 0.00, 0.01],
+    "suburban": [0.80, 0.03, 0.01, 0.03, 0.01, 0.04, 0.01, 0.04, 0.01, 0.01, 0.01],
+}
+LOT_SQFT = {"urban": (1100, 2000), "suburban": (6000, 14000)}
+BUILT_WEIGHTS = {"urban": [0.45, 0.40, 0.08, 0.07], "suburban": [0.08, 0.37, 0.30, 0.25]}
+
+# Income limits: HUD-style areas (code, name, counties). Area median family income =
+# the area's household-weighted median household income x a drawn ratio in FAMILY_RATIO;
+# the 4-person 50% limit is half of it, the 30% and 80% limits are 0.6x and 1.6x the 50%
+# limit, other sizes use HUD's family-size factors, and every limit is rounded up to $50.
+HUD_AREAS = [
+    ("METRO99900M99900", "Harbor-Maple, TL Metro Area (synthetic)", ("001", "003")),
+    ("METRO99910M99910", "Brookside, TL Metro Area (synthetic)", ("005",)),
+    ("NCNTY99007N99007", "Prairie County, TL (synthetic)", ("007",)),
+]
+FAMILY_RATIO = (1.15, 1.35)
+SIZE_FACTORS = [0.70, 0.80, 0.90, 1.00, 1.08, 1.16, 1.24, 1.32]
+LIMIT_MULTIPLES = {30: 0.6, 50: 1.0, 80: 1.6}
+
+
+def _infra():
+    from visionhousing.features import infrastructure
+
+    return infrastructure
+
+
+def _hazards():
+    from visionhousing.features import hazards
+
+    return hazards
+
+
+def _parcel_columns() -> list[str]:
+    from visionhousing.features import parcels
+
+    return parcels.parcel_columns(parcels.load_rules())
+
+
+def _limit_columns() -> list[str]:
+    from visionhousing.features.affordability import LIMIT_COLUMNS
+
+    return ["county", "hud_area_code", "hud_area_name", "areas_in_county", "median",
+            *LIMIT_COLUMNS]  # fmt: skip
+
+
+def _cell(value: object) -> object:
+    """A table cell for the CSV: blank for a missing value, plain Python numbers otherwise."""
+    if value is None:
+        return ""
+    if isinstance(value, float) or hasattr(value, "dtype"):
+        f = float(value)  # type: ignore[arg-type]
+        if math.isnan(f):
+            return ""
+        return int(f) if f.is_integer() and not isinstance(value, float) else round(f, 3)
+    return value
+
+
+def _records(frame) -> list[dict]:
+    """Rows of a pandas table as plain dictionaries for :func:`_csv`."""
+    return [{k: _cell(v) for k, v in row.items()} for row in frame.to_dict("records")]
+
+
+def _infra_rows(rng: Rng, tracts: list[dict]) -> list[dict]:
+    """``infra_tract``: made-up sewer answers per tract, summed by the real table function.
+
+    Water and EPA sewershed shares are drawn per tract and written in afterwards (the
+    table function would need them block by block).
+    """
+    import pandas as pd
+
+    fx = _infra()
+    groups, water, epa = [], {}, {}
+    for t in _county_order(tracts):
+        code, homes = t["county"][2:], t["housing_units"]
+        record = SEWER_RECORD[code]
+        water[t["geoid"]] = (
+            round(rng.uniform(0.85, 1.0), 3) if record != "none" else None
+        )  # no statewide water map where the county has no record
+        epa[t["geoid"]] = round(rng.uniform(0.6, 0.95), 3)
+        if record == "statement":
+            parts = {"in": homes}
+        elif record == "map":
+            inside = round(homes * rng.uniform(*SEWER_IN[code]))
+            parts = {"in": inside, "out": homes - inside}
+            if (code, t["index"]) == CONSTRAINT_TRACT:
+                held = round(inside * rng.uniform(*CONSTRAINT_SHARE))
+                parts = {"in": inside - held, "held": held, "out": homes - inside}
+        else:
+            parts = {"unknown": homes}
+        for kind, units in parts.items():
+            groups.append(
+                {
+                    "tract": t["geoid"],
+                    "county": t["county"],
+                    "units": units,
+                    "sewer_in": kind in ("in", "held"),
+                    "sewer_known": kind != "unknown",
+                    "constraint": kind == "held",
+                    "sewer_source": "synthetic" if kind != "unknown" else "",
+                    "water_in": False,
+                    "water_known": False,
+                    "epa_in": False,
+                }
+            )
+    table = fx.tract_table(
+        pd.DataFrame(groups), [t["geoid"] for t in tracts], rules=fx.load_rules()
+    )
+    table["water_share"] = table["geoid"].map(water)
+    table["epa_share"] = table["geoid"].map(epa)
+    return _records(table)
+
+
+def _county_order(tracts: list[dict]) -> list[dict]:
+    """Tracts with their position inside their county (``index``), in file order."""
+    seen: dict[str, int] = {}
+    out = []
+    for t in tracts:
+        k = seen.get(t["county"], 0)
+        seen[t["county"]] = k + 1
+        out.append({**t, "index": k})
+    return out
+
+
+def _hazard_rows(rng: Rng, tracts: list[dict]) -> list[dict]:
+    """``hazard_tract``: made-up 30 m cell and home counts, through the real table function."""
+    import pandas as pd
+
+    hz = _hazards()
+    rows = []
+    for t in _county_order(tracts):
+        area, homes = t["area_type"], t["housing_units"]
+        land = round(t["land_area_m2"] / 900.0)
+        developed = round(land * rng.uniform(*DEVELOPED[area]))
+        impervious = developed * rng.uniform(*IMPERVIOUS[area])
+        steep = round(land * rng.uniform(*STEEP[area]))
+        river = rng.uniform(0, 1) < 0.2
+        flood = rng.uniform(*(FLOOD_RIVER if river else FLOOD))
+        mapped = not (t["county"][2:] == FLOOD_UNMAPPED_COUNTY and t["index"] % 2 == 1)
+        rows.append(
+            {
+                "geoid": t["geoid"],
+                "homes": homes,
+                "land_cells": land,
+                "slope_cells": land,
+                "steep_cells": steep,
+                "developed_cells": developed,
+                "impervious_cells": land,
+                "impervious_sum": round(impervious),
+                "nfhl_cells": land if mapped else 0,
+                "nfhl_homes": homes if mapped else 0,
+                "nfhl_developed_cells": developed if mapped else 0,
+                "sfha_homes": round(homes * flood) if mapped else 0,
+                "sfha_developed_cells": round(developed * flood * rng.jitter(0.2)) if mapped else 0,
+            }
+        )
+    table = hz.tract_table(pd.DataFrame(rows), hz.load_rules())
+    return _records(table)
+
+
+def _parcel_rows(rng: Rng, tracts: list[dict]) -> list[dict]:
+    """``parcels_area``: made-up parcel counts for the measured counties, tract and county rows."""
+    from visionhousing.features import parcels as pc
+
+    rules = pc.load_rules()
+    classes = list(rules["land_use_classes"])
+    groups = list(rules["year_built_groups"])
+    rows: list[dict] = []
+    for code in PARCEL_COUNTIES:
+        county = STATE_FIPS + code
+        mine = []
+        for t in tracts:
+            if t["county"] != county:
+                continue
+            area = t["area_type"]
+            n = round(t["housing_units"] * PARCELS_PER_HOME[area] * rng.jitter(0.1))
+            weights = [w * rng.jitter(0.25) for w in LAND_USE_WEIGHTS[area]]
+            by_class = dict(zip(classes, allocate(n, weights), strict=True))
+            sf = by_class["single_family"]
+            unknown = round(sf * rng.uniform(0.0, 0.02))
+            built = allocate(sf - unknown, [w * rng.jitter(0.2) for w in BUILT_WEIGHTS[area]])
+            value = round(t["median_home_value"] * rng.jitter(0.1), -3)
+            short = round(sf * rng.uniform(0.03, 0.05))
+            sale = round(value * rng.uniform(1.0, 1.2), -3)
+            mine.append(
+                {
+                    "level": "tract",
+                    "geoid": t["geoid"],
+                    "county": county,
+                    "as_of": "synthetic",
+                    "value_basis": "synthetic market value",
+                    "parcels": n,
+                    **{f"lu_{c}": by_class[c] for c in classes},
+                    "sf_parcels": sf,
+                    "sf_median_value": int(value),
+                    "sf_median_lot_sqft": int(round(rng.uniform(*LOT_SQFT[area]), -1)),
+                    **{f"sf_built_{g}": b for g, b in zip(groups, built, strict=True)},
+                    "sf_built_unknown": unknown,
+                    "sales_short": short,
+                    "sales_long": round(short * rng.uniform(2.7, 3.1)),
+                    "median_sale_short": int(sale),
+                    "median_sale_long": int(round(sale * rng.uniform(0.88, 0.95), -3)),
+                    "unplaced": "",
+                }
+            )
+        total: dict[str, object] = {
+            "level": "county",
+            "geoid": county,
+            "county": county,
+            "as_of": "synthetic",
+            "value_basis": "synthetic market value",
+        }
+        counts = [
+            "parcels",
+            *(f"lu_{c}" for c in classes),
+            "sf_parcels",
+            *(f"sf_built_{g}" for g in groups),
+            "sf_built_unknown",
+            "sales_short",
+            "sales_long",
+        ]
+        for c in counts:
+            total[c] = sum(int(r[c]) for r in mine)
+        # County "medians" are the parcel-weighted means of the tract medians (synthetic).
+        weights = (
+            ("sf_median_value", "sf_parcels"),
+            ("sf_median_lot_sqft", "sf_parcels"),
+            ("median_sale_short", "sales_short"),
+            ("median_sale_long", "sales_long"),
+        )
+        for c, w in weights:
+            mean = sum(r[c] * r[w] for r in mine) / sum(r[w] for r in mine)
+            total[c] = int(round(mean, -1 if c == "sf_median_lot_sqft" else -3))
+        total["unplaced"] = rng.integer(0, 30)
+        rows.append(total)
+        rows.extend(mine)
+    return rows
+
+
+def _income_limit_rows(rng: Rng, tracts: list[dict]) -> list[dict]:
+    """``afford_income_limits``: HUD-style limits per county, through the real table function."""
+    import pandas as pd
+
+    from visionhousing.features.affordability import income_limits_table
+
+    raw = []
+    for code, name, members in HUD_AREAS:
+        mine = [t for t in tracts if t["county"][2:] in members]
+        hh = [t["households_owner"] + t["households_renter"] for t in mine]
+        income = sum(t["median_household_income"] * h for t, h in zip(mine, hh, strict=True))
+        median = round(income / sum(hh) * rng.uniform(*FAMILY_RATIO), -2)
+        for county in members:
+            row: dict[str, object] = {"county": STATE_FIPS + county, "hud_area_code": code,
+                                      "hud_area_name": name, "median": int(median)}  # fmt: skip
+            for pct, multiple in LIMIT_MULTIPLES.items():
+                for size, factor in enumerate(SIZE_FACTORS, start=1):
+                    value = median * 0.5 * multiple * factor
+                    row[f"l{pct}_{size}"] = int(math.ceil(value / 50.0) * 50)
+            raw.append(row)
+    return _records(income_limits_table(pd.DataFrame(raw)))
 
 
 def _block_rows(rng: Rng, tract: str, area: str, hu: int, cell) -> list[dict]:
@@ -576,6 +1013,27 @@ def _dictionary() -> bytes:
     add("transit_stops", "lon", "degrees", "Longitude")
     add("transit_stops", "mode", "category", "rail or bus")
     add("transit_stops", "weekday_departures", "departures per day", "Scheduled weekday trips")
+
+    from visionhousing.features import acs_bands as ab
+
+    for name in ["geoid", "level", *_band_names()]:
+        unit, text = ab.describe(name)
+        add("acs_bands", name, unit, text)
+
+    # The four optional tables reuse the real pack's column descriptions, marked synthetic.
+    from visionhousing.data import local as local_tables
+    from visionhousing.features import affordability as af
+
+    tag = " (Testland: synthetic, made by the generator's stated rules)"
+    for table, columns, describe in (
+        ("infra_tract", _infra().TRACT_COLUMNS, _infra().describe),
+        ("hazard_tract", _hazards().TRACT_COLUMNS, _hazards().describe),
+        ("parcels_area", _parcel_columns(), local_tables.describe),
+        ("afford_income_limits", _limit_columns(), af.describe),
+    ):
+        for name in columns:
+            unit, text = describe(table, name)
+            add(table, name, unit, text + tag)
 
     add("boundaries", "level", "category", "county or tract")
     add("boundaries", "geoid", "code", "Code of the county or tract")

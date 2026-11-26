@@ -1,5 +1,5 @@
 /**
- * The Slides view (decision D-22): a 16:9 deck of the current scenario, written by the
+ * The Slides view: a 16:9 deck of the current scenario, written by the
  * engine's explanation layer from one run (`explanation.slides`).
  *   - Each slide is drawn on a 960 x 540 logical frame that scales to the window.
  *   - Left / Right arrows (and Page Up / Page Down, Home / End) move; Esc goes back.
@@ -7,93 +7,29 @@
  *   - Printing gives one slide per page (css/slides.css), which is how the slide PDF is made.
  *   - Every footer carries the run's three fingerprints: code, data and assumptions.
  * A reform run alone also gets its top-drivers slide (the run asks for the drivers).
+ *   - The slide on show plays a short entry (numbers fade in with the engine's final text, bars
+ *     draw in, sentences fade in); with reduced motion it appears at once.
+ * The slide face itself is drawn by ui/slide-face.js, shared with the live Brief preview.
  */
 import { deckOf, stampOf } from "../content/slides.js";
 import { stateName } from "../content/states.js";
 import { learn, useRun } from "../lib/data.js";
-import { shortHash } from "../lib/format.js";
-import { html, useEffect, useLayoutEffect, useState } from "../lib/html.js";
-import { hrefFor, lastScreen, scenario } from "../state/store.js";
-import { RangeBar, scaleOf, Status } from "../ui/bits.js";
+import { html, useEffect, useLayoutEffect, useRef, useState } from "../lib/html.js";
+import { hrefFor, lastScreen, scenario, slideStart } from "../state/store.js";
+import { Status } from "../ui/bits.js";
 import { Icon } from "../ui/icons.js";
+import { ScenarioActions } from "../ui/actions.js";
+import { useReveal } from "../ui/motion.js";
+import { rangeOf, SlideFace, stampText } from "../ui/slide-face.js";
 
-function stampText(stamp) {
-  return `Code ${shortHash(stamp.code)} · Data ${shortHash(stamp.data)} · Assumptions ${shortHash(stamp.assumptions)}`;
-}
-
-function range(sh) {
-  if (!sh) return "";
-  if (sh.p10 !== undefined) return `${sh.p10} to ${sh.p90}`;
-  return sh.value || "";
-}
-
-function Chart({ chart }) {
-  if (!chart?.items?.length) return null;
-  if (chart.type === "tornado") {
-    const vals = chart.items.flatMap((x) => [x.total_low, x.total_high]).concat([chart.center]);
-    const lo = Math.min(0, ...vals);
-    const hi = Math.max(0, ...vals);
-    const at = (v) => `${(100 * (v - lo)) / (hi - lo || 1)}%`;
-    return html`<ol class="slide-chart">
-      ${chart.items.map((x) => {
-        const a = Math.min(x.total_low, x.total_high);
-        const b = Math.max(x.total_low, x.total_high);
-        return html`<li class="slide-chart-row">
-          <span class="slide-chart-label">${x.label.text}</span>
-          <span class="tornado-bar"><span class="tornado-band" style=${`left: ${at(a)}; width: calc(${at(b)} - ${at(a)})`}></span>
-            <span class="tornado-mid" style=${`left: ${at(chart.center)}`}></span></span>
-          <span class="slide-chart-value">${x.shown.total_low} / ${x.shown.total_high}</span>
-        </li>`;
-      })}
-    </ol>`;
-  }
-  const ranged = chart.items.filter((x) => x.shown?.p10 !== undefined);
-  const scales = {};
-  for (const u of new Set(ranged.map((x) => x.unit))) scales[u] = scaleOf(ranged.filter((x) => x.unit === u));
-  return html`<ol class="slide-chart">
-    ${chart.items.slice(0, 7).map(
-      (x) => html`<li class="slide-chart-row">
-        <span class="slide-chart-label">${x.label.text}</span>
-        ${x.shown?.p10 !== undefined
-          ? html`<${RangeBar} label=${x.label.text} n=${x} lo=${scales[x.unit]?.[0]} hi=${scales[x.unit]?.[1]} />`
-          : html`<span></span>`}
-        <span class="slide-chart-value">${range(x.shown)}</span>
-      </li>`,
-    )}
-  </ol>`;
-}
-
-function Slide({ slide, index, total, current, stamp }) {
-  const srcs = slide.sources || [];
-  // The disclaimer goes in the footer of every slide, so the body keeps the findings.
-  const body = slide.body.filter((b) => b !== stamp.disclaimer);
-  return html`<section class=${`slide-frame ${index === current ? "" : "is-off"}`}
+function Slide({ slide, index, total, current, stamp, play }) {
+  const ref = useRef(null);
+  // The slide on show plays its entry: numbers fade in, bars draw in, sentences fade in.
+  useReveal(ref, { active: index === current, key: play });
+  return html`<section ref=${ref} class=${`slide-frame ${index === current ? "" : "is-off"}`}
       aria-roledescription="slide" aria-label=${`Slide ${index + 1} of ${total}`}
       aria-hidden=${index === current ? undefined : "true"}>
-    <div class=${`slide slide--${slide.kind}`}>
-      <p class="slide-kicker">${slide.kicker}</p>
-      <h2 class="slide-title">${slide.title}</h2>
-      <div class="slide-main slide-split">
-        <div class="slide-left">
-          ${slide.big &&
-          html`<div class="slide-big">
-            <span class="slide-big-value">${slide.big.text}</span>
-            <span class="slide-stat-label">${slide.big.label}</span>
-            <span class="slide-stat-label">${slide.big.middle}</span>
-          </div>`}
-          ${slide.kind === "limits"
-            ? html`<ul class="slide-bullets">${body.map((b) => html`<li>${b}</li>`)}</ul>`
-            : body.slice(0, 2).map((b) => html`<p class="slide-text">${b}</p>`)}
-        </div>
-        ${slide.chart && html`<div class="slide-right"><${Chart} chart=${slide.chart} /></div>`}
-      </div>
-      ${srcs.length > 0 &&
-      html`<p class="slide-sources">Sources: ${srcs.slice(0, 3).map((s) => s.citation).join("; ")}${srcs.length > 3 ? `; and ${srcs.length - 3} more` : ""}.</p>`}
-      <footer class="slide-foot">
-        <span>VisionHousing · ${stamp.disclaimer ? `${stamp.disclaimer} · ` : ""}${stampText(stamp)}</span>
-        <span>${index + 1} / ${total}</span>
-      </footer>
-    </div>
+    <${SlideFace} slide=${slide} index=${index} total=${total} stamp=${stamp} />
   </section>`;
 }
 
@@ -105,7 +41,7 @@ function TextVersion({ deck, stamp }) {
         <h2>${s.title}</h2>
         ${s.big && html`<dl class="slides-text-stats"><div><dt>${s.big.label}</dt><dd>${s.big.text} (${s.big.middle})</dd></div></dl>`}
         ${s.chart?.items?.length > 0 &&
-        html`<ul>${s.chart.items.map((x) => html`<li>${x.label.text}: ${x.shown?.total_low !== undefined ? `${x.shown.total_low} / ${x.shown.total_high}` : range(x.shown)}</li>`)}</ul>`}
+        html`<ul>${s.chart.items.map((x) => html`<li>${x.label.text}: ${x.shown?.total_low !== undefined ? `${x.shown.total_low} / ${x.shown.total_high}` : rangeOf(x.shown)}</li>`)}</ul>`}
         ${s.body.map((b) => html`<p>${b}</p>`)}
       </section>`,
     )}
@@ -120,7 +56,12 @@ export function SlidesScreen() {
   const deck = deckOf(run.data);
   const stamp = stampOf(run.data);
   const total = deck.length;
-  const [current, setCurrent] = useState(0);
+  // A card in the Brief preview can open the deck at its slide.
+  const [current, setCurrent] = useState(() => {
+    const start = slideStart.value;
+    slideStart.value = 0;
+    return start;
+  });
   const [asPage, setAsPage] = useState(false);
   const at = Math.max(0, Math.min(current, total - 1));
 
@@ -165,6 +106,7 @@ export function SlidesScreen() {
           onClick=${() => setAsPage(!asPage)}><${Icon} name="page" /><span>Read as page</span></button>
         <button type="button" class="btn btn-quiet" onClick=${() => window.print()}>
           <${Icon} name="print" /><span>Print or PDF</span></button>
+        <${ScenarioActions} slides=${false} label="Export and share" />
         <button type="button" class="btn btn-quiet" onClick=${back}>
           <${Icon} name="close" /><span>Close</span><kbd>Esc</kbd></button>
       </div>
@@ -174,7 +116,8 @@ export function SlidesScreen() {
     (asPage
       ? html`<${TextVersion} deck=${deck} stamp=${stamp} />`
       : html`<div class="deck" aria-label="Slide deck">
-          ${deck.map((s, i) => html`<${Slide} slide=${s} index=${i} total=${total} current=${at} stamp=${stamp} />`)}
+          ${deck.map((s, i) => html`<${Slide} slide=${s} index=${i} total=${total} current=${at} stamp=${stamp}
+            play=${stamp.assumptions + stamp.data} />`)}
         </div>
         <p class="slides-hint">Use the Left and Right arrow keys to move, Esc to close.</p>`)}
   </main>`;

@@ -1,0 +1,1 @@
+{"$packed":1,"$pool":[],"$data":{"state":"WY","seed":0,"draws":2000,"columns":[{"label":"this scenario","reforms":["adu"],"overrides":{},"cycle":"typical","baseline":{"$s":45},"reform_results":{"adu":{"$s":8819}},"package":{"reforms":["adu"],"combined":{"$s":828},"pct_change":{"$s":830},"waterfall":{"$s":885}},"total":{"$s":892},"hashes":{"$s":3}}]},"$shared":1}

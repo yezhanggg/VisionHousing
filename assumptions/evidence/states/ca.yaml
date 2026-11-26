@@ -1,0 +1,845 @@
+# Cross-state comparison records: CA.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ca.apr_permit_pipeline_data
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Housing Element Annual Progress Report (APR) data: application, entitlement, permit and completion
+    dates by project'
+  citation: Gov. Code § 65400 (annual progress report); HCD dataset 'Housing Element Annual Progress Report
+    (APR) Data by Jurisdiction and Year' on data.ca.gov
+  url: https://data.ca.gov/dataset/housing-element-annual-progress-report-apr-data-by-jurisdiction-and-year
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Every California city and county, including charter cities, reports each year; a county
+    report covers only its unincorporated area. Project-level rows include APN and street address.
+  exclusions:
+  - Counties report only unincorporated areas
+  - Data are self-reported by jurisdictions and not independently verified by HCD
+  implementation_status: practically_usable
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: 'Table A: date application submitted (deemed-complete date if incomplete at submittal)
+    and units proposed by affordability; Table A2: date entitlement approved, date building permits issued,
+    date certificate of occupancy (or final inspection) issued, with unit counts by income level and unit
+    category (SFD, SFA, 2-4, 5+, ADU, MH)'
+  denominator: units or projects per jurisdiction per reporting year
+  horizon: annual; dataset refreshed weekly (last updated 2026-11-20 at retrieval)
+  observed_result: null
+  identification: descriptive
+  caveats:
+  - Applications (Table A) and building activity (Table A2) are separate tables; linking one project from
+    application to completion means matching on APN or the local tracking ID, which is not always consistent.
+  - Table A2 has a field for the streamlining path used; from the 2023 APR onward its valid values include
+    'SB 9 (2021) - Duplex in SF Zone' and 'SB 9 (2021) - Residential Lot Split', so SB 9 units and ministerial
+    multifamily (SB 35 / other) can be separated from ADUs (unit category ADU).
+  - Year coverage was not stated on the dataset page; check the YEAR field in the CSVs.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: data.ca.gov dataset page and CKAN metadata (publisher HCD) cite Gov. Code § 65400
+    as the basis; dataset created 2022-07-28, last updated 2026-11-20. Field names and definitions (APP_SUBMIT_DT;
+    entitlement, building permit and certificate of occupancy dates; SB 9 streamlining values) read from
+    the HCD data dictionaries for Tables A and A2 posted on the same page (updated 2026-10-01). The statute
+    page on leginfo.legislature.ca.gov returned HTTP 403, so § 65400 text was not read directly.
+  sources:
+  - label: 'data.ca.gov: Housing Element APR Data by Jurisdiction and Year (HCD)'
+    url: https://data.ca.gov/dataset/housing-element-annual-progress-report-apr-data-by-jurisdiction-and-year
+    official: true
+  - label: APR Table A2 Data Dictionary (HCD, data.ca.gov)
+    url: https://publish.data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/354a375a-821d-4d4e-97ab-4d79c2925fce/download/annualprogressreport_tablea2_datadictionary-2.docx
+    official: true
+  - label: APR Table A Data Dictionary (HCD, data.ca.gov)
+    url: https://publish.data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/198bded5-7a17-4e1e-bea5-688dbb439c6d/download/annualprogressreport_tablea_datadictionary-1.docx
+    official: true
+  discovered_via: addendum
+- id: ca.sb9_2021_lot_split
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - missing_middle
+  title: 'SB 9 urban lot split: ministerial split of a single-family lot into two'
+  citation: SB 9 (Atkins), Ch. 162, Stats. 2021; Gov. Code § 66411.7
+  url: https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/sb-9-fact-sheet.pdf
+  session: 2021-2022 regular session
+  bill: SB 9
+  enacted_date: 2021-09-16
+  effective_dates:
+  - date: 2022-01-01
+    applies_to: Lot split provisions (non-urgency 2021 statute, general Jan. 1 effective date)
+  - date: 2024-01-01
+    applies_to: HCD gains enforcement authority over Gov. Code §§ 65852.21 and 66411.7 (AB 434, Ch. 740,
+      Stats. 2023)
+  geographic_scope: Parcels in single-family residential zones in cities and counties statewide; local
+    agency must approve a parcel map for a split into two parcels ministerially, with no hearing and no
+    CEQA review.
+  exclusions:
+  - Parcels not zoned single-family residential (multifamily, commercial, mixed-use, agricultural zones)
+  - Sites with SB 35-type environmental constraints (farmland, wetlands, high fire hazard, earthquake
+    fault, flood, habitat, conservation easements)
+  - Historic districts, state historic inventory properties, local landmarks
+  - Projects that would demolish or alter rent-restricted, rent-controlled, or tenant-occupied (last 3
+    years) housing
+  - A parcel may be split only once under § 66411.7; no split if the same owner (or someone acting with
+    them) split an adjacent lot
+  - Denial allowed only on a written finding of a specific, adverse health/safety impact that cannot be
+    mitigated
+  implementation_status: legally_effective
+  litigation:
+    status: challenged
+    note: Charter cities (Redondo Beach, Carson, Torrance, Whittier; Del Mar added) won a trial court
+      writ holding SB 9 unconstitutional as applied to them. On 2025-11-12 the Court of Appeal (2d Dist.,
+      Div. 4, B338990, unpublished) reversed and remanded for the trial court to reconsider under SB 450
+      (Stats. 2024, ch. 286). See record ca.redondo_beach_v_bonta_2025.
+    citation: City of Redondo Beach v. Bonta (Nov. 12, 2025, B338990) [nonpub. opn.]
+    url: https://www.courts.ca.gov/opinions/nonpub/B338990.PDF
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Kept separate from SB 9 two-unit development (ca.sb9_2021_two_unit) and from ADU law; after a lot
+    split, ADUs and JADUs count toward the two-unit-per-lot limit (§ 66411.7(j)).
+  - SB 450 (2024) amended SB 9; amended text was not read here.
+  - Owner-occupancy affidavit and minimum lot size (1,200 sq ft / 60-40 split) are commonly cited but
+    were not in the HCD fact sheet text read; not verified here.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 162, Stats. 2021 read on HCD SB 9 Fact Sheet (Sept. 2024) and in the CA Senate
+    Housing Committee 2021 Legislative Summary (status 'Chapter 162, Statutes of 2021'; the summary states
+    chaptered 2021 bills generally take effect Jan. 1, 2022, urgency bills excepted; SB 9 is not marked
+    urgency). Signing date from Governor's office release (gov.ca.gov, published 2021-09-16 per page metadata,
+    'today signed ... SB 9'). AB 434 enforcement date Jan. 1, 2024 read in HCD fact sheet. leginfo.legislature.ca.gov
+    returned HTTP 403, so bill history was not read there.
+  sources:
+  - label: HCD SB 9 Fact Sheet (Sept. 2024)
+    url: https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/sb-9-fact-sheet.pdf
+    official: true
+  - label: CA Senate Housing Committee 2021 Legislative Summary
+    url: https://shou.senate.ca.gov/sites/shou.senate.ca.gov/files/2021_Legislative_Summary.pdf
+    official: true
+  - label: Governor's office release, Sept. 16, 2021
+    url: https://www.gov.ca.gov/2021/09/16/governor-newsom-signs-historic-legislation-to-boost-californias-housing-supply-and-fight-the-housing-crisis/
+    official: true
+  - label: HCD enforcement authority list (SB 9 §§ 65852.21, 66411.7)
+    url: https://www.hcd.ca.gov/hau/enforcement-authority
+    official: true
+  discovered_via: addendum
+- id: ca.sb9_2021_two_unit
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  title: 'SB 9 two-unit development: ministerial approval of up to two primary units on a single-family
+    lot'
+  citation: SB 9 (Atkins), Ch. 162, Stats. 2021; Gov. Code § 65852.21
+  url: https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/sb-9-fact-sheet.pdf
+  session: 2021-2022 regular session
+  bill: SB 9
+  enacted_date: 2021-09-16
+  effective_dates:
+  - date: 2022-01-01
+    applies_to: Two-unit (duplex) provisions (general Jan. 1 effective date for 2021 non-urgency statutes)
+  - date: 2024-01-01
+    applies_to: HCD enforcement authority over § 65852.21 (AB 434, Ch. 740, Stats. 2023)
+  geographic_scope: Single-family residential zones statewide. Local objective standards may apply only
+    if they do not preclude two units of at least 800 sq ft each; side and rear setbacks capped at 4 feet;
+    no setback for existing structures.
+  exclusions:
+  - Same environmental, historic, and anti-displacement exclusions as the lot split (see ca.sb9_2021_lot_split)
+  - Only one- or two-unit housing developments; SB 9 does not otherwise change allowed uses in the zone
+  - Not more than four units on one lot in any combination of primary units, ADUs and JADUs
+  implementation_status: legally_effective
+  litigation:
+    status: challenged
+    note: Same charter-city case as the lot split; Court of Appeal reversed and remanded 2025-11-12 for
+      reconsideration under SB 450.
+    citation: City of Redondo Beach v. Bonta (Nov. 12, 2025, B338990) [nonpub. opn.]
+    url: https://www.courts.ca.gov/opinions/nonpub/B338990.PDF
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Kept separate from the lot split and from ADU law. Without a lot split, ADUs/JADUs are allowed in
+    addition to the SB 9 units under ADU law.
+  - APR Table A2 flags 'SB 9 (2021) - Duplex in SF Zone' starting with 2023 reports, so counts before
+    2023 are not separable in that field.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'Same official sources as ca.sb9_2021_lot_split: HCD SB 9 Fact Sheet (Sept. 2024)
+    for § 65852.21 content and AB 434 date; Senate Housing Committee 2021 summary for Ch. 162 and Jan.
+    1, 2022 general effective date; gov.ca.gov release published 2021-09-16 for signing.'
+  sources:
+  - label: HCD SB 9 Fact Sheet (Sept. 2024)
+    url: https://www.hcd.ca.gov/sites/default/files/docs/planning-and-community/sb-9-fact-sheet.pdf
+    official: true
+  - label: CA Senate Housing Committee 2021 Legislative Summary
+    url: https://shou.senate.ca.gov/sites/shou.senate.ca.gov/files/2021_Legislative_Summary.pdf
+    official: true
+  discovered_via: addendum
+- id: ca.redondo_beach_v_bonta_2025
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - court_decision
+  - missing_middle
+  title: 'Charter-city challenge to SB 9: appeal court reverses trial court win and sends case back'
+  citation: City of Redondo Beach v. Bonta (Nov. 12, 2025, B338990) [nonpub. opn.], Cal. Ct. App., 2d
+    Dist., Div. 4; L.A. Super. Ct. No. 22STCP01143
+  url: https://www.courts.ca.gov/opinions/nonpub/B338990.PDF
+  session: null
+  bill: SB 9 (2021); SB 450 (2024)
+  enacted_date: null
+  effective_dates:
+  - date: 2025-11-12
+    applies_to: 'Court of Appeal opinion filed: judgment and fee award reversed; remanded to reconsider
+      under SB 450'
+  geographic_scope: Petitioner charter cities Redondo Beach, Carson, Torrance, Whittier and Del Mar; statewide
+    effect only on whether SB 9 binds charter cities
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: challenged
+    note: Trial court had held SB 9 violates Cal. Const. art. XI, § 5 as to the charter cities and awarded
+      about $270,000 in fees (fee order dated 2024-10-10). AG filed notice of appeal 2024-06-21. Court
+      of Appeal reversed both and remanded because SB 450 (Stats. 2024, ch. 286) rewrote the findings
+      the trial court relied on. Merits on remand not yet known at retrieval.
+    citation: B338990
+    url: https://www.courts.ca.gov/opinions/nonpub/B338990.PDF
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Opinion is not certified for publication and cannot be cited as precedent (Cal. Rules of Court, rule
+    8.1115).
+  - Remand status after Nov. 2025 was not checked.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Opinion PDF on courts.ca.gov shows 'Filed 11/12/25', disposition 'Reversed and Remanded',
+    and the Oct. 10, 2024 fee order. AG press release on oag.ca.gov dated June 21, 2024 shows the notice
+    of appeal and that the suit was filed March 29, 2022.
+  sources:
+  - label: Court of Appeal opinion B338990 (courts.ca.gov)
+    url: https://www.courts.ca.gov/opinions/nonpub/B338990.PDF
+    official: true
+  - label: CA Attorney General release, June 21, 2024
+    url: https://oag.ca.gov/news/press-releases/attorney-general-bonta-files-notice-appeal-overturn-superior-court-decision
+    official: true
+  discovered_via: search
+- id: ca.hcd_adu_ordinance_findings
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: HCD written findings on local ADU ordinances (state review with a 30-day response clock)
+  citation: 'Gov. Code § 66326 (State ADU Law, §§ 66310-66342); example: HCD findings letter to City of
+    Calabasas, May 4, 2026'
+  url: https://www.hcd.ca.gov/sites/default/files/docs/policy-and-research/ordinance-review-letters/calabasas-adu-findings-05042026.pdf
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates:
+  - date: 2024-03-25
+    applies_to: SB 477 recodification moved ADU law from §§ 65852.2/65852.22 to Gov. Code Title 7, Div.
+      1, Ch. 13 (§§ 66310-66342), per HCD letter
+  geographic_scope: Every city and county that adopts an ADU ordinance; HCD reviews submitted ordinances
+    and posts letters on hcd.ca.gov
+  exclusions: []
+  implementation_status: practically_usable
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: Whether HCD finds a local ADU ordinance noncompliant, and the jurisdiction's response
+  denominator: ordinances reviewed
+  horizon: null
+  observed_result:
+    summary: HCD found Calabasas' 2020 ADU ordinance noncompliant (e.g., ADUs not listed as permitted
+      in two residential zones; outdated code references) and required a written response within 30 days,
+      by June 3, 2026.
+    value: 30
+    unit: days to respond under § 66326(b)(1)
+    source_label: HCD findings letter to Calabasas, May 4, 2026
+    source_url: https://www.hcd.ca.gov/sites/default/files/docs/policy-and-research/ordinance-review-letters/calabasas-adu-findings-05042026.pdf
+  identification: descriptive
+  caveats:
+  - These are HCD 'findings' letters under § 66326, not a formal 'statutory determination' label; no HCD
+    index page of determinations was read.
+  - ADU-only; separate from SB 9 and ministerial multifamily (some letters, e.g., Anaheim 2025, cover
+    ADU and SB 9 ordinances together).
+  - 'Letter lists later ADU amendments: AB 130 (eff. June 30, 2025), AB 462 (eff. Oct. 10, 2025), AB 1154,
+    SB 9 of 2025 and SB 543 (eff. Jan. 1, 2026). ''SB 9'' there is a 2025 bill, not the 2021 lot-split
+    law.'
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: HCD letter dated May 4, 2026 (on HCD letterhead, hosted on hcd.ca.gov) cites § 66326(a)
+    for findings and § 66326(b)(1) for the 30-day response, sets June 3, 2026 deadline, and states SB
+    477 was effective March 25, 2024.
+  sources:
+  - label: HCD ADU findings letter, City of Calabasas, May 4, 2026
+    url: https://www.hcd.ca.gov/sites/default/files/docs/policy-and-research/ordinance-review-letters/calabasas-adu-findings-05042026.pdf
+    official: true
+  discovered_via: search
+- id: ca.hcd_housing_accountability_unit
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - adu
+  - missing_middle
+  title: 'HCD Housing Accountability Unit: state enforcement of 26 housing laws'
+  citation: HCD enforcement authority (AB 72 of 2017; AB 215 of 2021; AB 434 of 2023) over listed statutes
+    incl. Permit Streamlining Act (§§ 65943, 65941.1), SB 35 (§ 65913.4), SB 9 (§§ 65852.21, 66411.7),
+    ADU Law (§§ 66310-66342), Housing Accountability Act (§ 65589.5)
+  url: https://www.hcd.ca.gov/hau/enforcement-authority
+  session: null
+  bill: null
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: All California cities and counties; complaints and requests come through the HAU portal
+  exclusions: []
+  implementation_status: practically_usable
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Page lists the statutes and the bill years (2017, 2021, 2023) but no establishment date for the unit
+    and no effective dates; no dates are claimed here.
+  - Ministerial multifamily (SB 35 § 65913.4; AB 2011 §§ 65912.100-140; SB 79 TOD) is on the list but
+    is a separate track from SB 9 and ADUs.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: hcd.ca.gov/hau/enforcement-authority lists the 26 enforced laws with code sections
+    and names AB 72 (2017), AB 215 (2021), AB 434 (2023) as authority-expanding bills. No dates are recorded
+    beyond those bill years.
+  sources:
+  - label: 'HCD Accountability and Enforcement: enforcement authority'
+    url: https://www.hcd.ca.gov/hau/enforcement-authority
+    official: true
+  discovered_via: addendum
+- id: ca.sb79_2025_tod
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - missing_middle
+  - permit_timing
+  title: 'California SB 79 (2025): transit-oriented housing allowed near rail and frequent bus stops'
+  citation: Stats. 2025, ch. 512 (SB 79); Gov. Code §§ 65912.155 et seq. (Chapter 4.1.5)
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB79
+  session: 2025-26 regular session
+  bill: SB 79
+  enacted_date: 2025-10-10
+  effective_dates:
+  - date: 2026-01-01
+    applies_to: Statute in force (non-urgency statute; Cal. Const. art. IV, § 8(c)(1))
+  - date: 2026-07-01
+    applies_to: Housing-project provisions apply to local agencies (unincorporated county areas only from
+      the 7th housing-element cycle)
+  - date: 2027-01-01
+    applies_to: A denial of a qualifying project in a high-resource area is presumed to violate the Housing
+      Accountability Act, with penalties
+  geographic_scope: Housing projects of 5+ homes within one-half mile of a transit-oriented development
+    (TOD) stop, on land zoned residential, mixed or commercial, in counties with more than 15 passenger
+    rail stations. Tier 1 stops (heavy rail, very high-frequency commuter rail) and Tier 2 stops (light
+    rail, high-frequency commuter rail, qualifying bus) carry floors on height, density and floor area.
+  exclusions:
+  - Before one year after the 7th housing-element revision, sites a city excludes by ordinance, including
+    sites covered by a local TOD alternative plan
+  - Sites where demolition would remove rent- or price-controlled housing
+  - Outer band (one-quarter to one-half mile) floors apply only in cities of 35,000 or more
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Floors near Tier 1 stops: within one-quarter mile, height at least 75 ft, density at least 120 homes
+    per acre, floor area ratio up to 3.5; one-quarter to one-half mile, 65 ft, 100 per acre, 3.0. Near
+    Tier 2 stops: 65 ft, 100 per acre, 3.0 inside one-quarter mile; 55 ft, 80 per acre, 2.5 to one-half
+    mile.'
+  - Projects must include lower-income homes and meet labor standards; they may use streamlined ministerial
+    approval.
+  - Cities may adopt a local TOD alternative plan in the 7th housing element instead.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter number, the 2025-10-10 approval and chaptering, and the chaptered text (operative
+    dates 2026-07-01 and 2027-01-01, tiers, distances, floors) were read in the Legislative Counsel's
+    official bulk data (pubinfo_2025.zip, bill history and chaptered version tables). The 2026-01-01
+    date follows from Cal. Const. art. IV, § 8(c)(1), read in the same bulk data; the bill has no urgency
+    clause. The leginfo bill page itself returned HTTP 403 to scripted reading on 2026-11-24.
+  sources:
+  - label: SB 79 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB79
+    official: true
+  - label: Legislative Counsel bulk data, 2025-26 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip
+    official: true
+  discovered_via: search
+- id: ca.ab2074_2026_transit_hubs
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - tod
+  - permit_timing
+  title: 'California AB 2074 (2026): regional transit hub districts for downtown high-rise housing'
+  citation: Stats. 2026, ch. 797 (AB 2074); Gov. Code § 65913.13; amends Gov. Code § 65585
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB2074
+  session: 2025-26 regular session
+  bill: AB 2074
+  enacted_date: 2026-09-29
+  effective_dates:
+  - date: 2027-01-01
+    applies_to: Statute in force (non-urgency statute; Cal. Const. art. IV, § 8(c)(1))
+  - date: 2027-07-01
+    applies_to: Deadline for each major transit city to designate its regional transit hub district(s);
+      otherwise an area around its busiest TOD stop is deemed designated
+  geographic_scope: 'Major transit cities: population of 400,000 or more with at least two TOD stops.
+    Required district area 0.5 sq mi (under 1 million people), 1 sq mi (1-2 million) or 1.5 sq mi (2
+    million or more). Other cities may opt in. Charter cities included.'
+  exclusions:
+  - Projects must not demolish an individually landmarked historic property
+  - Projects must meet airport land-use compatibility standards
+  - Average unit size may not exceed 1,750 net habitable sq ft
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Inside a district, "downtown housing developments" (at least 60 homes per acre, with lower-income
+    homes and labor standards) are allowed: no height limit below 150 ft (450 ft on a quarter of district
+    area), no floor area ratio cap below 6 (12 on a quarter), no density cap below 200 homes per acre
+    (none on a quarter).'
+  - Projects are eligible for streamlined ministerial approval and density bonuses on top.
+  - The state housing finance agency must study construction lending by 2028-03-01.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 797, approval and chaptering on 2026-09-29 and the chaptered text (2027-07-01
+    designation deadline, size thresholds, height/FAR/density floors) were read in the Legislative Counsel's
+    official bulk data (pubinfo_2025.zip). The 2027-01-01 date follows from Cal. Const. art. IV, § 8(c)(1)
+    (no urgency clause). The leginfo bill page returned HTTP 403 to scripted reading on 2026-11-24.
+  sources:
+  - label: AB 2074 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB2074
+    official: true
+  - label: Legislative Counsel bulk data, 2025-26 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip
+    official: true
+  discovered_via: pew_2026
+- id: ca.ab2097_2022_parking_transit
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - parking
+  - tod
+  title: 'California AB 2097 (2022): no parking minimums within one-half mile of a major transit stop'
+  citation: Stats. 2022, ch. 459 (AB 2097); Gov. Code § 65863.2
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220AB2097
+  session: 2021-22 regular session
+  bill: AB 2097
+  enacted_date: 2022-09-22
+  effective_dates:
+  - date: 2023-01-01
+    applies_to: Whole act (non-urgency statute; Cal. Const. art. IV, § 8(c)(1))
+  geographic_scope: Residential, commercial and other projects within one-half mile of a major transit
+    stop (as defined in Pub. Resources Code § 21155). Applies to all public agencies, including charter
+    cities.
+  exclusions:
+  - A city may still require parking if it makes written findings within 30 days of substantial harm to
+    meeting its lower-income or special-needs housing goals or to nearby parking; this escape is unavailable
+    for housing projects with 20% affordable or special-needs units, fewer than 20 homes, or other parking
+    reductions
+  - Hotels and other transient lodging (residential hotels excepted)
+  - Event centers must still provide worker parking; required EV-ready and accessible spaces still apply
+  - Pre-2023 contractual commercial parking that is shared with the public
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Developers may still build parking voluntarily; a city may require such parking to be shared or priced
+    but not free to residents.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 459, approval and chaptering on 2022-09-22 and the chaptered text of § 65863.2
+    were read in the Legislative Counsel's official bulk data (pubinfo_2021.zip). The 2023-01-01 date
+    follows from Cal. Const. art. IV, § 8(c)(1) (no urgency clause). The leginfo bill page returned HTTP
+    403 to scripted reading on 2026-11-24.
+  sources:
+  - label: AB 2097 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220AB2097
+    official: true
+  - label: Legislative Counsel bulk data, 2021-22 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2021.zip
+    official: true
+  discovered_via: search
+- id: ca.ab68_2019_adu
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - permit_timing
+  title: 'California AB 68 (2019): ADUs and junior ADUs by right, 60-day review, 800 sq ft floor'
+  citation: Stats. 2019, ch. 655 (AB 68); amended Gov. Code §§ 65852.2 and 65852.22
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200AB68
+  session: 2019-20 regular session
+  bill: AB 68
+  enacted_date: 2019-10-09
+  effective_dates:
+  - date: 2020-01-01
+    applies_to: Whole act (non-urgency statute; Cal. Const. art. IV, § 8(c)(1))
+  geographic_scope: 'All cities and counties, in residential and mixed-use zones: one ADU plus one junior
+    ADU per single-family lot, ADUs inside existing multifamily buildings, and up to two detached ADUs
+    on lots with an existing multifamily building.'
+  exclusions:
+  - Local size limits may still apply above the 800 sq ft / 16 ft / 4-ft-setback floor
+  - Review clock may be paused when the ADU is filed together with a new primary home
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Cut the ministerial review deadline from 120 to 60 days after a complete application.
+  - Barred minimum lot size rules and lot coverage, floor area or open-space limits that would block an
+    800 sq ft ADU.
+  - Passed with companion ADU bills in 2019; Gov. Code § 65852.2 was later recodified (2024), so current
+    section numbers differ.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 655, approval and chaptering on 2019-10-09 and the chaptered text and Legislative
+    Counsel's digest were read in the Legislative Counsel's official bulk data (pubinfo_2019.zip). The
+    2020-01-01 date follows from Cal. Const. art. IV, § 8(c)(1) (no urgency clause). The leginfo bill
+    page returned HTTP 403 to scripted reading on 2026-11-24.
+  sources:
+  - label: AB 68 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=201920200AB68
+    official: true
+  - label: Legislative Counsel bulk data, 2019-20 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2019.zip
+    official: true
+  discovered_via: search
+- id: ca.ab956_2026_two_detached_adus
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'California AB 956 (2026): two detached new ADUs by right on single-family lots'
+  citation: Stats. 2026, ch. 791 (AB 956); amends Gov. Code § 66323 and Civ. Code §§ 714.3, 4751
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB956
+  session: 2025-26 regular session
+  bill: AB 956
+  enacted_date: 2026-09-29
+  effective_dates:
+  - date: 2027-01-01
+    applies_to: Whole act (non-urgency statute; Cal. Const. art. IV, § 8(c)(1))
+  geographic_scope: All cities and counties; lots with a proposed or existing single-family home in residential
+    or mixed-use zones. Private covenant limits extend to lots zoned to allow (not only zoned for) single-family
+    use.
+  exclusions:
+  - No junior ADU required to be approved on a lot that already has two new detached ADUs
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Raises the ministerial count of detached new-construction ADUs (4-ft side and rear setbacks) from one
+    to two per single-family lot.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 791, approval and chaptering on 2026-09-29 and the chaptered text were read
+    in the Legislative Counsel's official bulk data (pubinfo_2025.zip). The 2027-01-01 date follows from
+    Cal. Const. art. IV, § 8(c)(1) (no urgency clause). The leginfo bill page returned HTTP 403 to scripted
+    reading on 2026-11-24.
+  sources:
+  - label: AB 956 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB956
+    official: true
+  - label: Legislative Counsel bulk data, 2025-26 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip
+    official: true
+  discovered_via: search
+- id: ca.ab1033_2023_adu_condo
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  title: 'California AB 1033 (2023): local option to let ADUs be sold separately as condominiums'
+  citation: Stats. 2023, ch. 752 (AB 1033); amended Gov. Code §§ 65852.2 and 65852.26
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB1033
+  session: 2023-24 regular session
+  bill: AB 1033
+  enacted_date: 2023-10-11
+  effective_dates:
+  - date: 2024-01-01
+    applies_to: Whole act (non-urgency statute; Cal. Const. art. IV, § 8(c)(1))
+  geographic_scope: Cities and counties that choose to adopt an ordinance allowing separate condominium
+    sale of a primary home and its ADU(s).
+  exclusions:
+  - Opt-in only; without a local ordinance the general bar on separate sale of an ADU remains (apart from
+    the earlier nonprofit tenancy-in-common route)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Enabling law only; how many localities have adopted an ordinance was not checked.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 752, approval and chaptering on 2023-10-11 and the chaptered text and digest
+    were read in the Legislative Counsel's official bulk data (pubinfo_2023.zip). The 2024-01-01 date
+    follows from Cal. Const. art. IV, § 8(c)(1) (no urgency clause). The leginfo bill page returned HTTP
+    403 to scripted reading on 2026-11-24.
+  sources:
+  - label: AB 1033 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202320240AB1033
+    official: true
+  - label: Legislative Counsel bulk data, 2023-24 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2023.zip
+    official: true
+  discovered_via: search
+- id: ca.ab2011_2022_commercial_corridors
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - permit_timing
+  title: 'California AB 2011 (2022): Affordable Housing and High Road Jobs Act, housing by right on commercial
+    land'
+  citation: Stats. 2022, ch. 647 (AB 2011); Gov. Code §§ 65912.100-65912.140 (Chapter 4.1)
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220AB2011
+  session: 2021-22 regular session
+  bill: AB 2011
+  enacted_date: 2022-09-28
+  effective_dates:
+  - date: 2023-07-01
+    applies_to: Whole act operative (SEC. 7)
+  - date: 2033-01-01
+    applies_to: Chapter 4.1 repealed (sunset, § 65912.105 and parallel sections)
+  geographic_scope: Sites in zones where office, retail or parking is a principally permitted use, in cities
+    touching a census urbanized area or urban cluster (or wholly inside one if unincorporated), with at
+    least 75% of the perimeter next to urban uses. Two tracks, 100% affordable projects and mixed-income
+    projects on commercial corridors (50+ ft frontage, up to 20 acres), get streamlined ministerial review.
+  exclusions:
+  - Sites on or next to land where more than one-third of floor space is industrial
+  - Sites failing the environmental exclusions of Gov. Code § 65913.4(a)(6)(B)-(K)
+  - Prevailing wage required; for 50+ homes, apprenticeship and health-care spending too
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - The state housing department must study outcomes and report to the Legislature.
+  - The chapter has been amended since 2022; this record reflects the chaptered 2022 text only.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 647, approval and chaptering on 2022-09-28 and the chaptered text (operative
+    2023-07-01, repeal 2033-01-01, site criteria) were read in the Legislative Counsel's official bulk
+    data (pubinfo_2021.zip). The leginfo bill page returned HTTP 403 to scripted reading on 2026-11-24.
+  sources:
+  - label: AB 2011 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202120220AB2011
+    official: true
+  - label: Legislative Counsel bulk data, 2021-22 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2021.zip
+    official: true
+  discovered_via: search
+- id: ca.ab130_2025_infill_ceqa
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - adu
+  title: 'California AB 130 (2025 housing budget trailer bill): CEQA exemption for urban infill housing
+    and faster approvals'
+  citation: Stats. 2025, ch. 22 (AB 130); adds Pub. Resources Code § 21080.66 among many other changes
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB130
+  session: 2025-26 regular session
+  bill: AB 130
+  enacted_date: 2025-06-30
+  effective_dates:
+  - date: 2025-06-30
+    applies_to: Whole act (budget-related bill; takes effect immediately, SEC. 74)
+  geographic_scope: 'Statewide. CEQA does not apply to housing projects that: are on sites of 20 acres
+    or less (5 acres for builder''s-remedy projects); lie inside a city or a census urban area; are previously
+    developed or mostly surrounded by urban uses; are consistent with the general plan and zoning; and
+    reach at least half the housing-element default density.'
+  exclusions:
+  - Sites failing the environmental site exclusions of Gov. Code § 65913.4(a)(6)
+  - Projects demolishing a structure on a historic register before the preliminary application
+  - Projects with any hotel or other transient lodging (for applications deemed complete from 2025-01-01)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - An omnibus bill. Also sets a 30-day decision deadline after required environmental assessments for
+    exempt projects, makes deemed approval under the Permit Streamlining Act no longer depend on public
+    notice, ends the 2030/2034 sunsets of Housing Accountability Act and five-hearing limits, and bars
+    fees in private ADU covenant restrictions.
+  - Companion bill SB 131 (Stats. 2025, ch. 24) made further CEQA changes; not reviewed here.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 22, approval and chaptering on 2025-06-30, the take-effect-immediately clause
+    (SEC. 74) and the text of § 21080.66 were read in the Legislative Counsel's official bulk data (pubinfo_2025.zip).
+    The leginfo bill page returned HTTP 403 to scripted reading on 2026-11-24.
+  sources:
+  - label: AB 130 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260AB130
+    official: true
+  - label: Legislative Counsel bulk data, 2025-26 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip
+    official: true
+  discovered_via: search
+- id: ca.sb1116_2026_starter_homes
+  kind: policy
+  state: CA
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  - permit_timing
+  title: 'California SB 1116 (2026): wider ministerial small-lot subdivisions (Starter Home Revitalization
+    Act changes)'
+  citation: Stats. 2026, ch. 808 (SB 1116); amends Gov. Code §§ 65400, 65852.28, 66499.41; adds Civ. Code
+    § 714.9
+  url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB1116
+  session: 2025-26 regular session
+  bill: SB 1116
+  enacted_date: 2026-09-29
+  effective_dates:
+  - date: 2027-01-01
+    applies_to: Statute in force (Cal. Const. art. IV, § 8(c)(1)); amendments to §§ 65852.28 and 66499.41
+      operative for applications received on or after this date
+  - date: 2028-04-01
+    applies_to: First annual progress report that must include the new subdivision and surplus-land data
+  geographic_scope: Cities and counties statewide, for small-lot housing subdivisions that must be approved
+    ministerially (parcel maps and tentative/final maps), including charter cities.
+  exclusions:
+  - Earlier eligibility screens of §§ 65852.28 and 66499.41 still apply except as changed (the "substantially
+    surrounded by urban uses" test is replaced by other site tests)
+  implementation_status: enacted
+  litigation:
+    status: none_known
+    note: No court record was searched for this review.
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - New parcels on multifamily land may be as small as 480 or 960 sq ft under stated conditions; with lot
+    size averaging no new parcel may exceed half the original.
+  - Height limits count physical height, not floors; certain setbacks barred; stairs and enclosed bike
+    parking leave the 1,750 sq ft average-size test; "vacant" means no permanent structure.
+  - Provisions must be read liberally to maximise homes.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: Chapter 808, approval and chaptering on 2026-09-29 and the chaptered text and digest
+    (operative date for applications on or after 2027-01-01, report due 2028-04-01) were read in the Legislative
+    Counsel's official bulk data (pubinfo_2025.zip). The leginfo bill page returned HTTP 403 to scripted
+    reading on 2026-11-24.
+  sources:
+  - label: SB 1116 bill page (leginfo; refused scripted reading)
+    url: https://leginfo.legislature.ca.gov/faces/billNavClient.xhtml?bill_id=202520260SB1116
+    official: true
+  - label: Legislative Counsel bulk data, 2025-26 session (bill history and chaptered text)
+    url: https://downloads.leginfo.legislature.ca.gov/pubinfo_2025.zip
+    official: true
+  discovered_via: pew_2026

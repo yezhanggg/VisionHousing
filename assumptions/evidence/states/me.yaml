@@ -1,0 +1,365 @@
+# Cross-state comparison records: ME.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: me.pl2021_c672_ld2003
+  kind: policy
+  state: ME
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - adu
+  - parking
+  - water_compliance
+  title: 'Maine LD 2003 (2022): up to 4 homes per lot, ADUs and affordable density bonus'
+  citation: P.L. 2021, ch. 672 (LD 2003, HP 1489); 30-A M.R.S. §§ 4364, 4364-A, 4364-B, 4364-C
+  url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=2003&snum=130
+  session: 130th Legislature, Second Regular Session (2022)
+  bill: LD 2003
+  enacted_date: 2022-04-27
+  effective_dates:
+  - date: 2022-08-08
+    applies_to: General effective date for nonemergency laws of the 130th Second Regular Session
+  - date: 2023-07-01
+    applies_to: Municipalities need not implement §§ 4364-A (2-4 units per lot) and 4364-B (ADUs) until
+      this date; the affordable density bonus (§ 4364) applies to projects approved on or after it
+  geographic_scope: 'All municipalities, any area where housing is allowed: 2 units on a vacant lot; up
+    to 4 units on a vacant lot in a designated growth area or with public water and sewer; up to 2 more
+    units (one attached or internal, one detached) on a lot with one home; one ADU on a single-family
+    lot.'
+  exclusions:
+  - Shoreland zoning still applies (12 M.R.S. ch. 423-A)
+  - Each unit must show adequate water and wastewater service before occupancy
+  - Lots that already gained units under §§ 4364-A or 4364-B get no further density increase unless
+    the town allows it
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - An ADU may not face parking requirements beyond those of the single-family home on the lot.
+  - Affordable developments in growth areas or with public water and sewer get 2.5 times base density.
+  - Later amended by P.L. 2023, c. 192 (application dates and terms; not read here), P.L. 2025, c. 385
+    (LD 1829) and c. 733 (LD 2173).
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'legislature.maine.gov bill page: ''Final Disposition Enacted, Apr 27, 2022 Governor''s
+    Action: Signed, Apr 27, 2022 ... Chapter 672''. The Laws of Maine copy of P.L. 2021, c. 672 (Maine
+    State Law and Legislative Reference Library) shows the title-page general effective date August 8,
+    2022 and the July 1, 2023 implementation and approval dates in §§ 4364, 4364-A(10) and 4364-B.'
+  sources:
+  - label: LD 2003 text and status (Maine Legislature)
+    url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=2003&snum=130
+    official: true
+  - label: Laws of Maine, P.L. 2021, c. 672
+    url: https://lldc.mainelegislature.org/Open/Laws/2021/2021_PL_c672.pdf
+    official: true
+  discovered_via: search
+- id: me.pl2025_c385_ld1829
+  kind: policy
+  state: ME
+  jurisdiction: statewide
+  policy_types:
+  - missing_middle
+  - starter_lots
+  - adu
+  - water_compliance
+  - permit_timing
+  title: 'Maine LD 1829 (2025): 3-4 homes per lot, 5,000 sq ft lot cap with sewer, ADU and wastewater
+    streamlining'
+  citation: P.L. 2025, ch. 385 (LD 1829, HP 1224); 30-A M.R.S. §§ 4364, 4364-A, 4364-B, 4364-C; 25 M.R.S.
+    § 2463-B
+  url: https://www.mainelegislature.org/LawMakerWeb/summary.asp?ID=280098944
+  session: 132nd Legislature, First Special Session (2025)
+  bill: LD 1829
+  enacted_date: 2025-06-20
+  effective_dates:
+  - date: 2025-09-24
+    applies_to: General effective date for nonemergency laws of the 132nd First Special Session (ADU sprinkler
+      exemption, ADU definition and board training apply from here)
+  - date: 2026-07-01
+    applies_to: Rest of the act applies to municipalities whose officers can enact ordinances without
+      a vote (§ 23)
+  - date: 2027-07-01
+    applies_to: Rest of the act applies to all other municipalities (§ 23); towns with a conflicting subdivision
+      definition must comply by this date
+  geographic_scope: 'All municipalities, areas where residential use is allowed: at least 3 units per
+    lot (including ADUs), 4 in a designated growth area or with public water and sewer; caps on minimum
+    lot size and density where public water and sewer serve the lot.'
+  exclusions:
+  - Shoreland zoning still applies (12 M.R.S. ch. 423-A)
+  - Lots that reach 4 units under these sections get no further density increase unless the town allows
+    it
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Lot size: with public water and sewer, minimum lot at most 5,000 sq ft and density at most 1,250
+    sq ft per unit for the first 4 units in a growth area (as enacted; LD 2173 of 2026 changed the outside-growth-area
+    figures).'
+  - Planning board approval may not be required for 4 or fewer units in one structure; owner occupancy
+    may not be required for an ADU; ADUs need no sprinklers unless in or attached to a structure with
+    more than 2 units.
+  - Once a local plumbing inspector verifies wastewater compliance, the town may not ask for more wastewater
+    review before the certificate of occupancy.
+  - Affordable developments may exceed height limits by at least one storey or 14 feet (capped at 55
+    feet by LD 2173).
+  - The § 23 application dates shown are as amended by P.L. 2025, c. 733 (LD 2173); the enacted § 23 text
+    has the same two dates.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'LawMakerWeb (mainelegislature.org) shows ''Signed by the Governor, Chapter 385, Public
+    Law, Date 6/20/2025''. The Laws of Maine copy of P.L. 2025, c. 385 (Maine State Law and Legislative
+    Reference Library) shows the title-page general effective date for First Special Session nonemergency
+    laws, September 24, 2025, and the § 23 application dates (July 1, 2026 / July 1, 2027).'
+  sources:
+  - label: LD 1829 summary (LawMakerWeb)
+    url: https://www.mainelegislature.org/LawMakerWeb/summary.asp?ID=280098944
+    official: true
+  - label: Laws of Maine, P.L. 2025, c. 385
+    url: https://lldc.mainelegislature.org/Open/Laws/2025/2025_PL_c385.pdf
+    official: true
+  discovered_via: search
+- id: me.pl2025_c364_ld997
+  kind: policy
+  state: ME
+  jurisdiction: statewide
+  policy_types:
+  - commercial_land_housing
+  - adaptive_reuse
+  title: 'Maine LD 997 (2025): homes allowed in buildings in commercial zones'
+  citation: P.L. 2025, ch. 364 (LD 997, HP 644); 30-A M.R.S. § 4364-D (reallocated to § 4364-E)
+  url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=997&snum=132
+  session: 132nd Legislature, First Special Session (2025)
+  bill: LD 997
+  enacted_date: 2025-06-18
+  effective_dates:
+  - date: 2025-09-24
+    applies_to: General effective date for nonemergency laws of the 132nd First Special Session
+  - date: 2027-07-01
+    applies_to: Municipalities must comply beginning this date (§ 4364-D(7))
+  geographic_scope: All municipalities; residential units in buildings in areas zoned for commercial use,
+    including vacant or partly vacant retail buildings.
+  exclusions:
+  - Towns may exclude buildings where flooding or other natural hazards make them unfit for homes
+  - Towns may cap the number of units in a commercial development and may require ground-floor commercial
+    use
+  - Does not apply to areas allowing industrial uses (added by P.L. 2025, c. 733)
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Siting and design rules are allowed only if they do not discourage the housing through unreasonable
+    cost or delay; limits may be no stricter than §§ 4364, 4364-A and 4364-B.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'legislature.maine.gov bill page: ''Final Disposition Enacted, Jun 18, 2025 ... Signed,
+    Jun 18, 2025 ... Chapter 364''. The printed chapter (legislature.maine.gov) shows ''Approved June 18,
+    2025'' and the July 1, 2027 implementation date; the Laws of Maine copy places c. 364 in the First Special
+    Session, whose general effective date is September 24, 2025.'
+  sources:
+  - label: LD 997 text and status (Maine Legislature)
+    url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=997&snum=132
+    official: true
+  - label: P.L. 2025, c. 364 printed chapter
+    url: https://legislature.maine.gov/legis/bills/getPDF.asp?paper=HP0644&item=3&snum=132
+    official: true
+  - label: Laws of Maine, P.L. 2025, c. 364
+    url: https://lldc.mainelegislature.org/Open/Laws/2025/2025_PL_c364.pdf
+    official: true
+  discovered_via: search
+- id: me.pl2025_c733_ld2173
+  kind: policy
+  state: ME
+  jurisdiction: statewide
+  policy_types:
+  - adu
+  - starter_lots
+  - missing_middle
+  - permit_timing
+  title: 'Maine LD 2173 (2026): ADUs without planning board approval, revised lot size caps'
+  citation: P.L. 2025, ch. 733 (LD 2173, HP 1461); amends 30-A M.R.S. §§ 4360, 4364, 4364-A, 4364-B and
+    P.L. 2025, c. 385
+  url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=2173&snum=132
+  session: 132nd Legislature, Second Regular Session (2026)
+  bill: LD 2173
+  enacted_date: 2026-04-16
+  effective_dates:
+  - date: 2026-07-29
+    applies_to: General effective date for nonemergency laws of the 132nd Second Regular Session (amendments
+      to P.L. 2025, c. 288, 374 and 385 apply retroactively to 2025-09-24)
+  - date: 2027-07-01
+    applies_to: Other sections apply to municipalities beginning this date (§ 26)
+  geographic_scope: All municipalities, areas where residential use is allowed.
+  exclusions:
+  - Towns may exempt lots in coastal barriers, special flood hazard areas and coastal sand dunes from
+    the density, ADU and lot-size rules
+  - Lots in the Lewiston-Auburn unfiltered drinking-water watershed are excluded
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'Lot size caps: growth area with public water and sewer, at most 5,000 sq ft and 1,250 sq ft per unit
+    for the first 4 units; outside a growth area with public water and sewer, at most 10,000 sq ft (20,000
+    sq ft for 2 units); growth area without sewer, at most 20,000 sq ft.'
+  - ADUs allowed with 2- and 3-unit buildings as well as single-family homes; planning board approval
+    not required for ADUs or for 4 or fewer units in one structure.
+  - Affordable-housing height bonus capped at a total of 55 feet and needs State Fire Marshal (or registered
+    municipality) approval.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'legislature.maine.gov bill page: ''Final Disposition Enacted, Apr 16, 2026 ... Signed,
+    Apr 16, 2026 ... Chapter 733''. The printed chapter has no emergency clause and shows §§ 23-26 application
+    dates. The Legislature''s Second Regular Session disposition report (legislature.maine.gov/doc/12558)
+    states the nonemergency effective date, July 29, 2026, and summarizes P.L. 2025, c. 733.'
+  sources:
+  - label: LD 2173 text and status (Maine Legislature)
+    url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=2173&snum=132
+    official: true
+  - label: P.L. 2025, c. 733 printed chapter
+    url: https://legislature.maine.gov/legis/bills/getPDF.asp?paper=HP1461&item=5&snum=132
+    official: true
+  - label: 132nd Second Regular Session disposition report and enacted law summaries
+    url: https://legislature.maine.gov/doc/12558
+    official: true
+  discovered_via: pew_2026
+- id: me.pl2025_c554_ld128
+  kind: policy
+  state: ME
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  - missing_middle
+  - adu
+  title: 'Maine LD 128 (2026): Site Location of Development law eased for small-home subdivisions'
+  citation: P.L. 2025, ch. 554 (LD 128, SP 57); 38 M.R.S. ch. 3, subch. 1, art. 6
+  url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=128&snum=132
+  session: 132nd Legislature, Second Regular Session (2026)
+  bill: LD 128
+  enacted_date: 2026-03-09
+  effective_dates:
+  - date: 2026-07-29
+    applies_to: General effective date for nonemergency laws of the 132nd Second Regular Session
+  geographic_scope: State Site Location of Development permits (Department of Environmental Protection)
+    for subdivisions of single detached buildings with up to 4 units, with or without one ADU.
+  exclusions:
+  - Changes state environmental permit thresholds only; local zoning and subdivision review still apply
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A subdivision of 15 or more lots in five years for buildings of up to 4 units (with or without one
+    ADU) is covered, and land in such lots is left out of the 20-acre threshold, so fewer small-home
+    projects need a Site Law permit.
+  - The discovery label described this as an ADU environmental-review exemption; the enacted law is narrower.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'legislature.maine.gov bill page: ''Final Disposition Enacted, Mar 9, 2026 ... Signed,
+    Mar 9, 2026 ... Chapter 554''. The printed chapter has no emergency clause. The Second Regular Session
+    disposition report (legislature.maine.gov/doc/12558) gives the July 29, 2026 nonemergency effective
+    date and the enacted law summary for c. 554.'
+  sources:
+  - label: LD 128 text and status (Maine Legislature)
+    url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=128&snum=132
+    official: true
+  - label: P.L. 2025, c. 554 printed chapter
+    url: https://legislature.maine.gov/legis/bills/getPDF.asp?paper=SP0057&item=3&snum=132
+    official: true
+  - label: 132nd Second Regular Session disposition report and enacted law summaries
+    url: https://legislature.maine.gov/doc/12558
+    official: true
+  discovered_via: pew_2026
+- id: me.pl2025_c691_ld2231
+  kind: policy
+  state: ME
+  jurisdiction: statewide
+  policy_types:
+  - starter_lots
+  title: 'Maine LD 2231 (2026): manufactured and tiny homes on others'' land can become real property;
+    park lot sizes'
+  citation: P.L. 2025, ch. 691 (LD 2231, HP 1506)
+  url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=2231&snum=132
+  session: 132nd Legislature, Second Regular Session (2026)
+  bill: LD 2231
+  enacted_date: 2026-04-13
+  effective_dates:
+  - date: 2026-07-29
+    applies_to: General effective date for nonemergency laws of the 132nd Second Regular Session
+  geographic_scope: Statewide; manufactured housing, mobile homes and tiny homes, and manufactured housing
+    communities.
+  exclusions: []
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - A title may be cancelled for a home permanently affixed to land even when the home owner does not
+    own the land, making it residential real property; the home can be financed separately from the land.
+  - Changes the minimum lot size for new or expanded manufactured housing communities; also limits lot-rent
+    increases to once a year with mediation above CPI plus 1%.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: 'legislature.maine.gov bill page: ''Final Disposition Enacted, Apr 13, 2026 ... Signed,
+    Apr 13, 2026 ... Chapter 691''. The printed chapter has no emergency clause. The Second Regular Session
+    disposition report (legislature.maine.gov/doc/12558) gives the July 29, 2026 nonemergency effective
+    date and the enacted law summary for c. 691.'
+  sources:
+  - label: LD 2231 text and status (Maine Legislature)
+    url: https://legislature.maine.gov/legis/bills/display_ps.asp?LD=2231&snum=132
+    official: true
+  - label: 132nd Second Regular Session disposition report and enacted law summaries
+    url: https://legislature.maine.gov/doc/12558
+    official: true
+  discovered_via: pew_2026

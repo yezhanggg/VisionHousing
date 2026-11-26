@@ -1,0 +1,125 @@
+# Cross-state comparison records: AR.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+
+version: 1
+records:
+- id: ar.act313_2025_adu
+  kind: policy
+  state: AR
+  jurisdiction: statewide (municipalities)
+  policy_types:
+  - adu
+  - parking
+  - fees
+  title: 'Arkansas Act 313 of 2025 (HB 1503): at least one ADU by right on single-family lots in cities'
+  citation: Ark. Acts 2025, No. 313 (HB 1503); Ark. Code Ann. 14-56-205
+  url: https://arkleg.state.ar.us/Bills/Detail?id=HB1503&ddBienniumSession=2025%2F2025R
+  session: 95th General Assembly, 2025 Regular Session
+  bill: HB 1503
+  enacted_date: 2025-03-18
+  effective_dates:
+  - date: 2025-08-05
+    applies_to: Whole act (general effective date for acts without an emergency clause)
+  - date: 2026-01-01
+    applies_to: Conflicting local ADU rules in effect on or after this date are invalid to the extent of the
+      conflict
+  geographic_scope: All municipalities (cities and towns), on any lot or parcel with a single-family home.
+    Counties are not covered.
+  exclusions:
+  - Short-term rental rules may still apply
+  - Cities may require water and sewer will-serve letters, or Department of Health approval where city service
+    is not available
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - 'One attached, detached or internal ADU by right; attached or detached units capped at the lesser of
+    75% of the house or 1,000 sq ft. No added parking, owner occupancy, family tie, matching design, separate
+    utilities or street improvements may be required.'
+  - Impact fees on an ADU capped at $250 and the application fee at $250 per ADU (usual building fees still
+    apply). Height, setback, lot size and coverage rules may not be stricter than for the house.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: arkleg.state.ar.us bill page shows HB 1503 became Act 313 (act date 3/18/2025); the
+    Act 313 PDF shows 'APPROVED 3/18/25' and the 2026-01-01 invalidation date. The Bureau of Legislative
+    Research 2025 Summary of General Legislation (arkleg.state.ar.us) gives August 5, 2025 as the effective
+    date for acts without an emergency clause or specified date; Act 313 has neither.
+  sources:
+  - label: HB 1503 bill page (Arkansas State Legislature)
+    url: https://arkleg.state.ar.us/Bills/Detail?id=HB1503&ddBienniumSession=2025%2F2025R
+    official: true
+  - label: Act 313 of 2025 (PDF)
+    url: https://arkleg.state.ar.us/Acts/FTPDocument?path=%2FACTS%2F2025R%2FPublic%2F&file=313.pdf&ddBienniumSession=2025%2F2025R
+    official: true
+  - label: 2025 Summary of General Legislation (Bureau of Legislative Research)
+    url: https://arkleg.state.ar.us/Home/FTPDocument?path=%2Fassembly%2F2025%2F2025R%2FDocuments%2F2025+Summary+of+General+Legislation.pdf
+    official: true
+  discovered_via: search
+- id: ar.act446_2019_design_elements
+  kind: policy
+  state: AR
+  jurisdiction: statewide (counties and municipalities)
+  policy_types:
+  - missing_middle
+  - starter_lots
+  title: 'Arkansas Act 446 of 2019 (SB 170): bar on local residential design-element rules'
+  citation: Ark. Acts 2019, No. 446 (SB 170); Ark. Code Ann. 14-17-212, 14-56-204
+  url: https://arkleg.state.ar.us/Bills/Detail?id=SB170&ddBienniumSession=2019%2F2019R
+  session: 92nd General Assembly, 2019 Regular Session
+  bill: SB 170
+  enacted_date: 2019-03-13
+  effective_dates:
+  - date: 2019-07-24
+    applies_to: Whole act (general effective date for acts without an emergency clause)
+  geographic_scope: All counties and municipalities; single-family homes.
+  exclusions:
+  - Local and National Register historic districts and landmarks
+  - Multifamily and other non-single-family buildings
+  - Private covenants, building and safety codes, flood insurance rules, manufactured housing rules
+  - Rules applied to existing property on or before 2019-02-28
+  - Overlay districts with notice and a majority-owner petition
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Bars rules on exterior color, cladding, roof style and pitch, porches, ornament, windows and garage doors,
+    number and layout of rooms, and minimum house square footage. Height, bulk and placement are still regulated.
+  - The minimum-house-size ban is the most relevant part for small starter homes; the act does not allow
+    more units per lot, so its missing-middle effect is indirect.
+  retrieved: 2026-11-24
+  verified: true
+  verification_note: arkleg.state.ar.us bill page shows SB 170 became Act 446 (act date 3/13/2019); the
+    Act 446 PDF shows 'APPROVED 3/13/19'. The effective-date table in the Bureau of Legislative Research
+    2025 Summary of General Legislation lists 7/24/19 (AG Op. 2019-034) for the 92nd General Assembly.
+  sources:
+  - label: SB 170 bill page (Arkansas State Legislature)
+    url: https://arkleg.state.ar.us/Bills/Detail?id=SB170&ddBienniumSession=2019%2F2019R
+    official: true
+  - label: Act 446 of 2019 (PDF)
+    url: https://arkleg.state.ar.us/Acts/FTPDocument?path=%2FACTS%2F2019R%2FPublic%2F&file=446.pdf&ddBienniumSession=2019%2F2019R
+    official: true
+  - label: 2025 Summary of General Legislation, effective-date table (Bureau of Legislative Research)
+    url: https://arkleg.state.ar.us/Home/FTPDocument?path=%2Fassembly%2F2025%2F2025R%2FDocuments%2F2025+Summary+of+General+Legislation.pdf
+    official: true
+  discovered_via: search

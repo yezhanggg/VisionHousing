@@ -1,0 +1,100 @@
+# Calibration (validation): held-out coverage of the baseline's CURRENT range, per state
+# (generated; do not edit). Written by `visionhousing validate-state-holdouts` from the
+# Census Building Permits Survey county files of every state. Descriptive: no decision,
+# no baseline run reads it. `visionhousing state-readiness` reads `states.<ST>.held_out`.
+# Method: docs/modules/validation_donor_pool.md ("A state confidence check").
+
+version: 1
+id: state_holdouts_2026_11
+label: State confidence check (current baseline range, held out of time)
+status: validation
+use: Descriptive only. Read by visionhousing state-readiness (step 3, validation hold-out); never by a
+  baseline run.
+provenance:
+  summary: Out-of-time coverage of the baseline's current state range (own record blended toward Pennsylvania's,
+    only widened) for each listed state.
+  measured_on: '2026-11-24'
+  method: National county panel from the BPS annual county files; shared rules in assumptions/validation_donor_pool.yaml,
+    block state_holdout_check in assumptions/validation_state_holdouts.yaml; back-test cases from visionhousing.baseline
+    (read-only); see docs/modules/validation_donor_pool.md.
+  generated_by: visionhousing validate-state-holdouts
+  sources:
+  - id: bps_county_annual
+    citation: U.S. Census Bureau, Building Permits Survey, county annual files, 1990-2025
+    url: https://www2.census.gov/econ/bps/County/co{year}a.txt
+    licence: Public domain (U.S. government work)
+  limits:
+  - Each state is scored on about a dozen overlapping five-year windows, so its coverage moves in steps
+    of several points.
+  - All origins share one national housing cycle (the recovery after the bust).
+  - 'The growth-aware widening adopted by the third test is not scored here: the engine is not wired to
+    it yet.'
+preregistration:
+  block: state_holdout_check
+  sha256: bb09229bc08c972a1ca937746341013c5e256e1dd82d430fa38fcdc6b7ef9127
+  checks:
+  - block: donor_pool_rules
+    file: assumptions/validation_donor_pool.yaml
+    sha256: 4b23d3a44df092756d22058f30c8e7a296af0ce8260deabf857324b602476e24
+    recorded_on: '2026-11-24'
+    verified: true
+  - block: state_holdout_check
+    file: assumptions/validation_state_holdouts.yaml
+    sha256: bb09229bc08c972a1ca937746341013c5e256e1dd82d430fa38fcdc6b7ef9127
+    recorded_on: '2026-11-24'
+    verified: true
+settings:
+  rule: last_3_mean
+  method: pa_blend
+  variant: out_of_time
+  lead_years: 2
+  horizon_years: 5
+  target_coverage: 0.8
+  coverage_band:
+  - 0.75
+  - 0.85
+  full_weight_cases: 1000
+  min_cases_scored: 5
+states:
+  MA:
+    cases: 11
+    held_out: true
+    origins:
+    - 2009
+    - 2019
+    coverage: 0.5455
+    covered: 6
+    above: 5
+    below: 0
+    mean_width: 0.865
+    weight_own: 0.14
+    inside_band: false
+    gap_to_target: 0.2545
+  WY:
+    cases: 11
+    held_out: true
+    origins:
+    - 2009
+    - 2019
+    coverage: 0.9091
+    covered: 10
+    above: 0
+    below: 1
+    mean_width: 1.0648
+    weight_own: 0.227
+    inside_band: false
+    gap_to_target: 0.1091
+  VT:
+    cases: 11
+    held_out: true
+    origins:
+    - 2009
+    - 2019
+    coverage: 1.0
+    covered: 11
+    above: 0
+    below: 0
+    mean_width: 0.9024
+    weight_own: 0.14
+    inside_band: false
+    gap_to_target: 0.2

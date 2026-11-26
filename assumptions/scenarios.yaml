@@ -113,8 +113,9 @@ scenarios:
       proximity threshold. Teams may assume that parking requirements are reduced
       or eliminated.
     description: >-
-      More height and floor area near major transit stops (decision D-07 defines the
-      stops and distances), with reduced parking.
+      More height and floor area near major transit stops (a rail station, or a bus
+      stop with frequent weekday service; distances in the Model and Assumptions
+      Overview), with reduced parking.
     reforms: [tod, parking]
     source: [*handbook]
     notes:
@@ -129,8 +130,9 @@ scenarios:
       new residential development. Specify assumptions about developer-provided
       parking in the absence of mandates.
     description: >-
-      Residential parking minimums removed. Developers still build about 60% of
-      the old requirement near frequent transit and 85-100% elsewhere.
+      Residential parking minimums removed. Developers still build part of the old
+      requirement: a smaller share near frequent transit than elsewhere (both shares
+      are ranges in the Assumption Ledger).
     reforms: [parking]
     source: [*handbook]
 
@@ -188,3 +190,116 @@ scenarios:
       - "Section 603.2(a): at least one ADU for each single-family detached dwelling unit."
       - "Section 603.2(k): an ADU is not a new residential use for connection fees or capacity charges."
       - "Not law. Laid on the table on Nov 17, 2026; re-check after the session ends on Nov 30, 2026."
+
+  # ---------------------------------------------------------------- extra scenarios
+  # Named policies beyond the five benchmarks (kind: extra). The benchmark presets
+  # above are unchanged; each extra scenario is its own reform with its own ledger
+  # entries and says which benchmark it builds on. Methods:
+  # docs/methods/extra_scenarios.md.
+
+  transit_zoning_funded_infrastructure:
+    title: "Transit zoning with funded infrastructure"
+    kind: extra
+    priority: could
+    description: >-
+      The TOD benchmark's upzoning near major transit stops, plus public money (or
+      financing) for the water, sewer and power capacity station areas need. Permits
+      that need the new capacity count only after it enters service; permits that
+      were feasible without the money are never credited to it.
+    reforms: [transit_zoning_funded_infrastructure]
+    source:
+      - id: co_hb26_1065
+        citation: >-
+          Colorado HB26-1065, transit and housing investment zones (2026 Colo. Sess.
+          Laws ch. 157)
+        url: https://leg.colorado.gov/bills/hb26-1065
+        accessed: 2026-11-24
+      - id: ut_htrz_code
+        citation: >-
+          Utah Code Title 63N, Chapter 23, Part 2, Housing and Transit Reinvestment Zones
+        url: https://le.utah.gov/xcode/Title63N/Chapter23/63N-23-P2.html
+        accessed: 2026-11-24
+    notes:
+      - "Same funnel and draws as the TOD benchmark; cannot share a package with it."
+      - "Water and sewer readiness from the pack's infra_tract table where an official record exists; elsewhere 'unknown' with a wide need range."
+
+  commercial_land_housing:
+    title: "Housing by right on commercial land"
+    kind: extra
+    priority: could
+    description: >-
+      Apartment buildings (36+ homes per acre, at most one required parking space
+      per home) allowed by right on land used for shops and offices. New
+      construction, so counted in the Building Permits Survey measure.
+    reforms: [commercial_land_housing]
+    source:
+      - id: tx_sb840_2025_text
+        citation: >-
+          Texas SB 840, 89th Legislature (2025), enrolled text (Local Government Code
+          chapter 218)
+        url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00840F.htm
+        accessed: 2026-11-25
+    notes:
+      - "Eligible land is read from parcel land use where a county has it (Pennsylvania: Philadelphia and Allegheny); elsewhere 'eligible land not measured'."
+      - "Cannot share a package with the TOD reforms: commercial land near stations is already TOD land."
+
+  adaptive_reuse:
+    title: "Adaptive reuse: office and retail conversions"
+    kind: extra
+    priority: could
+    description: >-
+      Existing office and retail buildings converted into apartments. A conversion
+      is an alteration, which the Building Permits Survey leaves out, so its homes
+      are reported in a separate record, outside the permit total.
+    reforms: [adaptive_reuse]
+    source:
+      - id: tx_sb840_2025_text
+        citation: >-
+          Texas SB 840, 89th Legislature (2025), enrolled text, Local Government Code
+          chapter 218, subchapter C (conversions of commercial buildings)
+        url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00840F.htm
+        accessed: 2026-11-25
+    notes:
+      - "Adds 0 to added units authorized; conversions are the record conversion_homes."
+
+  starter_home_lots:
+    title: "Starter-home lots"
+    kind: extra
+    priority: could
+    description: >-
+      Smaller minimum lots (3,000-5,000 sq ft) for new subdivisions on single-family
+      land: owners split off a lot for a small house, or a builder replaces a house
+      with two or three small homes.
+    reforms: [starter_home_lots]
+    building_types: [sf_detached]
+    source:
+      - id: tx_sb15_2025_text
+        citation: >-
+          Texas SB 15, 89th Legislature (2025), enrolled text (Local Government Code
+          sections 211.051-211.058)
+        url: https://capitol.texas.gov/tlodocs/89R/billtext/html/SB00015F.htm
+        accessed: 2026-11-24
+    notes:
+      - "Cannot share a package with the ADU or missing-middle reforms (same single-family lots)."
+      - "Existing homes replaced are reported and subtracted in net added homes."
+
+  fee_deferral_with_affordability:
+    title: "Fee deferral or waiver with affordability terms"
+    kind: extra
+    priority: could
+    description: >-
+      Rental projects that keep part of their homes affordable to lower-income
+      households pay their development fees at occupancy instead of at permit
+      (deferral), or have them waived. Both are run on the same draws; deferral is
+      the headline.
+    reforms: [fee_deferral_with_affordability]
+    building_types: [two_to_four, five_plus]
+    source:
+      - id: hud_income_limits_fy2026
+        citation: >-
+          U.S. Department of Housing and Urban Development, FY2026 income limits
+          (Section 8), county 50% limits; 60% = 1.2 x the 50% limit as for tax-credit limits
+        url: https://www.huduser.gov/portal/datasets/il.html
+    notes:
+      - "Cannot share a package with the fee benchmark (the same fees)."
+      - "The $50,000 benchmark fee is the fee deferred or waived."

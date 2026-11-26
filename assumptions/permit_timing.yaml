@@ -1,0 +1,50 @@
+# Permit timing: settings for the Philadelphia permit-stage timing table.
+# Read by visionhousing.data.sources.phl_permit_timing and
+# visionhousing.features.permit_timing; the command
+# `visionhousing permit-timing` writes assumptions/calibration/permit_lag_phl.yaml.
+# Method: docs/modules/permit_timing.md.
+#
+# Philadelphia's open permit table (Carto table "permits") has an issue date
+# but no application date, so a true application-to-issue lag cannot be
+# measured. What can be measured is the time from the zoning permit being
+# issued to the new-construction building permit being issued, because each
+# building permit names its zoning permit (zoningpermitjobid).
+
+version: 1
+
+first_year: 2019
+last_year: 2025          # last full calendar year in the tables
+
+# Building permits that count as new homes. The permit and work types are the
+# ones in assumptions/pipeline_local.yaml (philadelphia block), so the profile
+# and this table count the same permits.
+building_types_from: pipeline_local.yaml
+
+# Building permits whose approved scope reads like an accessory dwelling unit
+# (any work type). Postgres case-insensitive pattern; \m and \M mark word edges.
+adu_pattern: '(accessory dwelling|\mADU\M|accessory (residential|living|apartment) unit|carriage house|in-law|granny)'
+adu_permit_types: ["Residential Building", "Building"]
+
+# Zoning permits that start the stage. Only permits whose scope reads as a new
+# structure (not an addition) are kept, because an addition never leads to a
+# new-construction building permit and would look like a permanent wait.
+zoning_permit_types: ["Zoning"]
+zoning_work_types:
+  - "New construction, addition, GFA change"
+  - "Combined Lot Line Relocation and New Development"
+new_structure_pattern: '(erection of|new construction of) (a|an|one|two|three|four|five|\(?[0-9])'
+addition_pattern: '(erection|construction) of (a |an )?([a-z0-9-]+ )?(story )?((rear|side|front|roof|vertical) )*addition'
+
+# Comparable project groups by homes on the building permit. ADU-like permits
+# are their own group and are left out of the unit groups.
+unit_groups:
+  new_1: [1, 1]
+  new_2_4: [2, 4]
+  new_5_plus: [5, null]
+
+quantiles: [0.10, 0.25, 0.50, 0.75, 0.90]
+# Share of a zoning cohort with a building permit by these days after zoning.
+horizons_days: [180, 365, 730, 1095]
+# Zoning permit statuses that mean the zoning permit itself has closed without
+# use (reported among censored cases; they stay censored at the read date).
+closed_statuses: [expired, abandoned, revoked, cancelled, withdrawn, refused, denied]

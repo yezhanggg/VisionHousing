@@ -19,6 +19,7 @@ plans:
     url: https://www.phila.gov/programs/the-comprehensive-plan/
     accessed: 2026-11-22
     verified: false
+    commission_url: https://www.phila.gov/departments/philadelphia-city-planning-commission/
     note: "The City's page says the Citywide Vision was released in June 2011; an update began in 2021."
   "42003":
     county: Allegheny
@@ -27,6 +28,7 @@ plans:
     url: https://www.alleghenycounty.us/Projects-and-Initiatives/Economic-Development/Comprehensive-Plan
     accessed: 2026-11-22
     verified: true
+    commission_url: null
     note: "The county calls it its previous plan; its successor, Allegheny Forward, is in preparation."
   "42091":
     county: Montgomery
@@ -35,6 +37,7 @@ plans:
     url: https://www.montgomerycountypa.gov/departments/planning-commission/comprehensive-plans/montco-2040-comprehensive-plan/montco-2040-shared-vision
     accessed: 2026-11-22
     verified: true
+    commission_url: https://www.montgomerycountypa.gov/departments/planning-commission
     note: "Updated in 2021; Montco 2050 is in draft."
   "42017":
     county: Bucks
@@ -43,6 +46,7 @@ plans:
     url: https://connects.buckscounty.gov/bucks2040
     accessed: 2026-11-22
     verified: true
+    commission_url: null
     note: ""
   "42045":
     county: Delaware
@@ -51,6 +55,7 @@ plans:
     url: https://www.delcopa.gov/planning/delawarecounty2035
     accessed: 2026-11-22
     verified: true
+    commission_url: https://delcopa.gov/planning/
     note: "Land use policy framework plan; component plans followed from 2015 to 2020."
   "42029":
     county: Chester
@@ -59,6 +64,7 @@ plans:
     url: https://www.chescoplanning.org/Landscapes3/
     accessed: 2026-11-22
     verified: true
+    commission_url: https://www.chescoplanning.org/
     note: ""
   "42071":
     county: Lancaster
@@ -67,6 +73,7 @@ plans:
     url: https://lancastercountyplanning.org/184/Places2040
     accessed: 2026-11-22
     verified: true
+    commission_url: https://lancastercountyplanning.org/
     note: "An amendment is under review."
   "42133":
     county: York
@@ -75,6 +82,7 @@ plans:
     url: https://www.ycpc.org/
     accessed: 2026-11-22
     verified: false
+    commission_url: https://ycpc.org/
     note: "Elements were amended in August 2026; the original adoption year is not shown on the page."
   "42011":
     county: Berks
@@ -83,6 +91,7 @@ plans:
     url: https://berkspa.gov/departments/planning-commission/comp-plan-update-2030
     accessed: 2026-11-22
     verified: true
+    commission_url: https://www.berkspa.gov/departments/planning-commission
     note: "Its successor, Imagine Berks, is in preparation."
   "42077":
     county: Lehigh
@@ -91,6 +100,7 @@ plans:
     url: https://lvpc.org/comprehensive-plan
     accessed: 2026-11-22
     verified: true
+    commission_url: https://lvpc.org/
     note: "One regional plan for Lehigh and Northampton counties."
   "42095":
     county: Northampton
@@ -99,6 +109,7 @@ plans:
     url: https://lvpc.org/comprehensive-plan
     accessed: 2026-11-22
     verified: true
+    commission_url: https://lvpc.org/
     note: "One regional plan for Lehigh and Northampton counties."
   "42129":
     county: Westmoreland
@@ -107,6 +118,7 @@ plans:
     url: https://www.westmorelandcountypa.gov/654/Comprehensive-Plan
     accessed: 2026-11-22
     verified: false
+    commission_url: null
     note: "The county site refuses automated reading; the year is from the county's 2019 annual report."
   "42079":
     county: Luzerne
@@ -115,6 +127,7 @@ plans:
     url: https://www.luzernecounty.org/300/Lackawanna-Luzerne-Joint-Comprehensive-P
     accessed: 2026-11-22
     verified: true
+    commission_url: null
     note: "A joint plan with Lackawanna County."
   "42049":
     county: Erie
@@ -123,6 +136,7 @@ plans:
     url: https://eriecountypa.gov/departments/planning-and-community-development/plans/emerge-2040/
     accessed: 2026-11-22
     verified: false
+    commission_url: https://eriecountypa.gov/departments/planning-and-community-development/
     note: "The page does not say it is the adopted county comprehensive plan."
   "42043":
     county: Dauphin
@@ -131,6 +145,7 @@ plans:
     url: https://www.tcrpc-pa.org/dauphin-county-comp-plan
     accessed: 2026-11-22
     verified: false
+    commission_url: https://www.tcrpc-pa.org/dcpc-about
     note: "Hosted by the Tri-County Regional Planning Commission; the adoption date is not on the page."
   "42041":
     county: Cumberland
@@ -139,6 +154,7 @@ plans:
     url: https://www.cumberlandcountypa.gov/4888/Comprehensive-Plan
     accessed: 2026-11-22
     verified: true
+    commission_url: https://www.cumberlandcountypa.gov/120/Planning-Department
     note: ""
   "42027":
     county: Centre
@@ -147,4 +163,459 @@ plans:
     url: https://centrecountypa.gov/212/Comprehensive-Plans
     accessed: 2026-11-22
     verified: false
+    commission_url: https://centrecountypa.gov/207/Planning-Community-Development
     note: "Phase I was completed in 2003 and chapters were updated 2016-2020; no adoption date on the page."
+
+  # Counties added 2026-11-23: every link was opened that day. A plan without a
+  # stated adoption year, or a page that could not be opened, is verified: false.
+  # name: null means no current county comprehensive plan was found online.
+  "42001":
+    county: Adams
+    name: "Adams County Comprehensive Plan"
+    adopted: null
+    url: https://www.adamscountypa.gov/Departments/OfficeofPlanningandDevelopment/AdamsCountyPlans
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.adamscountypa.gov/Departments/OfficeofPlanningandDevelopment
+    note: "Plans page lists the plan and later amendments but gives no adoption year; plan text dates from about 1990-91."
+  "42005":
+    county: Armstrong
+    name: null
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.co.armstrong.pa.us/index.php/county-government-m/planning-and-development-m
+    note: "No current countywide comprehensive plan found online; planning page opened."
+  "42007":
+    county: Beaver
+    name: "Beaver County Focus Comprehensive Plan"
+    adopted: 2024
+    url: https://www.beavercountypa.gov/Departments/Planning-Commission/Annual-Reports-Comprehensive-Plans
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.beavercountypa.gov/Departments/Planning-Commission
+    note: "Page says commissioners adopted the plan in August 2024."
+  "42009":
+    county: Bedford
+    name: "Alleghenies Ahead: Shared Strategies for a Stronger Region"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.bedfordcountypa.org/departments/planning/index.php
+    note: "Six-county regional plan (2018); no Bedford County page found stating its adoption date; plan_url is a PA APA copy, not county-hosted. The regional plan PDF link answered 404 on re-check (2026-11-23)."
+  "42013":
+    county: Blair
+    name: "Alleghenies Ahead: Shared Strategies for a Stronger Region"
+    adopted: null
+    url: https://www.blairplanning.org/comprehensive-planning
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.blairplanning.org/
+    note: "Regional plan shared with five other counties; page names it as current plan but gives no adoption year (prior county plan 2007)."
+  "42015":
+    county: Bradford
+    name: "Bradford County Comprehensive Plan"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: null
+    note: "County moved to a new website; old planning commission pages return 404, so the 2018 plan could not be opened."
+  "42019":
+    county: Butler
+    name: "Butler County Comprehensive Plan"
+    adopted: null
+    url: https://butlercountypa.gov/DocumentCenter/View/400/2017-Awarded-Comprehensive-Plan-PDF
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://butlercountypa.gov/302/Economic-Development
+    note: "Plan document is dated 2017 but does not state an adoption date."
+  "42021":
+    county: Cambria
+    name: "Alleghenies Ahead: Shared Strategies for a Stronger Region"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.cambriacountypa.gov/planning-commission/
+    note: "Regional plan shared with five other counties; county page does not give adoption date (older county plan update 2011)."
+  "42023":
+    county: Cameron
+    name: "Northern Pennsylvania Tri-County Comprehensive Plan"
+    adopted: null
+    url: https://cms8.revize.com/revize/cameronpa/Comprehensive%20Plan_Cameron%20County.pdf
+    accessed: 2026-11-23
+    verified: false
+    commission_url: null
+    note: "Plan shared with McKean and Potter, dated January 2020; Cameron copy shows no adoption date."
+  "42025":
+    county: Carbon
+    name: "Carbon County Comprehensive Plan and Greenway Plan"
+    adopted: 2013
+    url: https://cms5.revize.com/revize/carboncounty/Document%20Center/Important%20Links/Car%20complete%20plan%202013.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.carboncountypa.gov/services/planning___development/
+    note: "Plan states adoption by commissioners in November 2013."
+  "42031":
+    county: Clarion
+    name: "Clarion County Comprehensive Plan"
+    adopted: null
+    url: https://cms9files.revize.com/clarioncountypa/Document%20Center/Department/Planning/Comprehensive%20Plan/Volume%201%20Final.pdf
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.co.clarion.pa.us/government/departments/planning/index.php
+    note: "Hosted volume appears to be an older plan with no adoption date; a newer plan was drafted around 2022 but its adoption was not confirmed."
+  "42033":
+    county: Clearfield
+    name: "Clearfield and Elk Counties Joint Comprehensive Plan"
+    adopted: 2024
+    url: https://clearfieldcountypa.gov/DocumentCenter/View/640/-Comprehensive-Plan-2024-PDF
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://clearfieldcountypa.gov/218/Comprehensive-Plan
+    note: "Joint plan with Elk County; adoption resolution 2024 is inside the PDF (scanned page)."
+  "42035":
+    county: Clinton
+    name: "Clinton County Comprehensive Plan"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: null
+    note: "County website refused automated reading; search results point to a 2014 plan with an update under way."
+  "42037":
+    county: Columbia
+    name: null
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.columbiapa.org/planning/index.php
+    note: "No current county comprehensive plan found online; only 1990s background studies surfaced."
+  "42039":
+    county: Crawford
+    name: "Crawford Inspired (2024 Comprehensive Plan)"
+    adopted: 2024
+    url: https://crawfordcountypa.net/government/planning/comprehensive-plans/
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://crawfordcountypa.net/government/planning/
+    note: "Listed under adopted plans and studies as the 2024 plan."
+  "42047":
+    county: Elk
+    name: "Clearfield and Elk Counties Joint Comprehensive Plan"
+    adopted: 2024
+    url: https://cms3.revize.com/revize/northcentral/Documents/Our%20Work/Library/County%20Comp%20Plans/Elk_County_Comprehensive_Plan.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://countyofelkpa.gov/elk-county-offices/elk-county-planning-department/the-comprehensive-plan/
+    note: "Joint plan with Clearfield; Elk adoption resolution 2024 is in the PDF (scanned page); PDF hosted by the regional planning commission."
+  "42051":
+    county: Fayette
+    name: "A Comprehensive Strategy for Fayette County"
+    adopted: null
+    url: https://www.fayettecountypa.org/DocumentCenter/View/6381/Fayette_CompPlan_Final_2019
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://fayettecountypa.org/259/Zoning-Planning
+    note: "Final plan dated September 2019; resolution page left blank, so adoption date not shown."
+  "42053":
+    county: Forest
+    name: "Forest County Comprehensive Plan"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.co.forest.pa.us/departments/conservation_district_and_planning.php
+    note: "Planning page lists a county comprehensive plan but gives no year."
+  "42055":
+    county: Franklin
+    name: "Imagine Franklin 2035"
+    adopted: 2023
+    url: https://www.franklincountypa.gov/imagine-franklin-2035/
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.franklincountypa.gov/departments/planning/
+    note: "Page says adopted September 2023."
+  "42057":
+    county: Fulton
+    name: "Alleghenies Ahead: Shared Strategies for a Stronger Region"
+    adopted: null
+    url: https://www.co.fulton.pa.us/planning-draft-comp-plan.php
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.co.fulton.pa.us/planning-commission.php
+    note: "Regional plan shared with five counties; county page shows a draft update and no adoption year."
+  "42059":
+    county: Greene
+    name: "Greene County Comprehensive Plan (Live Greene, Work Greene, Love Greene)"
+    adopted: null
+    url: https://www.co.greene.pa.us/resources/37409
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://greenecountypa.gov/Department-Planning-Commission
+    note: "Plan titled 2020 County Comprehensive Plan; no adoption statement found in the document."
+  "42061":
+    county: Huntingdon
+    name: "Alleghenies Ahead: Shared Strategies for a Stronger Region"
+    adopted: 2018
+    url: https://huntingdoncountypa.gov/departments/planning-and-development/huntingdon-county-comprehensive-plan
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://huntingdoncountypa.gov/departments/planning-and-development
+    note: "Regional plan shared with five counties; page says county adopted it July 2018."
+  "42063":
+    county: Indiana
+    name: "Where We Live... A Comprehensive Plan for Indiana County"
+    adopted: 2012
+    url: https://icopd.org/adopted-plans-and-studies.html
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.indianacountypa.gov/departments/planning-and-development/
+    note: "Listed on adopted plans page as the 2012 plan."
+  "42065":
+    county: Jefferson
+    name: "Jefferson County Comprehensive Plan Update - 2018"
+    adopted: 2018
+    url: https://www.jeffersoncountypa.gov/wp-content/uploads/2017/03/Existing-Conditions-and-Recommendations.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.jeffersoncountypa.gov/departments/department-of-development/planning
+    note: "Cover states adopted July 2018."
+  "42067":
+    county: Juniata
+    name: null
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: null
+    note: "No county comprehensive plan or planning page could be found online."
+  "42069":
+    county: Lackawanna
+    name: "Lackawanna-Luzerne Counties Joint Comprehensive Plan"
+    adopted: 2021
+    url: https://ww2.lackawannacounty.org/wp-content/uploads/2021/11/LL-Comp-Plan-2021-Digital.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.lackawannacounty.org/government/departments/planning2.php
+    note: "Regional plan shared with Luzerne County; June 2021 document includes signed adoption resolutions."
+  "42073":
+    county: Lawrence
+    name: "Focus Lawrence County"
+    adopted: 2016
+    url: https://www.lawrencecountypa.gov/getmedia/a45d812a-aa48-4cdc-9540-c8e78eed9cdb/Lawrence-County-Comprehensive-Plan_FINAL-OCTOBER-2016.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://lawrencecountypa.gov/departments/planning-community-development
+    note: "Adopting resolution dated October 2016 is in the plan."
+  "42075":
+    county: Lebanon
+    name: "Lebanon County Comprehensive Plan"
+    adopted: 2007
+    url: https://www.lebanoncountypa.gov/departments/planning/comprehensive-plan
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://lebanoncountypa.gov/departments/planning
+    note: "Page says commissioners adopted it December 2007."
+  "42081":
+    county: Lycoming
+    name: "Lycoming 2030: Plan the Possible (2018 Update to the Lycoming County Comprehensive Plan)"
+    adopted: null
+    url: https://lycomingcountypa.gov/government/departments/planning_community_development/comprehensive_plan.php
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://lycomingcountypa.gov/government/departments/planning_community_development/index.php
+    note: "Page calls it the 2018 update but does not state an adoption date."
+  "42083":
+    county: McKean
+    name: "Northern Pennsylvania Tri-County Comprehensive Plan"
+    adopted: 2020
+    url: https://cms6.revize.com/revize/mckeancountypa/Document%20Center/Departments/Forms%20&%20Documents/McKean%20County%20Comprehensive%20Plan/Comprehensive%20Plan_McKean%20County.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: null
+    note: "Plan shared with Cameron and Potter; McKean adopting resolution of 2020 is in the PDF."
+  "42085":
+    county: Mercer
+    name: "Moving Mercer Forward"
+    adopted: 2026
+    url: https://www.mcrpc.com/mercer-countys-comprehensive-plan/
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.mcrpc.com
+    note: "Regional planning commission page calls it newly adopted, dated May 2026."
+  "42087":
+    county: Mifflin
+    name: "Mifflin County 2035"
+    adopted: 2025
+    url: https://mifflincountypa.gov/planning/comprehensive-planning
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://mifflincountypa.gov/planning
+    note: "Commissioner minutes of December 2025 record the adopting resolution; plan page still describes the 2014 plan."
+  "42089":
+    county: Monroe
+    name: "Monroe 2020 Comprehensive Plan Update"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.monroecountypa.gov/departments/planning
+    note: "County plan page not opened; search shows a 2014 update with a new update started in 2025."
+  "42093":
+    county: Montour
+    name: "Montour County Comprehensive Plan"
+    adopted: null
+    url: https://montourcounty.gov/getmedia/5ac26e42-76d6-46db-8f7c-737cc8b646ca/montourcofullreport.pdf
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://montourcounty.gov/departments/planning-commission
+    note: "Plan is dated April 2009 but no adoption statement found; a 2035 update is in progress."
+  "42097":
+    county: Northumberland
+    name: null
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: null
+    note: "County website did not answer and no county plan was found online."
+  "42099":
+    county: Perry
+    name: "Picture Perry Comprehensive Plan"
+    adopted: null
+    url: https://www.tcrpc-pa.org/pcpc-picture-perry-comp-plan
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://tcrpc-pa.org/pcpc-about
+    note: "Plan page opened but does not show adoption year (other sources say 2023); staffed by Tri-County Regional Planning Commission."
+  "42103":
+    county: Pike
+    name: "Imagine Pike 2035 Implementable Comprehensive Plan"
+    adopted: null
+    url: https://www.pikepa.org/living___working/community_planning/comprehensive_plan.php
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.pikepa.org/living___working/planning_and_mapping/index.php
+    note: "Page says the plan was newly adopted but gives no year."
+  "42105":
+    county: Potter
+    name: "Northern Pennsylvania Tri-County Comprehensive Plan"
+    adopted: null
+    url: https://pottercountypa.gov/Documents/Departments/GIS%20Planning%20Community%20Development/Planning/Potter%20County%202019%20Comprehensive%20plan.pdf
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://pottercountypa.gov/departments/gis_planning_community_development/planning.php
+    note: "Plan shared with Cameron and McKean; Potter copy shows no adoption date."
+  "42107":
+    county: Schuylkill
+    name: "Schuylkill County Comprehensive Plan"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.schuylkillcountypa.gov/departments/planning___zoning/index.php
+    note: "Planning page lists a 2006 comprehensive plan but no adoption date was opened."
+  "42109":
+    county: Snyder
+    name: "Snyder County in the 21st Century: A Strategic Comprehensive Plan"
+    adopted: 2001
+    url: https://www.snydercounty.org/wp-content/uploads/2020/12/Snyder-County-Comprehensive-Plan.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.snydercounty.org/departments/planning-commission/
+    note: "Cover states adopted May 2001; update review began 2025."
+  "42111":
+    county: Somerset
+    name: "Alleghenies Ahead: Shared Strategies for a Stronger Region"
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.co.somerset.pa.us/department.asp?deptnum=104
+    note: "Planning page lists the regional plan shared with five counties but gives no adoption year."
+  "42113":
+    county: Sullivan
+    name: "Sullivan County Comprehensive Plan"
+    adopted: 2011
+    url: https://static1.squarespace.com/static/59492851f5e231b1ec7b4bc4/594d25e2a6525a1109cb754b/594d25eba6525a1109cb778b/1498228203610/Planning-Sullivan-Co-Jan-2011-Comp-Plan.pdf?format=original
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.sullivancountypa.gov/offices/planning-development
+    note: "Cover states adopted January 2011; PDF linked from county planning page."
+  "42115":
+    county: Susquehanna
+    name: "Susquehanna County Comprehensive Plan Update"
+    adopted: 2018
+    url: https://www.susqco.com/getmedia/31d60887-f3b8-4c23-bccc-f6ba1803ba0f/Susq-Co-Comp-Plan-ADOPTED-2018-11.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://susqco.com/departments/planning-and-development
+    note: "Cover states adoption by commissioners November 2018."
+  "42117":
+    county: Tioga
+    name: "Tioga County Comprehensive Plan Update - 2030"
+    adopted: 2017
+    url: https://www.tiogacountypa.us/getmedia/2131cade-096d-4f21-ac49-a16da52ea7ca/2-COMPREHENSIVE-PLAN-GOAL%E2%80%8BS,-RECOMMENDATIONS-AND-ACTIONS.pdf
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://www.tiogacountypa.us/departments/planning-commission
+    note: "Cover states adopted December 2017."
+  "42119":
+    county: Union
+    name: "Cultivating Community: A Plan for Union County's Future"
+    adopted: 2024
+    url: https://sites.google.com/unionco.org/planning-commission-agendas-an/comprehensive-plan
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://sites.google.com/unionco.org/planning-commission-agendas-an/comprehensive-plan
+    note: "County planning site says adopted December 2024."
+  "42121":
+    county: Venango
+    name: null
+    adopted: null
+    url: null
+    accessed: 2026-11-23
+    verified: false
+    commission_url: null
+    note: "County website did not answer; an update begun in 2023 replaces a 2004 plan, adoption not confirmed."
+  "42123":
+    county: Warren
+    name: "Warren County Comprehensive Plan Update"
+    adopted: 2023
+    url: https://www.warrencountypa.gov/DocumentCenter/View/2714/Warren-County-Comp-Plan-Update-amended-June-2024
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://warrencountypa.gov/1197/Planning-Zoning
+    note: "Cover states adopted September 2023, amended June 2024."
+  "42125":
+    county: Washington
+    name: "Washington County Comprehensive Plan Update"
+    adopted: null
+    url: https://cms.washingtoncopa.gov/uploads/Wash_Co_Comp_Plan_Update_Sept23_compressed_FINAL_9b71ad3d75.pdf
+    accessed: 2026-11-23
+    verified: false
+    commission_url: https://www.washingtoncopa.gov/planning
+    note: "Final plan dated September 2023; document does not state the adoption date."
+  "42127":
+    county: Wayne
+    name: "Wayne County Comprehensive Plan Update"
+    adopted: 2024
+    url: https://waynecountypa.gov/983/2024-County-Comprehensive-Plan
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://waynecountypa.gov/1092/Planning-GIS
+    note: "Page says commissioners adopted it February 2024."
+  "42131":
+    county: Wyoming
+    name: "2019-2029 Wyoming County Comprehensive Plan"
+    adopted: 2019
+    url: https://wyomingcountypa.gov/board/comprehensive-plan/
+    accessed: 2026-11-23
+    verified: true
+    commission_url: https://wyomingcountypa.gov/board/
+    note: "Page says adopted April 2019."

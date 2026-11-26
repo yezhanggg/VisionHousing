@@ -13,12 +13,22 @@ INPUTS = [
     "DATA_PROVENANCE.md",
     "DISCLOSURES.md",
     "docs/MODEL_AND_ASSUMPTIONS.md",
+    "docs/POLICY_SCENARIO_COMPARISON.md",
+    "docs/TECHNICAL_APPENDIX.md",
+    "docs/modules/baseline.md",
     "src/visionhousing/data/sources.yaml",
     "assumptions/parameters.yaml",
     "assumptions/calibration",
     "uv.lock",
     "web/package.json",
     "web/package-lock.json",
+    "web/public/data/PA/runs",
+    "web/public/data/PA/pool.json",
+    "web/public/data/PA/report-card.json",
+    "web/public/data/PA/validation.json",
+    "web/public/data/VT/runs",
+    "web/public/data/VT/pool.json",
+    "web/public/data/VT/report-card.json",
 ]
 
 
@@ -82,7 +92,17 @@ def test_check_fails_when_a_record_changes(repo):
     ledger = repo / "assumptions" / "parameters.yaml"
     text = ledger.read_text(encoding="utf-8")
     ledger.write_text(text.replace('    label: "', '    label: "Changed ', 1), "utf-8")
-    assert g.stale(repo) == ["docs/MODEL_AND_ASSUMPTIONS.md"]
+    # The full tables (appendix) and the ledger fingerprint (overview) both follow the ledger.
+    assert g.stale(repo) == ["docs/MODEL_AND_ASSUMPTIONS.md", "docs/TECHNICAL_APPENDIX.md"]
+
+
+def test_key_assumptions_are_all_in_the_ledger(repo):
+    """The Overview's key-assumption table names only real ledger entries, in its fixed order."""
+    text = g.key_assumptions(repo)
+    assert "Not in the ledger" not in text
+    positions = [text.index(f"`{pid}`") for pid in g.KEY_ASSUMPTIONS]
+    assert positions == sorted(positions)
+    assert "`adu.unit_size_sqft`" in text  # the ADU size range the Overview's wording refers to
 
 
 def test_generation_is_deterministic_and_idempotent(repo):
@@ -148,3 +168,60 @@ def test_long_public_addresses_are_excused_but_keys_are_not():
     flagged = g.mark_public_urls(f"| [x]({url}) | {key} |")
     assert g.ALLOW_URL not in flagged  # a real key is never excused
     assert g._scan.scan_text("doc", flagged, [])
+
+
+def test_sparse_state_tables_come_from_the_saved_runs(repo):
+    """Section 3.4 is built from the static-site runs; without them it says how to make them."""
+    text = g.sparse_state_comparison(repo)
+    assert "| Accessory dwelling units |" in text and "VT width / PA width" in text
+    assert "No town-rule index for VT" in g.sparse_state_inputs(repo)
+    shutil.rmtree(repo / "web" / "public" / "data" / "VT")
+    assert "make export-static" in g.sparse_state_comparison(repo)
+    assert "make export-static" in g.sparse_state_inputs(repo)
+
+
+def test_uv_groups_name_optional_extras():
+    lock = {
+        "package": [
+            {"name": "visionhousing", "optional-dependencies": {"geo": [{"name": "s"}]}},
+            {"name": "s", "dependencies": [{"name": "n"}]},
+            {"name": "n"},
+        ]
+    }
+    assert g.uv_groups(lock) == {"s": ["geo (extra)"], "n": ["geo (extra)"]}
+
+
+def _rec(p10, p50, p90):
+    return {"p10": p10, "p50": p50, "p90": p90}
+
+
+def test_results_blocks_read_the_current_run_format(tmp_path):
+    """A run saved under the outcome contract (as-of date, gross/net, years) fills every block."""
+    import json
+
+    runs = tmp_path / "web" / "public" / "data" / "PA" / "runs"
+    runs.mkdir(parents=True)
+    years = {"years": [2027, 2028], "state": [_rec(1, 2, 3), _rec(4, 5, 6)]}
+    base = {"seed": 0, "draws": 10, "as_of": "2026-11-24", "baseline": _rec(10, 20, 30),
+            "reform_results": {}, "package": None,
+            "annual": {"baseline": years, "package": None}}  # fmt: skip
+    mm = {"title": "Missing middle", "added": _rec(1, 2, 3), "pct_change": _rec(0.1, 0.2, 0.3),
+          "gross_net": {"net_stock": _rec(0, 1, 2)}}  # fmt: skip
+    package = {**base, "reform_results": {"missing_middle": mm},
+               "package": {"combined": _rec(1, 2, 3), "pct_change": _rec(0.1, 0.2, 0.3),
+                           "sum_of_parts": _rec(1, 2, 3), "overlap": _rec(0, 0, 0),
+                           "interaction": _rec(0, 0, 0)},
+               "annual": {"baseline": years, "package": years}}  # fmt: skip
+    (runs / "baseline.json").write_text(json.dumps(base))
+    (runs / "missing_middle.json").write_text(json.dumps({**base, "reform_results": {
+        "missing_middle": mm}}))  # fmt: skip
+    (runs / "package.json").write_text(json.dumps(package))
+    head = g.headline_table("PA")(tmp_path)
+    assert "Frozen as of 2026-11-24" in head and "before the current outcome rules" not in head
+    assert (
+        "| Missing middle | 1 to 3 (middle 2) | 0.1% to 0.3% (middle 0.2%) | 0 to 2 (middle 1) |"
+        in head
+    )
+    assert "| 2028 | 4 to 6 (middle 5) | 4 to 6 (middle 5) |" in g.annual_table("PA")(tmp_path)
+    assert "Equals all five together | 1 to 3 (middle 2)" in g.package_waterfall("PA")(tmp_path)
+    assert "No saved runs for VT" in g.headline_table("VT")(tmp_path)

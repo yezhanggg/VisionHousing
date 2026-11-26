@@ -20,7 +20,8 @@ limits:
   general:
     title: "What these estimates cannot tell you"
     items:
-      - "These are likely ranges of building permits, not a forecast of homes finished."
+      - "These are ranges of building permits, not a forecast of homes finished."
+      - "A reform's likely range is a simulation range: it shows how the result moves with the assumptions, given the baseline. No reform of this kind has past totals to check it against."
       - "They describe the whole state. They do not say which lots, streets or owners would build."
       - "They do not say who would live in the new homes or what they would pay."
       - "They assume every town follows the new rule from the first day and approves permits at today's pace."
@@ -30,7 +31,13 @@ limits:
     title: "The baseline"
     items:
       - "The baseline repeats recent permit trends under today's rules. It does not predict a recession or a boom."
+      - "The baseline range is not a promise. Tested on past years, using only what was known at the time, ranges built this way caught the real five-year total less often than eight times in ten for counties. Each range states how often ranges like it caught the real total."
+      - "Those past years hold about one housing cycle, and misses ran mostly to one side and moved together across counties, so the share caught rests on few independent periods."
+      - "The rule behind the range was chosen using every past year, including the years it was later scored on, and with today's county types rather than those known at the time, so the share caught is somewhat favourable. Each count's validation card names the study, years and area it comes from."
       - "Counties without a permit office, or with imputed permit counts, carry the Census Bureau's estimates."
+      - "The year between the last full year of permit data and the first projected year has no full-year count yet. The baseline carries the latest yearly level through it; a nowcast from the monthly files is shown as a check only, and a part-year count is never treated as a full year."
+      - "The middle value depends on which past years the rule averages. In Pennsylvania one unusually high year sits in the window; the baseline card shows the effect of leaving it out as a disclosed sensitivity, not a replacement."
+      - "In states with a short permit record, the range is widened toward the past errors of states that grew at a similar pace. Those errors come from one recovery after a housing bust, so the next cycle may differ, and the ranges still caught the real total less often than they aim to."
 
   package:
     title: "Reforms together"
@@ -45,6 +52,7 @@ limits:
       - "Septic limits, steep slopes, flood zones, historic districts and private deed rules, none of which are in the fit test."
       - "Whether towns slow approvals or add new hurdles."
       - "How quickly owners take up the new right. This is the widest assumption and is not yet checked against places like this state."
+      - "Whether every ADU shows up in permit statistics. Many towns permit an ADU as an addition or a conversion, not as a new home, and the national permit survey does not count those, so some of the homes added here may never appear in published permit counts."
 
   missing_middle:
     title: "Missing middle"
@@ -89,3 +97,12 @@ limits:
     items:
       - "The bill is not law. The estimate assumes it passes as written and applies from the start of the period."
       - "Philadelphia and Pittsburgh are outside the Municipalities Planning Code, so the bill leaves their rules as they are."
+
+  districts:
+    title: "District numbers"
+    items:
+      - "District numbers share out tract and county results by where homes stood in the Census count. They are not separate estimates for each district."
+      - "Inside a tract that two districts share, added homes are assumed to follow existing homes. The split share says how much of a district rests on that."
+      - "The fee cut, parking and the baseline are worked out by county, so a district gets its counties' results in proportion to its homes there."
+      - "The districts are the plans adopted after the Census and first used in the elections of that cycle. A later redraw would change them."
+      - "The top driver of each reform is worked out for the whole state, not for the district."

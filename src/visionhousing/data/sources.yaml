@@ -280,6 +280,168 @@ sources:
     checked_on: 2026-11-22
     notes: Bill text https://www.palegis.us/legislation/bills/text/HTM/2025/0/SB1346/PN1747  # secret-scan: allow (a public URL path, not a key)
 
+  - id: pa_hb2155
+    name: Pennsylvania House Bill 2155 (municipal parking minimums), bill page and text
+    publisher: Pennsylvania General Assembly
+    url_pattern: https://www.palegis.us/legislation/bills/2025/hb2155
+    vintage: 2025-2026 regular session; text Printer's Number 2789
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://www.palegis.us/legislation/bills/2025/hb2155
+    parser: legislation.read_bill_status
+    limits: >-
+      A proposed bill, not law, unless enacted; it lapses at the end of the session.
+      In committee since January 26, 2026.
+    tier: 0
+    access: page
+    cleaning: Only status, dates and the section it adds are recorded; the summary is in our own words.
+    checked_on: 2026-11-23
+    notes: Bill text https://www.palegis.us/legislation/bills/text/HTM/2025/0/HB2155/PN2789  # secret-scan: allow (a public URL path, not a key)
+
+  - id: pa_hb1459
+    name: Pennsylvania House Bill 1459 (multiple-unit dwellings in commercial zones), bill page and text
+    publisher: Pennsylvania General Assembly
+    url_pattern: https://www.palegis.us/legislation/bills/2025/hb1459
+    vintage: 2025-2026 regular session; text Printer's Number 1712
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://www.palegis.us/legislation/bills/2025/hb1459
+    parser: legislation.read_bill_status
+    limits: >-
+      A proposed bill, not law, unless enacted. Would reach only municipalities over
+      5,000 people in counties that grew between the last two censuses. In committee
+      since May 13, 2025.
+    tier: 0
+    access: page
+    cleaning: Only status, dates and the section it adds are recorded; the summary is in our own words.
+    checked_on: 2026-11-23
+    notes: Bill text https://www.palegis.us/legislation/bills/text/HTM/2025/0/HB1459/PN1712  # secret-scan: allow (a public URL path, not a key)
+
+  - id: pa_mpc
+    name: Pennsylvania Municipalities Planning Code (Act 247 of 1968, as amended), full text
+    publisher: Pennsylvania General Assembly
+    url_pattern: https://www.palegis.us/statutes/unconsolidated/law-information/view-statute?62&iFrame=true&txtType=HTM&SessYr=1968&ActNum=0247.&SessInd=0
+    vintage: Text as published on palegis.us when fetched (amendments through the fetch date)
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://www.palegis.us/statutes/unconsolidated/law-information?sessYr=1968&sessInd=0&actNum=247
+    expected_size: 750000
+    parser: legislation.statute_text
+    limits: >-
+      The unofficial text the General Assembly publishes; Purdon's and the official
+      Laws of Pennsylvania are the authority. Does not reach Philadelphia or Pittsburgh.
+      Says what municipalities may or must do, not what each one did.
+    tier: 0
+    access: page
+    cleaning: >-
+      HTML tags removed and white space collapsed; the SHA-256 of that text is kept in
+      law_documents. Every MPC section cited in assumptions/law/state_provisions.yaml
+      is checked to be in the text. Summaries are our own words; no text is copied.
+    checked_on: 2026-11-23
+
+  - id: pa_code_bulletin
+    name: Pennsylvania Code and Bulletin (state regulations), linked only
+    publisher: Pennsylvania Legislative Reference Bureau
+    url_pattern: https://www.pacodeandbulletin.gov/
+    vintage: current
+    geography: [state]
+    licence: Public legislative record; the site's robots file disallows automated reading
+    terms_url: https://www.pacodeandbulletin.gov/
+    parser: legislation.statute_text
+    limits: Linked for readers; never fetched, because the site's robots file disallows all automated access.
+    tier: 0
+    access: page
+    cleaning: None; not fetched.
+    checked_on: 2026-11-23
+
+  - id: pgh_legistar
+    name: City of Pittsburgh legislation (Bill 2025-1545, Ordinance 31 of 2026, accessory dwelling units)
+    publisher: City of Pittsburgh, City Council
+    url_pattern: https://pittsburgh.legistar.com/LegislationDetail.aspx?GUID=C15553FF-85B6-480E-ACFF-53F40EF99EA9&ID=7147499
+    vintage: Final text (Version 7), enacted October 27, 2026, effective October 29, 2026
+    geography: [municipality]
+    licence: Public legislative record of the City of Pittsburgh
+    terms_url: https://pittsburgh.legistar.com/
+    parser: law.text.text_sha256
+    limits: >-
+      One ordinance. The web record above is the human-readable page; the text itself was
+      read by script from the city's Legistar web API
+      (https://webapi.legistar.com/v1/pittsburgh/matters/31504/texts/35471, version 7, the
+      pinned one; 31504 is the API's matter id, not the web site's). Struck and inserted
+      words are read from the API's RTF marks. The attachment server
+      (pittsburgh.legistar1.com) disallows robots, so no PDF is read. The full Pittsburgh
+      Code is hosted by a commercial code host and is not read.
+    tier: 2
+    access: page
+    cleaning: >-
+      Version 7 text pinned by the sha256 of its white-space-collapsed text; the rule,
+      section, a quote of at most 300 characters and its offset are kept in
+      assumptions/law/municipal_rules.yaml and the dated versions in
+      assumptions/law/timeline.yaml. Link re-checked by script on 2026-11-25 (HTTP 200,
+      file 2025-1545, enactment number 31, enactment date 10/27/2026).
+    checked_on: 2026-11-25
+
+  - id: phl_li_adu_checklist
+    name: City of Philadelphia, L&I Accessory Dwelling Unit Checklist (PZ_004_INF, Rev 3.2022)
+    publisher: City of Philadelphia, Department of Licenses and Inspections
+    url_pattern: https://www.phila.gov/media/20220308130807/PZ_004_INF_Accessory-Dwelling-Unit-Checklist-rev-3.8.2022.pdf
+    vintage: Revision 3.2022
+    geography: [municipality]
+    licence: Public guidance of the City of Philadelphia; cited, not copied
+    terms_url: https://www.phila.gov/terms-of-use/
+    parser: law.text.pdf_text
+    limits: >-
+      City guidance from 2022, not the Zoning Code itself (section 14-604(11) is hosted by
+      a commercial code host and is not read); a 2026 amendment could not be checked, so
+      the row stays draft.
+    tier: 2
+    access: page
+    cleaning: Read once by hand; rule, quote and offset kept in assumptions/law/municipal_rules.yaml.
+    checked_on: 2026-11-23
+
+  - id: pa_municipal_ordinances
+    name: Pennsylvania municipal zoning ordinances published on each municipality's own website
+    publisher: Pennsylvania municipalities (each its own)
+    url_pattern: https://dced.pa.gov/local-government/
+    vintage: The version each municipality posts; listed per document in law_documents
+    geography: [municipality]
+    licence: Public ordinances of each municipality; cited, not copied
+    terms_url: https://dced.pa.gov/local-government/
+    parser: law.extract.extract_facts
+    limits: >-
+      Five municipalities read by hand so far, out of about 2,560; all others are unknown.
+      Posted copies can lag amendments. Commercial code hosts (eCode360, Municode,
+      American Legal) are never read: their terms forbid bulk or automated use.
+    tier: 2
+    access: page
+    cleaning: >-
+      Read by hand, or drafted by the rule-based reader for a person to check. Only the
+      rule, the section, a quote of at most 300 characters and its offset are kept.
+    checked_on: 2026-11-23
+
+  - id: vt_24_vsa_4412
+    name: Vermont Statutes, Title 24, section 4412 (required provisions and prohibited effects of zoning bylaws)
+    publisher: Vermont General Assembly
+    url_pattern: https://legislature.vermont.gov/statutes/section/24/117/04412
+    vintage: Section as published on legislature.vermont.gov, read 2026-11-23 (version in force until January 1, 2028)
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://legislature.vermont.gov/statutes/
+    parser: legislation.statute_text
+    limits: >-
+      The statute says what bylaws must allow; it does not say how many towns have
+      updated their bylaws, or how often permits are refused in practice. Flood hazard
+      and fluvial erosion bylaws are excepted. The text on the website is unofficial.
+    tier: 0
+    access: page
+    cleaning: >-
+      Read by hand. Only the citation and a summary in our own words of subdivisions
+      (1)(D) (duplexes wherever year-round homes are allowed; up to four units where
+      municipal sewer and water serve) and (1)(E) (one accessory dwelling unit with a
+      single-family home as a permitted use) are kept, in
+      assumptions/calibration/already_legal_vt.yaml.
+    checked_on: 2026-11-23
+
   - id: bps_state_annual
     name: Building Permits Survey, state annual files
     publisher: U.S. Census Bureau
@@ -300,6 +462,29 @@ sources:
       dropped. Value is converted to dollars.
     checked_on: 2026-11-22
     notes: Used to check that county rows add up to the published state totals.
+
+  - id: bps_state_monthly_ytd
+    name: Building Permits Survey, state monthly year-to-date files
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/econ/bps/State/st{yy}{mm}y.txt
+    vintage: Year-to-date files for the months released on or before the model's as-of date (2021-2026)
+    geography: [state]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/about/policies/open-gov/open-data.html
+    expected_size: 15000
+    parser: bps_monthly.parse_state_ytd
+    limits: >-
+      Year-to-date state totals of units authorized, as published that month. Monthly and
+      annual files differ in reporting and imputation, so a year-to-date count is never a
+      full year. The release date is read from the file's Last-Modified date on the
+      Census server, which is later than the first release if the file was re-posted.
+    tier: 0
+    access: file
+    cleaning: >-
+      Same header rules as the annual files; the survey date must name the requested
+      month. Value is converted to dollars. Used only for the baseline's 2026 bridge
+      diagnostic (visionhousing baseline-card); no estimate reads it.
+    checked_on: 2026-11-25
 
   - id: acs5_geos
     name: American Community Survey 5-year summary file geography list (2020-2024)
@@ -399,13 +584,44 @@ sources:
       same provider has no active one.
     checked_on: 2026-11-22
 
+  - id: transitland_atlas
+    name: Transitland Atlas catalogue of transit feeds (static schedule addresses)
+    publisher: Interline Technologies and contributors (Transitland)
+    url_pattern: https://raw.githubusercontent.com/transitland/transitland-atlas/{commit}/{atlas_file}
+    vintage: The pinned commit in assumptions/transit_feeds.yaml (main branch, 2026-11-25)
+    geography: [point]
+    licence: Creative Commons Attribution 4.0 (CC-BY 4.0); attribution to Transitland Atlas (github.com/transitland/transitland-atlas)
+    terms_url: https://github.com/transitland/transitland-atlas/blob/main/LICENSE.txt
+    parser: transit.fetch_atlas_catalog
+    limits: >-
+      A catalogue of addresses, not a promise of service or reuse rights: each listed feed
+      keeps its operator's terms, which are checked and recorded feed by feed in
+      assumptions/transit_feeds.yaml. Used only for agencies the Mobility Database catalog
+      does not list (Wyoming).
+    tier: 0
+    access: file
+    cleaning: >-
+      Reads the catalogue file named for each listed feed at the pinned commit and keeps
+      that feed's current static schedule address. Only the state's rows are cached.
+    checked_on: 2026-11-25
+    notes: >-
+      Archived feed versions on transit.land need an account key, so the current operator
+      address is read and the schedule's own service dates are recorded per feed.
+
   - id: gtfs_agency_feeds
     name: Transit agency schedule feeds (GTFS), via their published addresses or the catalog mirror
     publisher: Each transit agency (copies mirrored by MobilityData)
     url_pattern: https://storage.googleapis.com/storage/v1/b/mdb-latest/o/{feed_file}?alt=media
     vintage: The schedule current when fetched; the representative date is recorded per feed
     geography: [point]
-    licence: Each agency's own open-data terms (for example SEPTA and Pittsburgh Regional Transit developer terms)
+    licence: >-
+      Each agency's own open-data terms (for example SEPTA and Pittsburgh Regional Transit
+      developer terms). Massachusetts: MBTA and regional transit authority schedules are
+      provided by MassDOT under its Developers License Agreement (use and redistribution
+      allowed; MassDOT acknowledged as the provider; no endorsement implied). Wyoming:
+      START Bus (Town of Jackson) and Cheyenne Transit Program feeds are published at
+      their operators' scheduling-vendor addresses with no licence attached; each feed's
+      legal record is in assumptions/transit_feeds.yaml
     terms_url: https://mobilitydatabase.org/
     parser: transit.read_gtfs
     limits: >-
@@ -424,6 +640,37 @@ sources:
     notes: >-
       The agency address listed in the catalog is tried first (http upgraded to https);
       the catalog's mirror copy is the fallback.
+
+  - id: osm_overpass_walk
+    name: OpenStreetMap walking network (streets, sidewalks and paths) near major transit stops, via the Overpass API
+    publisher: OpenStreetMap contributors (served by the public Overpass API instances)
+    url_pattern: https://overpass-api.de/api/interpreter?data={overpass_query}
+    vintage: The map as it stood when each tile was fetched (the Overpass answer carries its timestamp)
+    geography: [point, line]
+    licence: >-
+      Open Database Licence (ODbL 1.0). Attribution: "© OpenStreetMap contributors".
+      The transit_walk_tract and transit_walk_county tables are a derived database of
+      OpenStreetMap: if they are published (in a state pack or a download), they are
+      offered under ODbL 1.0, with the attribution, and anyone may rebuild them with
+      visionhousing transit-walk. Maps and results made from them are produced works and
+      carry the attribution. The raw tiles stay in the local cache and are never published.
+    terms_url: https://www.openstreetmap.org/copyright
+    parser: osm.parse_overpass
+    limits: >-
+      Volunteer-mapped: sidewalks and footpaths are complete in some places and missing in
+      others, so a street without a mapped sidewalk still counts as walkable. Barriers not
+      tagged on the map (fences, unsafe crossings) are not seen. Stops whose network is
+      missing or fragmentary use straight-line circles, flagged as fallback.
+    tier: 0
+    access: api
+    cleaning: >-
+      One query per 0.1-degree tile that touches a 3/4-mile circle around a major stop:
+      ways tagged highway, minus motorways and unbuilt, closed or private ways (list in
+      assumptions/transit_walk.yaml), with their nodes. Ways are cut into straight segments
+      between their nodes; repeated segments are kept once.
+    checked_on: 2026-11-24
+    notes: >-
+      Keyless. overpass-api.de is tried first, then the overpass.private.coffee mirror.
 
   # ---- Place profile: jobs, incentive areas and safety (market research sections) ----
 
@@ -789,17 +1036,22 @@ sources:
     url_pattern: https://phl.carto.com/api/v2/sql
     vintage: Permits as read on the build date, issued from 2016
     geography: [point]
-    licence: City of Philadelphia open data; licence to be confirmed before release (only tract totals are kept)
+    licence: City of Philadelphia License (OpenDataPhilly listing, https://metadata.phila.gov/#help/help-faqs/what-are-the-terms-of-use/); only tract totals, counts and day quantiles are kept
     terms_url: https://opendataphilly.org/datasets/licenses-and-inspections-building-and-zoning-permits/
     parser: local_permits.fetch_phl_permits
     limits: >-
       Permits issued, not homes started or finished. A record-system change in 2020
       renamed permit types; both names are counted. A 2021 rush ahead of a tax
-      abatement change inflates that year.
+      abatement change inflates that year. The table has an issue date but no
+      application date; building permits link to their zoning permit from late 2019.
     tier: 2
     access: api
-    cleaning: New-construction building permits only (types in assumptions/pipeline_local.yaml); location, year and homes kept.
-    checked_on: 2026-11-22
+    cleaning: >-
+      New-construction building permits only (types in assumptions/pipeline_local.yaml);
+      location, year and homes kept. Permit timing (phl_permit_timing.fetch_timing_extracts)
+      keeps only issue dates, homes and yes/no flags, and stores counts and day quantiles in
+      assumptions/calibration/permit_lag_phl.yaml.
+    checked_on: 2026-11-24
 
   - id: alle_assessments
     name: Allegheny County Property Assessments
@@ -902,12 +1154,15 @@ sources:
     name: County comprehensive plans (citation list in assumptions/plans.yaml)
     publisher: Pennsylvania county planning commissions
     url_pattern: https://dced.pa.gov/local-government/
-    vintage: Plans as adopted; links read 2026-11-22
+    vintage: Plans as adopted; links read 2026-11-22 and 2026-11-23
     geography: [county]
     licence: Public documents of each county; cited, not copied
     terms_url: https://dced.pa.gov/local-government/
     parser: zoning_status.read_plan_citations
-    limits: A citation list for large counties only; each county's own page is the authority.
+    limits: >-
+      A citation list for all 67 counties with the planning commission's link; 34 plans are
+      confirmed with name and adoption year on the county's page, the rest are marked not
+      confirmed. Each county's own page is the authority.
     tier: 2
     access: page
     cleaning: None; name, adoption year and link are typed from each county's page and marked verified or not.
@@ -942,3 +1197,986 @@ sources:
     access: page
     cleaning: None; the figure and its locator are recorded in assumptions/evidence.yaml (_owners).
     checked_on: 2026-11-22
+
+  - id: phl_shootings
+    name: Philadelphia Shooting Victims (Carto table shootings)
+    publisher: City of Philadelphia, Police Department (via OpenDataPhilly, Carto SQL)
+    url_pattern: https://phl.carto.com/api/v2/sql
+    vintage: Records as read on the build date, full calendar years from 2021 (assumptions/safety_local.yaml)
+    geography: [point]
+    licence: City of Philadelphia License (OpenDataPhilly terms of use; free use of the data as is, the City keeps its rights in the database, no warranty, user holds the City harmless); only tract and county totals are kept
+    terms_url: https://opendataphilly.org/datasets/shooting-victims/
+    parser: phl_safety.fetch_phl_safety
+    limits: >-
+      One row per victim, police-involved shootings included. Location is the
+      published block point. Records are revised after first publication.
+      Philadelphia only.
+    tier: 2
+    access: api
+    cleaning: Counted on the City's server per year and location cell (4 decimals); victims who died counted separately. No record, name or address kept.
+    checked_on: 2026-11-23
+
+  - id: phl_crime_incidents
+    name: Philadelphia Crime Incidents, Part I and II (Carto table incidents_part1_part2)
+    publisher: City of Philadelphia, Police Department (via OpenDataPhilly, Carto SQL)
+    url_pattern: https://phl.carto.com/api/v2/sql
+    vintage: Records as read on the build date, full calendar years from 2021 (assumptions/safety_local.yaml)
+    geography: [point]
+    licence: City of Philadelphia License (OpenDataPhilly terms of use; free use of the data as is, the City keeps its rights in the database, no warranty, user holds the City harmless); only tract and county totals are kept
+    terms_url: https://opendataphilly.org/datasets/crime-incidents/
+    parser: phl_safety.fetch_phl_safety
+    limits: >-
+      Incidents known to police, by the most serious offense (UCR general code);
+      many offenses are never reported. Location is the hundred-block point.
+      Not the FBI's agency counts, so not comparable with other places. Philadelphia only.
+    tier: 2
+    access: api
+    cleaning: Violent (UCR 100-400) and property (UCR 500, 600, 700, 900) incidents counted on the City's server per dispatch year and location cell. No record or address kept.
+    checked_on: 2026-11-23
+
+  - id: phl_li_violations
+    name: Philadelphia Licenses and Inspections Code Violations (Carto table violations)
+    publisher: City of Philadelphia, Department of Licenses and Inspections (via OpenDataPhilly, Carto SQL)
+    url_pattern: https://phl.carto.com/api/v2/sql
+    vintage: Records as read on the build date, full calendar years from 2021 (assumptions/safety_local.yaml)
+    geography: [point]
+    licence: City of Philadelphia License (OpenDataPhilly terms of use; free use of the data as is, the City keeps its rights in the database, no warranty, user holds the City harmless); only tract and county totals are kept
+    terms_url: https://opendataphilly.org/datasets/licenses-and-inspections-code-violations/
+    parser: phl_safety.fetch_phl_safety
+    limits: >-
+      Cases opened by inspectors, so they follow complaints and inspection effort
+      as well as building condition. A 2020 record-system change and the 2020
+      pandemic lowered counts that year. Philadelphia only.
+    tier: 2
+    access: api
+    cleaning: Notice-of-violation and site-violation cases counted once per case number, on the City's server, per year the case was created and location cell. No owner, address or case number kept.
+    checked_on: 2026-11-23
+
+  - id: phl_311_requests
+    name: Philadelphia 311 Service and Information Requests (Carto table public_cases_fc)
+    publisher: City of Philadelphia, Philly311 (via OpenDataPhilly, Carto SQL)
+    url_pattern: https://phl.carto.com/api/v2/sql
+    vintage: Records as read on the build date, full calendar years from 2021 (assumptions/safety_local.yaml)
+    geography: [point]
+    licence: City of Philadelphia License (OpenDataPhilly terms of use; free use of the data as is, the City keeps its rights in the database, no warranty, user holds the City harmless); only tract and county totals are kept
+    terms_url: https://opendataphilly.org/datasets/311-service-and-information-requests/
+    parser: phl_safety.fetch_phl_safety
+    limits: >-
+      Requests show where residents call, not how much neglect there is. Request
+      types were renamed over time (both names are counted). Philadelphia only.
+    tier: 2
+    access: api
+    cleaning: Neglect-related request types (list in assumptions/safety_local.yaml) counted on the City's server per year requested and location cell. No address, note or photo kept.
+    checked_on: 2026-11-23
+
+  - id: acs5_profile_tables
+    name: American Community Survey 5-year tables for the place-profile charts (2020-2024)
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/data/5YRData/acsdt5y2024-{table}.dat  # secret-scan: allow (a public URL path, not a key)
+    vintage: 2020-2024 5-year estimates
+    geography: [state, county, tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/programs-surveys/acs/data/summary-file.html
+    parser: acs.parse_summary_table
+    limits: >-
+      Survey estimates averaged over five years, with margins of error; tract
+      counts in small bands are often very uncertain. Bands are sums of published
+      cells; a band's margin is the Bureau's approximation for a sum. To keep the
+      pack small, tracts keep only age, race and ethnicity, household income,
+      commute mode and rent burden (counties and the state keep every table).
+    tier: 0
+    access: file
+    cleaning: >-
+      Tables B01001, B03002, B08301, B11016, B15003, B19001, B25003, B25004, B25024,
+      B25034 and B25070 (with B19013 and B25064 medians for counties and the state)
+      are collapsed into 2 to 6 bands each; only the bands and their margins are
+      kept. Negative missing-value codes become blanks. Shares are worked out when
+      the profile is built.
+    checked_on: 2026-11-24
+    notes: >-
+      Default path is the keyless summary files (one national file per table,
+      streamed and filtered to the state). When CENSUS_API_KEY is set the same
+      cells come from the Census Data API (api.census.gov/data/2024/acs/acs5),
+      which is faster; both give identical numbers. The state's cells are saved
+      once as acs/2024/acs5_profile_{fips}.csv.gz.
+
+  - id: census_sld_bef_2022
+    name: Block equivalency files, 2022 state legislative districts (upper and lower chambers)
+    publisher: U.S. Census Bureau, Redistricting Data Program
+    url_pattern: https://www2.census.gov/programs-surveys/decennial/rdo/mapping-files/2023/2022-state-legislative-bef/{layer}_2022.zip  # secret-scan: allow (a public URL path, not a key)
+    member: "{state_fips}_{state}_{LAYER}22.txt"
+    vintage: 2022 district plans on 2020 Census blocks
+    geography: [block, state legislative district]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/programs-surveys/decennial-census/about/rdo/mapping-files.html
+    expected_size: 25732755
+    parser: sld.read_block_equivalency
+    limits: >-
+      Assigns whole 2020 blocks to the districts first used in the 2022 elections.
+      Census published 2024 and 2026 files only for states that redrew again;
+      Pennsylvania and Vermont are not among them, so these are their current plans.
+      A court-ordered or later redraw would need a newer file.
+    tier: 0
+    access: range
+    cleaning: >-
+      Only the state's member of the national zip is read (HTTP range requests);
+      kept as geoid, district. Blocks coded ZZZ (no district, open water) are
+      dropped when weights are made.
+    checked_on: 2026-11-24
+    notes: >-
+      layer is sldu (upper chamber) or sldl (lower chamber); LAYER is the same in
+      capitals. Pennsylvania's members are about 0.5 MB compressed each.
+
+  - id: cb_2024_sld
+    name: Cartographic boundary files, state legislative districts, 2024, 1:500,000
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/geo/tiger/GENZ2024/shp/cb_2024_{state_fips}_{layer}_500k.zip  # secret-scan: allow (a public URL path, not a key)
+    vintage: "2024"
+    geography: [state legislative district]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/geographies/mapping-files/time-series/geo/cartographic-boundary.html
+    expected_size: 431780
+    parser: sld.read_district_shapes
+    limits: >-
+      Generalized district outlines for maps only; which homes are in which
+      district comes from the block equivalency files, not from these shapes.
+    tier: 0
+    access: file
+    cleaning: Simplified further and written as one small GeoJSON file per chamber.
+    checked_on: 2026-11-24
+    notes: layer is sldu (upper chamber) or sldl (lower chamber). The 2024 outlines are the 2022 plans for Pennsylvania and Vermont.
+
+  - id: hcd_apr_table_a
+    name: Housing Element Annual Progress Report (APR) data, Table A (housing development applications received)
+    publisher: California Department of Housing and Community Development (via the California Open Data Portal)
+    url_pattern: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/c78b769d-cc02-4050-91ef-79ded665b5a8/download/tablea.csv
+    vintage: Reporting years 2018-2025, as published on the build date (portal updated weekly)
+    geography: [jurisdiction, parcel]
+    licence: >-
+      Portal listing states "No restrictions on public use" (rights field); licence field
+      "not specified"; the state's open data handbook releases portal data in the public
+      domain. Only aggregates are kept.
+    terms_url: https://data.ca.gov/dataset/housing-element-annual-progress-report-apr-data-by-jurisdiction-and-year
+    expected_size: null
+    parser: apr_data.read_table_a
+    limits: >-
+      Self-reported by each city and county; HCD does not verify it. One row per
+      application received in the reporting year. A county row covers only its
+      unincorporated area. The streamlining field names the law used only from the
+      2022 form on. No link to later stages except the parcel number.
+    tier: 2
+    access: file
+    cleaning: >-
+      Downloaded once to data/raw/hcd_apr/ and read in chunks of 100,000 rows. Only
+      jurisdiction, year, parcel number (digits only, used for the join and then dropped),
+      unit category, application date, proposed homes, streamlining law, status and project
+      type are read; address, project name, notes and coordinates are never read. Only
+      counts, day quantiles and shares are written (assumptions/evidence/california_apr.yaml).
+    checked_on: 2026-11-24
+
+  - id: hcd_apr_table_a2
+    name: Housing Element Annual Progress Report (APR) data, Table A2 (entitled, permitted and completed units)
+    publisher: California Department of Housing and Community Development (via the California Open Data Portal)
+    url_pattern: https://data.ca.gov/dataset/81b0841f-2802-403e-b48e-2ef4b751f77c/resource/fe505d9b-8c36-42ba-ba30-08bc4f34e022/download/tablea2.csv
+    vintage: Reporting years 2018-2025, as published on the build date (portal updated weekly)
+    geography: [jurisdiction, parcel]
+    licence: >-
+      Portal listing states "No restrictions on public use" (rights field); licence field
+      "not specified"; the state's open data handbook releases portal data in the public
+      domain. Only aggregates are kept.
+    terms_url: https://data.ca.gov/dataset/housing-element-annual-progress-report-apr-data-by-jurisdiction-and-year
+    expected_size: null
+    parser: apr_data.read_table_a2
+    limits: >-
+      Self-reported; a project appears again in each year it reaches a stage, with the
+      first entitlement, building permit and certificate-of-occupancy dates. Completion
+      reporting is uneven. About 300 MB. ADU counts depend on the counting rule (permit
+      date inside the reporting year, or any row with a permit count).
+    tier: 2
+    access: file
+    cleaning: >-
+      Downloaded once to data/raw/hcd_apr/ and read in chunks of 100,000 rows; only
+      jurisdiction, year, parcel number (digits only, for the join), unit category, the
+      three stage dates, the homes at each stage and the streamlining law are read. Only
+      aggregates are written.
+    checked_on: 2026-11-24
+
+  # cost and affordability, assisted stock (visionhousing.data.sources.affordability)
+  - id: hud_chas
+    name: Comprehensive Housing Affordability Strategy (CHAS) data, Tables 8, 12 and 15C
+    publisher: U.S. Department of Housing and Urban Development, Office of Policy Development and Research (special tabulation of ACS data by the Census Bureau)
+    url_pattern: https://www.huduser.gov/PORTAL/datasets/cp/{vintage}-{sumlevel}-csv.zip
+    vintage: 2018-2022 (ACS 2018-2022 5-year estimates; HUD release of 2025-12-23)
+    geography: [state, county, tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.huduser.gov/portal/datasets/cp.html
+    expected_size: null
+    parser: affordability.read_chas_table
+    limits: >-
+      Survey estimates averaged over five years, rounded by the Census Bureau, with
+      margins of error; small tract cells are very uncertain. Income bands are shares
+      of HUD area median family income (HAMFI) for the household's area, not of a
+      county's own median. Cost burden is housing costs (gross rent, or owner costs)
+      over household income; households with no or negative income are "not
+      computed". The edition is older than the ACS 2020-2024 tables used elsewhere.
+    tier: 0
+    access: range
+    member: "{sumlevel}/Table{table}.csv"
+    cleaning: >-
+      Tables 8, 12 and 15C are read out of the national zips for the state (040),
+      county (050) and tract (140) levels with HTTP range requests; only the state's
+      rows and the subtotal cells named in visionhousing.data.sources.affordability
+      are kept, with their margins. Tract rows keep fewer cells and no margins.
+    checked_on: 2026-11-24
+    notes: >-
+      HUD's file server answers clients that do not name themselves in the common
+      "Mozilla/5.0 (compatible; ...)" form with an empty 202 page; the fetcher names
+      itself as visionhousing in that form. Cell meanings were checked against
+      HUD's data dictionary (CHAS-data-dictionary-18-22.xlsx).
+
+  - id: hud_income_limits
+    name: HUD income limits (Section 8), area median family income and 30%, 50% and 80% limits by household size
+    publisher: U.S. Department of Housing and Urban Development, Office of Policy Development and Research
+    url_pattern: https://www.huduser.gov/portal/datasets/il/il{yy}/Section8-FY{yy}.xlsx
+    vintage: Fiscal year 2026
+    geography: [county, town (New England), HUD area]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.huduser.gov/portal/datasets/il.html
+    expected_size: null
+    parser: affordability.read_income_limits
+    limits: >-
+      Limits are set per HUD area (a metro area or a non-metro county) with caps,
+      floors and state non-metro adjustments, so the 80% limit is not always 1.6 times
+      the 50% limit and the 30% limit can be raised to the poverty guideline. The 60%
+      and 100% figures used for rents are derived from the 50% limit (x1.2 and x2),
+      the convention HUD uses for tax-credit limits; they are not published here.
+    tier: 0
+    access: file
+    cleaning: >-
+      The state's rows are kept: county (or town) code, HUD area, median family
+      income and the 30%, 50% and 80% limits for 1 to 8 people. In New England a
+      county can span HUD areas; the county takes the area covering most of its towns
+      and the number of areas is kept.
+    checked_on: 2026-11-24
+
+  - id: hud_mf_assisted
+    name: HUD Multifamily Properties - Assisted (map service)
+    publisher: U.S. Department of Housing and Urban Development (HUD eGIS open data)
+    url_pattern: https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/MULTIFAMILY_PROPERTIES_ASSISTED/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: Map service as read on the build date (layer edited 2026-10)
+    geography: [point]
+    licence: Public domain (U.S. government work)
+    terms_url: https://hudgis-hud.opendata.arcgis.com/datasets/HUD::multifamily-properties-assisted
+    parser: affordability.read_layer
+    limits: >-
+      Properties with an active HUD project-based assistance contract (Section 8,
+      Section 202/811 and similar). Only the first two contracts of a property carry
+      units and an expiration date; a third or later contract is not dated here. Many
+      contracts are renewed when they expire, so "expiring" marks a renewal decision,
+      not a certain loss. Properties that also hold tax credits are counted in both
+      programs.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      Keeps property id, total and assisted units, the first two contracts' units,
+      expiration dates and program, the county code and the point. Points are placed
+      in 2020 tracts. Only county and tract totals are written to the pack; names,
+      addresses and contacts are never read.
+    checked_on: 2026-11-24
+
+  - id: hud_public_housing
+    name: HUD Public Housing Developments (map service)
+    publisher: U.S. Department of Housing and Urban Development (HUD eGIS open data)
+    url_pattern: https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/Public_Housing_Developments/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: Map service as read on the build date (layer edited 2026-10)
+    geography: [point]
+    licence: Public domain (U.S. government work)
+    terms_url: https://hudgis-hud.opendata.arcgis.com/datasets/HUD::public-housing-developments
+    parser: affordability.read_layer
+    limits: >-
+      Public housing developments as reported by housing agencies; a scattered-site
+      development is one point. Units converted to project-based contracts (RAD) leave
+      this list and appear among assisted multifamily properties.
+    tier: 0
+    access: feature_service
+    cleaning: Keeps development code, dwelling units, units under the operating subsidy contract (ACC), occupied units, county code and the point. Only county and tract totals are written.
+    checked_on: 2026-11-24
+
+  - id: hud_hcv_tract
+    name: HUD Housing Choice Vouchers by Tract (map service)
+    publisher: U.S. Department of Housing and Urban Development (HUD eGIS open data)
+    url_pattern: https://services.arcgis.com/VTyQ9soqVukalItT/arcgis/rest/services/Housing_Choice_Vouchers_by_Tract/FeatureServer/0/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: Map service as read on the build date (2020 tracts)
+    geography: [tract]
+    licence: Public domain (U.S. government work)
+    terms_url: https://hudgis-hud.opendata.arcgis.com/datasets/HUD::housing-choice-vouchers-by-tract
+    parser: affordability.read_layer
+    limits: >-
+      Households using a tenant-based voucher, by the tract of the home they rent.
+      Vouchers move with the household, so they are assisted households, not assisted
+      homes, and are kept apart from the unit counts. Small counts are suppressed by HUD.
+    tier: 0
+    access: feature_service
+    cleaning: Keeps tract code and voucher households; suppressed or negative values become blanks.
+    checked_on: 2026-11-24
+
+  - id: nlihc_gap_2026
+    name: "The Gap: A Shortage of Affordable Homes, 2026 (cited benchmark, not ingested)"
+    publisher: National Low Income Housing Coalition
+    url_pattern: https://nlihc.org/gap
+    vintage: 2026 edition (state pages read 2026-11-24)
+    geography: [state]
+    licence: Cited publication; NLIHC terms allow linking and citing with credit, not copying or redistributing. A few state figures are quoted with attribution; no data are copied.
+    terms_url: https://nlihc.org/terms-of-use
+    parser: affordability.gap_context
+    limits: >-
+      State level only. Built by NLIHC from ACS microdata (PUMS) with its own income
+      and affordability rules; not comparable cell by cell with CHAS. Quoted as
+      context, never used in a calculation.
+    tier: 1
+    access: page
+    cleaning: None; the quoted figures and their page locators are in assumptions/affordability.yaml (gap_context).
+    checked_on: 2026-11-24
+
+  - id: philly_fed_rental_explorer
+    name: "Rental Housing Affordability Data Explorer (cited method reference, not ingested)"
+    publisher: Federal Reserve Bank of Philadelphia
+    url_pattern: https://www.philadelphiafed.org/surveys-and-data/community-development-data/rental-housing-affordability-data-explorer
+    vintage: Updated 2024-12-04 (ACS PUMS 2017, 2022; 2013-2017, 2018-2022)
+    geography: [state, metro area, county]
+    licence: Cited publication; no download or reuse terms were found (site footer "All rights reserved"), so no figures are copied.
+    terms_url: https://www.philadelphiafed.org/surveys-and-data/rental-housing-affordability-data-tool-methodology
+    parser: affordability.gap_context
+    limits: >-
+      Covers Pennsylvania, New Jersey and Delaware, but in Pennsylvania only the state,
+      a few metro areas and Philadelphia and Allegheny counties. Interactive only; no
+      file to fetch. Cited as the method reference for "affordable and available"
+      rentals; its assisted-stock view rests on NHPD data, which this tool does not use.
+    tier: 2
+    access: page
+    cleaning: None; cited in docs/modules/affordability.md.
+    checked_on: 2026-11-24
+
+  - id: phl_permits_featureserver
+    name: Philadelphia L&I permits map layer (ArcGIS FeatureServer PERMITS, layer 0), field list and counts only
+    publisher: City of Philadelphia, Department of Licenses and Inspections
+    url_pattern: https://services.arcgis.com/fLeGjb7u4uXqeF9q/ArcGIS/rest/services/PERMITS/FeatureServer/0
+    vintage: Field list and row counts as read on the check date (permits issued 2007 onward)
+    geography: [point]
+    licence: City of Philadelphia License (OpenDataPhilly listing, https://metadata.phila.gov/#help/help-faqs/what-are-the-terms-of-use/)
+    terms_url: https://opendataphilly.org/datasets/licenses-and-inspections-building-and-zoning-permits/
+    parser: evidence.phl_fields.check_fields
+    limits: >-
+      Same rows and columns as the City's SQL table permits (phl_li_permits). Date fields are
+      issue, completed, certificate of occupancy, denial and most recent inspection; there is
+      no application or received date, although the layer description mentions one. Applications
+      still in review are not included.
+    tier: 2
+    access: feature_service
+    cleaning: Only the field list and count queries are read; no rows are downloaded or kept.
+    checked_on: 2026-11-24
+
+  - id: ma_adu_survey
+    name: Massachusetts ADU tracker and ADU survey composite (applications and approvals by municipality)
+    publisher: Massachusetts Executive Office of Housing and Livable Communities
+    url_pattern: https://www.mass.gov/info-details/accessory-dwelling-unit-tracker
+    vintage: 2025 surveys (July 2025, January 2026) and July 2026 mid-year survey (January-June 2026)
+    geography: [state, municipality]
+    licence: Massachusetts state government publication; terms of use on mass.gov
+    terms_url: https://www.mass.gov/massgov-terms-of-use
+    parser: evidence.records.load_panel
+    limits: >-
+      Self-reported by local building officials; 293 municipalities answered a 2025 survey and
+      265 the 2026 survey, so totals are not a fixed panel. Approvals are building permits issued,
+      not homes finished. Applications and approvals in one period are different cohorts.
+    tier: 2
+    access: page
+    cleaning: Statewide figures are read by hand into assumptions/evidence/states/ma.yaml; nothing is fetched by script.
+    checked_on: 2026-11-24
+    notes: Municipal composite CSV https://www.mass.gov/files/csv/2026-08/ADUSurvey2026Midyear_DownloadableComposite.csv  # secret-scan: allow (a public URL path, not a key)
+
+  - id: open_states
+    name: Open States legislative data (discovery of state bills; not fetched)
+    publisher: Plural Policy (Open States project)
+    url_pattern: https://open.pluralpolicy.com/data/
+    vintage: current
+    geography: [state]
+    licence: Open States terms make no copyright claim over the data and need no attribution; public domain dedication unless noted
+    terms_url: https://open.pluralpolicy.com/tos/
+    parser: evidence.records.load_panel
+    limits: >-
+      A discovery aid only: bills found here are cited from the legislature's own page. Not
+      fetched for the cross-state panel; the API needs a key.
+    tier: 0
+    access: page
+    cleaning: None; candidates are listed by hand in assumptions/evidence/states/discovery.yaml.
+    checked_on: 2026-11-24
+
+  - id: nyu_furman_tracker
+    name: NYU Furman Center Land Use Reform Tracker (linked only, never fetched)
+    publisher: NYU Furman Center
+    url_pattern: https://www.furmancenter.org/land-use-reform-tracker/
+    vintage: current
+    geography: [state, place]
+    licence: No terms of use or data licence found; linked only
+    terms_url: https://www.furmancenter.org/land-use-reform-tracker/
+    parser: evidence.records.load_panel
+    limits: >-
+      A discovery aid only. Its terms are unclear, so nothing from it is fetched by script or
+      kept; any reform it points to is cited from official text.
+    tier: 0
+    access: page
+    cleaning: None.
+    checked_on: 2026-11-24
+
+  - id: aei_housing_tracker
+    name: AEI Housing Center state housing supply legislation tracker (linked only, never fetched)
+    publisher: American Enterprise Institute Housing Center
+    url_pattern: https://heat.aeihousingcenter.org/toolkit/tracker
+    vintage: current
+    geography: [state]
+    licence: Terms page covers privacy only; reuse terms unclear; linked only
+    terms_url: https://www.aei.org/about/terms-of-use/
+    parser: evidence.records.load_panel
+    limits: >-
+      A discovery aid only. Its reuse terms are unclear, so nothing from it is fetched by script
+      or kept; any reform it points to is cited from official text.
+    tier: 0
+    access: page
+    cleaning: None.
+    checked_on: 2026-11-24
+
+  - id: massgis_mbta3a_atlas
+    name: MBTA Communities (3A) District Atlas, districts layer (map service)
+    publisher: MassGIS for the Massachusetts Executive Office of Housing and Livable Communities (HLC)
+    url_pattern: https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/MBTA_Communities_3A_District_Atlas/FeatureServer/{layer}/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: Current when read (item updated 2026-11-03); the read date is stored with the table
+    geography: [zoning district, municipality]
+    licence: >-
+      "Data are public" (item licence); meant for policy analysis, research and public
+      understanding of zoning. Not a legal record of permitted uses; HLC's compliance
+      determination letter is the dispositive record
+    terms_url: https://www.arcgis.com/home/item.html?id=8ba86e99e59d4f20a75e3860e46a8ed8
+    parser: ma_intake.parse_3a_districts
+    limits: >-
+      Holds only districts in towns HLC has found compliant (159 towns, 494 districts on
+      2026-11-24); towns in interim compliance or noncompliant have none. Capacities are the
+      compliance model's estimates, not a build-out: the reported district capacity
+      (MFUC_DIST) is often filled where the cleaned and parcel-based fields are 0. Outlines
+      are simplified (about 20 m) and are not legal boundaries.
+    tier: 2
+    access: feature_service
+    cleaning: >-
+      Read in pages with the outlines generalised by the service (assumptions/ma_intake.yaml:
+      simplify_degrees, precision) in longitude and latitude. Attributes renamed; the
+      submission date (epoch milliseconds) becomes an ISO date. Each district gets its town's
+      county (Census county subdivisions) and the tract holding its centre.
+    checked_on: 2026-11-24
+
+  - id: massgis_mbta3a_parcels
+    name: MBTA Communities (3A) District Atlas, parcels layer with modeled unit capacity (map service)
+    publisher: MassGIS for the Massachusetts Executive Office of Housing and Livable Communities (HLC)
+    url_pattern: https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/MBTA_Communities_3A_District_Atlas/FeatureServer/{layer}/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: Current when read (layer last edited 2026-11-03); the edit and read dates are stored with the cached file
+    geography: [parcel, zoning district, municipality]
+    licence: >-
+      "Data are public" (item licence); meant for policy analysis, research and public
+      understanding of zoning. Not a legal record of permitted uses; HLC's compliance
+      determination letter is the dispositive record. Owner names and addresses are not
+      read. Only tract and district sums enter the pack; parcel outlines stay in the local
+      cache.
+    terms_url: https://www.arcgis.com/home/item.html?id=8ba86e99e59d4f20a75e3860e46a8ed8
+    parser: ma_capacity.fetch_capacity_layer
+    limits: >-
+      Only parcels in districts of towns HLC found fully compliant (29,992 parcels on
+      2026-11-25). Capacity is the compliance model's gross zoning capacity (F_L_M__), not
+      a build-out or a forecast; it does not subtract the homes already there (RB_RSDN).
+      The district parcel-sum field MFUC_PARC is 0 everywhere at this read; summing F_L_M__
+      over a district's parcels reproduces the reported district capacity MFUC_DIST.
+    tier: 2
+    access: feature_service
+    cleaning: >-
+      Read by object id in chunks of 100 with a fixed column list (assumptions/ma_intake.yaml
+      capacity.parcels); outlines simplified on the server to about 1 m. A parcel listed in
+      two overlapping districts keeps its larger capacity. Each parcel's capacity is split
+      across 2020 tracts by area (features/ma_capacity.py).
+    checked_on: 2026-11-25
+
+  - id: massgis_mbta3a_station_radii
+    name: MBTA Communities (3A) District Atlas, transit station half-mile radii (map service)
+    publisher: MassGIS for the Massachusetts Executive Office of Housing and Livable Communities (HLC)
+    url_pattern: https://services1.arcgis.com/hGdibHYSPO59RG1h/arcgis/rest/services/MBTA_Communities_3A_District_Atlas/FeatureServer/{layer}/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: Current when read (layer last edited 2026-11-03)
+    geography: [polygon]
+    licence: '"Data are public" (item licence). Used only as a check; nothing from it enters the pack.'
+    terms_url: https://www.arcgis.com/home/item.html?id=8ba86e99e59d4f20a75e3860e46a8ed8
+    parser: ma_capacity.fetch_capacity_layer
+    limits: >-
+      One dissolved shape: the half-mile circles the compliance model draws around
+      stations. Straight-line distance, not a walking network.
+    tier: 2
+    access: feature_service
+    cleaning: Read in one request by object id; simplified on the server to about 5 m.
+    checked_on: 2026-11-25
+
+  - id: massdep_sewer_service_areas
+    name: MassDEP estimated sewer system service area boundaries (POTW and non-POTW) and unmapped systems
+    publisher: Massachusetts Department of Environmental Protection, Water Utility Resilience Program (served by MassGIS)
+    url_pattern: https://arcgisserver.digital.mass.gov/arcgisserver/rest/services/AGOL/DEP_SEWER_SERVICE_AREAS/FeatureServer/{layer}/query  # secret-scan: allow (a public URL path, not a key)
+    vintage: PubV2025_10 (published October 2025; item updated 2025-12-15)
+    geography: [polygon]
+    licence: >-
+      Public state record. The item's terms are a data limitations disclaimer (estimates
+      for broad planning; not for site- or parcel-specific analysis; use at the user's
+      risk) and a requested citation: "MassDEP. Water Utility Resilience Program. 2025.
+      Publicly-Owned Treatment Work and Non-Publicly-Owned Sewer Service Areas
+      (PubV2025_10)." Redistribution is not addressed, so only per-tract shares of homes
+      enter the pack; the polygons stay in the local cache.
+    terms_url: https://www.arcgis.com/home/item.html?id=a2f07c0cf4a841f78ed74bda97b19cd5
+    parser: ma_capacity.fetch_sewer_layers
+    limits: >-
+      Estimated service areas, not connections or spare capacity: not every property
+      inside is served and some outside are. Many areas are unconfirmed by the system;
+      some are buffered sewer lines (300 ft) or whole town boundaries (towns at least 97%
+      served); some unmapped systems are drawn as small placeholder circles around the
+      plant, which are not service areas. Systems not yet mapped are listed in a table.
+    tier: 2
+    access: feature_service
+    cleaning: >-
+      Polygons read by object id with a fixed column list, simplified on the server to
+      about 5 m. Placeholder circles found by shape (assumptions/ma_intake.yaml
+      sewer_estimated). 2020 Census blocks placed by internal point; per-tract shares of
+      2020 housing units.
+    checked_on: 2026-11-25
+
+  - id: ma_3a_compliance_status
+    name: MBTA Communities compliance status sheet (CSV)
+    publisher: Massachusetts Executive Office of Housing and Livable Communities (HLC)
+    url_pattern: https://www.mass.gov/files/csv/2026-11/Compliance%20Status%20Sheet%20as%20of%2011-24-26.csv  # secret-scan: allow (a public URL path, not a key)
+    vintage: The dated sheet read (the file name carries its date); stored as status_as_of
+    geography: [municipality]
+    licence: Public record posted for download by the Commonwealth; mass.gov terms of use apply
+    terms_url: https://www.mass.gov/massgov-terms-of-use
+    parser: ma_intake.parse_compliance_status
+    limits: >-
+      A status list, not a measure of homes: compliance means zoning was adopted and
+      approved, not that anything was built. Interim compliance means an application is in
+      review. HLC posts a new file name for each update, so the address in
+      assumptions/ma_intake.yaml must be updated by hand. www.mass.gov refuses scripted
+      requests (HTTP 403 on 2026-11-24); the build respects that and reads a copy saved by
+      hand as data/raw/local/ma/mbta3a_compliance_status.csv, or else builds the status table
+      from the 3A atlas alone (compliant towns only).
+    tier: 2
+    access: file
+    cleaning: >-
+      Names and statuses trimmed; "-" details left empty; deadlines to ISO dates; Yes/No to
+      1/0. Joined to the categories file, the 3A atlas and the development tracker by town.
+    checked_on: 2026-11-24
+
+  - id: ma_3a_categories
+    name: MBTA Communities community categories and capacity calculations (CSV)
+    publisher: Massachusetts Executive Office of Housing and Livable Communities (HLC)
+    url_pattern: https://www.mass.gov/files/csv/2025-06/MBTA%20Communities%20Community%20Categories%20and%20Capacity%20Calculations%20for%20web_June2025.csv  # secret-scan: allow (a public URL path, not a key)
+    vintage: June 2025 file (last modified 2025-06-09)
+    geography: [municipality]
+    licence: Public record posted for download by the Commonwealth; mass.gov terms of use apply
+    terms_url: https://www.mass.gov/massgov-terms-of-use
+    parser: ma_intake.parse_categories
+    limits: >-
+      The requirement each town must meet (minimum unit capacity, land area, station-area
+      share), not what it zoned. Capacity is a zoning capacity, not a forecast of homes.
+    tier: 2
+    access: file
+    cleaning: Thousands commas and percent signs removed; "-" (no station area) left empty.
+    checked_on: 2026-11-24
+    notes: >-
+      www.mass.gov refuses scripted requests (HTTP 403 on 2026-11-24); the build respects that
+      and reads a copy saved by hand as data/raw/local/ma/mbta3a_categories.csv, or leaves these columns empty.
+
+  - id: ma_3a_development_tracker
+    name: 3A Development Tracker (CSV of developments HLC links to 3A zoning)
+    publisher: Massachusetts Executive Office of Housing and Livable Communities (HLC)
+    url_pattern: https://www.mass.gov/files/csv/2026-09/3A%20Development%20Tracker%20as%20of%209-11-26.csv  # secret-scan: allow (a public URL path, not a key)
+    vintage: As of 2026-09-11
+    geography: [municipality]
+    licence: Public record posted for download by the Commonwealth; mass.gov terms of use apply
+    terms_url: https://www.mass.gov/massgov-terms-of-use
+    parser: ma_intake.parse_development_tracker
+    limits: >-
+      Compiled by HLC from third-party information and its own judgement; may not be complete.
+      Listed projects may not reach a building permit. Mixes proposed, permitted and built
+      projects without a stage field.
+    tier: 2
+    access: file
+    cleaning: >-
+      Summed per town (projects, total units, net units, deed-restricted units). Developer
+      names and addresses are not kept.
+    checked_on: 2026-11-24
+    notes: >-
+      www.mass.gov refuses scripted requests (HTTP 403 on 2026-11-24); the build respects that
+      and reads a copy saved by hand as data/raw/local/ma/mbta3a_development_tracker.csv, or leaves these columns empty.
+
+  - id: ma_adu_survey_file
+    name: Massachusetts ADU survey composite, municipal file (CSV)
+    publisher: Massachusetts Executive Office of Housing and Livable Communities (HLC)
+    url_pattern: https://www.mass.gov/files/csv/2026-08/ADUSurvey2026Midyear_DownloadableComposite.csv  # secret-scan: allow (a public URL path, not a key)
+    vintage: Composite of the July 2025, January 2026 and July 2026 surveys (last modified 2026-08-12)
+    geography: [municipality]
+    licence: Public record posted for download by the Commonwealth; mass.gov terms of use apply
+    terms_url: https://www.mass.gov/massgov-terms-of-use
+    parser: ma_intake.parse_adu_survey
+    limits: >-
+      Self-reported by building officials; towns answered different waves, so the 2025
+      period is the full year for some towns and the first half for others (cohort column).
+      Approvals are building permits issued, not homes finished and not Building Permits
+      Survey authorizations (attached and interior ADUs are usually alterations). Detached and
+      attached only; interior ADUs are counted as attached. www.mass.gov refuses scripted
+      requests (HTTP 403 on 2026-11-24); the build respects that and adds the table only from
+      a copy saved by hand as data/raw/local/ma/ma_adu_survey.csv.
+    tier: 2
+    access: file
+    cleaning: >-
+      Reshaped to one row per town and survey period; "No response" gives no row (unknown is
+      not zero). The published totals are checked against the sum of the periods.
+    checked_on: 2026-11-24
+    notes: Same survey as ma_adu_survey (statewide figures read by hand for the evidence panel).
+
+  - id: ma_gl_40a
+    name: Massachusetts General Laws chapter 40A (Zoning), sections 1A, 3 and 3A
+    publisher: The General Court of the Commonwealth of Massachusetts
+    url_pattern: https://malegislature.gov/Laws/GeneralLaws/PartI/TitleVII/Chapter40A/Section{section}
+    vintage: Text read 2026-11-24
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://malegislature.gov/StateHouse/TermsAndConditions
+    parser: legislation.statute_text
+    limits: >-
+      The statute says what zoning may not do; it does not say how each town's bylaw reads
+      today or how often permits are refused. Boston is not subject to chapter 40A. The web
+      text is unofficial.
+    tier: 0
+    access: page
+    cleaning: >-
+      Read by hand. Only citations and summaries in our own words are kept, in
+      assumptions/law/states/ma.yaml and assumptions/calibration/already_legal_ma.yaml.
+    checked_on: 2026-11-25
+
+  - id: ma_acts_2024_c150
+    name: Acts of 2024, chapter 150 (the Affordable Homes Act), session law text
+    publisher: The General Court of the Commonwealth of Massachusetts
+    url_pattern: https://malegislature.gov/Laws/SessionLaws/Acts/2024/Chapter150
+    vintage: Approved August 6, 2024 (emergency law)
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://malegislature.gov/StateHouse/TermsAndConditions
+    parser: legislation.statute_text
+    limits: >-
+      Gives the amending sections and their effective dates, not how towns implemented them.
+    tier: 0
+    access: page
+    cleaning: >-
+      Read by hand: sections 7 and 8 (ADU definition and by-right ADU paragraph) and section
+      143 (effective 180 days after the act, so 2025-02-02). Kept as citations and our own
+      summaries in assumptions/law/states/ma.yaml.
+    checked_on: 2026-11-25
+
+  - id: bps_place_annual
+    name: Building Permits Survey, place (permit office) annual files by census region
+    publisher: U.S. Census Bureau
+    url_pattern: https://www2.census.gov/econ/bps/Place/{region_dir}/{region_code}{year}a.txt
+    vintage: 2012-2025 annual files (the 2025 file is the latest published)
+    geography: [place, county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.census.gov/about/policies/open-gov/open-data.html
+    expected_size: 1200000
+    parser: evidence.retro.parse_place_annual
+    limits: >-
+      Counts units authorized by each permit office, not units built. An office is a city,
+      town, township or a county's unincorporated area; offices that did not report some
+      months are partly imputed. One file per region and year (Northeast, Midwest, South,
+      West; region_dir is the folder name with %20 for the space).
+    tier: 0
+    access: file
+    cleaning: >-
+      Two header rows joined; columns read by name. Offices keyed by state code and six-digit
+      office id, matched to census places by state and place code. Only the offices used and
+      their yearly aggregates are kept in outputs; raw files stay in data/raw/bps_place/.
+    checked_on: 2026-11-24
+    notes: Used by `visionhousing evidence-retro` (retrospective reform panel).
+
+  - id: pa_montco_sewer_service_areas
+    name: Montgomery County (PA) sewer service areas, July 2022 edition (via PASDA)
+    publisher: Montgomery County, Pennsylvania (Planning Commission); served by PASDA
+    url_pattern: https://mapservices.pasda.psu.edu/server/rest/services/pasda/MontgomeryCounty/MapServer/18
+    vintage: 2022-07 (layer "Sewer Service Areas 202207")
+    geography: [polygon]
+    licence: >-
+      Public county record distributed through PASDA, Pennsylvania's official open geospatial
+      clearinghouse; the service metadata states no use constraint. Credited to Montgomery
+      County. Only per-tract shares of homes are kept.
+    terms_url: https://www.pasda.psu.edu/
+    parser: infrastructure.fetch_layer
+    limits: >-
+      A planning map of areas served by public sewer as of 2022; it does not show spare
+      treatment or conveyance capacity, and a parcel inside an area may still need an
+      extension. Homes outside every polygon are read as outside public sewer (the county
+      inventory is treated as complete).
+    tier: 2
+    access: feature_service
+    cleaning: >-
+      All 42 polygons, thinned by the server to about 5 m. 2020 Census blocks are placed by
+      their internal point; shares are of 2020 housing units.
+    checked_on: 2026-11-24
+
+  - id: pa_adams_sewer_service_areas
+    name: Adams County (PA) sewer service areas (existing), county GIS
+    publisher: Adams County, Pennsylvania (Office of Planning and Development GIS)
+    url_pattern: https://mapping.adamscountypa.gov/arcgis/rest/services/AGOL/SLD_Review_Layers/MapServer/130
+    vintage: layer updated 2024-09
+    geography: [polygon]
+    licence: >-
+      Public county record; the county's notice says the data are for information only and
+      that any service area should be verified with the provider. No redistribution limit
+      is stated. Only per-tract shares of homes are kept.
+    terms_url: https://www.arcgis.com/home/item.html?id=3d16a7f1f8ba4d2ea79a8181bf8cab4a
+    parser: infrastructure.fetch_layer
+    limits: >-
+      Approximate locations of public or community sewer from several authorities. The 17
+      "Future Sewer Service Area" polygons are left out; only the 36 existing areas count.
+    tier: 2
+    access: feature_service
+    cleaning: "Type = 'Existing' polygons only, thinned to about 5 m."
+    checked_on: 2026-11-24
+
+  - id: phl_pwd_wastewater
+    name: Philadelphia Water Department statement of citywide sewer service
+    publisher: Philadelphia Water Department
+    url_pattern: https://water.phila.gov/about-pwd/
+    vintage: page as read 2026-11-24
+    geography: [county]
+    licence: Public statement of a city agency; quoted briefly, nothing else is kept
+    terms_url: https://water.phila.gov/about-pwd/
+    parser: infrastructure.block_answers
+    limits: >-
+      A whole-city statement of the utility's service territory ("supplies drinking water,
+      wastewater, and stormwater services to customers within the City of Philadelphia";
+      its wastewater page adds "combined sewers in approximately half of the city's
+      neighborhoods and a separate sewer system in the other half"), not a parcel map: a
+      few properties on private on-lot systems would not show. It says nothing about
+      capacity for added homes or about combined-sewer overflow limits.
+    tier: 2
+    access: page
+    cleaning: Every Philadelphia block with homes is read as inside public sewer service.
+    checked_on: 2026-11-24
+
+  - id: vt_accd_wastewater_service_areas
+    name: Vermont known wastewater service areas in towns with zoning and subdivision rules (HOME Act map, 2023)
+    publisher: Vermont Agency of Commerce and Community Development (published by VCGI)
+    url_pattern: https://services1.arcgis.com/BkFxaEFNwHqX3tAw/arcgis/rest/services/FS_ACCD_2023_VT_HOME_Act_WM_v1/FeatureServer/20
+    vintage: 2023-08 (polygons dated by their own sources, 2003 to 2023)
+    geography: [polygon]
+    licence: >-
+      Public state record published by the Vermont Center for Geographic Information; no
+      licence is stated on the item. Credited to Vermont ACCD. Only per-tract shares of homes
+      are kept.
+    terms_url: https://www.arcgis.com/home/item.html?id=34ed176dbe814ba2a011e4d34c9f7e23
+    parser: infrastructure.fetch_layer
+    limits: >-
+      Covers only towns with both zoning and subdivision rules, and each polygon is as old as
+      its source (many 2008). Homes outside every polygon stay unknown rather than outside.
+      No capacity information.
+    tier: 2
+    access: feature_service
+    cleaning: All 104 polygons, thinned to about 5 m.
+    checked_on: 2026-11-24
+
+  - id: pa_dep_pws_service_areas
+    name: Pennsylvania public water supplier service areas (DEP, via PASDA)
+    publisher: Pennsylvania Department of Environmental Protection; served by PASDA
+    url_pattern: https://mapservices.pasda.psu.edu/server/rest/services/pasda/DEP2/MapServer/8
+    vintage: 2026-10 (layer "Public Water Supply 2026_10")
+    geography: [polygon]
+    licence: >-
+      Public state record (credited to PA DEP) distributed through PASDA; no use constraint
+      is stated. Only per-tract shares and provider names are kept.
+    terms_url: https://www.pasda.psu.edu/
+    parser: infrastructure.fetch_layer
+    limits: >-
+      Present service-area boundaries of public water systems, made for the State Water Plan
+      to find self-supplied areas; not a statement of spare supply. A home inside an area may
+      still need a main extension.
+    tier: 1
+    access: feature_service
+    cleaning: All 1,792 polygons, thinned to about 5 m; PWS ids prefixed with PA for links.
+    checked_on: 2026-11-24
+
+  - id: pa_dep_act537_plan_status
+    name: Pennsylvania DEP Act 537 official plan status (plan age by municipality)
+    publisher: Pennsylvania Department of Environmental Protection
+    url_pattern: https://files.dep.state.pa.us/Water/BPNPSM/WastewaterManagement/Act537/PlanStatusMaps/2025/{region}_Plan_Ages_2025_TableToExcel.pdf
+    vintage: 2025-05-29 (DEP's regional tables)
+    geography: [municipality]
+    licence: Public state record (PDF tables on DEP's website); no reuse limit stated
+    terms_url: https://www.pa.gov/agencies/dep/programs-and-services/water/clean-water/wastewater-management/act-537-sewage-facilities-program/plan-status-map
+    expected_size: 100208
+    parser: infrastructure.fetch_act537
+    limits: >-
+      Gives only the date DEP last approved each municipality's official sewage facilities
+      plan (or a pre-1971 county plan) and DEP's age class. An old plan is not a ban, and a
+      recent plan is not spare capacity.
+    tier: 1
+    access: file
+    cleaning: >-
+      Six regional PDF tables read with pypdf; rows matched to municipalities by name within
+      the county (2,534 of 2,569 matched on 2026-11-24).
+    checked_on: 2026-11-24
+
+  - id: epa_sewersheds
+    name: EPA sewersheds of the United States (version 1.3) and their endpoint treatment plants
+    publisher: U.S. Environmental Protection Agency (Office of Research and Development, Office of Water)
+    url_pattern: https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/National_Sewershed_Web_Map_Internal_WFL1/FeatureServer/0
+    vintage: version 1.3 (October 2026)
+    geography: [polygon, point]
+    licence: U.S. government work; the data and code are also released under the MIT licence
+    terms_url: https://github.com/USEPA/Sewersheds
+    parser: infrastructure.fetch_layer
+    limits: >-
+      Context only. Most boundaries are modelled with machine learning from hexagons of about
+      0.11 square km (Pennsylvania: 799 of 838 modelled; Vermont: 92 of 93 taken from a 2009
+      state map); EPA says they are not an authoritative source for property-level
+      connections. Never used for a tract's sewer status.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      The state's sewersheds (STATE_CODE) thinned to about 5 m; endpoint plants with their
+      authority and NPDES permit, giving the plant's EPA ECHO page as an official listing.
+    checked_on: 2026-11-24
+
+  - id: epa_cwns_2022
+    name: EPA Clean Watersheds Needs Survey 2022, documented needs by county
+    publisher: U.S. Environmental Protection Agency (Office of Water)
+    url_pattern: https://services.arcgis.com/cJ9YHowT8TU7DUyn/arcgis/rest/services/ARTN_COUNTY/FeatureServer/0
+    vintage: 2022 survey (needs as of January 1, 2022, in January 2022 dollars)
+    geography: [county]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.epa.gov/cwns
+    parser: infrastructure.fetch_cwns_county
+    limits: >-
+      Capital needs states documented for the survey (projects eligible for Clean Water State
+      Revolving Fund loans), summarized by county by EPA. Context only: a large need is not a
+      shortage of capacity, and a zero can mean nothing was submitted.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      Categories added up: treatment (I, II), sewer repair (III-A, III-B), new collector and
+      interceptor sewers (IV-A, IV-B), combined sewer overflow (V), stormwater, decentralized,
+      nonpoint source, total.
+    checked_on: 2026-11-24
+
+  - id: fema_nfhl
+    name: FEMA National Flood Hazard Layer (flood hazard zones and NFHL availability), public map service
+    publisher: Federal Emergency Management Agency
+    url_pattern: https://hazards.fema.gov/arcgis/rest/services/public/NFHL/MapServer/28
+    vintage: The layer as read (FEMA updates it continuously; the read date is kept per county)
+    geography: [polygon]
+    licence: Public domain (U.S. government work); FEMA's map service is keyless
+    terms_url: https://www.fema.gov/flood-maps/national-flood-hazard-layer
+    parser: hazards.flood_zones
+    limits: >-
+      The Special Flood Hazard Area is the regulatory 1% annual chance floodplain; it leaves
+      out flooding from heavy rain away from mapped streams, and some maps are decades old.
+      Where FEMA has no digital map (outside layer 0, "NFHL availability") flood shares are
+      left blank rather than zero.
+    tier: 0
+    access: feature_service
+    cleaning: >-
+      Polygons with SFHA_TF = 'T' touching each county's box, in Albers (EPSG:5070), thinned
+      by the server to 5 m, burned onto a 30 m grid by cell centre; nothing is stored but
+      counts and answer checksums.
+    checked_on: 2026-11-24
+
+  - id: usgs_annual_nlcd
+    name: USGS Annual NLCD land cover and fractional impervious surface (Collection 1), MRLC coverage service
+    publisher: U.S. Geological Survey (Multi-Resolution Land Characteristics Consortium)
+    url_pattern: https://www.mrlc.gov/geoserver/ows?service=WCS&version=1.0.0&request=GetCoverage&coverage={coverage}&time={year}-01-01T00:00:00.000Z
+    vintage: Annual NLCD year 2025 (the latest year in the service's time list on 2026-11-24)
+    geography: [30 m grid]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.mrlc.gov/data
+    parser: hazards.nlcd_grid
+    limits: >-
+      Satellite classification at 30 m: small lots, narrow streets and tree-covered yards are
+      blurred; the developed classes include parks and lawns (class 21). Screening only.
+    tier: 0
+    access: api
+    cleaning: >-
+      One uncompressed GeoTIFF per county box on the NLCD's own grid; land is every cell but
+      open water and no data; shares are cell counts per tract.
+    checked_on: 2026-11-24
+
+  - id: usgs_3dep_dem
+    name: USGS 3D Elevation Program bare-earth elevation (3DEPElevation image service)
+    publisher: U.S. Geological Survey (The National Map)
+    url_pattern: https://elevation.nationalmap.gov/arcgis/rest/services/3DEPElevation/ImageServer/exportImage
+    vintage: 3DEP DEMs published as of the read date (the service said October 26, 2026)
+    geography: [30 m grid]
+    licence: Public domain (U.S. government work)
+    terms_url: https://www.usgs.gov/3d-elevation-program
+    parser: hazards.dem_grid
+    limits: >-
+      Resampled by the service to 30 m (bilinear), so short steep banks are smoothed and the
+      steep share is a lower bound for small sites. Screening only.
+    tier: 0
+    access: api
+    cleaning: >-
+      One float32 GeoTIFF per county box on the 30 m Albers grid; slope by central
+      differences; cells next to missing elevation are left out.
+    checked_on: 2026-11-24
+
+  - id: wy_statutes
+    name: Wyoming Statutes Titles 15 and 18 (city, town and county zoning) and session bill digests
+    publisher: Wyoming State Legislature
+    url_pattern: https://wyoleg.gov/statutes/compress/title{title}.pdf
+    vintage: Text read 2026-11-24 (statutes as compiled after the 2026 budget session)
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://wyoleg.gov/
+    parser: legislation.statute_text
+    limits: >-
+      The statutes say what cities, towns and counties may regulate, not what each local code
+      allows today. Wyoming has no state ADU, missing-middle, transit-density, parking or fee
+      statute, so this source supports a finding of silence, not a share of lots. The web
+      PDFs are unofficial compilations.
+    tier: 0
+    access: page
+    cleaning: >-
+      Read by hand: W.S. 15-1-601 to 15-1-611, 18-5-201 to 18-5-208 and 18-5-303, and the 2025
+      and 2026 subject indexes and bill digests. Only citations and summaries in our own words
+      are kept, in assumptions/law/states/wy.yaml.
+    checked_on: 2026-11-24
+
+  - id: vt_acts_2026
+    name: Vermont Acts 152 (S.325) and 179 (S.328) of 2026, as enacted, with their bill status pages
+    publisher: Vermont General Assembly
+    url_pattern: https://legislature.vermont.gov/Documents/2026/Docs/ACTS/ACT{act}/ACT{act}%20As%20Enacted.pdf
+    vintage: >-
+      As enacted (Act 152 signed June 16, 2026; Act 179 signed June 18, 2026; both effective
+      July 1, 2026). Text and bill status pages re-read 2026-11-25
+    geography: [state]
+    licence: Public legislative record
+    terms_url: https://legislature.vermont.gov/
+    parser: legislation.statute_text
+    limits: >-
+      The acts say what changed in law and from when; they do not say how many towns have
+      updated their bylaws or how many projects used the Act 250 exemption. The enacted PDFs
+      mark changes by strike-through and underline; the meaning of a struck word is read from
+      those marks by hand. The web copies are not the official printed session laws.
+    tier: 0
+    access: page
+    cleaning: >-
+      Read by hand: Act 152 Sec. 6 (10 V.S.A. § 6081(dd), the Act 250 interim housing exemption
+      extended to January 1, 2028) and Sec. 23 (effective dates); Act 179 Sec. 9 (24 V.S.A.
+      § 4412(1)(E), owner-occupancy words struck from the ADU rule), Sec. 9a and Sec. 14
+      (effective dates). Kept as dated records with citations and our own summaries in
+      assumptions/law/timeline.yaml.
+    checked_on: 2026-11-25

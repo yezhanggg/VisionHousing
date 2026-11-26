@@ -1,0 +1,122 @@
+# Validation cards: what every published coverage count refers to, and extra scores.
+#
+# Read by visionhousing.validation.cards; the command `visionhousing validate-cards`
+# writes assumptions/calibration/validation_cards.yaml. Method:
+# docs/modules/validation_cards.md.
+#
+# Why: different screens quote different validation exercises ("8/8", "10/11",
+# "6/11", "545/1,004"). Each is a count of past five-year totals caught by a range,
+# but they come from different studies, origins, targets and geographies. A card
+# names all of these so every count is traceable. It also adds scores the counts
+# hide: an interval score (penalises misses AND width), the signed error, error by
+# size, a subset of non-overlapping windows, and the timeline of each fold.
+#
+# The block below was written on 2026-11-25 BEFORE any of its scores was computed,
+# and its fingerprint recorded in assumptions/preregistration.yaml (block
+# validation_card_scores). The coverage counts themselves were already published by
+# their own studies; the card re-derives them case by case and checks that it gets
+# the same count (parity) before showing any new score. Re-deriving changes no
+# study's rules and no published count.
+
+version: 1
+
+validation_card_scores:
+  written_on: 2026-11-25
+  # Studies whose cases are re-derived (per case: origin, geography, lower, upper,
+  # point, actual). Each re-derivation calls the study's own building blocks.
+  studies:
+    baseline_reliability_state:
+      results: assumptions/calibration/baseline_reliability.yaml
+      block: baseline_reliability
+      geography: state
+      point: p50
+    baseline_reliability_county:
+      results: assumptions/calibration/baseline_reliability.yaml
+      block: baseline_reliability
+      geography: county
+      point: projected
+    state_holdouts:
+      results: assumptions/calibration/state_holdouts.yaml
+      block: state_holdout_check
+      geography: state
+      point: projected
+  # Studies listed with their names, origins, target and release only (no case-level
+  # re-derivation in this release; their own files hold the counts).
+  listed_only: [national_state_calibration]
+  parity: >-
+    The re-derived count (covered, cases) must equal the study's published count. If
+    it does not, the card shows the published count, marks parity as failed and shows
+    no new score.
+  interval_level: 0.8  # every scored range is P10-P90
+  metrics:
+    interval_score: >-
+      Gneiting-Raftery interval score of a central (1 - alpha) range, alpha = 0.2:
+      IS = (U - L) + (2 / alpha) * (L - y) * [y < L] + (2 / alpha) * (y - U) * [y > U],
+      divided by the actual total y so states and counties of different sizes compare.
+      Lower is better. Reported: mean and median over cases, and the mean of its two
+      parts (width part (U - L) / y; miss part, the rest).
+    signed_error: >-
+      log(actual / point) per case, where point is the study's own centre (P50 for the
+      state range, the rule's projection elsewhere). Above zero: more homes were
+      permitted than the centre said. Reported: median, mean, and the shares of misses
+      above the top and below the bottom.
+    width: mean of (U - L) / point
+    error_by_size: >-
+      County cards: by the study's own size class at each case's origin (small, medium,
+      large). State cards: one row per state on a cross-state table, states ordered by
+      their mean actual five-year total.
+    non_overlapping: >-
+      Five-year target windows of consecutive origins share four years, so the cases
+      are not independent. Subset: origins spaced by the horizon (5 years), anchored at
+      the latest scored origin and stepping back. Reported for that primary anchor and
+      for every other anchor (offsets 0 to horizon - 1), with the lowest and highest
+      coverage across anchors. Counted per geography and pooled within the card.
+  fold_timeline: >-
+    One row per origin: train years (first data year to the origin: the errors used
+    are from cases whose five target years had ended by the origin), gap years
+    (origin + 1 to origin + lead - 1), evaluation years (origin + lead to origin + lead
+    + horizon - 1) and selection years (the years the rule and its settings were
+    chosen on: the full record), with a flag when selection overlaps evaluation.
+  disclosures:
+    selection_full_record: >-
+      The projection rule each study scores (and the baseline's bias-correction and
+      widening settings) was chosen on the full record, which includes the evaluation
+      years of every fold, so the counts are somewhat favourable. Not rebuilt now.
+    present_day_place_types: >-
+      The baseline contest that chose each state's rule describes counties with
+      today's place types (county typology and tract mix), not the types known at each
+      origin. County ranges use size classes computed at each origin. Origin-specific
+      typologies are not rebuilt in this release.
+
+# ---------------------------------------------------------------- card text
+# Plain-language names for each study's cards (descriptive only; not part of the
+# fingerprinted block above, and no score depends on them).
+card_text:
+  baseline_reliability_state:
+    study: Measured reliability of the baseline range (state range)
+    command: visionhousing validate-baseline-reliability
+    method: >-
+      The state range as shipped, rebuilt at each past start year from the state's own
+      earlier state-total errors (centred, then widened as the engine widens it).
+    target: Five-year total of units authorized by building permits in the state (BPS county files added up)
+  baseline_reliability_county:
+    study: Measured reliability of the baseline range (county ranges)
+    command: visionhousing validate-baseline-reliability
+    method: >-
+      Each county's range from other counties' earlier errors in its size class (the
+      contest's leave-one-county-out test, out of time).
+    target: Five-year total of units authorized by building permits in each county
+  state_holdouts:
+    study: State confidence check (current range method, held out of time)
+    command: visionhousing validate-state-holdouts
+    method: >-
+      The state's own state-total error record blended toward Pennsylvania's, only
+      widened, scored with one fixed rule for every state (not each state's shipped rule).
+    target: Five-year total of units authorized by building permits in the state (national BPS county panel)
+  national_state_calibration:
+    study: National state-total calibration (pre-registered test; not adopted)
+    command: visionhousing validate-national-state-calibration
+    method: >-
+      A state range from every state's earlier state-total errors (two variants);
+      listed here with its counts only.
+    target: Five-year total of units authorized by building permits in the state (national BPS county panel)

@@ -1,0 +1,3752 @@
+# Retrospective panel: treatment-date audit results (generated; do not edit).
+# Written by `visionhousing evidence-retro audit` from the pre-registered block in
+# assumptions/evidence/retro_audit.yaml (retro_treatment_audit) and the original
+# design. Evidence only: nothing here enters a model run. Rates are units authorized
+# per 1,000 housing units per year. Method: docs/modules/evidence_retro.md.
+
+version: 1
+id: retro_treatment_audit_results
+label: 'Retrospective panel: treatment-date audit (before and after)'
+use: evidence only; never a multiplier on a model run
+provenance:
+  measured_on: '2026-11-25'
+  generated_by: visionhousing evidence-retro audit
+  audit_file: assumptions/evidence/retro_audit.yaml
+  audit_sha256: ce053e535b40a40df27b7b14da88ce14a85874dc6d7482905356e3aea9d99936
+  design_file: assumptions/evidence/retro_design.yaml
+  design_sha256: e441d21aca39f230281a4194618f4c21e5e2ee9352fb5b1825e0a078204c7fdf
+  before_file: assumptions/evidence/retro_results.yaml
+  before_sha256: 9a8db6905cb4b6c86764c7477951474965f1408658074668f8836ab04da22f20
+  preregistration:
+  - block: retro_design
+    file: assumptions/evidence/retro_design.yaml
+    sha256: 8cd8ea6fae830de67ff57d9aca7a403ec82a3a538aed8684ea40462583ab388d
+    recorded_on: '2026-11-24'
+    verified: true
+  - block: retro_treatment_audit
+    file: assumptions/evidence/retro_audit.yaml
+    sha256: 6df46e11f705316757c269c474867ac458ad3c83f5ccd7b473a15de7e70fe76f
+    recorded_on: '2026-11-25'
+    verified: true
+  method: docs/modules/evidence_retro.md (Treatment-date audit)
+  panel:
+    offices_read: 3462
+    pool: 81
+    cases: 6
+    removed_by_rule:
+      population: 3163
+      full_reporting: 95
+      excluded_state: 89
+      all_years: 25
+      local_reformer: 3
+    excluded_states:
+    - AZ
+    - CA
+    - CO
+    - FL
+    - MA
+    - ME
+    - NJ
+    - OR
+    - WA
+  pool_frozen_to_original:
+    excluded_states:
+    - AZ
+    - CA
+    - CO
+    - FL
+    - MA
+    - ME
+    - NJ
+    - OR
+    - WA
+    excluded_states_today:
+    - AZ
+    - CA
+    - CO
+    - CT
+    - FL
+    - MA
+    - MD
+    - ME
+    - MT
+    - NC
+    - NH
+    - NJ
+    - NV
+    - OR
+    - RI
+    - UT
+    - VT
+    - WA
+    note: Today's verified statewide records exclude more states than the original run did; the audit
+      keeps the original run's list so that before and after differ only in treatment years and the comparison
+      rule.
+  reproduction:
+    what: The original design re-run on the original pool and files; its estimates must match the published
+      'before' record (rounding to 4 decimals).
+    pool: 81
+    same_bps_files: true
+    max_abs_diff_att: 0.0
+    matches: true
+  bps_place_files: 56
+  acs:
+    url: https://www2.census.gov/programs-surveys/acs/summary_file/2024/table-based-SF/data/5YRData/acsdt5y2024-b25001.dat
+    kept_bytes: 875458
+    sha256_kept: f21917eb5adfa258fd5f0221197c6840e590dc2823fd1d88f8371e04521ba8bf
+year_convention:
+  rule: g = year of the effective date if it falls on or before June 30, else the next year
+  partial_year: Data are calendar-year counts, so a year is either treated or not; nothing is pro-rated.
+    When the effective date is after June 30, the months under the rule fall in the last base year (g-1),
+    which is then a partly treated base year; when it is on or before June 30, the first treated year
+    g has up to six months before the rule. Each case names its partial year below. A reform in force
+    on January 1 has none.
+  sensitivity_conventions:
+    any_exposure: g = calendar year of the effective date (a partial year counts as treated)
+    first_full_year_all_phases: g = first calendar year in which every listed phase of the case's 2-4
+      unit treatment was in force for the whole year
+reading_rule:
+  adoption: 'Decided before scoring, whatever the estimates: the audited variant becomes the panel''s
+    reference record for every case (it changes the treatment year only for Saint Paul). The original
+    results file is kept unchanged as the "before" record. Sensitivity variants are shown beside it and
+    never replace it.'
+  robustness: A case is called robust to the date convention only if the 90% intervals of its primary
+    outcome under audited, any_exposure and first_full_year_all_phases have the same relation to zero
+    (all include zero, or all exclude it on the same side).
+  null_results: An interval that includes zero is reported as "no change distinguishable from ordinary
+    cities", never dropped and never described as a negative or positive effect.
+treatments:
+- record: mn.minneapolis_2040_plan
+  name: Minneapolis
+  treatment: Minneapolis 2040 Comprehensive Plan policies in effect (city-wide 1-3 units)
+  phase: single date
+  effective_date: 2020-01-01
+  partial_year: none
+  other_phases:
+  - what: Land Use Rezoning Study
+    effective_date: 2023-07-01
+    role: later change inside the horizon
+  date_check: verified by script (minneapolis2040.com overview, 2026-11-25); the 1-3 unit zoning ordinance's
+    own date was not confirmed
+  g:
+    audited: 2020
+    any_exposure: 2020
+    first_full_year_all_phases: 2020
+- record: mn.saint_paul_1to4_units
+  name: Saint Paul
+  treatment: Ordinance 23-43 (1-4 Unit Housing Study Phase 2), duplexes to fourplexes in more places
+  phase: Phase 2
+  effective_date: 2023-11-26
+  partial_year: 2023 (36 days under Phase 2) is the last base year
+  other_phases:
+  - what: Ordinance 22-1 (Phase 1; small homes
+    ADUs: null
+    small parcels): null
+    effective_date: 2022-03-05
+    role: earlier phase; in force through the base years 2022-2023
+  date_check: verified by script (stpaul.gov 1-4 Unit Housing Study page, 2026-11-25)
+  g:
+    audited: 2024
+    any_exposure: 2023
+    first_full_year_all_phases: 2024
+  g_before: 2022
+- record: or.portland_rip_2021
+  name: Portland
+  treatment: Ordinance 190093 (Residential Infill Project, first phase), directives b, d, f, g, h
+  phase: RIP1
+  effective_date: 2021-08-01
+  partial_year: 2021 (5 months under RIP1) is the last base year
+  other_phases:
+  - what: Ordinance 190851 (RIP2; R10/R20 zones
+    attached houses: null
+    cottage clusters): null
+    effective_date: 2022-06-30
+    role: second phase; in force from the middle of the first treated year
+  date_check: verified by script (Ordinance 190093 text on efiles.portlandoregon.gov; portland.gov RIP2
+    page, 2026-11-25)
+  g:
+    audited: 2022
+    any_exposure: 2021
+    first_full_year_all_phases: 2023
+  g_before: 2022
+- record: nc.raleigh_missing_middle_2021
+  name: Raleigh
+  treatment: Text change TC-5-20 (Ordinance 263-TC-451), Missing Middle Housing
+  phase: single date
+  effective_date: 2021-08-05
+  partial_year: 2021 (about 5 months) is the last base year
+  other_phases: []
+  date_check: not verified by script (raleighnc.gov refused the request with HTTP 403, 2026-11-25); date
+    kept from the verified record
+  g:
+    audited: 2022
+    any_exposure: 2021
+    first_full_year_all_phases: 2022
+- record: wa.spokane_boca_2022
+  name: Spokane
+  treatment: Ordinance C36232 (Building Opportunity and Choices for All, interim)
+  phase: interim ordinance
+  effective_date: 2022-08-27
+  partial_year: 2022 (about 4 months) is the last base year
+  other_phases:
+  - what: permanent Building Opportunity for Housing code (approved 2023-11-20; residential interim portions
+      expired 2023-12-18)
+    effective_date: null
+    role: continuation inside the horizon
+  date_check: 'month verified by script (my.spokanecity.org page: "expected to go into effect in August
+    2022"); exact day not verified by script (the city''s document server refused robots.txt with HTTP
+    403)'
+  g:
+    audited: 2023
+    any_exposure: 2022
+    first_full_year_all_phases: 2023
+- record: va.arlington_eho_2023
+  name: Arlington County
+  treatment: Zoning Ordinance 10.4 Expanded Housing Option amendments
+  phase: single date
+  effective_date: 2023-07-01
+  partial_year: 2023 (6 months) is the last base year
+  other_phases:
+  - what: court halt 2024-09-27; permits open again 2025-10-01
+    effective_date: 2025-10-01
+    role: interruption inside the horizon
+  date_check: not verified by script (arlingtonva.us refused robots.txt with HTTP 403, 2026-11-25); date
+    kept from the verified record
+  g:
+    audited: 2024
+    any_exposure: 2023
+    first_full_year_all_phases: 2024
+primary_outcome: units_2_4
+before_after:
+- record: mn.minneapolis_2040_plan
+  name: Minneapolis
+  treatment: Minneapolis 2040 Comprehensive Plan policies in effect (city-wide 1-3 units)
+  effective_date: '2020-01-01'
+  before:
+    g: 2020
+    post_years: 5
+    att: -0.1514
+    ci:
+    - -0.8022
+    - 0.2655
+    includes_zero: true
+    p_value: 0.7317
+    pretrend_p: 0.4512
+    placebo_date_p: 0.3415
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  after:
+    g: 2020
+    post_years: 5
+    att: -0.159
+    ci:
+    - -0.8024
+    - 0.2657
+    includes_zero: true
+    p_value: 0.7317
+    pretrend_p: 0.4512
+    placebo_date_p: 0.3293
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  g_changed: false
+  variants:
+    audited:
+      g: 2020
+      post_years: 5
+      att: -0.159
+      ci:
+      - -0.8024
+      - 0.2657
+      includes_zero: true
+      p_value: 0.7317
+      pretrend_p: 0.4512
+      placebo_date_p: 0.3293
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    dates_only:
+      g: 2020
+      post_years: 5
+      att: -0.1508
+      ci:
+      - -0.8022
+      - 0.2655
+      includes_zero: true
+      p_value: 0.7317
+      pretrend_p: 0.4512
+      placebo_date_p: 0.3415
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    any_exposure:
+      g: 2020
+      post_years: 5
+      att: -0.159
+      ci:
+      - -0.8024
+      - 0.2657
+      includes_zero: true
+      p_value: 0.7317
+      pretrend_p: 0.4512
+      placebo_date_p: 0.3293
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    first_full_year_all_phases:
+      g: 2020
+      post_years: 5
+      att: -0.159
+      ci:
+      - -0.8024
+      - 0.2657
+      includes_zero: true
+      p_value: 0.7317
+      pretrend_p: 0.4512
+      placebo_date_p: 0.3293
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+  robust_to_convention: true
+- record: mn.saint_paul_1to4_units
+  name: Saint Paul
+  treatment: Ordinance 23-43 (1-4 Unit Housing Study Phase 2), duplexes to fourplexes in more places
+  effective_date: '2023-11-26'
+  before:
+    g: 2022
+    post_years: 4
+    att: 0.0485
+    ci:
+    - -0.6858
+    - 0.7292
+    includes_zero: true
+    p_value: 0.9146
+    pretrend_p: 0.9024
+    placebo_date_p: 0.878
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  after:
+    g: 2024
+    post_years: 2
+    att: 0.1566
+    ci:
+    - -1.0627
+    - 0.8138
+    includes_zero: true
+    p_value: 0.8293
+    pretrend_p: 0.9146
+    placebo_date_p: 0.9878
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  g_changed: true
+  variants:
+    audited:
+      g: 2024
+      post_years: 2
+      att: 0.1566
+      ci:
+      - -1.0627
+      - 0.8138
+      includes_zero: true
+      p_value: 0.8293
+      pretrend_p: 0.9146
+      placebo_date_p: 0.9878
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    dates_only:
+      g: 2024
+      post_years: 2
+      att: 0.1566
+      ci:
+      - -1.0627
+      - 0.8138
+      includes_zero: true
+      p_value: 0.8293
+      pretrend_p: 0.9146
+      placebo_date_p: 0.9878
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    any_exposure:
+      g: 2023
+      post_years: 3
+      att: 0.1371
+      ci:
+      - -0.7393
+      - 1.0547
+      includes_zero: true
+      p_value: 0.622
+      pretrend_p: 0.8293
+      placebo_date_p: 0.7927
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    first_full_year_all_phases:
+      g: 2024
+      post_years: 2
+      att: 0.1566
+      ci:
+      - -1.0627
+      - 0.8138
+      includes_zero: true
+      p_value: 0.8293
+      pretrend_p: 0.9146
+      placebo_date_p: 0.9878
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+  robust_to_convention: true
+- record: or.portland_rip_2021
+  name: Portland
+  treatment: Ordinance 190093 (Residential Infill Project, first phase), directives b, d, f, g, h
+  effective_date: '2021-08-01'
+  before:
+    g: 2022
+    post_years: 4
+    att: -0.3888
+    ci:
+    - -1.1231
+    - 0.2919
+    includes_zero: true
+    p_value: 0.2317
+    pretrend_p: 0.5366
+    placebo_date_p: 0.7927
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  after:
+    g: 2022
+    post_years: 4
+    att: -0.3894
+    ci:
+    - -1.1231
+    - 0.292
+    includes_zero: true
+    p_value: 0.2317
+    pretrend_p: 0.5244
+    placebo_date_p: 0.7805
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  g_changed: false
+  variants:
+    audited:
+      g: 2022
+      post_years: 4
+      att: -0.3894
+      ci:
+      - -1.1231
+      - 0.292
+      includes_zero: true
+      p_value: 0.2317
+      pretrend_p: 0.5244
+      placebo_date_p: 0.7805
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    dates_only:
+      g: 2022
+      post_years: 4
+      att: -0.3884
+      ci:
+      - -1.1231
+      - 0.2919
+      includes_zero: true
+      p_value: 0.2317
+      pretrend_p: 0.5366
+      placebo_date_p: 0.7927
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    any_exposure:
+      g: 2021
+      post_years: 5
+      att: -0.4279
+      ci:
+      - -1.0607
+      - 0.1836
+      includes_zero: true
+      p_value: 0.2195
+      pretrend_p: 0.5488
+      placebo_date_p: 0.9756
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    first_full_year_all_phases:
+      g: 2023
+      post_years: 3
+      att: -0.1611
+      ci:
+      - -1.0375
+      - 0.7565
+      includes_zero: true
+      p_value: 0.561
+      pretrend_p: 0.1707
+      placebo_date_p: 0.1341
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+  robust_to_convention: true
+- record: nc.raleigh_missing_middle_2021
+  name: Raleigh
+  treatment: Text change TC-5-20 (Ordinance 263-TC-451), Missing Middle Housing
+  effective_date: '2021-08-05'
+  before:
+    g: 2022
+    post_years: 4
+    att: 0.0074
+    ci:
+    - -0.727
+    - 0.6881
+    includes_zero: true
+    p_value: 0.9878
+    pretrend_p: 0.878
+    placebo_date_p: 0.8415
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  after:
+    g: 2022
+    post_years: 4
+    att: 0.0067
+    ci:
+    - -0.727
+    - 0.6882
+    includes_zero: true
+    p_value: 0.9878
+    pretrend_p: 0.878
+    placebo_date_p: 0.8415
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  g_changed: false
+  variants:
+    audited:
+      g: 2022
+      post_years: 4
+      att: 0.0067
+      ci:
+      - -0.727
+      - 0.6882
+      includes_zero: true
+      p_value: 0.9878
+      pretrend_p: 0.878
+      placebo_date_p: 0.8415
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    dates_only:
+      g: 2022
+      post_years: 4
+      att: 0.0077
+      ci:
+      - -0.727
+      - 0.688
+      includes_zero: true
+      p_value: 0.9878
+      pretrend_p: 0.878
+      placebo_date_p: 0.8415
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    any_exposure:
+      g: 2021
+      post_years: 5
+      att: -0.0113
+      ci:
+      - -0.6441
+      - 0.6002
+      includes_zero: true
+      p_value: 0.9756
+      pretrend_p: 0.9024
+      placebo_date_p: 0.9756
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    first_full_year_all_phases:
+      g: 2022
+      post_years: 4
+      att: 0.0067
+      ci:
+      - -0.727
+      - 0.6882
+      includes_zero: true
+      p_value: 0.9878
+      pretrend_p: 0.878
+      placebo_date_p: 0.8415
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+  robust_to_convention: true
+- record: wa.spokane_boca_2022
+  name: Spokane
+  treatment: Ordinance C36232 (Building Opportunity and Choices for All, interim)
+  effective_date: '2022-08-27'
+  before:
+    g: 2023
+    post_years: 3
+    att: 0.5965
+    ci:
+    - -0.28
+    - 1.514
+    includes_zero: true
+    p_value: 0.1829
+    pretrend_p: 0.3902
+    placebo_date_p: 0.3659
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  after:
+    g: 2023
+    post_years: 3
+    att: 0.5965
+    ci:
+    - -0.28
+    - 1.5141
+    includes_zero: true
+    p_value: 0.1829
+    pretrend_p: 0.3902
+    placebo_date_p: 0.3537
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  g_changed: false
+  variants:
+    audited:
+      g: 2023
+      post_years: 3
+      att: 0.5965
+      ci:
+      - -0.28
+      - 1.5141
+      includes_zero: true
+      p_value: 0.1829
+      pretrend_p: 0.3902
+      placebo_date_p: 0.3537
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    dates_only:
+      g: 2023
+      post_years: 3
+      att: 0.5966
+      ci:
+      - -0.28
+      - 1.514
+      includes_zero: true
+      p_value: 0.1829
+      pretrend_p: 0.3902
+      placebo_date_p: 0.3659
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    any_exposure:
+      g: 2022
+      post_years: 4
+      att: 0.3784
+      ci:
+      - -0.3554
+      - 1.0598
+      includes_zero: true
+      p_value: 0.2439
+      pretrend_p: 0.4878
+      placebo_date_p: 0.4268
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    first_full_year_all_phases:
+      g: 2023
+      post_years: 3
+      att: 0.5965
+      ci:
+      - -0.28
+      - 1.5141
+      includes_zero: true
+      p_value: 0.1829
+      pretrend_p: 0.3902
+      placebo_date_p: 0.3537
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+  robust_to_convention: true
+- record: va.arlington_eho_2023
+  name: Arlington County
+  treatment: Zoning Ordinance 10.4 Expanded Housing Option amendments
+  effective_date: '2023-07-01'
+  before:
+    g: 2024
+    post_years: 2
+    att: -0.1847
+    ci:
+    - -1.404
+    - 0.4725
+    includes_zero: true
+    p_value: 0.7439
+    pretrend_p: 0.7317
+    placebo_date_p: 0.6463
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  after:
+    g: 2024
+    post_years: 2
+    att: -0.1847
+    ci:
+    - -1.404
+    - 0.4725
+    includes_zero: true
+    p_value: 0.7439
+    pretrend_p: 0.7317
+    placebo_date_p: 0.6463
+    identification: causal
+    label_reasons:
+    - pre-trend, placebo-date and pool-size checks passed
+    comparisons: 81
+  g_changed: false
+  variants:
+    audited:
+      g: 2024
+      post_years: 2
+      att: -0.1847
+      ci:
+      - -1.404
+      - 0.4725
+      includes_zero: true
+      p_value: 0.7439
+      pretrend_p: 0.7317
+      placebo_date_p: 0.6463
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    dates_only:
+      g: 2024
+      post_years: 2
+      att: -0.1847
+      ci:
+      - -1.404
+      - 0.4725
+      includes_zero: true
+      p_value: 0.7439
+      pretrend_p: 0.7317
+      placebo_date_p: 0.6463
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    any_exposure:
+      g: 2023
+      post_years: 3
+      att: -0.1134
+      ci:
+      - -0.9898
+      - 0.8042
+      includes_zero: true
+      p_value: 0.7805
+      pretrend_p: 0.6463
+      placebo_date_p: 0.5976
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+    first_full_year_all_phases:
+      g: 2024
+      post_years: 2
+      att: -0.1847
+      ci:
+      - -1.404
+      - 0.4725
+      includes_zero: true
+      p_value: 0.7439
+      pretrend_p: 0.7317
+      placebo_date_p: 0.6463
+      identification: causal
+      label_reasons:
+      - pre-trend, placebo-date and pool-size checks passed
+      comparisons: 81
+  robust_to_convention: true
+pooled:
+  before:
+    overall: -0.0121
+    ci:
+    - -0.2598
+    - 0.253
+    includes_zero: true
+    pretrend_p: 0.579
+    treated: 6
+    comparisons: 81
+  audited:
+    overall: 0.0044
+    ci:
+    - -0.2476
+    - 0.2665
+    includes_zero: true
+    pretrend_p: 0.251
+    treated: 6
+    comparisons: 81
+  dates_only:
+    overall: 0.0062
+    ci:
+    - -0.2447
+    - 0.2672
+    includes_zero: true
+    pretrend_p: 0.228
+    treated: 6
+    comparisons: 81
+  any_exposure:
+    overall: -0.0327
+    ci:
+    - -0.2624
+    - 0.1978
+    includes_zero: true
+    pretrend_p: 0.064
+    treated: 6
+    comparisons: 81
+  first_full_year_all_phases:
+    overall: 0.0425
+    ci:
+    - -0.1858
+    - 0.2833
+    includes_zero: true
+    pretrend_p: 0.332
+    treated: 6
+    comparisons: 81
+variants:
+  audited:
+    cases:
+      mn.minneapolis_2040_plan:
+        units_1:
+          g: 2020
+          post_years: 5
+          att: -0.8723
+          ci:
+          - -5.1455
+          - 1.8268
+          includes_zero: true
+          p_value: 0.4756
+          pretrend_p: 0.6951
+          placebo_date_p: 0.622
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2020
+          post_years: 5
+          att: -0.0346
+          ci:
+          - -0.5176
+          - 0.2793
+          includes_zero: true
+          p_value: 0.8293
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3049
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2020
+          post_years: 5
+          att: -0.1244
+          ci:
+          - -0.6386
+          - 0.1446
+          includes_zero: true
+          p_value: 0.7195
+          pretrend_p: 0.439
+          placebo_date_p: 0.3537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2020
+          post_years: 5
+          att: -0.159
+          ci:
+          - -0.8024
+          - 0.2657
+          includes_zero: true
+          p_value: 0.7317
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3293
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2020
+          post_years: 5
+          att: -6.123
+          ci:
+          - -12.009
+          - -1.7827
+          includes_zero: false
+          p_value: 0.0976
+          pretrend_p: 0.0854
+          placebo_date_p: 0.061
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.09 < 0.1
+          - placebo-date p 0.06 < 0.1
+          - donor fit 0.34 > 0.25
+          comparisons: 81
+      mn.saint_paul_1to4_units:
+        units_1:
+          g: 2024
+          post_years: 2
+          att: 0.4061
+          ci:
+          - -2.2166
+          - 2.9718
+          includes_zero: true
+          p_value: 0.7195
+          pretrend_p: 0.9024
+          placebo_date_p: 0.9756
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2024
+          post_years: 2
+          att: 0.1385
+          ci:
+          - -0.6121
+          - 0.5223
+          includes_zero: true
+          p_value: 0.6585
+          pretrend_p: 0.6463
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2024
+          post_years: 2
+          att: 0.0182
+          ci:
+          - -0.7986
+          - 0.4958
+          includes_zero: true
+          p_value: 0.9756
+          pretrend_p: 0.9024
+          placebo_date_p: 0.8659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2024
+          post_years: 2
+          att: 0.1566
+          ci:
+          - -1.0627
+          - 0.8138
+          includes_zero: true
+          p_value: 0.8293
+          pretrend_p: 0.9146
+          placebo_date_p: 0.9878
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2024
+          post_years: 2
+          att: -8.3796
+          ci:
+          - -14.3384
+          - 0.2815
+          includes_zero: true
+          p_value: 0.0854
+          pretrend_p: 0.2561
+          placebo_date_p: 0.5732
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      nc.raleigh_missing_middle_2021:
+        units_1:
+          g: 2022
+          post_years: 4
+          att: 3.7722
+          ci:
+          - 0.3368
+          - 7.2414
+          includes_zero: false
+          p_value: 0.1098
+          pretrend_p: 0.1951
+          placebo_date_p: 0.1951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2022
+          post_years: 4
+          att: 0.1641
+          ci:
+          - -0.3561
+          - 0.7044
+          includes_zero: true
+          p_value: 0.3415
+          pretrend_p: 1.0
+          placebo_date_p: 1.0
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2022
+          post_years: 4
+          att: -0.1574
+          ci:
+          - -0.4688
+          - 0.1726
+          includes_zero: true
+          p_value: 0.3293
+          pretrend_p: 0.4268
+          placebo_date_p: 0.4024
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2022
+          post_years: 4
+          att: 0.0067
+          ci:
+          - -0.727
+          - 0.6882
+          includes_zero: true
+          p_value: 0.9878
+          pretrend_p: 0.878
+          placebo_date_p: 0.8415
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2022
+          post_years: 4
+          att: 6.3209
+          ci:
+          - -2.6987
+          - 10.7192
+          includes_zero: true
+          p_value: 0.0976
+          pretrend_p: 0.3659
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      or.portland_rip_2021:
+        units_1:
+          g: 2022
+          post_years: 4
+          att: 1.126
+          ci:
+          - -2.3094
+          - 4.5952
+          includes_zero: true
+          p_value: 0.4146
+          pretrend_p: 0.4268
+          placebo_date_p: 0.378
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2022
+          post_years: 4
+          att: -0.2175
+          ci:
+          - -0.7378
+          - 0.3227
+          includes_zero: true
+          p_value: 0.2439
+          pretrend_p: 0.4268
+          placebo_date_p: 0.878
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2022
+          post_years: 4
+          att: -0.1719
+          ci:
+          - -0.4833
+          - 0.1581
+          includes_zero: true
+          p_value: 0.2805
+          pretrend_p: 0.3902
+          placebo_date_p: 0.5
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2022
+          post_years: 4
+          att: -0.3894
+          ci:
+          - -1.1231
+          - 0.292
+          includes_zero: true
+          p_value: 0.2317
+          pretrend_p: 0.5244
+          placebo_date_p: 0.7805
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2022
+          post_years: 4
+          att: -5.7084
+          ci:
+          - -14.728
+          - -1.3101
+          includes_zero: false
+          p_value: 0.1098
+          pretrend_p: 0.0976
+          placebo_date_p: 0.0854
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.10 < 0.1
+          - placebo-date p 0.09 < 0.1
+          comparisons: 81
+      va.arlington_eho_2023:
+        units_1:
+          g: 2024
+          post_years: 2
+          att: 0.2226
+          ci:
+          - -2.4001
+          - 2.7883
+          includes_zero: true
+          p_value: 0.8659
+          pretrend_p: 1.0
+          placebo_date_p: 0.8537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2024
+          post_years: 2
+          att: -0.1289
+          ci:
+          - -0.8795
+          - 0.255
+          includes_zero: true
+          p_value: 0.6829
+          pretrend_p: 0.9512
+          placebo_date_p: 0.8049
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2024
+          post_years: 2
+          att: -0.0557
+          ci:
+          - -0.8725
+          - 0.4219
+          includes_zero: true
+          p_value: 0.8049
+          pretrend_p: 0.7439
+          placebo_date_p: 0.6829
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2024
+          post_years: 2
+          att: -0.1847
+          ci:
+          - -1.404
+          - 0.4725
+          includes_zero: true
+          p_value: 0.7439
+          pretrend_p: 0.7317
+          placebo_date_p: 0.6463
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2024
+          post_years: 2
+          att: -9.2394
+          ci:
+          - -15.1982
+          - -0.5783
+          includes_zero: false
+          p_value: 0.0488
+          pretrend_p: 0.0976
+          placebo_date_p: 0.1585
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.10 < 0.1
+          comparisons: 81
+      wa.spokane_boca_2022:
+        units_1:
+          g: 2023
+          post_years: 3
+          att: -0.1732
+          ci:
+          - -3.7783
+          - 3.7809
+          includes_zero: true
+          p_value: 0.9024
+          pretrend_p: 0.7805
+          placebo_date_p: 0.6098
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2023
+          post_years: 3
+          att: 0.3495
+          ci:
+          - -0.116
+          - 0.8291
+          includes_zero: true
+          p_value: 0.1829
+          pretrend_p: 0.5366
+          placebo_date_p: 0.6951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2023
+          post_years: 3
+          att: 0.247
+          ci:
+          - -0.2339
+          - 0.685
+          includes_zero: true
+          p_value: 0.2927
+          pretrend_p: 0.2561
+          placebo_date_p: 0.2927
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2023
+          post_years: 3
+          att: 0.5965
+          ci:
+          - -0.28
+          - 1.5141
+          includes_zero: true
+          p_value: 0.1829
+          pretrend_p: 0.3902
+          placebo_date_p: 0.3537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2023
+          post_years: 3
+          att: 5.0676
+          ci:
+          - -0.6792
+          - 10.2481
+          includes_zero: true
+          p_value: 0.1585
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+    pooled:
+      units_1:
+        overall: 0.7469
+        ci:
+        - -0.2664
+        - 1.7972
+        includes_zero: true
+        pretrend_p: 0.066
+        treated: 6
+        comparisons: 81
+      units_2:
+        overall: 0.0452
+        ci:
+        - -0.1072
+        - 0.2003
+        includes_zero: true
+        pretrend_p: 0.511
+        treated: 6
+        comparisons: 81
+      units_3_4:
+        overall: -0.0407
+        ci:
+        - -0.1811
+        - 0.0965
+        includes_zero: true
+        pretrend_p: 0.262
+        treated: 6
+        comparisons: 81
+      units_2_4:
+        overall: 0.0044
+        ci:
+        - -0.2476
+        - 0.2665
+        includes_zero: true
+        pretrend_p: 0.251
+        treated: 6
+        comparisons: 81
+      units_5plus:
+        overall: -3.0103
+        ci:
+        - -7.3491
+        - 1.4075
+        includes_zero: true
+        pretrend_p: 0.387
+        treated: 6
+        comparisons: 81
+  dates_only:
+    cases:
+      mn.minneapolis_2040_plan:
+        units_1:
+          g: 2020
+          post_years: 5
+          att: -0.8531
+          ci:
+          - -5.1437
+          - 1.8254
+          includes_zero: true
+          p_value: 0.4756
+          pretrend_p: 0.6951
+          placebo_date_p: 0.622
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2020
+          post_years: 5
+          att: -0.0316
+          ci:
+          - -0.5174
+          - 0.2792
+          includes_zero: true
+          p_value: 0.8415
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3049
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2020
+          post_years: 5
+          att: -0.1192
+          ci:
+          - -0.6383
+          - 0.1444
+          includes_zero: true
+          p_value: 0.7439
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2020
+          post_years: 5
+          att: -0.1508
+          ci:
+          - -0.8022
+          - 0.2655
+          includes_zero: true
+          p_value: 0.7317
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3415
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2020
+          post_years: 5
+          att: -6.0976
+          ci:
+          - -12.008
+          - -1.7843
+          includes_zero: false
+          p_value: 0.0976
+          pretrend_p: 0.0854
+          placebo_date_p: 0.061
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.09 < 0.1
+          - placebo-date p 0.06 < 0.1
+          - donor fit 0.34 > 0.25
+          comparisons: 81
+      mn.saint_paul_1to4_units:
+        units_1:
+          g: 2024
+          post_years: 2
+          att: 0.4061
+          ci:
+          - -2.2166
+          - 2.9718
+          includes_zero: true
+          p_value: 0.7195
+          pretrend_p: 0.9024
+          placebo_date_p: 0.9634
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2024
+          post_years: 2
+          att: 0.1385
+          ci:
+          - -0.6121
+          - 0.5223
+          includes_zero: true
+          p_value: 0.6585
+          pretrend_p: 0.6463
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2024
+          post_years: 2
+          att: 0.0182
+          ci:
+          - -0.7986
+          - 0.4958
+          includes_zero: true
+          p_value: 0.9756
+          pretrend_p: 0.9024
+          placebo_date_p: 0.8659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2024
+          post_years: 2
+          att: 0.1566
+          ci:
+          - -1.0627
+          - 0.8138
+          includes_zero: true
+          p_value: 0.8293
+          pretrend_p: 0.9146
+          placebo_date_p: 0.9878
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2024
+          post_years: 2
+          att: -8.3796
+          ci:
+          - -14.3384
+          - 0.2815
+          includes_zero: true
+          p_value: 0.0854
+          pretrend_p: 0.2561
+          placebo_date_p: 0.5732
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      nc.raleigh_missing_middle_2021:
+        units_1:
+          g: 2022
+          post_years: 4
+          att: 3.7613
+          ci:
+          - 0.3388
+          - 7.241
+          includes_zero: false
+          p_value: 0.1098
+          pretrend_p: 0.2073
+          placebo_date_p: 0.1951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2022
+          post_years: 4
+          att: 0.1634
+          ci:
+          - -0.356
+          - 0.7043
+          includes_zero: true
+          p_value: 0.3415
+          pretrend_p: 1.0
+          placebo_date_p: 1.0
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2022
+          post_years: 4
+          att: -0.1557
+          ci:
+          - -0.4688
+          - 0.1725
+          includes_zero: true
+          p_value: 0.3293
+          pretrend_p: 0.4268
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2022
+          post_years: 4
+          att: 0.0077
+          ci:
+          - -0.727
+          - 0.688
+          includes_zero: true
+          p_value: 0.9878
+          pretrend_p: 0.878
+          placebo_date_p: 0.8415
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2022
+          post_years: 4
+          att: 6.3814
+          ci:
+          - -2.6978
+          - 10.7177
+          includes_zero: true
+          p_value: 0.0976
+          pretrend_p: 0.378
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      or.portland_rip_2021:
+        units_1:
+          g: 2022
+          post_years: 4
+          att: 1.1151
+          ci:
+          - -2.3074
+          - 4.5949
+          includes_zero: true
+          p_value: 0.4146
+          pretrend_p: 0.4268
+          placebo_date_p: 0.3902
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2022
+          post_years: 4
+          att: -0.2182
+          ci:
+          - -0.7377
+          - 0.3226
+          includes_zero: true
+          p_value: 0.2439
+          pretrend_p: 0.4268
+          placebo_date_p: 0.878
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2022
+          post_years: 4
+          att: -0.1702
+          ci:
+          - -0.4833
+          - 0.158
+          includes_zero: true
+          p_value: 0.2927
+          pretrend_p: 0.3902
+          placebo_date_p: 0.5122
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2022
+          post_years: 4
+          att: -0.3884
+          ci:
+          - -1.1231
+          - 0.2919
+          includes_zero: true
+          p_value: 0.2317
+          pretrend_p: 0.5366
+          placebo_date_p: 0.7927
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2022
+          post_years: 4
+          att: -5.6479
+          ci:
+          - -14.7272
+          - -1.3116
+          includes_zero: false
+          p_value: 0.1098
+          pretrend_p: 0.0976
+          placebo_date_p: 0.0854
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.10 < 0.1
+          - placebo-date p 0.09 < 0.1
+          comparisons: 81
+      va.arlington_eho_2023:
+        units_1:
+          g: 2024
+          post_years: 2
+          att: 0.2226
+          ci:
+          - -2.4001
+          - 2.7883
+          includes_zero: true
+          p_value: 0.8659
+          pretrend_p: 1.0
+          placebo_date_p: 0.8659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2024
+          post_years: 2
+          att: -0.1289
+          ci:
+          - -0.8795
+          - 0.255
+          includes_zero: true
+          p_value: 0.6829
+          pretrend_p: 0.9512
+          placebo_date_p: 0.8171
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2024
+          post_years: 2
+          att: -0.0557
+          ci:
+          - -0.8725
+          - 0.4219
+          includes_zero: true
+          p_value: 0.8049
+          pretrend_p: 0.7439
+          placebo_date_p: 0.6951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2024
+          post_years: 2
+          att: -0.1847
+          ci:
+          - -1.404
+          - 0.4725
+          includes_zero: true
+          p_value: 0.7439
+          pretrend_p: 0.7317
+          placebo_date_p: 0.6463
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2024
+          post_years: 2
+          att: -9.2394
+          ci:
+          - -15.1982
+          - -0.5783
+          includes_zero: false
+          p_value: 0.0488
+          pretrend_p: 0.0976
+          placebo_date_p: 0.1585
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.10 < 0.1
+          comparisons: 81
+      wa.spokane_boca_2022:
+        units_1:
+          g: 2023
+          post_years: 3
+          att: -0.1789
+          ci:
+          - -3.7776
+          - 3.7801
+          includes_zero: true
+          p_value: 0.9024
+          pretrend_p: 0.7927
+          placebo_date_p: 0.6098
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2023
+          post_years: 3
+          att: 0.3491
+          ci:
+          - -0.116
+          - 0.8291
+          includes_zero: true
+          p_value: 0.1829
+          pretrend_p: 0.5366
+          placebo_date_p: 0.6951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2023
+          post_years: 3
+          att: 0.2474
+          ci:
+          - -0.2339
+          - 0.685
+          includes_zero: true
+          p_value: 0.2927
+          pretrend_p: 0.2561
+          placebo_date_p: 0.2927
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2023
+          post_years: 3
+          att: 0.5966
+          ci:
+          - -0.28
+          - 1.514
+          includes_zero: true
+          p_value: 0.1829
+          pretrend_p: 0.3902
+          placebo_date_p: 0.3659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2023
+          post_years: 3
+          att: 5.1095
+          ci:
+          - -0.678
+          - 10.2475
+          includes_zero: true
+          p_value: 0.1585
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+    pooled:
+      units_1:
+        overall: 0.7455
+        ci:
+        - -0.2614
+        - 1.7889
+        includes_zero: true
+        pretrend_p: 0.071
+        treated: 6
+        comparisons: 81
+      units_2:
+        overall: 0.0454
+        ci:
+        - -0.1074
+        - 0.1998
+        includes_zero: true
+        pretrend_p: 0.49
+        treated: 6
+        comparisons: 81
+      units_3_4:
+        overall: -0.0392
+        ci:
+        - -0.1788
+        - 0.0973
+        includes_zero: true
+        pretrend_p: 0.257
+        treated: 6
+        comparisons: 81
+      units_2_4:
+        overall: 0.0062
+        ci:
+        - -0.2447
+        - 0.2672
+        includes_zero: true
+        pretrend_p: 0.228
+        treated: 6
+        comparisons: 81
+      units_5plus:
+        overall: -2.9789
+        ci:
+        - -7.3219
+        - 1.4341
+        includes_zero: true
+        pretrend_p: 0.373
+        treated: 6
+        comparisons: 81
+  any_exposure:
+    cases:
+      mn.minneapolis_2040_plan:
+        units_1:
+          g: 2020
+          post_years: 5
+          att: -0.8723
+          ci:
+          - -5.1455
+          - 1.8268
+          includes_zero: true
+          p_value: 0.4756
+          pretrend_p: 0.6951
+          placebo_date_p: 0.622
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2020
+          post_years: 5
+          att: -0.0346
+          ci:
+          - -0.5176
+          - 0.2793
+          includes_zero: true
+          p_value: 0.8293
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3049
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2020
+          post_years: 5
+          att: -0.1244
+          ci:
+          - -0.6386
+          - 0.1446
+          includes_zero: true
+          p_value: 0.7195
+          pretrend_p: 0.439
+          placebo_date_p: 0.3537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2020
+          post_years: 5
+          att: -0.159
+          ci:
+          - -0.8024
+          - 0.2657
+          includes_zero: true
+          p_value: 0.7317
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3293
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2020
+          post_years: 5
+          att: -6.123
+          ci:
+          - -12.009
+          - -1.7827
+          includes_zero: false
+          p_value: 0.0976
+          pretrend_p: 0.0854
+          placebo_date_p: 0.061
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.09 < 0.1
+          - placebo-date p 0.06 < 0.1
+          - donor fit 0.34 > 0.25
+          comparisons: 81
+      mn.saint_paul_1to4_units:
+        units_1:
+          g: 2023
+          post_years: 3
+          att: 0.7285
+          ci:
+          - -2.8766
+          - 4.6826
+          includes_zero: true
+          p_value: 0.5244
+          pretrend_p: 0.8659
+          placebo_date_p: 0.7195
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2023
+          post_years: 3
+          att: 0.163
+          ci:
+          - -0.3025
+          - 0.6426
+          includes_zero: true
+          p_value: 0.3659
+          pretrend_p: 0.8293
+          placebo_date_p: 0.7927
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2023
+          post_years: 3
+          att: -0.0259
+          ci:
+          - -0.5068
+          - 0.4121
+          includes_zero: true
+          p_value: 0.9268
+          pretrend_p: 0.8415
+          placebo_date_p: 0.8293
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2023
+          post_years: 3
+          att: 0.1371
+          ci:
+          - -0.7393
+          - 1.0547
+          includes_zero: true
+          p_value: 0.622
+          pretrend_p: 0.8293
+          placebo_date_p: 0.7927
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2023
+          post_years: 3
+          att: -9.0654
+          ci:
+          - -14.8122
+          - -3.8849
+          includes_zero: false
+          p_value: 0.0488
+          pretrend_p: 0.1463
+          placebo_date_p: 0.1341
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      nc.raleigh_missing_middle_2021:
+        units_1:
+          g: 2021
+          post_years: 5
+          att: 2.8454
+          ci:
+          - -0.8835
+          - 6.8452
+          includes_zero: true
+          p_value: 0.1585
+          pretrend_p: 0.1951
+          placebo_date_p: 0.1951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2021
+          post_years: 5
+          att: 0.1951
+          ci:
+          - -0.3379
+          - 0.689
+          includes_zero: true
+          p_value: 0.2683
+          pretrend_p: 0.9146
+          placebo_date_p: 0.8171
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2021
+          post_years: 5
+          att: -0.2065
+          ci:
+          - -0.4599
+          - 0.1425
+          includes_zero: true
+          p_value: 0.2195
+          pretrend_p: 0.5244
+          placebo_date_p: 0.6098
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2021
+          post_years: 5
+          att: -0.0113
+          ci:
+          - -0.6441
+          - 0.6002
+          includes_zero: true
+          p_value: 0.9756
+          pretrend_p: 0.9024
+          placebo_date_p: 0.9756
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2021
+          post_years: 5
+          att: 10.1198
+          ci:
+          - 2.3114
+          - 13.7697
+          includes_zero: false
+          p_value: 0.0366
+          pretrend_p: 0.7073
+          placebo_date_p: 0.8902
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      or.portland_rip_2021:
+        units_1:
+          g: 2021
+          post_years: 5
+          att: -0.0909
+          ci:
+          - -3.8198
+          - 3.9089
+          includes_zero: true
+          p_value: 0.939
+          pretrend_p: 0.5244
+          placebo_date_p: 0.4268
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2021
+          post_years: 5
+          att: -0.2472
+          ci:
+          - -0.7803
+          - 0.2467
+          includes_zero: true
+          p_value: 0.2439
+          pretrend_p: 0.3537
+          placebo_date_p: 0.939
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2021
+          post_years: 5
+          att: -0.1807
+          ci:
+          - -0.4341
+          - 0.1682
+          includes_zero: true
+          p_value: 0.2317
+          pretrend_p: 0.5244
+          placebo_date_p: 0.4512
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2021
+          post_years: 5
+          att: -0.4279
+          ci:
+          - -1.0607
+          - 0.1836
+          includes_zero: true
+          p_value: 0.2195
+          pretrend_p: 0.5488
+          placebo_date_p: 0.9756
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2021
+          post_years: 5
+          att: -7.4311
+          ci:
+          - -15.2395
+          - -3.7812
+          includes_zero: false
+          p_value: 0.122
+          pretrend_p: 0.2317
+          placebo_date_p: 0.2439
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      va.arlington_eho_2023:
+        units_1:
+          g: 2023
+          post_years: 3
+          att: 0.4598
+          ci:
+          - -3.1454
+          - 4.4139
+          includes_zero: true
+          p_value: 0.6829
+          pretrend_p: 0.939
+          placebo_date_p: 0.8659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2023
+          post_years: 3
+          att: -0.0525
+          ci:
+          - -0.518
+          - 0.4271
+          includes_zero: true
+          p_value: 0.7683
+          pretrend_p: 0.7683
+          placebo_date_p: 0.6951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2023
+          post_years: 3
+          att: -0.061
+          ci:
+          - -0.5419
+          - 0.3771
+          includes_zero: true
+          p_value: 0.7561
+          pretrend_p: 0.7561
+          placebo_date_p: 0.7195
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2023
+          post_years: 3
+          att: -0.1134
+          ci:
+          - -0.9898
+          - 0.8042
+          includes_zero: true
+          p_value: 0.7805
+          pretrend_p: 0.6463
+          placebo_date_p: 0.5976
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2023
+          post_years: 3
+          att: -6.9918
+          ci:
+          - -12.7386
+          - -1.8113
+          includes_zero: false
+          p_value: 0.0732
+          pretrend_p: 0.122
+          placebo_date_p: 0.2561
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      wa.spokane_boca_2022:
+        units_1:
+          g: 2022
+          post_years: 4
+          att: 0.1314
+          ci:
+          - -3.304
+          - 3.6006
+          includes_zero: true
+          p_value: 0.8902
+          pretrend_p: 0.4756
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2022
+          post_years: 4
+          att: 0.2524
+          ci:
+          - -0.2678
+          - 0.7927
+          includes_zero: true
+          p_value: 0.1707
+          pretrend_p: 0.9634
+          placebo_date_p: 1.0
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2022
+          post_years: 4
+          att: 0.1259
+          ci:
+          - -0.1855
+          - 0.4559
+          includes_zero: true
+          p_value: 0.4634
+          pretrend_p: 0.2439
+          placebo_date_p: 0.2073
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2022
+          post_years: 4
+          att: 0.3784
+          ci:
+          - -0.3554
+          - 1.0598
+          includes_zero: true
+          p_value: 0.2439
+          pretrend_p: 0.4878
+          placebo_date_p: 0.4268
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2022
+          post_years: 4
+          att: 2.9779
+          ci:
+          - -6.0417
+          - 7.3762
+          includes_zero: true
+          p_value: 0.3171
+          pretrend_p: 0.4268
+          placebo_date_p: 0.3537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+    pooled:
+      units_1:
+        overall: 0.5336
+        ci:
+        - -0.3084
+        - 1.3915
+        includes_zero: true
+        pretrend_p: 0.021
+        treated: 6
+        comparisons: 81
+      units_2:
+        overall: 0.046
+        ci:
+        - -0.0916
+        - 0.1804
+        includes_zero: true
+        pretrend_p: 0.593
+        treated: 6
+        comparisons: 81
+      units_3_4:
+        overall: -0.0787
+        ci:
+        - -0.2302
+        - 0.049
+        includes_zero: true
+        pretrend_p: 0.062
+        treated: 6
+        comparisons: 81
+      units_2_4:
+        overall: -0.0327
+        ci:
+        - -0.2624
+        - 0.1978
+        includes_zero: true
+        pretrend_p: 0.064
+        treated: 6
+        comparisons: 81
+      units_5plus:
+        overall: -2.7523
+        ci:
+        - -7.4503
+        - 2.1783
+        includes_zero: true
+        pretrend_p: 0.977
+        treated: 6
+        comparisons: 81
+  first_full_year_all_phases:
+    cases:
+      mn.minneapolis_2040_plan:
+        units_1:
+          g: 2020
+          post_years: 5
+          att: -0.8723
+          ci:
+          - -5.1455
+          - 1.8268
+          includes_zero: true
+          p_value: 0.4756
+          pretrend_p: 0.6951
+          placebo_date_p: 0.622
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2020
+          post_years: 5
+          att: -0.0346
+          ci:
+          - -0.5176
+          - 0.2793
+          includes_zero: true
+          p_value: 0.8293
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3049
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2020
+          post_years: 5
+          att: -0.1244
+          ci:
+          - -0.6386
+          - 0.1446
+          includes_zero: true
+          p_value: 0.7195
+          pretrend_p: 0.439
+          placebo_date_p: 0.3537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2020
+          post_years: 5
+          att: -0.159
+          ci:
+          - -0.8024
+          - 0.2657
+          includes_zero: true
+          p_value: 0.7317
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3293
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2020
+          post_years: 5
+          att: -6.123
+          ci:
+          - -12.009
+          - -1.7827
+          includes_zero: false
+          p_value: 0.0976
+          pretrend_p: 0.0854
+          placebo_date_p: 0.061
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.09 < 0.1
+          - placebo-date p 0.06 < 0.1
+          - donor fit 0.34 > 0.25
+          comparisons: 81
+      mn.saint_paul_1to4_units:
+        units_1:
+          g: 2024
+          post_years: 2
+          att: 0.4061
+          ci:
+          - -2.2166
+          - 2.9718
+          includes_zero: true
+          p_value: 0.7195
+          pretrend_p: 0.9024
+          placebo_date_p: 0.9756
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2024
+          post_years: 2
+          att: 0.1385
+          ci:
+          - -0.6121
+          - 0.5223
+          includes_zero: true
+          p_value: 0.6585
+          pretrend_p: 0.6463
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2024
+          post_years: 2
+          att: 0.0182
+          ci:
+          - -0.7986
+          - 0.4958
+          includes_zero: true
+          p_value: 0.9756
+          pretrend_p: 0.9024
+          placebo_date_p: 0.8659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2024
+          post_years: 2
+          att: 0.1566
+          ci:
+          - -1.0627
+          - 0.8138
+          includes_zero: true
+          p_value: 0.8293
+          pretrend_p: 0.9146
+          placebo_date_p: 0.9878
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2024
+          post_years: 2
+          att: -8.3796
+          ci:
+          - -14.3384
+          - 0.2815
+          includes_zero: true
+          p_value: 0.0854
+          pretrend_p: 0.2561
+          placebo_date_p: 0.5732
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      nc.raleigh_missing_middle_2021:
+        units_1:
+          g: 2022
+          post_years: 4
+          att: 3.7722
+          ci:
+          - 0.3368
+          - 7.2414
+          includes_zero: false
+          p_value: 0.1098
+          pretrend_p: 0.1951
+          placebo_date_p: 0.1951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2022
+          post_years: 4
+          att: 0.1641
+          ci:
+          - -0.3561
+          - 0.7044
+          includes_zero: true
+          p_value: 0.3415
+          pretrend_p: 1.0
+          placebo_date_p: 1.0
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2022
+          post_years: 4
+          att: -0.1574
+          ci:
+          - -0.4688
+          - 0.1726
+          includes_zero: true
+          p_value: 0.3293
+          pretrend_p: 0.4268
+          placebo_date_p: 0.4024
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2022
+          post_years: 4
+          att: 0.0067
+          ci:
+          - -0.727
+          - 0.6882
+          includes_zero: true
+          p_value: 0.9878
+          pretrend_p: 0.878
+          placebo_date_p: 0.8415
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2022
+          post_years: 4
+          att: 6.3209
+          ci:
+          - -2.6987
+          - 10.7192
+          includes_zero: true
+          p_value: 0.0976
+          pretrend_p: 0.3659
+          placebo_date_p: 0.4146
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+      or.portland_rip_2021:
+        units_1:
+          g: 2023
+          post_years: 3
+          att: 1.627
+          ci:
+          - -1.9781
+          - 5.5812
+          includes_zero: true
+          p_value: 0.3171
+          pretrend_p: 0.4024
+          placebo_date_p: 0.3537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2023
+          post_years: 3
+          att: -0.0568
+          ci:
+          - -0.5223
+          - 0.4228
+          includes_zero: true
+          p_value: 0.6341
+          pretrend_p: 0.122
+          placebo_date_p: 0.0976
+          identification: matched
+          label_reasons:
+          - placebo-date p 0.10 < 0.1
+          comparisons: 81
+        units_3_4:
+          g: 2023
+          post_years: 3
+          att: -0.1043
+          ci:
+          - -0.5852
+          - 0.3337
+          includes_zero: true
+          p_value: 0.4146
+          pretrend_p: 0.3293
+          placebo_date_p: 0.3171
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2023
+          post_years: 3
+          att: -0.1611
+          ci:
+          - -1.0375
+          - 0.7565
+          includes_zero: true
+          p_value: 0.561
+          pretrend_p: 0.1707
+          placebo_date_p: 0.1341
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2023
+          post_years: 3
+          att: -2.2198
+          ci:
+          - -7.9666
+          - 2.9607
+          includes_zero: true
+          p_value: 0.4146
+          pretrend_p: 0.0854
+          placebo_date_p: 0.0732
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.09 < 0.1
+          - placebo-date p 0.07 < 0.1
+          comparisons: 81
+      va.arlington_eho_2023:
+        units_1:
+          g: 2024
+          post_years: 2
+          att: 0.2226
+          ci:
+          - -2.4001
+          - 2.7883
+          includes_zero: true
+          p_value: 0.8659
+          pretrend_p: 1.0
+          placebo_date_p: 0.8537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2024
+          post_years: 2
+          att: -0.1289
+          ci:
+          - -0.8795
+          - 0.255
+          includes_zero: true
+          p_value: 0.6829
+          pretrend_p: 0.9512
+          placebo_date_p: 0.8049
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2024
+          post_years: 2
+          att: -0.0557
+          ci:
+          - -0.8725
+          - 0.4219
+          includes_zero: true
+          p_value: 0.8049
+          pretrend_p: 0.7439
+          placebo_date_p: 0.6829
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2024
+          post_years: 2
+          att: -0.1847
+          ci:
+          - -1.404
+          - 0.4725
+          includes_zero: true
+          p_value: 0.7439
+          pretrend_p: 0.7317
+          placebo_date_p: 0.6463
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2024
+          post_years: 2
+          att: -9.2394
+          ci:
+          - -15.1982
+          - -0.5783
+          includes_zero: false
+          p_value: 0.0488
+          pretrend_p: 0.0976
+          placebo_date_p: 0.1585
+          identification: matched
+          label_reasons:
+          - pre-trend p 0.10 < 0.1
+          comparisons: 81
+      wa.spokane_boca_2022:
+        units_1:
+          g: 2023
+          post_years: 3
+          att: -0.1732
+          ci:
+          - -3.7783
+          - 3.7809
+          includes_zero: true
+          p_value: 0.9024
+          pretrend_p: 0.7805
+          placebo_date_p: 0.6098
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2:
+          g: 2023
+          post_years: 3
+          att: 0.3495
+          ci:
+          - -0.116
+          - 0.8291
+          includes_zero: true
+          p_value: 0.1829
+          pretrend_p: 0.5366
+          placebo_date_p: 0.6951
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_3_4:
+          g: 2023
+          post_years: 3
+          att: 0.247
+          ci:
+          - -0.2339
+          - 0.685
+          includes_zero: true
+          p_value: 0.2927
+          pretrend_p: 0.2561
+          placebo_date_p: 0.2927
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_2_4:
+          g: 2023
+          post_years: 3
+          att: 0.5965
+          ci:
+          - -0.28
+          - 1.5141
+          includes_zero: true
+          p_value: 0.1829
+          pretrend_p: 0.3902
+          placebo_date_p: 0.3537
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+        units_5plus:
+          g: 2023
+          post_years: 3
+          att: 5.0676
+          ci:
+          - -0.6792
+          - 10.2481
+          includes_zero: true
+          p_value: 0.1585
+          pretrend_p: 0.4512
+          placebo_date_p: 0.3659
+          identification: causal
+          label_reasons:
+          - pre-trend, placebo-date and pool-size checks passed
+          comparisons: 81
+    pooled:
+      units_1:
+        overall: 0.8304
+        ci:
+        - -0.2176
+        - 1.8861
+        includes_zero: true
+        pretrend_p: 0.078
+        treated: 6
+        comparisons: 81
+      units_2:
+        overall: 0.072
+        ci:
+        - -0.0628
+        - 0.214
+        includes_zero: true
+        pretrend_p: 0.542
+        treated: 6
+        comparisons: 81
+      units_3_4:
+        overall: -0.0294
+        ci:
+        - -0.162
+        - 0.1015
+        includes_zero: true
+        pretrend_p: 0.111
+        treated: 6
+        comparisons: 81
+      units_2_4:
+        overall: 0.0425
+        ci:
+        - -0.1858
+        - 0.2833
+        includes_zero: true
+        pretrend_p: 0.332
+        treated: 6
+        comparisons: 81
+      units_5plus:
+        overall: -2.4289
+        ci:
+        - -6.5708
+        - 1.7977
+        includes_zero: true
+        pretrend_p: 0.062
+        treated: 6
+        comparisons: 81
+before:
+  cases:
+    mn.minneapolis_2040_plan:
+      units_1:
+        g: 2020
+        post_years: 5
+        att: -0.8522
+        ci:
+        - -5.144
+        - 1.8256
+        includes_zero: true
+        p_value: 0.4756
+        pretrend_p: 0.6951
+        placebo_date_p: 0.622
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2:
+        g: 2020
+        post_years: 5
+        att: -0.0316
+        ci:
+        - -0.5174
+        - 0.2792
+        includes_zero: true
+        p_value: 0.8415
+        pretrend_p: 0.4512
+        placebo_date_p: 0.3049
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_3_4:
+        g: 2020
+        post_years: 5
+        att: -0.1199
+        ci:
+        - -0.6383
+        - 0.1445
+        includes_zero: true
+        p_value: 0.7439
+        pretrend_p: 0.4512
+        placebo_date_p: 0.3659
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2_4:
+        g: 2020
+        post_years: 5
+        att: -0.1514
+        ci:
+        - -0.8022
+        - 0.2655
+        includes_zero: true
+        p_value: 0.7317
+        pretrend_p: 0.4512
+        placebo_date_p: 0.3415
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_5plus:
+        g: 2020
+        post_years: 5
+        att: -6.0965
+        ci:
+        - -12.0086
+        - -1.7841
+        includes_zero: false
+        p_value: 0.0976
+        pretrend_p: 0.0854
+        placebo_date_p: 0.061
+        identification: matched
+        label_reasons:
+        - pre-trend p 0.09 < 0.1
+        - placebo-date p 0.06 < 0.1
+        - donor fit 0.34 > 0.25
+        comparisons: 81
+    mn.saint_paul_1to4_units:
+      units_1:
+        g: 2022
+        post_years: 4
+        att: 0.8048
+        ci:
+        - -2.6233
+        - 4.2798
+        includes_zero: true
+        p_value: 0.4878
+        pretrend_p: 0.8049
+        placebo_date_p: 0.7805
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2:
+        g: 2022
+        post_years: 4
+        att: 0.1292
+        ci:
+        - -0.3906
+        - 0.6698
+        includes_zero: true
+        p_value: 0.3902
+        pretrend_p: 0.9634
+        placebo_date_p: 0.939
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_3_4:
+        g: 2022
+        post_years: 4
+        att: -0.0807
+        ci:
+        - -0.3931
+        - 0.2482
+        includes_zero: true
+        p_value: 0.8659
+        pretrend_p: 0.9146
+        placebo_date_p: 0.8659
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2_4:
+        g: 2022
+        post_years: 4
+        att: 0.0485
+        ci:
+        - -0.6858
+        - 0.7292
+        includes_zero: true
+        p_value: 0.9146
+        pretrend_p: 0.9024
+        placebo_date_p: 0.878
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_5plus:
+        g: 2022
+        post_years: 4
+        att: -10.3311
+        ci:
+        - -19.3653
+        - -5.9488
+        includes_zero: false
+        p_value: 0.061
+        pretrend_p: 0.0854
+        placebo_date_p: 0.061
+        identification: matched
+        label_reasons:
+        - pre-trend p 0.09 < 0.1
+        - placebo-date p 0.06 < 0.1
+        comparisons: 81
+    nc.raleigh_missing_middle_2021:
+      units_1:
+        g: 2022
+        post_years: 4
+        att: 3.7662
+        ci:
+        - 0.338
+        - 7.2412
+        includes_zero: false
+        p_value: 0.1098
+        pretrend_p: 0.2073
+        placebo_date_p: 0.1951
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2:
+        g: 2022
+        post_years: 4
+        att: 0.1638
+        ci:
+        - -0.3561
+        - 0.7043
+        includes_zero: true
+        p_value: 0.3415
+        pretrend_p: 1.0
+        placebo_date_p: 1.0
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_3_4:
+        g: 2022
+        post_years: 4
+        att: -0.1564
+        ci:
+        - -0.4688
+        - 0.1725
+        includes_zero: true
+        p_value: 0.3293
+        pretrend_p: 0.4268
+        placebo_date_p: 0.4146
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2_4:
+        g: 2022
+        post_years: 4
+        att: 0.0074
+        ci:
+        - -0.727
+        - 0.6881
+        includes_zero: true
+        p_value: 0.9878
+        pretrend_p: 0.878
+        placebo_date_p: 0.8415
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_5plus:
+        g: 2022
+        post_years: 4
+        att: 6.3363
+        ci:
+        - -2.6979
+        - 10.7186
+        includes_zero: true
+        p_value: 0.0976
+        pretrend_p: 0.378
+        placebo_date_p: 0.4146
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+    or.portland_rip_2021:
+      units_1:
+        g: 2022
+        post_years: 4
+        att: 1.12
+        ci:
+        - -2.3081
+        - 4.595
+        includes_zero: true
+        p_value: 0.4146
+        pretrend_p: 0.4268
+        placebo_date_p: 0.3902
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2:
+        g: 2022
+        post_years: 4
+        att: -0.2179
+        ci:
+        - -0.7377
+        - 0.3227
+        includes_zero: true
+        p_value: 0.2439
+        pretrend_p: 0.4268
+        placebo_date_p: 0.878
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_3_4:
+        g: 2022
+        post_years: 4
+        att: -0.1709
+        ci:
+        - -0.4833
+        - 0.158
+        includes_zero: true
+        p_value: 0.2805
+        pretrend_p: 0.3902
+        placebo_date_p: 0.5122
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2_4:
+        g: 2022
+        post_years: 4
+        att: -0.3888
+        ci:
+        - -1.1231
+        - 0.2919
+        includes_zero: true
+        p_value: 0.2317
+        pretrend_p: 0.5366
+        placebo_date_p: 0.7927
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_5plus:
+        g: 2022
+        post_years: 4
+        att: -5.6931
+        ci:
+        - -14.7272
+        - -1.3107
+        includes_zero: false
+        p_value: 0.1098
+        pretrend_p: 0.0976
+        placebo_date_p: 0.0854
+        identification: matched
+        label_reasons:
+        - pre-trend p 0.10 < 0.1
+        - placebo-date p 0.09 < 0.1
+        comparisons: 81
+    va.arlington_eho_2023:
+      units_1:
+        g: 2024
+        post_years: 2
+        att: 0.2226
+        ci:
+        - -2.4001
+        - 2.7883
+        includes_zero: true
+        p_value: 0.8659
+        pretrend_p: 1.0
+        placebo_date_p: 0.8659
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2:
+        g: 2024
+        post_years: 2
+        att: -0.1289
+        ci:
+        - -0.8795
+        - 0.255
+        includes_zero: true
+        p_value: 0.6829
+        pretrend_p: 0.9512
+        placebo_date_p: 0.8171
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_3_4:
+        g: 2024
+        post_years: 2
+        att: -0.0557
+        ci:
+        - -0.8725
+        - 0.4219
+        includes_zero: true
+        p_value: 0.8049
+        pretrend_p: 0.7439
+        placebo_date_p: 0.6951
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2_4:
+        g: 2024
+        post_years: 2
+        att: -0.1847
+        ci:
+        - -1.404
+        - 0.4725
+        includes_zero: true
+        p_value: 0.7439
+        pretrend_p: 0.7317
+        placebo_date_p: 0.6463
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_5plus:
+        g: 2024
+        post_years: 2
+        att: -9.2394
+        ci:
+        - -15.1982
+        - -0.5783
+        includes_zero: false
+        p_value: 0.0488
+        pretrend_p: 0.0976
+        placebo_date_p: 0.1585
+        identification: matched
+        label_reasons:
+        - pre-trend p 0.10 < 0.1
+        comparisons: 81
+    wa.spokane_boca_2022:
+      units_1:
+        g: 2023
+        post_years: 3
+        att: -0.1761
+        ci:
+        - -3.778
+        - 3.7805
+        includes_zero: true
+        p_value: 0.9024
+        pretrend_p: 0.7805
+        placebo_date_p: 0.6098
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2:
+        g: 2023
+        post_years: 3
+        att: 0.3494
+        ci:
+        - -0.116
+        - 0.8291
+        includes_zero: true
+        p_value: 0.1829
+        pretrend_p: 0.5366
+        placebo_date_p: 0.6951
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_3_4:
+        g: 2023
+        post_years: 3
+        att: 0.2471
+        ci:
+        - -0.2339
+        - 0.685
+        includes_zero: true
+        p_value: 0.2927
+        pretrend_p: 0.2561
+        placebo_date_p: 0.2927
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_2_4:
+        g: 2023
+        post_years: 3
+        att: 0.5965
+        ci:
+        - -0.28
+        - 1.514
+        includes_zero: true
+        p_value: 0.1829
+        pretrend_p: 0.3902
+        placebo_date_p: 0.3659
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+      units_5plus:
+        g: 2023
+        post_years: 3
+        att: 5.0906
+        ci:
+        - -0.6786
+        - 10.2478
+        includes_zero: true
+        p_value: 0.1585
+        pretrend_p: 0.4634
+        placebo_date_p: 0.3659
+        identification: causal
+        label_reasons:
+        - pre-trend, placebo-date and pool-size checks passed
+        comparisons: 81
+  pooled:
+    units_1:
+      overall: 0.8142
+      ci:
+      - -0.2177
+      - 1.8554
+      includes_zero: true
+      pretrend_p: 0.035
+      treated: 6
+      comparisons: 81
+    units_2:
+      overall: 0.044
+      ci:
+      - -0.1076
+      - 0.2001
+      includes_zero: true
+      pretrend_p: 0.846
+      treated: 6
+      comparisons: 81
+    units_3_4:
+      overall: -0.0561
+      ci:
+      - -0.2081
+      - 0.0904
+      includes_zero: true
+      pretrend_p: 0.277
+      treated: 6
+      comparisons: 81
+    units_2_4:
+      overall: -0.0121
+      ci:
+      - -0.2598
+      - 0.253
+      includes_zero: true
+      pretrend_p: 0.579
+      treated: 6
+      comparisons: 81
+    units_5plus:
+      overall: -3.3222
+      ci:
+      - -7.8645
+      - 1.2614
+      includes_zero: true
+      pretrend_p: 0.728
+      treated: 6
+      comparisons: 81
+records:
+- id: mn.retro.minneapolis_2040_plan.units_2_4
+  kind: study
+  state: MN
+  jurisdiction: Minneapolis
+  policy_types:
+  - missing_middle
+  title: 'Retrospective permit panel: Minneapolis 2040 Comprehensive Plan and zoning implementation (end
+    of single-family-only zoning) (units in 2- to 4-unit buildings (the sum of the two above))'
+  citation: VisionHousing retrospective panel (Census BPS place files and ACS B25001), design retro_bps_2026_11
+  url: https://www.census.gov/construction/bps/index.html
+  geographic_scope: Citywide
+  implementation_status: not_law
+  litigation:
+    status: not_applicable
+  outcome_measure: Units in 2- to 4-unit buildings (the sum of the two above) authorized by building permits
+  denominator: per 1,000 housing units (ACS 2020-2024 5-year, table B25001)
+  horizon: 5 calendar years from 2020 (event times 0 to 4)
+  observed_result:
+    summary: 'Minneapolis: units in 2- to 4-unit buildings (the sum of the two above) per 1,000 homes
+      changed by -0.16 a year against the comparison cities over 5 years from 2020 (90% placebo interval
+      -0.80 to +0.27; about -33 units a year). Pre-trend p 0.45; placebo-date p 0.33. The interval includes
+      zero: no change distinguishable from ordinary cities.'
+    value: -0.159
+    unit: units per 1,000 housing units per year (difference from comparison)
+    source_label: Census Building Permits Survey
+    source_url: https://www.census.gov/construction/bps/index.html
+  identification: causal
+  caveats:
+  - pre-trend, placebo-date and pool-size checks passed
+  - 'Concurrent reform: mn.minneapolis_parking_2021'
+  - City page lists 'eliminating single-family exclusive zoning' (up to 3 units) as an implementation
+    action, but the triplex ordinance's adoption/effective date was not readable on an official page (link
+    redirects)
+  - enacted_date is the council resolution sending the plan to Met Council; final approval came in October
+    2019
+  - A further 1-3 unit housing rules update had a City Council vote scheduled for 2026-12-03 (not yet
+    adopted)
+  - 'Synthetic control: pre-period fit ratio 0.00, mean post gap -0.06 (90% placebo interval -0.79 to
+    +0.82), placebo rank p 0.13; a near-perfect fit from many donors over few years can be over-fitting'
+  - Permits are units authorized, not built; a reform can move permits between years or places (diversion
+    to nearby suburbs is not measured).
+  - 2020-2021 pandemic and 2022-2023 interest-rate shocks hit all offices; the comparison removes the
+    shared part only.
+  - One treated city per case; the interval reflects how much ordinary cities move, not sampling of many
+    reforms.
+  - The housing-unit denominator is 2020-2024, partly after some reforms; the stock moves a few percent
+    at most, so the bias is small and toward zero.
+  - Comparison cities may have made local changes not recorded here; that would pull estimates toward
+    zero.
+  - BPS counts townhouses (attached single-family homes) as 1-unit buildings, so middle housing built
+    as townhouses shows up in units_1, not units_2_4.
+  - The identification label grades the design checks, not the size of the effect; a 'causal' record whose
+    interval includes zero means no change could be told apart from ordinary cities.
+  retrieved: &id001 2026-11-25
+  verified: true
+  verification_note: Effective date from verified record mn.minneapolis_2040_plan; permit counts from
+    the Census Bureau's own files; computed by visionhousing evidence-retro.
+  sources:
+  - label: Census Building Permits Survey
+    url: https://www.census.gov/construction/bps/index.html
+    official: true
+  - label: Reform record mn.minneapolis_2040_plan
+    url: https://minneapolis2040.com/overview/
+    official: true
+  discovered_via: addendum
+- id: mn.retro.saint_paul_1to4_units.units_2_4
+  kind: study
+  state: MN
+  jurisdiction: Saint Paul
+  policy_types:
+  - missing_middle
+  - adu
+  title: 'Retrospective permit panel: Saint Paul 1-4 unit housing zoning (Phase 1 ADU/small homes; Phase
+    2 up to fourplexes) (units in 2- to 4-unit buildings (the sum of the two above))'
+  citation: VisionHousing retrospective panel (Census BPS place files and ACS B25001), design retro_bps_2026_11
+  url: https://www.census.gov/construction/bps/index.html
+  geographic_scope: Citywide residential districts
+  implementation_status: not_law
+  litigation:
+    status: not_applicable
+  outcome_measure: Units in 2- to 4-unit buildings (the sum of the two above) authorized by building permits
+  denominator: per 1,000 housing units (ACS 2020-2024 5-year, table B25001)
+  horizon: 2 calendar years from 2024 (event times 0 to 1)
+  observed_result:
+    summary: 'Saint Paul: units in 2- to 4-unit buildings (the sum of the two above) per 1,000 homes changed
+      by +0.16 a year against the comparison cities over 2 years from 2024 (90% placebo interval -1.06
+      to +0.81; about +21 units a year). Pre-trend p 0.91; placebo-date p 0.99. The interval includes
+      zero: no change distinguishable from ordinary cities.'
+    value: 0.157
+    unit: units per 1,000 housing units per year (difference from comparison)
+    source_label: Census Building Permits Survey
+    source_url: https://www.census.gov/construction/bps/index.html
+  identification: causal
+  caveats:
+  - pre-trend, placebo-date and pool-size checks passed
+  - 'Concurrent reform: mn.saint_paul_parking_2021'
+  - Request described this as a 2024 action; the city page shows Phase 2 adopted October 2023 and effective
+    November 2023, with no 2024 action listed
+  - District-by-district unit counts not given on the page read
+  - Permits are units authorized, not built; a reform can move permits between years or places (diversion
+    to nearby suburbs is not measured).
+  - 2020-2021 pandemic and 2022-2023 interest-rate shocks hit all offices; the comparison removes the
+    shared part only.
+  - One treated city per case; the interval reflects how much ordinary cities move, not sampling of many
+    reforms.
+  - The housing-unit denominator is 2020-2024, partly after some reforms; the stock moves a few percent
+    at most, so the bias is small and toward zero.
+  - Comparison cities may have made local changes not recorded here; that would pull estimates toward
+    zero.
+  - BPS counts townhouses (attached single-family homes) as 1-unit buildings, so middle housing built
+    as townhouses shows up in units_1, not units_2_4.
+  - The identification label grades the design checks, not the size of the effect; a 'causal' record whose
+    interval includes zero means no change could be told apart from ordinary cities.
+  retrieved: *id001
+  verified: true
+  verification_note: Effective date from verified record mn.saint_paul_1to4_units; permit counts from
+    the Census Bureau's own files; computed by visionhousing evidence-retro.
+  sources:
+  - label: Census Building Permits Survey
+    url: https://www.census.gov/construction/bps/index.html
+    official: true
+  - label: Reform record mn.saint_paul_1to4_units
+    url: https://www.stpaul.gov/departments/planning-and-economic-development/planning/completed-projects/1-4-unit-housing-study
+    official: true
+  discovered_via: addendum
+- id: nc.retro.raleigh_missing_middle_2021.units_2_4
+  kind: study
+  state: NC
+  jurisdiction: Raleigh
+  policy_types:
+  - missing_middle
+  title: 'Retrospective permit panel: Raleigh Missing Middle Housing text change (duplexes, townhouses,
+    small apartments in residential districts) (units in 2- to 4-unit buildings (the sum of the two above))'
+  citation: VisionHousing retrospective panel (Census BPS place files and ACS B25001), design retro_bps_2026_11
+  url: https://www.census.gov/construction/bps/index.html
+  geographic_scope: Citywide residential districts (R-2, R-4, R-6, R-10)
+  implementation_status: not_law
+  litigation:
+    status: not_applicable
+  outcome_measure: Units in 2- to 4-unit buildings (the sum of the two above) authorized by building permits
+  denominator: per 1,000 housing units (ACS 2020-2024 5-year, table B25001)
+  horizon: 4 calendar years from 2022 (event times 0 to 3)
+  observed_result:
+    summary: 'Raleigh: units in 2- to 4-unit buildings (the sum of the two above) per 1,000 homes changed
+      by +0.01 a year against the comparison cities over 4 years from 2022 (90% placebo interval -0.73
+      to +0.69; about +2 units a year). Pre-trend p 0.88; placebo-date p 0.84. The interval includes zero:
+      no change distinguishable from ordinary cities.'
+    value: 0.007
+    unit: units per 1,000 housing units per year (difference from comparison)
+    source_label: Census Building Permits Survey
+    source_url: https://www.census.gov/construction/bps/index.html
+  identification: causal
+  caveats:
+  - pre-trend, placebo-date and pool-size checks passed
+  - A follow-up text change (TC-20-21, 'Missing Middle 2.0') was reported to take effect in 2022; its
+    date was not read on the official table
+  - Permits are units authorized, not built; a reform can move permits between years or places (diversion
+    to nearby suburbs is not measured).
+  - 2020-2021 pandemic and 2022-2023 interest-rate shocks hit all offices; the comparison removes the
+    shared part only.
+  - One treated city per case; the interval reflects how much ordinary cities move, not sampling of many
+    reforms.
+  - The housing-unit denominator is 2020-2024, partly after some reforms; the stock moves a few percent
+    at most, so the bias is small and toward zero.
+  - Comparison cities may have made local changes not recorded here; that would pull estimates toward
+    zero.
+  - BPS counts townhouses (attached single-family homes) as 1-unit buildings, so middle housing built
+    as townhouses shows up in units_1, not units_2_4.
+  - The identification label grades the design checks, not the size of the effect; a 'causal' record whose
+    interval includes zero means no change could be told apart from ordinary cities.
+  retrieved: *id001
+  verified: true
+  verification_note: Effective date from verified record nc.raleigh_missing_middle_2021; permit counts
+    from the Census Bureau's own files; computed by visionhousing evidence-retro.
+  sources:
+  - label: Census Building Permits Survey
+    url: https://www.census.gov/construction/bps/index.html
+    official: true
+  - label: Reform record nc.raleigh_missing_middle_2021
+    url: https://raleighnc.gov/node/40066
+    official: true
+  discovered_via: addendum
+- id: or.retro.portland_rip_2021.units_2_4
+  kind: study
+  state: OR
+  jurisdiction: Portland
+  policy_types:
+  - missing_middle
+  - adu
+  title: 'Retrospective permit panel: Portland Residential Infill Project (more housing types in single-dwelling
+    zones) (units in 2- to 4-unit buildings (the sum of the two above))'
+  citation: VisionHousing retrospective panel (Census BPS place files and ACS B25001), design retro_bps_2026_11
+  url: https://www.census.gov/construction/bps/index.html
+  geographic_scope: Citywide single-dwelling zones
+  implementation_status: not_law
+  litigation:
+    status: not_applicable
+  outcome_measure: Units in 2- to 4-unit buildings (the sum of the two above) authorized by building permits
+  denominator: per 1,000 housing units (ACS 2020-2024 5-year, table B25001)
+  horizon: 4 calendar years from 2022 (event times 0 to 3)
+  observed_result:
+    summary: 'Portland: units in 2- to 4-unit buildings (the sum of the two above) per 1,000 homes changed
+      by -0.39 a year against the comparison cities over 4 years from 2022 (90% placebo interval -1.12
+      to +0.29; about -120 units a year). Pre-trend p 0.52; placebo-date p 0.78. The interval includes
+      zero: no change distinguishable from ordinary cities.'
+    value: -0.389
+    unit: units per 1,000 housing units per year (difference from comparison)
+    source_label: Census Building Permits Survey
+    source_url: https://www.census.gov/construction/bps/index.html
+  identification: causal
+  caveats:
+  - pre-trend, placebo-date and pool-size checks passed
+  - Adopted in the same period as Oregon's statewide middle-housing law (HB 2001, 2019), which the ordinance
+    itself cites; effects of the two cannot be told apart
+  - A second part (Ordinance 190851) took effect 2022-06-30 and is not covered by this record
+  - Permits are units authorized, not built; a reform can move permits between years or places (diversion
+    to nearby suburbs is not measured).
+  - 2020-2021 pandemic and 2022-2023 interest-rate shocks hit all offices; the comparison removes the
+    shared part only.
+  - One treated city per case; the interval reflects how much ordinary cities move, not sampling of many
+    reforms.
+  - The housing-unit denominator is 2020-2024, partly after some reforms; the stock moves a few percent
+    at most, so the bias is small and toward zero.
+  - Comparison cities may have made local changes not recorded here; that would pull estimates toward
+    zero.
+  - BPS counts townhouses (attached single-family homes) as 1-unit buildings, so middle housing built
+    as townhouses shows up in units_1, not units_2_4.
+  - The identification label grades the design checks, not the size of the effect; a 'causal' record whose
+    interval includes zero means no change could be told apart from ordinary cities.
+  retrieved: *id001
+  verified: true
+  verification_note: Effective date from verified record or.portland_rip_2021; permit counts from the
+    Census Bureau's own files; computed by visionhousing evidence-retro.
+  sources:
+  - label: Census Building Permits Survey
+    url: https://www.census.gov/construction/bps/index.html
+    official: true
+  - label: Reform record or.portland_rip_2021
+    url: https://www.portland.gov/ppd/planning/doza/news/2021/7/16/major-updates-citys-housing-related-zoning-rules-coming-august-1
+    official: true
+  discovered_via: addendum
+- id: va.retro.arlington_eho_2023.units_2_4
+  kind: study
+  state: VA
+  jurisdiction: Arlington County
+  policy_types:
+  - missing_middle
+  title: 'Retrospective permit panel: Arlington County Expanded Housing Option (2 to 6 homes on lots zoned
+    for one) (units in 2- to 4-unit buildings (the sum of the two above))'
+  citation: VisionHousing retrospective panel (Census BPS place files and ACS B25001), design retro_bps_2026_11
+  url: https://www.census.gov/construction/bps/index.html
+  geographic_scope: One-family residential districts R-20 to R-5
+  implementation_status: not_law
+  litigation:
+    status: not_applicable
+  outcome_measure: Units in 2- to 4-unit buildings (the sum of the two above) authorized by building permits
+  denominator: per 1,000 housing units (ACS 2020-2024 5-year, table B25001)
+  horizon: 2 calendar years from 2024 (event times 0 to 1)
+  observed_result:
+    summary: 'Arlington County: units in 2- to 4-unit buildings (the sum of the two above) per 1,000 homes
+      changed by -0.18 a year against the comparison cities over 2 years from 2024 (90% placebo interval
+      -1.40 to +0.47; about -23 units a year). Pre-trend p 0.73; placebo-date p 0.65. The interval includes
+      zero: no change distinguishable from ordinary cities.'
+    value: -0.185
+    unit: units per 1,000 housing units per year (difference from comparison)
+    source_label: Census Building Permits Survey
+    source_url: https://www.census.gov/construction/bps/index.html
+  identification: causal
+  caveats:
+  - pre-trend, placebo-date and pool-size checks passed
+  - The rule was usable for about 15 months (2023-07-01 to 2024-09-27), then halted until late 2025
+  - The adopted program capped EHO permits at 58 a year, spread around the County, so the possible effect
+    on permits is small by design
+  - Permits are units authorized, not built; a reform can move permits between years or places (diversion
+    to nearby suburbs is not measured).
+  - 2020-2021 pandemic and 2022-2023 interest-rate shocks hit all offices; the comparison removes the
+    shared part only.
+  - One treated city per case; the interval reflects how much ordinary cities move, not sampling of many
+    reforms.
+  - The housing-unit denominator is 2020-2024, partly after some reforms; the stock moves a few percent
+    at most, so the bias is small and toward zero.
+  - Comparison cities may have made local changes not recorded here; that would pull estimates toward
+    zero.
+  - BPS counts townhouses (attached single-family homes) as 1-unit buildings, so middle housing built
+    as townhouses shows up in units_1, not units_2_4.
+  - The identification label grades the design checks, not the size of the effect; a 'causal' record whose
+    interval includes zero means no change could be told apart from ordinary cities.
+  retrieved: *id001
+  verified: true
+  verification_note: Effective date from verified record va.arlington_eho_2023; permit counts from the
+    Census Bureau's own files; computed by visionhousing evidence-retro.
+  sources:
+  - label: Census Building Permits Survey
+    url: https://www.census.gov/construction/bps/index.html
+    official: true
+  - label: Reform record va.arlington_eho_2023
+    url: https://www.arlingtonva.us/About-Arlington/Newsroom/Articles/2023/County-Board-Adopts-Expanded-Housing-Options
+    official: true
+  discovered_via: addendum
+- id: wa.retro.spokane_boca_2022.units_2_4
+  kind: study
+  state: WA
+  jurisdiction: Spokane
+  policy_types:
+  - missing_middle
+  title: 'Retrospective permit panel: Spokane Building Opportunity and Choices for All interim zoning
+    ordinance (duplex to fourplex on residential lots) (units in 2- to 4-unit buildings (the sum of the
+    two above))'
+  citation: VisionHousing retrospective panel (Census BPS place files and ACS B25001), design retro_bps_2026_11
+  url: https://www.census.gov/construction/bps/index.html
+  geographic_scope: Citywide residential lots
+  implementation_status: not_law
+  litigation:
+    status: not_applicable
+  outcome_measure: Units in 2- to 4-unit buildings (the sum of the two above) authorized by building permits
+  denominator: per 1,000 housing units (ACS 2020-2024 5-year, table B25001)
+  horizon: 3 calendar years from 2023 (event times 0 to 2)
+  observed_result:
+    summary: 'Spokane: units in 2- to 4-unit buildings (the sum of the two above) per 1,000 homes changed
+      by +0.60 a year against the comparison cities over 3 years from 2023 (90% placebo interval -0.28
+      to +1.51; about +61 units a year). Pre-trend p 0.39; placebo-date p 0.35. The interval includes
+      zero: no change distinguishable from ordinary cities.'
+    value: 0.596
+    unit: units per 1,000 housing units per year (difference from comparison)
+    source_label: Census Building Permits Survey
+    source_url: https://www.census.gov/construction/bps/index.html
+  identification: causal
+  caveats:
+  - pre-trend, placebo-date and pool-size checks passed
+  - 'Concurrent reform: wa.hb1110_2023'
+  - 'Concurrent reform: wa.hb1337_2023'
+  - Interim (pilot) ordinance, originally to end 2023-07-18 and later extended, then replaced by permanent
+    code; the extension ordinance's date was not read
+  - Washington's statewide middle-housing law (HB 1110) took effect 2023-07-23, inside the same window
+  - Permits are units authorized, not built; a reform can move permits between years or places (diversion
+    to nearby suburbs is not measured).
+  - 2020-2021 pandemic and 2022-2023 interest-rate shocks hit all offices; the comparison removes the
+    shared part only.
+  - One treated city per case; the interval reflects how much ordinary cities move, not sampling of many
+    reforms.
+  - The housing-unit denominator is 2020-2024, partly after some reforms; the stock moves a few percent
+    at most, so the bias is small and toward zero.
+  - Comparison cities may have made local changes not recorded here; that would pull estimates toward
+    zero.
+  - BPS counts townhouses (attached single-family homes) as 1-unit buildings, so middle housing built
+    as townhouses shows up in units_1, not units_2_4.
+  - The identification label grades the design checks, not the size of the effect; a 'causal' record whose
+    interval includes zero means no change could be told apart from ordinary cities.
+  retrieved: *id001
+  verified: true
+  verification_note: Effective date from verified record wa.spokane_boca_2022; permit counts from the
+    Census Bureau's own files; computed by visionhousing evidence-retro.
+  sources:
+  - label: Census Building Permits Survey
+    url: https://www.census.gov/construction/bps/index.html
+    official: true
+  - label: Reform record wa.spokane_boca_2022
+    url: https://my.spokanecity.org/housing/building-opportunity/
+    official: true
+  discovered_via: addendum
+caveats:
+- Saint Paul under the audited date has two post years (2024-2025), the declared minimum; its base years
+  2021-2023 include Phase 1, and its placebo date (2021) looks at years that include Phase 1.
+- Eligible exposure (the share of the city's lots the rule changed) is not measured; the outcome is a
+  city-wide rate, so a rule that touched few lots is diluted.
+- The audit changes no pool rule, outcome, base, horizon or pass mark; the pool and the data files are
+  the original run's.

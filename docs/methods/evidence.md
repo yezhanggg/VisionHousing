@@ -17,7 +17,7 @@ The evidence library is a list of real reforms and published studies that the mo
 | `sources` | Citation, web address, date read, where in the document, and how it was checked |
 | `verification` | The weakest check among the entry's sources (see below) |
 | `comparability` | How far the place and its figures carry over to Pennsylvania, and what to watch for |
-| `used_for` | `calibration` (sets a range in the Assumption Ledger), `hindcast` (job T4 runs the model on the place and compares), `evidence_card` (shown on a reform page) |
+| `used_for` | `calibration` (sets a range in the Assumption Ledger), `hindcast` (the hindcast runs the model on the place and compares), `evidence_card` (shown on a reform page) |
 
 The numbers themselves live only in `assumptions/evidence.yaml`. This note does not repeat them, so the two cannot disagree.
 

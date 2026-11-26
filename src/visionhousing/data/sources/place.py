@@ -14,8 +14,11 @@ one door the pack builder uses for them:
 - :data:`TABLES` and :data:`COLUMNS` describe every table and column for the
   pack's data dictionary.
 
-The safety source needs an api.data.gov key in the environment; without one
-the safety table is simply left out and a note says so.
+The FBI safety source needs an api.data.gov key in the environment; without
+one the ``safety_county`` table is simply left out and a note says so. The
+keyless city safety records (Philadelphia, see
+:mod:`visionhousing.data.sources.phl_safety`) need no key and build
+``safety_local``.
 """
 
 from __future__ import annotations
@@ -31,24 +34,33 @@ from visionhousing.data import manifest as mf
 from visionhousing.data.http import FetchError, HttpClient
 from visionhousing.data.sources import incentives as inc_src
 from visionhousing.data.sources import jobs as jobs_src
+from visionhousing.data.sources import phl_safety as phl_safety_src
 from visionhousing.data.sources import safety as safety_src
 from visionhousing.data.sources import state_fips as to_state_fips
 from visionhousing.features import incentives as inc_fx
 from visionhousing.features import jobs as jobs_fx
 from visionhousing.features import safety as safety_fx
+from visionhousing.features import safety_local as safety_local_fx
 
 __all__ = ["COLUMNS", "TABLES", "PlaceInputs", "fetch_place", "place_tables"]
 
-TABLES: dict[str, dict[str, object]] = {**jobs_fx.TABLES, **inc_fx.TABLES, **safety_fx.TABLES}
+TABLES: dict[str, dict[str, object]] = {
+    **jobs_fx.TABLES,
+    **inc_fx.TABLES,
+    **safety_fx.TABLES,
+    **safety_local_fx.TABLES,
+}
 """Every place-profile pack table: key, sources and description."""
 COLUMNS: dict[tuple[str, str], tuple[str, str, str]] = {
     **jobs_fx.COLUMNS,
     **inc_fx.COLUMNS,
     **safety_fx.COLUMNS,
+    **safety_local_fx.COLUMNS,
 }
 """``(table, column) -> (unit, description, source id)`` for every place-profile column."""
 TIER_TWO = {("incentives_tract", "koz_sites"), ("incentives_tract", "koz_acres"),
             ("incentives_county", "koz_sites"), ("incentives_county", "koz_acres")}  # fmt: skip
+TIER_TWO |= {key for key in safety_local_fx.COLUMNS}
 """Columns from a single state's own source (Keystone Opportunity Zones): tier 2."""
 
 
@@ -61,6 +73,8 @@ class PlaceInputs:
     cbp: pd.DataFrame | None = None
     incentives: inc_src.IncentiveInputs | None = None
     safety: pd.DataFrame | None = None
+    safety_local: dict[str, pd.DataFrame] | None = None
+    """Philadelphia count extracts (:mod:`visionhousing.data.sources.phl_safety`)."""
     files: list[tuple[str, Path]] = field(default_factory=list)
     notes: list[str] = field(default_factory=list)
 
@@ -116,6 +130,14 @@ def fetch_place(
             "place: safety table left out (no api.data.gov key in API_DATA_GOV_KEY or "
             "FBI_API_KEY, and nothing cached)"
         )
+    if state.upper() == "PA":
+        rules = safety_local_fx.load_rules()
+        out.safety_local = attempt("phl_safety", lambda: phl_safety_src.fetch_phl_safety(
+            cache, rules=rules, client=client, manifest=manifest))  # fmt: skip
+        for name, file in phl_safety_src.FILES.items():
+            path = cache / "local" / "phl" / file
+            if path.exists():
+                out.files.append((phl_safety_src.SOURCES[name], path))
     out.files.sort()
     return out
 
@@ -148,4 +170,20 @@ def place_tables(
         )
     if inputs.safety is not None and len(inputs.safety):
         out["safety_county"] = safety_fx.safety_table(inputs.safety, counties)
+    if inputs.safety_local:
+        out["safety_local"] = phl_safety_table(inputs.safety_local, tracts, tract_shapes)
     return out
+
+
+def phl_safety_table(
+    extracts: dict[str, pd.DataFrame],
+    tracts: pd.DataFrame,
+    tract_shapes: Sequence[tuple[str, dict[str, Any]]],
+) -> pd.DataFrame:
+    """The ``safety_local`` table for Philadelphia from its count extracts."""
+    county = safety_local_fx.PHILADELPHIA
+    rules = safety_local_fx.load_rules()
+    shapes = [(g, s) for g, s in tract_shapes if str(g).startswith(county)]
+    return safety_local_fx.safety_local_table(
+        extracts, shapes, tracts, county, float(rules["min_tract_population"])
+    )

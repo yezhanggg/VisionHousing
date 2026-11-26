@@ -160,6 +160,9 @@ def test_county_detail(client):
     assert d["tracts"] and all(t.startswith(fips) for t in d["tracts"])
     geoids = {f["properties"]["geoid"] for f in d["boundaries"]["features"]}
     assert fips in geoids and set(d["tracts"]) <= geoids
+    # plain notes for the county panel: the back-test record; no local law read in Testland
+    assert d["notes"]["backtest"].startswith("In past years, this tool's baseline for this county")
+    assert d["notes"]["local_law"] is None
 
 
 def test_county_not_in_state_is_404(client):

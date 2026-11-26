@@ -11,19 +11,51 @@ Plain-language summary
 ``GET  /states/{st}/summary``              the state's facts and its baseline
 ``GET  /states/{st}/counties/{fips}``      one county: baseline, each reform, the package
 ``GET  /reforms`` · ``/reforms/{id}``      reform definitions and their ledger parameters
+``GET  /scenarios``                        every scenario (benchmarks, bills, extra scenarios):
+                                           kind, description, how to run it, variants
 ``POST /run``                              one run: ``Result.to_dict()`` + explanation
 ``POST /compare``                          reforms (or up to six scenarios) side by side
 ``GET  /ledger``                           the Assumption Ledger, searchable
 ``GET  /provenance``                       where every dataset comes from
-``GET  /validation``                       the baseline backtest skill table
-``GET  /export/{fmt}``                     the run as ``csv``, ``json`` or ``html`` (the brief)
+``GET  /validation``                       the backtest skill table and error by kind of place
+``GET  /export/{fmt}``                     the run as ``csv``, ``json``, ``html`` (the brief)
+                                          or ``hearing`` (the two-page hearing brief)
 ``GET  /states/{st}/map``                  each county's baseline, added homes, change and map class
+``GET  /states/{st}/tract-points``         every tract's id, county and interior point (once)
+``GET  /states/{st}/tracts``               every tract under the scenario, column by column: added
+                                           homes, each reform, class; county-level reforms in
+                                           ``county_only``
+``GET  /states/{st}/tract-funnel``         each tract-level reform's map funnel, tract by tract
+``GET  /states/{st}/permit-years``         each county's homes permitted per year (past), per
+                                           1,000 homes and class, plus the baseline's 2027-2031
 ``GET  /states/{st}/outlines``             the county outlines (GeoJSON)
+``GET  /states/{st}/adu-budget-grid``      the ADU budget-and-target grid and one query on it
+                                           (``api.budget_grid``)
+``GET  /states/{st}/law-changes?r=``      what one reform or bill changes in each county and
+                                           municipality: four answers with citations, dates,
+                                           denominators, capacity and units (``api.law_changes``)
+``GET  /states/{st}/law-changes/read-next`` bounding runs for the top unread ordinances
+                                           (``?r=``; slow the first time, then cached)
+``GET  /states/{st}/districts``            each state legislative district under the scenario:
+                                           baseline, each reform, package (P10/P50/P90 of
+                                           per-draw sums), split share (``api.districts``)
 ``GET  /evidence?reform=``                 the evidence library entries (all, or one reform's)
+``GET  /evidence/states?state=``           cross-state comparison records and the state-by-policy-
+                                           type completeness matrix (``evidence_states``)
 ``GET  /report-card?state=``               the state's data report card
-``GET  /places/{st}?q=&level=``            counties (or tracts) whose name contains ``q``
+``GET  /places/{st}?q=&level=&county=``   counties (or tracts) whose name contains ``q``
+                                           (``county=`` keeps one county's, with ``total``)
 ``GET  /profile/{st}/{geoid}``             a place profile (county or tract); ``format=``
                                            ``json`` (default), ``md``, ``html`` or ``csv``
+``GET  /grades/{st}?r=&level=``            evidence grades A-D for each headline number, state
+                                           or county (``api.grades``)
+``GET  /trace/{st}?r=&id=``                the step-by-step waterfall behind one number
+``GET  /switch/{st}?r=``                   each reform's top three drivers at low / central /
+                                           high, for a three-way switch
+``GET  /confidence/{st}``                  baseline performance and reform evidence, side by
+                                           side, never merged (``api.cards``)
+``GET  /lever/{st}?r=&county=``            the counterfactual lever card for one reform
+``GET  /implementation/{st}?r=&geoid=``    implementation-status rows with sources and dates
 =========================================  ==============================================
 
 If ``web/dist/`` has not been built, every page address answers with a short
@@ -31,8 +63,12 @@ plain-language page that says how to build it; the JSON endpoints still work.
 
 Every number comes from the engine unchanged. Requests are checked (see
 ``api.models``); bad input gets a 400, a body over 64 KB a 413, an unknown
-state or county a 404, and a run past the time limit a 504, each as JSON with
-an ``error`` code and a plain ``message``.
+state or county a 404, a full work queue a 503 (with ``Retry-After``), and a run
+past the time limit a 504, each as JSON with
+an ``error`` code and a plain ``message``. A real state's scenario GET addresses
+(county, map, tracts, tract-funnel, export) answer only the default seed and
+draws (400 ``default_sampling_only``; ``POST /run`` takes any). Every GET looks up
+its rendered reply in the cache before it asks for the engine run behind it.
 """
 
 from __future__ import annotations
@@ -60,17 +96,29 @@ from visionhousing.api.models import (
     ScenarioError,
     scenario_from_query,
 )
-from visionhousing.api.runner import ContextStore, Runner, RunTimeoutError, _signature
+from visionhousing.api.runner import (
+    ContextStore,
+    MemoryWatchdog,
+    Runner,
+    RunnerBusyError,
+    RunTimeoutError,
+    _signature,
+    is_default_scenario,
+    require_default_sampling,
+    stamp,
+)
 from visionhousing.api.security import (
     BodyLimit,
     SecurityHeaders,
     content_security_policy,
     page_hashes,
 )
+from visionhousing.api.status_view import status_views
 from visionhousing.engine.context import PACKS_DIR
 from visionhousing.engine.core import Result, run
 from visionhousing.ledger import LedgerError, load_ledger
 from visionhousing.ledger.loader import ROOT
+from visionhousing.paths import state_code
 
 __all__ = ["API", "ApiError", "create_app"]
 
@@ -142,7 +190,9 @@ def create_app(
     packs_dir: Path | None = None,
     run_timeout: float | None = None,
     workers: int = 2,
-    cache_size: int = 32,
+    cache_size: int = 4,
+    result_mb: float | None = None,
+    any_sampling: bool = False,
 ) -> Any:
     """Build the app.
 
@@ -152,7 +202,14 @@ def create_app(
         run_timeout: Seconds a request waits for a run (default 120, or the
             ``VISIONHOUSING_RUN_TIMEOUT`` environment variable).
         workers: Threads that run the engine.
-        cache_size: Run results kept in memory.
+        cache_size: Whole run results kept in memory, at most (rendered replies have a
+            byte budget of their own; see ``api.runner``).
+        result_mb: Megabytes of whole results kept (default 3,072, or the
+            ``VISIONHOUSING_RESULT_MB`` environment variable; ``math.inf`` for no
+            byte limit, so only ``cache_size`` counts).
+        any_sampling: Let a real state's scenario GET addresses take any seed and
+            draws. Off for the server; the static exporter, which asks for its own
+            seed and draws, turns it on.
 
     Returns:
         The ASGI app: the FastAPI app wrapped in the body-size limit and the
@@ -161,7 +218,13 @@ def create_app(
     """
     web = Path(web_dir) if web_dir is not None else WEB_DIR
     contexts = ContextStore(Path(packs_dir) if packs_dir is not None else PACKS_DIR)
-    runner = Runner(workers, DEFAULT_TIMEOUT if run_timeout is None else run_timeout, cache_size)
+    runner = Runner(
+        workers,
+        DEFAULT_TIMEOUT if run_timeout is None else run_timeout,
+        cache_size,
+        result_budget=None if result_mb is None else result_mb * 1024 * 1024,
+    )
+    watchdog = MemoryWatchdog(runner)
     mimetypes.add_type("text/javascript", ".js")
     mimetypes.add_type("text/javascript", ".mjs")
     mimetypes.add_type("application/json", ".json")
@@ -169,7 +232,9 @@ def create_app(
 
     @asynccontextmanager
     async def lifespan(_app: FastAPI):
+        watchdog.start()  # only a real server runs the lifespan; in-memory callers do not
         yield
+        watchdog.stop()
         runner.shutdown()
 
     app = FastAPI(
@@ -181,6 +246,7 @@ def create_app(
         lifespan=lifespan,
     )
     app.state.runner = runner
+    app.state.watchdog = watchdog
     app.state.contexts = contexts
     profile_contexts: dict[str, tuple[tuple, Any]] = {}
 
@@ -189,6 +255,12 @@ def create_app(
     @app.exception_handler(ApiError)
     async def _api_error(_req: Request, exc: ApiError) -> Response:
         return _error(exc.status, exc.code, exc.message)
+
+    @app.exception_handler(RunnerBusyError)
+    async def _busy(_req: Request, exc: RunnerBusyError) -> Response:
+        reply = _error(503, "busy", str(exc))
+        reply.headers["Retry-After"] = str(exc.retry_after)
+        return reply
 
     @app.exception_handler(RequestValidationError)
     async def _bad_request(_req: Request, exc: RequestValidationError) -> Response:
@@ -204,16 +276,21 @@ def create_app(
 
     # ------------------------------------------------------------ helpers
 
+    def checked_state(state: str) -> str:
+        try:
+            return state_code(state)
+        except ValueError:
+            raise ApiError(400, "invalid_state", "state must be a two-letter code") from None
+
     def context(state: str):
-        code = state.upper()
-        if len(code) != 2 or not code.isalpha():
-            raise ApiError(400, "invalid_state", "state must be a two-letter code")
+        code = checked_state(state)
         try:
             return contexts.get(code)
         except FileNotFoundError as exc:
             raise ApiError(404, "state_not_built", str(exc)) from None
 
-    def execute(req: RunRequest) -> tuple[str, Result]:
+    def run_key(req: RunRequest) -> tuple[Any, Any, str]:
+        """The state context, the reforms and the cache key of a run; runs nothing."""
         ctx = context(req.state)
         reforms = req.reform_arg()
         key = Runner.key(
@@ -227,7 +304,13 @@ def create_app(
             req.seed,
             req.draws,
             req.cycle,
+            *(() if req.market is None else (("market", req.market),)),
+            *((("capacity_screen", True),) if req.capacity_screen else ()),
         )
+        return ctx, reforms, key
+
+    def execute(req: RunRequest) -> tuple[str, Result]:
+        ctx, reforms, key = run_key(req)
 
         def job() -> Result:
             return run(
@@ -239,20 +322,25 @@ def create_app(
                 cycle=req.cycle,
                 context=ctx,
                 use_cache=False,
+                market=req.market,
+                capacity_screen=req.capacity_screen,
             )
 
-        return key, timed(key, job)
+        return key, timed(key, job, pin=is_default_scenario(req))
 
-    def timed(key: str, job: Any) -> Any:
+    def timed(key: str, job: Any, pin: bool = False) -> Any:
         """Run ``job`` on the pool within the time limit; map errors to clear JSON."""
         try:
-            return runner.submit(key, job)
+            return runner.submit(key, job, pin=pin)
+        except RunnerBusyError:
+            raise
         except RunTimeoutError as exc:
             raise ApiError(
                 504,
                 "run_timeout",
-                f"{exc}. The run continues in the background; ask again in a minute "
-                "for the result, or use fewer draws or fewer reforms.",
+                f"{exc}. A run already started continues in the background; ask again "
+                "while it runs to pick it up (a custom scenario's result is not kept once "
+                "no one waits for it), or use fewer draws or fewer reforms.",
             ) from None
         except LedgerError as exc:
             raise ApiError(400, "invalid_override", str(exc)) from None
@@ -274,17 +362,50 @@ def create_app(
                 payload, status = service.explanation(result, drivers=drivers)
             else:
                 payload, status = None, "skipped"
-            return service.dumps(
-                {**result.to_dict(), "explanation": payload, "explanation_status": status}
-            )
+            reply = {**result.to_dict(), "explanation": payload, "explanation_status": status}
+            # The transit status ladder as shown text (api.status_view), for every screen.
+            reply["status_views"] = status_views(reply)
+            return service.dumps(reply)
 
         return timed(Runner.key("json", key, with_explanation, drivers), render)
 
-    def from_query(request: Request, state: str | None = None) -> RunRequest:
+    def scenario_query(
+        request: Request, state: str | None = None, aliases: dict[str, str] | None = None
+    ) -> RunRequest:
+        """The scenario of a GET address; a real state answers only the default sampling."""
+        req = from_query(request, state, aliases)
+        refused = None if any_sampling else require_default_sampling(req)
+        if refused:
+            raise ApiError(400, "default_sampling_only", refused)
+        return req
+
+    def cached_reply(req: RunRequest, kind: str, make: Any, *extra: Any) -> Any:
+        """Return the rendered reply ``kind`` of the run ``req``.
+
+        Looked up in the cache first, so a cached reply never needs its run; else
+        the run (cached or new) is rendered with ``make(result)`` and kept.
+        """
+        _ctx, _reforms, key = run_key(req)
+        reply_key = Runner.key(kind, key, *extra)
+        found, body = runner.peek(reply_key)
+        if found:
+            return body
+        _key, result = execute(req)
+        return timed(reply_key, lambda: make(result))
+
+    def from_query(
+        request: Request, state: str | None = None, aliases: dict[str, str] | None = None
+    ) -> RunRequest:
         if len(request.url.query) > LIMITS["query_chars"]:
             raise ApiError(400, "query_too_long", "the address is too long")
+        params = dict(request.query_params)
+        for alias, name in (aliases or {}).items():
+            if alias in params:
+                if name in params:
+                    raise ApiError(400, "invalid_query", f"give {name} or {alias}, not both")
+                params[name] = params.pop(alias)
         try:
-            return scenario_from_query(dict(request.query_params), state)
+            return scenario_from_query(params, state)
         except ScenarioError as exc:
             raise ApiError(400, "invalid_query", str(exc)) from None
         except ValidationError as exc:
@@ -302,32 +423,92 @@ def create_app(
     def state_summary(st: str) -> Response:
         """The state's facts and its baseline at the default seed and draws."""
         ctx = context(st)
-        _key, result = execute(RunRequest(state=ctx.state))
-        return _json(service.state_summary(ctx, contexts.folder(ctx.state), result))
+        folder = contexts.folder(ctx.state)
+        body = cached_reply(
+            RunRequest(state=ctx.state), "summary",
+            lambda result: service.dumps(service.state_summary(ctx, folder, result)),
+            stamp(folder),
+        )  # fmt: skip
+        return Response(body, media_type="application/json")
 
     @app.get(f"{API}/states/{{st}}/counties/{{fips}}")
     def county(st: str, fips: str, request: Request) -> Response:
         """One county under the scenario in the query (``r``, ``a``, ``seed``, ...)."""
         if not fips.isdigit() or len(fips) != 5:
             raise ApiError(400, "invalid_county", "county must be a five-digit FIPS code")
-        req = from_query(request, st)
-        _key, result = execute(req)
-        ctx = context(req.state)
-        try:
-            data = service.county_detail(ctx, contexts.folder(ctx.state), result, fips)
-        except KeyError:
-            raise ApiError(404, "county_not_found", f"no county {fips} in {ctx.state}") from None
-        data["tract_results"] = views.county_tracts(result, fips)
-        return _json(data)
+        req = scenario_query(request, st)
+        ctx, _reforms, key = run_key(req)
+        folder = contexts.folder(ctx.state)
+        reply_key = Runner.key("county", key, fips, stamp(folder))
+        found, body = runner.peek(reply_key)
+        if not found:
+            _key, result = execute(req)
+            try:
+                data = service.county_detail(ctx, folder, result, fips)
+            except KeyError:
+                raise ApiError(
+                    404, "county_not_found", f"no county {fips} in {ctx.state}"
+                ) from None
+            data["tract_results"] = views.county_tracts(result, fips)
+            body = service.dumps(data)
+            runner.put(reply_key, body)
+        return Response(body, media_type="application/json")
 
     @app.get(f"{API}/states/{{st}}/map")
     def county_map(st: str, request: Request) -> Response:
         """Each county under the scenario in the query: baseline, added, change, map class."""
-        req = from_query(request, st)
-        key, result = execute(req)
+        req = scenario_query(request, st)
         ctx = context(req.state)
-        facts = service._county_facts(contexts.folder(ctx.state))
-        return _json(timed(Runner.key("map", key), lambda: views.county_map(ctx, facts, result)))
+        folder = contexts.folder(ctx.state)
+
+        def make(result: Result) -> bytes:
+            facts = service._county_facts(folder)
+            there = folder if folder.is_dir() else None
+            return service.dumps(views.county_map(ctx, facts, result, there))
+
+        return Response(cached_reply(req, "map_json", make), media_type="application/json")
+
+    @app.get(f"{API}/states/{{st}}/tract-points")
+    def tract_points(st: str) -> Response:
+        """Every tract's id, county and interior point (does not depend on the scenario)."""
+        ctx = context(st)
+        key = Runner.key("tract_points", ctx.state, ctx.data_hash)
+        body = timed(key, lambda: service.dumps(views.state_tract_points(ctx)))
+        return Response(body, media_type="application/json")
+
+    def tract_reply(kind: str, view: Any, st: str, request: Request) -> Response:
+        """A tract reply for the scenario in the query, made once per run and cached."""
+        req = scenario_query(request, st, aliases={"reforms": "r"})
+        ctx = context(req.state)
+        body = cached_reply(req, kind, lambda result: service.dumps(view(result, ctx)))
+        return Response(body, media_type="application/json")
+
+    @app.get(f"{API}/states/{{st}}/tracts")
+    def state_tracts(st: str, request: Request) -> Response:
+        """Every tract under the scenario in the query (``r`` or ``reforms``, ``a``, ...).
+
+        Column by column, keyed by geoid: homes added by the tract-level reforms,
+        each reform's P50, class; county-level reforms in ``county_only``.
+        """
+        return tract_reply("tracts", views.state_tracts, st, request)
+
+    @app.get(f"{API}/states/{{st}}/tract-funnel")
+    def tract_funnel(st: str, request: Request) -> Response:
+        """Each tract-level reform's map funnel (run alone), per tract, county and state."""
+        return tract_reply("tract_funnel", views.state_tract_funnel, st, request)
+
+    @app.get(f"{API}/states/{{st}}/permit-years")
+    def permit_years(st: str) -> Response:
+        """Each county's homes permitted per year (past) and the baseline's years 2027-2031."""
+        ctx = context(st)
+        folder = contexts.folder(ctx.state)
+        body = cached_reply(
+            RunRequest(state=ctx.state), "permit_years",
+            lambda result: service.dumps(
+                views.county_permit_years(ctx, service._county_facts(folder), result)
+            ),
+        )  # fmt: skip
+        return Response(body, media_type="application/json")
 
     @app.get(f"{API}/states/{{st}}/outlines")
     def outlines(st: str) -> Response:
@@ -337,7 +518,7 @@ def create_app(
     @app.get(f"{API}/evidence")
     def evidence(reform: str | None = None) -> Response:
         """The evidence library: every entry, or one reform's."""
-        if reform is not None and (len(reform) > 32 or not reform.replace("_", "").isalnum()):
+        if reform is not None and (len(reform) > 40 or not reform.replace("_", "").isalnum()):
             raise ApiError(400, "invalid_reform", "reform must be a short id")
         return _json(views.evidence_cards(reform))
 
@@ -354,10 +535,15 @@ def create_app(
         """Every runnable reform."""
         return _json({"reforms": service.reform_list()})
 
+    @app.get(f"{API}/scenarios")
+    def scenarios() -> Response:
+        """Every scenario (baseline, benchmarks, bills, extra scenarios) with a description."""
+        return _json({"scenarios": service.scenario_list()})
+
     @app.get(f"{API}/reforms/{{key}}")
     def reform(key: str) -> Response:
         """One reform's definition and its ledger parameters."""
-        if len(key) > 32:
+        if len(key) > 40:
             raise ApiError(400, "invalid_reform", "reform id is too long")
         try:
             return _json(service.reform_detail(key))
@@ -367,10 +553,11 @@ def create_app(
     @app.post(f"{API}/run")
     def run_endpoint(req: RunRequest) -> Response:
         """One run: the engine's ``Result.to_dict()`` plus the explanation payload."""
-        key, result = execute(req)
-        return Response(
-            run_json(key, result, req.explain, req.drivers), media_type="application/json"
-        )
+        _ctx, _reforms, key = run_key(req)
+        found, body = runner.peek(Runner.key("json", key, req.explain, req.drivers))
+        if not found:
+            body = run_json(key, execute(req)[1], req.explain, req.drivers)
+        return Response(body, media_type="application/json")
 
     @app.post(f"{API}/compare")
     def compare(req: CompareRequest) -> Response:
@@ -386,6 +573,8 @@ def create_app(
                     reforms=item.reforms,
                     overrides=item.overrides,
                     preset=item.preset,
+                    market=item.market,
+                    capacity_screen=item.capacity_screen,
                     seed=req.seed,
                     draws=req.draws,
                 )
@@ -418,32 +607,53 @@ def create_app(
         """The baseline backtest: each candidate rule's error and interval coverage."""
         ctx = context(state)
         key = Runner.key("validation", ctx.state, ctx.data_hash, ctx.ledger.hash())
-        return _json(runner.submit(key, lambda: service.validation_table(ctx)))
+
+        def build() -> dict:
+            out = service.validation_table(ctx, contexts.folder(ctx.state))
+            # The Method screen's plain rule list on the contest's own measure.
+            return {**out, "contest_view": views.contest_view(out)}
+
+        return _json(runner.submit(key, build))
 
     @app.get(f"{API}/export/{{fmt}}")
     def export(fmt: str, request: Request) -> Response:
         """The scenario in the query (``s``, ``r``, ``a``, ...) as a CSV, JSON or HTML file."""
-        if fmt not in ("csv", "json", "html"):
-            raise ApiError(400, "invalid_format", "format must be csv, json or html")
-        req = from_query(request)
-        key, result = execute(req)
-        name = f"visionhousing-{result.state}-{result.hashes.data[:8]}-seed{result.seed}.{fmt}"
+        if fmt == "hearing.css":
+            # The hearing brief's style rules (the page links them; no inline styles).
+            from visionhousing.report.hearing import CSS
+
+            return Response(CSS + "\n", media_type="text/css; charset=utf-8")
+        if fmt not in ("csv", "json", "html", "hearing"):
+            raise ApiError(400, "invalid_format", "format must be csv, json, html or hearing")
+        req = scenario_query(request)
+        ctx = context(req.state)
+        # The run's state and data hash are the context's (engine.run copies them).
+        name = f"visionhousing-{ctx.state}-{ctx.data_hash[:8]}-seed{req.seed}.{fmt}"
         disposition = {"content-disposition": f'attachment; filename="{name}"'}
+        if fmt == "hearing":
+            # The two-page hearing brief (report.hearing), shown in the browser to print.
+            from visionhousing.report.hearing import hearing_reply
+
+            folder = contexts.folder(ctx.state)
+            body = cached_reply(req, "hearing", lambda r: hearing_reply(ctx, folder, r))
+            return Response(body, media_type="text/html; charset=utf-8")
         if fmt == "csv":
-            body = timed(Runner.key("csv", key), lambda: service.export_csv(result))
+            body = cached_reply(req, "csv", service.export_csv)
             return Response(body, headers=disposition, media_type="text/csv; charset=utf-8")
         if fmt == "html":
-            body = timed(Runner.key("html", key), lambda: service.export_html(result))
+            body = cached_reply(req, "html", service.export_html)
             return Response(body, headers=disposition, media_type="text/html; charset=utf-8")
-        return Response(run_json(key, result), headers=disposition, media_type="application/json")
+        _ctx, _reforms, key = run_key(req)
+        found, body = runner.peek(Runner.key("json", key, True, False))
+        if not found:
+            body = run_json(key, execute(req)[1])
+        return Response(body, headers=disposition, media_type="application/json")
 
     def profile_context(state: str):
         """The state's profile context (small pack tables), loaded once per pack version."""
         from visionhousing.profile import load_profile_context
 
-        code = state.upper()
-        if len(code) != 2 or not code.isalpha():
-            raise ApiError(400, "invalid_state", "state must be a two-letter code")
+        code = checked_state(state)
         folder = contexts.folder(code)
         if not folder.is_dir():
             raise ApiError(
@@ -457,8 +667,14 @@ def create_app(
         return held[1]
 
     @app.get(f"{API}/places/{{st}}")
-    def places(st: str, q: str = "", level: str = "county", limit: int = 25) -> Response:
-        """Counties (or tracts) of a state whose name or code contains ``q``."""
+    def places(
+        st: str, q: str = "", level: str = "county", limit: int = 25, county: str = ""
+    ) -> Response:
+        """Counties (or tracts) of a state whose name or code contains ``q``.
+
+        ``county`` (a 5-digit code) keeps only the places in that county; the reply then
+        also says how many matched in all (``total``), so a caller can tell a cut list.
+        """
         from visionhousing.profile import list_places
 
         if len(q) > LIMITS["search_chars"]:
@@ -467,10 +683,18 @@ def create_app(
             raise ApiError(400, "invalid_level", "level must be county or tract")
         if not 1 <= limit <= 500:
             raise ApiError(400, "invalid_limit", "limit must be between 1 and 500")
+        if county and not (county.isdigit() and len(county) == 5):
+            raise ApiError(400, "invalid_county", "county must be a 5-digit code")
         ctx = profile_context(st)
+        if not county:
+            return _json(
+                {"state": ctx.state, "level": level, "places": list_places(ctx, q, level=level,
+                                                                           limit=limit)}
+            )  # fmt: skip
+        found = [p for p in list_places(ctx, q, level=level, limit=10**9) if p["county"] == county]
         return _json(
-            {"state": ctx.state, "level": level, "places": list_places(ctx, q, level=level,
-                                                                       limit=limit)}
+            {"state": ctx.state, "level": level, "county": county, "total": len(found),
+             "places": found[:limit]}
         )  # fmt: skip
 
     @app.get(f"{API}/profile/{{st}}/{{geoid}}")
@@ -498,6 +722,55 @@ def create_app(
             headers={"content-disposition": f'attachment; filename="{name}"'},
             media_type=f"{media}; charset=utf-8",
         )
+
+    from visionhousing.api.evidence_states import make_router as evidence_states_router
+
+    app.include_router(evidence_states_router(API, _error))
+
+    from visionhousing.api import districts as districts_api
+
+    districts_api.register(
+        app, api=API, error=ApiError, context=context, execute=execute, timed=timed,
+        folder=contexts.folder,
+    )  # fmt: skip
+
+    from visionhousing.api import intake as intake_api
+
+    intake_api.register(
+        app, api=API, error=ApiError, context=context, execute=execute, timed=timed,
+        folder=contexts.folder,
+    )  # fmt: skip
+
+    from visionhousing.api import grades as grades_api
+
+    grades_api.register(
+        app, api=API, error=ApiError, context=context, execute=execute, timed=timed,
+        folder=contexts.folder, data_dir=web / "data",
+    )  # fmt: skip
+
+    service.register_comparisons(app, api=API, error=ApiError, context=context, timed=timed)
+
+    from visionhousing.api import budget_grid as budget_grid_api
+
+    budget_grid_api.register(app, api=API, error=ApiError, context=context, timed=timed)
+
+    from visionhousing.api import cards as cards_api
+
+    cards_api.register(
+        app, api=API, error=ApiError, context=context, execute=execute, timed=timed,
+        folder=contexts.folder,
+    )  # fmt: skip
+
+    from visionhousing.api import answers as answers_api
+
+    answers_api.register(app, api=API, error=ApiError)
+
+    from visionhousing.api import law_changes as law_changes_api
+
+    law_changes_api.register(
+        app, api=API, error=ApiError, context=context, execute=execute, timed=timed,
+        folder=contexts.folder,
+    )  # fmt: skip
 
     @app.api_route(f"{API}/{{rest:path}}", methods=["GET", "POST", "PUT", "PATCH", "DELETE"])
     def api_not_found(rest: str) -> Response:

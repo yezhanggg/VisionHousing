@@ -33,6 +33,10 @@ What the pack holds (``costs_county``)
 - ``wage_index_method``: ``county`` where BLS publishes the county figure, and
   ``state_value`` where it does not (BLS withholds figures that would reveal a
   single employer; these are flagged "N"). There the county index is 1.0.
+  Where BLS also withholds the **state** figure (small states, such as
+  Vermont), the state pay is the job-weighted mean of the published counties
+  and withheld counties are marked ``state_from_counties`` (or
+  ``national_value`` when no county is published either).
 
 The model turns the wage index into a cost index with a labour share from the
 ledger (only part of a building's cost is labour); that step is not done here.
@@ -112,6 +116,33 @@ def read_qcew(source: str | Path) -> pd.DataFrame:
     return frame[cols].sort_values(["level", "area_fips"]).reset_index(drop=True)
 
 
+def _state_pay(
+    qcew: pd.DataFrame, state_fips: str, state: pd.Series, nation_pay: float
+) -> tuple[float, str]:
+    """The state's construction pay and how it was found.
+
+    BLS withholds the statewide private figure in some small states (Vermont in
+    2025) to protect a large employer's data. The model then degrades instead of
+    failing: the job-weighted mean pay of the counties BLS does publish
+    (``state_from_counties``), or, with none published, the national figure
+    (``national_value``).
+    """
+    if state["disclosure_code"] != "N" and state["avg_annual_pay"] > 0:
+        return float(state["avg_annual_pay"]), "state"
+    counties = qcew[
+        (qcew["level"] == "county")
+        & qcew["area_fips"].str.startswith(state_fips)
+        & ~qcew["area_fips"].str.endswith("999")  # "county unknown" rows
+        & (qcew["disclosure_code"] != "N")
+        & (qcew["avg_annual_pay"] > 0)
+        & (qcew["annual_avg_emplvl"] > 0)
+    ]
+    if len(counties):
+        jobs = counties["annual_avg_emplvl"].astype(float)
+        return float((counties["avg_annual_pay"] * jobs).sum() / jobs.sum()), "state_from_counties"
+    return nation_pay, "national_value"
+
+
 def cost_adjusters(qcew: pd.DataFrame, state_fips: str, counties: list[str]) -> pd.DataFrame:
     """Build the ``costs_county`` table for the given county codes.
 
@@ -121,7 +152,7 @@ def cost_adjusters(qcew: pd.DataFrame, state_fips: str, counties: list[str]) -> 
         counties: Five-digit county codes the pack holds; each gets a row.
 
     Raises:
-        ValueError: If the state or national row is missing or withheld.
+        ValueError: If the state or national row is missing, or the national pay is withheld.
     """
     rows = qcew.set_index(["level", "area_fips"])
     try:
@@ -129,11 +160,10 @@ def cost_adjusters(qcew: pd.DataFrame, state_fips: str, counties: list[str]) -> 
         nation = rows.loc[("nation", "US000")]
     except KeyError as err:
         raise ValueError(f"QCEW file lacks the state or national row: {err}") from None
-    for label, row in (("state", state), ("nation", nation)):
-        if row["disclosure_code"] == "N" or row["avg_annual_pay"] <= 0:
-            raise ValueError(f"QCEW {label} construction pay is withheld")
+    if nation["disclosure_code"] == "N" or nation["avg_annual_pay"] <= 0:
+        raise ValueError("QCEW nation construction pay is withheld")
     year = int(state["year"])
-    state_pay = float(state["avg_annual_pay"])
+    state_pay, state_method = _state_pay(qcew, state_fips, state, float(nation["avg_annual_pay"]))
     out = []
     for county in sorted(counties):
         key = ("county", county)
@@ -146,6 +176,8 @@ def cost_adjusters(qcew: pd.DataFrame, state_fips: str, counties: list[str]) -> 
         else:
             jobs = pay = None
             index, method = 1.0, "state_value"
+        if state_method != "state" and method == "state_value":
+            method = state_method  # the stand-in for the state is itself an estimate
         out.append(
             {
                 "county": county,

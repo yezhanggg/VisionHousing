@@ -167,6 +167,27 @@ def test_cost_adjusters_by_hand(tmp_path):
         costs.cost_adjusters(q[q["level"] != "nation"], "42", ["42001"])
 
 
+def test_cost_adjusters_when_the_state_pay_is_withheld(tmp_path):
+    """Small states: BLS withholds the statewide figure; the build degrades, it does not fail."""
+    path = tmp_path / "q.csv"
+    path.write_text(QCEW, encoding="utf-8")
+    q = costs.read_qcew(path)
+    state = q["level"] == "state"
+    hidden = q.copy()
+    hidden.loc[state, "disclosure_code"] = "N"
+    hidden.loc[state, "avg_annual_pay"] = 0
+    out = costs.cost_adjusters(hidden, "42", ["42001", "42003"]).set_index("county")
+    # Only 42001 is published, so the state stand-in is its pay and its index is 1.0.
+    assert out.loc["42001", "wage_index_county_vs_state"] == 1.0
+    assert out.loc["42001", "wage_index_method"] == "county"
+    assert out.loc["42003", "wage_index_method"] == "state_from_counties"
+    assert out.loc["42001", "wage_index_state_vs_us"] == 0.945  # 75,600 / 80,000
+    no_counties = hidden[hidden["level"] != "county"]
+    out = costs.cost_adjusters(no_counties, "42", ["42001"]).set_index("county")
+    assert out.loc["42001", "wage_index_method"] == "national_value"
+    assert out.loc["42001", "wage_index_state_vs_us"] == 1.0
+
+
 def test_fetch_qcew_keeps_state_and_us_rows(tmp_path):
     url = get_source("bls_qcew_construction").url(year=2025)
     server = FileServer({url: QCEW.encode()})

@@ -4,7 +4,7 @@ Builds the one-sentence summary and three numbers, a verdict word per reform,
 each reform's funnel with what every step means, the top drivers from the
 sensitivity tornado, the package waterfall, what each estimate cannot tell
 you, the "explain this number" payload for every record, and the slide deck
-spec. Nothing here calls a model or types a number by hand (decision D-12):
+spec. Nothing here calls a model or types a number by hand:
 every number in every sentence carries a cite to where it came from, and the
 tests check each one. See ``docs/modules/explain.md``.
 """

@@ -14,25 +14,35 @@ How each number is worked out:
 - **Share aged 65 or older** (B01001): a tract's published share; for a county
   or the state, the tracts' shares weighted by population (which equals the
   share of the summed counts).
-- **Median household income** (B19013): a tract's published median. The pack
-  has no county or state income brackets, so a county's or state's figure is
-  the average of its tracts' medians weighted by households, and is marked
-  approximate.
+- **Median household income** (B19013): the Bureau's published median for a
+  tract, a county or the state (county and state medians are in the pack's
+  ``acs_bands`` table). A pack without that table falls back, for a county or
+  the state, to the average of its tracts' medians weighted by households,
+  marked approximate.
 - **Share of households renting**: renter households / all households (B25003).
 - **Rent-to-income gauge**: median gross rent x 12 / median household income.
-  It is a rough gauge only. It is not the share of renters who pay more than
-  30% of income (table B25070 is not in the pack yet), and renters usually earn
-  less than the median household.
+  It is a rough gauge only; the real share of renters paying 30% or more of
+  income (B25070) is in the ``housing`` section.
 
 A county is compared with the state, a tract with its county.
+
+Charts (see :mod:`visionhousing.profile.charts`): age (6 bands, B01001), race
+and ethnicity (B03002), household income (6 bands, B19001), and, for counties
+and the state, household size (B11016) and education of adults aged 25 or older
+(B15003). Each shows the bigger area's shares next to the place's.
+
+Headline: residents. Summary points: residents and households, median
+household income, and the largest age group.
 """
 
 from __future__ import annotations
 
 from visionhousing.features import brackets as br
+from visionhousing.profile.charts import band_chart, largest, published_median
 from visionhousing.profile.context import Area, Measure, ProfileContext
+from visionhousing.profile.format import fmt
 from visionhousing.profile.model import Section
-from visionhousing.profile.sections._common import FactMaker, finish, sentence, with_words
+from visionhousing.profile.sections._common import FactMaker, finish, point, sentence, with_words
 
 KEY = "people"
 TITLE = "People"
@@ -43,17 +53,28 @@ INCOME_NOTE = (
 )
 
 
-def _income(area: Area) -> Measure:
-    m = area.weighted_mean("median_household_income", list(HOUSEHOLDS))
-    return m if area.single else Measure(m.value, None, INCOME_NOTE)
+def _income_of(ctx: ProfileContext):
+    def measure(area: Area) -> Measure:
+        published = published_median(ctx, area, "median_household_income")
+        if published is not None:
+            return published
+        m = area.weighted_mean("median_household_income", list(HOUSEHOLDS))
+        return m if area.single else Measure(m.value, None, INCOME_NOTE)
+
+    return measure
 
 
-def _rent_gauge(area: Area) -> Measure:
-    rent = area.median("median_gross_rent", br.RENT).value
-    income = _income(area).value
-    if not rent or not income:
-        return Measure(None)
-    return Measure(rent * 12 / income)
+def _rent_gauge_of(ctx: ProfileContext):
+    def measure(area: Area) -> Measure:
+        rent = published_median(ctx, area, "median_gross_rent") or area.median(
+            "median_gross_rent", br.RENT
+        )
+        income = _income_of(ctx)(area).value
+        if not rent.value or not income:
+            return Measure(None)
+        return Measure(rent.value * 12 / income)
+
+    return measure
 
 
 def build(ctx: ProfileContext, geoid: str) -> Section | None:
@@ -67,7 +88,8 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
            lambda a: a.count(*HOUSEHOLDS), compare=False)  # fmt: skip
     fm.add("share_age_65plus", "Residents aged 65 or older", "share", SOURCE, years,
            lambda a: a.weighted_mean("share_age_65plus", "population"))  # fmt: skip
-    fm.add("median_household_income", "Median household income", "dollars", SOURCE, years, _income)
+    fm.add("median_household_income", "Median household income", "dollars", SOURCE, years,
+           _income_of(ctx))  # fmt: skip
     fm.add("renter_share", "Households that rent", "share", SOURCE, years,
            lambda a: a.ratio(["households_renter"], list(HOUSEHOLDS)))  # fmt: skip
     fm.add(
@@ -76,7 +98,7 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
         "share",
         SOURCE,
         years,
-        _rent_gauge,
+        _rent_gauge_of(ctx),
         note="median gross rent x 12 / median household income; not the share of rent-burdened "
         "renters",
     )
@@ -93,10 +115,28 @@ def build(ctx: ProfileContext, geoid: str) -> Section | None:
     if renters and renters.value is not None:
         parts.append(f"{renters.text} of households rent")
     summary = sentence(parts)
+    charts = [
+        band_chart(ctx, KEY, "age", "age", "bar", place, other, title="Residents by age"),
+        band_chart(ctx, KEY, "race", "race", "pie", place, other),
+        band_chart(ctx, KEY, "income", "income", "bar", place, other, title="Households by income"),
+        band_chart(
+            ctx, KEY, "household_size", "hhsize", "bar", place, other, title="Households by size"
+        ),
+        band_chart(ctx, KEY, "education", "edu", "bar", place, other),
+    ]
+    points = [
+        point(pop, "{text} residents" + (f" in {hh.text} households" if hh and hh.value else "")),
+        point(income, "Median household income {text}{words}"),
+    ]
+    top_age = largest(charts[0])
+    if top_age is not None:
+        points.append(f"Largest age group: {top_age.label} ({fmt(top_age.share, 'share')})")
     limits = (
         "Survey estimates averaged over five years, with margins of error; small tracts often have "
-        "wide margins. County and state income are approximate (tract medians weighted by "
-        "households). Rent burden (the share of renters paying over 30% of income) is not in the "
-        "data pack yet; the rent-to-income gauge is only a rough stand-in."
+        "wide margins. County and state medians are the Bureau's published medians where the "
+        "pack has them, else approximate (tract medians weighted by households). The "
+        "rent-to-income gauge is only a rough stand-in for rent burden, which the Homes section "
+        "shows. Household size and education are shown for counties and the "
+        "state only, to keep the data pack small."
     )
-    return finish(KEY, TITLE, summary, fm.facts, limits)
+    return finish(KEY, TITLE, summary, fm.facts, limits, charts=charts, lead=pop, points=points)

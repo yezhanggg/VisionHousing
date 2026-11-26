@@ -1,0 +1,50 @@
+# Keyless safety and neighbourhood-distress counts from city open data.
+#
+# Read by visionhousing.data.sources.phl_safety (what to ask the City's Carto
+# SQL service for) and visionhousing.features.safety_local (how the counts
+# become tract and county rates). Every count is added up on the City's
+# server into small location cells; no record, name or address is kept.
+
+version: 1
+
+# First calendar year read. Only full calendar years before the build date
+# are read, so with a 2026 build the years are 2021-2025 (five years).
+first_year: 2021
+
+# Years averaged for the "recent average" rate and spanned by the trend.
+window_years: 5
+
+# A trend (first to last year of the window) is shown only when the first
+# year has at least this many records: a change from 4 to 1 says little.
+min_trend_count: 20
+
+# Locations are rounded to this many decimals of a degree before counting
+# (4 decimals is about 10 metres). The City already publishes most points at
+# the hundred-block level, so this loses nothing that matters for tracts.
+grid_decimals: 4
+
+# A tract with fewer residents than this gets counts but no rate: a tiny
+# resident base (a park, the airport, the business district) makes any rate
+# per resident meaningless.
+min_tract_population: 500
+
+philadelphia:
+  # Police incidents by the FBI's Uniform Crime Reporting codes the City
+  # publishes in ucr_general. Violent: homicide (100), rape (200), robbery
+  # (300), aggravated assault (400). Property: burglary (500), theft (600),
+  # motor-vehicle theft (700), arson (900, which the FBI counts as property).
+  violent_ucr: ["100", "200", "300", "400"]
+  property_ucr: ["500", "600", "700", "900"]
+  # L&I code-violation cases (counted once per case number) of these types.
+  li_case_types: ["NOTICE OF VIOLATION", "SITE VIOLATION NOTICE"]
+  # 311 service requests that point at physical neglect of a block. Other
+  # request types (information requests, potholes, street lights ...) are left
+  # out. The City renamed some types over time; both names are listed.
+  requests_311:
+    - Illegal Dumping
+    - Abandoned Vehicle
+    - Graffiti Removal
+    - Dangerous Building Complaint
+    - Maintenance Complaint
+    - Sanitation Violation
+    - Sanitation / Dumpster Violation

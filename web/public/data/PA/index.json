@@ -186,5 +186,6 @@
   "tod"
  ],
  "adu_budget_grid": true,
+ "alternatives": true,
  "note": "Default assumptions only. Changing assumptions needs the local app (make app)."
 }

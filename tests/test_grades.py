@@ -264,7 +264,7 @@ def test_grades_read_the_audited_retro_results(monkeypatch):
 
     assert gi.RETRO_AUDIT_PATH.name == "retro_audit_results.yaml"
     records, src = _retro_ids(monkeypatch, gi.RETRO_AUDIT_PATH)
-    assert src == {
+    assert {k: src[k] for k in ("file", "variant", "fallback")} == {
         "file": "assumptions/evidence/retro_audit_results.yaml",
         "variant": "audited",
         "fallback": False,
@@ -289,3 +289,19 @@ def test_grades_fall_back_to_the_original_retro_run(monkeypatch, tmp_path, caplo
     empty = tmp_path / "empty.yaml"
     empty.write_text("records: []\n", encoding="utf-8")
     assert _retro_ids(monkeypatch, empty)[1]["variant"] == "original"
+
+
+def test_evidence_payload_labels_both_retro_pools():
+    import visionhousing.grades.inputs as gi
+
+    pools = {p["pool"]: p for p in gi.retro_source()["pools"]}
+    assert pools["original"]["label"] == "original pool (81, as pre-registered)"
+    assert pools["original"]["graded"] is True
+    assert pools["original"]["file"] == "assumptions/evidence/retro_audit_results.yaml"
+    assert pools["current"]["label"] == "current pool (68, update)"
+    assert pools["current"]["graded"] is False
+    assert pools["current"]["file"] == "assumptions/evidence/retro_current_pool_results.yaml"
+    scores = load_rule()["components"]["evidence"]["identification_scores"]
+    ev = gi.best_evidence("missing_middle", scores)
+    assert ev["retro"]["variant"] == "audited"  # grades still read the original pool
+    assert [p["pool"] for p in ev["retro"]["pools"]] == ["original", "current"]

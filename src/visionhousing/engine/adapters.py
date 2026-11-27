@@ -74,6 +74,7 @@ from visionhousing.scenarios.missing_middle import scope_from_scenario as middle
 from visionhousing.scenarios.parking import (
     TRANSIT_IDS,
     MinimumMix,
+    bar_minimums,
     minimum_mix,
     parking_reform,
     transit_rich_tracts,
@@ -82,8 +83,10 @@ from visionhousing.scenarios.tod import (
     DEFAULT_DISTANCE,
     EXISTING_METHODS,
     EXISTING_SOURCES,
+    EXISTING_SUBTRACT,
     NETWORK_DISTANCE,
     NETWORK_SOURCES,
+    by_right_words,
     decomposition_verdict,
     distance_words,
     existing_capacity,
@@ -124,11 +127,34 @@ OPTION_LOT_REACH = "lot_reach"
 every tract, ``"owner_occupied"`` for the tract's owner-occupied share of
 households, or ``None``/1 for all; used by the ADU policy dials)."""
 
+OPTION_ADU_LEGAL = "legal"
+"""ADU option: ``"statewide"`` (the benchmark: the state's labelled already-legal range)
+or ``"ma_state_floor"`` (variant ``ma_adu_state_floor``: each tract's share from the
+Massachusetts ADU law, :func:`visionhousing.law.ma_adu.state_floor_rule`, in place of
+the range), or ``"zoning_districts"`` / ``"zoning_districts_guidance"`` (variants
+``adu_zoning_districts`` and ``adu_zoning_districts_guidance``: in the Pennsylvania
+zoning-district sample each tract's share from the pack's ``rule_area_weights``
+classes, :func:`visionhousing.engine.zone_scope.district_rule`; the benchmark's share
+elsewhere)."""
+ZONE_LEGAL_OPTIONS = ("zoning_districts", "zoning_districts_guidance")
+
 OPTION_MIN_KEPT = "minimum_share_kept"
 OPTION_MINIMUMS = "minimums"
 """Parking option: ``default`` (the benchmark: the ledger default minimum, verified
-zeros through the county reach factor) or ``verified`` (variant
-``parking_verified_minimums``: every verified, in-force local minimum)."""
+zeros through the county reach factor), ``verified`` (variant
+``parking_verified_minimums``: every verified, in-force local minimum) or
+``verified_bar`` (variant ``parking_verified_minimums_bar``: verified non-zero
+minimums only in the counties that pass the hooks' 50% resident bar, zeros
+through the reach factor as in the benchmark)."""
+MINIMUMS_CHOICES = ("default", "verified", "verified_bar", "local_readings")
+"""``local_readings`` (variants ``vt_parking_town_bylaws``, ``wy_parking_local``):
+verified, in-force minimums of ``assumptions/law/local_readings.yaml`` for the
+state named by option ``readings_state`` (:func:`engine.law_floor.local_parking_minimums`);
+the county reach factor stays as in the benchmark."""
+OPTION_READINGS_STATE = "readings_state"
+OPTION_LOCAL_RIGHTS = "local_rights"
+"""Missing-middle option: ``none`` (benchmark) or ``town_bylaws`` (variant
+``vt_missing_middle_town_bylaws``, :func:`engine.law_floor.middle_floor_for`)."""
 OPTION_WINDOW = "baseline_window"
 """Fee and parking option: re-run under a named baseline-window sensitivity
 (``assumptions/cost_reforms.yaml``, ``baseline_windows``)."""
@@ -330,6 +356,29 @@ def _variant_notes(family: str, options: Mapping[str, Any]) -> list[str]:
     ]
 
 
+def _adu_legal_rule(
+    state: Any, ledger: Ledger, options: Mapping[str, Any], scope: Any = None
+) -> Any:
+    """The already-legal rule an ADU option asks for, or ``None`` (the benchmark range)."""
+    which = str(options.get(OPTION_ADU_LEGAL) or "statewide")
+    if which == "statewide":
+        return None
+    if which in ZONE_LEGAL_OPTIONS:
+        from visionhousing.engine.zone_scope import district_rule
+
+        types = tuple(getattr(scope, "building_types", ("sf_detached",)))
+        return district_rule(state, option=which, building_types=types, ledger=ledger)
+    if which != "ma_state_floor":
+        raise ValueError(
+            "ADU option legal must be 'statewide', 'ma_state_floor', "
+            f"{' or '.join(repr(o) for o in ZONE_LEGAL_OPTIONS)}, got {which!r}"
+        )
+    from visionhousing.law.ma_adu import state_floor_rule
+    from visionhousing.scenarios.adu import YEAR_PARAMS
+
+    return state_floor_rule(state, ledger, year=int(ledger[YEAR_PARAMS[0]].central))
+
+
 def _adu_adapter(scenario_id: str):
     def adapter(context: RunContext, draws: Draws, options: Mapping[str, Any]) -> ReformResult:
         state = context.state
@@ -342,6 +391,7 @@ def _adu_adapter(scenario_id: str):
         law = state.local_law
         local = law.adu_coefficients() if law is not None else {}
         categories = adu_lot_categories(law, local) if options.get("categories", True) else {}
+        legal_rule = _adu_legal_rule(state, ledger, options, scope)
         res = adu_funnel(
             state.tracts,
             ledger,
@@ -353,10 +403,12 @@ def _adu_adapter(scenario_id: str):
             local_categories=categories or None,
             lot_reach=lot_reach(state.tracts, options.get(OPTION_LOT_REACH)),
             lot_detail=bool(options.get(OPTION_LOT_DETAIL, False)),
+            legal_rule=legal_rule,
         )
         head = res.records[ADU_HEADLINE]
         notes = [*scenario.notes, *place_notes]
         notes += _variant_notes("adu", options)
+        notes += list(legal_rule.notes) if legal_rule is not None else []
         county_notes = {}
         if law is not None and local:
             for c in sorted(local):
@@ -567,13 +619,20 @@ def parking_adapter(context: RunContext, draws: Draws, options: Mapping[str, Any
     state = context.state
     flags = _transit_flags(context, ledger)
     which = str(options.get(OPTION_MINIMUMS, "default"))
-    if which not in ("default", "verified"):
-        raise ValueError(f"parking option minimums must be default or verified, got {which!r}")
-    mix = (
-        _verified_minimums(state, tuple(str(c) for c in baseline.index), flags)
-        if which == "verified"
-        else None
-    )
+    if which not in MINIMUMS_CHOICES:
+        raise ValueError(
+            f"parking option minimums must be one of {MINIMUMS_CHOICES}, got {which!r}"
+        )
+    counties = tuple(str(c) for c in baseline.index)
+    local_notes: tuple[str, ...] = ()
+    if which == "local_readings":
+        mix, local_notes = _local_minimums(
+            state, counties, flags, str(options.get(OPTION_READINGS_STATE, ""))
+        )
+    elif which != "default":
+        mix = _verified_minimums(state, counties, flags, bar=which == "verified_bar")
+    else:
+        mix = None
     res = parking_reform(
         baseline,
         state.tracts,
@@ -584,13 +643,13 @@ def parking_adapter(context: RunContext, draws: Draws, options: Mapping[str, Any
         seed=draws.seed,
         baseline_scale=scale,
         transit_rich=flags,
-        reach=None if mix is not None else _parking_reach(state, baseline.index),
+        reach=(None if which == "verified" else _parking_reach(state, baseline.index)),
         response=str(options.get("response", "share")),
         min_share_kept=float(options.get(OPTION_MIN_KEPT, 0.0)),
         minimums=mix,
     )
     title = state.scenarios["parking"].title
-    notes = (*res.notes, *_variant_notes("parking", options), *window[1])
+    notes = (*res.notes, *local_notes, *_variant_notes("parking", options), *window[1])
     out = _with_window(_channel_b_result("parking", title, res, ledger, notes), window[0])
     law = state.local_law
     if law is None or law.parking.empty:
@@ -606,6 +665,7 @@ def parking_adapter(context: RunContext, draws: Draws, options: Mapping[str, Any
 _MIN_TABLES = {
     "muni_zoning_rules": {"geoid": str},
     "tract_municipalities": {"tract": str, "county": str, "cousub": str},
+    "tract_places": {"tract": str, "county": str, "place": str},
     "law_documents": {"doc_id": str, "source_id": str},
 }
 
@@ -632,14 +692,18 @@ def _law_table(state: Any, name: str) -> pd.DataFrame | None:
     return table
 
 
-def _verified_minimums(state: Any, counties: tuple[str, ...], flags: pd.Series) -> MinimumMix:
+def _verified_minimums(
+    state: Any, counties: tuple[str, ...], flags: pd.Series, *, bar: bool = False
+) -> MinimumMix:
     """Verified, in-force local parking minimums mixed into each county (option ``minimums``).
 
     Reads ``muni_zoning_rules`` and ``tract_municipalities`` from the state's
     pack (read-only, through :mod:`visionhousing.law.parking_rules`); the
     fields and words come from ``verified_minimums`` in
     ``assumptions/cost_reforms.yaml``. With no tables every home keeps the
-    ledger default.
+    ledger default. With ``bar`` only the non-zero minimums of the counties
+    the parking hook qualifies (``state.local_law.parking``, the 50% resident
+    bar of ``assumptions/law/hooks.yaml``) are kept (:func:`bar_minimums`).
     """
     from visionhousing.law.parking_rules import verified_parking_minimums
     from visionhousing.scenarios.fees import load_cost_settings
@@ -651,6 +715,12 @@ def _verified_minimums(state: Any, counties: tuple[str, ...], flags: pd.Series) 
         apartment_fields=tuple(cfg["apartment_fields"]),
         small_fields=tuple(cfg["small_building_fields"]),
     )
+    bar_counties: tuple[str, ...] | None = None
+    if bar:
+        law = state.local_law
+        qual = () if law is None or law.parking.empty else law.parking["county"].astype(str)
+        bar_counties = tuple(sorted(c for c in set(qual) if c in set(counties)))
+        table = bar_minimums(table, bar_counties)
     docs = _law_table(state, "law_documents")
     sources: set[str] = set()
     if docs is not None and len(table):
@@ -668,7 +738,114 @@ def _verified_minimums(state: Any, counties: tuple[str, ...], flags: pd.Series) 
         source_ids=tuple(sorted(sources)),
         assumption_id=str(cfg["id"]),
         weight_words=" ".join(str(cfg.get("weight", "")).split()),
+        bar_counties=bar_counties,
     )
+
+
+def _local_minimums(
+    state: Any, counties: tuple[str, ...], flags: pd.Series, readings_state: str
+) -> tuple[MinimumMix, tuple[str, ...]]:
+    """Verified local-reading minimums (Vermont, Wyoming) mixed into each county.
+
+    Only for the state the variant names (``readings_state``); in any other
+    state, or with no ``tract_municipalities`` (county subdivisions) or
+    ``tract_places`` (Census places, :func:`_place_readings`) table to place
+    the places on tracts, every home keeps the ledger default and the run equals the
+    benchmark draw for draw. Zero minimums are blanked where the county reach
+    factor already takes them out (as :func:`bar_minimums` does).
+    """
+    from visionhousing.engine.law_floor import load_local_settings, local_parking_minimums
+
+    cfg = load_local_settings()
+    code = str(state.state).upper()
+    words = " ".join(str(cfg.get("weight", "")).split())
+    kw = {"assumption_id": str(cfg["id"]), "weight_words": words}
+    if readings_state.upper() != code:
+        return MinimumMix.default_only(len(counties), **kw, words=(
+            f"Local readings variant for {readings_state or 'no state'}; this run is {code}, so "
+            "every home keeps the labelled default (equal to the benchmark)."
+        )), ()  # fmt: skip
+    table, notes = local_parking_minimums(code, settings=cfg)
+    table, tm, place_notes, xwalk = _place_readings(
+        state, table, _law_table(state, "tract_municipalities"), str(cfg["crosswalk_source_id"])
+    )
+    notes = (*notes, *place_notes)
+    reach = _parking_reach(state, pd.Index(counties))
+    if reach is not None and len(table):
+        table = bar_minimums(table, sorted({str(g)[:5] for g in table["geoid"]}))
+    by_cousub = xwalk == str(cfg["crosswalk_source_id"])
+    if len(table) and tm is None and by_cousub:
+        notes = (*notes, "The pack has no tract_municipalities table, so these places cannot be "
+                 "placed on tracts: every home keeps the labelled default (equal to the "
+                 "benchmark) until the pack has it.")  # fmt: skip
+    mix = minimum_mix(
+        state.tracts,
+        tm,
+        flags,
+        table,
+        counties,
+        source_ids=(str(cfg["source_id"]), xwalk) if len(table) else (),
+        **kw,
+        words=(
+            f"The old minimum is the verified local minimum from the {code} local readings "
+            "wherever a place's parking fact is verified and in force on the run's as-of date "
+            "(records parking_verified_share and parking_default_share give the split of "
+            "baseline homes), and the ledger default (labelled as a default) everywhere else. "
+            "Spaces avoided = max(v, m) - max(v, m left), with v from the default minimum, so "
+            "a verified minimum at or below v (or zero) avoids nothing."
+        ),
+    )
+    if len(table) and mix.munis == 0 and tm is not None and by_cousub:
+        notes = (*notes, "None of these places is a county subdivision found in "
+                 "tract_municipalities (a city that is a Census place needs a place crosswalk): "
+                 "every home keeps the labelled default.")  # fmt: skip
+    return mix, tuple(notes)
+
+
+def _place_readings(
+    state: Any, table: pd.DataFrame, tract_munis: pd.DataFrame | None, by_cousub: str
+) -> tuple[pd.DataFrame, pd.DataFrame | None, tuple[str, ...], str]:
+    """Put place-level readings (7-digit ``geoid``, a Census place) on the pack's place pieces.
+
+    A Wyoming city is a Census place, not a county subdivision, so it is
+    placed through ``tract_places`` (:func:`visionhousing.law.places.place_pieces`,
+    :func:`visionhousing.law.places.readings_on_places`) instead of
+    ``tract_municipalities``. The two tables are never mixed: when a state's
+    readings in force are all places, the place pieces are used; when they
+    mix places and county subdivisions, the subdivisions are used and the
+    places keep the default (noted). Rows are unchanged when there is no
+    place reading.
+
+    Returns:
+        ``(rows, pieces, notes, source id)``: the source id is the crosswalk's,
+        ``by_cousub`` (the settings' ``crosswalk_source_id``) or the place
+        block assignment file (``census_baf_2020_place``).
+    """
+    from visionhousing.data.sources.munstats import BAF_PLACE_SOURCE
+    from visionhousing.law.places import PLACE_GEOID_DIGITS, place_pieces, readings_on_places
+
+    by_place = BAF_PLACE_SOURCE
+    if table.empty:
+        return table, tract_munis, (), by_cousub
+    is_place = table["geoid"].astype(str).str.len() == PLACE_GEOID_DIGITS
+    if not is_place.any():
+        return table, tract_munis, (), by_cousub
+    names = ", ".join(table.loc[is_place, "name"].astype(str))
+    if not is_place.all():
+        return table[~is_place].reset_index(drop=True), tract_munis, (
+            f"{names}: Census places read with county subdivisions in one state; the places "
+            "keep the labelled default (the two crosswalks are not mixed).",
+        ), by_cousub  # fmt: skip
+    tp = _law_table(state, "tract_places")
+    if tp is None:
+        return table, None, (
+            f"{names}: a Census place, and the pack has no tract_places table to place it on "
+            "tracts: every home keeps the labelled default (equal to the benchmark).",
+        ), by_place  # fmt: skip
+    return readings_on_places(table, tp), place_pieces(tp), (
+        f"{names}: a Census place, placed on tracts by 2020 housing units in tract_places "
+        "(2020 block assignment, places).",
+    ), by_place  # fmt: skip
 
 
 def _parking_reach(state: Any, counties: pd.Index) -> np.ndarray | None:
@@ -689,7 +866,9 @@ def _middle_adapter(scenario_id: str):
         ledger = apply_overrides(ledger, package_changes("missing_middle", ledger, options))
         scope = middle_scope(scenario_id, scenario)
         method = str(options.get("method", "mix"))
-        floor, floor_notes = middle_floor_for(state, ledger, method)
+        floor, floor_notes = middle_floor_for(
+            state, ledger, method, local=options.get(OPTION_LOCAL_RIGHTS)
+        )
         res = missing_middle_funnel(
             state.tracts,
             ledger,
@@ -794,6 +973,11 @@ OPTION_EXISTING = "existing_capacity"
 ``mbta_3a_capacity_tract``): additional legal capacity = max(0, proposed - existing)
 on the same land. ``acre_share`` (variant ``tod_ma_acre_share``): the older rule that
 takes ``tod.state_zoned_overlap_share`` of district acres out of the developable land."""
+
+OPTION_EXISTING_SUBTRACT = "existing_3a_subtract"
+"""TOD option (capacity rule only; ``scenarios.tod.EXISTING_SUBTRACT``): ``full``
+(default, the headline: subtract all existing 3A capacity) or ``q_scaled`` (variant
+``tod_ma_3a_q_scaled``: subtract q x existing, as base-zoning land does)."""
 
 
 def tod_by_right(
@@ -904,6 +1088,11 @@ def tod_adapter(context: RunContext, draws: Draws, options: Mapping[str, Any]) -
     rows = [context.county_ids.index(c) for c in order]
     mf = context.baseline_types.get(MF_COLUMN)
     by_right, existing_for, zoned = tod_by_right(state, tracts, options)
+    subtract = str(options.get(OPTION_EXISTING_SUBTRACT, EXISTING_SUBTRACT[0]))
+    if subtract not in EXISTING_SUBTRACT:
+        raise ValueError(
+            f"TOD {OPTION_EXISTING_SUBTRACT} must be one of {EXISTING_SUBTRACT}, got {subtract!r}"
+        )
 
     def funnel(led: Ledger, sc: Any) -> Any:
         return tod_funnel(
@@ -916,6 +1105,7 @@ def tod_adapter(context: RunContext, draws: Draws, options: Mapping[str, Any]) -
             seed=draws.seed,
             zoned_m2=zoned,
             existing=existing_for(sc.suffix),
+            existing_subtract=subtract,
         )
 
     res = funnel(ledger, scope)
@@ -948,21 +1138,27 @@ def tod_adapter(context: RunContext, draws: Draws, options: Mapping[str, Any]) -
         county_notes = _zoned_county_notes(county_notes, res, tracts)
     if by_right == "capacity" and res.existing is not None:
         r = records
+        w = by_right_words(str(getattr(state, "state", "")))
+        unresolved = 1.0 - float(r["existing_3a_resolved_share"].value or 0.0)
         notes.append(
-            "Land Massachusetts already zones for multi-family homes by right (Section 3A "
-            "parcels in the distance, atlas F_L_M__ split across tracts by area) counts only "
+            f"Land {w['who']} already zones for multi-family homes by right near transit "
+            f"({w['land']}) counts only "
             "its additional legal capacity: max(0, homes the FAR 2.5 five-storey prototype "
-            "allows - homes the 3A district already allows) on the same developable land, in "
+            f"allows - homes {w['district']} already allows) on the same developable land, in "
             "gross homes (records existing_3a_*, proposed_3a_capacity, additional_3a_capacity). "
-            "3A's 15 homes per acre is a district-wide minimum gross density; the prototype "
-            "is about 105 per acre on one lot: different measures, so the parcels' own modeled "
-            "capacity is compared, not the 15-per-acre floor. Eligible land in tracts with no "
-            "compliant 3A district in the atlas: "
-            f"{1.0 - float(r['existing_3a_resolved_share'].value or 0.0):.0%}, existing 3A "
-            "capacity 0 there (base-zoning rule); the pack cannot tie a tract to its town's "
-            "3A status. Variant tod_ma_acre_share keeps the older acre-share rule."
+            f"{w['floor']}Eligible land in tracts with no "
+            f"{w['missing']}: {unresolved:.0%}, existing by-right "
+            "capacity 0 there (base-zoning rule). Variant tod_ma_acre_share keeps the older "
+            "acre-share rule."
+            + (
+                " This run (option existing_3a_subtract: q_scaled) subtracts only q x the "
+                "existing 3A capacity (q = tod.baseline_replacement_probability), as on "
+                "base-zoning land."
+                if subtract == "q_scaled"
+                else ""
+            )
         )
-        county_notes = _existing_county_notes(county_notes, res, tracts)
+        county_notes = _existing_county_notes(county_notes, res, tracts, w["capacity"])
     if str(options.get(OPTION_WALK, "straight")) == "network" and not has_walk:
         notes.append(
             "A network walkshed was asked for, but this state's pack has no walkshed table: "
@@ -1126,9 +1322,15 @@ def _zoned_county_notes(
 
 
 def _existing_county_notes(
-    county_notes: Mapping[str, tuple[str, tuple[str, ...]]], res: Any, tracts: pd.DataFrame
+    county_notes: Mapping[str, tuple[str, tuple[str, ...]]],
+    res: Any,
+    tracts: pd.DataFrame,
+    what: str = "existing by-right modeled capacity",
 ) -> dict[str, tuple[str, tuple[str, ...]]]:
-    """Add each county's existing 3A capacity in the distance and its additional capacity (P50)."""
+    """Add each county's existing by-right capacity in the distance and its added capacity (P50).
+
+    ``what`` names that capacity (:func:`scenarios.tod.by_right_words`).
+    """
     out = dict(county_notes)
     ex, add = res.existing, res.capacity_by_right
     if ex is None or add is None:
@@ -1142,7 +1344,7 @@ def _existing_county_notes(
             continue
         text, srcs = out.get(c, ("", ()))
         line = (
-            f"{u:,.0f} homes of existing Section 3A modeled capacity lie in the distance; on "
+            f"{u:,.0f} homes of {what} lie in the distance; on "
             f"the feasible part the prototype adds {float(extra.get(c, 0.0)):,.0f} homes of "
             "capacity above them (P50, before take-up and absorption)"
         )

@@ -861,3 +861,27 @@ def test_law_changes_and_budget_grid_hooks(tmp_path, packs, client):
     assert index["adu_budget_grid"] is grid.is_file()
     if not grid.is_file():
         assert any("budget grid" in n for n in report.notes)
+
+
+def test_alternatives_hook_saves_the_cached_table_only(tmp_path, packs, monkeypatch):
+    """The Alternatives table is saved (compact) and flagged only when it is on disk."""
+    from visionhousing.api import alternatives as alt
+
+    body = {"state": "TL", "reforms": {"adu": {"rows": [{"diff": {"p10": 1, "p50": 2}}]}}}
+    monkeypatch.setattr(alt, "payload", lambda ctx, **kw: body)
+    monkeypatch.setattr(alt, "reform_view", lambda body, key: None)  # no brief appendix
+    out = tmp_path / "data"
+    export_static("TL", out, packs_dir=packs, draws=DRAWS, tracts="no", explain="no",
+                  comparisons=False, alternatives=True)  # fmt: skip
+    index = read(out / "TL" / "index.json")
+    assert index["alternatives"] is True
+    saved = json.loads((out / "TL" / "alternatives.json").read_text())
+    assert saved == alt.compact(body) and "p10" not in json.dumps(saved)
+
+    monkeypatch.setattr(alt, "payload", lambda ctx, **kw: None)
+    out2 = tmp_path / "data2"
+    report = export_static("TL", out2, packs_dir=packs, draws=DRAWS, tracts="no", explain="no",
+                           comparisons=False, alternatives=True)  # fmt: skip
+    assert read(out2 / "TL" / "index.json")["alternatives"] is False
+    assert not (out2 / "TL" / "alternatives.json").exists()
+    assert any("alternatives not cached" in n for n in report.notes)

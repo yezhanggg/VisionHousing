@@ -16,12 +16,21 @@ Shapes:
 Same seed, same draws. Each parameter gets its own random stream, built from the
 seed and the parameter's id, so adding or removing one parameter never changes
 the draws of any other.
+
+**Joint order (sensitivity runs only).** :func:`joint_ranks` lets a named
+sensitivity run (``engine.correlated``) say, for some parameters, in which
+order their draws should fall: each such parameter's own draws are sorted and
+placed by the given ranks. Every parameter keeps exactly its own values (its
+range and shape are unchanged); only which draw gets which value changes, so
+parameters can move together. Outside that context nothing changes.
 """
 
 from __future__ import annotations
 
 import hashlib
-from collections.abc import Iterable
+from collections.abc import Iterable, Iterator, Mapping
+from contextlib import contextmanager
+from contextvars import ContextVar
 
 import numpy as np
 
@@ -29,6 +38,29 @@ from visionhousing.ledger.loader import Ledger
 from visionhousing.ledger.schema import Parameter
 
 DEFAULT_DRAWS = 2000
+
+_JOINT: ContextVar[tuple[int, int, Mapping[str, np.ndarray]] | None] = ContextVar(
+    "visionhousing_joint_ranks", default=None
+)
+
+
+@contextmanager
+def joint_ranks(seed: int, n: int, ranks: Mapping[str, np.ndarray]) -> Iterator[None]:
+    """Within the block, :func:`sample` places some parameters' draws in a given order.
+
+    Args:
+        seed: The run's seed (other seeds are not touched).
+        n: The run's number of draws (other sizes are not touched).
+        ranks: Parameter id to the rank (0 to ``n - 1``) of each draw's value.
+    """
+    for pid, r in ranks.items():
+        if np.asarray(r).shape != (n,):
+            raise ValueError(f"ranks for '{pid}' must have shape ({n},)")
+    token = _JOINT.set((int(seed), int(n), dict(ranks)))
+    try:
+        yield
+    finally:
+        _JOINT.reset(token)
 
 
 def stream(seed: int, parameter_id: str) -> np.random.Generator:
@@ -89,7 +121,14 @@ def sample(
         Parameter id to an array of ``n`` draws.
     """
     chosen = list(ids) if ids is not None else list(ledger)
-    return {pid: draw(ledger[pid], n, stream(seed, pid)) for pid in chosen}
+    out = {pid: draw(ledger[pid], n, stream(seed, pid)) for pid in chosen}
+    joint = _JOINT.get()
+    if joint is not None and joint[0] == seed and joint[1] == n:
+        for pid in chosen:
+            r = joint[2].get(pid)
+            if r is not None:
+                out[pid] = np.sort(out[pid])[np.asarray(r, dtype=int)]
+    return out
 
 
 def percentiles(values: np.ndarray) -> tuple[float, float, float]:

@@ -120,5 +120,7 @@ export function PlausibilityCard({ state, reform, h = 2 }) {
         </table>`}
         <p class="ec-quiet">Settings ${st.data.settings_id}; ${st.data.note || ""}</p>
       <//>`}
+    ${r?.context &&
+    html`<p class="ec-quiet" data-testid="plausibility-context"><strong>${r.context.label}:</strong> ${r.context.text}. ${r.context.note}</p>`}
   <//>`;
 }

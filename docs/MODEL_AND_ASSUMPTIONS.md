@@ -111,13 +111,13 @@ The entries below are the benchmark choices above and the inputs that move the r
 | Count by | Value | Entries |
 |---|---|---|
 | kind | benchmark | 9 |
-| kind | judgement | 283 |
+| kind | judgement | 290 |
 | kind | sourced | 14 |
-| status | draft | 283 |
+| status | draft | 290 |
 | status | sourced | 23 |
-| all | entries | 306 |
+| all | entries | 313 |
 
-*Ledger fingerprint `ffb232d3fffc`.*
+*Ledger fingerprint `8f39317fed68`.*
 <!-- /generated: ledger_summary -->
 
 **How the judgement ranges were set.** Each judgement range is set wide on purpose: wide enough to include the values in the published evidence the team found (`assumptions/evidence.yaml`, [`docs/methods/evidence.md`](methods/evidence.md)), and wider still where there is little evidence. Take-up rates are checked against places that passed similar reforms and published permit counts, and against observed ADU rates in California (appendix F.2). The share of a cost saving that reaches the decision to build is set from the literature on who keeps a fee or cost saving. These ranges are then swung one at a time in the sensitivity analysis, so a reader can see which ones matter (section 6).
@@ -170,7 +170,11 @@ The inputs and their tiers are listed in `assumptions/data_tiers.yaml`. A hide-t
 
 The method must also run where data are sparse. We ran it, unchanged, for **Vermont** (`make data STATE=VT`, then `make export-static STATE=VT`). Both states are on the static site.
 
-Vermont is small and has none of Pennsylvania's local data: no town zoning rules read, no county parcel files, no pending bills read. It is thin even in some national files (the Bureau of Labor Statistics withholds its statewide construction pay). One state statute is read: Vermont law already makes one ADU with a single-family home, and duplexes wherever homes are allowed, a permitted use (24 V.S.A. § 4412(1)(D) and (1)(E)). Where an input was missing, the code falls back to a documented default instead of failing; each fallback, and the inputs available, used and missing in each state, are listed in appendix G.2.
+Vermont is small and has much less of Pennsylvania's local data: town zoning rules read for a few towns only and not yet used in an estimate, no county parcel files, no pending bills read. It is thin even in some national files (the Bureau of Labor Statistics withholds its statewide construction pay). One state statute is read: Vermont law already makes one ADU with a single-family home, and duplexes wherever homes are allowed, a permitted use (24 V.S.A. § 4412(1)(D) and (1)(E)). Where an input was missing, the code falls back to a documented default instead of failing; each fallback, and the inputs available, used and missing in each state, are listed in appendix G.2.
+
+<!-- generated: law_readings -->
+*Generated from `assumptions/law/municipal_rules.yaml` and `assumptions/law/local_readings.yaml`.* Local zoning rules read and verified from each place's own published text (each reading cites a short quote and where it sits in the text): Pennsylvania: 174 municipalities (112 of them through county ordinances), plus 3 drafts that count for nothing; Vermont: 11 towns and cities (3 more could not be read: Brattleboro (town), St. Albans (city), Williston (town)); Wyoming: Laramie (city); Teton County (unincorporated) only in its former text (superseded). The Vermont and Wyoming readings are kept with their citations but do not enter an estimate yet.
+<!-- /generated: law_readings -->
 
 **How much wider the likely ranges are.** Width is the P10-to-P90 span divided by the middle value, so states of different size can be compared:
 

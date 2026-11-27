@@ -437,8 +437,18 @@ def _card(
             if present_day_types
             else "Not used by this card's ranges (the scored rule needs no place types)."
         ),
+        "selection_measured": NESTED_NOTE,
     }
     return card
+
+
+NESTED_NOTE = (
+    "Measured by a pre-registered nested test that re-chooses the rule at each start year "
+    "from matured cases only, with permit-only place types: "
+    "assumptions/calibration/nested_selection.yaml (visionhousing validate-nested-selection; "
+    "docs/modules/validation_nested_selection.md)."
+)
+"""Where the full-record selection and present-day place types are measured, not only disclosed."""
 
 
 def build_cards(

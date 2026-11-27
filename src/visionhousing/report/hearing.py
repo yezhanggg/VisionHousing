@@ -29,6 +29,10 @@ Page two
   8. **Reproduce**: the run id, the three hashes, seed, draws, the command that
      writes this brief again and the link that reopens the view.
 
+Appendix (one benchmark reform, when its table is on disk or in the static export)
+  **Alternatives at a glance**: the reform's named alternatives, each with its likely
+  range and its paired difference from the benchmark (``api.alternatives.hearing_rows``).
+
 Formats: ``html`` (one self-contained page, no scripts or outside requests,
 print rules for two US Letter pages) and ``md``.
 
@@ -56,6 +60,7 @@ __all__ = [
     "STATIC_CSS_HREF",
     "add_parser",
     "command",
+    "context_folder",
     "hearing_doc",
     "hearing_from_result",
     "hearing_reply",
@@ -258,6 +263,7 @@ def hearing_doc(
     law: Mapping[str, Any] | None = None,
     *,
     run_date: str | None = None,
+    alternatives: Mapping[str, Any] | None = None,
 ) -> dict[str, Any]:
     """The hearing brief as data (both formats draw this).
 
@@ -266,6 +272,7 @@ def hearing_doc(
         card: The state's baseline card with its ``view`` (``api.baseline_view.view_for``).
         law: The "what this law changes" payload for the reform, or ``None`` (left out).
         run_date: Date to print, or ``None``.
+        alternatives: The appendix rows (``api.alternatives.hearing_rows``), or ``None``.
     """
     from visionhousing.api.answers import run_id
 
@@ -344,6 +351,7 @@ def hearing_doc(
         "drivers": [] if hidden else _drivers(run, key),
         "unknowns": _unknowns(run, law),
         "limits": _limits(run),
+        "alternatives": dict(alternatives) if alternatives else None,
         "stamp": {
             "run_id": run_id(run, key),
             "code": hashes.get("code", ""),
@@ -425,6 +433,21 @@ def _ul(items: Sequence[str]) -> str:
     return "<ul>" + "".join(f"<li>{escape(x)}</li>" for x in items) + "</ul>"
 
 
+ALT_HEAD = ("Alternative", "Added, middle (likely range)", "Change from benchmark", "Status")
+
+
+def _alternatives_html(alt: Mapping[str, Any] | None) -> str:
+    """The appendix section: the benchmark line and one row per named alternative."""
+    if not alt:
+        return ""
+    return (
+        '<section aria-labelledby="h-x"><h2 id="h-x">Appendix: alternatives at a glance</h2>'
+        f"<p>{escape(alt['headline'])}</p>"
+        + _table(ALT_HEAD, alt["rows"], "lrrl")
+        + f'<p class="small">{escape(alt["note"])}</p></section>'
+    )
+
+
 def _stamp_lines(s: Mapping[str, Any]) -> list[str]:
     lines = [
         f"Run id: {s['run_id']}",
@@ -489,6 +512,7 @@ def to_html(doc: Mapping[str, Any], css_href: str | None = None) -> str:
             p.append(
                 f'<section aria-labelledby="{hid}"><h2 id="{hid}">{head}</h2>{_ul(items)}</section>'
             )
+    p.append(_alternatives_html(doc.get("alternatives")))
     lines = _stamp_lines(doc["stamp"])
     p.append(
         '<footer class="stamp" aria-label="Reproduce this brief"><p>'
@@ -555,6 +579,10 @@ def to_markdown(doc: Mapping[str, Any]) -> str:
     ):
         if items:
             o += [f"## {head}", "", *[f"- {x}" for x in items], ""]
+    alt = doc.get("alternatives")
+    if alt:
+        o += ["## Appendix: alternatives at a glance", "", alt["headline"], ""]
+        o += [*_md_table(ALT_HEAD, alt["rows"]), "", alt["note"], ""]
     o += [
         "---",
         "",
@@ -572,11 +600,12 @@ def render(
     law: Mapping[str, Any] | None = None,
     run_date: str | None = None,
     css_href: str | None = None,
+    alternatives: Mapping[str, Any] | None = None,
 ) -> str:
     """The hearing brief of a run reply as ``html`` or ``md`` text (see :func:`to_html`)."""
     if fmt not in FORMATS:
         raise ValueError(f"format must be one of {', '.join(FORMATS)}")
-    doc = hearing_doc(run, card, law, run_date=run_date)
+    doc = hearing_doc(run, card, law, run_date=run_date, alternatives=alternatives)
     return to_html(doc, css_href) if fmt == "html" else to_markdown(doc)
 
 
@@ -588,6 +617,7 @@ def hearing_from_result(
     fmt: str = "html",
     run_date: str | None = None,
     css_href: str | None = None,
+    alternatives: Mapping[str, Any] | None = None,
 ) -> str:
     """Render from an engine result: the run reply is built exactly as ``POST /run`` builds it."""
     from visionhousing.api import service
@@ -597,7 +627,8 @@ def hearing_from_result(
     reply = json.loads(
         service.dumps({**result.to_dict(), "explanation": payload, "explanation_status": status})
     )
-    return render(reply, fmt, card=card, law=law, run_date=run_date, css_href=css_href)
+    return render(reply, fmt, card=card, law=law, run_date=run_date, css_href=css_href,
+                  alternatives=alternatives)  # fmt: skip
 
 
 def hearing_reply(ctx: Any, folder: Path, result: Any) -> bytes:
@@ -619,7 +650,40 @@ def hearing_reply(ctx: Any, folder: Path, result: Any) -> bytes:
         if len(reforms) == 1 and not result.synthetic
         else None
     )
-    return hearing_from_result(result, card=card, law=law, css_href=API_CSS_HREF).encode("utf-8")
+    alts = _cached_alternatives(ctx, result) if len(reforms) == 1 else None
+    return hearing_from_result(
+        result, card=card, law=law, css_href=API_CSS_HREF, alternatives=alts
+    ).encode("utf-8")
+
+
+def _cached_alternatives(ctx: Any, result: Any) -> dict[str, Any] | None:
+    """The appendix rows of a default benchmark run, from the disk cache only (never a run)."""
+    from visionhousing.api import alternatives as alt
+    from visionhousing.ledger import DEFAULT_DRAWS
+
+    key = next(iter(result.reform_ids))
+    if key not in PACKAGE or result.overrides or result.seed != 0:
+        return None
+    if result.draws != DEFAULT_DRAWS and not result.synthetic:
+        return None
+    try:
+        body = alt.payload(ctx, seed=result.seed, draws=result.draws, compute=False)
+    except (OSError, ValueError, KeyError):
+        return None
+    return alt.hearing_rows(alt.reform_view(body, key)) if body else None
+
+
+def context_folder(ctx: Any) -> Path:
+    """The folder a loaded context's data were read from.
+
+    The loader records it in ``derived`` (``PACK_FOLDER_KEY``), so a context read from
+    another pack folder (a copy, ``VISIONHOUSING_PACKS``) reads its law tables from that
+    same folder. A context built by hand falls back to the state's default pack folder.
+    """
+    from visionhousing.engine.context import PACK_FOLDER_KEY, pack_dir
+
+    folder = getattr(ctx, "derived", {}).get(PACK_FOLDER_KEY)
+    return Path(folder) if folder is not None else pack_dir(ctx.state)
 
 
 def law_payload(ctx: Any, folder: Path, key: str, result: Any) -> dict[str, Any] | None:
@@ -736,6 +800,8 @@ def refresh_static(data: Path, state: str) -> list[Path]:
     written.append(css)
     card_path = folder / "baseline-card.json"
     card = read_saved(card_path) if card_path.is_file() else None
+    alt_path = folder / "alternatives.json"
+    alts = read_saved(alt_path) if alt_path.is_file() else None
     briefs: list[str] = []
     for key in [*(index.get("runs") or []), *(index.get("extra_runs") or [])]:
         run_path = folder / "runs" / f"{key}.json"
@@ -746,7 +812,9 @@ def refresh_static(data: Path, state: str) -> list[Path]:
             continue
         out = folder / "exports" / f"{key}.hearing.html"
         out.parent.mkdir(parents=True, exist_ok=True)
-        out.write_text(render(run, "html", card=card, css_href=STATIC_CSS_HREF), encoding="utf-8")
+        appendix = _static_alternatives(alts, key)
+        out.write_text(render(run, "html", card=card, css_href=STATIC_CSS_HREF,
+                              alternatives=appendix), encoding="utf-8")  # fmt: skip
         written.append(out)
         briefs.append(key)
     new = {"schema_version": STATIC_SCHEMA_VERSION}
@@ -756,6 +824,15 @@ def refresh_static(data: Path, state: str) -> list[Path]:
     idx_path.write_text(json.dumps(new, indent=1), encoding="utf-8")
     written.append(idx_path)
     return written
+
+
+def _static_alternatives(body: Mapping[str, Any] | None, key: str) -> dict[str, Any] | None:
+    """The appendix rows of a saved run from the export's ``alternatives.json``, if any."""
+    if not body or key not in PACKAGE:
+        return None
+    from visionhousing.api import alternatives as alt
+
+    return alt.hearing_rows(alt.reform_view(body, key))
 
 
 def command(args: Any) -> int:
@@ -779,13 +856,14 @@ def command(args: Any) -> int:
         baseline = result.baseline.model_dump(mode="json")
         card = None if result.synthetic else view_for(state, baseline)
         law = None
-        if len(reforms) == 1 and not result.synthetic:
-            from visionhousing.engine.context import pack_dir
-
-            rc = getattr(result, "run_context", None)
-            if rc is not None:
-                law = law_payload(rc.state, pack_dir(state), reforms[0], result)
-        text = hearing_from_result(result, card=card, law=law, fmt=args.format, run_date=args.date)
+        alts = None
+        rc = getattr(result, "run_context", None)
+        if len(reforms) == 1 and not result.synthetic and rc is not None:
+            law = law_payload(rc.state, context_folder(rc.state), reforms[0], result)
+        if len(reforms) == 1 and rc is not None:
+            alts = _cached_alternatives(rc.state, result)
+        text = hearing_from_result(result, card=card, law=law, fmt=args.format, run_date=args.date,
+                                   alternatives=alts)  # fmt: skip
     out = (
         args.out
         or Path("outputs") / "reports" / f"{state}-{run_key(reforms)}-hearing.{args.format}"

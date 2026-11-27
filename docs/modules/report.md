@@ -96,6 +96,12 @@ model cannot tell you**; and the **reproduce** block: run id (state, run key, th
 seed, draws), the full hashes, the command that writes the brief again and the link that
 reopens the view.
 
+Appendix (one benchmark reform): **alternatives at a glance**, the reform's named alternatives
+with their likely range, the paired change from the benchmark and the status
+(`api.alternatives.hearing_rows`). It is added only when the table is already on disk (the API
+and the CLI read the comparisons disk cache, never run it) or in the export
+(`ST/alternatives.json`, read by `--refresh-static`); otherwise the brief has no appendix.
+
 Nothing is typed by hand: every number is a `shown` text or a card row from the records.
 `tests/test_hearing_brief.py` checks that every number in the brief is a number of the run
 reply, that the answer table and scope equal the records, that the HTML is self-contained with

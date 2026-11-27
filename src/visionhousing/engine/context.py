@@ -504,9 +504,10 @@ def _read_walk_tables(folder: Path) -> tuple[dict[str, pd.DataFrame], list[Path]
 PACK_FOLDER_KEY = ("pack_folder",)
 """``StateContext.derived`` key holding the folder a context was read from."""
 
-LAZY_TABLES = ("incentives_county",)
+LAZY_TABLES = ("incentives_county", "tract_places")
 """Pack tables read later, outside this module, that change results: the place
-breakdown's incentive table. The extra scenarios' optional tables
+breakdown's incentive table, and the local-readings variants' tract-to-place
+table (``tract_places``: Wyoming cities are Census places). The extra scenarios' optional tables
 (``scenarios.extra_common.OPTIONAL_TABLES``) and the state-only tables
 (``STATE_TABLES``) are added to these."""
 

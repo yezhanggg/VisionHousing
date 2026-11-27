@@ -890,3 +890,61 @@ sources:
       Blooming Grove township (Pike): its site reset the connection to an
       automated request (robots file could not be read), so nothing was
       fetched; search found the code only on a commercial host.
+  # --- 2026-11-26: units looked at and not read
+  - unit: "4204563264"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      Radnor township (Delaware): radnor.com answered robots.txt with HTTP 403;
+      nothing fetched. Read by hand.
+  - unit: "4201124384"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      Exeter township (Berks): the township site's robots file disallows all
+      agents; not fetched. Read by hand.
+  - unit: "4204336232"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      Hummelstown borough (Dauphin): robots.txt disallows ClaudeBot and other
+      AI agents; not fetched. Read by hand.
+  - unit: "4204321208"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      East Hanover township (Dauphin): its zoning pages sit on a host whose
+      robots file disallows all agents; not fetched. Read by hand.
+  - unit: "4204349040"
+    effort: own_pdf_scan
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      Middle Paxton township (Dauphin): the own-site zoning ordinance is a
+      285-page scan with no text layer, so no quote can be found at an offset.
+  - unit: "4204381216"
+    effort: own_pdf_scan
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      Washington township (Dauphin): the own-site code book (660 pages) has no
+      text layer for Chapter 27 (zoning).
+  - unit: "4204358712"
+    effort: not_searched
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      Penbrook borough (Dauphin): the posted code-book link now redirects to the
+      home page; no text found.
+  - unit: "4208569720"
+    effort: own_text_incomplete
+    url: ""
+    checked_on: 2026-11-26
+    note: >-
+      Sharon city (Mercer): the city posts only a 2026 draft; the adopted 2006
+      text is on the county planning commission's site, not a municipal
+      publication.

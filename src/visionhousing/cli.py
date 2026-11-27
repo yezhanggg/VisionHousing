@@ -386,6 +386,7 @@ def export_static_cmd(
     extras: bool = False,
     law_changes: bool = True,
     budget_grid: bool = True,
+    alternatives: bool = True,
 ) -> int:
     """Save the state's default-scenario results as JSON files for the static site.
 
@@ -409,6 +410,7 @@ def export_static_cmd(
             extras=extras,
             law_changes=law_changes,
             budget_grid=budget_grid,
+            alternatives=alternatives,
         )
     except ExportError as err:
         print(f"export-static: {err}", file=sys.stderr)
@@ -429,6 +431,21 @@ def permit_timing(raw: Path, out: Path, *, refresh: bool = False) -> int:
     frames = fetch_timing_extracts(raw, settings, refresh=refresh)
     path = write_table(build_table(frames, settings), out)
     print(f"permit-timing: wrote {path}")
+    return 0
+
+
+def tract_crosswalks(state: str, raw: Path, packs: Path) -> int:
+    """Add the tract-to-town (and tract-to-place) tables to a built pack (VT, WY, MA)."""
+    from visionhousing.data.pack import add_tract_crosswalks
+
+    folder = Path(packs) / state.upper()
+    written = add_tract_crosswalks(folder, Path(raw))
+    if not written:
+        print(f"tract-crosswalks: {state.upper()} needs no crosswalk; nothing written",
+              file=sys.stderr)  # fmt: skip
+        return 1
+    for name, table in written.items():
+        print(f"{name}: {len(table):,} tract pieces, {table['tract'].nunique():,} tracts")
     return 0
 
 
@@ -608,6 +625,12 @@ def build_parser() -> argparse.ArgumentParser:
     ltb.add_argument("--state", default="PA", help="two-letter state code (default PA)")
     ltb.add_argument("--raw", type=Path, default=Path("data/raw"), help="download cache folder")
     ltb.add_argument("--out", type=Path, default=Path("data/packs"), help="packs folder")
+    zrl = sub.add_parser(
+        "zone-rules", help="Add the zoning-district pilot tables (zone_rule, rule_area_weights)"
+    )
+    zrl.add_argument("--state", default="PA", help="two-letter state code (default PA)")
+    zrl.add_argument("--raw", type=Path, default=Path("data/raw"), help="download cache folder")
+    zrl.add_argument("--out", type=Path, default=Path("data/packs"), help="packs folder")
     lpr = sub.add_parser(
         "law-priorities", help="Rank unread municipal ordinances by the value of reading them next"
     )
@@ -649,6 +672,13 @@ def build_parser() -> argparse.ArgumentParser:
         "--stop-report", type=Path, default=None,
         help="also write each rail stop's own 1/2-mile walkshed to this CSV (checks by hand)",
     )  # fmt: skip
+    txw = sub.add_parser(
+        "tract-crosswalks",
+        help="Add 2020 tract-to-town and tract-to-place tables to a built pack (VT, WY, MA)",
+    )
+    txw.add_argument("--state", required=True, help="two-letter state code")
+    txw.add_argument("--raw", type=Path, default=Path("data/raw"), help="download cache folder")
+    txw.add_argument("--out", type=Path, default=Path("data/packs"), help="packs folder")
     m3a = sub.add_parser(
         "ma-3a-tracts",
         help="Add the tracts each Massachusetts Section 3A district reaches to a built pack",
@@ -745,6 +775,11 @@ def build_parser() -> argparse.ArgumentParser:
         "default yes)",
     )  # fmt: skip
     exp.add_argument(
+        "--alternatives", choices=["yes", "no"], default="yes",
+        help="save the Alternatives table if cached (python -m visionhousing.api.alternatives; "
+        "default yes)",
+    )  # fmt: skip
+    exp.add_argument(
         "--tract-cache", default="data/cache/tract-profiles",
         help="folder that keeps fetched tract profiles so a stopped export resumes "
         "(default data/cache/tract-profiles; 'none' keeps nothing)",
@@ -782,6 +817,12 @@ def build_parser() -> argparse.ArgumentParser:
     from visionhousing.validation.cards import add_parser as add_validation_cards
 
     add_validation_cards(sub)
+    from visionhousing.validation.nested_selection import add_parser as add_nested_selection
+
+    add_nested_selection(sub)
+    from visionhousing.engine.correlated import add_parser as add_uncertainty_structure
+
+    add_uncertainty_structure(sub)
     from visionhousing.evidence.retro import add_parser as add_evidence_retro
 
     add_evidence_retro(sub)
@@ -823,6 +864,7 @@ def main(argv: list[str] | None = None) -> int:
             extras=args.extras,
             law_changes=args.law_changes == "yes",
             budget_grid=args.budget_grid == "yes",
+            alternatives=args.alternatives == "yes",
         )
     if args.command == "profile":
         return profile(args.state, args.county, args.tract, args.fmt, args.out)
@@ -834,6 +876,10 @@ def main(argv: list[str] | None = None) -> int:
         from visionhousing.law.commands import law_tables
 
         return law_tables(args.state, args.raw, args.out)
+    if args.command == "zone-rules":
+        from visionhousing.law.commands import zone_rules
+
+        return zone_rules(args.state, args.raw, args.out)
     if args.command == "law-priorities":
         from visionhousing.law.commands import law_priorities
 
@@ -878,6 +924,14 @@ def main(argv: list[str] | None = None) -> int:
         from visionhousing.validation.cards import command as validation_cards
 
         return validation_cards(args)
+    if args.command == "validate-nested-selection":
+        from visionhousing.validation.nested_selection import command as nested_selection
+
+        return nested_selection(args)
+    if args.command == "uncertainty-structure":
+        from visionhousing.engine.correlated import command as uncertainty_structure
+
+        return uncertainty_structure(args)
     if args.command == "validate-national-state-calibration":
         from visionhousing.validation.national_state import command as national_state
 
@@ -904,6 +958,8 @@ def main(argv: list[str] | None = None) -> int:
         from visionhousing.features.hazards_build import hazards_cmd
 
         return hazards_cmd(args.state, args.raw, args.out, args.county, args.workers)
+    if args.command == "tract-crosswalks":
+        return tract_crosswalks(args.state, args.raw, args.out)
     if args.command == "ma-3a-tracts":
         return ma_3a_tracts(args.state, args.raw, args.out)
     if args.command == "ma-capacity":

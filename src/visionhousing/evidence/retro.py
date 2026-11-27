@@ -1349,11 +1349,13 @@ def add_parser(sub: argparse._SubParsersAction) -> None:
         "action",
         nargs="?",
         default="check",
-        choices=["run", "check", "audit", "audit-check"],
+        choices=["run", "check", "audit", "audit-check", "current-pool", "current-pool-check"],
         help=(
             "run (fetch, estimate, write results), check (validate results), audit "
             "(treatment-date audit: re-score the pre-registered variants, write the "
-            "before/after file) or audit-check (validate the audit file)"
+            "before/after file), audit-check (validate the audit file), current-pool "
+            "(the audited design on today's comparison pool, a named update) or "
+            "current-pool-check (validate that file)"
         ),
     )
     p.add_argument("--raw", type=Path, default=RAW_DIR, help="folder for raw downloads")
@@ -1363,6 +1365,29 @@ def add_parser(sub: argparse._SubParsersAction) -> None:
 
 def run(args: argparse.Namespace) -> int:
     """Run the chosen action; return the exit code."""
+    if args.action in ("current-pool", "current-pool-check"):
+        from visionhousing.evidence import retro_current_pool as rcp
+
+        if args.action == "current-pool-check":
+            problems = rcp.check_current_pool()
+            for line in problems:
+                print("  " + line)
+            verdict = "ok" if not problems else f"{len(problems)} problems"
+            print(f"evidence-retro current pool: {verdict}")
+            return 1 if problems else 0
+        doc = rcp.run_current_pool(args.raw, draws=args.draws)
+        for row in doc["before_after"]:
+            b, a = row["before"], row["after"]
+            print(
+                f"{row['name']:<18} original pool g={b['g']} {b['att']:+.3f} "
+                f"[{b['ci'][0]:+.3f},{b['ci'][1]:+.3f}] {b['identification']} | current pool "
+                f"g={a['g']} {a['att']:+.3f} [{a['ci'][0]:+.3f},{a['ci'][1]:+.3f}] "
+                f"{a['identification']}"
+            )
+        c = doc["conclusions"]
+        print("conclusions " + ("change: " + "; ".join(c["changes"]) if c["change"] else "hold"))
+        print(f"wrote {rcp.OUT_PATH}")
+        return 0
     if args.action in ("audit", "audit-check"):
         from visionhousing.evidence import retro_audit
 

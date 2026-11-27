@@ -14,7 +14,7 @@ provenance:
   summary: Study, origins, target, geography and release behind each published coverage count, with an
     interval score, signed error, error by size, a non-overlapping subset and a fold timeline for the
     re-derived studies.
-  measured_on: '2026-11-25'
+  measured_on: '2026-11-26'
   method: visionhousing.validation.cards; block validation_card_scores in assumptions/validation_cards.yaml;
     cases re-derived with the studies' own building blocks (read-only); see docs/modules/validation_cards.md.
   generated_by: visionhousing validate-cards
@@ -385,6 +385,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: baseline_reliability.county.PA
   quote: 545/1004
   study: Measured reliability of the baseline range (county ranges)
@@ -782,6 +785,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: baseline_reliability.state.VT
   quote: 8/8
   study: Measured reliability of the baseline range (state range)
@@ -1019,6 +1025,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: baseline_reliability.county.VT
   quote: 103/210
   study: Measured reliability of the baseline range (county ranges)
@@ -1416,6 +1425,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: baseline_reliability.state.MA
   quote: 7/8
   study: Measured reliability of the baseline range (state range)
@@ -1653,6 +1665,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: baseline_reliability.county.MA
   quote: 97/210
   study: Measured reliability of the baseline range (county ranges)
@@ -2050,6 +2065,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: baseline_reliability.state.WY
   quote: 8/8
   study: Measured reliability of the baseline range (state range)
@@ -2287,6 +2305,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: baseline_reliability.county.WY
   quote: 205/340
   study: Measured reliability of the baseline range (county ranges)
@@ -2684,6 +2705,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: state_holdouts.state.MA
   quote: 6/11
   study: State confidence check (current range method, held out of time)
@@ -2969,6 +2993,9 @@ cards:
       widening settings) was chosen on the full record, which includes the evaluation years of every fold,
       so the counts are somewhat favourable. Not rebuilt now.
     present_day_place_types: Not used by this card's ranges (the scored rule needs no place types).
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: state_holdouts.state.WY
   quote: 10/11
   study: State confidence check (current range method, held out of time)
@@ -3254,6 +3281,9 @@ cards:
       widening settings) was chosen on the full record, which includes the evaluation years of every fold,
       so the counts are somewhat favourable. Not rebuilt now.
     present_day_place_types: Not used by this card's ranges (the scored rule needs no place types).
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: state_holdouts.state.VT
   quote: 11/11
   study: State confidence check (current range method, held out of time)
@@ -3539,6 +3569,9 @@ cards:
       widening settings) was chosen on the full record, which includes the evaluation years of every fold,
       so the counts are somewhat favourable. Not rebuilt now.
     present_day_place_types: Not used by this card's ranges (the scored rule needs no place types).
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
 - id: national_state_calibration.pooled.state.PA
   quote: 7/8
   study: National state-total calibration (pre-registered test; not adopted)
@@ -3712,6 +3745,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: pooled
   listed_only: true
 - id: national_state_calibration.pooled.state.VT
@@ -3887,6 +3923,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: pooled
   listed_only: true
 - id: national_state_calibration.pooled.state.MA
@@ -4062,6 +4101,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: pooled
   listed_only: true
 - id: national_state_calibration.pooled.state.WY
@@ -4237,6 +4279,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: pooled
   listed_only: true
 - id: national_state_calibration.shock.state.PA
@@ -4412,6 +4457,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: shock
   listed_only: true
 - id: national_state_calibration.shock.state.VT
@@ -4587,6 +4635,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: shock
   listed_only: true
 - id: national_state_calibration.shock.state.MA
@@ -4762,6 +4813,9 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: shock
   listed_only: true
 - id: national_state_calibration.shock.state.WY
@@ -4937,5 +4991,8 @@ cards:
       today's place types (county typology and tract mix), not the types known at each origin. County
       ranges use size classes computed at each origin. Origin-specific typologies are not rebuilt in this
       release.
+    selection_measured: 'Measured by a pre-registered nested test that re-chooses the rule at each start
+      year from matured cases only, with permit-only place types: assumptions/calibration/nested_selection.yaml
+      (visionhousing validate-nested-selection; docs/modules/validation_nested_selection.md).'
   variant: shock
   listed_only: true

@@ -42,5 +42,9 @@ Modules:
   dates, and the eligibility call the engine can make;
 - :mod:`~visionhousing.law.states`: reads the law files of states without the
   Pennsylvania table (``assumptions/law/states/<st>.yaml``, their timeline
-  records and the already-legal calibration) for the ``state_law`` profile section.
+  records and the already-legal calibration) for the ``state_law`` profile section;
+- :mod:`~visionhousing.law.local_readings`: town and county readings in states
+  without a municipal table (Vermont, Wyoming), from
+  ``assumptions/law/local_readings.yaml``, with their districts in the terms of
+  the Vermont rights test.
 """

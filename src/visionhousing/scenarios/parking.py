@@ -65,6 +65,27 @@ as set from the default minimum, so a verified minimum at or below ``v`` (or
 zero) avoids nothing. Coverage (share of baseline homes under verified vs
 default minimums) is reported in every draw (:func:`minimum_records`).
 
+**The documented 50% bar** (variant ``parking_verified_minimums_bar``,
+:func:`bar_minimums`). The law hooks let a county use its own read value only
+where its verified rows cover at least half of its residents
+(``assumptions/law/hooks.yaml``, ``min_coverage``; on 2026-11-26 Fayette, Pike
+and Warren). This variant follows that rule for non-zero minimums too: a
+verified minimum above zero replaces the default only in those counties;
+everywhere else the default stays. Zeros work exactly as in the benchmark,
+through the county reach factor, and never enter the mix (so nothing is
+counted twice). When no county passes the bar the variant equals the
+benchmark draw for draw.
+
+**Local readings** (variants ``vt_parking_town_bylaws`` and
+``wy_parking_local``). Vermont and Wyoming have no municipal rule table; their
+town and city readings (``assumptions/law/local_readings.yaml``) give the
+verified minimums instead (:func:`visionhousing.engine.law_floor.local_parking_minimums`),
+mixed in by :func:`minimum_mix` the same way. Only a verified parking fact of
+a place whose reading is in force on the run's as-of date counts; drafts,
+flagged facts and places the pack cannot put on tracts keep the default, so
+with nothing placed the variant equals the benchmark draw for draw. The county
+reach factor stays as in the benchmark.
+
 **Zero reduction gives zero.** If the share still built is 1 in both tract
 classes, spaces avoided are 0, the saving is 0 and the site-yield share is 0, so
 both parts are exactly zero.
@@ -74,7 +95,7 @@ All functions are pure: data frames and the ledger go in, records come out.
 
 from __future__ import annotations
 
-from collections.abc import Mapping, Sequence
+from collections.abc import Collection, Mapping, Sequence
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -113,6 +134,7 @@ __all__ = [
     "TRANSIT_IDS",
     "VOLUNTARY_IDS",
     "MinimumMix",
+    "bar_minimums",
     "binding_records",
     "binding_share",
     "expected_provided",
@@ -436,6 +458,15 @@ class MinimumMix:
         source_ids: Registry ids of the readings used.
         assumption_id: Id of the settings block (``assumptions/cost_reforms.yaml``).
         weight_words: How the shares are weighted, in words (for records).
+        bar_counties: ``None`` for every verified minimum (variant
+            ``parking_verified_minimums``); else the counties that pass the
+            50% resident bar (:func:`bar_minimums`, variant
+            ``parking_verified_minimums_bar``): only their non-zero minimums
+            are in the mix, and zeros keep the county reach factor.
+        words: The run note for the old minimum, when the mix comes from
+            elsewhere (the Vermont and Wyoming local readings, variants
+            ``vt_parking_town_bylaws`` and ``wy_parking_local``); empty uses
+            the words of the two verified-minimum variants.
     """
 
     levels: np.ndarray = field(repr=False)
@@ -447,6 +478,8 @@ class MinimumMix:
     source_ids: tuple[str, ...] = ()
     assumption_id: str = ""
     weight_words: str = ""
+    bar_counties: tuple[str, ...] | None = None
+    words: str = ""
 
     @classmethod
     def default_only(cls, n_counties: int, **kw: Any) -> MinimumMix:
@@ -454,6 +487,36 @@ class MinimumMix:
         z = np.zeros((n_counties, len(STRUCTURE_TYPES), 0))
         zz = np.zeros((n_counties, len(STRUCTURE_TYPES)))
         return cls(np.zeros(0), z, z.copy(), zz, zz.copy(), **kw)
+
+
+def bar_minimums(minimums: pd.DataFrame | None, counties: Collection[str]) -> pd.DataFrame:
+    """Keep the verified non-zero minimums of the counties that pass the 50% bar.
+
+    The documented hook rule (``assumptions/law/hooks.yaml``): a county uses
+    its own read value only where its verified rows cover at least
+    ``min_coverage`` of its residents. ``counties`` are those counties (the
+    engine passes the parking hook's qualifying counties). A minimum of zero
+    is blanked (it stays on the default here, because the county reach factor
+    already takes it out, as in the benchmark); a row left with no number is
+    dropped. Blank is never zero.
+
+    Args:
+        minimums: :func:`visionhousing.law.parking_rules.verified_parking_minimums`,
+            or ``None``.
+        counties: County ids (5 digits) that pass the bar.
+
+    Returns:
+        The kept rows (same columns); empty when no county passes.
+    """
+    if minimums is None or minimums.empty:
+        return pd.DataFrame(columns=getattr(minimums, "columns", None))
+    keep = {str(c) for c in counties}
+    m = minimums[minimums["geoid"].astype(str).str[:5].isin(keep)].copy()
+    for c in ("min_apartment", "min_small"):
+        vals = pd.to_numeric(m[c], errors="coerce")
+        m[c] = vals.where(vals > 0)
+    m = m[m["min_apartment"].notna() | m["min_small"].notna()]
+    return m.reset_index(drop=True)
 
 
 def minimum_mix(
@@ -960,7 +1023,10 @@ def parking_reform(
         minimums: Verified local minimums (:func:`minimum_mix`; variant
             ``parking_verified_minimums``). ``None`` (the benchmark) uses the
             ledger default everywhere. Callers pass ``reach=None`` with it:
-            verified zero minimums are already in the mix.
+            verified zero minimums are already in the mix. With
+            ``bar_counties`` set (variant ``parking_verified_minimums_bar``)
+            the mix holds no zero, and callers keep ``reach`` as in the
+            benchmark.
 
     Returns:
         The result. ``parts`` holds the cost channel and the site-yield term;
@@ -1059,6 +1125,19 @@ def parking_reform(
                 "set the minimum to zero (the county reach factor).",
             )
             if mix is None
+            else (mix.words,)
+            if mix.words
+            else (
+                "The old minimum is the verified local minimum above zero only in the "
+                "counties whose verified rows cover at least half of their residents (the "
+                "documented hook rule, assumptions/law/hooks.yaml min_coverage; "
+                f"{', '.join(mix.bar_counties) or 'none today'}; {mix.munis} municipalities; "
+                "records parking_verified_share and parking_default_share give the split of "
+                "baseline homes), and the ledger default (labelled as a default) everywhere "
+                "else. Zero minimums enter only through the county reach factor, as in the "
+                "benchmark, so nothing is counted twice.",
+            )
+            if mix.bar_counties is not None
             else (
                 "The old minimum is the verified local minimum wherever a reading is verified "
                 f"and in force ({mix.munis} municipalities; records parking_verified_share and "

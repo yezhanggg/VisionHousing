@@ -191,7 +191,7 @@ Screen: **Place** (`#/place/42003?v=1&s=PA`). Search a county by name, then pick
 - Permits are counted by county only; a tract shows its county.
 - Cost burden (CHAS) describes 2018-2022, older than the other survey figures; income limits are per HUD area, so a tract shows its county's; assisted counts overlap across programs and cover federal programs only.
 - Transit access is understated where agencies publish no readable schedule feed; distances are straight lines.
-- Testland is synthetic: every vintage then reads "synthetic test data (Testland)" and every page says the numbers are not real.
+- Testland is synthetic: every vintage then reads "synthetic test data (Testland)" and every page says the numbers are not real. Another synthetic pack (one whose data dictionary says `synthetic`, such as the demo state) names itself the same way: "synthetic test data (Demo state)", from `name` in its manifest or data dictionary, else its state name without the bracketed note.
 
 ## Tests
 

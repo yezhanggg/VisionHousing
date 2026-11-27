@@ -259,6 +259,12 @@ past bias.
   state's own yearly totals: state P10 = state P50 x (state ratio P10 / state
   ratio at the cycle quantile), and the same for P90.
 - Never add county P10s or P90s to get a state range.
+- **Inside the draws.** Each draw sets every county to its P50 times the state's
+  multiplier for that draw, so the state draw is exactly the sum of the county
+  draws (tested for PA, VT, MA and WY, every draw and year). Inside the draws a
+  county therefore swings by the state's proportion, not by its own record's
+  range; see [correlated.md](correlated.md) for the measured gap and a
+  regional-residual sensitivity that keeps the state range.
 
 ### Few cases: widening the state range
 
@@ -692,7 +698,9 @@ out-of-time test by group measures.
 - In the back-test, size classes come from the years up to each origin. Place
   types from the county typology are today's grouping, used for every origin.
 - The rule contest chooses on every origin at once (in-sample); only the ranges
-  and corrections are tested out of time.
+  and corrections are tested out of time. A pre-registered nested test that
+  re-chooses the rule at each start year from matured cases only is in
+  [validation_nested_selection.md](validation_nested_selection.md).
 - Ranges tested on later years (the out-of-time test) catch the real total less
   often than ranges tested on other counties of the same years: a new housing
   cycle moves every county at once, and the earliest origins have only one

@@ -4,6 +4,8 @@ Code: `src/visionhousing/evidence/retro.py`. Design (written before any estimate
 
 Treatment-date audit (2026-11-25): rules in `assumptions/evidence/retro_audit.yaml` (block `retro_treatment_audit`, fingerprinted before any re-score), results in `assumptions/evidence/retro_audit_results.yaml`, command `uv run visionhousing evidence-retro audit` (re-score) or `evidence-retro audit-check`, code `src/visionhousing/evidence/retro_audit.py`, tests `tests/test_retro_audit.py`. See "Treatment-date audit" below.
 
+Current-pool update (2026-11-26): rules in `assumptions/evidence/retro_current_pool.yaml` (block `retro_current_pool`, fingerprinted before any estimate on the new pool), results in `assumptions/evidence/retro_current_pool_results.yaml`, command `uv run visionhousing evidence-retro current-pool` (re-score) or `evidence-retro current-pool-check`, code `src/visionhousing/evidence/retro_current_pool.py`, tests `tests/test_retro_current_pool.py`. See "Current-pool update" below.
+
 ## What it asks
 
 Several U.S. cities have already allowed 2 to 4 homes on lots once zoned for one: Minneapolis (2020), Saint Paul (first phase 2022, duplex-to-fourplex phase late 2023), Portland (2021, second phase 2022), Raleigh (2021), Spokane (2022) and Arlington County, Virginia (2023). The years in brackets are when each rule took effect; the year a case is *scored from* follows the convention in "The design" and is audited below. Did permits for those building types rise afterwards, compared with ordinary cities that did not change their rules?
@@ -101,7 +103,37 @@ The primary outcome is units in 2–4 unit buildings per 1,000 homes per year. A
 - Every case's interval includes zero under every variant, so every case is robust to the date convention. All design checks still pass (`causal` label: the checks passed, not that an effect was found).
 - Pooled: before −0.01 (−0.26 to +0.25); audited +0.00 (−0.25 to +0.27). Under `any_exposure` the pooled pre-trend p is 0.06, below the 0.10 mark.
 
-**Pool note.** Re-running the unchanged original design today gives a 68-office pool, not 81: more states now have verified statewide ADU or middle-housing records in force by 2025-12-31 and are left out. The audit keeps the original 81 so that before and after differ only in the treatment definition. The original results file has not been re-run on today's records.
+**Pool note.** Re-running the unchanged original design today gives a 68-office pool, not 81: more states now have verified statewide ADU or middle-housing records in force by 2025-12-31 and are left out. The audit keeps the original 81 so that before and after differ only in the treatment definition. The original results file has not been re-run on today's records; the audited design is re-run on today's pool as a separate update (next section).
+
+## Current-pool update (2026-11-26)
+
+**Two pools, both kept.** The comparison pool leaves out every state with a verified statewide ADU or middle-housing law in force by 2025-12-31. When the panel first ran, that list had 9 states and the pool had 81 offices. Records added since put 9 more states on it (CT, MD, MT, NC, NH, NV, RI, UT, VT), so the same rule gives 68 offices today: 13 offices leave (North Carolina 4, Connecticut 3, Nevada 3, Utah 2, Montana 1; Maryland, New Hampshire, Rhode Island and Vermont had none in the pool). The team kept both:
+
+| Label | File | Role |
+|---|---|---|
+| original pool (81, as pre-registered) | `retro_audit_results.yaml` | The published record. The grades read it. |
+| current pool (68, update) | `retro_current_pool_results.yaml` | The same audited design on today's pool, shown beside it. Never graded. |
+
+The grade code (`grades/inputs.py`, `retro_source()["pools"]`) returns both labels in the evidence detail of every grade, with `graded: true` only for the original pool. The labels' numbers are read from each file.
+
+**Declared first.** Block `retro_current_pool` was written and fingerprinted (2026-11-26) before any estimate on the 68-office pool was computed. The 81-office results (first run and audit) had been seen, and so had today's pool size, which comes from the pool rule alone. The block freezes the excluded-state list, keeps the audit's treatment years and four variants, adds `original_design` (the first run's years and comparison rule on the new pool, to tell the pool change apart from the date change), and fixes what "the conclusions change" means: for the primary outcome, a case's 90% interval changes its relation to zero or its identification label changes, or the pooled interval changes its relation to zero, or the pooled pre-trend p crosses 0.10. Shifts in points and widths are reported but are not a change of conclusion. The run also reports whether today's records still give the frozen list.
+
+**What it found.** All figures are in `retro_current_pool_results.yaml`; units in 2-4 unit buildings per 1,000 homes per year, audited variant, 90% placebo interval; original pool (81) → current pool (68).
+
+| Case | g | Original pool (81) | Current pool (68) |
+|---|---|---|---|
+| Minneapolis | 2020 | −0.16 (−0.80 to +0.27) | −0.14 (−0.79 to +0.28) |
+| Saint Paul | 2024 | +0.16 (−1.06 to +0.81) | +0.17 (−1.03 to +0.80) |
+| Portland | 2022 | −0.39 (−1.12 to +0.29) | −0.47 (−1.16 to +0.27) |
+| Raleigh | 2022 | +0.01 (−0.73 to +0.69) | −0.07 (−0.77 to +0.67) |
+| Spokane | 2023 | +0.60 (−0.28 to +1.51) | +0.54 (−0.33 to +1.37) |
+| Arlington County | 2024 | −0.18 (−1.40 to +0.47) | −0.17 (−1.38 to +0.46) |
+| Pooled | | +0.00 (−0.25 to +0.27), pre-trend p 0.25 | −0.03 (−0.31 to +0.22), pre-trend p 0.22 |
+
+- **The conclusions hold** under the declared rule. Every case's interval still includes zero (no change distinguishable from ordinary cities), every case keeps the `causal` label (the design checks passed, not that an effect was found), and every case is robust to the date convention under all five variants.
+- Under `any_exposure` the pooled pre-trend p is 0.05 (0.06 on the original pool): below the 0.10 mark in both pools.
+- Outside the primary outcome: Raleigh's 1-unit interval now includes zero (it was above zero), and the 5+ unit outcome of Portland and Arlington moves from `matched` to `causal` (pre-trend or placebo checks now pass). These are secondary outcomes and do not enter the conclusions rule.
+- Caveats: Raleigh is in North Carolina, now an excluded state; the rule removes comparison offices only, so Raleigh stays a case. Several newly counted state laws are narrow (a residential-code change, single-stair laws, ADU-only laws); the design's rule counts any verified statewide record typed ADU or middle housing and this update does not re-judge them. Fewer comparisons mean fewer placebo values, which alone can move an interval.
 
 ## How to use these records
 

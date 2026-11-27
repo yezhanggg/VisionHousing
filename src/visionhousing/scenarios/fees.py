@@ -49,6 +49,18 @@ fee level (``fees.pa_assumed_fee_per_unit_judgement``). That parameter is a
 draft judgement with a wide range until per-unit impact, tap and permit fees are
 sourced; the result says so.
 
+The documented local view
+-------------------------
+``view="local"`` (variant ``fees_documented_local``) starts from the same
+labelled judgement, but where a city's own fee schedules have been documented
+in full and the city covers its whole county, that county's fees per unit are
+the documented ones, by structure type (``features.fee_schedules``:
+single-family home, duplex, fourplex, 20-unit apartment). Today that is
+Philadelphia only; Pittsburgh's fee book refuses scripted reading and the city
+is only part of Allegheny County, so Allegheny stays on the judgement. The cut
+is the same 50%, so the saving per unit varies by county and structure type.
+The benchmark's $50,000 is never replaced.
+
 Shared helpers
 --------------
 The Channel B formula, the value of a new unit, the market brackets and the
@@ -71,6 +83,7 @@ from visionhousing.baseline.panel import STRUCTURE_LABELS, STRUCTURE_TYPES
 from visionhousing.baseline.project import BaselineResult
 from visionhousing.engine import records as rec
 from visionhousing.engine.records import Record
+from visionhousing.features import fee_schedules as fsched
 from visionhousing.features.brackets import RENT, VALUE, median_from_brackets
 from visionhousing.ledger import DEFAULT_DRAWS, Ledger, LedgerError, apply_overrides, sample
 from visionhousing.ledger.loader import ROOT, read_yaml
@@ -104,11 +117,15 @@ TIER = 0
 DATA_SOURCES: tuple[str, ...] = ("bps_county_annual", "acs5_summary_file")
 """Registry ids behind the baseline and the county medians."""
 
-VIEWS = ("benchmark", "state", "deferral")
+VIEWS = ("benchmark", "state", "deferral", "local")
 """``benchmark``: $50,000 per unit cut by 50%. ``state``: an assumed state fee level
 (team judgement).
 ``deferral`` (variant ``fees_deferral``): the $50,000 is paid at occupancy instead
-of at permit; the builder saves the construction-loan interest on it."""
+of at permit; the builder saves the construction-loan interest on it.
+``local`` (variant ``fees_documented_local``): the assumed state fee level,
+except in counties whose city's fee schedules are documented in full
+(``assumptions/fee_schedules.yaml``), which use the documented fees by
+structure type."""
 
 ELASTICITY = "supply.elasticity_medium_run"
 PREMIUM = "supply.new_construction_value_premium"
@@ -152,8 +169,20 @@ FEE_IDS: dict[str, tuple[str, ...]] = {
     "benchmark": (FEE_TOTAL, FEE_CUT, ELASTICITY, FEE_K, *VALUE_IDS),
     "state": (FEE_STATE, FEE_CUT, ELASTICITY, FEE_K, *VALUE_IDS),
     "deferral": (*DEFERRAL_IDS, ELASTICITY, FEE_K, *VALUE_IDS),
+    "local": (FEE_STATE, FEE_CUT, ELASTICITY, FEE_K, *VALUE_IDS),
 }
-"""Ledger ids behind the Channel B fee estimate, by view."""
+"""Ledger ids behind the Channel B fee estimate, by view (``local`` also reads
+:func:`visionhousing.features.fee_schedules.local_ids`, see :func:`view_ids`)."""
+
+
+def view_ids(view: str) -> tuple[str, ...]:
+    """Every ledger id one fee view samples (the local view adds the schedule's ids)."""
+    if view not in VIEWS:
+        raise ValueError(f"view must be one of {VIEWS}, got {view!r}")
+    if view == "local":
+        return (*FEE_IDS["local"], *fsched.local_ids(fsched.load_schedule()))
+    return FEE_IDS[view]
+
 
 # Which pro forma stands in for each structure type in the cross-check.
 _CROSSCHECK_SPECS: dict[str, tuple[Intensity, str]] = {
@@ -505,13 +534,14 @@ def fee_saving(params: Mapping[str, np.ndarray], view: str) -> np.ndarray:
     Args:
         params: Ledger id to draws.
         view: ``benchmark`` ($50,000), ``state`` (assumed state fee level, a judgement)
-            or ``deferral``.
+            or ``deferral``. The ``local`` view's saving varies by county and
+            structure type; use :func:`local_fees` times the cut share.
 
     Returns:
         Array of shape (draws,), $ per unit.
     """
-    if view not in VIEWS:
-        raise ValueError(f"view must be one of {VIEWS}, got {view!r}")
+    if view not in VIEWS or view == "local":
+        raise ValueError(f"view must be one of {VIEWS[:3]}, got {view!r}")
     if view == "deferral":
         months = np.asarray(params[DEFER_MONTHS], dtype=float)
         rate = np.asarray(params[LOAN_RATE], dtype=float)
@@ -909,14 +939,44 @@ def funnel_steps(
 # ---------------------------------------------------------------- the reform
 
 
+def local_fees(
+    params: Mapping[str, np.ndarray], counties: Sequence[str]
+) -> tuple[np.ndarray, dict[str, Any]]:
+    """Fees per unit before the cut in the local view, by county, structure type and draw.
+
+    Counties whose city's schedules are documented in full use the documented
+    prototype fees (``features.fee_schedules.county_fee_matrix``); all others
+    the labelled judgement ``fees.pa_assumed_fee_per_unit_judgement``.
+
+    Returns:
+        ``(fees of shape (counties, 4, draws), city id -> status)``.
+    """
+    return fsched.county_fee_matrix(
+        fsched.load_schedule(),
+        counties,
+        STRUCTURE_TYPES,
+        params,
+        np.asarray(params[FEE_STATE], dtype=float),
+    )
+
+
 def _fee_core(
     params: Mapping[str, np.ndarray],
     base: np.ndarray,
     market: Market,
     view: str,
     capacity_case: str = "none",
+    counties: Sequence[str] = (),
 ) -> dict[str, np.ndarray]:
-    saving = fee_saving(params, view)[None, None, :]
+    fee = None
+    if view == "local":
+        cut = np.asarray(params[FEE_CUT], dtype=float)
+        if np.any((cut < 0) | (cut > 1)):
+            raise ValueError("the fee cut share must be between 0 and 1")
+        fee, _ = local_fees(params, counties)
+        saving = fee * cut[None, None, :]
+    else:
+        saving = fee_saving(params, view)[None, None, :]
     value = value_per_unit(market, params)
     added = channel_b(
         base,
@@ -926,6 +986,8 @@ def _fee_core(
         np.asarray(params[FEE_K])[None, None, :],
     )
     out = {"saving": saving, "value": value, "added": added}
+    if fee is not None:
+        out["fee"] = fee
     if capacity_case == "delayed":
         earmark = np.asarray(params[EARMARK], dtype=float)
         delayed = np.asarray(params[DELAYED], dtype=float)
@@ -967,7 +1029,9 @@ def fee_reform(
             structure type (see :func:`baseline_by_type`).
         tracts: Tract table with ``county`` and the ACS bracket columns.
         ledger: The Assumption Ledger.
-        view: ``benchmark`` ($50,000 x 50%) or ``state`` (assumed state fees x 50%).
+        view: ``benchmark`` ($50,000 x 50%), ``state`` (assumed state fees x 50%),
+            ``deferral`` or ``local`` (documented city fees where complete, the
+            assumed state fees elsewhere, x 50%).
         n_draws: Monte Carlo draws.
         seed: Run seed; the same seed gives the same result.
         overrides: Ledger overrides for this run (see ``ledger.apply_overrides``).
@@ -991,11 +1055,11 @@ def fee_reform(
     counties = tuple(str(c) for c in baseline.index)
     base = baseline_array(baseline, counties)
     market = market_from_tracts(tracts, counties)
-    ids = (*FEE_IDS[view], *(DELAYED_IDS if capacity_case == "delayed" else ()))
+    ids = (*view_ids(view), *(DELAYED_IDS if capacity_case == "delayed" else ()))
     xids = tuple(sorted({*CROSSCHECK_IDS, *ids}))
     params = _draws(ledger, xids, n_draws, seed)
     based = _scaled(base, baseline_scale, n_draws)
-    core = _fee_core(params, based, market, view, capacity_case)
+    core = _fee_core(params, based, market, view, capacity_case, counties)
     expression = "baseline units x e x (fees per unit x cut share / value per new unit) x k"
     if capacity_case == "delayed":
         expression += " x (1 - earmarked water and sewer share x delayed-capacity share)"
@@ -1005,6 +1069,13 @@ def fee_reform(
             "/ value per new unit) x k"
         )
     what = "added units from the fee cut" + (" (state fee levels)" if view == "state" else "")
+    if view == "local":
+        expression = (
+            "baseline units x e x (fees per unit of the county and structure type, documented "
+            "where a city's schedules are complete, else the assumed state level, x cut share / "
+            "value per new unit) x k"
+        )
+        what = "added units from the fee cut (documented local fees)"
     if view == "deferral":
         what = "added units from fee deferral"
     counties_rec, state, by_type = range_records(
@@ -1013,7 +1084,7 @@ def fee_reform(
 
     # Pro-forma cross-check: the same saving, times the same k, through the pro formas.
     pf_params = dict(params)
-    if view == "state":
+    if view in ("state", "local"):
         pf_params[FEE_TOTAL] = params[FEE_STATE]
     reached = core["saving"] * np.asarray(params[FEE_K])[None, None, :]
     check = proforma_crosscheck(based, reached, market, pf_params)
@@ -1023,8 +1094,8 @@ def fee_reform(
 
     # Funnel and swings at central values.
     central = _central(ledger, ids)
-    c_core = _fee_core(central, base[:, :, None], market, view, capacity_case)
-    fee_id = FEE_STATE if view == "state" else FEE_TOTAL
+    c_core = _fee_core(central, base[:, :, None], market, view, capacity_case, counties)
+    fee_id = FEE_STATE if view in ("state", "local") else FEE_TOTAL
     if view == "deferral":
         saving_rec = rec.div(
             rec.product(
@@ -1039,6 +1110,26 @@ def fee_reform(
             name="fee deferral saving per unit (carry not paid)",
             unit="$/unit",
         )
+    elif view == "local":
+        weight = base.sum()
+        avg = float((base * c_core["fee"][:, :, 0]).sum() / weight) if weight > 0 else 0.0
+        saving_rec = rec.mul(
+            rec.quantity(
+                "fees per unit, baseline-weighted, documented local where complete",
+                avg,
+                "$/unit",
+                formula=(
+                    "sum over counties and structure types of baseline units x fees per unit "
+                    "(documented city schedules where complete, else the assumed state level) / "
+                    f"baseline units = {rec.format_number(avg, '$/unit')}, central values"
+                ),
+                assumption_ids=view_ids("local"),
+                source_ids=_local_sources(),
+            ),
+            rec.from_parameter(FEE_CUT, ledger[FEE_CUT]),
+            name="fee saving per unit",
+            unit="$/unit",
+        )
     else:
         saving_rec = rec.mul(
             rec.from_parameter(fee_id, ledger[fee_id]),
@@ -1048,7 +1139,9 @@ def fee_reform(
         )
     steps = _fee_steps(ledger, base, c_core, saving_rec)
     swing = swing_table(
-        lambda p: float(_fee_core(p, base[:, :, None], market, view, capacity_case)["added"].sum()),
+        lambda p: float(
+            _fee_core(p, base[:, :, None], market, view, capacity_case, counties)["added"].sum()
+        ),
         ledger,
         ids,
     )
@@ -1065,6 +1158,10 @@ def fee_reform(
             "Pennsylvania fee schedules stands behind it yet."
         )
     records: dict[str, Record] = {}
+    if view == "local":
+        local_notes, local_records = _local_outputs(ledger, params, counties, core, based)
+        notes.extend(local_notes)
+        records.update(local_records)
     if capacity_case == "delayed":
         notes.append(
             "Delayed-capacity case (a policy option, not the benchmark): the earmarked water "
@@ -1110,6 +1207,7 @@ def fee_reform(
         per_unit={
             "base": based,
             "saving": np.broadcast_to(core["saving"], core["added"].shape),
+            **({"fee": core["fee"]} if "fee" in core else {}),
         },
         records=records,
     )
@@ -1129,3 +1227,73 @@ def _fee_steps(
         passthrough=rec.from_parameter(FEE_K, ledger[FEE_K]),
         added_name="added units from the fee cut, central values",
     )
+
+
+def _local_sources() -> tuple[str, ...]:
+    sched = fsched.load_schedule()
+    return tuple(sorted({str(d["source_id"]) for d in sched.documents.values()}))
+
+
+def _local_outputs(
+    ledger: Ledger,
+    params: Mapping[str, np.ndarray],
+    counties: Sequence[str],
+    core: Mapping[str, np.ndarray],
+    based: np.ndarray,
+) -> tuple[list[str], dict[str, Record]]:
+    """Notes and records of the documented local view: who is applied, and the fees used."""
+    sched = fsched.load_schedule()
+    _, status = local_fees(params, counties)
+    ids = tuple(sorted({*view_ids("local")}))
+    sources = tuple(sorted({*_sources(ledger, ids), *_local_sources()}))
+    notes = [
+        "Documented local view (variant fees_documented_local, not the benchmark): fees per "
+        "unit are the documented city schedules (assumptions/fee_schedules.yaml) where every "
+        "core fee category is documented and the city covers its county; every other county "
+        f"keeps the assumed state level ({FEE_STATE}, a draft judgement). The benchmark "
+        "$50,000 is unchanged.",
+        *(
+            st.reason
+            + ("" if st.county in counties or not st.applied else " (not in this state's counties)")
+            + "."
+            for st in status.values()
+        ),
+    ]
+    records: dict[str, Record] = {}
+    index = {str(c): i for i, c in enumerate(counties)}
+    for city, st in status.items():
+        if not st.applied or st.county not in index:
+            continue
+        i = index[st.county]
+        for j, t in enumerate(STRUCTURE_TYPES):
+            proto = sched.type_prototypes[t]
+            records[f"local_fee_{city}_{t}"] = rec.from_draws(
+                f"documented fees per unit before the cut, {sched.cities[city]['name']}, "
+                f"{STRUCTURE_LABELS[t]} ({proto} prototype)",
+                core["fee"][i, j, :],
+                "$/unit",
+                expression=(
+                    "sum of the documented items at the low reading + schedule position x "
+                    "(high - low), per building, / units (application fees credited to the "
+                    "final permit counted once)"
+                ),
+                assumption_ids=(fsched.POSITION_ID, *fsched.local_ids(sched), sched.id),
+                source_ids=_local_sources(),
+                tier=TIER,
+            )
+    fee = core["fee"]
+    weight = based.sum(axis=(0, 1))
+    avg = np.where(weight > 0, (based * fee).sum(axis=(0, 1)) / np.where(weight > 0, weight, 1), 0)
+    records["local_fee_state_average"] = rec.from_draws(
+        "fees per unit before the cut, state baseline-weighted average, documented local view",
+        avg,
+        "$/unit",
+        expression=(
+            "sum over counties and structure types of baseline units x fees per unit / "
+            "baseline units, in each draw"
+        ),
+        assumption_ids=ids,
+        source_ids=sources,
+        tier=TIER,
+    )
+    return notes, records

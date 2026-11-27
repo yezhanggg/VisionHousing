@@ -1,0 +1,91 @@
+# Retrospective reform panel: the audited design re-run on today's comparison pool,
+# declared before any of its estimates were computed.
+#
+# What this file is: a third, separate design block for `visionhousing evidence-retro
+# current-pool`. It re-scores the treatment-date audit (retro_audit.yaml, block
+# retro_treatment_audit) on the comparison pool that the original design's own pool
+# rule gives with TODAY's verified statewide records. It was written on 2026-11-26
+# BEFORE any estimate on this pool was computed; its fingerprint is in
+# assumptions/preregistration.yaml (block retro_current_pool). The original design,
+# the audit block and both of their results files are left unchanged.
+#
+# Honest note: the results on the original 81-office pool WERE seen before this block
+# was written (the first run, 2026-11-24, and the audit, 2026-11-25). The size of
+# today's pool (68 offices) and which offices leave it were also known: they come
+# from the pool rule alone, before any estimate. No estimate on the 68-office pool
+# had been computed. Method: docs/modules/evidence_retro.md ("Current-pool update").
+
+version: 1
+id: retro_current_pool_2026_11
+declared_on: 2026-11-26
+
+retro_current_pool:
+  # Everything not listed here (data, outcomes, horizon, base years, pre-trend and
+  # placebo tests, estimators, seed, draws, pass marks, identification rule, treatment
+  # definitions and variants) is read from retro_design.yaml and retro_audit.yaml and
+  # checked against their own fingerprints before scoring.
+  inherits: [retro_design, retro_treatment_audit]
+  why: >-
+    The original design leaves out every state with a verified statewide ADU or
+    middle-housing law in force by 2025-12-31. When it ran (2026-11-24) that list had 9
+    states and the pool had 81 offices. Comparison records added after that run
+    put 9 more states on the list, so the same rule today gives 68 offices. The owner
+    decided (2026-11-26) to keep both: the 81-office audited result stays the published
+    record; this block re-scores it on today's pool as a named update shown beside it.
+
+  pool:
+    rule: >-
+      The original design's comparison_pool rule, unchanged, applied with the verified
+      statewide records on file on 2026-11-26. The excluded-state list is frozen here so
+      that later records do not move this update; the run also reports the list today's
+      records would give and whether it still matches.
+    excluded_states: [AZ, CA, CO, CT, FL, MA, MD, ME, MT, NC, NH, NJ, NV, OR, RI, UT, VT, WA]
+    added_since_original_run: [CT, MD, MT, NC, NH, NV, RI, UT, VT]
+    expected_pool: 68
+    offices_leaving_the_pool:
+      CT: [New Haven, Stamford, Waterbury]
+      MT: [Billings]
+      NC: [Cary town, Fayetteville, Greensboro, Winston-Salem]
+      NV: [Henderson, Las Vegas, North Las Vegas]
+      UT: [Provo, West Valley City]
+    no_pool_office: [MD, NH, RI, VT]
+
+  # The audit's four variants, re-scored on this pool, plus the original design
+  # (original treatment years and comparison rule) on this pool, so that the pool
+  # change can be told apart from the treatment-date change.
+  variants:
+    audited: {g: audited, comparisons: never_treated_only, role: primary (the update's reference)}
+    dates_only: {g: audited, comparisons: never_treated_and_not_yet_treated, role: as in the audit}
+    any_exposure: {g: any_exposure, comparisons: never_treated_only, role: sensitivity}
+    first_full_year_all_phases: {g: first_full_year_all_phases, comparisons: never_treated_only, role: sensitivity}
+    original_design: {g: design, comparisons: never_treated_and_not_yet_treated, role: pool change alone}
+  compared_with: >-
+    The audited variant on the original 81-office pool, read from
+    assumptions/evidence/retro_audit_results.yaml (variants.audited).
+
+  reading_rule:
+    adoption: >-
+      Decided before scoring, whatever the estimates: the 81-office audited result stays
+      the published record and the one the grades read. This update is shown beside it,
+      labelled "current pool", and never replaces it.
+    conclusions_change: >-
+      For the primary outcome (units in 2-4 unit buildings), the conclusions are said to
+      change if, between the original-pool audited result and this pool's audited
+      result, any case's 90% interval changes its relation to zero (includes zero /
+      above / below) or any case's identification label changes, or the pooled
+      interval changes its relation to zero, or the pooled pre-trend p crosses 0.10.
+      Otherwise the conclusions are said to hold. Point shifts and interval widths are
+      reported but are not a change of conclusion.
+    robustness: the audit's rule (audited, any_exposure, first_full_year_all_phases on the same side of zero)
+    null_results: >-
+      An interval that includes zero is reported as "no change distinguishable from
+      ordinary cities", never dropped and never described as a negative or positive effect.
+
+  caveats:
+    - Raleigh is a case in North Carolina, now an excluded state. The pool rule removes comparison offices only, so
+      Raleigh stays a case; its state's 2023 law (a residential-code change counted by the rule) is in force inside its
+      horizon.
+    - Several newly counted state laws are narrow (building-code, single-stair, ADU-only). The design's rule counts any
+      verified statewide record typed adu or missing_middle; this block does not re-judge them.
+    - Fewer comparison offices give fewer placebo values, so intervals can move or widen for that reason alone.
+    - Nothing else changes; the BPS and ACS files are the same ones the original run and the audit used.

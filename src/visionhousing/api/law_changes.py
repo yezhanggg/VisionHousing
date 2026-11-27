@@ -57,6 +57,10 @@ comparisons disk cache, keyed by the pack, ledger, code and assumptions.
 Interface addresses (registered by :func:`register`):
 
 - ``GET /api/v1/states/{st}/law-changes?r=KEY``: the payload for one reform.
+  Opt-in ``&view=districts`` (or ``districts_guidance``): in the zoning-district
+  sample (Philadelphia, Pittsburgh, Frankstown) each municipality's single answer
+  is replaced by its mix of district answers from the pack's ``rule_area_weights``
+  (:func:`district_view`); the default view is unchanged.
 - ``GET /api/v1/states/{st}/law-changes/read-next?r=KEY``: the bounding runs.
 
 Static site: :func:`write_static` writes ``<ST>/law_changes/<KEY>.json`` (the
@@ -94,6 +98,7 @@ __all__ = [
     "SETTINGS_PATH",
     "build_payload",
     "classify_munis",
+    "district_view",
     "load_settings",
     "read_next",
     "read_tables",
@@ -117,6 +122,13 @@ EXTRA_TABLES = {
 }
 """Tables the review-priority score also reads (typed as its command reads them)."""
 LAW_SOURCE = "pa_municipal_ordinances"
+DISTRICT_TABLE = "rule_area_weights"
+"""Pack table of the zoning-district sample, read only by the opt-in district view."""
+VIEWS = ("default", "districts", "districts_guidance")
+"""``default``: the municipal answers (the shipped page). ``districts``: each sample
+municipality's answer replaced by its zoning-district mix, verified code only;
+``districts_guidance``: also the jurisdiction's published guidance (a sensitivity).
+Settings in ``assumptions/law/zone_scope.yaml`` (``law_changes``)."""
 BLANK = ("", "nan", "none", "unknown")
 
 
@@ -146,6 +158,10 @@ def read_tables(folder: Path) -> dict[str, pd.DataFrame]:
             if path.is_file():
                 out[name] = pd.read_csv(path, dtype=dtypes)
                 break
+    for path in (folder / f"{DISTRICT_TABLE}.csv.gz", folder / f"{DISTRICT_TABLE}.csv"):
+        if path.is_file():  # read only by the opt-in district view
+            out[DISTRICT_TABLE] = pd.read_csv(path, dtype=str)
+            break
     return out
 
 
@@ -719,6 +735,7 @@ def build_payload(
     settings: dict[str, Any] | None = None,
     hooks: dict[str, Any] | None = None,
     as_of: date | str | None = None,
+    view: str = "default",
 ) -> dict[str, Any]:
     """The "what this law changes" payload of one reform for a loaded state.
 
@@ -732,11 +749,17 @@ def build_payload(
         settings: ``assumptions/law_changes.yaml`` (read when not given).
         hooks: ``assumptions/law/hooks.yaml`` (the law layer's default when not given).
         as_of: The run's as-of date (default: ``assumptions/outcome.yaml``).
+        view: One of :data:`VIEWS`; anything but ``default`` adds the district
+            view (:func:`district_view`) and a ``view`` block.
 
     Raises:
         KeyError: ``key`` is not in the settings.
+        ValueError: ``view`` is not one of :data:`VIEWS`.
     """
     from visionhousing.law.inforce import resolve_as_of
+
+    if view not in VIEWS:
+        raise ValueError(f"law-changes view must be one of {VIEWS}, got {view!r}")
 
     settings = settings or load_settings()
     spec = settings["reforms"][key]
@@ -789,6 +812,12 @@ def build_payload(
             hooks=hooks,
         )
         classified["weight"] = pd.to_numeric(classified[weight_col], errors="coerce").fillna(0.0)
+    split, view_block = classified, None
+    if view != "default":
+        split, view_block = district_view(
+            classified, tables, rule=rule, proposed=proposed, view=view, weight_col=weight_col,
+            den=den,
+        )  # fmt: skip
     coverage = county_answer_coverage(
         tables.get("muni_zoning_rules"), tables.get("municipal_planning"), rule, hooks, when
     )
@@ -817,10 +846,11 @@ def build_payload(
         cap_lo = cap_hi = 0.0
         g = classified[classified["county"] == county] if classified is not None else None
         if g is not None and len(g) and den_id != "station_homes":
+            gs = split[split["county"] == county]  # the classified rows unless a district view
             for cls in (*CLASSES, OUTSIDE):
-                parts[cls] = float(g.loc[g["answer"] == cls, "weight"].sum())
-            cap_lo = float((g["weight"] * g["cap_low"]).sum())
-            cap_hi = float((g["weight"] * g["cap_high"]).sum())
+                parts[cls] = float(gs.loc[gs["answer"] == cls, "weight"].sum())
+            cap_lo = float((gs["weight"] * gs["cap_low"]).sum())
+            cap_hi = float((gs["weight"] * gs["cap_high"]).sum())
             for r in g[g["method"].fillna("unread").astype(str) != "unread"].to_dict("records"):
                 mrows.append(_muni_row(r, rule, stage, muni_den, when))
         else:
@@ -942,7 +972,7 @@ def build_payload(
             )
     words = {c["id"]: c for c in settings["classes"]}
     scen = getattr(ctx, "scenarios", {}).get(key)
-    return {
+    out = {
         "state": ctx.state,
         "reform": key,
         "title": getattr(scen, "title", key) if scen is not None else key,
@@ -999,6 +1029,119 @@ def build_payload(
         "law_assumption_ids": law_ids,
         "counties": rows,
     }
+    if view_block is not None:
+        out["view"] = view_block
+    return out
+
+
+def district_view(
+    classified: pd.DataFrame | None,
+    tables: Mapping[str, pd.DataFrame],
+    *,
+    rule: str,
+    proposed: float | None,
+    view: str,
+    weight_col: str,
+    den: Mapping[str, Any],
+) -> tuple[pd.DataFrame | None, dict[str, Any]]:
+    """Replace each sample municipality's answer by its zoning-district mix.
+
+    For a municipality of the pack's ``rule_area_weights`` sample, its row
+    (weight ``w``) becomes one row per district class ``k`` with weight
+    ``w x share_k``, ``share_k`` its lots (homes, for a residents
+    denominator) in class ``k`` over all its lots, from the window's zone rows
+    (:func:`visionhousing.engine.zone_scope.jurisdiction_mix`). A class that
+    rests on a row the view does not count is unresolved. Capacity per lot:
+    known by right and conditions relaxed 0; newly eligible and discretionary
+    the reform's full gain; unresolved 0 to the full gain. Places outside the
+    bill stay outside; every other municipality keeps its own answer.
+
+    Returns the rows the shares and capacity are counted from, and the
+    payload's ``view`` block (which municipalities moved, from which answer, to
+    which mix).
+    """
+    from visionhousing.engine import zone_scope as zs
+
+    settings = zs.load_settings()
+    lc = settings["law_changes"]
+    review = list(settings["views"][lc["views"][view]]["review_states"])
+    words = str(settings["views"][lc["views"][view]]["words"])
+    bench = (lc.get("benchmarks") or {}).get(rule)
+    raw = tables.get(DISTRICT_TABLE)
+    block: dict[str, Any] = {
+        "id": view,
+        "words": f"Zoning-district view ({words})",
+        "table": DISTRICT_TABLE,
+        "benchmark": bench,
+        "municipalities": [],
+        "note": None,
+    }
+    if classified is None or bench is None or raw is None or raw.empty:
+        block["note"] = (
+            "No district answers for this reform or pack: every municipality keeps its own answer."
+        )
+        return classified, block
+    table = zs.typed_table(raw)
+    mix = zs.jurisdiction_mix(table, str(bench), review, weight=str(lc["weights"][weight_col]))
+    full = _full_gain(rule, proposed)
+    gain = {
+        "known_by_right": (0.0, 0.0),
+        "conditions_relaxed": (0.0, 0.0),
+        "newly_eligible": (full, full),
+        "discretionary": (full, full),
+        "unresolved": (0.0, full),
+    }
+    sources = [*list(den.get("source_ids") or []), LAW_SOURCE, *settings.get("source_ids", [])]
+    sample = set(mix["jurisdiction"].astype(str))
+    keep, add = [], []
+    for row in classified.to_dict("records"):
+        gid = str(row["geoid"])
+        if gid not in sample or row["answer"] == OUTSIDE:
+            keep.append(row)
+            continue
+        m = mix[mix["jurisdiction"] == gid]
+        own = float(row.get("weight") or 0.0)
+        parts = []
+        for r in m.itertuples(index=False):
+            lo, hi = gain[str(r.opportunity_class)]
+            add.append(
+                {
+                    **row,
+                    "answer": r.answer,
+                    "weight": own * float(r.share),
+                    "cap_low": lo,
+                    "cap_high": hi,
+                    "why": f"District view: {r.why}",
+                }
+            )
+            parts.append(
+                {
+                    "class": str(r.opportunity_class),
+                    "answer": str(r.answer),
+                    "share": _num(
+                        float(r.share),
+                        "share",
+                        f"{lc['weights'][weight_col]} of the municipality's zone rows in class "
+                        f"'{r.opportunity_class}' / all its zone rows ({DISTRICT_TABLE}, window "
+                        "2027-2031)",
+                        sources,
+                    ),
+                    "why": str(r.why),
+                }
+            )
+        block["municipalities"].append(
+            {
+                "geoid": gid,
+                "name": _text(row.get("name")),
+                "municipal_answer": row["answer"],
+                "denominator": _num(
+                    own, den["unit"], f"{den['label']} of this municipality", sources
+                ),
+                "districts": parts,
+            }
+        )
+    out = pd.DataFrame([*keep, *add], columns=classified.columns)
+    return out, block
 
 
 def _observed(
@@ -1447,11 +1590,17 @@ def register(
     def law_changes(st: str, request: Request) -> Response:
         """What the reform changes in each county and municipality (four answers)."""
         ctx, key, tables = checked(st, request)
+        view = str(request.query_params.get("view", "default"))
+        if view not in VIEWS:
+            raise error(400, "invalid_view", f"no law-change view '{view[:40]}'")
         _rk, result = execute(RunRequest(state=ctx.state, reforms=[key], explain=False))
-        rkey = Runner.key(
-            "law_changes", ctx.state, ctx.data_hash, ctx.calibration_hash, ctx.ledger.hash(), key
-        )
-        body = timed(rkey, lambda: {"changes": build_payload(ctx, key, tables, result)})
+        parts = ["law_changes", ctx.state, ctx.data_hash, ctx.calibration_hash, ctx.ledger.hash()]
+        if view != "default":  # the default key is unchanged
+            from visionhousing.engine.zone_scope import table_fingerprint
+
+            parts += [view, table_fingerprint(folder=folder(ctx.state)) or "no-table"]
+        rkey = Runner.key(*parts, key)
+        body = timed(rkey, lambda: {"changes": build_payload(ctx, key, tables, result, view=view)})
         return Response(_dumps(body), media_type="application/json")
 
     @app.get(f"{api}/states/{{st}}/law-changes/read-next")

@@ -1,0 +1,125 @@
+# Settings of the zoning-district layer (P5 Pennsylvania legal-exposure pilot).
+#
+# Read by src/visionhousing/law/zone_rules.py, src/visionhousing/law/rule_weights.py,
+# src/visionhousing/law/zone_build.py and src/visionhousing/data/sources/zoning_layers.py.
+# The reviewed rules themselves are in assumptions/law/zone_rules.yaml.
+#
+# Every value here is a setting or a judgement, never a result. Results (weights,
+# shares, sliver and unmatched totals) are worked out by the code and written to the
+# pack tables zone_rule and rule_area_weights.
+
+version: 1
+
+# The five-year window the benchmark runs cover (assumptions/outcome.yaml: 2027-2031).
+# A zone version's weight inside the window is the share of these days it is in force.
+window:
+  start: "2027-01-01"
+  end: "2032-01-01"   # first day after the window
+
+# The sample: a small contrasting set, not the state. Each jurisdiction is a 2020
+# county subdivision (10-digit state + county + county subdivision code).
+sample:
+  - geoid: "4210160000"
+    name: Philadelphia city (Philadelphia County)
+    kind: first-class city, own zoning code
+    county: "42101"
+    maps: [phl_current, phl_2021]   # district maps, newest first (see layers)
+    overlays: phl_overlays
+  - geoid: "4200361000"
+    name: Pittsburgh city (Allegheny County)
+    kind: second-class city, own zoning code
+    county: "42003"
+    maps: [pgh_current]
+    overlays: pgh_parking_reduction
+  - geoid: "4201327600"
+    name: Frankstown township (Blair County)
+    kind: rural township, own ordinance; no district map published as data
+    county: "42013"
+    maps: []          # no district map: every lot goes to the whole-jurisdiction zone
+    overlays: null
+
+# Map-service layers read by script (data/sources/zoning_layers.py). `district_field`
+# is the attribute holding the district code; `not_a_district` lists codes that mark
+# land the map gives to another jurisdiction (it is treated as unmatched).
+layers:
+  phl_current:
+    source: phl_zoning_base
+    service: Zoning_BaseDistricts
+    district_field: long_code   # the code as the Zoning Code writes it (RSA-5); `code` drops the hyphen
+    fields: [code, long_code, zoninggroup, pending, pendingbill]
+    map_version: current     # replaced by the read date at fetch time
+    file: phl_zoning_base_current.json.gz
+  phl_2021:
+    source: phl_zoning_base_dated
+    service: zoning_basedistricts_122021
+    district_field: long_code
+    fields: [code, long_code, zoninggroup]
+    map_version: "2021-12"   # the City's December 2021 snapshot
+    observed_on: "2021-12-31"
+    file: phl_zoning_base_2021_12.json.gz
+  phl_overlays:
+    source: phl_zoning_overlays
+    service: Zoning_Overlays
+    overlay_field: overlay_symbol
+    fields: [overlay_name, overlay_symbol, type, code_section, pending]
+    keep_types: [Overlay District]   # supplemental controls (signs, loading) are not overlays
+    file: phl_zoning_overlays_current.json.gz
+  pgh_current:
+    source: pgh_zoning
+    service: PGHWebZoning
+    district_field: zon_new
+    fields: [zon_new, full_zoning_type, legendtype, status]
+    not_a_district: [MTOBOR]   # the Borough of Mount Oliver, an enclave with its own zoning
+    file: pgh_zoning_current.json.gz
+  pgh_parking_reduction:
+    source: pgh_parking_reduction_overlay
+    service: PGHWebParkingReductionOverlay
+    overlay_field: name
+    overlay_code: PRO        # one code for every parking-reduction area
+    fields: [name, reduction]
+    file: pgh_parking_reduction_current.json.gz
+
+# Outline generalisation asked of the map services (degrees; about 0.5 m), and the
+# block shapes kept from the 2020 TIGER/Line block file (only the sample's counties).
+simplify_degrees: 0.000005
+block_shapes:
+  source: tiger_2020_tabblock_shapes
+  counties: ["42101", "42003"]
+  file: tl_2020_42_tabblock20_sample_shapes.json.gz
+  decimals: 6
+
+# How a block is split among districts and overlays (law/rule_weights.py).
+# Each block is drawn on its own flat grid in metres (one projection per
+# jurisdiction, centred on it), with `cells_per_side` cells along its longer side
+# and none smaller than `min_cell_m`. A cell belongs to the district whose outline
+# holds its centre. Pieces under `min_piece_share` of a block are slivers: folded
+# into the block's largest piece and reported as sliver totals.
+split:
+  cells_per_side: 40
+  min_cell_m: 0.5
+  min_piece_share: 0.02
+
+# What each benchmark needs before a lot counts as "known by right" (no change).
+# Taken from the challenge's benchmark definitions (CLAUDE.md) and
+# assumptions/law/hooks.yaml; a rule that fails one test, where the test is known,
+# is "by right, conditions relaxed"; an unknown input never counts as "no".
+benchmarks:
+  adu:
+    detached_allowed: true
+    min_size_sf: 600
+    owner_occupancy: false
+    extra_parking: 0
+  missing_middle:
+    units_min: 2
+    units_max: 6
+  parking:
+    min_per_unit: 0
+  tod:
+    note: >-
+      Height or floor area near major stops. No sample rule reads height or floor
+      area with a station-distance test, so every lot is unresolved for this
+      benchmark.
+  fees:
+    note: >-
+      Development fees are not zoning rules; this table does not answer the fee
+      benchmark (see the fee prototypes).

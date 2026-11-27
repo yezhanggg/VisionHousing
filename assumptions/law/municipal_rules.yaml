@@ -900,6 +900,180 @@ documents:
     adopted_on: 2025-07-15
     effective_date: 2025-07-15
 
+  # --- Readings of 2026-11-26 (each quote re-found by script at its offset
+  # in the saved copy, whose PDF and text SHA-256 match the values below)
+  - doc_id: york_city_co_part13_2026
+    title: "City of York Codified Ordinances, Part Thirteen Planning and Zoning Code, Title One Zoning Ordinance (Arts. 1301-1313), 2026 Replacement, updated 6-23-26"
+    level: municipality
+    publisher: City of York (York County)
+    url: https://www.yorkcity.org/wp-content/uploads/2026/06/Part-13-Planning-Zoning-Updated-6-23-26.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 85446f6fd22491c70d467fe24f0dce09348f34685f434f07d3a2b6d88f689179
+    text_chars: 794482
+    fetched_on: 2026-11-26
+    # Offset 95750 (Table 1303.08 history note): "(Ord. 23-2011. Passed
+    # 8-16-11; Ord. 2-2015. Passed 2-3-15; Ord. 21-2019. Passed 9-17-19.)".
+    # Offset 30383: "(Ord. 1-2025. Passed 1-5-26.)". No effective date printed.
+    adopted_on: 2011-08-16
+    amended_through: 2026-01-05
+  - doc_id: york_township_york_zo_2012_13
+    title: "York Township (York County) Zoning Ordinance, Chapter 265 (Ordinance 2012-13, adopted 9/11/2012), amendments through Ordinance 2023-01 (3/14/2023)"
+    level: municipality
+    publisher: Township of York (York County)
+    url: https://yorktownshippa.gov/wp-content/uploads/Zoning-Ordinance-last-amendment-3-14-23.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 5bc9c156bb1e4499cd9e56b0013d23214eb616598d917381626d8862e3df65ab
+    text_chars: 443609
+    fetched_on: 2026-11-26
+    # Offset 12: "YORK TOWNSHIP ZONING ORDINANCE Ordinance 2012-13 Adopted
+    # 9/11/2012 Incorporated amendments: ... Ordinance 2023-01 3/14/2023".
+    # No effective date printed.
+    adopted_on: 2012-09-11
+    amended_through: 2023-03-14
+  - doc_id: lycoming_county_zo_2021
+    title: "Lycoming County Zoning Ordinance (enacted December 31, 1991; posted text revised through Ordinance #2021-02, June 15, 2021)"
+    level: county
+    publisher: County of Lycoming, Department of Planning & Community Development
+    url: "https://lycomingcountypa.gov/Documents/Government/Departments/Planning%20and%20Community%20Development/Zoning/Lycoming%20County%20Zoning%20Ordinance_2021-6-15%20To%20WEBSITE.pdf"
+    licence: Public ordinance of the county
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: de1d130237b72d7289948ec55ffd3b9cfd7ea7fcdd88b8fbcb9ce04a949332bf
+    text_chars: 653574
+    fetched_on: 2026-11-26
+    # Offset 108: "LYCOMING COUNTY ZONING ORDINANCE Enacted December 31, 1991 by,
+    # LYCOMING COUNTY COMMISSIONERS". Offset 5955: "Revised June 15, 2021 –
+    # Ordinance #2021-02". Division 1400.A says only that it is not effective
+    # until enacted; no effective date is printed.
+    adopted_on: 1991-12-31
+    amended_through: 2021-06-15
+  - doc_id: upper_paxton_dauphin_ch27_2019
+    title: "Upper Paxton Township (Dauphin County) Code, Chapter 27 Zoning, enacted by Ord. No. 6-11-19 (6/11/2019); page headers Supp 22, Feb 2020"
+    level: municipality
+    publisher: Township of Upper Paxton
+    url: "https://upperpaxtontwp.org/gencode/Chapter%2027%20-%20Zoning.pdf"
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 0eb5184c5c43f9359fede6e90be9222470314bcdbccd25a171b3601da9ba8b20
+    text_chars: 453996
+    fetched_on: 2026-11-26
+    # Offset 12140: "§ 27-111. When Effective. [ Ord. No. 6-11-19 , 6/11/2019 ]
+    # This chapter shall take effect upon its enactment by the Upper Paxton
+    # Township Board of Supervisors."
+    adopted_on: 2019-06-11
+    effective_date: 2019-06-11
+  # Highspire posts its zoning chapter part by part; offsets are into each part.
+  - doc_id: highspire_dauphin_ch27_part6
+    title: "Borough of Highspire (Dauphin County) Zoning Ordinance, Chapter 27, Part 6 (district use tables)"
+    level: municipality
+    publisher: Borough of Highspire
+    url: https://highspire.gov/wp-content/uploads/2022/10/zopart6.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: f460c66547301c9b2ed8ca853095e30451eb55e1643f37e7491870e1e5eafeee
+    text_chars: 14006
+    fetched_on: 2026-11-26
+    # Cover of the chapter (zotoc.pdf): "Effective Date: November 4, 2009
+    # Enacted: December 15, 2009 Amended: November 15, 2011", as printed (the
+    # effective date precedes the enactment date on the cover; kept as stated).
+    # Page footers: "Enacted: November 15, 2011".
+    adopted_on: 2009-12-15
+    amended_through: 2011-11-15
+    effective_date: 2009-11-04
+  - doc_id: highspire_dauphin_ch27_part14
+    title: "Borough of Highspire (Dauphin County) Zoning Ordinance, Chapter 27, Part 14 (supplemental use standards)"
+    level: municipality
+    publisher: Borough of Highspire
+    url: https://highspire.gov/wp-content/uploads/2022/10/zopart14.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: b6f4bd24d124956c570f070a6edc7a29f9c0672c993b8318c3a592f4c0badc9a
+    text_chars: 159460
+    fetched_on: 2026-11-26
+    adopted_on: 2009-12-15
+    amended_through: 2011-11-15
+    effective_date: 2009-11-04
+  - doc_id: highspire_dauphin_ch27_part19
+    title: "Borough of Highspire (Dauphin County) Zoning Ordinance, Chapter 27, Part 19 (off-street parking)"
+    level: municipality
+    publisher: Borough of Highspire
+    url: https://highspire.gov/wp-content/uploads/2022/10/zopart19.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: dcc175258a66dd10c861f4c07e7b50982de9b83143984bb02e36596d369806b2
+    text_chars: 118775
+    fetched_on: 2026-11-26
+    adopted_on: 2009-12-15
+    amended_through: 2011-11-15
+    effective_date: 2009-11-04
+  - doc_id: millersburg_dauphin_zo_2_16
+    title: "Millersburg Borough (Dauphin County) Zoning Code, Ordinance 2-16 (form-based; file FINAL ZONING ORDINANCE 08-19-16)"
+    level: municipality
+    publisher: Borough of Millersburg
+    url: "https://www.millersburgpa.org/wp-content/uploads/Ordinances/Zoning/FINAL%20ZONING%20ORDINANCE%2008-19-16.pdf"
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 31b8f3f2be193e727fc318fa0ec9bc124065f26b89f0d2e81ce2376955cebc97
+    text_chars: 286740
+    fetched_on: 2026-11-26
+    # Adoption: the borough's ordinances page (millersburgpa.org/ordinance/,
+    # read 2026-11-26): "The Millersburg Borough Council adopted the zoning
+    # ordinance on Wednesday evening, August 10, 2016." Offset 8318: "1:1:9
+    # Effective Date. A. This ordinance shall take effect upon its enactment by
+    # the Millersburg Borough Council." Ordinance 6-18 (December 2018) is posted
+    # only as a scan with no text layer: not read.
+    adopted_on: 2016-08-10
+    effective_date: 2016-08-10
+  - doc_id: conewago_dauphin_ch27_2007
+    title: "Township of Conewago (Dauphin County) Code, Chapter 27 Zoning (Ord. 1985-1, as amended; page headers 7/11/2007), posted October 2025"
+    level: municipality
+    publisher: Township of Conewago (Dauphin County)
+    url: https://conewagotownship.com/wp-content/uploads/2025/10/Chapter-27-Zoning.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 7ed778561d831714e7c4c45620a55edc9f1aa5cdd2cfd0f859604daf88be291d
+    text_chars: 290122
+    fetched_on: 2026-11-26
+    # Offset 5408: "(Ord. 1985-1, 10/9/1985, §1)". Latest dated enactment in
+    # the posted chapter: Ord. 2005-2 (August 10, 2005). No effective date.
+    adopted_on: 1985-10-09
+  - doc_id: royalton_dauphin_zo
+    title: "Borough of Royalton (Dauphin County) Zoning Ordinance (posted file created May 10, 2012; no enactment date in the text)"
+    level: municipality
+    publisher: Borough of Royalton
+    url: https://royaltonpa.com/document/ordinance-zoning/
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 03d5560f76e78c664bc7b3f6d5886acd2592465bddc33796534f9badca85376f
+    text_chars: 182402
+    fetched_on: 2026-11-26
+  - doc_id: hazleton_city_luzerne_zo_2021
+    title: "Hazleton City Zoning Ordinance of 2021 (posted FINAL text, file dated 6/4/21; enactment date left blank)"
+    level: municipality
+    publisher: City of Hazleton
+    url: https://hazletoncity.org/images/FINAL_2021_Hazleton_City_Zoning_Ordinance_6421.pdf
+    licence: Public ordinance of the municipality
+    access: hand_read
+    source_id: pa_municipal_ordinances
+    sha256: 705c0f4ac55b679a18d5eafaabc92b0319f16f024d65f5f7a45af95ebab6c9d0
+    text_chars: 570632
+    fetched_on: 2026-11-26
+    # Offset 19352: "SECTION 111. EFFECTIVE DATE. This ordinance shall take
+    # effect immediately following the date of enactment, being this ____ day
+    # of _____________, 2020." The date is blank, so no date is kept and the
+    # row stays a draft. Ordinance 2022-13 (an amendment) is listed, not read.
+
 rules:
   - geoid: "4200361000"
     doc_id: pgh_ord_2025_1545
@@ -2355,3 +2529,263 @@ rules:
       use (§ 4.402, offset 192714). Smallest lot 0.75 acre (R and MR with off-site water and
       sewer). Parking (offset 288098) 2 per single- or two-family unit; multi-family 2 plus 0.25
       for visitors.
+  # --- Readings of 2026-11-26 (York, Dauphin, Lycoming, Luzerne). Every
+  # quote and offset below was re-found by script in the saved copy of the
+  # document (its text SHA-256 is the document's sha256).
+  - geoid: '4213387048'  # York city
+    doc_id: york_city_co_part13_2026
+    section_cite: Table 1303.08(A); § 1304.01-1.04.005 (Accessory Dwelling Unit); § 1304.01-1.01.001
+      and 1.02.001 (parking); Tables 1303.09 and 1303.11 (lots)
+    adu_status: special_exception
+    adu_detached: true
+    adu_owner_occupancy: true
+    min_lot_sf_smallest_res_district: 2000
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1.5
+    permitted_types: [single_family_detached, single_family_attached, semi_attached, multi_family_se,
+      multi_family_conversion, live_work, apartment_over_commercial]
+    in_force_by: 2019-09-17  # Table 1303.08 history note, offset 95750: "Ord. 21-2019. Passed 9-17-19."
+    binding_conditions: Special exception in RS1, RS2, UN1, UN2, MUI1 and MUI2; only by converting
+      or enlarging an existing carriage house or garage; owner-occupied house; 400-700 sq ft and at
+      most half the house; at most 2 occupants; 1 extra parking space.
+    evidence_quote: 1.04.005 Accessory Dwelling Unit SE SE SE SE SE SE
+    evidence_offset: 85957
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-26
+    status: verified
+    note: 'Use table row (p. 18). § 1304.01-1.04.005(a) (offset 147816): an existing carriage house
+      or garage converted or enlarged on an owner-occupied single-family property; (c)(1) owner
+      rule (offset 148388); (c)(6) 400 to 700 sq ft (offset 149350); (d) 2 spaces for the house
+      and 1 for the ADU (offset 150806). No clause on unlisted uses: the table says a blank cell is
+      not permitted. Smallest lot 2,000 sq ft (UN-1, offset 105952); RS-1 6,000 sq ft. Parking 2
+      per single-family home (offset 126920), 1.5 per apartment (offset 132734).'
+  - geoid: '4213387056'  # York township
+    doc_id: york_township_york_zo_2012_13
+    section_cite: § 265-602 (Accessory Unit, Single Bedroom); § 265-304 (all other uses); Art. 4
+      (districts); § 265-801 (parking); § 265-206 (transportation impact fee)
+    adu_status: special_exception
+    adu_owner_occupancy: true
+    unlisted_uses: special_exception
+    unlisted_uses_cite: § 265-304.A (offset 37386)
+    min_lot_sf_smallest_res_district: 5000
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 1
+    permitted_types: [single_family_detached, single_family_semidetached, two_family, townhouse,
+      multi_family_se, conversion_apartment_se]
+    transport_impact_fee_ordinance: true
+    in_force_by: 2023-03-14  # cover, offset 12: "Ordinance 2023-01 3/14/2023" (latest incorporated amendment)
+    binding_conditions: Special exception in RL, RM, RH, RA and MRC; owner lives on the lot; at most
+      720 sq ft and one bedroom; inside or added to the house or an existing accessory structure; 1
+      extra parking space.
+    evidence_quote: 'ACCESSORY UNIT, SINGLE BEDROOM Accessory Units, Single Bedroom (Unit) are permitted
+      by special exception in the RL, RM, RH, RA and MRC Districts, subject to the following:'
+    evidence_offset: 126493
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-26
+    status: verified
+    note: 'Definition (offset 371256): a one-bedroom unit added onto or created within a single-family
+      dwelling or an existing accessory structure, so a new detached building is not provided for
+      (adu_detached left unknown). Size (offset 126808), owner rule (offset 127011), 1 space per unit
+      (offset 292324). Smallest lot 5,000 sq ft (RH, offset 51074). RL lists single-family detached
+      only. Parking 2 per house (offset 292214); apartments 1 (efficiency), 1.5 (one bedroom), 2 (two
+      or three bedrooms) (offset 292848).'
+  - geoid: '4204379216'  # Upper Paxton township
+    doc_id: upper_paxton_dauphin_ch27_2019
+    section_cite: § 27-305 (use table); § 27-1102.15 (Apartment, Accessory); § 27-1403 (parking);
+      §§ 27-603, 27-703 (lots)
+    adu_status: by_right
+    adu_detached: false
+    adu_owner_occupancy: true
+    occupancy_restriction: relatives_only
+    min_lot_sf_smallest_res_district: 12000
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family_detached, accessory_apartment, conversion_apartment, two_family,
+      semidetached, townhouse, multi_family, manufactured]
+    binding_conditions: By right in A, R-S and R-M; inside a single-family detached house only; owner
+      lives there; first for relatives; 300-400 sq ft and at most 30% of floor area; 1 space for the
+      unit and at least 3 on the lot.
+    evidence_quote: RESIDENTIAL USES Accessory apartments (single family) P P P
+    evidence_offset: 110911
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-26
+    status: verified
+    note: 'Use table p. 27:51 (P in A, R-S and R-M). § 27-1102.15 (offset 184420): created in a
+      single-family detached dwelling; B (offset 184663) for persons related by marriage or blood;
+      I (offset 185643) later leasable to a nonrelative; C owner rule (offset 184835); F-G size
+      (offset 185341). The use table bars unlisted uses (offset 110152) but § 27-1106 (offset
+      302039) refers them to the zoning hearing board, so unlisted_uses is left empty. Lot 12,000 sq
+      ft with public water and sewer (offset 138923). Parking offsets 359818 and 359226.'
+  - geoid: '4204334664'  # Highspire borough
+    doc_id: highspire_dauphin_ch27_part6
+    section_cite: Table 6-1 (R-L, R-M) and Table 6-2 (MN/C, CBD), Part 6; § 1403.A (Accessory
+      Apartment), Part 14; Table 19-1.a (parking), Part 19
+    adu_status: conditional
+    adu_detached: true
+    adu_owner_occupancy: true
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family_detached, semi_detached, two_family, townhouse, multi_family,
+      apartment_conversion]
+    in_force_by: 2011-11-15  # page footers of Parts 6, 14 and 19: "Enacted: November 15, 2011"
+    binding_conditions: Conditional use (Borough Council) in R-L and R-M, special exception in MN/C
+      and CBD; owner on the premises; 350-700 sq ft; at most 2 homes per lot; inside the house, an
+      accessory building or a new accessory structure.
+    evidence_quote: C. ACCESSORY USES Accessory Apartment to Owner Occupied Single-Family Detached
+      Dwelling 1403 C C
+    evidence_offset: 6139
+    method: hand
+    confidence: high
+    reviewed_on: 2026-11-26
+    status: verified
+    note: 'Offsets are into each part file. Part 14 § 1403.A (offset 142167): single-family detached
+      principal use, at most two homes per lot; new accessory structures allowed (offset 143644);
+      350-700 sq ft (offset 142427); owner resides on the premises (offset 142743). Part 6: two-family
+      by right in R-M, special exception in R-L (offset 5616). Part 19: 2 spaces per house (offset
+      13732), 2 per apartment plus half a visitor space where no on-street parking (offset 13042).
+      Lot sizes (Parts 7-8) and the clause on unlisted uses were not read.'
+  - geoid: '4204349680'  # Millersburg borough
+    doc_id: millersburg_dauphin_zo_2_16
+    section_cite: § 4:1:12.B (Uses Not Specifically Regulated); § 2:4:2 (parking); ch. 3 (zone
+      standards)
+    adu_status: not_addressed
+    unlisted_uses: special_exception
+    unlisted_uses_cite: § 4:1:12.B (offset 104325)
+    min_lot_sf_smallest_res_district: 4500
+    parking_min_per_unit_sf: 1
+    parking_min_per_unit_mf: 1
+    permitted_types: [single_family_detached, semi_detached, two_family, townhouse, apartments]
+    evidence_quote: Uses Not Specifically Regulated. If a use clearly is not permitted By Right or
+      Conditional Use by this Ordinance within any Zoning District, the use is prohibited, except
+      that the Zoning Hearing Board may permit such use as a Special Exception use
+    evidence_offset: 104325
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-26
+    status: verified
+    note: No accessory dwelling, accessory apartment, carriage house, in-law, granny or ECHO use in
+      the text, so the ADU answer follows the clause on unlisted uses (special exception). Form-based
+      code; housing types from the zone standards (offset 45778), not a use table. Lot 4,500 sq ft
+      (offset 45508); parking 1 per home (offset 33559). Medium confidence because Ordinance 6-18
+      (2018) is an unread scan.
+  - geoid: '4204315640'  # Conewago township (Dauphin)
+    doc_id: conewago_dauphin_ch27_2007
+    section_cite: Parts 4-7 (district uses); § 201 (definitions); § 605 (R-S lots); § 1302 (parking)
+    adu_status: not_addressed
+    max_units_by_right_sf_district: 1
+    parking_min_per_unit_sf: 2
+    permitted_types: [single_family_detached, semi_detached, two_family, townhouse, apartments,
+      conversion_apartment]
+    in_force_by: 2005-08-10  # latest dated enactment in the chapter, e.g. offset 80014: "Ord. 2005-2, 8/10/2005"
+    evidence_quote: Two-family detached (duplex with one unit over another). E. Single-family attached
+      dwellings (townhouses). F. Apartments with no more than 10 dwelling units per building and not
+      more than two stories in height.
+    evidence_offset: 99407
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-26
+    status: verified
+    note: No accessory dwelling, accessory apartment, in-law, ECHO or family care use; only
+      conversion apartments are defined (offset 12815). No clause on unlisted uses was found, so the
+      ADU answer is unknown. Two-family, townhouses and apartments in R-M only (quote). R-S single-family
+      lot 20,000 sq ft with sewer and public water (offset 95973); the smallest lot of every district
+      was not read. Parking 2 per single- or two-family home (offset 220824).
+  - geoid: '4204366560'  # Royalton borough
+    doc_id: royalton_dauphin_zo
+    section_cite: Art. III § 31 (Use Not Provided For); Art. VI (R-ST area regulations)
+    adu_status: not_addressed
+    unlisted_uses: special_exception
+    unlisted_uses_cite: Art. III § 31 (referred to the zoning hearing board; offset 71739)
+    min_lot_sf_smallest_res_district: 5000
+    evidence_quote: 'Use Not Provided For: Whenever in any district established under this Ordinance,
+      a use is neither specifically permitted or denied and an application is made by a property
+      owner the Zoning Officer for such use, the Zoning Officer shall refer the application to the
+      Zoning Hearing Board'
+    evidence_offset: 71739
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-26
+    status: verified
+    note: No accessory dwelling, accessory apartment, in-law, ECHO or family care use; conversion and
+      garden apartments are defined. A use not provided for goes to the zoning hearing board, which
+      may permit or deny it (a hearing route, read as a special exception like Dingman's § 105).
+      Lot 5,000 sq ft (R-ST, offset 91159). Parking table columns are split in the text layer, not
+      read. The text gives no enactment or effective date, so the row counts from reviewed_on.
+  # Draft: the posted FINAL text leaves its enactment date blank (Section 111),
+  # and Ordinance 2022-13 is not read. Counts for nothing until a dated text is read.
+  - geoid: '4207933408'  # Hazleton city
+    doc_id: hazleton_city_luzerne_zo_2021
+    section_cite: § 412.c (accessory residential dwelling unit); § 106 (safe harbor)
+    adu_status: by_right
+    adu_detached: false
+    occupancy_restriction: relatives_only
+    evidence_quote: 'The use of a separate residential dwelling unit within or attached to a single-
+      family dwelling unit shall not be considered a two-family dwelling unit, but shall be a permitted
+      accessory use provided that:'
+    evidence_offset: 187457
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-26
+    status: draft
+    note: Within or attached to the house only; at most two occupants who are family members of the
+      main household (offset 187679); 1 extra off-street space (offset 187882). § 106 (offset 16338)
+      lets unlisted uses ask for a special exception only in the GI district. Missing middle, parking
+      and lots not read.
+  # Lycoming County ordinance (MPC § 602): one row per municipality it zones,
+  # where the DCED record and the county's own text (Division 1400.A and its
+  # per-municipality zoning maps) agree. Five more municipalities have a county
+  # map in the text but are "own" in the DCED record (Bastress, Muncy, Piatt,
+  # Pine and Plunketts Creek townships); they stay unknown until the county's
+  # jurisdiction map confirms them.
+  - &lycoming_county_zoning
+    geoid: "4208109280"  # Brown township
+    doc_id: lycoming_county_zo_2021
+    section_cite: Table 3120 (permitted uses); § 3220J (Family Care Unit); § 3220D (Conversion
+      Apartment); Division 3100; § 7101.A.2 (parking)
+    adu_status: special_exception
+    adu_detached: true
+    occupancy_restriction: relatives_only
+    min_lot_sf_smallest_res_district: 10000
+    max_units_by_right_sf_district: 2
+    parking_min_per_unit_sf: 2
+    parking_min_per_unit_mf: 2
+    permitted_types: [single_family, two_family, conversion_2_to_4, cluster, multi_family,
+      mobile_home]
+    in_force_by: 2021-06-15  # offset 5955: "Revised June 15, 2021 – Ordinance #2021-02"
+    binding_conditions: Special exception in AG, RP, CS, RC, E, SE, SM and NP; only where a resident
+      family member needs personal care; may be a free-standing temporary structure; the permit ends
+      when the need ends.
+    evidence_quote: J. Family Care Unit S S S S S S S N N S
+    evidence_offset: 79522
+    method: hand
+    confidence: medium
+    reviewed_on: 2026-11-26
+    status: verified
+    note: 'County zoning (MPC § 602; Division 1400.A, offset 59536). The only ADU-type use is the
+      family care unit (§ 3220J.1, offset 106957), for a person needing personal care; the zoning
+      hearing board may limit occupancy to the life tenure of the resident family member (offset
+      107623). Two-family by right in most districts; an existing house may be converted to 2-4
+      units (offset 98501). Smallest lot 10,000 sq ft (NP-10 with public sewer, offset 75439).
+      Parking 2 per home of 1-4 bedrooms (offset 367684).'
+  - {<<: *lycoming_county_zoning, geoid: "4208111560"}  # Cascade township
+  - {<<: *lycoming_county_zoning, geoid: "4208114872"}  # Cogan House township
+  - {<<: *lycoming_county_zoning, geoid: "4208128352"}  # Gamble township
+  - {<<: *lycoming_county_zoning, geoid: "4208137408"}  # Jackson township
+  - {<<: *lycoming_county_zoning, geoid: "4208138448"}  # Jordan township
+  - {<<: *lycoming_county_zoning, geoid: "4208142944"}  # Lewis township
+  - {<<: *lycoming_county_zoning, geoid: "4208143352"}  # Limestone township
+  - {<<: *lycoming_county_zoning, geoid: "4208146184"}  # McHenry township
+  - {<<: *lycoming_county_zoning, geoid: "4208146208"}  # McIntyre township
+  - {<<: *lycoming_county_zoning, geoid: "4208146352"}  # McNett township
+  - {<<: *lycoming_county_zoning, geoid: "4208149280"}  # Mifflin township
+  - {<<: *lycoming_county_zoning, geoid: "4208150936"}  # Moreland township
+  - {<<: *lycoming_county_zoning, geoid: "4208158848"}  # Penn township
+  - {<<: *lycoming_county_zoning, geoid: "4208162184"}  # Porter township
+  - {<<: *lycoming_county_zoning, geoid: "4208167616"}  # Salladasburg borough

@@ -1,0 +1,1591 @@
+{
+ "state": "DM",
+ "synthetic": true,
+ "seed": 20261126,
+ "columns": [
+  {
+   "table": "counties",
+   "name": "geoid",
+   "unit": "code",
+   "description": "County code: 2-digit state code + 3-digit county code",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "counties",
+   "name": "name",
+   "unit": "text",
+   "description": "County name",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "counties",
+   "name": "population",
+   "unit": "persons",
+   "description": "Residents; the sum of the county's tracts",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "counties",
+   "name": "housing_units",
+   "unit": "units",
+   "description": "Housing units; the sum of the county's tracts",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "geoid",
+   "unit": "code",
+   "description": "Tract code: 5-digit county code + 6-digit tract code",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "county",
+   "unit": "code",
+   "description": "Code of the county that contains the tract",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "area_type",
+   "unit": "category",
+   "description": "urban, suburban or rural",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "land_area_m2",
+   "unit": "square metres",
+   "description": "Land area",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "housing_units",
+   "unit": "units",
+   "description": "All housing units, occupied and vacant",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "population",
+   "unit": "persons",
+   "description": "Residents",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_1_detached",
+   "unit": "units",
+   "description": "Housing units in structures of type: 1 unit, detached (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_1_attached",
+   "unit": "units",
+   "description": "Housing units in structures of type: 1 unit, attached (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_2",
+   "unit": "units",
+   "description": "Housing units in structures of type: 2 units (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_3_4",
+   "unit": "units",
+   "description": "Housing units in structures of type: 3 or 4 units (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_5_9",
+   "unit": "units",
+   "description": "Housing units in structures of type: 5 to 9 units (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_10_19",
+   "unit": "units",
+   "description": "Housing units in structures of type: 10 to 19 units (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_20_plus",
+   "unit": "units",
+   "description": "Housing units in structures of type: 20 or more units (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "units_mobile",
+   "unit": "units",
+   "description": "Housing units in structures of type: mobile home (as B25024)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "households_owner",
+   "unit": "households",
+   "description": "Owner-occupied housing units",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "households_renter",
+   "unit": "households",
+   "description": "Renter-occupied housing units",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "vacant_units",
+   "unit": "units",
+   "description": "Vacant housing units",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "vacancy_rate",
+   "unit": "share",
+   "description": "Vacant units / housing units",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "median_household_income",
+   "unit": "dollars per year",
+   "description": "Median household income",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "median_home_value",
+   "unit": "dollars",
+   "description": "Median value of owner-occupied units",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "median_gross_rent",
+   "unit": "dollars per month",
+   "description": "Median gross rent (as B25064)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "median_rent_b0",
+   "unit": "dollars per month",
+   "description": "Median gross rent, units with 0 bedrooms (as B25031)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "median_rent_b1",
+   "unit": "dollars per month",
+   "description": "Median gross rent, units with 1 bedrooms (as B25031)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "median_rent_b2",
+   "unit": "dollars per month",
+   "description": "Median gross rent, units with 2 bedrooms (as B25031)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "median_rent_b3",
+   "unit": "dollars per month",
+   "description": "Median gross rent, units with 3+ bedrooms (as B25031)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "share_age_65plus",
+   "unit": "share",
+   "description": "Share of residents aged 65 or older",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_lt_10000",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket lt_10000 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_10000_14999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 10000_14999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_15000_19999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 15000_19999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_20000_24999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 20000_24999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_25000_29999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 25000_29999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_30000_34999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 30000_34999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_35000_39999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 35000_39999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_40000_49999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 40000_49999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_50000_59999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 50000_59999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_60000_69999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 60000_69999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_70000_79999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 70000_79999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_80000_89999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 80000_89999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_90000_99999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 90000_99999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_100000_124999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 100000_124999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_125000_149999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 125000_149999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_150000_174999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 150000_174999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_175000_199999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 175000_199999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_200000_249999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 200000_249999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_250000_299999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 250000_299999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_300000_399999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 300000_399999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_400000_499999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 400000_499999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_500000_749999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 500000_749999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_750000_999999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 750000_999999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_1000000_1499999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 1000000_1499999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_1500000_1999999",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 1500000_1999999 dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "value_2000000_plus",
+   "unit": "households",
+   "description": "Owner-occupied units in value bracket 2000000_plus dollars (B25075 edges); brackets sum to households_owner",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_lt_100",
+   "unit": "households",
+   "description": "Renter units paying gross rent lt_100 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_100_149",
+   "unit": "households",
+   "description": "Renter units paying gross rent 100_149 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_150_199",
+   "unit": "households",
+   "description": "Renter units paying gross rent 150_199 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_200_249",
+   "unit": "households",
+   "description": "Renter units paying gross rent 200_249 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_250_299",
+   "unit": "households",
+   "description": "Renter units paying gross rent 250_299 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_300_349",
+   "unit": "households",
+   "description": "Renter units paying gross rent 300_349 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_350_399",
+   "unit": "households",
+   "description": "Renter units paying gross rent 350_399 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_400_449",
+   "unit": "households",
+   "description": "Renter units paying gross rent 400_449 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_450_499",
+   "unit": "households",
+   "description": "Renter units paying gross rent 450_499 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_500_549",
+   "unit": "households",
+   "description": "Renter units paying gross rent 500_549 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_550_599",
+   "unit": "households",
+   "description": "Renter units paying gross rent 550_599 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_600_649",
+   "unit": "households",
+   "description": "Renter units paying gross rent 600_649 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_650_699",
+   "unit": "households",
+   "description": "Renter units paying gross rent 650_699 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_700_749",
+   "unit": "households",
+   "description": "Renter units paying gross rent 700_749 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_750_799",
+   "unit": "households",
+   "description": "Renter units paying gross rent 750_799 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_800_899",
+   "unit": "households",
+   "description": "Renter units paying gross rent 800_899 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_900_999",
+   "unit": "households",
+   "description": "Renter units paying gross rent 900_999 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_1000_1249",
+   "unit": "households",
+   "description": "Renter units paying gross rent 1000_1249 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_1250_1499",
+   "unit": "households",
+   "description": "Renter units paying gross rent 1250_1499 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_1500_1999",
+   "unit": "households",
+   "description": "Renter units paying gross rent 1500_1999 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_2000_2499",
+   "unit": "households",
+   "description": "Renter units paying gross rent 2000_2499 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_2500_2999",
+   "unit": "households",
+   "description": "Renter units paying gross rent 2500_2999 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_3000_3499",
+   "unit": "households",
+   "description": "Renter units paying gross rent 3000_3499 dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_3500_plus",
+   "unit": "households",
+   "description": "Renter units paying gross rent 3500_plus dollars a month (B25063 edges)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tracts",
+   "name": "rent_no_cash",
+   "unit": "households",
+   "description": "Renter units paying no cash rent; rent brackets plus this sum to households_renter",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "blocks",
+   "name": "geoid",
+   "unit": "code",
+   "description": "Block code: 11-digit tract code + 4-digit block code",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "blocks",
+   "name": "tract",
+   "unit": "code",
+   "description": "Code of the tract that contains the block",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "blocks",
+   "name": "housing_units",
+   "unit": "units",
+   "description": "Housing units; blocks sum to their tract",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "blocks",
+   "name": "land_area_m2",
+   "unit": "square metres",
+   "description": "Land area",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "blocks",
+   "name": "lat",
+   "unit": "degrees",
+   "description": "Latitude of the block centre",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "blocks",
+   "name": "lon",
+   "unit": "degrees",
+   "description": "Longitude of the block centre",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permits_county_year",
+   "name": "county",
+   "unit": "code",
+   "description": "County code",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permits_county_year",
+   "name": "year",
+   "unit": "year",
+   "description": "Calendar year of authorization",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permits_county_year",
+   "name": "units_1",
+   "unit": "units",
+   "description": "Units authorized in 1-unit buildings",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permits_county_year",
+   "name": "units_2",
+   "unit": "units",
+   "description": "Units authorized in 2-unit buildings",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permits_county_year",
+   "name": "units_3_4",
+   "unit": "units",
+   "description": "Units authorized in 3- and 4-unit buildings",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permits_county_year",
+   "name": "units_5plus",
+   "unit": "units",
+   "description": "Units authorized in 5-or-more-unit buildings",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permits_county_year",
+   "name": "imputed",
+   "unit": "flag",
+   "description": "1 if the county-year was partly estimated",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "transit_stops",
+   "name": "stop_id",
+   "unit": "code",
+   "description": "Stop identifier",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "transit_stops",
+   "name": "lat",
+   "unit": "degrees",
+   "description": "Latitude",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "transit_stops",
+   "name": "lon",
+   "unit": "degrees",
+   "description": "Longitude",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "transit_stops",
+   "name": "mode",
+   "unit": "category",
+   "description": "rail or bus",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "transit_stops",
+   "name": "weekday_departures",
+   "unit": "departures per day",
+   "description": "Scheduled weekday trips",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "geoid",
+   "unit": "code",
+   "description": "Tract code: 5-digit county code + 6-digit tract code (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_status",
+   "unit": "category",
+   "description": "verified, outside, constraint or unknown: the sewer answer holding most of the tract's 2020 homes (official records only); blank for a tract with no homes (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_share",
+   "unit": "share",
+   "description": "Share of 2020 homes inside a mapped public sewer service area or a utility's whole-jurisdiction service statement; blank where no official record speaks (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_known",
+   "unit": "share",
+   "description": "Share of 2020 homes that an official sewer record speaks to (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "constraint_share",
+   "unit": "share",
+   "description": "Share of 2020 homes in an area with a documented sewer moratorium or connection ban (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "sewer_source",
+   "unit": "source id",
+   "description": "Source id of the official sewer record used (blank: none) (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "water_share",
+   "unit": "share",
+   "description": "Share of 2020 homes inside a mapped public water supplier service area; blank where the state has no statewide map (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "epa_share",
+   "unit": "share",
+   "description": "Share of 2020 homes inside an EPA sewershed (mostly modelled; context only) (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_tract",
+   "name": "act537_class",
+   "unit": "category",
+   "description": "Act 537 plan age of the municipality with most of the tract's homes: lt10, 10to20, 20plus or prereg (Pennsylvania DEP table date) (demo state: synthetic, made by the generator's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "boundaries",
+   "name": "level",
+   "unit": "category",
+   "description": "county or tract",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "boundaries",
+   "name": "geoid",
+   "unit": "code",
+   "description": "Code of the county or tract",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "boundaries",
+   "name": "name",
+   "unit": "text",
+   "description": "Display name",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "county",
+   "unit": "",
+   "description": "infra_county.county (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "homes",
+   "unit": "",
+   "description": "infra_county.homes (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "tracts_verified",
+   "unit": "",
+   "description": "infra_county.tracts_verified (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "tracts_outside",
+   "unit": "",
+   "description": "infra_county.tracts_outside (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "tracts_constraint",
+   "unit": "",
+   "description": "infra_county.tracts_constraint (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "tracts_unknown",
+   "unit": "",
+   "description": "infra_county.tracts_unknown (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "homes_verified",
+   "unit": "",
+   "description": "infra_county.homes_verified (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "homes_outside",
+   "unit": "",
+   "description": "infra_county.homes_outside (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "homes_constraint",
+   "unit": "",
+   "description": "infra_county.homes_constraint (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "homes_unknown",
+   "unit": "",
+   "description": "infra_county.homes_unknown (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "water_share",
+   "unit": "",
+   "description": "infra_county.water_share (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "epa_share",
+   "unit": "",
+   "description": "infra_county.epa_share (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "sewer_sources",
+   "unit": "",
+   "description": "infra_county.sewer_sources (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "sewer_as_of",
+   "unit": "",
+   "description": "infra_county.sewer_as_of (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "act537_lt10",
+   "unit": "",
+   "description": "infra_county.act537_lt10 (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "act537_10to20",
+   "unit": "",
+   "description": "infra_county.act537_10to20 (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "act537_20plus",
+   "unit": "",
+   "description": "infra_county.act537_20plus (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "act537_prereg",
+   "unit": "",
+   "description": "infra_county.act537_prereg (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "act537_unmatched",
+   "unit": "",
+   "description": "infra_county.act537_unmatched (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_total",
+   "unit": "",
+   "description": "infra_county.cwns_total (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_treatment",
+   "unit": "",
+   "description": "infra_county.cwns_treatment (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_new_sewers",
+   "unit": "",
+   "description": "infra_county.cwns_new_sewers (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_sewer_repair",
+   "unit": "",
+   "description": "infra_county.cwns_sewer_repair (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_cso",
+   "unit": "",
+   "description": "infra_county.cwns_cso (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_stormwater",
+   "unit": "",
+   "description": "infra_county.cwns_stormwater (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_decentralized",
+   "unit": "",
+   "description": "infra_county.cwns_decentralized (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "cwns_nonpoint",
+   "unit": "",
+   "description": "infra_county.cwns_nonpoint (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "infra_county",
+   "name": "epa_plants",
+   "unit": "",
+   "description": "infra_county.epa_plants (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "mbta_3a_capacity_tract",
+   "name": "geoid",
+   "unit": "",
+   "description": "mbta_3a_capacity_tract.geoid (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "mbta_3a_capacity_tract",
+   "name": "capacity_units",
+   "unit": "",
+   "description": "mbta_3a_capacity_tract.capacity_units (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "mbta_3a_capacity_tract",
+   "name": "capacity_parcel_units",
+   "unit": "",
+   "description": "mbta_3a_capacity_tract.capacity_parcel_units (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "mbta_3a_capacity_tract",
+   "name": "station_area_units",
+   "unit": "",
+   "description": "mbta_3a_capacity_tract.station_area_units (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "mbta_3a_capacity_tract",
+   "name": "parcel_acres",
+   "unit": "",
+   "description": "mbta_3a_capacity_tract.parcel_acres (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "geoid",
+   "unit": "",
+   "description": "muni_zoning_rules.geoid (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "dced_id",
+   "unit": "",
+   "description": "muni_zoning_rules.dced_id (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "name",
+   "unit": "",
+   "description": "muni_zoning_rules.name (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "zoning_regime",
+   "unit": "",
+   "description": "muni_zoning_rules.zoning_regime (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "doc_id",
+   "unit": "",
+   "description": "muni_zoning_rules.doc_id (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "section_cite",
+   "unit": "",
+   "description": "muni_zoning_rules.section_cite (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "adu_status",
+   "unit": "",
+   "description": "muni_zoning_rules.adu_status (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "adu_detached",
+   "unit": "",
+   "description": "muni_zoning_rules.adu_detached (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "adu_owner_occupancy",
+   "unit": "",
+   "description": "muni_zoning_rules.adu_owner_occupancy (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "occupancy_restriction",
+   "unit": "",
+   "description": "muni_zoning_rules.occupancy_restriction (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "unlisted_uses",
+   "unit": "",
+   "description": "muni_zoning_rules.unlisted_uses (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "unlisted_uses_cite",
+   "unit": "",
+   "description": "muni_zoning_rules.unlisted_uses_cite (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "min_lot_sf_smallest_res_district",
+   "unit": "",
+   "description": "muni_zoning_rules.min_lot_sf_smallest_res_district (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "max_units_by_right_sf_district",
+   "unit": "",
+   "description": "muni_zoning_rules.max_units_by_right_sf_district (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "parking_min_per_unit_sf",
+   "unit": "",
+   "description": "muni_zoning_rules.parking_min_per_unit_sf (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "parking_min_per_unit_mf",
+   "unit": "",
+   "description": "muni_zoning_rules.parking_min_per_unit_mf (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "permitted_types",
+   "unit": "",
+   "description": "muni_zoning_rules.permitted_types (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "transport_impact_fee_ordinance",
+   "unit": "",
+   "description": "muni_zoning_rules.transport_impact_fee_ordinance (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "evidence_quote",
+   "unit": "",
+   "description": "muni_zoning_rules.evidence_quote (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "evidence_offset",
+   "unit": "",
+   "description": "muni_zoning_rules.evidence_offset (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "method",
+   "unit": "",
+   "description": "muni_zoning_rules.method (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "confidence",
+   "unit": "",
+   "description": "muni_zoning_rules.confidence (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "reviewed_on",
+   "unit": "",
+   "description": "muni_zoning_rules.reviewed_on (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "status",
+   "unit": "",
+   "description": "muni_zoning_rules.status (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "note",
+   "unit": "",
+   "description": "muni_zoning_rules.note (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "adopted_on",
+   "unit": "",
+   "description": "muni_zoning_rules.adopted_on (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "effective_date",
+   "unit": "",
+   "description": "muni_zoning_rules.effective_date (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "in_force_by",
+   "unit": "",
+   "description": "muni_zoning_rules.in_force_by (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "binding_conditions",
+   "unit": "",
+   "description": "muni_zoning_rules.binding_conditions (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "future_effective",
+   "unit": "",
+   "description": "muni_zoning_rules.future_effective (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "sf_lots",
+   "unit": "",
+   "description": "muni_zoning_rules.sf_lots (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "muni_zoning_rules",
+   "name": "res_land_ha",
+   "unit": "",
+   "description": "muni_zoning_rules.res_land_ha (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "county",
+   "unit": "",
+   "description": "municipal_planning.county (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "cousub",
+   "unit": "",
+   "description": "municipal_planning.cousub (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "name",
+   "unit": "",
+   "description": "municipal_planning.name (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "dced_id",
+   "unit": "",
+   "description": "municipal_planning.dced_id (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "zoning_regime",
+   "unit": "",
+   "description": "municipal_planning.zoning_regime (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "comprehensive_plan",
+   "unit": "",
+   "description": "municipal_planning.comprehensive_plan (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "multi_municipal_plan",
+   "unit": "",
+   "description": "municipal_planning.multi_municipal_plan (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "subdivision_ordinance",
+   "unit": "",
+   "description": "municipal_planning.subdivision_ordinance (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "planning_commission",
+   "unit": "",
+   "description": "municipal_planning.planning_commission (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "zoning_hearing_board",
+   "unit": "",
+   "description": "municipal_planning.zoning_hearing_board (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "ucc_code",
+   "unit": "",
+   "description": "municipal_planning.ucc_code (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "population",
+   "unit": "",
+   "description": "municipal_planning.population (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "municipal_planning",
+   "name": "housing_units_2020",
+   "unit": "",
+   "description": "municipal_planning.housing_units_2020 (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tract_municipalities",
+   "name": "tract",
+   "unit": "",
+   "description": "tract_municipalities.tract (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tract_municipalities",
+   "name": "county",
+   "unit": "",
+   "description": "tract_municipalities.county (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tract_municipalities",
+   "name": "cousub",
+   "unit": "",
+   "description": "tract_municipalities.cousub (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "tract_municipalities",
+   "name": "housing_units_2020",
+   "unit": "",
+   "description": "tract_municipalities.housing_units_2020 (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permit_stages",
+   "name": "stage",
+   "unit": "",
+   "description": "permit_stages.stage (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permit_stages",
+   "name": "order",
+   "unit": "",
+   "description": "permit_stages.order (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permit_stages",
+   "name": "observed",
+   "unit": "",
+   "description": "permit_stages.observed (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permit_stages",
+   "name": "date_column",
+   "unit": "",
+   "description": "permit_stages.date_column (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  },
+  {
+   "table": "permit_stages",
+   "name": "note",
+   "unit": "",
+   "description": "permit_stages.note (demo state: synthetic, made by scripts/make_demo_fixture.py's stated rules)",
+   "source": "synthetic",
+   "tier": "0"
+  }
+ ]
+}

@@ -19,9 +19,17 @@
 # www.mass.gov (760 CMR 71 for ADUs, 760 CMR 72 for Section 3A) are listed as
 # links only: that site refuses scripted requests.
 #
-# Not yet wired into a run: the law layer imports this file later. The
-# Massachusetts already-legal ADU range the engine reads today is in
-# assumptions/calibration/already_legal_ma.yaml.
+# The ADU benchmark reads the Massachusetts already-legal range in
+# assumptions/calibration/already_legal_ma.yaml. The named variant
+# ma_adu_state_floor reads the ADU records below through
+# visionhousing.law.ma_adu, with the statute's operative terms (size cap,
+# parking, owner occupancy, Boston outside chapter 40A) in
+# assumptions/law/statutory_rights.yaml (provision ma_40a_3_adu). The § 1A
+# definition, the § 3 ADU paragraph and St. 2024 c. 150 were read again by
+# script on malegislature.gov on 2026-11-26 (robots file checked first):
+# unchanged. Boston's scope: § 3's other paragraphs name Boston where they
+# reach it; the ADU paragraph does not; St. 1956 c. 665 (Boston's own zoning
+# act) is not on malegislature.gov, so its text was not read.
 #
 # Per-town Section 3A districts are not listed here one by one: the pack table
 # mbta_3a_districts holds every compliant district with its outline and

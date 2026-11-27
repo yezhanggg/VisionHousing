@@ -364,6 +364,9 @@ class PackageOutcome:
         parts_draws: Sum of parts by draw.
         overlap_draws: Overlap by draw.
         interaction_draws: Total interaction by draw.
+        interaction_draws_by_name: Interaction name (``"fees -> adu"``) to its state
+            draws, the same draws its record in ``interactions`` summarises; in every
+            draw they add up to ``interaction_draws``.
         waterfall: The four steps in order, for the Compare screen.
         notes: Plain statements on the package rules.
         tract_reforms: Keys of the package's tract-level reforms.
@@ -404,6 +407,9 @@ class PackageOutcome:
     tract_draws: np.ndarray | None = field(default=None, repr=False, compare=False)
     tract_county_draws: np.ndarray | None = field(default=None, repr=False, compare=False)
     tract_combined: Record | None = None
+    interaction_draws_by_name: Mapping[str, np.ndarray] = field(
+        default_factory=dict, repr=False, compare=False
+    )
 
 
 @dataclass(frozen=True)
@@ -1032,6 +1038,7 @@ def _package(
         parts_draws=_frozen(parts_c.sum(axis=0)),
         overlap_draws=_frozen(overlap_c.sum(axis=0)),
         interaction_draws=_frozen(inter_c.sum(axis=0)),
+        interaction_draws_by_name={n: _frozen(d.sum(axis=0)) for n, (d, _i, _t) in extras.items()},
         waterfall=(s_parts, s_overlap, s_inter, s_combined),
         notes=notes,
         **tract,

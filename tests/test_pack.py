@@ -86,6 +86,7 @@ def test_tables_follow_the_testland_schema(tmp_path):
     optional |= set(pack.walk_fx.TABLES) | set(pack.district_fx.PACK_TABLES)
     optional |= set(pack.afford_fx.TABLES) | set(pack.infra_fx.TABLES) | set(pack.hazard_fx.TABLES)
     optional |= set(pack.law_tables.VERSION_TABLE)  # added by its own step
+    optional |= set(pack.zone_fx.TABLES)  # zoning-district pilot, its own step (PA)
     assert set(pack.TABLES) - optional <= set(tables) <= set(pack.TABLES)
     tl = fixture_csv("tracts").set_index("geoid")
     tr = tables["tracts"].set_index("geoid")

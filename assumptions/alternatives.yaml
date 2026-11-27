@@ -1,0 +1,138 @@
+# VisionHousing "Alternatives at a glance": which named alternatives sit beside
+# each benchmark reform's headline, and the words that go with them.
+#
+# Read by visionhousing.api.alternatives. No number lives here: every value the
+# table shows comes from an engine run on the benchmark's seed and draws.
+#
+# Each reform lists its rows in display order. A row is one of:
+#   variant: <name>     a named variant of assumptions/variants.yaml, run on the
+#                       benchmark's seed and draws. When the name is not in that
+#                       file yet, the row shows status "not built" and `absent`.
+#   kind: capacity      the benchmark screened for practical capacity (run option
+#                       capacity_screen), with the joint bounds of the screens.
+#   kind: market        this reform's part of the five-reform package under the
+#                       package option `market` (mode: choice | choice+capacity).
+#   kind: correlated    the correlated high-cost / tight-credit / slow-review
+#                       sensitivity (engine/correlated.py, settings in
+#                       assumptions/uncertainty_structure.yaml), run on the
+#                       benchmark's seed and draws.
+#   kind: comparable    the Census-comparable scope of the headline (outcome
+#                       accounting), only where the headline counts more.
+#   kind: planned       an alternative that is not built; `absent` says why.
+# `states` limits a row to the states named (the row is left out elsewhere).
+# Every other variant of the reform family is appended after the listed rows,
+# so no named alternative is ever left out (`skip` names the ones another row
+# already shows).
+
+version: 1
+id: alternatives.settings
+
+formula: >-
+  P10, P50, P90 of the paired draws of (alternative added units minus benchmark
+  added units), same seed and same draws; share of draws below / above the
+  benchmark with its Monte Carlo standard error sqrt(p (1 - p) / n)
+
+statuses:
+  built: "Built"
+  not_built: "Not built"
+  needs_local_app: "Needs the local app"
+
+kinds:
+  capacity:
+    title: "Screened for practical capacity (sewer, flood zone, steep slope)"
+    reason: >-
+      Removes added homes on land without public sewer, in the flood zone or on
+      steep slopes; the joint bounds show the middle when the screens overlap
+      fully or not at all.
+  market_choice:
+    title: "Project choice on shared lots (five-reform package)"
+    reason: >-
+      Each shared lot goes once to the use that pays most (an ADU, a 2-6 unit
+      building, a new house or no change); this is the reform's part of the
+      package.
+  market_capacity:
+    title: "Project choice and a building-capacity limit (five-reform package)"
+    reason: >-
+      As project choice, and each area's yearly building is capped near its past
+      peak; homes over the cap move past 2031.
+  correlated:
+    title: "Correlated high cost, tight credit and slow review"
+    reason: >-
+      One shared factor per draw moves costs, credit, review speed and the
+      baseline's cycle together (each input keeps its own values, only their
+      order across draws changes); the change per draw therefore also carries
+      that reordering.
+  comparable:
+    title: "Census-comparable scope (work types the permit survey counts)"
+    reason: >-
+      Counts only added units of work types the Building Permits Survey counts as
+      new units; additions, conversions and uncertain attached units are left out.
+
+common:
+  - kind: capacity
+    skip: [adu_capacity_screen, missing_middle_capacity_screen, tod_capacity_screen,
+           parking_capacity_screen, fees_capacity_screen]
+  - kind: market
+    mode: choice
+  - kind: market
+    mode: choice+capacity
+  - kind: correlated
+
+reforms:
+  adu:
+    rows:
+      - variant: adu_finance_budget
+      - variant: adu_finance_budget_loan
+      - variant: adu_timing_conserved
+      - variant: adu_timing_reliable
+      - variant: adu_hazard_reference
+      - variant: ma_adu_state_floor
+        states: [MA]
+      - variant: adu_zoning_districts
+        states: [PA]
+      - variant: adu_zoning_districts_guidance
+        states: [PA]
+      - kind: planned
+        id: wy_adu_local
+        title: "ADUs in Wyoming: Laramie's local ADU rule in place of the default"
+        states: [WY]
+        absent: >-
+          Not built: Laramie ADU permission not confirmed by a use-table row (ADUs are an
+          accessory use, not a row of Table 15.10-1, and the code prohibits uses the table
+          does not allow; the reading's flag says the by-right status was not confirmed).
+      - kind: comparable
+  missing_middle:
+    rows:
+      - variant: missing_middle_prototype_choice
+      - variant: vt_missing_middle_town_bylaws
+        states: [VT]
+      - kind: comparable
+  tod:
+    rows:
+      - variant: tod_ma_acre_share
+        states: [MA]
+      - variant: tod_ma_3a_q_scaled
+        states: [MA]
+  parking:
+    rows:
+      - variant: parking_verified_minimums
+      - variant: parking_verified_minimums_bar
+        states: [PA]
+      - variant: vt_parking_town_bylaws
+        states: [VT]
+      - variant: wy_parking_local
+        states: [WY]
+      - variant: parking_voluntary_floor
+      - variant: parking_baseline_window_pa_2022_2025
+        states: [PA]
+  fees:
+    rows:
+      - variant: fees_funded_backfill
+      - variant: fees_delayed_capacity
+      - variant: fees_baseline_window_pa_2022_2025
+        states: [PA]
+      - variant: fees_documented_local
+        states: [PA]
+        absent: >-
+          Not built yet: documented local fee schedules (Philadelphia, Pittsburgh)
+          are being added as a named variant.

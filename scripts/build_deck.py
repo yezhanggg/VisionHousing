@@ -1006,6 +1006,9 @@ def build_slides(data: Data, deck: Deck, screens: Path | None = None) -> None:
         'Where no rule is read, the status is unknown, not "no rule".</p></div></div>',
     )
 
+    # 19b. Alternatives at a glance
+    _alternatives_slide(data, deck, st)
+
     # 20. Sparse data
     _sparse_slide(data, deck, runs, name)
 
@@ -1214,6 +1217,41 @@ def _what_ifs(cv: dict[str, Any], deck: Deck, got: Got) -> str:
         f'<ul class="bullets">{"".join(rows)}</ul>'
         + (f'<p class="note">{deck.n(sentence, "dial step sentence", got)}</p>' if sentence else "")
     )
+
+
+def _alternatives_slide(data: Data, deck: Deck, st: str) -> None:
+    """One summary slide: each reform's headline, how many alternatives, the widest swing.
+
+    Every line is the server's own text (``api.alternatives``: saved ``ST/alternatives.json``
+    or the live ``GET /states/ST/alternatives``); nothing is worked out here.
+    """
+    got = data.either([f"{st}/alternatives.json"], f"/states/{st}/alternatives")
+    av = deck.use(got) or {}
+    rows = []
+    for key in BENCHMARKS:
+        part = (av.get("reforms") or {}).get(key)
+        if not part:
+            continue
+        s = part["summary"]
+        rows.append(
+            f"<tr><td>{esc(part['title'])}</td>"
+            f"<td>{deck.n(s['headline'], f'{key} headline', got, f'reforms.{key}.summary')}</td>"
+            f"<td>{deck.n(s['count_text'], f'{key} alternatives', got)}</td>"
+            f"<td>{deck.n(s['widest_text'], f'{key} widest swing', got)}</td></tr>"
+        )
+    body = (
+        "<table><tr><th>Reform</th><th>Headline, middle (likely range)</th>"
+        "<th>Alternatives</th><th>Widest swing (paired, middle)</th></tr>"
+        + "".join(rows)
+        + "</table>"
+        '<p class="note">One headline per reform. Every named alternative (named variants, the '
+        "capacity screen, project choice, the Census-comparable scope) sits one click away in the "
+        "tool, run on the same draws; the swing is the alternative minus the benchmark, draw by "
+        "draw.</p>"
+        if rows
+        else _pending_box("The alternatives table is not in this build yet.")
+    )
+    deck.add("Alternatives", "One headline per reform, every alternative one click away", body)
 
 
 def _sparse_slide(data: Data, deck: Deck, runs: dict[str, Got | None], name: str) -> None:

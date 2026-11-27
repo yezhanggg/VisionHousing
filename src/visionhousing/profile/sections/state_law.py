@@ -487,6 +487,37 @@ def _district_fact(ctx: ProfileContext, level: str, geoid: str) -> Fact | None:
     )
 
 
+def _survey_fact(ctx: ProfileContext, level: str, geoid: str) -> Fact | None:
+    """Massachusetts ADU survey for the place's county: observed context, never a rate."""
+    from visionhousing.features import ma_intake as ma_fx
+
+    sid = "ma_adu_survey_file"
+    if ctx.state.upper() != "MA" or sid not in ctx.registry:
+        return None
+    county = str(geoid)[:5]
+    table = ctx.table(ma_fx.SURVEY_TABLE)
+    got = ma_fx.survey_context(table, county=county)
+    whole = ma_fx.survey_context(table) if table is not None else None
+    approvals = sum(int(p.get("approvals", 0)) for p in got["periods"])
+    where = "this county" if level == "county" else "this tract's county"
+    note = got["note"]
+    if whole is not None and whole["periods"]:
+        note += f" Statewide: {whole['text']}."
+    when = ", ".join(f"{p['period_start']} to {p['period_end']}" for p in got["periods"])
+    return Fact(
+        id=f"{KEY}.ma_adu_survey",
+        label=f"ADUs approved under the state ADU law, towns of {where} (state survey)",
+        value=approvals if got["state"] == "observed" else None,
+        unit="ADUs approved" if got["state"] == "observed" else "text",
+        text=got["text"],
+        source=sid,
+        vintage=ctx.vintage(sid),
+        year=when or "not supplied",
+        measured_at="county",
+        note=note,
+    )
+
+
 def build_from_files(ctx: ProfileContext, geoid: str) -> Section | None:
     """The section from the state's law files (any state without the table)."""
     from visionhousing.data.sources import STATE_FIPS
@@ -552,6 +583,9 @@ def build_from_files(ctx: ProfileContext, geoid: str) -> Section | None:
         parts.append(f"no state reform law found (checked {checked})")
     for cal in cals:
         facts += _calibration_facts(ctx, cal)
+    survey = _survey_fact(ctx, place.level, place.geoid)
+    if survey is not None:
+        facts.append(survey)
     district = _district_fact(ctx, place.level, place.geoid)
     if district is not None:
         facts.append(district)

@@ -31,6 +31,8 @@ Plain-language summary
 ``GET  /states/{st}/outlines``             the county outlines (GeoJSON)
 ``GET  /states/{st}/adu-budget-grid``      the ADU budget-and-target grid and one query on it
                                            (``api.budget_grid``)
+``GET  /states/{st}/alternatives?r=``      each benchmark's headline and its named alternatives
+                                           with paired differences (``api.alternatives``)
 ``GET  /states/{st}/law-changes?r=``      what one reform or bill changes in each county and
                                            municipality: four answers with citations, dates,
                                            denominators, capacity and units (``api.law_changes``)
@@ -753,6 +755,10 @@ def create_app(
     from visionhousing.api import budget_grid as budget_grid_api
 
     budget_grid_api.register(app, api=API, error=ApiError, context=context, timed=timed)
+
+    from visionhousing.api import alternatives as alternatives_api
+
+    alternatives_api.register(app, api=API, error=ApiError, context=context, timed=timed)
 
     from visionhousing.api import cards as cards_api
 

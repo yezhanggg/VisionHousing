@@ -12,7 +12,7 @@ These sources exist only for Pennsylvania, or only for Philadelphia and Alleghen
 | `owners` | `owners_area`, `owners_deeds_year`; `_owners` in `assumptions/evidence.yaml` | Philadelphia OPA and transfer records; Allegheny assessments | Philadelphia and Allegheny (deed flow: Philadelphia) |
 | `pipeline_local` | `pipeline_tract_year`, `lihtc_awards` | Philadelphia L&I permits; Pittsburgh PLI permits; PHFA award lists; Census Geocoder | Philadelphia and Pittsburgh (permits); all Pennsylvania (awards) |
 
-Massachusetts has its own local tables (MBTA Communities Section 3A districts and status, and the state ADU survey), described in [ma_intake.md](ma_intake.md). `visionhousing.data.local.fetch_local_tables` runs every source on its own: when one city service is down the others still go in and the failure is written in the build notes. `make data` calls it through `pack.load_inputs`. `local.add_to_pack(folder, cache)` adds the tables to a pack that is already built and rebuilds its dictionary and manifest.
+Massachusetts has its own local tables (MBTA Communities Section 3A districts and status, and the state ADU survey), described in [ma_intake.md](ma_intake.md). `visionhousing.data.local.fetch_local_tables` runs every source on its own: when one city service is down the others still go in and the failure is written in the build notes. `make data` calls it through `pack.load_inputs`. `local.add_to_pack(folder, cache)` adds the tables to a pack that is already built and rebuilds its dictionary and manifest. It is safe to re-run on a pack that later add-on steps have extended: it reads tract outlines the way the full build does (the cached full-detail file first, so a 3A district keeps its centre tract), skips a table whose content did not change, replaces only the inputs of the tables it writes (matched by source id, so the 3A capacity step's parcels, station radii and sewer files stay listed), and touches nothing when nothing changed. `tables=["ma_adu_survey"]` writes one table only. Run on a copy of the Massachusetts pack on 2026-11-26 (offline), it changed only `mbta_3a_status` (and the manifest and dictionary): the pack's copy predates the two route columns (`categories_route`, `tracker_route`) the current code writes, as a full build would; every other table and file-list entry stayed byte-identical (tests/test_local_addon.py).
 
 ## Terms
 
@@ -40,7 +40,7 @@ All parameters (land-use crosswalk, year-built groups, sales windows and price f
 - Philadelphia keeps only each parcel's latest sale, so repeat sales in a window count once.
 - An entity is not an institutional investor; trusts include estate planning. The cited benchmarks (Philadelphia Fed 2025, Pew 2024) describe Philadelphia only and use other definitions.
 - The City of Philadelphia's licence is to be confirmed before release; only derived totals are shown.
-- Chester County GIS and the National Zoning Atlas are not used (their terms forbid it). Zoning district maps are not built yet.
+- Chester County GIS and the National Zoning Atlas are not used (their terms forbid it). Zoning district maps are built only for the pilot sample (Philadelphia, Pittsburgh, Frankstown Township): see [zone_rules.md](zone_rules.md).
 
 ## Tests
 

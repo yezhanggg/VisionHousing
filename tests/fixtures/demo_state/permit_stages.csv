@@ -1,0 +1,5 @@
+stage,order,observed,date_column,note
+application,1,0,,no application date is published (unobserved)
+zoning_permit,2,1,zoning_issued_on,zoning permit issue date
+building_permit,3,1,permit_issued_on,building permit issue date: the outcome measure
+completion,4,1,completed_on,certificate of occupancy date

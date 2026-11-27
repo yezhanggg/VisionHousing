@@ -36,7 +36,8 @@ All under `/api/v1`. Errors are JSON: `{"error": code, "message": plain text}`.
 | `GET /states/{st}/tract-funnel` | Each tract-level reform's map funnel, run alone: lots in scope, physically fit, financially feasible, expected permits (the module stages `eligible`, `fit` or `developable`, `feasible`, and `built`, `units` or `absorbed`; TOD's land steps are in acres), each with P10 / P50 / P90 per tract and per county (the county's tracts summed in each draw) and the module's state record. Ask with one reform: a package's funnel is each reform alone, with the same numbers |
 | `GET /states/{st}/outlines` | The county outlines as GeoJSON (no tracts) |
 | `GET /states/{st}/adu-budget-grid?target=&budget=&award=&accept=&seed=&draws=` | The ADU budget-and-target grid (`api/budget_grid.py`, `scenarios/adu_budget.py`): appropriations x award sizes x {law only, program only, both} on the same draws, each cell with added authorizations, net public cost, share of draws meeting each target and a Pareto flag; with `target`, the tested options within `budget` that meet the `accept` share, never interpolated, with the flags `input_missing`, `outside_tested_range`, `between_tested_values`, `budget_exceeded`, `no_tested_option_meets_both`. Read from the comparisons disk cache when `visionhousing adu-budget-grid --state ST` has kept it. The reply also holds `view` (`api/budget_view.py`): every cell's numbers as shown text keyed `arm|appropriation|award`, the tested values and accepted-share choices as text, the flag words, the key lever and the uncapped-variant note; the static site saves `{grid, view}` as `ST/adu-budget-grid.json` (`budget_view.write_static`) |
-| `GET /states/{st}/law-changes?r=` | What one reform or bill (`adu`, `missing_middle`, `tod`, `parking`, `fees`, and in Pennsylvania `pa_hb2186`, `pa_sb1346`) changes in each county and each municipality with a law row: one of four answers (already allowed, allowed with a changed condition, newly allowed, unresolved; `outside` where a bill does not reach), the bill's or benchmark's citation and effective date, the denominator (single-family lots, residents, or homes near a major stop) and each answer's share of it, observed or fallback, whether the engine uses the county's readings, the model stage each answer changes, legal additional capacity (a low-to-high range) and the additional units authorized (the reform's own county records), and the municipal rows read (section, dates, the rule read). Statewide: each answer's share, the share outside, and the share of the added homes in unresolved places. See [Law changes](#law-changes) |
+| `GET /states/{st}/alternatives?r=` | Alternatives at a glance (`api/alternatives.py`): for each benchmark reform (one with `r`), the headline (P50 and P10-P90 with its scope) and one row per named alternative: its added units, the paired difference from the benchmark (alternative minus benchmark per draw, then P10/P50/P90), the share of draws below / above with its Monte Carlo standard error, a one-line reason and a status (`built`, `not_built` with `absent`, `needs_local_app`). Real states answer only the default seed and draws (else 400 `default_sampling_only`); unknown fields 400 `invalid_query`, an unknown reform 400 `invalid_reform`. Kept in the comparisons disk cache (part `alternatives`); the first ask computes the whole state (504 while it runs; ask again) |
+| `GET /states/{st}/law-changes?r=[&view=districts]` | What one reform or bill (`adu`, `missing_middle`, `tod`, `parking`, `fees`, and in Pennsylvania `pa_hb2186`, `pa_sb1346`) changes in each county and each municipality with a law row: one of four answers (already allowed, allowed with a changed condition, newly allowed, unresolved; `outside` where a bill does not reach), the bill's or benchmark's citation and effective date, the denominator (single-family lots, residents, or homes near a major stop) and each answer's share of it, observed or fallback, whether the engine uses the county's readings, the model stage each answer changes, legal additional capacity (a low-to-high range) and the additional units authorized (the reform's own county records), and the municipal rows read (section, dates, the rule read). Statewide: each answer's share, the share outside, and the share of the added homes in unresolved places. See [Law changes](#law-changes) |
 | `GET /states/{st}/law-changes/read-next?r=` | The top unread ordinances (the review-priority score) with bounding runs: statewide added homes (P50) if each is read as permissive and as restrictive, for the reform and one other option, whether the preferred option would switch, the county's reading coverage after the reading, and the review effort. Slow the first time (about 20 seconds for Pennsylvania), then from the comparisons disk cache |
 | `GET /states/{st}/permit-years` | For the year slider: each county's homes authorized by building permits in every year from `permit_years.first_year` (`assumptions/decision.yaml`, 2000) to the pack's latest (the sum of the permit table's 1, 2, 3-4 and 5+ unit columns), the same per 1,000 existing homes (the pack's county housing units), its class by the fixed `permit_years.breaks` (`q1`..`q4`), whether the Census Bureau imputed it, text forms, and the state's total per year; `projected`: the baseline run's own yearly county table for 2027-2031 (P10 / P50 / P90, the rate on the same stock and class) and its yearly state records. Does not depend on the scenario |
 | `GET /states/{st}/districts` | One chamber's state legislative districts under the scenario (`chamber=lower` default, or `upper`; `district=` for one): baseline, each reform and the package as P10 / P50 / P90 of the per-draw district sums, 2020 units, split shares and a `caveat` flag, the plans' vintage, a `state_check` and the district `brief` pointers, dressed for the screens with text forms, a headline, a map class, the caveat text, the counties touched and the limits (`api/districts.py`; method in [districts](districts.md)). `GET /states/{st}/district-outlines?chamber=` sends the outlines (Testland: its made-up districts as rectangles) |
@@ -233,6 +234,7 @@ and that Python and the browser give the same answers.
 - **Capacity.** Low end: lots with a known gain x the added homes per lot (`adu.units_per_lot`; for missing middle `missing_middle.max_units` less today's count). High end: plus every unresolved lot at the full gain. Parking, fees and transit density add no legal homes per lot and have none.
 - **Units authorized.** The engine's county records of the reform run alone (default seed and draws), unchanged. The share of the added homes in unresolved places is worked out in each draw (the sum over counties of the county's added homes x its unresolved share, over the state's added homes in that draw) and reported as the P50 (`value`) with `p10` and `p90`; percentiles are never added or divided.
 - **Read next.** `review_priorities` ranks the unread review units; the top `read_next.top` (5) with a positive score are each set once to a permissive reading and once to a restrictive one (the rows in `read_next.treatments`, counted as verified and in force), the local law is rebuilt with the law layer's own `local_law_for_engine`, and the engine runs on a copy of the context (`dataclasses.replace(ctx, local_law=...)`, uncached because the copy keeps the data hashes) on the same seed and draws. Each bound's `change` is worked out in each draw (statewide added homes with the reading minus with today's readings, same draw) and reported as its P50 (`value`) with `p10` and `p90`; `impact` runs from the lower to the higher of the two bounds' change P50s. A reading changes a number only when it puts the county over the 50% bar or the county already passes it; the reply says so. The preferred option is the one adding more homes statewide (P50). Only reforms whose county values come from readings (ADU family, parking) are bounded.
+- **District view (opt-in).** `&view=districts` (verified code only) or `&view=districts_guidance` (also the jurisdiction's published guidance, a sensitivity): in the Pennsylvania zoning-district sample (Philadelphia, Pittsburgh, Frankstown Township) each municipality's single answer is replaced by its mix of district answers from the pack's `rule_area_weights` table (`district_view`, through `engine/zone_scope.jurisdiction_mix`; classes known by right = already allowed, conditions relaxed and discretionary = changed condition, newly eligible = newly allowed, unresolved; a class that rests on a row the view does not count is unresolved). Each piece keeps the municipality's own weight times its district share (lots; homes for a residents denominator), so the denominator does not change. The payload gains a `view` block (which municipalities moved, from which answer, to which mix, each share with its formula and ids). The default view, its cache key and the static files are unchanged. Settings: `law_changes` in `assumptions/law/zone_scope.yaml`.
 - **Static site.** `law_changes.write_static(ctx, out, results, tables)` writes `<ST>/law_changes/<KEY>.json` (`{changes, read_next}`, read-next only when already cached). The exporter has not called it yet; Pennsylvania's seven files are about 0.21 MB gzip (3.7 MB raw). Without the file the screen says it needs the local app.
 - **Command.** `python -m visionhousing.api.law_changes --state PA [--estimate] [--read-next] [--out DIR]` prints the sizes, fills the read-next cache, or writes the static files.
 
@@ -262,6 +264,52 @@ the question box never format a number themselves:
 `write_static(grid, out/ST)` saves `{grid, view}` as `ST/adu-budget-grid.json` and sets
 `adu_budget_grid: true` in `ST/index.json`. Pennsylvania (2026-11-25): 539 KB raw, 38 KB gzip (grid 0.36 MB, view
 0.19 MB). Tests: `tests/test_budget_target.py` and `tests/e2e/test_budget_target_ui.py`.
+
+## Alternatives at a glance (`api/alternatives.py`)
+
+One headline per benchmark reform; every named alternative behind one click. The rows each
+reform lists, their order and their words are in `assumptions/alternatives.yaml`; every other
+variant of the reform family in `assumptions/variants.yaml` is appended, so none is left out
+(the five `*_capacity_screen` variants are shown by the capacity row instead).
+
+Row kinds:
+
+- `variant`: the named variant run alone on the benchmark's seed and draws (one engine run each).
+  A name not in `variants.yaml` is a `not_built` row with the file's `absent` words; a variant
+  that refuses to run for the state (for example a Pennsylvania-only option) is `not_built` with
+  the engine's reason.
+- `capacity`: the benchmark screened for practical capacity (`Result.capacity`, run option
+  `capacity_screen`), with the joint bounds of the screens as text (the middles of
+  `screened_disjoint` and `screened_nested`, each from its own draws).
+- `market`: this reform's part of the five-reform package under `market = choice` or
+  `choice+capacity` (`MarketOutcome.draws["parts.<case>.<key>"]`).
+- `comparable`: the Census-comparable scope (outcome accounting), only where the headline counts
+  more; its draws are the comparable work types summed per draw, exactly as
+  `engine.outcome.accounting` sums them, and checked against that record's middle.
+- `planned`: not built; the file says why (none today: the Massachusetts q x existing 3A
+  setting is variant `tod_ma_3a_q_scaled` and the Pennsylvania parking 50% resident bar is
+  variant `parking_verified_minimums_bar`, both shown as `variant` rows).
+
+Every number is paired: `diff` = alternative draws minus benchmark draws, draw by draw, before any
+percentile; percentiles are never added or subtracted. `below` / `above` are the shares of draws
+with a difference under / over zero, with `se` = sqrt(p (1 - p) / n). All text (`mid`, `range`,
+the shares, the summary) is written here, so the browser, the hearing appendix and the deck show
+the same words. A reform whose statewide range is hidden by the transit status shows middles only.
+Each row lists the ledger and source ids it adds to the headline (the headline's own are in the
+run's `reform_results.<key>.added` record); a variant row also names `variants.<name>`.
+
+`summary` (per reform): the headline text, built / not-built counts and the widest swing (the
+built row with the largest middle paired change). The deck's summary slide reads it.
+
+Cache and export: the whole state is computed in one job (benchmarks with the capacity screen,
+two market package runs, one run per variant) and kept as part `alternatives` in the comparisons
+disk cache under the usual fingerprint. Warm it with
+`uv run python -m visionhousing.api.alternatives --state PA` (heavy for a large state; add
+`--static web/public/data` to also save `PA/alternatives.json`). `write_static(body, out/ST)`
+saves the table and sets `alternatives: true` in `ST/index.json`; by default it leaves out the
+P10 / P90 numbers and standard errors (their text and every id stay), about 8-9 KB gzip per
+state (2026-11-26: PA 49 KB raw / 9.0 KB gzip; all four states about 33 KB gzip). The exporter
+hook is a queued request.
 
 ## Transit status as text (`api/status_view.py`)
 

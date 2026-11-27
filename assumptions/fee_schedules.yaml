@@ -1,0 +1,1027 @@
+# Documented local development fee schedules (Philadelphia, Pittsburgh).
+#
+# Read by visionhousing.features.fee_schedules. Feeds only the named variant
+# `fees_documented_local` (assumptions/variants.yaml). The benchmark ($50,000
+# per unit cut by 50%, ledger fees.fee_total_per_unit and fees.fee_cut_share)
+# never reads this file and never changes because of it.
+#
+# Rules for this file:
+#   - Every dollar amount is copied from a document the City or its water
+#     utility publishes itself, fetched by script (robots.txt and terms checked
+#     first, in a separate request). Each amount carries the document id, a
+#     quote of at most 300 characters and the date it was read. The module's
+#     check (python -m visionhousing.features.fee_schedules --check) fetches
+#     the documents again into data/raw/fee_schedules/ and confirms every quote
+#     is still in the text (white space and quote marks ignored).
+#   - Every item states: category, basis (how the amount is worked out),
+#     exemptions, payment stage, dollars year, payee and the service provided.
+#   - status:
+#       documented            the amount is in a document listed below
+#       not_applicable        reviewed, and it does not apply to the prototype
+#                             as defined below (the reason is given)
+#       optional_excluded     the applicant may choose it; not counted
+#       unknown_not_reviewed  not reviewed yet: stays unknown, never zero
+#       unknown_refused       the only official copy refuses scripted access
+#                             (robots.txt or HTTP 403); stays unknown
+#     "Not listed" is never read as zero: an item stays unknown until a person
+#     has reviewed the document that would list it.
+#   - An application (filing) fee that the City credits to the final permit
+#     fee names that permit in credited_to and is counted once: it adds only
+#     what exceeds the permit fee it is credited to (normally nothing).
+#   - Quantities that are not in any schedule (floor area, fixtures, sheets,
+#     meter sizes) belong to the prototypes below. They are design
+#     assumptions of the team, labelled as such. Where a reading could go two
+#     ways (an ADU filed as a new accessory structure or as a new dwelling;
+#     one shared water service or a new one) the prototype gives
+#     {low: ..., high: ...} and the range keeps both readings.
+#   - Construction cost (for the valuation-based electrical permit) comes from
+#     the Assumption Ledger (cost_id), so its uncertainty flows into the range.
+#   - Dollars are those of the schedule in force on the date read (dollars_year
+#     on each item); no inflation adjustment is made.
+#
+# Methods: docs/methods/fees.md ("Documented local fee schedules");
+# module: docs/modules/fee_schedules.md.
+
+version: 1
+id: fee_schedules_2026_11
+read_on: 2026-11-26
+
+# Which prototype prices each structure type of the fee reform's baseline.
+structure_type_prototypes:
+  units_1: single_family
+  units_2: duplex
+  units_3_4: fourplex
+  units_5plus: apartment_20
+
+# Fee categories every city is reviewed against. A city's documented total is
+# used in the variant only when every core category is documented or
+# reviewed and not applicable, and only where the city covers a whole county
+# (the fee reform works county by county). Otherwise the county stays on the
+# labelled judgement fees.pa_assumed_fee_per_unit_judgement.
+categories:
+  core: [zoning, building, trade, impact, water_connection, sewer_connection]
+  secondary: [stormwater, right_of_way, planning, administrative]
+
+# ----------------------------------------------------------------- prototypes
+# A number, or {low, high} where the reading could go two ways. schedule_class:
+# one_two_family (Philadelphia's "Residential (1 or 2 family)" column) or
+# other (every other occupancy, which includes a 3+ unit building).
+prototypes:
+  adu:
+    label: "Detached ADU on a single-family lot, 600 sq ft (the benchmark minimum)"
+    units: 1
+    floor_area_sqft: 600
+    schedule_class: one_two_family
+    cost_id: adu.hard_cost_per_sqft
+    plumbing_fixtures: 7
+    registers: 6
+    sprinkler_heads: 0
+    permits: {low: 1, high: 5}
+    sheets_large: {low: 0, high: 6}
+    dit_value_per_sqft: {low: 89.15, high: 94.75}
+    stormwater_hours: 0
+    note: >-
+      Low reading: filed as a new accessory structure (and plumbing as an
+      addition) that shares the house's water service and sewer lateral.
+      High reading: filed as new construction of a dwelling with its own
+      3/4-inch water service, 5/8-inch meter and 6-inch sewer connection.
+  single_family:
+    label: "New single-family home, 1,600 sq ft"
+    units: 1
+    floor_area_sqft: 1600
+    schedule_class: one_two_family
+    cost_id: missing_middle.hard_cost_per_sqft
+    plumbing_fixtures: 12
+    registers: 10
+    sprinkler_heads: 0
+    permits: {low: 1, high: 5}
+    sheets_large: {low: 0, high: 10}
+    dit_value_per_sqft: {low: 89.15, high: 94.75}
+    stormwater_hours: 0
+    note: "One 3/4-inch (low) or 1-inch (high) water service, one 5/8-inch meter, one 6-inch sewer connection."
+  duplex:
+    label: "New two-family building, 2 units x 1,000 sq ft"
+    units: 2
+    floor_area_sqft: 2000
+    schedule_class: one_two_family
+    cost_id: missing_middle.hard_cost_per_sqft
+    plumbing_fixtures: 18
+    registers: 14
+    sprinkler_heads: 0
+    permits: {low: 1, high: 5}
+    sheets_large: {low: 0, high: 12}
+    dit_value_per_sqft: {low: 89.15, high: 94.75}
+    stormwater_hours: 0
+    note: >-
+      Low reading: one 1-inch water service with two meters and one sewer
+      connection. High reading: two 3/4-inch services and a second sewer
+      connection in the same trench.
+  fourplex:
+    label: "New four-unit building, 4 units x 1,000 sq ft, sprinklered (13R)"
+    units: 4
+    floor_area_sqft: 4000
+    schedule_class: other
+    cost_id: missing_middle.hard_cost_per_sqft
+    plumbing_fixtures: 36
+    registers: 28
+    sprinkler_heads: 48
+    permits: {low: 1, high: 6}
+    sheets_large: {low: 0, high: 20}
+    dit_value_per_sqft: {low: 113.88, high: 118.57}
+    stormwater_hours: {low: 0, high: 4}
+    note: >-
+      Low reading: one 1 1/2-inch service and master meter; the site disturbs
+      under 5,000 sq ft, so no stormwater review. High reading: a 2-inch
+      service, four 5/8-inch meters and a stormwater review.
+  apartment_20:
+    label: "New 20-unit apartment building, 20 units x 850 sq ft + 15% common area, sprinklered"
+    units: 20
+    floor_area_sqft: 20000
+    schedule_class: other
+    cost_id: multifamily.hard_cost_per_sqft
+    plumbing_fixtures: 184
+    registers: 160
+    sprinkler_heads: 300
+    permits: {low: 1, high: 6}
+    sheets_large: {low: 0, high: 60}
+    dit_value_per_sqft: {low: 113.88, high: 135.04}
+    stormwater_hours: {low: 4, high: 20}
+    note: >-
+      Low reading: a 2-inch combined domestic and fire service (ferrule) with
+      one 2-inch meter and a 6-inch sewer connection; construction type VB.
+      High reading: a separate 4-inch fire service (valve connection) with a
+      4-inch fire-series meter, an 8-inch wye sewer connection, standpipes on
+      four floors; construction type IIIA.
+
+# ----------------------------------------------------------------- documents
+# Fetched by script on read_on. robots: what robots.txt said, checked in a
+# separate request first. sha256 is of the file as downloaded (PDF only; web
+# pages change their markup, so only their quotes are checked).
+documents:
+  phl_li_construction_fees:
+    title: "City of Philadelphia L&I, Construction Permit Fees (PG_012_INF, Rev 7.2026), effective October 1, 2026"
+    publisher: City of Philadelphia, Department of Licenses and Inspections
+    url: https://www.phila.gov/media/20260729134349/PG_012_INF_Summary-of-construction-permit-fees-Eff-1.1.2025-Rev-7.2026.pdf
+    listed_on: https://www.phila.gov/documents/fees-for-li-permits-and-licenses/
+    kind: pdf
+    sha256: 8bd2b883f3d718c66bf684d43bb653117b7c08c0b124cb4b05d1227556496b4d
+    robots: "www.phila.gov/robots.txt: HTTP 404 (no rules); terms of use (phila.gov/terms-of-use) set no rule against automated reading"
+    source_id: phl_li_fee_schedules
+  phl_li_zoning_fees:
+    title: "City of Philadelphia L&I, Zoning & Use Permit Fees (PZ_008_INF, Rev 7.2026), effective January 1, 2025"
+    publisher: City of Philadelphia, Department of Licenses and Inspections
+    url: https://www.phila.gov/media/20260720085858/PZ_008_INF_Summary-of-zoning-permit-fees-Rev-7.2026.pdf
+    listed_on: https://www.phila.gov/documents/fees-for-li-permits-and-licenses/
+    kind: pdf
+    sha256: 6bf663b5ad585d509d585a9279bff55e4d93b35400e8d1eb3ccde06ea69ef6b4
+    robots: "www.phila.gov/robots.txt: HTTP 404 (no rules)"
+    source_id: phl_li_fee_schedules
+  phl_li_building_permit_page:
+    title: "City of Philadelphia, Get a building permit (fees section: filing fee, surcharges, record retention)"
+    publisher: City of Philadelphia, Department of Licenses and Inspections
+    url: https://www.phila.gov/services/permits-violations-licenses/apply-for-a-permit/building-and-repair-permits/get-a-building-permit/
+    kind: html
+    robots: "www.phila.gov/robots.txt: HTTP 404 (no rules)"
+    source_id: phl_li_fee_schedules
+  phl_revenue_dit_page:
+    title: "City of Philadelphia, Department of Revenue, Development Impact Tax"
+    publisher: City of Philadelphia, Department of Revenue
+    url: https://www.phila.gov/services/payments-assistance-taxes/business-taxes/development-impact-tax/
+    kind: html
+    robots: "www.phila.gov/robots.txt: HTTP 404 (no rules)"
+    source_id: phl_li_fee_schedules
+  phl_pwd_rates_2026:
+    title: "Philadelphia Water Department, Rates and Charges, effective September 1, 2026"
+    publisher: City of Philadelphia, Water Department (Water, Sewer and Storm Water Rate Board)
+    url: https://water.phila.gov/wp-content/uploads/files/rates-and-charges-2026-09-01.pdf
+    listed_on: https://water.phila.gov/rates/
+    kind: pdf
+    sha256: 880779871b2e47c11c619d33f499752afc9b3791dda5c326793165800f4ad9e6
+    robots: "water.phila.gov/robots.txt: disallows only /wp-admin/"
+    source_id: phl_pwd_tariff
+  phl_pwd_regulations_ch5:
+    title: "Philadelphia Water Department Regulations, Chapter 5 (section 504.14 Sewer Connection Fees)"
+    publisher: City of Philadelphia, Water Department
+    url: https://water.phila.gov/wp-content/uploads/files/pwd-regulations-chapter-5.pdf
+    listed_on: https://water.phila.gov/regulations/
+    kind: pdf
+    sha256: c89a23f68298d3d760deab2b89cbd371179a8e48aff5a6d97c12ee72a6ec3e74
+    robots: "water.phila.gov/robots.txt: disallows only /wp-admin/"
+    source_id: phl_pwd_tariff
+  pgh_pwsa_permits_page:
+    title: "Pittsburgh Water and Sewer Authority, Permits (residential permit fee and typical tap and meter cost)"
+    publisher: Pittsburgh Water and Sewer Authority
+    url: https://www.pgh2o.com/developers-contractors-vendors/permits
+    kind: html
+    robots: "www.pgh2o.com/robots.txt: web pages allowed; every PDF disallowed (Disallow: /*.pdf$), so the 2026 permitting fee schedule PDF is not read"
+    source_id: pgh_pwsa_permits
+  pgh_fee_schedule_resolution_2026:
+    title: "City of Pittsburgh, Resolution authorizing the fee schedule for 2026 (file 2025-2463), text"
+    publisher: City of Pittsburgh, City Council (Legistar web API, matter 32429, text 34016)
+    url: https://webapi.legistar.com/v1/pittsburgh/matters/32429/texts/34016
+    kind: legistar_text
+    robots: >-
+      webapi.legistar.com/robots.txt: HTTP 404 (no rules). The fee book itself
+      is only an attachment ("2026 Fee Schedule Template", .xlsx) on
+      pittsburgh.legistar1.com, whose robots.txt says "Disallow: /", and the
+      City's own site www.pittsburghpa.gov answers scripted requests (even
+      robots.txt) with HTTP 403. So no Pittsburgh dollar amount for building,
+      zoning or trade permits can be read by script.
+    source_id: pgh_legistar
+
+# How each city's schedule applies to the county-level fee reform.
+cities:
+  philadelphia:
+    name: "City of Philadelphia"
+    county: "42101"
+    whole_county: true
+    review:
+      zoning: documented
+      building: documented
+      trade: documented
+      impact: documented
+      water_connection: documented
+      sewer_connection: documented
+      stormwater: documented
+      administrative: documented
+      right_of_way: unknown_not_reviewed
+      planning: unknown_not_reviewed
+    review_notes: >-
+      Not reviewed: Streets Department street-opening and lane-closure permits
+      for the water and sewer laterals (the plumber must get them), and any
+      planning review beyond a by-right zoning permit. Both stay unknown, so
+      the documented total is a floor for them. Utility company (electric,
+      gas) service charges are not government fees and are not counted.
+  pittsburgh:
+    name: "City of Pittsburgh"
+    county: "42003"
+    whole_county: false
+    review:
+      zoning: unknown_refused
+      building: unknown_refused
+      trade: unknown_refused
+      impact: unknown_not_reviewed
+      water_connection: documented
+      sewer_connection: unknown_not_reviewed
+      stormwater: unknown_refused
+      administrative: unknown_refused
+      right_of_way: unknown_not_reviewed
+      planning: unknown_refused
+    review_notes: >-
+      The 2026 fee book (PLI building and trade permits, City Planning zoning
+      fees) exists (Resolution file 2025-2463, effective January 1, 2026) but
+      is only published where scripted reading is refused. PWSA's web page
+      gives the single-family residential permit fee and the typical tap and
+      meter cost; larger services are in a PDF that robots.txt disallows.
+      ALCOSAN's sewage tap-in fee is not among the sources allowed for this
+      review. The City is part of Allegheny County, so even a complete
+      schedule would need a within-county split before it could replace the
+      county's judgement fee.
+
+# ----------------------------------------------------------------- items
+# basis:
+#   flat                  amount, times the prototype's multiplier
+#   per_count             amount x a prototype count (count_field), minimum applies
+#   area_tiered           first_amount for the first first_sqft, plus
+#                         step_amount for each step_sqft (or fraction) above
+#   fixtures_tiered       first_amount for the first first_count fixtures,
+#                         plus step_amount for each fixture above
+#   valuation_per_1000    rate for each $1,000 (or fraction) of estimated
+#                         cost of that work = cost share x construction cost
+#                         per sq ft (ledger cost_id) x floor area; min / max
+#   percent_of_table_value  rate x floor area x the City's table value per sq ft
+# applies: prototype -> multiplier (a number or {low, high}); a prototype not
+# listed does not owe the item.
+items:
+  # --- Philadelphia, L&I building permit
+  phl_li_filing_one_two:
+    city: philadelphia
+    category: administrative
+    name: "Filing fee, one-or-two-family dwelling"
+    status: documented
+    basis: flat
+    amount: 25
+    credited_to: [phl_li_building_new_one_two, phl_li_building_accessory_one_two]
+    applies: {adu: 1, single_family: 1, duplex: 1}
+    exemptions: "None stated."
+    payment_stage: "At application; nonrefundable; applied towards the final permit fee"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Intake of the permit application"
+    doc: phl_li_building_permit_page
+    quote: "For one-or-two-family dwellings: $25 For any other occupancy: $100 This fee is nonrefundable and is applied towards the final permit fee."
+  phl_li_filing_other:
+    city: philadelphia
+    category: administrative
+    name: "Filing fee, any other occupancy"
+    status: documented
+    basis: flat
+    amount: 100
+    credited_to: [phl_li_building_new_other]
+    applies: {fourplex: 1, apartment_20: 1}
+    exemptions: "None stated."
+    payment_stage: "At application; nonrefundable; applied towards the final permit fee"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Intake of the permit application"
+    doc: phl_li_building_permit_page
+    quote: "For one-or-two-family dwellings: $25 For any other occupancy: $100 This fee is nonrefundable and is applied towards the final permit fee."
+  phl_li_building_new_one_two:
+    city: philadelphia
+    category: building
+    name: "Building permit, new construction, residential (1 or 2 family)"
+    status: documented
+    basis: flat
+    amount: 1328
+    applies: {adu: {low: 0, high: 1}, single_family: 1, duplex: 1}
+    exemptions: "None stated in the schedule."
+    payment_stage: "Balance at permit issuance (after approval)"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Plan review and construction inspections; certificate of occupancy included"
+    doc: phl_li_construction_fees
+    quote: "New Construction $1328 $253 for the first 500 sq. ft.; plus $73 for each additional 100 sq. ft. or fraction thereof above 500"
+  phl_li_building_accessory_one_two:
+    city: philadelphia
+    category: building
+    name: "Building permit, new accessory structure or addition, residential (1 or 2 family)"
+    status: documented
+    basis: area_tiered
+    first_sqft: 500
+    first_amount: 75
+    step_sqft: 100
+    step_amount: 56
+    applies: {adu: {low: 1, high: 0}}
+    exemptions: "None stated in the schedule."
+    payment_stage: "Balance at permit issuance (after approval)"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Plan review and construction inspections"
+    doc: phl_li_construction_fees
+    quote: "New Accessory Structures or Additions $75 for the first 500 sq. ft.; plus $56 for each additional 100 sq. ft. or fraction thereof above 500"
+  phl_li_building_new_other:
+    city: philadelphia
+    category: building
+    name: "Building permit, new construction, other occupancies"
+    status: documented
+    basis: area_tiered
+    first_sqft: 500
+    first_amount: 253
+    step_sqft: 100
+    step_amount: 73
+    applies: {fourplex: 1, apartment_20: 1}
+    exemptions: "None stated in the schedule."
+    payment_stage: "Balance at permit issuance (after approval)"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Plan review and construction inspections; certificate of occupancy included"
+    doc: phl_li_construction_fees
+    quote: "New Construction $1328 $253 for the first 500 sq. ft.; plus $73 for each additional 100 sq. ft. or fraction thereof above 500"
+  phl_li_certificate_of_occupancy:
+    city: philadelphia
+    category: building
+    name: "Certificate of occupancy (part of the building permit)"
+    status: documented
+    basis: flat
+    amount: 0
+    applies: {adu: 1, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: "Not applicable: no additional fee."
+    payment_stage: "Included in the building permit"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Certificate of occupancy"
+    doc: phl_li_construction_fees
+    quote: "Certificate of Occupancy No Additional Fee (as part of the Building Permit Process)"
+  phl_li_preliminary_review:
+    city: philadelphia
+    category: building
+    name: "Preliminary review"
+    status: optional_excluded
+    basis: flat
+    amount: 442
+    applies: {}
+    exemptions: "Optional service; not counted."
+    payment_stage: "On request"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Optional early code review"
+    doc: phl_li_construction_fees
+    quote: "Preliminary Review $442 (three stories or less)"
+  phl_li_accelerated_review:
+    city: philadelphia
+    category: building
+    name: "Accelerated plan review (optional)"
+    status: optional_excluded
+    basis: flat
+    amount: 2000
+    applies: {}
+    exemptions: "Optional; not credited toward the final permit fee; not counted."
+    payment_stage: "$350 at application, the rest once approved"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Review within 5 business days"
+    doc: phl_li_building_permit_page
+    quote: "Accelerated review fees will not be credited toward your final permit fee."
+  # --- Philadelphia, L&I trade permits
+  phl_li_plumbing_new:
+    city: philadelphia
+    category: trade
+    name: "Plumbing permit, new construction"
+    status: documented
+    basis: fixtures_tiered
+    first_count: 7
+    first_amount: 284
+    step_amount: 25
+    applies: {adu: {low: 0, high: 1}, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: "None stated in the schedule."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Plumbing plan review and inspection"
+    doc: phl_li_construction_fees
+    quote: "New Construction $284 for first 7 fixtures; $25 for each additional fixture above 7"
+  phl_li_plumbing_addition_one_two:
+    city: philadelphia
+    category: trade
+    name: "Plumbing permit, fixtures associated with additions, residential"
+    status: documented
+    basis: fixtures_tiered
+    first_count: 7
+    first_amount: 50
+    step_amount: 22.5
+    applies: {adu: {low: 1, high: 0}}
+    exemptions: "None stated in the schedule."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Plumbing inspection"
+    doc: phl_li_construction_fees
+    quote: "Additions $50 for first 7 fixtures associated with additions; $22.50 for each additional fixture above 7"
+  phl_li_plumbing_underground_separate:
+    city: philadelphia
+    category: trade
+    name: "Plumbing permit for new underground service lines, when filed as a separate permit"
+    status: documented
+    basis: flat
+    amount: 253
+    applies: {adu: {low: 0, high: 1}, single_family: {low: 0, high: 1}, duplex: {low: 0, high: 1}, fourplex: {low: 0, high: 1}, apartment_20: {low: 0, high: 1}}
+    exemptions: "Owed only when the service lines are a separate permit."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Inspection of the water distribution and drainage service lines"
+    doc: phl_li_construction_fees
+    quote: "$253 for new underground services lines (water distribution and drainage system) as a separate permit"
+  phl_li_electrical:
+    city: philadelphia
+    category: trade
+    name: "Electrical permit"
+    status: documented
+    basis: valuation_per_1000
+    rate: 25
+    cost_share_id: fees.local_electrical_cost_share
+    minimum: 63
+    maximum: 18975
+    applies: {adu: 1, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: "None stated in the schedule."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Electrical inspection"
+    doc: phl_li_construction_fees
+    quote: "Electrical Work $25 for each $1,000 or fraction thereof of estimated electrical construction costs. (minimum $63 / maximum $18,975)"
+  phl_li_mechanical_one_two:
+    city: philadelphia
+    category: trade
+    name: "Mechanical permit, ductwork including appliances, residential"
+    status: documented
+    basis: flat
+    amount: 189
+    applies: {adu: 1, single_family: 1, duplex: 1}
+    exemptions: "None stated in the schedule."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Mechanical inspection"
+    doc: phl_li_construction_fees
+    quote: "Ductwork (to include any appliances $189 $15.10 for each register/diffuser served by the ductwork (min. $189)"
+  phl_li_mechanical_other:
+    city: philadelphia
+    category: trade
+    name: "Mechanical permit, ductwork, other occupancies (per register or diffuser)"
+    status: documented
+    basis: per_count
+    amount: 15.10
+    count_field: registers
+    minimum: 189
+    applies: {fourplex: 1, apartment_20: 1}
+    exemptions: "None stated in the schedule."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Mechanical inspection"
+    doc: phl_li_construction_fees
+    quote: "Ductwork (to include any appliances $189 $15.10 for each register/diffuser served by the ductwork (min. $189)"
+  phl_li_fuel_gas:
+    city: philadelphia
+    category: trade
+    name: "Fuel gas piping permit"
+    status: not_applicable
+    basis: flat
+    amount: 189
+    applies: {}
+    exemptions: "Not applicable: the prototypes are all-electric. A gas-heated building would add $189 (1 or 2 family) or 2% of the gas piping contract value (other occupancies)."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Fuel gas inspection"
+    doc: phl_li_construction_fees
+    quote: "Fuel Gas Piping Systems and Equipment (as regulated by the Philadelphia Fuel Gas Code) $189 2% of contract value for construction (minimum $189)"
+  phl_li_sprinkler_other:
+    city: philadelphia
+    category: trade
+    name: "Fire sprinkler system, new installation, other occupancies (per head)"
+    status: documented
+    basis: per_count
+    amount: 15.10
+    count_field: sprinkler_heads
+    minimum: 189
+    applies: {fourplex: 1, apartment_20: 1}
+    exemptions: "One- and two-family prototypes are not sprinklered (none counted)."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Fire suppression plan review and inspection"
+    doc: phl_li_construction_fees
+    quote: "New Installation of Fire Sprinkler System $189 $15.10 per sprinkler head (min. $189)"
+  phl_li_fire_backflow:
+    city: philadelphia
+    category: trade
+    name: "Backflow prevention device on a fire suppression system"
+    status: documented
+    basis: flat
+    amount: 158
+    applies: {fourplex: 1, apartment_20: 1}
+    exemptions: "Only sprinklered prototypes."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Inspection of the device"
+    doc: phl_li_construction_fees
+    quote: "Backflow Prevention Device (on a Fire Suppression System) $158 per device"
+  phl_li_standpipe:
+    city: philadelphia
+    category: trade
+    name: "Standpipe riser (per riser per floor)"
+    status: documented
+    basis: flat
+    amount: 75
+    applies: {apartment_20: {low: 0, high: 4}}
+    exemptions: "Only where a standpipe is required (high reading of the 20-unit building)."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Inspection"
+    doc: phl_li_construction_fees
+    quote: "Standpipe Riser N/A $75 per riser per floor"
+  # --- Philadelphia, surcharges and records
+  phl_li_surcharge_city:
+    city: philadelphia
+    category: administrative
+    name: "City surcharge (per permit)"
+    status: documented
+    basis: per_count
+    amount: 3
+    count_field: permits
+    applies: {adu: 1, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: "None stated."
+    payment_stage: "With each permit"
+    dollars_year: 2026
+    payee: "City of Philadelphia"
+    service: "Not stated on the page"
+    doc: phl_li_building_permit_page
+    quote: "City surcharge: $3 per permit State surcharge: $4.50 per permit"
+  phl_li_surcharge_state:
+    city: philadelphia
+    category: administrative
+    name: "State surcharge (per permit)"
+    status: documented
+    basis: per_count
+    amount: 4.5
+    count_field: permits
+    applies: {adu: 1, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: "None stated."
+    payment_stage: "With each permit"
+    dollars_year: 2026
+    payee: "Commonwealth of Pennsylvania (collected by the City)"
+    service: "Not stated on the page"
+    doc: phl_li_building_permit_page
+    quote: "City surcharge: $3 per permit State surcharge: $4.50 per permit"
+  phl_li_record_retention:
+    city: philadelphia
+    category: administrative
+    name: "Record retention fee (per page larger than 8.5 x 14 in.)"
+    status: documented
+    basis: per_count
+    amount: 4
+    count_field: sheets_large
+    applies: {adu: 1, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: "None stated; the low reading assumes no large paper sheets."
+    payment_stage: "At application"
+    dollars_year: 2026
+    payee: "City of Philadelphia (L&I)"
+    service: "Keeping the plan record"
+    doc: phl_li_building_permit_page
+    quote: "Per page larger than 8.5 in. by 14 in.: $4"
+  # --- Philadelphia, zoning
+  phl_zoning_new_one_two:
+    city: philadelphia
+    category: zoning
+    name: "Zoning permit, new construction, residential (1 or 2 family)"
+    status: documented
+    basis: flat
+    amount: 189
+    applies: {adu: 1, single_family: 1, duplex: 1}
+    exemptions: "None stated."
+    payment_stage: "At zoning permit issuance"
+    dollars_year: 2025
+    payee: "City of Philadelphia (L&I)"
+    service: "Zoning review of a by-right project"
+    doc: phl_li_zoning_fees
+    quote: "New Construction $189 $632"
+  phl_zoning_new_other:
+    city: philadelphia
+    category: zoning
+    name: "Zoning permit, new construction, other occupancies"
+    status: documented
+    basis: flat
+    amount: 632
+    applies: {fourplex: 1, apartment_20: 1}
+    exemptions: "None stated."
+    payment_stage: "At zoning permit issuance"
+    dollars_year: 2025
+    payee: "City of Philadelphia (L&I)"
+    service: "Zoning review of a by-right project"
+    doc: phl_li_zoning_fees
+    quote: "New Construction $189 $632"
+  phl_zoning_use:
+    city: philadelphia
+    category: zoning
+    name: "Additional fee for uses (each use)"
+    status: documented
+    basis: flat
+    amount: 189
+    applies: {adu: {low: 0, high: 1}, duplex: {low: 0, high: 1}, fourplex: 1, apartment_20: 1}
+    exemptions: "No fee for single-family new construction or addition (so none for the single-family prototype; the ADU and duplex readings keep both)."
+    payment_stage: "At zoning permit issuance"
+    dollars_year: 2025
+    payee: "City of Philadelphia (L&I)"
+    service: "Use permit"
+    doc: phl_li_zoning_fees
+    quote: "Additional Fee for Uses* No fee for Family Daycare or Group Daycare, or Single-Family New Construction/Addition $189 for each use"
+  # --- Philadelphia, Development Impact Tax
+  phl_dit:
+    city: philadelphia
+    category: impact
+    name: "Development Impact Tax (1% of the City's computed construction cost)"
+    status: documented
+    basis: percent_of_table_value
+    rate: 0.01
+    applies: {adu: 1, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: >-
+      Projects certified as affordable housing (Philadelphia Code 19-4401(3)(d)),
+      properties in Keystone Opportunity Zones exempt from Real Estate Tax, and
+      improvements approved for the H.O.M.E. plan. Applies to residential new
+      construction over $15,000. A tax rather than a service fee; it counts
+      here because it is charged with the building permit.
+    payment_stage: "50% when the building permit is issued, 50% at the certificate of final inspection"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Department of Revenue)"
+    service: "None stated: a tax on new construction"
+    doc: phl_revenue_dit_page
+    quote: "You must pay 50% of the tax when the building permit is issued and 50% when the certificate of final inspection is issued."
+    table_quote: "VA $94.75 $118.57 $148.44 VB $89.15 $113.88 $143.75"
+  # --- Philadelphia Water Department: connections (tap fees)
+  phl_pwd_ferrule_3_4:
+    city: philadelphia
+    category: water_connection
+    name: "Water connection (ferrule tap) 3/4 inch"
+    status: documented
+    basis: flat
+    amount: 245
+    applies: {adu: {low: 0, high: 1}, single_family: {low: 1, high: 0}, duplex: {low: 0, high: 2}}
+    exemptions: "None stated. Excavation and piping after the ferrule are the owner's (site cost, not a fee)."
+    payment_stage: "Before the PWD connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD installs the ferrule at the main"
+    doc: phl_pwd_rates_2026
+    quote: "Size Charge ¾” $245 1” 280 1½” 345 2” 455"
+  phl_pwd_ferrule_1:
+    city: philadelphia
+    category: water_connection
+    name: "Water connection (ferrule tap) 1 inch"
+    status: documented
+    basis: flat
+    amount: 280
+    applies: {single_family: {low: 0, high: 1}, duplex: {low: 1, high: 0}}
+    exemptions: "None stated."
+    payment_stage: "Before the PWD connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD installs the ferrule at the main"
+    doc: phl_pwd_rates_2026
+    quote: "Size Charge ¾” $245 1” 280 1½” 345 2” 455"
+  phl_pwd_ferrule_1_5:
+    city: philadelphia
+    category: water_connection
+    name: "Water connection (ferrule tap) 1 1/2 inch"
+    status: documented
+    basis: flat
+    amount: 345
+    applies: {fourplex: {low: 1, high: 0}}
+    exemptions: "None stated."
+    payment_stage: "Before the PWD connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD installs the ferrule at the main"
+    doc: phl_pwd_rates_2026
+    quote: "Size Charge ¾” $245 1” 280 1½” 345 2” 455"
+  phl_pwd_ferrule_2:
+    city: philadelphia
+    category: water_connection
+    name: "Water connection (ferrule tap) 2 inch"
+    status: documented
+    basis: flat
+    amount: 455
+    applies: {fourplex: {low: 0, high: 1}, apartment_20: 1}
+    exemptions: "None stated."
+    payment_stage: "Before the PWD connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD installs the ferrule at the main"
+    doc: phl_pwd_rates_2026
+    quote: "Size Charge ¾” $245 1” 280 1½” 345 2” 455"
+  phl_pwd_valve_4:
+    city: philadelphia
+    category: water_connection
+    name: "Water connection (valve) 3 or 4 inch, regular hours"
+    status: documented
+    basis: flat
+    amount: 14950
+    applies: {apartment_20: {low: 0, high: 1}}
+    exemptions: "None stated. Includes the valve, piping to one foot inside the curb, backfill and repaving."
+    payment_stage: "Before the PWD connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD makes the connection to the main and repaves"
+    doc: phl_pwd_rates_2026
+    quote: "4” $14,950"
+  phl_pwd_meter_5_8:
+    city: philadelphia
+    category: water_connection
+    name: "Furnishing and setting a 5/8 inch water meter and meter interface unit"
+    status: documented
+    basis: flat
+    amount: 360
+    applies: {adu: {low: 0, high: 1}, single_family: 1, duplex: 2, fourplex: {low: 0, high: 4}}
+    exemptions: "None stated."
+    payment_stage: "With the meter installation permit"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD supplies and sets the meter"
+    doc: phl_pwd_rates_2026
+    quote: "Meter Size Charge 5/8” $360"
+  phl_pwd_meter_2:
+    city: philadelphia
+    category: water_connection
+    name: "Furnishing and setting a 1 1/2 or 2 inch water meter and meter interface unit"
+    status: documented
+    basis: flat
+    amount: 1385
+    applies: {fourplex: {low: 1, high: 0}, apartment_20: 1}
+    exemptions: "None stated."
+    payment_stage: "With the meter installation permit"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD supplies and sets the meter"
+    doc: phl_pwd_rates_2026
+    quote: "2” 1,385"
+  phl_pwd_meter_fire_4:
+    city: philadelphia
+    category: water_connection
+    name: "Furnishing and setting a 4 inch fire-series meter"
+    status: documented
+    basis: flat
+    amount: 6190
+    applies: {apartment_20: {low: 0, high: 1}}
+    exemptions: "Only with a separate fire service (high reading)."
+    payment_stage: "With the meter installation permit"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "PWD supplies and sets the meter"
+    doc: phl_pwd_rates_2026
+    quote: "4” Fire Series 6,190"
+  phl_pwd_utility_plan_review:
+    city: philadelphia
+    category: water_connection
+    name: "Utility plan review"
+    status: documented
+    basis: flat
+    amount: 365
+    applies: {adu: {low: 0, high: 1}, single_family: 1, duplex: 1, fourplex: 1, apartment_20: 1}
+    exemptions: "Community gardens. The low ADU reading has no new connection and no utility plan."
+    payment_stage: "When the utility plan is submitted (before the building permit)"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "Review of the water, sewer and stormwater connections"
+    doc: phl_pwd_rates_2026
+    quote: "A fee of three hundred and sixty-five dollars ($365) shall be due upon submission of the Utility Plan for review."
+  phl_pwd_sewer_6:
+    city: philadelphia
+    category: sewer_connection
+    name: "Sewer connection permit, 5 or 6 inch"
+    status: documented
+    basis: flat
+    amount: 375
+    applies: {adu: {low: 0, high: 1}, single_family: 1, duplex: 1, fourplex: 1, apartment_20: {low: 1, high: 0}}
+    exemptions: "None stated. The lateral itself is built by the owner's plumber (site cost, not a fee)."
+    payment_stage: "Before the PWD sewer connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "Permit and inspection of the sewer connection"
+    doc: phl_pwd_regulations_ch5
+    quote: "5” or 6” connection $375.00"
+  phl_pwd_sewer_8_wye:
+    city: philadelphia
+    category: sewer_connection
+    name: "Sewer connection permit, 8 inch wye"
+    status: documented
+    basis: flat
+    amount: 665
+    applies: {apartment_20: {low: 0, high: 1}}
+    exemptions: "None stated."
+    payment_stage: "Before the PWD sewer connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "Permit and inspection of the sewer connection"
+    doc: phl_pwd_regulations_ch5
+    quote: "8” Wye connection $665.00"
+  phl_pwd_sewer_same_trench:
+    city: philadelphia
+    category: sewer_connection
+    name: "Additional sewer connection permit in the same trench"
+    status: documented
+    basis: flat
+    amount: 50
+    applies: {duplex: {low: 0, high: 1}}
+    exemptions: "With the Water Department's approval; may be $50."
+    payment_stage: "Before the PWD sewer connection permit is issued"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "Permit and inspection of the second connection"
+    doc: phl_pwd_regulations_ch5
+    quote: "the fee for an additional Sewer Connection Permit for work to be performed in the same trench"
+  # --- Philadelphia Water Department: stormwater review (sites disturbing 5,000 sq ft or more)
+  phl_pwd_stormwater_conceptual:
+    city: philadelphia
+    category: stormwater
+    name: "Stormwater plan review, conceptual plan"
+    status: documented
+    basis: flat
+    amount: 1795
+    applies: {fourplex: {low: 0, high: 1}, apartment_20: 1}
+    exemptions: "Only developments that need stormwater management approval (5,000 sq ft or more of earth disturbance)."
+    payment_stage: "On submission of the conceptual plan"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "Review of the stormwater management plan"
+    doc: phl_pwd_rates_2026
+    quote: "($1,795) shall be due upon submission of the Conceptual Stormwater Management Plan for review."
+  phl_pwd_stormwater_hourly:
+    city: philadelphia
+    category: stormwater
+    name: "Stormwater plan review, post-construction plan (per hour of review)"
+    status: documented
+    basis: per_count
+    amount: 260
+    count_field: stormwater_hours
+    applies: {fourplex: {low: 0, high: 1}, apartment_20: 1}
+    exemptions: "As above."
+    payment_stage: "Before the post-construction stormwater plan approval"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "Technical review of the stormwater plan"
+    doc: phl_pwd_rates_2026
+    quote: "A fee of two hundred and sixty dollars ($260) per hour of review time shall be due prior to issuance of the Post-Construction Stormwater Management Plan approval."
+  phl_pwd_stormwater_final:
+    city: philadelphia
+    category: stormwater
+    name: "Stormwater final inspection"
+    status: documented
+    basis: flat
+    amount: 420
+    applies: {fourplex: {low: 0, high: 1}, apartment_20: 1}
+    exemptions: "As above."
+    payment_stage: "Before the post-construction stormwater plan approval"
+    dollars_year: 2026
+    payee: "City of Philadelphia (Water Department)"
+    service: "Final inspection of the stormwater works"
+    doc: phl_pwd_rates_2026
+    quote: "A fee of four hundred and twenty dollars ($420) for the final inspection of a development project"
+  phl_streets_opening:
+    city: philadelphia
+    category: right_of_way
+    name: "Streets Department street-opening and lane-closure permits"
+    status: unknown_not_reviewed
+    applies: {}
+    exemptions: "Not reviewed."
+    payment_stage: "Before work in the street"
+    dollars_year: null
+    payee: "City of Philadelphia (Streets Department)"
+    service: "Use of the street for the laterals"
+    doc: phl_li_building_permit_page
+    quote: null
+  # --- Pittsburgh
+  pgh_pwsa_residential_permit:
+    city: pittsburgh
+    category: water_connection
+    name: "PWSA residential permit application fee (single-family home)"
+    status: documented
+    basis: flat
+    amount: 40
+    applies: {adu: {low: 0, high: 1}, single_family: 1}
+    exemptions: "Residential permits are for single-family homes; larger projects need a development permit (fees in a PDF that robots.txt disallows)."
+    payment_stage: "With the PWSA permit application"
+    dollars_year: 2026
+    payee: "Pittsburgh Water and Sewer Authority"
+    service: "Permit for new water and/or sewer taps"
+    doc: pgh_pwsa_permits_page
+    quote: "The residential permit application fee is $40."
+  pgh_pwsa_tap_meter_single:
+    city: pittsburgh
+    category: water_connection
+    name: "PWSA tap connection and meter, typical single-family (1-inch service, 5/8-inch meter)"
+    status: documented
+    basis: flat
+    amount: 570
+    applies: {adu: {low: 0, high: 1}, single_family: 1}
+    exemptions: "Typical case only; other sizes are in the PDF fee schedule that robots.txt disallows."
+    payment_stage: "With the PWSA permit"
+    dollars_year: 2026
+    payee: "Pittsburgh Water and Sewer Authority"
+    service: "Tap connection and meter"
+    doc: pgh_pwsa_permits_page
+    quote: "Typical connections for a single-family home are 1\" service line and 5/8\" meter at a total cost of $570."
+  pgh_pwsa_development_permit:
+    city: pittsburgh
+    category: water_connection
+    name: "PWSA development permit, taps and meters for 2+ unit buildings"
+    status: unknown_refused
+    applies: {}
+    exemptions: "Unknown: the 2026 permitting fee schedule is a PDF that www.pgh2o.com/robots.txt disallows."
+    payment_stage: "With the PWSA development permit"
+    dollars_year: 2026
+    payee: "Pittsburgh Water and Sewer Authority"
+    service: "Development permit review, taps and meters"
+    doc: pgh_pwsa_permits_page
+    quote: null
+  pgh_pli_building:
+    city: pittsburgh
+    category: building
+    name: "PLI building and trade permits (2026 fee book)"
+    status: unknown_refused
+    applies: {}
+    exemptions: "Unknown: the fee book is published only where scripted reading is refused."
+    payment_stage: "At permit issuance"
+    dollars_year: 2026
+    payee: "City of Pittsburgh (Department of Permits, Licenses, and Inspections)"
+    service: "Plan review and inspections"
+    doc: pgh_fee_schedule_resolution_2026
+    quote: "Section 2. The effective date of the Resolution shall be January 1, 2026."
+  pgh_dcp_zoning:
+    city: pittsburgh
+    category: zoning
+    name: "Zoning and development review fees (2026 fee book)"
+    status: unknown_refused
+    applies: {}
+    exemptions: "Unknown: as above."
+    payment_stage: "At zoning review"
+    dollars_year: 2026
+    payee: "City of Pittsburgh"
+    service: "Zoning review"
+    doc: pgh_fee_schedule_resolution_2026
+    quote: "Section 1. The fees for permits, licenses, and inspections is hereby incorporated for the 2026 fiscal year."
+  pgh_alcosan_tap_in:
+    city: pittsburgh
+    category: sewer_connection
+    name: "Regional sewage treatment tap-in fee"
+    status: unknown_not_reviewed
+    applies: {}
+    exemptions: "Not reviewed: the regional sewage authority is outside the sources allowed for this review."
+    payment_stage: "Before connection"
+    dollars_year: null
+    payee: "Regional sewage authority"
+    service: "Sewage treatment capacity"
+    doc: pgh_pwsa_permits_page
+    quote: null

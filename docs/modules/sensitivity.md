@@ -29,7 +29,7 @@
 | `uncertainty(result, reform)` | "What would narrow the range" for one reform of an engine result, from exactly the draws the reform used (`input_draws`) |
 | `switch_runs(result, reform, top=3)` | `switch_runs.py`. For the reform's top three tornado inputs, nine switch runs (three inputs, each fixed at low, central and high): `{input: {setting: {"state": record, "counties": {id: record}}}}`. Kept in memory and, for the default scenario, on disk beside the comparisons parts |
 | `cached_switch_runs(result, reform)` | The switch runs if already worked out (memory, then disk); never computes |
-| `switch_payload(state, reform)` | `switch_runs.py`. The switch runs of one reform alone as JSON, for the static file `<ST>/switch-ranges/<reform>.json` |
+| `switch_payload(state, reform)` | `switch_runs.py`. The switch runs of one reform alone as JSON, for the static file `<ST>/switch-ranges/<reform>.json`; `context=` runs it on an already loaded state (the exporter passes the app's, read from its own packs folder) |
 | `drivers(result, reform, top=5)` | Both tables for one reform of an engine result, and the top five as `Driver` objects (rank, id, plain label, swing, totals at low and high, rho, `sentence()`) |
 
 ## Example
@@ -50,6 +50,8 @@ for d in drivers(result, "fees").top:
 - For the fee reform, the engine's tornado reproduces the fee module's own swing table exactly (tested).
 
 **Switch runs, how.** The tornado gives one pinned total per setting. A switch run keeps the rest of the uncertainty. For input *x* at value *v*: take the ledger the reform used, set *x* to `{"central": v, "low": v, "high": v, "shape": "fixed"}`, and run the reform's adapter with the run's seed, draws and baseline positions. If *x* is the baseline's position in its range, every draw instead uses the baseline multiplier at that end (P10 ÷ P50, 1, or P90 ÷ P50) and the ledger is unchanged. County draws are kept; each record's formula names the fixed input, its value, the seed and the draws. Three inputs × two extra settings is six extra reform runs per reform (nine adapter calls with central). `visionhousing switch-ranges --state PA` works them out for the five benchmark reforms and keeps each on disk, so `GET /api/v1/switch/{st}` adds the ranges. Fixing an input removes its spread, so the central setting's range is close to the run's and a little narrower; the fixed central value is the ledger's central, so a skewed input can move the middle a little.
+
+**Shared uncertainty.** Every method here takes the inputs as independent, as the benchmark does. What happens when costs, credit and review speed move together, or when regions swing apart inside the state range, is a separate named sensitivity: [correlated.md](correlated.md).
 
 A permutation check (shuffle one input and rerun) would need one rerun of the reform per input, so it is not done; the rank correlations on the same draws are the cross-check.
 

@@ -228,6 +228,7 @@ def test_every_local_column_is_described():
         "lihtc_awards": pipeline_local.AWARD_COLUMNS,
         "municipal_planning": zoning_status.MUNICIPAL_COLUMNS,
         "tract_municipalities": zoning_status.TRACT_COLUMNS,
+        "tract_places": zoning_status.TRACT_PLACE_COLUMNS,
         "law_documents": LawDocument.model_fields,
         "state_law_provisions": StateProvision.model_fields,
         "county_land_use": CountyLandUse.model_fields,

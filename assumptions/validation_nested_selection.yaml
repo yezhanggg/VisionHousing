@@ -1,0 +1,75 @@
+# Nested rolling-origin selection of the baseline rule (written 2026-11-26,
+# BEFORE any score of it). Read by visionhousing.validation.nested_selection.
+#
+# Why: the baseline contest picks each state's projection rule on the full
+# record, which includes the target years of every past case later used to
+# score it, and it describes counties with today's place types (county typology
+# and tract mix). The validation cards and the limits already say so. This
+# block fixes, in advance, a test in which the rule is chosen at each past start
+# year using only what was known then, and scored on what followed.
+#
+# Terms. Origin o: the last data year of a past projection. lead and horizon:
+# the forecast's own (lead = years from the last data year to the first
+# projected year; horizon = five target years), so each past case has the same
+# information gap as the 2027-2031 forecast. Matured by o: a case with origin
+# o' whose five target years had all been observed by o
+# (o' + lead + horizon - 1 <= o).
+#
+# Arms (each scored at the same evaluation origins):
+#   full_record       the shipped rule (the contest's winner on the full record)
+#                     with the shipped place info (today's typology and homes).
+#                     Its state counts must equal baseline_reliability's (parity).
+#   full_record_permit_only
+#                     the shipped rule with permit-only place info at o (size
+#                     classes from years <= o, no typology, no homes): isolates
+#                     the effect of present-day place types.
+#   nested            at each o, the contest is rerun on county cases matured by
+#                     o only, with permit-only place info at o, and its choosing
+#                     rule (coverage band, tolerance, simplest; assumptions/
+#                     backtest.yaml contest and the ledger's selection tolerance)
+#                     picks the rule; that rule is then scored at o.
+# Held from the full record in every arm (disclosed, not rebuilt): the
+# bias-correction choice, the small-sample prior and the growth-aware widening.
+#
+# Scoring at o (as baseline_reliability):
+#   state range  rebuilt from the state's past state-total cases matured by o
+#                (q10, q50, q90; P50 = projection x q50 if the bias correction is
+#                kept), then the same small-sample and growth-aware widening.
+#   county range the contest's leave-one-county-out pool of other counties'
+#                matured cases in the case's size class at its own origin.
+#   caught       P10 <= actual five-year total <= P90 (edges count).
+# Evaluation origins: those where the shipped state range is scored by
+# baseline_reliability (at least min_past_origins matured state cases). An
+# origin where the nested contest has no rule with a finite score is counted
+# as unscored for that arm and reported.
+#
+# Reported per state and arm: state covered / cases, mean state width
+# ((P90 - P10) / actual), median |log(actual / P50)| of the state P50, county
+# covered / cases, the rule picked at each origin, and how many origins the
+# nested pick equals the shipped rule. A fold audit lists, for each origin, the
+# selection origins and their last target year (never after o), the evaluation
+# target years, and asserts no selection case was unmatured.
+#
+# Decision: none. Descriptive only; it never changes the shipped rule or any
+# range. Results go to the file named by results whatever they show.
+nested_selection:
+  written_on: 2026-11-26
+  states: [PA, VT, MA, WY]
+  arms: [full_record, full_record_permit_only, nested]
+  candidates: contest.rules
+  choosing_rule: contest_choose_winner
+  lead_horizon: same_as_forecast
+  matured: "o' + lead + horizon - 1 <= o"
+  selection_cases: county_cases_matured_by_origin
+  place_info_nested: permit_only_size_classes_through_origin
+  held_from_full_record: [bias_correction, small_sample_prior, growth_widening]
+  state_scoring: baseline_reliability_state_method
+  county_scoring: baseline_reliability_county_method
+  evaluation_origins: baseline_reliability_state_scored_origins
+  min_past_origins: 8
+  caught: "P10 <= actual <= P90"
+  metrics: [state_covered, state_cases, state_width, state_median_abs_log_error,
+            county_covered, county_cases, rule_by_origin, agreement_with_shipped]
+  parity: full_record_state_counts_equal_baseline_reliability
+  decision: none_descriptive
+  results: assumptions/calibration/nested_selection.yaml

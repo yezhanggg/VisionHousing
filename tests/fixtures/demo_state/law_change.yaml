@@ -1,0 +1,19 @@
+change_id: dm_ridge_parking_2026
+geoid: '9800100100'
+name: Ridge city
+fields:
+  parking_min_per_unit_sf:
+    original: 2
+    revised: 0
+  parking_min_per_unit_mf:
+    original: 1.5
+    revised: 0
+adopted_on: '2026-08-04'
+effective_date: '2026-09-01'
+reviewed_on: '2026-11-20'
+appeal:
+  filed_on: '2026-09-20'
+  court_status: challenged
+  stayed: false
+note: Synthetic. Ridge city removes its parking minimums; one appeal is pending, with
+  no stay, so the new rule is in force.

@@ -1,0 +1,37 @@
+version: 1
+snapshot:
+  read_on: '2026-07-15'
+  synthetic: true
+records:
+- citation: "Ridge city zoning code \xA7 4 (synthetic)"
+  jurisdiction: '9800100100'
+  housing_type: parking
+  review: verified
+  sources: &id001
+  - synthetic:demo_state/law_change.yaml
+  provision_id: dm_ridge_parking
+  record_id: dm_ridge_parking_original
+  status: legally_effective
+  effect: restricts
+  start: '2015-03-01'
+  end: '2026-09-01'
+  verified_on: '2026-07-15'
+  end_verified_on: '2026-11-20'
+  superseded_by: dm_ridge_parking_revised
+  scope: 'Off-street parking: 2 spaces per single-family home, 1.5 per apartment'
+- citation: "Ridge city zoning code \xA7 4 (synthetic)"
+  jurisdiction: '9800100100'
+  housing_type: parking
+  review: verified
+  sources: *id001
+  provision_id: dm_ridge_parking
+  record_id: dm_ridge_parking_revised
+  status: legally_effective
+  effect: allows
+  start: '2026-09-01'
+  verified_on: '2026-11-20'
+  adopted_on: '2026-08-04'
+  supersedes: dm_ridge_parking_original
+  court_status: challenged
+  scope: No off-street parking minimum
+  note: Appeal filed 2026-09-20; no stay.

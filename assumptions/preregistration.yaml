@@ -12,7 +12,9 @@
 #   visionhousing evidence-retro run        (retro_design)
 #   visionhousing evidence-retro check      (retro_design, and the results' design_sha256)
 #   visionhousing evidence-retro audit      (retro_design, retro_treatment_audit)
+#   visionhousing evidence-retro current-pool (retro_design, retro_treatment_audit, retro_current_pool)
 #   visionhousing validate-cards            (validation_card_scores)
+#   visionhousing validate-nested-selection (nested_selection)
 #
 # Fingerprint: SHA-256 of json.dumps(block, sort_keys=True, separators=(",", ":"),
 # default=str), where block is the YAML as read by yaml.safe_load. Comments and layout
@@ -143,3 +145,27 @@ blocks:
       state_holdout_check. Written, fingerprinted here and logged in the decision log
       (2026-11-25 18:02Z) before any of these scores was computed; the coverage counts
       themselves were already published by their own studies.
+  nested_selection:
+    file: assumptions/validation_nested_selection.yaml
+    key: nested_selection
+    sha256: 034d3eb8c0f17418a5d88eee6662080f136a7ce236864b02e1b9175751e91741
+    recorded_on: 2026-11-26
+    logged_before_first_score: true
+    note: >-
+      Nested rolling-origin selection of the baseline rule (rule chosen at each past
+      start year from matured cases only, permit-only place types). Descriptive; no
+      decision. Written, fingerprinted here and logged in the decision log
+      (2026-11-26 19:07Z) before the study code existed or any score was computed.
+  retro_current_pool:
+    file: assumptions/evidence/retro_current_pool.yaml
+    key: retro_current_pool
+    sha256: 5ce1d509ecb7f50f3d722653fa51017df2930274fcc23e65232b7f0a8438e4a7
+    recorded_on: 2026-11-26
+    logged_before_first_score: true
+    note: >-
+      The audited retrospective panel re-scored on today's comparison pool (68 offices;
+      9 more states excluded by the original pool rule with today's records), shown
+      beside the published 81-office record. Written, fingerprinted here and logged in
+      the decision log (2026-11-26 19:10Z) before any estimate on that pool was
+      computed. The 81-office results and today's pool size had been seen.
+      retro_design and retro_treatment_audit are unchanged.

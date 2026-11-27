@@ -121,6 +121,14 @@ mix method:
 The prototype method is not changed by the floor (the engine applies the floor
 to the mix method only).
 
+Town bylaws (variant ``vt_missing_middle_town_bylaws``). ``floor.local`` may
+hold :class:`LocalLevel` entries: towns whose verified, in-force bylaw reading
+says how many homes its districts already allow by right. On a tract's lots
+inside such a town (share by 2020 housing units) "already allowed" becomes
+``max(state floor comparator, town level)``; the rest of the tract keeps the
+state floor. With no entries (the benchmark) nothing changes, draw for draw.
+Record ``floor_town_bylaw_share`` gives the share of eligible lots reached.
+
 Files and purity
 ----------------
 :func:`missing_middle_funnel` is pure: tables and ledger in, result out. Its
@@ -165,6 +173,7 @@ __all__ = [
     "SQ_M_PER_SQ_FT",
     "STAGES",
     "TYPOLOGIES",
+    "LocalLevel",
     "MiddleChoice",
     "MiddleFloor",
     "MiddleResult",
@@ -362,6 +371,35 @@ class MiddleFloor:
     schedule: Any
     sewer_share: np.ndarray
     source_ids: tuple[str, ...] = ()
+    local: tuple[LocalLevel, ...] = ()
+
+
+@dataclass(frozen=True)
+class LocalLevel:
+    """One town's own bylaw on the reform's lots (variant ``vt_missing_middle_town_bylaws``).
+
+    Where a verified, in-force town reading says its districts already allow
+    more homes by right than the state floor, that part of a tract's lots uses
+    the town's level as "already allowed": the comparator there is
+    ``max(state floor comparator, town level)`` for every service class and
+    year. The engine builds it (:func:`visionhousing.engine.law_floor.town_levels_for`).
+
+    Attributes:
+        place_id: The reading's place id (``assumptions/law/local_readings.yaml``).
+        name: Town name, for notes.
+        share: Per tract, the share of the tract's lots inside the town
+            (2020 housing units of the tract piece / the tract's), shape (tracts,).
+        current: Units the town's bylaw allows by right on the reform's lots,
+            per window year (the smallest over its listed districts, each read
+            with the state floor of that year).
+        frozen: The same on the freeze date ("freeze today's rules").
+    """
+
+    place_id: str
+    name: str
+    share: np.ndarray
+    current: tuple[int, ...]
+    frozen: int
 
 
 # ---------------------------------------------------------------- scenario hooks
@@ -956,7 +994,7 @@ def missing_middle_funnel(
     authorized = account.gross_additional
     net = account.net_if_completed
     frozen_authorized = None
-    if floor is not None and _same_schedule(floor.schedule):
+    if floor is not None and _same_rights(floor):
         frozen_authorized = authorized  # the same rights every year: no difference, exactly
     elif floor_view is not None:
         legal_f, alt_f = floor_view["frozen"]
@@ -1110,6 +1148,33 @@ def _same_schedule(sched: Any) -> bool:
     )
 
 
+def _same_rights(floor: MiddleFloor) -> bool:
+    """:func:`_same_schedule`, and every town level the same in each year as on the freeze date."""
+    if not _same_schedule(floor.schedule):
+        return False
+    for lv in floor.local:
+        for c in ("served", "unserved"):
+            if _comparator(floor.schedule, c, False, lv) != _comparator(
+                floor.schedule, c, True, lv
+            ):
+                return False
+    return True
+
+
+def _comparator(
+    sched: Any, service: str, frozen: bool, level: LocalLevel | None = None
+) -> tuple[int | None, ...]:
+    """Units already allowed per year; inside a town reading, at least the town's level."""
+    base = sched.comparator(service, frozen)
+    if level is None:
+        return base
+    town = (level.frozen,) * len(base) if frozen else tuple(level.current)
+    if len(town) != len(base):
+        raise ValueError(f"{level.place_id}: town levels do not match the schedule's years")
+    pairs = zip(base, town, strict=True)
+    return tuple(None if m is None else max(int(m), int(t)) for m, t in pairs)
+
+
 def _floor_view(
     floor: MiddleFloor,
     col: Mapping[str, np.ndarray],
@@ -1143,7 +1208,7 @@ def _floor_view(
         raise ValueError("floor schedule years do not match the funnel's years")
 
     def one(
-        frozen: bool,
+        frozen: bool, level: LocalLevel | None = None
     ) -> tuple[dict[int, np.ndarray], dict[int, np.ndarray], dict[int, np.ndarray]]:
         legal: dict[int, np.ndarray] = {}
         alt: dict[int, np.ndarray] = {}
@@ -1151,7 +1216,7 @@ def _floor_view(
         for k in TYPOLOGIES:
             parts_l, parts_a, parts_s = [], [], []
             for c in ("served", "unserved"):
-                comp = sched.comparator(c, frozen)
+                comp = _comparator(sched, c, frozen, level)
                 if any(m is None for m in comp):
                     raise ValueError(f"state floor for {c} lots is unknown; cannot apply it")
                 lk = np.zeros((ys.shape[0], 1))
@@ -1177,12 +1242,36 @@ def _floor_view(
             alt_lots[k] = served * parts_s[0] + (1.0 - served) * parts_s[1]
         return legal, alt, alt_lots
 
-    cur, frz = one(False), one(True)
+    def blended(frozen: bool) -> tuple[dict[int, np.ndarray], ...]:
+        """The state floor's view, with each town reading's part of the tracts swapped in."""
+        out = one(frozen)
+        if not floor.local:
+            return out
+        shares = [np.clip(np.asarray(lv.share, dtype=float), 0.0, 1.0) for lv in floor.local]
+        for w in shares:
+            if w.shape != (n_tracts,):
+                raise ValueError(f"town reading share must have shape ({n_tracts},)")
+        rest = np.clip(1.0 - sum(shares), 0.0, 1.0)[None, :]
+        mixed = tuple({k: part[k] * rest for k in TYPOLOGIES} for part in out)
+        for lv, w in zip(floor.local, shares, strict=True):
+            town = one(frozen, lv)
+            for acc, part in zip(mixed, town, strict=True):
+                for k in TYPOLOGIES:
+                    acc[k] = acc[k] + part[k] * w[None, :]
+        return mixed
+
+    cur, frz = blended(False), blended(True)
+    town_share = (
+        np.clip(sum(np.asarray(lv.share, dtype=float) for lv in floor.local), 0.0, 1.0)
+        if floor.local
+        else np.zeros(n_tracts)
+    )
     return {
         "current": cur[:2],
         "frozen": frz[:2],
         "alt_lots": {"current": cur[2], "frozen": frz[2]},
         "served": served,
+        "town_share": town_share,
     }
 
 
@@ -1275,6 +1364,25 @@ def _floor_records(
             tier=1,
         ),
     }
+    if floor.local:
+        with np.errstate(divide="ignore", invalid="ignore"):
+            town = (eligible * view["town_share"][None, :]).sum(axis=1)
+            town = np.where(elig > 0, town / np.where(elig > 0, elig, 1), 0.0)
+        names = ", ".join(f"{lv.name} ({max(lv.current)})" for lv in floor.local)
+        out["floor_town_bylaw_share"] = rec.from_draws(
+            "share of eligible lots where a verified town bylaw sets the units already allowed "
+            f"({sched.state}: {names})",
+            town,
+            "share",
+            expression=(
+                "the sum over tracts of eligible lots x share of the tract's 2020 housing units "
+                "inside a town whose verified, in-force bylaw is read / eligible lots; there "
+                "already allowed = max(state floor comparator, the town's level)"
+            ),
+            inputs=served_inputs,
+            source_ids=src,
+            tier=1,
+        )
     return out
 
 

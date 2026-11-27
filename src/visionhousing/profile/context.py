@@ -51,6 +51,7 @@ __all__ = [
 ]
 
 SYNTHETIC_VINTAGE = "synthetic test data (Testland)"
+"""Testland's vintage text; another synthetic pack names itself (``ProfileContext.vintage``)."""
 _TEXT = ("geoid", "county", "tract", "stop_id", "feed_id", "ntd_id")
 STATE_NAMES = {"TL": "Testland (synthetic test state)"}
 
@@ -298,20 +299,35 @@ class ProfileContext:
         """The pack's fingerprint, when it has a manifest."""
         return (self.manifest or {}).get("pack_hash")
 
+    @property
+    def pack_name(self) -> str:
+        """The pack's own name, for a synthetic pack's vintage text.
+
+        ``name`` in its manifest or data dictionary, else the state's name without a
+        bracketed note ("Testland (synthetic test state)" gives "Testland").
+        """
+        for doc in (self.manifest or {}, self.dictionary):
+            name = doc.get("name")
+            if isinstance(name, str) and name.strip():
+                return name.strip()
+        return self.state_name.split(" (", 1)[0].strip() or self.state
+
     # ------------------------------------------------------------------ sources
 
     def vintage(self, source_id: str) -> str:
         """The edition of a source as used in this pack.
 
-        Testland: "synthetic test data (Testland)". A real state: the version in
-        the pack manifest, else the registry's vintage.
+        A synthetic pack: "synthetic test data (<its name>)", the name the pack gives
+        itself (``name`` in its manifest or data dictionary), else the state's name
+        without its bracketed note ("Testland", "Demo state"). A real state: the
+        version in the pack manifest, else the registry's vintage.
 
         Raises:
             KeyError: The id is not in ``sources.yaml``.
         """
         entry = self.registry[source_id]
         if self.synthetic:
-            return SYNTHETIC_VINTAGE
+            return f"synthetic test data ({self.pack_name})"
         for row in (self.manifest or {}).get("provenance", []):
             if row.get("id") == source_id and row.get("version"):
                 return str(row["version"])

@@ -1,0 +1,108 @@
+# Cross-state comparison records: WY.
+#
+# One record per law, court decision, program or study. Format and checks:
+# src/visionhousing/evidence/schema.py; method: docs/modules/evidence_states.md.
+# verified: true only when the citation and every date were read on an official
+# page on the retrieved date; otherwise verification_note says what is missing.
+# Summaries are our own words. Context only: no number here enters a model run.
+#
+# A documented search of the Wyoming statutes, every bill title of the 2024,
+# 2025 and 2026 sessions and the full text of every act enacted in those years
+# (wyoleg.gov, 2026-11-26) found no statewide ADU, missing-middle,
+# transit-oriented density, parking-minimum or development-fee reform; see
+# assumptions/law/states/wy.yaml. The records below are the one enacted act
+# that bears on permitting and the one fee bill that did not pass.
+
+version: 1
+records:
+- id: wy.hb0002_2026_fast_track_permits
+  kind: policy
+  state: WY
+  jurisdiction: statewide
+  policy_types:
+  - permit_timing
+  title: 'Wyoming Fast Track Permits Act (2026 HB0002): residential permit shot clock'
+  citation: W.S. 16-13-101 and 16-13-102 (2026 Session Laws ch. 42, Enrolled Act No. 16)
+  url: https://wyoleg.gov/2026/Enroll/HB0002.pdf
+  session: '2026'
+  bill: HB0002
+  enacted_date: 2026-03-05
+  effective_dates:
+  - date: 2026-07-01
+    applies_to: Residential building permit applications filed on or after this date
+  geographic_scope: Every city, town and county that zones and has adopted an International Residential
+    Code. Applies to permits for a building of one or two homes, at most three storeys and 3,000 sq
+    ft of finished floor per home.
+  exclusions:
+  - Does not change what zoning allows, parking minimums or impact fees
+  - Inspections are still required after a permit is deemed approved
+  implementation_status: legally_effective
+  litigation:
+    status: none_known
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Not one of the five benchmark reforms; context for ADU and duplex permits, which are a dwelling
+    of one or two units under the act.
+  - A local government must say within 10 business days whether an application is complete and decide
+    a complete one within 30 calendar days, or the permit is deemed approved. The 10% fee cut applies
+    only to conditions added after approval.
+  - How often local governments meet the clock has not been measured.
+  retrieved: 2026-11-26
+  verified: true
+  verification_note: Enrolled act text read on wyoleg.gov (effective-date section and § 16-13-102(c),
+    (g)); signed date 2026-03-05, chapter 42 and effective date 2026-07-01 from the legislature's bill
+    record.
+  sources:
+  - label: 2026 HB0002 enrolled act (Wyoming Legislature)
+    url: https://wyoleg.gov/2026/Enroll/HB0002.pdf
+    official: true
+  - label: Wyoming Statutes Title 16 (chapter 13, building permit timelines)
+    url: https://wyoleg.gov/statutes/compress/title16.pdf
+    official: true
+  discovered_via: search
+- id: wy.hb0197_2025_exaction_fee_limits
+  kind: policy
+  state: WY
+  jurisdiction: statewide
+  policy_types:
+  - fees
+  title: 'Wyoming 2025 HB0197: limits on housing exaction and mitigation fees (not enacted)'
+  citation: 2025 HB0197 (introduced)
+  url: https://wyoleg.gov/2025/Introduced/HB0197.pdf
+  session: '2025'
+  bill: HB0197
+  enacted_date: null
+  effective_dates: []
+  geographic_scope: Would have applied to every city, town and county charging an affordable or workforce
+    housing exaction or mitigation fee.
+  exclusions: []
+  implementation_status: lapsed
+  litigation:
+    status: not_applicable
+    note: ''
+    citation: null
+    url: null
+  outcome_measure: null
+  denominator: null
+  horizon: null
+  observed_result: null
+  identification: not_applicable
+  caveats:
+  - Would have capped such fees at the lesser of a nexus study's percentage or 4% of construction cost,
+    with the first 3,000 sq ft of a single-family home exempt. Last action 2025-02-10, no committee report
+    before the cutoff; not law.
+  retrieved: 2026-11-26
+  verified: true
+  verification_note: Introduced text and the legislature's bill record read on wyoleg.gov.
+  sources:
+  - label: 2025 HB0197 introduced text (Wyoming Legislature)
+    url: https://wyoleg.gov/2025/Introduced/HB0197.pdf
+    official: true
+  discovered_via: search

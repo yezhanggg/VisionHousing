@@ -1,0 +1,483 @@
+# Reviewed zoning rules by district (the zone_rule table of the P5 pilot).
+#
+# One row = one rule for one jurisdiction, one zoning district (or "*" for every
+# district), one overlay ("none" for the base rule, an overlay code for a change an
+# overlay makes) and one validity interval, for one prototype lot. Read by
+# src/visionhousing/law/zone_rules.py; settings in assumptions/law/zone_weights.yaml.
+#
+# Rules of this file (checked by the loader):
+# - Every rule field is stated. "unknown" means nobody has read it, or the text read
+#   does not answer it. It is never "no". In an overlay row, "inherit" means the
+#   overlay does not change the base rule's value.
+# - A use that the text does not list stays "not_listed"; it counts as prohibited only
+#   where `exclusivity_clause: verified` cites a clause saying uses not listed are not
+#   allowed, and as a hearing route only where the clause gives one.
+# - review_state: verified_code (the enacted text, read by script from the
+#   jurisdiction's own site or legislative system), guidance (the jurisdiction's own
+#   published guidance, not the code), unread (no text read; every field unknown).
+# - valid_from is the first day in force; valid_from_unknown: true when the source does
+#   not say, and then the row counts only from its reviewed_on date (the same rule as the
+#   law timeline). valid_to is the first day no longer in force (empty when open).
+# - A district code is the map's own code (map field in zone_weights.yaml); a rule is
+#   never inferred from a district's name.
+# - Texts on commercial code hosts (eCode360, American Legal, Municode) are not read by
+#   script. Philadelphia's Zoning Code (Title 14) and the Pittsburgh Code (Title Nine) are
+#   published only there; their use tables and district standards are "not read by
+#   script", so the fields that depend on them stay unknown.
+
+version: 1
+prototype_note: >-
+  Prototype sf_lot: a lot with one existing single-family building (one home),
+  the lot every benchmark reform starts from.
+
+rows:
+  # ------------------------------------------------------------------ Philadelphia
+  - rule_id: phl_adu_rsa5
+    jurisdiction: "4210160000"
+    district: RSA-5
+    overlay: none
+    prototype: sf_lot
+    maps: [phl_current, phl_2021]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: ""
+    review_state: guidance
+    doc_id: phl_li_adu_checklist_2022
+    section_cite: "Philadelphia Zoning Code § 14-604(11), as summarised by L&I checklist PZ_004_INF (Rev 3.2022), Steps 1-3"
+    evidence_quote: "Is the property located in the RSA-5 or CMX-1 zoning districts?"
+    evidence_offset: 2275
+    text_sha256: 4fdc4ced8bbadba4dbd661af46a9fc015d8d7f442ef65b3afee5bc6cf56c0a80
+    reviewed_on: 2026-11-26
+    use_permission: unknown
+    review_path: unknown
+    units_by_right: unknown
+    multi_unit_review_path: unknown
+    density_far: unknown
+    height_max_ft: unknown
+    lot_min_sf: unknown
+    adu_permission: by_right
+    adu_forms: internal,existing_accessory
+    adu_max_sf: "800"
+    adu_owner_occupancy: "yes"
+    adu_max_per_lot: "1"
+    adu_min_lot_sf: "1600"
+    parking_min_sf: unknown
+    parking_min_adu: unknown
+    parking_overlay_change: none
+    utility_conditions: unknown
+    exclusivity_clause: unread
+    exclusions: >-
+      Principal building must be semi-detached or detached; lot of at least 1,600 sq ft on
+      which no more than one home is otherwise permitted; historic designation changes the
+      size limit; some overlays change the answer (overlay rows).
+    note: >-
+      City guidance, not the code: the checklist's own words (Step 3) are the owner lives
+      on the lot and records a deed restriction, one ADU per lot, at most 800 sq ft, inside
+      the main building or in a detached accessory building that existed when the code
+      took effect. A new detached ADU is therefore not allowed. Re-read by script
+      2026-11-26 from phila.gov (same text fingerprint as 2026-11-23). The Zoning Code
+      itself is published only on a commercial code host: not read by script. Bill 250042
+      (ADUs, § 14-604) is pending and not applied.
+  - rule_id: phl_adu_cmx1
+    jurisdiction: "4210160000"
+    district: CMX-1
+    overlay: none
+    prototype: sf_lot
+    maps: [phl_current, phl_2021]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: ""
+    review_state: guidance
+    doc_id: phl_li_adu_checklist_2022
+    section_cite: "Philadelphia Zoning Code § 14-604(11), as summarised by L&I checklist PZ_004_INF (Rev 3.2022), Steps 1-3"
+    evidence_quote: "Is the property located in the RSA-5 or CMX-1 zoning districts?"
+    evidence_offset: 2275
+    text_sha256: 4fdc4ced8bbadba4dbd661af46a9fc015d8d7f442ef65b3afee5bc6cf56c0a80
+    reviewed_on: 2026-11-26
+    use_permission: unknown
+    review_path: unknown
+    units_by_right: unknown
+    multi_unit_review_path: unknown
+    density_far: unknown
+    height_max_ft: unknown
+    lot_min_sf: unknown
+    adu_permission: by_right
+    adu_forms: internal,existing_accessory
+    adu_max_sf: "800"
+    adu_owner_occupancy: "yes"
+    adu_max_per_lot: "1"
+    adu_min_lot_sf: "1600"
+    parking_min_sf: unknown
+    parking_min_adu: unknown
+    parking_overlay_change: none
+    utility_conditions: unknown
+    exclusivity_clause: unread
+    exclusions: Same as RSA-5.
+    note: Same reading as phl_adu_rsa5.
+  - rule_id: phl_other_districts
+    jurisdiction: "4210160000"
+    district: "*"
+    overlay: none
+    prototype: sf_lot
+    maps: [phl_current, phl_2021]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: ""
+    review_state: unread
+    doc_id: phl_li_adu_checklist_2022
+    section_cite: "Philadelphia Zoning Code Title 14 (use tables § 14-602, dimensional standards § 14-701, parking § 14-802): not read by script"
+    evidence_quote: ""
+    evidence_offset: ""
+    text_sha256: ""
+    reviewed_on: 2026-11-26
+    use_permission: unknown
+    review_path: unknown
+    units_by_right: unknown
+    multi_unit_review_path: unknown
+    density_far: unknown
+    height_max_ft: unknown
+    lot_min_sf: unknown
+    adu_permission: unknown
+    adu_forms: unknown
+    adu_max_sf: unknown
+    adu_owner_occupancy: unknown
+    adu_max_per_lot: unknown
+    adu_min_lot_sf: unknown
+    parking_min_sf: unknown
+    parking_min_adu: unknown
+    parking_overlay_change: unknown
+    utility_conditions: unknown
+    exclusivity_clause: unread
+    exclusions: ""
+    note: >-
+      Every other district. The checklist offers "Other" and sends the reader to a flow
+      chart drawn as a picture (page 3), which the text reader cannot read; it is not an
+      exclusivity clause. So the ADU answer stays unknown here, as does every rule that
+      lives only in the code (on a commercial code host, not read by script).
+  - rule_id: phl_overlay_adu_ne
+    jurisdiction: "4210160000"
+    district: "*"
+    overlay: /NE
+    prototype: sf_lot
+    maps: [phl_current, phl_2021]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: ""
+    review_state: guidance
+    doc_id: phl_li_adu_checklist_2022
+    section_cite: "L&I checklist PZ_004_INF (Rev 3.2022), Step 2 question 1"
+    evidence_quote: "Is the property located in the /FNE or /NE Overlay Districts?"
+    evidence_offset: ""
+    text_sha256: 4fdc4ced8bbadba4dbd661af46a9fc015d8d7f442ef65b3afee5bc6cf56c0a80
+    reviewed_on: 2026-11-26
+    use_permission: inherit
+    review_path: inherit
+    units_by_right: inherit
+    multi_unit_review_path: inherit
+    density_far: inherit
+    height_max_ft: inherit
+    lot_min_sf: inherit
+    adu_permission: unknown
+    adu_forms: inherit
+    adu_max_sf: inherit
+    adu_owner_occupancy: inherit
+    adu_max_per_lot: inherit
+    adu_min_lot_sf: inherit
+    parking_min_sf: inherit
+    parking_min_adu: inherit
+    parking_overlay_change: inherit
+    utility_conditions: inherit
+    exclusivity_clause: inherit
+    exclusions: ""
+    note: >-
+      The checklist asks first whether the lot is in /FNE or /NE; what follows is in the
+      flow chart picture, not read. The overlay changes the ADU answer to unknown.
+  - rule_id: phl_overlay_adu_fne
+    jurisdiction: "4210160000"
+    district: "*"
+    overlay: /FNE
+    prototype: sf_lot
+    maps: [phl_current, phl_2021]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: ""
+    review_state: guidance
+    doc_id: phl_li_adu_checklist_2022
+    section_cite: "L&I checklist PZ_004_INF (Rev 3.2022), Step 2 question 1"
+    evidence_quote: "Is the property located in the /FNE or /NE Overlay Districts?"
+    evidence_offset: ""
+    text_sha256: 4fdc4ced8bbadba4dbd661af46a9fc015d8d7f442ef65b3afee5bc6cf56c0a80
+    reviewed_on: 2026-11-26
+    use_permission: inherit
+    review_path: inherit
+    units_by_right: inherit
+    multi_unit_review_path: inherit
+    density_far: inherit
+    height_max_ft: inherit
+    lot_min_sf: inherit
+    adu_permission: unknown
+    adu_forms: inherit
+    adu_max_sf: inherit
+    adu_owner_occupancy: inherit
+    adu_max_per_lot: inherit
+    adu_min_lot_sf: inherit
+    parking_min_sf: inherit
+    parking_min_adu: inherit
+    parking_overlay_change: inherit
+    utility_conditions: inherit
+    exclusivity_clause: inherit
+    exclusions: ""
+    note: As for /NE.
+  - rule_id: phl_overlay_adu_district_overlays
+    jurisdiction: "4210160000"
+    district: "*"
+    overlay: /FDO,/VDO,/NDO,/EDO
+    prototype: sf_lot
+    maps: [phl_current, phl_2021]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: ""
+    review_state: guidance
+    doc_id: phl_li_adu_checklist_2022
+    section_cite: "L&I checklist PZ_004_INF (Rev 3.2022), Step 2 question 3"
+    evidence_quote: "Is the property located in the /FDO, /VDO, /NDO or /EDO Overlay Districts?"
+    evidence_offset: ""
+    text_sha256: 4fdc4ced8bbadba4dbd661af46a9fc015d8d7f442ef65b3afee5bc6cf56c0a80
+    reviewed_on: 2026-11-26
+    use_permission: inherit
+    review_path: inherit
+    units_by_right: inherit
+    multi_unit_review_path: inherit
+    density_far: inherit
+    height_max_ft: inherit
+    lot_min_sf: inherit
+    adu_permission: unknown
+    adu_forms: inherit
+    adu_max_sf: inherit
+    adu_owner_occupancy: inherit
+    adu_max_per_lot: inherit
+    adu_min_lot_sf: inherit
+    parking_min_sf: inherit
+    parking_min_adu: inherit
+    parking_overlay_change: inherit
+    utility_conditions: inherit
+    exclusivity_clause: inherit
+    exclusions: ""
+    note: >-
+      Four council-district overlays the checklist names; the answer for them is in the
+      flow chart picture, not read. Each one changes the ADU answer to unknown.
+
+  # ------------------------------------------------------------------ Pittsburgh
+  - rule_id: pgh_before_ord31
+    jurisdiction: "4200361000"
+    district: "*"
+    overlay: none
+    prototype: sf_lot
+    maps: [pgh_current]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: 2026-10-29
+    timeline_record: pgh_adu_overlay_before_ord31
+    review_state: verified_code
+    doc_id: pgh_ord_2025_1545
+    section_cite: "Pittsburgh Zoning Code § 912.08 before Ordinance 31 of 2026 (struck text of Version 7, Section 37)"
+    evidence_quote: ""
+    evidence_offset: "234859"
+    text_sha256: b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67
+    reviewed_on: 2026-11-25
+    use_permission: unknown
+    review_path: unknown
+    units_by_right: unknown
+    multi_unit_review_path: unknown
+    density_far: unknown
+    height_max_ft: unknown
+    lot_min_sf: unknown
+    adu_permission: unknown
+    adu_forms: unknown
+    adu_max_sf: "800"
+    adu_owner_occupancy: "yes"
+    adu_max_per_lot: "1"
+    adu_min_lot_sf: unknown
+    parking_min_sf: unknown
+    parking_min_adu: "0"
+    parking_overlay_change: none
+    utility_conditions: unknown
+    exclusivity_clause: unread
+    exclusions: ADUs only inside an ADU Overlay District mapped on the Zoning District Map.
+    note: >-
+      The rule Ordinance 31 replaced: ADUs by right only inside an ADU overlay district,
+      owner on site, at most 800 sq ft, one per lot, exempt from parking. The overlay's
+      outline is not published as map data and the ordinance struck it, so which lots were
+      inside is unknown: the ADU answer is unknown everywhere. Its start is not stated, so
+      it applies on no date (law timeline); it is kept for the history.
+  - rule_id: pgh_ord31
+    jurisdiction: "4200361000"
+    district: "*"
+    overlay: none
+    prototype: sf_lot
+    maps: [pgh_current]
+    valid_from: 2026-10-29
+    valid_from_unknown: false
+    valid_to: ""
+    timeline_record: pgh_ord31_adu_effective
+    review_state: verified_code
+    doc_id: pgh_ord_2025_1545
+    section_cite: "Pittsburgh Zoning Code § 912.08.B.1 and C.2-C.8 (ADUs) and § 914.02.A (parking), as amended by Ordinance 31 of 2026"
+    evidence_quote: >-
+      Accessory Dwelling Units are permitted to be located on any lot where a primary use
+      is a Residential use, Community Center, or Religious Assembly use as defined in
+      Section 911.02;
+    evidence_offset: "237803"
+    text_sha256: b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67
+    reviewed_on: 2026-11-25
+    use_permission: unknown
+    review_path: unknown
+    units_by_right: unknown
+    multi_unit_review_path: unknown
+    density_far: unknown
+    height_max_ft: unknown
+    lot_min_sf: unknown
+    adu_permission: by_right
+    adu_forms: internal,detached,existing_accessory
+    adu_max_sf: "1000"
+    adu_owner_occupancy: "no"
+    adu_max_per_lot: "2"
+    adu_min_lot_sf: none
+    parking_min_sf: "0"
+    parking_min_adu: "0"
+    parking_overlay_change: none
+    utility_conditions: none
+    exclusivity_clause: unread
+    exclusions: >-
+      Lots whose primary use is not residential, community center or religious assembly
+      (a lot with a single-family home is residential). A detached ADU in a side or rear
+      setback, other than above an existing garage on a way, needs an administrator's
+      exception (§ 925.06.G.1(i)).
+    note: >-
+      Effective October 29, 2026 in every district: the rule is set by the lot's primary
+      use, not by its district. Chapter 914 is replaced; no automobile parking minimum
+      remains, only maximums (§ 914.02.A, offset 306671; timeline
+      pgh_ord31_parking_effective). What each district allows besides (homes per lot,
+      height, lot size) is in Title Nine on a commercial code host: not read by script.
+  - rule_id: pgh_parking_reduction_before_ord31
+    jurisdiction: "4200361000"
+    district: "*"
+    overlay: PRO
+    prototype: sf_lot
+    maps: [pgh_current]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: 2026-10-29
+    review_state: verified_code
+    doc_id: pgh_ord_2025_1545
+    section_cite: "Pittsburgh Zoning Code Chapter 914 before Ordinance 31 (Parking Reduction overlay, as mapped by the City)"
+    evidence_quote: ""
+    evidence_offset: ""
+    text_sha256: b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67
+    reviewed_on: 2026-11-26
+    use_permission: inherit
+    review_path: inherit
+    units_by_right: inherit
+    multi_unit_review_path: inherit
+    density_far: inherit
+    height_max_ft: inherit
+    lot_min_sf: inherit
+    adu_permission: inherit
+    adu_forms: inherit
+    adu_max_sf: inherit
+    adu_owner_occupancy: inherit
+    adu_max_per_lot: inherit
+    adu_min_lot_sf: inherit
+    parking_min_sf: unknown
+    parking_min_adu: inherit
+    parking_overlay_change: "reduced 25%, 50% or 100% of the base minimum (layer field reduction; some areas exempt residential)"
+    utility_conditions: inherit
+    exclusivity_clause: inherit
+    exclusions: ""
+    note: >-
+      Before Ordinance 31 the overlay reduced the Chapter 914 minimums by the share in the
+      City's layer; the base minimums themselves are in the code, not read, so the
+      reduced minimum stays unknown.
+  - rule_id: pgh_parking_reduction_after_ord31
+    jurisdiction: "4200361000"
+    district: "*"
+    overlay: PRO
+    prototype: sf_lot
+    maps: [pgh_current]
+    valid_from: 2026-10-29
+    valid_from_unknown: false
+    valid_to: ""
+    timeline_record: pgh_ord31_parking_effective
+    review_state: verified_code
+    doc_id: pgh_ord_2025_1545
+    section_cite: "Pittsburgh Zoning Code § 914.02.A, as amended by Ordinance 31 of 2026"
+    evidence_quote: ""
+    evidence_offset: "306671"
+    text_sha256: b6fcbc494e45bd06835cdcaec9a8f4ed95f2259618383af43113b75e3e023c67
+    reviewed_on: 2026-11-26
+    use_permission: inherit
+    review_path: inherit
+    units_by_right: inherit
+    multi_unit_review_path: inherit
+    density_far: inherit
+    height_max_ft: inherit
+    lot_min_sf: inherit
+    adu_permission: inherit
+    adu_forms: inherit
+    adu_max_sf: inherit
+    adu_owner_occupancy: inherit
+    adu_max_per_lot: inherit
+    adu_min_lot_sf: inherit
+    parking_min_sf: inherit
+    parking_min_adu: inherit
+    parking_overlay_change: none
+    utility_conditions: inherit
+    exclusivity_clause: inherit
+    exclusions: ""
+    note: No minimum remains to reduce; the overlay no longer changes the parking rule.
+
+  # ------------------------------------------------------------------ Frankstown (rural)
+  - rule_id: frankstown_all
+    jurisdiction: "4201327600"
+    district: "*"
+    overlay: none
+    prototype: sf_lot
+    maps: ["*"]
+    valid_from: ""
+    valid_from_unknown: true
+    valid_to: ""
+    review_state: verified_code
+    doc_id: frankstown_blair_zo_2007
+    section_cite: "Frankstown Township Zoning Ordinance (Amendment Ord. 100207-A, 2007): preamble item 4 (unlisted uses), Articles IV-VI (district uses)"
+    evidence_quote: >-
+      Residential District, only the following buildings, structures and uses shall be
+      permitted. SECTION 401. USES PERMITTED A. One (1) single family detached dwelling per
+      lot.
+    evidence_offset: "32653"
+    text_sha256: 79c1b483a6b689ab07eb0cf2cf16ad284f7f6e760126fb7ff7910487a3beec66
+    reviewed_on: 2026-11-24
+    use_permission: permitted
+    review_path: by_right
+    units_by_right: unknown
+    multi_unit_review_path: unknown
+    density_far: unknown
+    height_max_ft: unknown
+    lot_min_sf: unknown
+    adu_permission: not_listed
+    adu_forms: none
+    adu_max_sf: none
+    adu_owner_occupancy: none
+    adu_max_per_lot: "0"
+    adu_min_lot_sf: none
+    parking_min_sf: "2"
+    parking_min_adu: unknown
+    parking_overlay_change: none
+    utility_conditions: "Smallest lot (10,000 sq ft) only with public sewer (§ 403)"
+    exclusivity_clause: verified
+    exclusions: ""
+    note: >-
+      No district of the ordinance lists an ADU-type use, and uses not listed in Articles
+      IV-VI "are specifically prohibited" (preamble item 4, offset 4404), so ADUs are
+      prohibited in every district. Two parking spaces per dwelling. The township
+      publishes no district map as data, so the homes allowed per lot in each district
+      (one in the R district, § 401.A) cannot be placed on lots: unknown at this level.

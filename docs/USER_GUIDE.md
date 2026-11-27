@@ -264,6 +264,16 @@ evidence and the brief.
 - **About this chart:** the (i) under a chart opens its source and the longer method words.
 
 - **What it adds:** the homes added and the change from the baseline, with the verdict.
+- **Alternatives** (button under the headline, benchmark reforms only): one headline per reform,
+  and behind this one click a compact table of every named alternative the tool has built for
+  it, for example verified local parking minimums, the older Massachusetts 3A acre-share rule,
+  budget-capped ADU programs, the practical-capacity screen, project choice on shared lots and
+  the Census-comparable scope. Each row gives the homes added (middle and likely range), the
+  change from the headline worked out on the same simulated futures (the alternative minus the
+  headline in each future, then its middle and range), how often it is below or above the
+  headline, one line on why it exists, and whether it is built. An alternative that is not built
+  says why. The first opening after a change can take a few minutes on a large state; the static
+  website shows it only when it was exported.
 - **The funnel:** eligible lots, then lots with room, then lots where building pays, then homes
   permitted in five years. Each step shows a likely range and its formula. Pointing at a step
   shades the map by that stage, county by county (the other steps dim); the later homes steps

@@ -25,7 +25,11 @@ read-only, for one number (a reform's state headline or one county's figure):
   pre-registered reading rule; it moves Saint Paul's first treated year to 2024).
   When that file is absent or holds no records, the original run
   (``retro_results.yaml``) is read instead and a warning is logged;
-  :func:`retro_source` says which file was used.
+  :func:`retro_source` says which file was used. Its ``pools`` entry names
+  both comparison pools of the panel with their labels: the original pool (as
+  pre-registered, the one graded) and today's pool (``retro_current_pool_results.yaml``,
+  an update shown beside it and never graded, by that update's pre-registered
+  reading rule).
 
 Nothing here changes a number; every value it returns comes from those files
 and the engine result.
@@ -48,12 +52,14 @@ from visionhousing.ledger.loader import ROOT
 __all__ = [
     "CALIBRATION_DIR",
     "RETRO_AUDIT_PATH",
+    "RETRO_CURRENT_POOL_PATH",
     "RETRO_PATH",
     "backtest_rows",
     "best_evidence",
     "calibration_statuses",
     "law_inputs",
     "pack_sources",
+    "retro_pools",
     "retro_source",
     "source_classes",
     "state_law_on_file",
@@ -63,6 +69,7 @@ LOG = logging.getLogger(__name__)
 CALIBRATION_DIR = ROOT / "assumptions" / "calibration"
 RETRO_AUDIT_PATH = ROOT / "assumptions" / "evidence" / "retro_audit_results.yaml"
 RETRO_PATH = ROOT / "assumptions" / "evidence" / "retro_results.yaml"  # fallback (original run)
+RETRO_CURRENT_POOL_PATH = ROOT / "assumptions" / "evidence" / "retro_current_pool_results.yaml"
 TIER_CLASS = {2: "local", 1: "multi_state", 0: "national"}
 
 
@@ -275,11 +282,66 @@ def retro_source() -> dict[str, Any]:
         else the original run (``variant: "original"``, ``fallback: True``);
         ``file: None`` when neither file is on disk.
     """
+    pools = retro_pools()
     if _raw_records(RETRO_AUDIT_PATH):
-        return {"file": _rel(RETRO_AUDIT_PATH), "variant": "audited", "fallback": False}
-    if RETRO_PATH.is_file():
-        return {"file": _rel(RETRO_PATH), "variant": "original", "fallback": True}
-    return {"file": None, "variant": None, "fallback": True}
+        out = {"file": _rel(RETRO_AUDIT_PATH), "variant": "audited", "fallback": False}
+    elif RETRO_PATH.is_file():
+        out = {"file": _rel(RETRO_PATH), "variant": "original", "fallback": True}
+    else:
+        out = {"file": None, "variant": None, "fallback": True}
+    return {**out, "pools": pools}
+
+
+@lru_cache(maxsize=4)
+def _pool_sizes(stamp: tuple[int, ...]) -> tuple[int | None, int | None]:
+    def size(path: Path) -> int | None:
+        if not path.is_file():
+            return None
+        data = yaml.safe_load(path.read_text(encoding="utf-8")) or {}
+        pool = ((data.get("provenance") or {}).get("panel") or {}).get("pool")
+        return int(pool) if pool is not None else None
+
+    return size(RETRO_AUDIT_PATH), size(RETRO_CURRENT_POOL_PATH)
+
+
+def retro_pools() -> list[dict[str, Any]]:
+    """Both comparison pools of the retrospective panel, labelled, with which one is graded.
+
+    The original pool (as pre-registered; ``retro_audit_results.yaml``) is the
+    published record and the one the grades read. Today's pool
+    (``retro_current_pool_results.yaml``) is a pre-registered update shown
+    beside it and never graded. Pool sizes are read from each file's
+    provenance; a file not on disk is left out.
+    """
+    from visionhousing.evidence.retro_current_pool import pool_label
+
+    stamp = tuple(
+        p.stat().st_mtime_ns if p.is_file() else 0
+        for p in (RETRO_AUDIT_PATH, RETRO_CURRENT_POOL_PATH)
+    )
+    original, current = _pool_sizes(stamp)
+    out = []
+    if original is not None:
+        out.append(
+            {
+                "pool": "original",
+                "label": pool_label("original", original),
+                "offices": original,
+                "file": _rel(RETRO_AUDIT_PATH),
+                "graded": True,
+            }
+        )
+    if current is not None:
+        out.append(
+            {
+                "pool": "current",
+                "label": pool_label("current", current),
+                "offices": current,
+                "file": _rel(RETRO_CURRENT_POOL_PATH),
+                "graded": False,
+            }
+        )
+    return out
 
 
 def _rel(path: Path) -> str:

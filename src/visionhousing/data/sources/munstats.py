@@ -70,12 +70,14 @@ __all__ = [
     "crosswalk",
     "dced_county_fips",
     "export_url",
+    "fetch_block_places",
     "fetch_block_subdivisions",
     "fetch_munstats",
     "fetch_subdivision_population",
     "hidden_fields",
     "normalise_name",
     "parse_block_assignment",
+    "parse_block_places",
     "parse_munstats",
     "parse_subdivision_population",
     "zoning_regime",
@@ -84,6 +86,10 @@ __all__ = [
 SOURCE = "pa_dced_munstats"
 POP_SOURCE = "census_subcounty_pop"
 BAF_SOURCE = "census_baf_2020_mcd"
+BAF_PLACE_SOURCE = "census_baf_2020_place"
+NO_PLACE = "99999"
+"""Place code written for a block outside every incorporated place and CDP
+(the block assignment file leaves it blank)."""
 FORM_URL = "https://apps.dced.pa.gov/munstats-public/ReportInformation2.aspx?report=CountyMuniBuilding_Excel"
 HOST = "https://apps.dced.pa.gov"
 POP_YEAR = 2024
@@ -315,6 +321,19 @@ def parse_block_assignment(raw: bytes | str) -> pd.DataFrame:
     return pd.DataFrame({"block": frame["BLOCKID"], "cousub": frame["COUSUBFP"]})
 
 
+def parse_block_places(raw: bytes | str) -> pd.DataFrame:
+    """The 2020 block assignment file for places (incorporated places and CDPs).
+
+    Returns:
+        ``block`` (15 digits) and ``place`` (5 digits; :data:`NO_PLACE` when
+        the block is in no place).
+    """
+    text = raw.decode("utf-8-sig") if isinstance(raw, bytes) else raw
+    frame = pd.read_csv(io.StringIO(text), sep="|", dtype=str)
+    place = frame["PLACEFP"].fillna("").str.strip()
+    return pd.DataFrame({"block": frame["BLOCKID"], "place": place.where(place != "", NO_PLACE)})
+
+
 # --------------------------------------------------------------------------- crosswalk
 
 
@@ -457,6 +476,11 @@ def fetch_block_subdivisions(
 
     The zip (about 6 MB for Pennsylvania) is read in memory and only the two
     needed columns are kept, gzipped, in the cache.
+
+    Raises:
+        LookupError: The state's zip has no county subdivision member (a state
+            whose subdivisions are statistical census county divisions, such
+            as Wyoming).
     """
     from visionhousing.data.sources import STATE_FIPS
 
@@ -469,10 +493,49 @@ def fetch_block_subdivisions(
     url = source.url(fips=fips, postal=postal)
     raw = (client or HttpClient()).get_bytes(url)
     with zipfile.ZipFile(io.BytesIO(raw)) as zf:
-        member = next(n for n in zf.namelist() if n.endswith("_MCD.txt"))
+        member = next((n for n in zf.namelist() if n.endswith("_MCD.txt")), None)
+        if member is None:
+            raise LookupError(
+                f"{url} has no county subdivision member: the state's county subdivisions "
+                "are census county divisions, which have no block assignment file"
+            )
         table = parse_block_assignment(zf.read(member))
     dest.parent.mkdir(parents=True, exist_ok=True)
     table.to_csv(dest, index=False, compression={"method": "gzip", "mtime": 0})
     if manifest is not None:
         mf.record(mf.entry_for_file(BAF_SOURCE, url, dest, "2020", root=mf.ROOT), manifest)
+    return table
+
+
+def fetch_block_places(
+    state: str,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    manifest: Path | None = mf.MANIFEST_PATH,
+) -> pd.DataFrame:
+    """Download (or reuse) the 2020 block-to-place file for one state.
+
+    Same zip as :func:`fetch_block_subdivisions` (the Census Bureau's block
+    assignment files); only the incorporated place and CDP member is read and
+    two columns are kept, gzipped, in the cache. Used where a city is a Census
+    place but not a county subdivision (Wyoming).
+    """
+    from visionhousing.data.sources import STATE_FIPS
+
+    fips = to_state_fips(state)
+    postal = next(k for k, v in STATE_FIPS.items() if v == fips)
+    dest = Path(cache) / "local" / "census" / f"block_place_2020_{fips}.csv.gz"
+    if dest.exists():
+        return pd.read_csv(dest, dtype=str)
+    source = get_source(BAF_PLACE_SOURCE)
+    url = source.url(fips=fips, postal=postal)
+    raw = (client or HttpClient()).get_bytes(url)
+    with zipfile.ZipFile(io.BytesIO(raw)) as zf:
+        member = next(n for n in zf.namelist() if n.endswith("_INCPLACE_CDP.txt"))
+        table = parse_block_places(zf.read(member))
+    dest.parent.mkdir(parents=True, exist_ok=True)
+    table.to_csv(dest, index=False, compression={"method": "gzip", "mtime": 0})
+    if manifest is not None:
+        mf.record(mf.entry_for_file(BAF_PLACE_SOURCE, url, dest, "2020", root=mf.ROOT), manifest)
     return table

@@ -62,6 +62,38 @@ provisions:
           # The protection yields to flood hazard and fluvial erosion area
           # bylaws adopted under 24 V.S.A. § 4424.
           yields_to: [flood_hazard_bylaw, fluvial_erosion_bylaw]
+  ma_40a_3_adu:
+    state: MA
+    housing_type: adu
+    # The timeline records are in assumptions/law/states/ma.yaml
+    # (visionhousing.law.ma_adu reads that file). Text read by script on
+    # malegislature.gov: c. 40A § 1A (ADU definition) and § 3 (ADU paragraph),
+    # and St. 2024 c. 150 §§ 7-8 (re-read 2026-11-26, unchanged).
+    versions:
+      ma_adu_by_right_effective:
+        adu:
+          units_by_right: 1          # a second ADU needs a special permit (§ 3)
+          districts: [single_family_residential]
+          # § 1A: not larger than 1/2 the principal dwelling's gross floor area
+          # or 900 sq ft, whichever is smaller.
+          size_cap:
+            share_of_principal: 0.5
+            max_sqft: 900
+          # § 3: not more than 1 added space may be required; none for an ADU
+          # not more than 0.5 miles from a commuter rail station, subway
+          # station, ferry terminal or bus station.
+          parking:
+            max_added_spaces: 1
+            none_within_miles: 0.5
+            station_types: [commuter_rail, subway, ferry_terminal, bus_station]
+          owner_occupancy_required: false   # § 3: may not be required
+          # Chapter 40A is not Boston's zoning law (Boston zones under its own
+          # enabling act, St. 1956 c. 665). Read by script: § 3's other
+          # paragraphs name Boston when they reach it ("including ... the city
+          # of Boston"); the ADU paragraph does not, and St. 2024 c. 150 §§ 7-8
+          # amend chapter 40A only. The 1956 act is not on malegislature.gov
+          # (page not found, 2026-11-26), so the exclusion's own text was not read.
+          excluded_municipalities: [boston]
 
 # How the missing-middle funnel applies the § 4412(1)(D) floor
 # (visionhousing.law.rights.middle_floor_schedule, used by
@@ -107,3 +139,57 @@ missing_middle_application:
   history:
     version: vt_4412_1d_act179
     since: 2023-07-01
+
+# How the named variant ma_adu_state_floor applies the Massachusetts ADU
+# right (visionhousing.law.ma_adu, used by the ADU funnel in Massachusetts
+# runs with option legal: ma_state_floor). The benchmark keeps its labelled
+# statewide range (assumptions/calibration/already_legal_ma.yaml); this
+# variant REPLACES that range (never adds to it) with a share worked out per
+# tract from the statute's terms above.
+#
+# On a single-family lot the state law already gives one ADU by right. The
+# benchmark (an ADU of at least adu.min_size_sqft, detached or semi-detached,
+# no added parking) adds a right only where:
+#   - Boston: chapter 40A does not apply;
+#   - the lot is outside a single-family residential district (§ 3 covers
+#     those districts only);
+#   - the § 1A size cap is below the benchmark's size: half the principal
+#     dwelling is under adu.min_size_sqft (and the town does not already
+#     allow more), or the 900 sq ft cap is below it;
+#   - the town may require the one added space: the lot is more than the
+#     statute's distance from a listed station and the town requires it.
+# Owner occupancy adds nothing: § 3 already forbids that requirement.
+# Lots where the only gap is the parking space count at
+# adu.conditions_exposure_share (the same "by right with conditions" rule the
+# law hooks use); lots short of a by-right ADU of the benchmark's size count
+# in full.
+ma_adu_application:
+  states: [MA]
+  provision: ma_40a_3_adu
+  # The right is read in force on this day of the window's first year.
+  read_on: "07-01"
+  # Listed station types as GTFS route types in the pack's transit_stops
+  # (route_types). A bus station is a terminal, not every bus stop, and the
+  # pack's stop list cannot tell one apart, so no bus stop counts: the
+  # near-station share is a lower bound and the parking gap an upper bound.
+  station_route_types:
+    commuter_rail: [2]
+    subway: [0, 1]        # heavy rail and the light-rail Green Line / Mattapan line
+    ferry_terminal: [4]
+    bus_station: []
+  # Boston as a county subdivision (Census 2020): Suffolk County, cousub 07000.
+  boston:
+    county: "25025"
+    cousub: "07000"
+  # Ledger entries (assumptions/parameters.yaml), all labelled judgement.
+  ledger:
+    single_family_district_share: adu.ma_sf_district_share
+    primary_below_floor_share: adu.ma_primary_below_floor_share
+    local_size_allows_benchmark_share: adu.ma_local_size_allows_benchmark_share
+    town_requires_space_share: adu.ma_town_requires_space_share
+    boston_share_without_table: adu.ma_boston_share_of_suffolk_lots
+    parking_only_exposure: adu.conditions_exposure_share
+  # adu.ma_primary_below_floor_share is the share of primary dwellings below
+  # this floor area. It must equal adu.min_size_sqft / size_cap.share_of_principal
+  # (checked on use), so a changed benchmark size cannot silently reuse it.
+  primary_below_floor_at_sqft: 1200

@@ -308,3 +308,16 @@ def test_committed_exports_list_hearing_briefs_that_exist(state):
         assert run_id(run, key) in text
         assert '<link rel="stylesheet" href="../../hearing.css">' in text
     assert (DATA / "hearing.css").read_text() == hearing.CSS + "\n"
+
+
+def test_cli_law_section_reads_the_loaded_contexts_pack_folder(tmp_path):
+    """The brief's law tables come from the folder the context was read from, not pack_dir."""
+    from types import SimpleNamespace
+
+    from visionhousing.engine.context import PACK_FOLDER_KEY, pack_dir
+
+    copy = tmp_path / "packs" / "PA"
+    ctx = SimpleNamespace(state="PA", derived={PACK_FOLDER_KEY: copy})
+    assert hearing.context_folder(ctx) == copy
+    bare = SimpleNamespace(state="PA", derived={})
+    assert hearing.context_folder(bare) == pack_dir("PA")

@@ -30,7 +30,7 @@ a policymaker asks next.
 | `interactions.py` | Net interaction (state and county), last-in effects and interaction shares, the ordered allocation, the named mechanisms with rule-written sentences, the waterfall payload and its exactness check |
 | `dials.py` | Each dial's levels (state record and county table), paired steps, "each step adds about X homes", the diminishing-return level, the target seeker (`invert_curve`) and the ADU adoption threshold |
 | `matrix.py` | ADU take-up × construction cost: P10 / P50 / P90 per cell, one funnel run per cost column, take-up from the cached feasible stage |
-| `ablation.py` | `masked_context` (hide data inputs so fallbacks fire), `context_at_tier`, the four measures (middle shift paired per draw), tiers 2/1/0, one-input masks and the "hurts most" ranking |
+| `ablation.py` | `masked_context` (hide data inputs so fallbacks fire; the masked context keeps the folder its state was read from), `context_at_tier`, the four measures (middle shift paired per draw), tiers 2/1/0, one-input masks and the "hurts most" ranking |
 | `ranking.py` | Top inputs per reform by rank correlation; rankings with each at its low and high end; overlapping pairs and paired win shares |
 | `common.py` | Records, compact county tables, plain number wording |
 | `__init__.py` | `comparisons(state, part=...)`: runs the parts asked for on one bench |

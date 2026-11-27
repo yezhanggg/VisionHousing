@@ -20,11 +20,13 @@
 | `context.py` | `load_context(state)`: reads Testland (`state="TL"`) or `data/packs/<STATE>/`; the only file reading in the engine |
 | `registry.py` | The common reform signature, `ReformResult`, `RunContext`, `Draws`, `register` |
 | `adapters.py` | Thin adapters for `scenarios/adu.py` (also the two Pennsylvania ADU bills), `scenarios/fees.py`, `scenarios/parking.py` |
-| `law_floor.py` | `middle_floor_for(state, ledger, method)`: the dated state floor handed to the missing-middle funnel (Vermont's § 4412(1)(D) schedule from `law/rights.py` plus the pack's mapped sewer share); scenario modules never read the law files themselves |
+| `law_floor.py` | `middle_floor_for(state, ledger, method, local=...)`: the dated state floor handed to the missing-middle funnel (Vermont's § 4412(1)(D) schedule from `law/rights.py` plus the pack's mapped sewer share; with `local="town_bylaws"` also the verified town bylaws, `town_levels_for`); `local_parking_minimums(code)`: verified, in-force parking minimums from the Vermont and Wyoming readings for the parking option `minimums: local_readings`. Settings: `local_readings` in `assumptions/variants.yaml`. Scenario modules never read the law files themselves |
+| `zone_scope.py` | The zoning-district reading for the named ADU variants `adu_zoning_districts` (verified code only) and `adu_zoning_districts_guidance` (also published guidance, a sensitivity): `district_rule(state, option=..., building_types=..., ledger=...)` turns the pack's `rule_area_weights` tract rows into each tract's already-legal share, `(1 - z) x benchmark share + sum of z_k x legal_k`, handed to the ADU funnel as `legal_rule` (ADU option `legal`); `jurisdiction_mix` gives the law-changes district view. Settings: `assumptions/law/zone_scope.yaml`. See [zone_rules.md](zone_rules.md#engine-use-named-adu-variants-and-the-district-view) |
 | `packages.py` | Package rules: interactions and the lot-overlap hook |
 | `capacity.py` | The run option `capacity_screen` and the `capacity_screen` reform option (variants `*_capacity_screen`): practical capacity multiplier per tract for sewer, flood zone and steep slope (`Result.capacity`; see [capacity.md](capacity.md)) |
 | `market.py` | The package option `market` (`"choice"`, `"choice+capacity"`): project choice on shared lots and a shared market capacity limit, beside today's package (`Result.market`; see [market.md](market.md)) |
-| `montecarlo.py` | The baseline's per-draw scale |
+| `montecarlo.py` | The baseline's per-draw scale (and `baseline_scale_hook`, used only by named sensitivity runs) |
+| `correlated.py` | Conservation checks (state = counties, five years = the years, every draw) and the named correlated-uncertainty sensitivities: macro shock + regional residuals, and high cost + tight credit + slow review (`visionhousing uncertainty-structure`; see [correlated.md](correlated.md)) |
 | `hashes.py` | The code, data and assumption fingerprints |
 | `records.py` | The record format (see [records.md](records.md)) |
 | `readouts.py` | Readouts from the paired draws: shares of the modeled draws (with Monte Carlo standard errors), shares of the baseline, widths, and what each reform costs |
@@ -106,6 +108,7 @@ The five benchmark presets stay exactly as the Handbook defines them. A **varian
 | `parking_no_response` | Parking | shares still built = 1 (adds exactly zero) |
 | `parking_all_surface`, `parking_all_structured` | Parking | parking mix shares |
 | `fees_deferral` | Fees | `view: deferral` |
+| `fees_documented_local` | Fees | `view: local` (documented city fee schedules where complete, the labelled state judgement elsewhere; `assumptions/fee_schedules.yaml`) |
 | `tod_network_half_mile`, `tod_network_quarter_mile`, `tod_network_three_quarter_mile` | TOD | `walk: network`, distance |
 | `tod_lowrise` | TOD | storeys, floor area ratio, cost per sq ft, parking cost |
 | `tod_ma_acre_share` | TOD | `existing_capacity: acre_share` (the older rule for Section 3A land: a share of district acres taken out of the developable land) |
@@ -188,7 +191,7 @@ Results are kept in memory, keyed by state, reforms with options, overrides, see
 
 ## Limits
 
-- The baseline position is shared by all counties. County-specific swings are not drawn; at state level they partly cancel, and the state range comes from the state's own backtest.
+- The baseline position is shared by all counties. County-specific swings are not drawn; at state level they partly cancel, and the state range comes from the state's own backtest. Ledger inputs are drawn independently. A named sensitivity ([correlated.md](correlated.md)) adds regional residuals inside the state range and a joint high-cost, tight-credit, slow-review draw, beside the benchmark.
 - Fee and parking savings on baseline production are added; their cross term is not modelled.
 - A state without a built pack stops with a message; it never falls back to Testland.
 - A state code from any caller is checked before a path is built (`visionhousing.paths.state_code`: two letters; `pack_dir`: a known state; `visionhousing.paths.safe_child`: the folder, as written and with links resolved, stays inside `data/packs/`), so `../x` or an absolute path is refused with an error (`tests/test_engine_paths.py`).

@@ -1,0 +1,4 @@
+stop_id,lat,lon,mode,weekday_departures
+DM-R01,20.015000,-44.987000,rail,132
+DM-R02,20.015000,-44.981000,rail,136
+DM-B01,20.010000,-44.930000,bus,16

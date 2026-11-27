@@ -14,6 +14,10 @@ Plain-language summary
 - ``law-priorities``: rank the unread municipalities by the value of reading
   them next (:mod:`visionhousing.law.priorities`) and write the list to a CSV
   (default ``data/outputs/law_priorities_<STATE>.csv``, not part of the repository).
+- ``zone-rules``: build the zoning-district pilot tables (``zone_rule`` and
+  ``rule_area_weights``, :mod:`visionhousing.law.zone_build`), add them to the
+  Pennsylvania pack, and print the per-benchmark shares, the coverage gained,
+  the checks and the pack size against its budget.
 """
 
 from __future__ import annotations
@@ -21,7 +25,7 @@ from __future__ import annotations
 import sys
 from pathlib import Path
 
-__all__ = ["law_draft", "law_priorities", "law_tables"]
+__all__ = ["law_draft", "law_priorities", "law_tables", "zone_rules"]
 
 
 def law_draft(pdf: Path, url: str, geoid: str, out: Path, doc_id: str = "") -> int:
@@ -141,3 +145,34 @@ def law_priorities(state: str, packs: Path, out: Path | None, top: int = 30) -> 
     print(ranked[cols].head(top).to_string(index=False))
     print(f"law-priorities: {len(ranked):,} review units ranked; wrote {out}")
     return 0
+
+
+def zone_rules(state: str, raw: Path, packs: Path) -> int:
+    """Add ``zone_rule`` and ``rule_area_weights`` to the pack of ``state``; print the results."""
+    from visionhousing.data import pack
+    from visionhousing.law import zone_build
+
+    folder = Path(packs) / state.upper()
+    if not (folder / "pack_manifest.json").is_file():
+        print(f"zone-rules: {folder} is not a built pack; build the pack first", file=sys.stderr)
+        return 1
+    built = zone_build.add_zone_tables(folder, Path(raw))
+    if not built:
+        print(f"zone-rules: {state.upper()} has no zoning-district sample; nothing added")
+        return 0
+    weights = built["rule_area_weights"]
+    tracts = pack.load_pack(folder)["tracts"]
+    rep = zone_build.report(weights, state_sf_lots=float(tracts["units_1_detached"].sum()))
+    for name in zone_build.TABLES:
+        print(f"zone-rules: {name}: {len(built[name]):,} rows")
+    for bench, rows in rep["shares"].items():
+        for r in rows.to_dict("records"):
+            parts = ", ".join(f"{c} {r['share_' + c]:.1%}" for c in zone_build.zr.CLASSES)
+            print(f"zone-rules: {bench} {r['jurisdiction']}: {r['sf_lots']:,.0f} lots: {parts}")
+    for problem in rep["checks"]:
+        print(f"zone-rules: CHECK FAILED: {problem}", file=sys.stderr)
+    report = pack.report_from_folder(folder)
+    total = sum(f.bytes for f in report.files)
+    print(f"zone-rules: pack {total:,} bytes of {pack.PACK_BUDGET_BYTES:,} "
+          f"({total / pack.PACK_BUDGET_BYTES:.1%})")  # fmt: skip
+    return 1 if rep["checks"] or total >= pack.PACK_BUDGET_BYTES else 0

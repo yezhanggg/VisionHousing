@@ -64,7 +64,6 @@
   "package"
  ],
  "hearing_briefs": [
-  "baseline",
   "adu",
   "missing_middle",
   "tod",
@@ -121,7 +120,7 @@
   "parking",
   "fees"
  ],
- "switch_ranges_counties": true,
+ "switch_ranges_counties": false,
  "law_changes": [
   "adu",
   "missing_middle",
@@ -130,5 +129,6 @@
   "tod"
  ],
  "adu_budget_grid": false,
+ "alternatives": true,
  "note": "Default assumptions only. Changing assumptions needs the local app (make app)."
 }

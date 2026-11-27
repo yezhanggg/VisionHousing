@@ -1,0 +1,1333 @@
+# Calibration (validation): nested rolling-origin selection of the baseline rule
+# (generated; do not edit). Written by `visionhousing validate-nested-selection`
+# from the Census Building Permits Survey county files in the state packs.
+# Descriptive (block nested_selection in assumptions/validation_nested_selection.yaml);
+# changes no estimate. Method: docs/modules/validation_nested_selection.md.
+version: 1
+id: nested_selection_2026_11
+label: Nested rolling-origin selection of the baseline rule (out of time)
+status: validation
+use: 'Descriptive. Shows how the baseline''s past share caught changes when the rule is chosen at each
+  start year from matured cases only. Changes no estimate. Method: docs/modules/validation_nested_selection.md.'
+provenance:
+  method: Census Building Permits Survey county files in each state pack; visionhousing.validation.nested_selection;
+    block nested_selection in assumptions/validation_nested_selection.yaml.
+  generated_by: visionhousing validate-nested-selection
+  sources:
+  - id: bps_county_annual
+    citation: U.S. Census Bureau, Building Permits Survey, county annual files
+    url: https://www2.census.gov/econ/bps/County/
+    licence: Public domain (U.S. government work)
+  limits:
+  - The bias-correction choice, the small-sample prior and the growth-aware widening were set on the full
+    record and are held in every arm.
+  - Start years one year apart share most of their target years, so the counts rest on few independent
+    periods.
+  - Permit-only place info drops the typology and tract homes; it is not a rebuilt historical typology.
+preregistration:
+  block: nested_selection
+  file: assumptions/validation_nested_selection.yaml
+  sha256: 034d3eb8c0f17418a5d88eee6662080f136a7ce236864b02e1b9175751e91741
+  recorded_on: '2026-11-26'
+  verified: true
+states:
+  PA:
+    shipped_rule: top_down_share
+    bias_correction_kept: false
+    growth_widening: false
+    evaluation_origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    lead: 2
+    horizon: 5
+    arms:
+      full_record:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 0.7512
+          median_abs_log_error: 0.2628
+          by_origin:
+            '2012':
+              actual: 117125.0
+              p10: 50325.9739
+              p50: 96355.0
+              p90: 131950.4824
+              caught: true
+            '2013':
+              actual: 115605.0
+              p10: 50344.3348
+              p50: 93428.0
+              p90: 142057.5351
+              caught: true
+            '2014':
+              actual: 118457.0
+              p10: 58510.898
+              p50: 100212.0
+              p90: 166966.7061
+              caught: true
+            '2015':
+              actual: 143048.0
+              p10: 63457.0867
+              p50: 103326.0
+              p90: 178028.1704
+              caught: true
+            '2016':
+              actual: 148613.0
+              p10: 67155.8355
+              p50: 111662.0
+              p90: 178517.8637
+              caught: true
+            '2017':
+              actual: 150608.0
+              p10: 67732.1423
+              p50: 115450.0
+              p90: 172028.0134
+              caught: true
+            '2018':
+              actual: 151879.0
+              p10: 66886.0347
+              p50: 117125.0
+              p90: 170858.8916
+              caught: true
+            '2019':
+              actual: 151882.0
+              p10: 64004.7271
+              p50: 115605.0
+              p90: 166704.8322
+              caught: true
+        county_ranges:
+          cases: 535
+          covered: 405
+          coverage: 0.757
+        rule_by_origin:
+          '2012': top_down_share
+          '2013': top_down_share
+          '2014': top_down_share
+          '2015': top_down_share
+          '2016': top_down_share
+          '2017': top_down_share
+          '2018': top_down_share
+          '2019': top_down_share
+        unscored_origins: []
+      full_record_permit_only:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 0.7512
+          median_abs_log_error: 0.2628
+          by_origin:
+            '2012':
+              actual: 117125.0
+              p10: 50325.9739
+              p50: 96355.0
+              p90: 131950.4824
+              caught: true
+            '2013':
+              actual: 115605.0
+              p10: 50344.3348
+              p50: 93428.0
+              p90: 142057.5351
+              caught: true
+            '2014':
+              actual: 118457.0
+              p10: 58510.898
+              p50: 100212.0
+              p90: 166966.7061
+              caught: true
+            '2015':
+              actual: 143048.0
+              p10: 63457.0867
+              p50: 103326.0
+              p90: 178028.1704
+              caught: true
+            '2016':
+              actual: 148613.0
+              p10: 67155.8355
+              p50: 111662.0
+              p90: 178517.8637
+              caught: true
+            '2017':
+              actual: 150608.0
+              p10: 67732.1423
+              p50: 115450.0
+              p90: 172028.0134
+              caught: true
+            '2018':
+              actual: 151879.0
+              p10: 66886.0347
+              p50: 117125.0
+              p90: 170858.8916
+              caught: true
+            '2019':
+              actual: 151882.0
+              p10: 64004.7271
+              p50: 115605.0
+              p90: 166704.8322
+              caught: true
+        county_ranges:
+          cases: 535
+          covered: 405
+          coverage: 0.757
+        rule_by_origin:
+          '2012': top_down_share
+          '2013': top_down_share
+          '2014': top_down_share
+          '2015': top_down_share
+          '2016': top_down_share
+          '2017': top_down_share
+          '2018': top_down_share
+          '2019': top_down_share
+        unscored_origins: []
+      nested:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 0.7197
+          median_abs_log_error: 0.2423
+          by_origin:
+            '2012':
+              actual: 117125.0
+              p10: 50325.9739
+              p50: 96355.0
+              p90: 131950.4824
+              caught: true
+            '2013':
+              actual: 115605.0
+              p10: 50344.3348
+              p50: 93428.0
+              p90: 142057.5351
+              caught: true
+            '2014':
+              actual: 118457.0
+              p10: 67033.3149
+              p50: 109175.0
+              p90: 177046.407
+              caught: true
+            '2015':
+              actual: 143048.0
+              p10: 69725.9622
+              p50: 115938.3333
+              p90: 174521.8693
+              caught: true
+            '2016':
+              actual: 148613.0
+              p10: 61309.0887
+              p50: 103478.7576
+              p90: 154982.9212
+              caught: true
+            '2017':
+              actual: 150608.0
+              p10: 65010.0198
+              p50: 114568.3333
+              p90: 155231.8972
+              caught: true
+            '2018':
+              actual: 151879.0
+              p10: 63178.954
+              p50: 115353.3333
+              p90: 167984.1496
+              caught: true
+            '2019':
+              actual: 151882.0
+              p10: 60912.9799
+              p50: 115746.6667
+              p90: 165139.6201
+              caught: true
+        county_ranges:
+          cases: 529
+          covered: 372
+          coverage: 0.7032
+        rule_by_origin:
+          '2012': top_down_share
+          '2013': top_down_share
+          '2014': last_3_mean
+          '2015': last_3_mean
+          '2016': damped_trend
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': last_3_mean
+        unscored_origins: []
+    agreement_with_shipped:
+      same_rule: 2
+      origins: 8
+    parity:
+      reliability_covered: 8
+      reliability_cases: 8
+      full_record_covered: 8
+      full_record_cases: 8
+      match: true
+    fold_audit:
+    - origin: 2012
+      selection_origins:
+      - 1999
+      - 2006
+      selection_last_target_year: 2012
+      selection_matured: true
+      evaluation_target_years:
+      - 2014
+      - 2018
+      nested_rule: top_down_share
+      nested_reason: closest coverage
+    - origin: 2013
+      selection_origins:
+      - 1999
+      - 2007
+      selection_last_target_year: 2013
+      selection_matured: true
+      evaluation_target_years:
+      - 2015
+      - 2019
+      nested_rule: top_down_share
+      nested_reason: closest coverage
+    - origin: 2014
+      selection_origins:
+      - 1999
+      - 2008
+      selection_last_target_year: 2014
+      selection_matured: true
+      evaluation_target_years:
+      - 2016
+      - 2020
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2015
+      selection_origins:
+      - 1999
+      - 2009
+      selection_last_target_year: 2015
+      selection_matured: true
+      evaluation_target_years:
+      - 2017
+      - 2021
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2016
+      selection_origins:
+      - 1999
+      - 2010
+      selection_last_target_year: 2016
+      selection_matured: true
+      evaluation_target_years:
+      - 2018
+      - 2022
+      nested_rule: damped_trend
+      nested_reason: closest coverage
+    - origin: 2017
+      selection_origins:
+      - 1999
+      - 2011
+      selection_last_target_year: 2017
+      selection_matured: true
+      evaluation_target_years:
+      - 2019
+      - 2023
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2018
+      selection_origins:
+      - 1999
+      - 2012
+      selection_last_target_year: 2018
+      selection_matured: true
+      evaluation_target_years:
+      - 2020
+      - 2024
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2019
+      selection_origins:
+      - 1999
+      - 2013
+      selection_last_target_year: 2019
+      selection_matured: true
+      evaluation_target_years:
+      - 2021
+      - 2025
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    fold_audit_ok: true
+  VT:
+    shipped_rule: shrink_to_group
+    bias_correction_kept: false
+    growth_widening: true
+    evaluation_origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    lead: 2
+    horizon: 5
+    arms:
+      full_record:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 0.9635
+          median_abs_log_error: 0.273
+          by_origin:
+            '2012':
+              actual: 9144.0
+              p10: 3034.7135
+              p50: 6730.0
+              p90: 10640.6635
+              caught: true
+            '2013':
+              actual: 9399.0
+              p10: 3069.3048
+              p50: 6785.0
+              p90: 12155.3747
+              caught: true
+            '2014':
+              actual: 9478.0
+              p10: 3163.2391
+              p50: 6964.0
+              p90: 13899.2456
+              caught: true
+            '2015':
+              actual: 10026.0
+              p10: 3473.7263
+              p50: 7643.0
+              p90: 13997.0602
+              caught: true
+            '2016':
+              actual: 10680.0
+              p10: 3695.1232
+              p50: 8115.0
+              p90: 14475.3056
+              caught: true
+            '2017':
+              actual: 11056.0
+              p10: 3906.4613
+              p50: 8563.0
+              p90: 14878.1912
+              caught: true
+            '2018':
+              actual: 11909.0
+              p10: 4164.8918
+              p50: 9144.0
+              p90: 14780.2483
+              caught: true
+            '2019':
+              actual: 12126.0
+              p10: 4271.6512
+              p50: 9399.0
+              p90: 14389.488
+              caught: true
+        county_ranges:
+          cases: 112
+          covered: 81
+          coverage: 0.7232
+        rule_by_origin:
+          '2012': shrink_to_group
+          '2013': shrink_to_group
+          '2014': shrink_to_group
+          '2015': shrink_to_group
+          '2016': shrink_to_group
+          '2017': shrink_to_group
+          '2018': shrink_to_group
+          '2019': shrink_to_group
+        unscored_origins: []
+      full_record_permit_only:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 0.9635
+          median_abs_log_error: 0.273
+          by_origin:
+            '2012':
+              actual: 9144.0
+              p10: 3034.7135
+              p50: 6730.0
+              p90: 10640.6635
+              caught: true
+            '2013':
+              actual: 9399.0
+              p10: 3069.3048
+              p50: 6785.0
+              p90: 12155.3747
+              caught: true
+            '2014':
+              actual: 9478.0
+              p10: 3163.2391
+              p50: 6964.0
+              p90: 13899.2456
+              caught: true
+            '2015':
+              actual: 10026.0
+              p10: 3473.7263
+              p50: 7643.0
+              p90: 13997.0602
+              caught: true
+            '2016':
+              actual: 10680.0
+              p10: 3695.1232
+              p50: 8115.0
+              p90: 14475.3056
+              caught: true
+            '2017':
+              actual: 11056.0
+              p10: 3906.4613
+              p50: 8563.0
+              p90: 14878.1912
+              caught: true
+            '2018':
+              actual: 11909.0
+              p10: 4164.8918
+              p50: 9144.0
+              p90: 14780.2483
+              caught: true
+            '2019':
+              actual: 12126.0
+              p10: 4271.6512
+              p50: 9399.0
+              p90: 14389.488
+              caught: true
+        county_ranges:
+          cases: 112
+          covered: 74
+          coverage: 0.6607
+        rule_by_origin:
+          '2012': shrink_to_group
+          '2013': shrink_to_group
+          '2014': shrink_to_group
+          '2015': shrink_to_group
+          '2016': shrink_to_group
+          '2017': shrink_to_group
+          '2018': shrink_to_group
+          '2019': shrink_to_group
+        unscored_origins: []
+      nested:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 0.9157
+          median_abs_log_error: 0.2501
+          by_origin:
+            '2012':
+              actual: 9144.0
+              p10: 3034.7135
+              p50: 6730.0
+              p90: 10640.6635
+              caught: true
+            '2013':
+              actual: 9399.0
+              p10: 3069.3048
+              p50: 6785.0
+              p90: 12155.3747
+              caught: true
+            '2014':
+              actual: 9478.0
+              p10: 3287.3262
+              p50: 7243.3333
+              p90: 12934.3681
+              caught: true
+            '2015':
+              actual: 10026.0
+              p10: 3821.2978
+              p50: 8405.0
+              p90: 14459.1901
+              caught: true
+            '2016':
+              actual: 10680.0
+              p10: 4023.8263
+              p50: 8858.3333
+              p90: 13612.5525
+              caught: true
+            '2017':
+              actual: 11056.0
+              p10: 4171.6569
+              p50: 9196.6667
+              p90: 13944.6336
+              caught: true
+            '2018':
+              actual: 11909.0
+              p10: 4238.5057
+              p50: 9333.3333
+              p90: 14230.5544
+              caught: true
+            '2019':
+              actual: 12126.0
+              p10: 4266.0182
+              p50: 9383.3333
+              p90: 14298.9003
+              caught: true
+        county_ranges:
+          cases: 112
+          covered: 77
+          coverage: 0.6875
+        rule_by_origin:
+          '2012': top_down_share
+          '2013': top_down_share
+          '2014': last_3_mean
+          '2015': last_3_mean
+          '2016': last_3_mean
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': last_3_mean
+        unscored_origins: []
+    agreement_with_shipped:
+      same_rule: 0
+      origins: 8
+    parity:
+      reliability_covered: 8
+      reliability_cases: 8
+      full_record_covered: 8
+      full_record_cases: 8
+      match: true
+    fold_audit:
+    - origin: 2012
+      selection_origins:
+      - 1999
+      - 2006
+      selection_last_target_year: 2012
+      selection_matured: true
+      evaluation_target_years:
+      - 2014
+      - 2018
+      nested_rule: top_down_share
+      nested_reason: closest coverage
+    - origin: 2013
+      selection_origins:
+      - 1999
+      - 2007
+      selection_last_target_year: 2013
+      selection_matured: true
+      evaluation_target_years:
+      - 2015
+      - 2019
+      nested_rule: top_down_share
+      nested_reason: closest coverage
+    - origin: 2014
+      selection_origins:
+      - 1999
+      - 2008
+      selection_last_target_year: 2014
+      selection_matured: true
+      evaluation_target_years:
+      - 2016
+      - 2020
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2015
+      selection_origins:
+      - 1999
+      - 2009
+      selection_last_target_year: 2015
+      selection_matured: true
+      evaluation_target_years:
+      - 2017
+      - 2021
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2016
+      selection_origins:
+      - 1999
+      - 2010
+      selection_last_target_year: 2016
+      selection_matured: true
+      evaluation_target_years:
+      - 2018
+      - 2022
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2017
+      selection_origins:
+      - 1999
+      - 2011
+      selection_last_target_year: 2017
+      selection_matured: true
+      evaluation_target_years:
+      - 2019
+      - 2023
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2018
+      selection_origins:
+      - 1999
+      - 2012
+      selection_last_target_year: 2018
+      selection_matured: true
+      evaluation_target_years:
+      - 2020
+      - 2024
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2019
+      selection_origins:
+      - 1999
+      - 2013
+      selection_last_target_year: 2019
+      selection_matured: true
+      evaluation_target_years:
+      - 2021
+      - 2025
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    fold_audit_ok: true
+  MA:
+    shipped_rule: last_3_mean
+    bias_correction_kept: false
+    growth_widening: true
+    evaluation_origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    lead: 2
+    horizon: 5
+    arms:
+      full_record:
+        state_range:
+          cases: 8
+          covered: 7
+          coverage: 0.875
+          width: 1.1347
+          median_abs_log_error: 0.1318
+          by_origin:
+            '2012':
+              actual: 82970.0
+              p10: 21365.2468
+              p50: 46518.3333
+              p90: 81245.5869
+              caught: false
+            '2013':
+              actual: 85849.0
+              p10: 25772.6216
+              p50: 55675.0
+              p90: 97338.1821
+              caught: true
+            '2014':
+              actual: 85450.0
+              p10: 31044.1163
+              p50: 66943.3333
+              p90: 117317.98
+              caught: true
+            '2015':
+              actual: 89015.0
+              p10: 35918.8822
+              p50: 77465.0
+              p90: 134547.5618
+              caught: true
+            '2016':
+              actual: 88117.0
+              p10: 37172.2007
+              p50: 80330.0
+              p90: 137512.1773
+              caught: true
+            '2017':
+              actual: 84287.0
+              p10: 37430.07
+              p50: 85733.3333
+              p90: 150335.5215
+              caught: true
+            '2018':
+              actual: 81260.0
+              p10: 36744.2757
+              p50: 85100.0
+              p90: 151432.492
+              caught: true
+            '2019':
+              actual: 76712.0
+              p10: 37121.2983
+              p50: 86895.0
+              p90: 153342.5682
+              caught: true
+        county_ranges:
+          cases: 112
+          covered: 69
+          coverage: 0.6161
+        rule_by_origin:
+          '2012': last_3_mean
+          '2013': last_3_mean
+          '2014': last_3_mean
+          '2015': last_3_mean
+          '2016': last_3_mean
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': last_3_mean
+        unscored_origins: []
+      full_record_permit_only:
+        state_range:
+          cases: 8
+          covered: 7
+          coverage: 0.875
+          width: 1.1347
+          median_abs_log_error: 0.1318
+          by_origin:
+            '2012':
+              actual: 82970.0
+              p10: 21365.2468
+              p50: 46518.3333
+              p90: 81245.5869
+              caught: false
+            '2013':
+              actual: 85849.0
+              p10: 25772.6216
+              p50: 55675.0
+              p90: 97338.1821
+              caught: true
+            '2014':
+              actual: 85450.0
+              p10: 31044.1163
+              p50: 66943.3333
+              p90: 117317.98
+              caught: true
+            '2015':
+              actual: 89015.0
+              p10: 35918.8822
+              p50: 77465.0
+              p90: 134547.5618
+              caught: true
+            '2016':
+              actual: 88117.0
+              p10: 37172.2007
+              p50: 80330.0
+              p90: 137512.1773
+              caught: true
+            '2017':
+              actual: 84287.0
+              p10: 37430.07
+              p50: 85733.3333
+              p90: 150335.5215
+              caught: true
+            '2018':
+              actual: 81260.0
+              p10: 36744.2757
+              p50: 85100.0
+              p90: 151432.492
+              caught: true
+            '2019':
+              actual: 76712.0
+              p10: 37121.2983
+              p50: 86895.0
+              p90: 153342.5682
+              caught: true
+        county_ranges:
+          cases: 112
+          covered: 69
+          coverage: 0.6161
+        rule_by_origin:
+          '2012': last_3_mean
+          '2013': last_3_mean
+          '2014': last_3_mean
+          '2015': last_3_mean
+          '2016': last_3_mean
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': last_3_mean
+        unscored_origins: []
+      nested:
+        state_range:
+          cases: 8
+          covered: 6
+          coverage: 0.75
+          width: 1.1085
+          median_abs_log_error: 0.1258
+          by_origin:
+            '2012':
+              actual: 82970.0
+              p10: 21155.7941
+              p50: 45735.0
+              p90: 79921.5808
+              caught: false
+            '2013':
+              actual: 85849.0
+              p10: 20970.6577
+              p50: 45280.0
+              p90: 79063.0807
+              caught: false
+            '2014':
+              actual: 85450.0
+              p10: 31044.1163
+              p50: 66943.3333
+              p90: 117317.98
+              caught: true
+            '2015':
+              actual: 89015.0
+              p10: 35918.8822
+              p50: 77465.0
+              p90: 134547.5618
+              caught: true
+            '2016':
+              actual: 88117.0
+              p10: 37172.2007
+              p50: 80330.0
+              p90: 137512.1773
+              caught: true
+            '2017':
+              actual: 84287.0
+              p10: 37430.07
+              p50: 85733.3333
+              p90: 150335.5215
+              caught: true
+            '2018':
+              actual: 81260.0
+              p10: 36744.2757
+              p50: 85100.0
+              p90: 151432.492
+              caught: true
+            '2019':
+              actual: 76712.0
+              p10: 39800.4319
+              p50: 85849.0
+              p90: 153016.114
+              caught: true
+        county_ranges:
+          cases: 112
+          covered: 71
+          coverage: 0.6339
+        rule_by_origin:
+          '2012': top_down_share
+          '2013': median_5
+          '2014': last_3_mean
+          '2015': last_3_mean
+          '2016': last_3_mean
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': top_down_share
+        unscored_origins: []
+    agreement_with_shipped:
+      same_rule: 5
+      origins: 8
+    parity:
+      reliability_covered: 7
+      reliability_cases: 8
+      full_record_covered: 7
+      full_record_cases: 8
+      match: true
+    fold_audit:
+    - origin: 2012
+      selection_origins:
+      - 1999
+      - 2006
+      selection_last_target_year: 2012
+      selection_matured: true
+      evaluation_target_years:
+      - 2014
+      - 2018
+      nested_rule: top_down_share
+      nested_reason: closest coverage
+    - origin: 2013
+      selection_origins:
+      - 1999
+      - 2007
+      selection_last_target_year: 2013
+      selection_matured: true
+      evaluation_target_years:
+      - 2015
+      - 2019
+      nested_rule: median_5
+      nested_reason: closest coverage
+    - origin: 2014
+      selection_origins:
+      - 1999
+      - 2008
+      selection_last_target_year: 2014
+      selection_matured: true
+      evaluation_target_years:
+      - 2016
+      - 2020
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2015
+      selection_origins:
+      - 1999
+      - 2009
+      selection_last_target_year: 2015
+      selection_matured: true
+      evaluation_target_years:
+      - 2017
+      - 2021
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2016
+      selection_origins:
+      - 1999
+      - 2010
+      selection_last_target_year: 2016
+      selection_matured: true
+      evaluation_target_years:
+      - 2018
+      - 2022
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2017
+      selection_origins:
+      - 1999
+      - 2011
+      selection_last_target_year: 2017
+      selection_matured: true
+      evaluation_target_years:
+      - 2019
+      - 2023
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2018
+      selection_origins:
+      - 1999
+      - 2012
+      selection_last_target_year: 2018
+      selection_matured: true
+      evaluation_target_years:
+      - 2020
+      - 2024
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2019
+      selection_origins:
+      - 1999
+      - 2013
+      selection_last_target_year: 2019
+      selection_matured: true
+      evaluation_target_years:
+      - 2021
+      - 2025
+      nested_rule: top_down_share
+      nested_reason: closest coverage
+    fold_audit_ok: true
+  WY:
+    shipped_rule: last_3_mean
+    bias_correction_kept: false
+    growth_widening: true
+    evaluation_origins:
+    - 2012
+    - 2013
+    - 2014
+    - 2015
+    - 2016
+    - 2017
+    - 2018
+    - 2019
+    lead: 2
+    horizon: 5
+    arms:
+      full_record:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 1.2764
+          median_abs_log_error: 0.1867
+          by_origin:
+            '2012':
+              actual: 9269.0
+              p10: 4917.7244
+              p50: 10870.0
+              p90: 16176.1413
+              caught: true
+            '2013':
+              actual: 9076.0
+              p10: 4545.1837
+              p50: 10873.3333
+              p90: 16190.5805
+              caught: true
+            '2014':
+              actual: 9301.0
+              p10: 4733.0292
+              p50: 10518.3333
+              p90: 16064.5061
+              caught: true
+            '2015':
+              actual: 10280.0
+              p10: 4648.053
+              p50: 10173.3333
+              p90: 17544.0828
+              caught: true
+            '2016':
+              actual: 11359.0
+              p10: 4268.5356
+              p50: 9218.3333
+              p90: 18087.948
+              caught: true
+            '2017':
+              actual: 11228.0
+              p10: 4349.1949
+              p50: 9260.0
+              p90: 19965.1016
+              caught: true
+            '2018':
+              actual: 11655.0
+              p10: 4314.2286
+              p50: 9108.3333
+              p90: 19732.5823
+              caught: true
+            '2019':
+              actual: 11765.0
+              p10: 4339.8622
+              p50: 9076.6667
+              p90: 19760.3707
+              caught: true
+        county_ranges:
+          cases: 179
+          covered: 153
+          coverage: 0.8547
+        rule_by_origin:
+          '2012': last_3_mean
+          '2013': last_3_mean
+          '2014': last_3_mean
+          '2015': last_3_mean
+          '2016': last_3_mean
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': last_3_mean
+        unscored_origins: []
+      full_record_permit_only:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 1.2764
+          median_abs_log_error: 0.1867
+          by_origin:
+            '2012':
+              actual: 9269.0
+              p10: 4917.7244
+              p50: 10870.0
+              p90: 16176.1413
+              caught: true
+            '2013':
+              actual: 9076.0
+              p10: 4545.1837
+              p50: 10873.3333
+              p90: 16190.5805
+              caught: true
+            '2014':
+              actual: 9301.0
+              p10: 4733.0292
+              p50: 10518.3333
+              p90: 16064.5061
+              caught: true
+            '2015':
+              actual: 10280.0
+              p10: 4648.053
+              p50: 10173.3333
+              p90: 17544.0828
+              caught: true
+            '2016':
+              actual: 11359.0
+              p10: 4268.5356
+              p50: 9218.3333
+              p90: 18087.948
+              caught: true
+            '2017':
+              actual: 11228.0
+              p10: 4349.1949
+              p50: 9260.0
+              p90: 19965.1016
+              caught: true
+            '2018':
+              actual: 11655.0
+              p10: 4314.2286
+              p50: 9108.3333
+              p90: 19732.5823
+              caught: true
+            '2019':
+              actual: 11765.0
+              p10: 4339.8622
+              p50: 9076.6667
+              p90: 19760.3707
+              caught: true
+        county_ranges:
+          cases: 179
+          covered: 153
+          coverage: 0.8547
+        rule_by_origin:
+          '2012': last_3_mean
+          '2013': last_3_mean
+          '2014': last_3_mean
+          '2015': last_3_mean
+          '2016': last_3_mean
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': last_3_mean
+        unscored_origins: []
+      nested:
+        state_range:
+          cases: 8
+          covered: 8
+          coverage: 1.0
+          width: 1.1951
+          median_abs_log_error: 0.2008
+          by_origin:
+            '2012':
+              actual: 9269.0
+              p10: 5055.7611
+              p50: 11135.1439
+              p90: 16622.0872
+              caught: true
+            '2013':
+              actual: 9076.0
+              p10: 4456.1341
+              p50: 9878.9015
+              p90: 14904.9013
+              caught: true
+            '2014':
+              actual: 9301.0
+              p10: 3754.307
+              p50: 8554.5227
+              p90: 13075.6396
+              caught: true
+            '2015':
+              actual: 10280.0
+              p10: 3726.2334
+              p50: 8221.5227
+              p90: 13169.3145
+              caught: true
+            '2016':
+              actual: 11359.0
+              p10: 4268.5356
+              p50: 9218.3333
+              p90: 18087.948
+              caught: true
+            '2017':
+              actual: 11228.0
+              p10: 4349.1949
+              p50: 9260.0
+              p90: 19965.1016
+              caught: true
+            '2018':
+              actual: 11655.0
+              p10: 4314.2286
+              p50: 9108.3333
+              p90: 19732.5823
+              caught: true
+            '2019':
+              actual: 11765.0
+              p10: 4339.8622
+              p50: 9076.6667
+              p90: 19760.3707
+              caught: true
+        county_ranges:
+          cases: 180
+          covered: 138
+          coverage: 0.7667
+        rule_by_origin:
+          '2012': damped_trend
+          '2013': damped_trend
+          '2014': damped_trend
+          '2015': damped_trend
+          '2016': last_3_mean
+          '2017': last_3_mean
+          '2018': last_3_mean
+          '2019': last_3_mean
+        unscored_origins: []
+    agreement_with_shipped:
+      same_rule: 4
+      origins: 8
+    parity:
+      reliability_covered: 8
+      reliability_cases: 8
+      full_record_covered: 8
+      full_record_cases: 8
+      match: true
+    fold_audit:
+    - origin: 2012
+      selection_origins:
+      - 1999
+      - 2006
+      selection_last_target_year: 2012
+      selection_matured: true
+      evaluation_target_years:
+      - 2014
+      - 2018
+      nested_rule: damped_trend
+      nested_reason: closest coverage
+    - origin: 2013
+      selection_origins:
+      - 1999
+      - 2007
+      selection_last_target_year: 2013
+      selection_matured: true
+      evaluation_target_years:
+      - 2015
+      - 2019
+      nested_rule: damped_trend
+      nested_reason: closest coverage
+    - origin: 2014
+      selection_origins:
+      - 1999
+      - 2008
+      selection_last_target_year: 2014
+      selection_matured: true
+      evaluation_target_years:
+      - 2016
+      - 2020
+      nested_rule: damped_trend
+      nested_reason: closest coverage
+    - origin: 2015
+      selection_origins:
+      - 1999
+      - 2009
+      selection_last_target_year: 2015
+      selection_matured: true
+      evaluation_target_years:
+      - 2017
+      - 2021
+      nested_rule: damped_trend
+      nested_reason: closest coverage
+    - origin: 2016
+      selection_origins:
+      - 1999
+      - 2010
+      selection_last_target_year: 2016
+      selection_matured: true
+      evaluation_target_years:
+      - 2018
+      - 2022
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2017
+      selection_origins:
+      - 1999
+      - 2011
+      selection_last_target_year: 2017
+      selection_matured: true
+      evaluation_target_years:
+      - 2019
+      - 2023
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2018
+      selection_origins:
+      - 1999
+      - 2012
+      selection_last_target_year: 2018
+      selection_matured: true
+      evaluation_target_years:
+      - 2020
+      - 2024
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    - origin: 2019
+      selection_origins:
+      - 1999
+      - 2013
+      selection_last_target_year: 2019
+      selection_matured: true
+      evaluation_target_years:
+      - 2021
+      - 2025
+      nested_rule: last_3_mean
+      nested_reason: closest coverage
+    fold_audit_ok: true

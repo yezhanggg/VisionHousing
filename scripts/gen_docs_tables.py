@@ -17,7 +17,8 @@ What it fills (only the text between ``<!-- generated: NAME -->`` and
   can be imported, else straight from ``importlib.metadata``.
 - ``docs/MODEL_AND_ASSUMPTIONS.md`` (the Overview, kept under the 25-page limit): the
   key-assumption table and the ledger summary, from ``assumptions/parameters.yaml``;
-  the thin-data state comparison (section 3.4), from the engine runs and report cards
+  the local zoning readings per state, from ``assumptions/law/``; the thin-data state
+  comparison (section 3.4), from the engine runs and report cards
   saved for the static site in ``web/public/data/`` (committed, so the check needs no
   fetched data); and, from the same saved files, the baseline rule contest, the
   headline results and the top inputs per reform.
@@ -1054,6 +1055,83 @@ def baseline_reconciliation(root: Path) -> str:
     return "\n\n".join(out)
 
 
+# --------------------------------------------------------------------------- docs/methods/fees.md
+
+
+def local_fee_prototypes(root: Path) -> str:
+    """Documented local fee per home by prototype (Philadelphia, Pittsburgh) vs the benchmark."""
+    from visionhousing.features.fee_schedules import load_schedule, summary_rows
+
+    sched = load_schedule(root / "assumptions" / "fee_schedules.yaml")
+    led = _ledger(root)
+    bench = float(led["fees.fee_total_per_unit"].central)
+    cats = ["building", "zoning", "trade", "impact", "water_connection", "sewer_connection"]
+    cats += ["stormwater", "administrative"]
+    rows, parts = [], []
+
+    def whole(v: float) -> str:
+        return f"{round(v):,}"
+
+    for r in summary_rows(sched, led):
+        name = sched.cities[r["city"]]["name"]
+        if r["complete"]:
+            fee = f"${whole(r['low'])} - ${whole(r['high'])} (central ${whole(r['central'])})"
+            share = f"{100 * r['central'] / bench:.0f}%"
+        else:
+            fee = (
+                f"unknown; documented part only: ${whole(r['low'])} - ${whole(r['high'])}"
+                if r["high"] > 0
+                else "unknown (no documented item)"
+            )
+            share = "n/a"
+        rows.append([name, r["label"], fee, share, "yes" if r["applied"] else "no"])
+        if r["complete"]:
+            bc = r["by_category"]
+            parts.append([r["label"], *(f"${whole(bc.get(c, 0.0))}" for c in cats)])
+    head = ["City", "Prototype", "Documented fees per home", "Central / $50,000", "In variant"]
+    out = [table(head, rows), table(["Prototype (Philadelphia, central)", *cats], parts)]
+    return "\n\n".join(out)
+
+
+def law_readings(root: Path) -> str:
+    """How many places have local zoning rules read and verified, per state, from the law files."""
+    from visionhousing.law.local_readings import load_local_readings
+
+    data = yaml.safe_load((root / "assumptions/law/municipal_rules.yaml").read_text("utf-8"))
+    levels = {d["doc_id"]: d.get("level") for d in data["documents"]}
+    verified = [r for r in data["rules"] if r.get("status") == "verified"]
+    by_county = sum(levels.get(r.get("doc_id")) == "county" for r in verified)
+    drafts = sum(r.get("status") == "draft" for r in data["rules"])
+    local = load_local_readings(root / "assumptions/law/local_readings.yaml")
+
+    def names(state: str, status: str) -> list[str]:
+        return [p.name for p in local.places if p.state == state and p.status == status]
+
+    vt_read, vt_not = names("VT", "verified"), names("VT", "not_read")
+    wy_read, wy_old = names("WY", "verified"), names("WY", "superseded")
+    parts = [
+        f"Pennsylvania: {len(verified)} municipalities ({by_county} of them through county "
+        f"ordinances), plus {drafts} drafts that count for nothing",
+        f"Vermont: {len(vt_read)} towns and cities"
+        + (f" ({len(vt_not)} more could not be read: {', '.join(vt_not)})" if vt_not else ""),
+        f"Wyoming: {', '.join(wy_read) or 'none'}"
+        + (f"; {', '.join(wy_old)} only in its former text (superseded)" if wy_old else ""),
+    ]
+    note = (
+        "*Generated from `assumptions/law/municipal_rules.yaml` and "
+        "`assumptions/law/local_readings.yaml`.*"
+    )
+    lead = (
+        f"{note} Local zoning rules read and verified from each place's own published text "
+        "(each reading cites a short quote and where it sits in the text): "
+    )
+    tail = (
+        ". The Vermont and Wyoming readings are kept with their citations but do not enter "
+        "an estimate yet."
+    )
+    return lead + "; ".join(parts) + tail
+
+
 # --------------------------------------------------------------------------- driver
 
 Builder = Callable[[Path], str]
@@ -1079,6 +1157,10 @@ DOCUMENTS: dict[str, dict[str, Builder]] = {
         "baseline_reconciliation": baseline_reconciliation,
         "headline_table_pa": headline_table("PA"),
         "top_drivers_pa": top_drivers("PA"),
+        "law_readings": law_readings,
+    },
+    "docs/methods/fees.md": {
+        "local_fee_prototypes": local_fee_prototypes,
     },
     "docs/modules/baseline.md": {
         "baseline_reconciliation": baseline_reconciliation,

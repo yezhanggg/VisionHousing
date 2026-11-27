@@ -34,10 +34,12 @@ __all__ = [
     "ASSUMPTIONS",
     "MUNICIPAL_COLUMNS",
     "TRACT_COLUMNS",
+    "TRACT_PLACE_COLUMNS",
     "load_rules",
     "municipal_planning",
     "read_plan_citations",
     "tract_municipalities",
+    "tract_places",
 ]
 
 ASSUMPTIONS = Path(__file__).resolve().parents[3] / "assumptions" / "zoning.yaml"
@@ -58,6 +60,7 @@ MUNICIPAL_COLUMNS = (
     "housing_units_2020",
 )
 TRACT_COLUMNS = ("tract", "county", "cousub", "housing_units_2020")
+TRACT_PLACE_COLUMNS = ("tract", "county", "place", "housing_units_2020")
 
 
 def load_rules(path: Path = ASSUMPTIONS) -> dict[str, Any]:
@@ -112,6 +115,34 @@ def tract_municipalities(blocks: pd.DataFrame, block_cousub: pd.DataFrame) -> pd
     )
     out["housing_units_2020"] = out["housing_units_2020"].astype(int)
     return out[list(TRACT_COLUMNS)].sort_values(["tract", "cousub"]).reset_index(drop=True)
+
+
+def tract_places(blocks: pd.DataFrame, block_place: pd.DataFrame, no_place: str) -> pd.DataFrame:
+    """2020 housing units of each tract, split by Census place (same weights as above).
+
+    The place twin of :func:`tract_municipalities`, for cities that are Census
+    places but not county subdivisions (Wyoming's). A block outside every
+    place, or missing from the file, gets ``no_place``, so a tract's pieces
+    always add up to all its 2020 housing units.
+
+    Args:
+        blocks: Pack blocks: ``geoid`` (15 digits), ``tract``, ``housing_units``.
+        block_place: ``block`` and ``place`` from the block assignment file.
+        no_place: Code for "not in any place" (``99999``).
+    """
+    b = blocks[["geoid", "tract", "housing_units"]].merge(
+        block_place.rename(columns={"block": "geoid"}), on="geoid", how="left"
+    )
+    b["place"] = b["place"].fillna(no_place)
+    b["county"] = b["tract"].astype(str).str[:5]
+    b["housing_units"] = pd.to_numeric(b["housing_units"], errors="coerce").fillna(0)
+    out = (
+        b.groupby(["tract", "county", "place"], as_index=False)["housing_units"]
+        .sum()
+        .rename(columns={"housing_units": "housing_units_2020"})
+    )
+    out["housing_units_2020"] = out["housing_units_2020"].astype(int)
+    return out[list(TRACT_PLACE_COLUMNS)].sort_values(["tract", "place"]).reset_index(drop=True)
 
 
 PLANS = ASSUMPTIONS.with_name("plans.yaml")

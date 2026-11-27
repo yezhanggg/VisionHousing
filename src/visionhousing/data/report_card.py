@@ -357,7 +357,8 @@ INPUTS: tuple[Input, ...] = (
         ("approvals",),
         used=False,
         limits=(
-            "Massachusetts only; evidence for the ADU take-up range. www.mass.gov refuses "
+            "Massachusetts only; observed context for the ADU reform (every survey period "
+            "kept), never a rate and never an input to an estimate. www.mass.gov refuses "
             "scripted downloads, so the table is built only from a hand-saved copy of the "
             "survey file."
         ),
@@ -527,6 +528,12 @@ def _state_notes(item: Input, state: str, tables: Mapping[str, pd.DataFrame]) ->
             out.append(line + ".")
     if item.id in ("transit_frequency", "transit_access"):
         out += _transit_notes(item.id, state, tables)
+    if item.id == "ma_adu_survey" and tables.get("ma_adu_survey") is not None:
+        from visionhousing.features.ma_intake import survey_context
+
+        got = survey_context(tables["ma_adu_survey"])
+        if got["periods"]:
+            out.append("Observed (not a rate): " + got["text"] + ".")
     if item.id == "permits":
         frame = tables.get("permits_county_year")
         if frame is not None and {"imputed", "year"} <= set(frame.columns) and len(frame):

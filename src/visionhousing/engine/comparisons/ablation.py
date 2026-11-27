@@ -57,6 +57,7 @@ from visionhousing.engine.comparisons.bench import BENCHMARKS, Bench
 from visionhousing.engine.comparisons.common import share
 from visionhousing.engine.comparisons.settings import DataTiers, load_data_tiers
 from visionhousing.engine.context import (
+    PACK_FOLDER_KEY,
     StateContext,
     load_transfer_rules,
     local_law_override,
@@ -163,7 +164,7 @@ def masked_context(
     def h(text: str) -> str:
         return hashlib.sha256(f"{text}\nmasked:{tag}".encode()).hexdigest()
 
-    return replace(
+    masked = replace(
         context,
         ledger=ledger,
         local_law=law,
@@ -173,6 +174,12 @@ def masked_context(
         data_hash=h(context.data_hash),
         calibration_hash=h(context.calibration_hash),
     )
+    # ``replace`` starts ``derived`` empty (its values belong to the unmasked data), but the
+    # folder the state was read from stays the same: later steps read optional tables there.
+    folder = context.derived.get(PACK_FOLDER_KEY)
+    if folder is not None:
+        masked.derived[PACK_FOLDER_KEY] = folder
+    return masked
 
 
 def context_at_tier(

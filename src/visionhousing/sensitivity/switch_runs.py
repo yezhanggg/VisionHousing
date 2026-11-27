@@ -45,6 +45,7 @@ from typing import Any
 import numpy as np
 
 from visionhousing.engine.adapters import OPTION_REPLACE
+from visionhousing.engine.context import StateContext
 from visionhousing.engine.core import SPAN, Result
 from visionhousing.engine.montecarlo import BASELINE_STREAM
 from visionhousing.engine.records import Record, format_number, from_draws
@@ -319,6 +320,7 @@ def switch_payload(
     draws: int | None = None,
     top: int = TOP_SWITCH,
     compute: bool = True,
+    context: StateContext | None = None,
 ) -> dict[str, Any] | None:
     """The switch ranges of one reform alone, as JSON for ``<ST>/switch-ranges/<key>.json``.
 
@@ -334,6 +336,8 @@ def switch_payload(
         top: How many inputs to switch.
         compute: Work the runs out when they are not cached; when false, return
             ``None`` instead.
+        context: The state's loaded context (for example the API's, read from its own
+            packs folder). Without one the pack is read by state code from ``data/packs``.
 
     Returns:
         ``{"state", "reform", "title", "seed", "draws", "hashes", "note",
@@ -344,7 +348,7 @@ def switch_payload(
     from visionhousing.engine.core import DEFAULT_DRAWS, run
     from visionhousing.sensitivity.drivers import drivers
 
-    result = run(state, [key], seed=seed, draws=draws or DEFAULT_DRAWS)
+    result = run(state, [key], seed=seed, draws=draws or DEFAULT_DRAWS, context=context)
     runs = cached_switch_runs(result, key, top)
     if runs is None:
         if not compute:

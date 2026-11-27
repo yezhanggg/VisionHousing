@@ -357,7 +357,13 @@ before their first scores: the panel's treatment-date audit
 `retro_treatment_audit` (`assumptions/evidence/retro_audit.yaml`, checked by
 `evidence-retro audit`) and the validation cards' `validation_card_scores`
 (`assumptions/validation_cards.yaml`, checked by `validate-cards`; see
-`validation_cards.md`). Before any score is computed,
+`validation_cards.md`), and two recorded on 2026-11-26 before their first
+scores: the nested rolling-origin selection test `nested_selection`
+(`assumptions/validation_nested_selection.yaml`, checked by
+`validate-nested-selection`; see `validation_nested_selection.md`) and the
+retrospective panel re-scored on today's comparison pool `retro_current_pool`
+(`assumptions/evidence/retro_current_pool.yaml`, checked by
+`evidence-retro current-pool`; see `evidence_retro.md`). Before any score is computed,
 `validate-donor-pool` checks `donor_pool_rules` and `pooled_states_test`,
 `validate-growth-coverage` checks `donor_pool_rules` and
 `growth_coverage_test`, and `evidence-retro run` checks `retro_design`

@@ -1,0 +1,112 @@
+# Uncertainty structure checks and the correlated-uncertainty sensitivity.
+# Read by visionhousing.engine.correlated (`visionhousing uncertainty-structure`).
+#
+# The benchmark is untouched: every headline keeps one statewide housing-cycle
+# position per draw (all counties move together) and independent ledger draws.
+# The scenarios below are NAMED SENSITIVITIES shown beside it, never instead of
+# it. Method: docs/modules/correlated.md.
+#
+# Kept out of backtest.yaml and parameters.yaml on purpose: neither the
+# engine's calibration fingerprint nor the ledger fingerprint changes, so no
+# benchmark run id moves.
+
+version: 1
+
+run:
+  seed: 0
+  draws: 2000
+  # The five benchmark reforms, run alone and as a package.
+  reforms: [adu, missing_middle, tod, parking, fees]
+
+# Conservation checks (every state): in every draw, state = sum of counties and
+# five-year total = sum of the years, for the baseline, each reform, the
+# package and the total. Anything above this many units counts as a break
+# (floating-point rounding only).
+conservation:
+  tolerance_units: 1.0e-6
+  # Residual diagnostics are saved for the draws whose benchmark state baseline
+  # is closest to these percentiles of the benchmark's own baseline draws.
+  diagnostic_draw_percentiles: [10, 50, 90]
+
+# Shared macro shock + regional residuals.
+# Macro shock: the benchmark's statewide position (unchanged).
+# Regional residual: each county group (the baseline's place type: the pack's
+# "places like this one" typology where it has one, else size class) gets one
+# multiplier per draw, exp(sigma_g z - sigma_g^2 / 2), z standard normal from its
+# own seeded stream (mean one). sigma_g is estimated from the shipped rule's
+# back-test: for each past origin, log(group actual / group projected) minus
+# log(state actual / state projected), counties summed; sigma_g = their standard
+# deviation over origins (ddof 1). Groups with fewer than min_origins usable
+# origins take the pooled standard deviation of all groups' residuals.
+regional:
+  grouping: baseline_place_type
+  min_origins: 5
+  ddof: 1
+  # reconciled: the county multipliers are rescaled in each draw so the state
+  #   total equals the benchmark's (the separately calibrated state range is
+  #   kept; counties trade places within it). This is the scenario shown.
+  # unreconciled: no rescaling (a diagnostic: residuals stacked on top of the
+  #   state range, which was calibrated on state totals and so already holds
+  #   them; this double counts and is not shown as a result).
+  modes: [reconciled, unreconciled]
+
+# Correlated "high cost + tight credit + slow review" scenario.
+# One common factor F per draw (standard normal, own seeded stream). Each listed
+# ledger entry gets a latent sign x loading x F + sqrt(1 - loading^2) x e (e its
+# own standard normal); its OWN draws (same range, same shape, same values) are
+# reordered to follow that latent's ranks. The baseline's housing-cycle
+# position is reordered the same way with baseline_sign, so a high-cost,
+# tight-credit draw is also a weak-cycle draw in BOTH arms (the baseline and
+# every reform read the same draws). Entries that are fixed in the ledger
+# cannot move and are reported as such.
+# The loading is a team judgement (no estimate of the joint distribution of
+# these inputs exists in the sources); a pairwise rank correlation of about
+# loading^2 results.
+correlated:
+  loading: 0.7
+  baseline_sign: -1
+  # The adverse corner: the draws whose F is at or above this quantile.
+  adverse_quantile: 0.8
+  # A control with loading 0 (independent latents, the same reordering
+  # machinery) checks that the reordering alone moves nothing but sampling noise.
+  control: true
+  components:
+    high_cost:
+      adu.hard_cost_per_sqft: 1
+      adu.soft_cost_share: 1
+      adu.site_utility_cost: 1
+      missing_middle.hard_cost_per_sqft: 1
+      missing_middle.soft_cost_share: 1
+      missing_middle.code_cost_ibc_per_sqft: 1
+      missing_middle.demolition_cost_per_lot: 1
+      multifamily.hard_cost_per_sqft: 1
+      multifamily.soft_cost_share: 1
+      parking.cost_per_space_surface: 1
+      parking.cost_per_space_structured: 1
+      parking.cost_per_space_underground: 1
+    tight_credit:
+      econ.mortgage_rate_30y: 1
+      adu.loan_share: -1
+      adu.loan_rate_spread: 1
+      missing_middle.cap_rate: 1
+      multifamily.cap_rate: 1
+      fees.construction_loan_rate: 1
+    slow_review:
+      adu.ramp_first_year_share: -1
+      adu.ramp_years_to_full: 1
+      missing_middle.ramp_first_year_share: -1
+      missing_middle.ramp_years_to_full: 1
+      tod.ramp_first_year_share: -1
+      tod.ramp_years_to_full: 1
+      parking.ramp_first_year_share: -1
+      parking.ramp_years_to_full: 1
+      fees.ramp_first_year_share: -1
+      fees.ramp_years_to_full: 1
+      fees.delayed_capacity_share: 1
+      adu.start_delay_years: 1
+      missing_middle.start_delay_years: 1
+      tod.start_delay_years: 1
+      parking.start_delay_years: 1
+      fees.start_delay_years: 1
+
+results: assumptions/calibration/uncertainty_structure.yaml

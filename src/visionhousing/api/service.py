@@ -54,6 +54,7 @@ __all__ = [
 
 STATE_NAMES = {
     "TL": "Testland (synthetic test state)",
+    "DM": "Demo state (synthetic)",  # tests/fixtures/demo_state; web/js/content/states.js
     "AL": "Alabama", "AK": "Alaska", "AZ": "Arizona", "AR": "Arkansas", "CA": "California",
     "CO": "Colorado", "CT": "Connecticut", "DE": "Delaware", "DC": "District of Columbia",
     "FL": "Florida", "GA": "Georgia", "HI": "Hawaii", "ID": "Idaho", "IL": "Illinois",
@@ -110,11 +111,14 @@ def available_states(packs_dir: Path) -> list[dict[str, Any]]:
             if not any((folder / m).is_file() for m in PACK_MARKERS):
                 continue
             manifest = _read_json(folder / "pack_manifest.json") or {}
+            # A built pack has a manifest; a synthetic pack (the demo state) says so in its
+            # data dictionary (read only then: a real pack's dictionary is large).
+            dictionary = {} if manifest else (_read_json(folder / "data_dictionary.json") or {})
             out.append(
                 {
                     "code": code,
                     "name": STATE_NAMES[code],
-                    "synthetic": False,
+                    "synthetic": dictionary.get("synthetic") is True,
                     "pack_hash": manifest.get("pack_hash"),
                 }
             )

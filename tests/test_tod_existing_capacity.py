@@ -384,3 +384,85 @@ def test_accounting_never_reclassifies_silently():
         books.records["work_new_standalone"].p50, np.median(head * 0.8), rtol=1e-6
     )
     assert books.records["comparable"].p50 > 0
+
+
+# ---------------------------------------------------------------- q x existing (variant)
+
+Q_ID = "tod.baseline_replacement_probability"
+
+
+def test_q_scaled_with_q_one_equals_full(tl_tracts, setup):
+    led, scope = setup
+    led1 = apply_overrides(led, {Q_ID: 1.0})
+    existing = whole_tract_3a(tl_tracts, scope, PROPOSED_PER_M2 * 30 / 50)
+    full = tod_funnel(tl_tracts, led1, scope, draws=DRAWS, seed=SEED, existing=existing)
+    qs = tod_funnel(
+        tl_tracts,
+        led1,
+        scope,
+        draws=DRAWS,
+        seed=SEED,
+        existing=existing,
+        existing_subtract="q_scaled",
+    )
+    for stage in ("capacity", "built", "absorbed", "authorized", "net"):
+        np.testing.assert_array_equal(qs.stages[stage], full.stages[stage])
+
+
+def test_q_scaled_subtracts_q_times_existing(tl_tracts, setup):
+    led, scope = setup
+    half = apply_overrides(led, {Q_ID: 0.5})
+    existing = whole_tract_3a(tl_tracts, scope, PROPOSED_PER_M2 * 30 / 50)
+    kw = {"draws": DRAWS, "seed": SEED, "existing": existing}
+    full = tod_funnel(tl_tracts, half, scope, **kw)
+    qs = tod_funnel(tl_tracts, half, scope, existing_subtract="q_scaled", **kw)
+    proposed = qs.stages["feasible"] * M2_PER_ACRE * PROPOSED_PER_M2
+    # max(0, 50 - 0.5 x 30) / 50 = 0.7 of the proposed homes, against 20 / 50 under full.
+    np.testing.assert_allclose(qs.stages["capacity"], proposed * 0.7, rtol=1e-9, atol=1e-9)
+    np.testing.assert_allclose(full.stages["capacity"], proposed * 0.4, rtol=1e-9, atol=1e-9)
+    assert (qs.stages["authorized"] >= full.stages["authorized"] - 1e-9).all()
+    assert "q x existing" in qs.records["capacity"].formula
+    assert "q x existing" in qs.records["additional_3a_capacity"].formula
+    assert "q x existing" not in full.records["capacity"].formula
+    with pytest.raises(ValueError, match="existing_subtract"):
+        tod_funnel(tl_tracts, half, scope, existing_subtract="half", **kw)
+
+
+def test_engine_variant_q_scaled_is_named_and_at_least_the_headline(tl_tracts):
+    c = load_context("TL")
+    c.derived[("pack_table", "mbta_3a_capacity_tract")] = three_a_table(tl_tracts)
+    head = compute(c, ["tod"], RICH, seed=SEED, draws=DRAWS).reforms["tod"]
+    alt = compute(c, {"tod": {"variant": "tod_ma_3a_q_scaled"}}, RICH, seed=SEED, draws=DRAWS)
+    a = alt.reforms["tod"]
+    assert (a.state_draws >= head.state_draws - 1e-9).all()
+    assert any("q_scaled" in n for n in a.result.notes)
+    assert not any("q_scaled" in n for n in head.result.notes)
+    with pytest.raises(ValueError, match="existing_3a_subtract"):
+        compute(c, {"tod": {"existing_3a_subtract": "x"}}, RICH, seed=SEED, draws=DRAWS)
+
+
+# ---------------------------------------------------------------- note wording by state
+
+
+def test_by_right_note_names_massachusetts_only_for_ma(tmp_path):
+    """The synthetic demo state has the by-right capacity table but is not Massachusetts."""
+    import shutil
+    from pathlib import Path
+
+    from visionhousing.engine.core import run
+    from visionhousing.scenarios.tod import by_right_words
+
+    fix = Path(__file__).resolve().parent / "fixtures" / "demo_state"
+    folder = tmp_path / "DM"
+    shutil.copytree(fix, folder)
+    c = load_context("DM", folder=folder)
+    out = run("DM", ["tod"], seed=0, draws=200, context=c, use_cache=False).reforms["tod"]
+    r = out.result
+    assert "existing_3a_capacity" in r.records  # the capacity rule is used
+    words = [*r.notes, *(t for t, _ in r.county_notes.values())]
+    assert any("already zones for multi-family homes by right" in n for n in words)
+    for banned in ("Massachusetts", "Section 3A", "F_L_M__", "3A district"):
+        assert not any(banned in n for n in words), banned
+    ma = by_right_words("MA")
+    assert ma["who"] == "Massachusetts" and "F_L_M__" in ma["land"]
+    assert by_right_words("dm") == by_right_words("")

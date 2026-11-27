@@ -21,18 +21,45 @@ make data STATE=PA        # = visionhousing fetch --state PA, then visionhousing
 - `build` reads the cache (no network when it is complete), writes the pack, then runs the
   add-on steps in order (`RETROFITS` in `data/pack.py`: districts, affordability and stock
   ledger, infrastructure, hazards, transit walksheds, Massachusetts 3A district tracts,
-  Massachusetts 3A capacity and estimated sewer, law provision versions) and
-  prints a size report. Each add-on is also its own command (`visionhousing districts`,
-  `affordability`, `infrastructure`, `hazards`, `transit-walk`, `ma-3a-tracts`, `ma-capacity`, `law-tables`) for refreshing
+  Massachusetts 3A capacity and estimated sewer, tract crosswalks, law provision versions, zoning
+  districts) and prints a size report. Each add-on is also its own command (`visionhousing districts`,
+  `affordability`, `infrastructure`, `hazards`, `transit-walk`, `ma-3a-tracts`, `ma-capacity`,
+  `tract-crosswalks`, `law-tables`, `zone-rules`) for refreshing
   one part; the two 3A steps do nothing in a pack without 3A district outlines. The law step writes
   `law_provision_version` in every state (one row per dated version of a provision, from
   `assumptions/law/timeline.yaml`; no download): on 2026-11-25 Pennsylvania 16 rows, Vermont 6,
   Massachusetts and Wyoming none verified yet (an empty table with its columns). Packs after the
   step: PA 10,601,328 bytes (88% of the 12 MB budget), VT 1,114,706 (9%), MA 4,271,640 (36%),
-  WY 1,954,186 (16%). A step that fails is noted in the report
+  WY 1,954,186 (16%). The zoning-district step (Pennsylvania only; see
+  [zone_rules.md](zone_rules.md)) adds `zone_rule` (14 rows, 1,796 bytes) and `rule_area_weights`
+  (3,749 rows, 33,252 bytes), derived counts only: on 2026-11-26 the PA pack went from 10,601,328
+  to 10,666,903 bytes (88.9%). A step that fails is noted in the report
   and skipped; run its command to add it later. Both refuse to start with less than 15 GB of
   free disk.
   `visionhousing transit-stops --state WY` (`add_transit_stops`) rebuilds a built pack's
+  The tract-crosswalk step (`add_tract_crosswalks`, `visionhousing tract-crosswalks --state VT`)
+  acts in the states `crosswalk_states()` reads from the assumption files: states with town
+  readings in `assumptions/law/local_readings.yaml` (Vermont, Wyoming) get both tables; the
+  states of the `ma_adu_application` block in `assumptions/law/statutory_rights.yaml`
+  (Massachusetts) get `tract_municipalities` only, so the named variant `ma_adu_state_floor`
+  measures each tract's Boston share (a Massachusetts town is a county subdivision). It joins the pack's blocks to the Census Bureau's 2020 block assignment files and
+  sums 2020 housing units per tract piece, the method Pennsylvania's `tract_municipalities`
+  uses (split tracts keep one row per piece): `tract_municipalities` from the county
+  subdivision member (`census_baf_2020_mcd`), `tract_places` (`tract`, `county`, `place`,
+  `housing_units_2020`; `99999` = outside every place) from the incorporated place and CDP
+  member (`census_baf_2020_place`). Wyoming's zip has no county subdivision member (its
+  subdivisions are statistical census county divisions), so Wyoming gets `tract_places` only;
+  a pack that already has `tract_municipalities` keeps it. On 2026-11-26: VT 309 town pieces and
+  392 place pieces over 193 tracts (61 and 129 split), 1,132,945 bytes (9%), pack hash
+  `b32ab10f…` -> `b5d3f6ab…`, engine data hash `8e227e27…` -> `a4f75806…`; WY 496 place pieces
+  over 160 tracts (Laramie, place 45050: 10 tracts, 14,959 housing units), 1,973,005 bytes (16%),
+  pack hash `f3611442…` -> `50b69339…`, data hash `992e3542…` -> `83076450…`. Pennsylvania is
+  untouched. Massachusetts on 2026-11-26 (D7): 1,668 town pieces over all 1,613 tracts (38
+  split), 10,909 bytes; Boston (25025, county subdivision 07000) 207 whole tracts, 301,702
+  housing units; pack 4,352,613 bytes (36%), pack hash `74bc8e42…` -> `0b7039b5…`, engine data
+  hash `0eb5aa58…` -> `54020b60…`. Only the new table, the data dictionary and the manifest
+  changed; the five Massachusetts benchmark headlines are unchanged. The engine hashes `tract_places` with the other lazily read
+  tables, so the data hash and run cache keys follow it.
   `transit_stops`, `transit_feeds` and the tracts' `transit_*` columns from the cache, for a pack
   built before a schedule feed was added (not a full-build step: the build already makes them);
   run `transit-walk` after it.

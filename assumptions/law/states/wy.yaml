@@ -20,7 +20,22 @@
 # that a county may not use a minimum lot size to stop a home on an
 # immediate-family land division (W.S. 18-5-201 with 18-5-303(a)(i)).
 #
-# Bills read and not enacted (so no record below):
+# Re-checked by script on 2026-11-26 (wyoleg.gov; the bill list is the
+# lsoservice.wyoleg.gov BillInformation record the site itself reads): every
+# bill title of the 2024, 2025 and 2026 sessions and the full text of every
+# enacted act of those years. Still no statewide reform on the five benchmark
+# reforms. One enacted act bears on permitting but is not a benchmark reform:
+# 2026 HB0002, the Fast Track Permits Act (non_benchmark_enacted, below). It is
+# kept out of `provisions` and `records` on purpose, so the state is still
+# shown as "No state reform law found" for the five reforms.
+#
+# Bills read and not enacted (so no record below; listed in bills_not_enacted):
+#   - 2025 HB0197 "Limits on property development exaction and mitigation
+#     fees": no committee report before the cutoff (2025-02-10). Not enacted,
+#     so it has no effective date (the bill record's effective-date field is a
+#     placeholder for bills that pass).
+#   - 2025 SF0040 "Zoning protest petition-amendments": postponed indefinitely
+#     in the Senate (2025-03-06).
 #   - 2024 interim working draft "Accessory residential units-permits" (county
 #     permits within 90 days, no owner-occupancy rule): not introduced as a bill
 #     in the 2025 session (the 2025 subject index lists no ADU bill).
@@ -151,3 +166,52 @@ provisions:
 # No dated records: no state provision that bears on the benchmark reforms has
 # been enacted, so the law timeline has nothing to switch on for Wyoming.
 records: []
+
+# Enacted law that bears on permitting but on none of the five benchmark
+# reforms. Context only: not a provision of the reforms, never a timeline
+# record, never in an estimate. Each quote was found again by script in the
+# saved copy (enrolled act PDF, SHA-256 below) on the page given.
+non_benchmark_enacted:
+  - provision_id: wy_hb0002_2026_fast_track_permits
+    citation: "W.S. 16-13-101 and 16-13-102 (2026 HB0002, Enrolled Act No. 16, Session Laws 2026 ch. 42)"
+    topic: permitting_timeline
+    status: enacted
+    signed_on: 2026-03-05
+    effective_date: 2026-07-01
+    checked_on: 2026-11-26
+    source_id: wy_statutes
+    url: https://wyoleg.gov/2026/Enroll/HB0002.pdf
+    source_fingerprint: "sha256:700066bf9ff9cd3e97c95fc6009dff84140f971f5d18494a47b4206cc368b18f (enrolled act PDF)"
+    applies_to: >-
+      Residential building permit applications filed on or after July 1, 2026
+      for a building of one or two homes, at most three storeys and 3,000 sq ft
+      of finished floor per home, where an International Residential Code is
+      adopted.
+    summary_own_words: >-
+      A city, town or county must say within 10 business days whether a
+      residential building permit application is complete and approve or deny
+      a complete one within 30 calendar days; a missed deadline means the
+      permit is deemed approved (inspections still apply). It does not change
+      what zoning allows, parking minimums or impact fees.
+    benchmark_bearing: >-
+      None of the five benchmark reforms. A house with an ADU, or a duplex, is a
+      "dwelling" of one or two units under the act, so permits for them get
+      the shot clock; the act's 10% fee cut applies only to conditions added
+      after approval, so it is not a development-fee reform.
+    evidence:
+      - {locator: "Enrolled act p. 3, § 16-13-102(c)", quote: "A local government entity shall approve or deny an applicant's completed application not later than thirty (30) calendar days after the date the completed application is submitted."}
+      - {locator: "Enrolled act p. 5, § 16-13-102(g)", quote: "the applicant's completed application shall be deemed approved as submitted on the day after the deadline has lapsed."}
+      - {locator: "Enrolled act p. 2, § 16-13-102(a)(iii)", quote: "\"Dwelling\" means a building that contains one (1) or two (2) dwelling units"}
+      - {locator: "Enrolled act p. 6, Section 3", quote: "This act is effective July 1, 2026."}
+      - {locator: "Bill record HB0002 (lsoservice.wyoleg.gov BillInformation, 2026)", fields: {chapterNo: "0042", signedDate: "2026-03-05T00:00:00", effectiveDate: "2026-07-01T00:00:00", lastAction: "Assigned Chapter Number 42"}}
+
+# Bills that touch the benchmark reforms or local zoning, read and not
+# enacted. Dates are the last action in the bill record; no effective date.
+bills_not_enacted:
+  - {year: 2025, bill: HB0197, title: "Limits on property development exaction and mitigation fees.", reform: fees, last_action: "H No report prior to CoW Cutoff", last_action_date: 2025-02-10, url: "https://wyoleg.gov/2025/Introduced/HB0197.pdf", locator: "Introduced p. 5, proposed § 16-13-102(b), lines 9-14 (line numbers removed)", quote: "shall be more than the percentage determined by an exaction or mitigation nexus study or four percent (4%), whichever is less, of the total construction, renovation or addition cost", summary_own_words: "Would have capped affordable or workforce housing exaction and mitigation fees at the lesser of a nexus study's percentage or 4% of construction cost."}
+  - {year: 2025, bill: SF0040, title: "Zoning protest petition-amendments.", reform: missing_middle, last_action: "S postponed indefinitely", last_action_date: 2025-03-06}
+  - {year: 2025, bill: HB0088, title: "Multi-family dwelling single stairwell exits.", reform: missing_middle, last_action: "H Did not Consider for Introduction", last_action_date: 2025-02-03}
+  - {year: 2025, bill: HB0056, title: "Cities and towns notice for zoning changes-amendments.", reform: missing_middle, last_action: "H Did not Consider for Introduction", last_action_date: 2025-02-03}
+  - {year: 2026, bill: SF0042, title: "County zoning authority-amendments.", reform: missing_middle, last_action: "S Failed Introduction 18-12-1-0-0", last_action_date: 2026-02-10}
+  - {year: 2026, bill: HB0077, title: "Zoning protest petition-repeal.", reform: missing_middle, last_action: "H Failed Introduction 26-35-1-0-0", last_action_date: 2026-02-10}
+  - {year: 2026, bill: SF0117, title: "Zoning protest petition-amendments.", reform: missing_middle, last_action: "H:Died in Committee Returned Bill Pursuant to HR 5-4", last_action_date: 2026-03-03}

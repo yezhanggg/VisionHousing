@@ -95,6 +95,7 @@ __all__ = [
     "deferral_readouts",
     "fiscal_split",
     "group_sums",
+    "local_per_unit",
     "paired_readouts",
     "parking_readouts",
     "width",
@@ -480,6 +481,7 @@ def cost_readouts(
     groups: Mapping[str, str] | None = None,
     variant: tuple[str, np.ndarray, np.ndarray] | None = None,
     fiscal_seed: int = 0,
+    local: Mapping[str, np.ndarray] | None = None,
 ) -> tuple[dict[str, Record], dict[str, dict[str, Record]], dict[str, str]]:
     """What a fee cut costs: revenue given up and cost per added home.
 
@@ -500,6 +502,10 @@ def cost_readouts(
         variant: ``(label, cut per unit by draw, added units by county and draw)``
             of a second fee level (optional).
         fiscal_seed: The run's seed, for the fee level and replacement share draws.
+        local: For the documented local view, per-unit values by county and
+            draw (shape ``(counties, draws)``): ``fee`` and ``cut`` of the
+            baseline homes, ``fee_added`` and ``cut_added`` of the added homes
+            (see :func:`local_per_unit`). ``cut_per_unit`` is then ignored.
 
     Returns:
         ``(state records, {"revenue_given_up" | "cost_per_added_home": county ->
@@ -509,8 +515,14 @@ def cost_readouts(
     """
     ids = sorted({*added.assumption_ids, fee_id, FEE_CUT})
     sources = sorted({*added.source_ids, *_sources(ledger, [fee_id, FEE_CUT]), "bps_county_annual"})
-    cut = np.asarray(cut_per_unit, dtype=float)[None, :]
-    rev_c = cut * (base_county + county_draws)
+    if local is not None:
+        cut = np.asarray(local["cut"], dtype=float)
+        cut_a = np.asarray(local["cut_added"], dtype=float)
+        rev_c = cut * base_county + cut_a * county_draws
+    else:
+        cut = np.asarray(cut_per_unit, dtype=float)[None, :]
+        cut_a = cut
+        rev_c = cut * (base_county + county_draws)
     state_rev = rev_c.sum(axis=0)
     state_add = county_draws.sum(axis=0)
     floor = min_added_share(ledger)
@@ -518,18 +530,36 @@ def cost_readouts(
         "state", state_rev, state_add, ids=ids, sources=sources, key="", min_share=floor
     )
     texts = {"cost_per_added_home": missing} if missing else {}
-    cut_rec = rec.from_draws(
-        "fee cut per unit",
-        cut[0],
-        "$/unit",
-        expression=f"fees per unit (ledger {fee_id}) x cut share (ledger {FEE_CUT})",
-        assumption_ids=[fee_id, FEE_CUT],
-        source_ids=_sources(ledger, [fee_id, FEE_CUT]),
-    )
+    if local is not None:
+        b_tot = base_county.sum(axis=0)
+        avg_cut = np.where(
+            b_tot > 0, (cut * base_county).sum(axis=0) / np.where(b_tot > 0, b_tot, 1.0), 0.0
+        )
+        cut_rec = rec.from_draws(
+            "fee cut per unit, baseline-weighted state average",
+            avg_cut,
+            "$/unit",
+            expression=(
+                "sum over counties of baseline units x (fees per unit x cut share) / baseline "
+                "units; fees per unit documented where a city's schedules are complete, else "
+                f"ledger {fee_id}"
+            ),
+            assumption_ids=ids,
+            source_ids=sources,
+        )
+        to_added = (cut_a * county_draws).sum(axis=0)
+    else:
+        cut_rec = rec.from_draws(
+            "fee cut per unit",
+            cut[0],
+            "$/unit",
+            expression=f"fees per unit (ledger {fee_id}) x cut share (ledger {FEE_CUT})",
+            assumption_ids=[fee_id, FEE_CUT],
+            source_ids=_sources(ledger, [fee_id, FEE_CUT]),
+        )
+        to_added = cut[0] * state_add
     out["fee_cut_per_unit"] = cut_rec
-    share_new = np.where(
-        state_rev > 0, (cut[0] * state_add) / np.where(state_rev > 0, state_rev, 1.0), 0.0
-    )
+    share_new = np.where(state_rev > 0, to_added / np.where(state_rev > 0, state_rev, 1.0), 0.0)
     out["share_to_added_homes"] = rec.from_draws(
         "share of the revenue given up that goes to the added homes",
         share_new,
@@ -542,8 +572,21 @@ def cost_readouts(
         source_ids=sources,
         tier=0,
     )
-    out.update(
-        fiscal_split(
+    if local is not None:
+        fiscal = fiscal_split(
+            cut,
+            np.asarray(local["fee"], dtype=float),
+            base_county,
+            county_draws,
+            ledger,
+            ids=ids,
+            sources=sources,
+            seed=fiscal_seed,
+            cut_added=cut_a,
+            fee_added=np.asarray(local["fee_added"], dtype=float),
+        )
+    else:
+        fiscal = fiscal_split(
             cut[0],
             fee_per_unit(ledger, fee_id, state_add.size, seed=fiscal_seed),
             base_county.sum(axis=0),
@@ -553,7 +596,7 @@ def cost_readouts(
             sources=sources,
             seed=fiscal_seed,
         )
-    )
+    out.update(fiscal)
     fiscal_words = load_cost_settings()["fiscal"]
     texts["fiscal_by_recipient"] = " ".join(str(fiscal_words["recipients_text"]).split())
     texts["fiscal_by_year"] = " ".join(str(fiscal_words["years_text"]).split())
@@ -603,6 +646,56 @@ def cost_readouts(
     return out, counties, texts
 
 
+def local_per_unit(
+    detail: Any, county_ids: Sequence[str], fallback_fee: np.ndarray, cut_share: np.ndarray
+) -> dict[str, np.ndarray]:
+    """Per-unit fee and cut by county and draw for the documented local view.
+
+    The fee reform's detail holds fees per unit by county, structure type and
+    draw (``per_unit["fee"]``), with the baseline units it reached
+    (``per_unit["base"]``) and the added units (``added``). Each county's fee
+    per baseline home is the baseline-weighted average over its structure
+    types; per added home, the added-weighted average (the added homes' mix of
+    types differs). Counties the reform did not reach (no tracts) take the
+    fallback (the labelled state judgement), so every baseline home pays one
+    fee level.
+
+    Args:
+        detail: The fee reform's ``ChannelBResult`` (local view).
+        county_ids: The run's county ids, in row order.
+        fallback_fee: Judgement fee per unit by draw, shape ``(draws,)``.
+        cut_share: Cut share by draw, shape ``(draws,)``.
+
+    Returns:
+        ``fee``, ``cut``, ``fee_added``, ``cut_added``, each ``(counties, draws)``.
+    """
+    fb = np.asarray(fallback_fee, dtype=float)
+    share = np.asarray(cut_share, dtype=float)
+    fee_b = np.broadcast_to(fb, (len(county_ids), fb.size)).copy()
+    fee_a = fee_b.copy()
+    fee = np.asarray(detail.per_unit["fee"], dtype=float)
+    base = np.asarray(detail.per_unit["base"], dtype=float)
+    base = np.broadcast_to(base, fee.shape)
+    add = np.asarray(detail.added, dtype=float)
+    rows = {str(c): i for i, c in enumerate(county_ids)}
+    with np.errstate(divide="ignore", invalid="ignore"):
+        mean = fee.mean(axis=1)
+        wb = base.sum(axis=1)
+        fb_c = np.where(wb > 0, (fee * base).sum(axis=1) / np.where(wb > 0, wb, 1.0), mean)
+        wa = add.sum(axis=1)
+        fa_c = np.where(wa > 0, (fee * add).sum(axis=1) / np.where(wa > 0, wa, 1.0), fb_c)
+    for k, c in enumerate(detail.county_ids):
+        if str(c) in rows:
+            fee_b[rows[str(c)]] = fb_c[k]
+            fee_a[rows[str(c)]] = fa_c[k]
+    return {
+        "fee": fee_b,
+        "cut": fee_b * share[None, :],
+        "fee_added": fee_a,
+        "cut_added": fee_a * share[None, :],
+    }
+
+
 def fee_per_unit(ledger: Ledger, fee_id: str, n: int, *, seed: int) -> np.ndarray:
     """Fees per unit before the reform, by draw (the fee level the reform starts from)."""
     return sample(ledger, n=n, seed=seed, ids=[fee_id])[fee_id]
@@ -618,8 +711,17 @@ def fiscal_split(
     ids: Sequence[str],
     sources: Sequence[str],
     seed: int = 0,
+    cut_added: np.ndarray | None = None,
+    fee_added: np.ndarray | None = None,
 ) -> dict[str, Record]:
     """The fiscal screen of a fee cut, state totals by draw.
+
+    ``cut``, ``fee``, ``base`` and ``added`` are by draw, shape ``(draws,)``,
+    or by county and draw, shape ``(counties, draws)``, summed over counties
+    (the documented local view, where fees differ by county). ``cut_added``
+    and ``fee_added`` are the per-unit cut and fee of the added homes when
+    they differ from the baseline's (the added homes' mix of building types
+    differs); by default the same as ``cut`` and ``fee``.
 
     In each draw::
 
@@ -652,22 +754,29 @@ def fiscal_split(
     fee = np.asarray(fee, dtype=float)
     base = np.asarray(base, dtype=float)
     added = np.asarray(added, dtype=float)
-    waived_base = cut * base
-    waived_added = cut * added
-    paid = (fee - cut) * added
+    cut_a = cut if cut_added is None else np.asarray(cut_added, dtype=float)
+    fee_a = fee if fee_added is None else np.asarray(fee_added, dtype=float)
+
+    def total(x: np.ndarray) -> np.ndarray:
+        return x.sum(axis=0) if x.ndim == 2 else x
+
+    waived_base = total(cut * base)
+    waived_added = total(cut_a * added)
+    paid = total((fee_a - cut_a) * added)
+    n = waived_base.size
     share = (
-        sample(ledger, n=cut.size, seed=seed, ids=[REPLACEMENT])[REPLACEMENT]
+        sample(ledger, n=n, seed=seed, ids=[REPLACEMENT])[REPLACEMENT]
         if REPLACEMENT in ledger
-        else np.zeros_like(cut)
+        else np.zeros(n)
     )
     replacement = share * (waived_base + waived_added)
     net = -waived_base + paid + replacement
     r_ids = sorted({*ids, *([REPLACEMENT] if REPLACEMENT in ledger else [])})
     common = {"source_ids": sources, "tier": 0}
-    before = fee * base
-    after = (fee - cut) * (base + added)
+    before = total(fee * base)
+    after = total((fee - cut) * base) + paid
     change = after - before  # = (F' - F) x B + F' x A, the fiscal identity
-    n = cut.size
+    added = total(added)
     gain = added > 0
     zero = 1.0 - float(gain.mean()) if n else 0.0
     extra: dict[str, Record] = {
@@ -1030,6 +1139,17 @@ def build_readouts(
         records.update(
             deferral_readouts(outcome.added, county_draws, base_county, r_ledger, seed=seed)
         )
+    elif family == "fees" and detail is not None and getattr(detail, "view", "") == "local":
+        params = sample(r_ledger, n=n, seed=seed, ids=[FEE_STATE, FEE_CUT])
+        local = local_per_unit(detail, county_ids, params[FEE_STATE], params[FEE_CUT])
+        more, more_c, more_t = cost_readouts(
+            outcome.title, outcome.added, county_draws, base_county, county_ids,
+            params[FEE_STATE] * params[FEE_CUT], fee_id=FEE_STATE, ledger=r_ledger,
+            groups=groups, fiscal_seed=seed, local=local,
+        )  # fmt: skip
+        records.update(more)
+        counties.update(more_c)
+        texts.update(more_t)
     elif family == "fees" and detail is not None:
         view = str(getattr(detail, "view", outcome.options.get("view", "benchmark")))
         fee_id = FEE_TOTAL if view == "benchmark" else FEE_STATE

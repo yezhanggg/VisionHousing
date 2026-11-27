@@ -1,0 +1,3 @@
+county,homes,tracts_verified,tracts_outside,tracts_constraint,tracts_unknown,homes_verified,homes_outside,homes_constraint,homes_unknown,water_share,epa_share,sewer_sources,sewer_as_of,act537_lt10,act537_10to20,act537_20plus,act537_prereg,act537_unmatched,cwns_total,cwns_treatment,cwns_new_sewers,cwns_sewer_repair,cwns_cso,cwns_stormwater,cwns_decentralized,cwns_nonpoint,epa_plants
+98001,6512,3,0,0,0,6512,0,0,0,,0.0,synthetic,,,,,,,,,,,,,,,
+98003,6111,2,0,0,1,3258,696,0,2157,,0.0,synthetic,,,,,,,,,,,,,,,

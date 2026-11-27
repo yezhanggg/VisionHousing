@@ -1,0 +1,84 @@
+# How the engine reads the zoning-district table (rule_area_weights) for the named
+# ADU variants adu_zoning_districts and adu_zoning_districts_guidance, and for the
+# opt-in district view of the law-changes page (view=districts).
+#
+# Read by src/visionhousing/engine/zone_scope.py. The table itself is built by
+# src/visionhousing/law/rule_weights.py (settings in zone_weights.yaml, rules in
+# zone_rules.yaml). Nothing here is a result; the benchmark never reads this file.
+
+version: 1
+id: zone_scope.settings
+
+table: rule_area_weights      # pack table read (a .csv.gz copy first)
+benchmark: adu                # the table's benchmark the ADU variants read
+period: window                # the 2027-2031 run window (not the dated map history)
+
+# Which review states of a zone row count. A class that rests on a row in another
+# state is read as `unresolved` (unknown stays unknown).
+views:
+  verified:
+    review_states: [verified_code]
+    words: "verified code text only"
+  guidance:
+    review_states: [verified_code, guidance]
+    words: "verified code text and the jurisdiction's own published guidance (a labelled sensitivity)"
+
+# Which view each option of the ADU adapter (option `legal`) uses.
+legal_options:
+  zoning_districts: verified
+  zoning_districts_guidance: guidance
+
+# Already-legal share of a class's lots, per draw (the same reading the benchmark's
+# lot-weighted categories use, scenarios/adu.py):
+#   one                   already legal: the benchmark changes nothing there
+#   one_minus_conditions  1 - adu.conditions_exposure_share (by right, a condition dropped)
+#   zero                  not legal today (prohibited, not listed under a verified
+#                         exclusivity clause, or only after a hearing): fully exposed
+#   statewide             the benchmark's statewide draw of adu.already_legal_share
+already_legal:
+  known_by_right: one
+  conditions_relaxed: one_minus_conditions
+  newly_eligible: zero
+  discretionary: zero
+  unresolved: statewide
+
+ledger:
+  statewide: adu.already_legal_share
+  conditions: adu.conditions_exposure_share
+
+# Data behind the table's lots and districts (registry ids, data/sources.yaml).
+source_ids:
+  - acs5_summary_file
+  - tiger_2020_tabblock_shapes
+  - phl_zoning_base
+  - phl_zoning_overlays
+  - pgh_zoning
+  - pgh_parking_reduction_overlay
+  - pa_municipal_ordinances
+
+# Law-changes view (api/law_changes.py, view=districts | districts_guidance): which
+# benchmark of the table answers each of the view's rules. Rules not listed (fees)
+# keep the municipal answer. The residents denominator is split by the zone rows'
+# 2020 housing units (homes stand in for residents inside a municipality).
+law_changes:
+  views:
+    districts: verified
+    districts_guidance: guidance
+  benchmarks:
+    adu_category: adu
+    max_units: missing_middle
+    parking_min: parking
+    not_read: tod
+  weights:
+    sf_lots: sf_lots
+    residents: housing_units
+
+# The table counts single-family detached lots only (ACS one-unit detached homes).
+# In each tract the class shares are scaled by the detached lots' share of the lots
+# the scenario reaches; attached and 2-4 unit lots keep the benchmark's share.
+# 2-4 unit homes become lots with the ledger centrals of homes per building.
+lots:
+  counted_type: sf_detached
+  homes_per_building:
+    units_2: adu.homes_per_building_two_family
+    units_3_4: adu.homes_per_building_three_four

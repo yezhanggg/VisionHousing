@@ -76,6 +76,8 @@ Files written under ``--out`` (``ST`` is the state code)::
                                       read_next only when cached), ``law_changes`` in the index
     ST/adu-budget-grid.json           the ADU budget-and-target grid ({grid, view}), from the
                                       disk cache only; ``adu_budget_grid: true`` in the index
+    ST/alternatives.json              the benchmarks' Alternatives table (compact), from the
+                                      disk cache only; ``alternatives: true`` in the index
     ST/pool.json                      the state's shared pool (see "Packed files")
 
 Each card, the comparisons and the districts are flagged in ``index.json`` (``confidence``,
@@ -746,6 +748,7 @@ def export_static(
     extras: bool = False,
     law_changes: bool = False,
     budget_grid: bool = False,
+    alternatives: bool = False,
 ) -> ExportReport:
     """Write the static-site files for ``state`` into ``out``.
 
@@ -777,6 +780,11 @@ def export_static(
         budget_grid: Also save the ADU budget-and-target grid (``ST/adu-budget-grid.json``,
             ``adu_budget_grid`` in the index), from the disk cache only (warm it with
             ``visionhousing adu-budget-grid --state ST``); left out with a note if not cached.
+        alternatives: Also save the "Alternatives" table of the five benchmark reforms
+            (``ST/alternatives.json``, ``alternatives`` in the index; compact: the P10 / P90
+            numbers and standard errors are left out, their text kept), from the disk cache
+            only (warm it with ``python -m visionhousing.api.alternatives --state ST``); left
+            out with a note if not cached. No size step ever drops it.
 
     Returns:
         The report: files and bytes per kind, and notes.
@@ -881,6 +889,8 @@ def export_static(
         flags["law_changes"] = _export_law_changes(w, app, code, seed=seed, draws=draws)
     if budget_grid:
         flags["adu_budget_grid"] = _export_budget_grid(w, app, code, seed=seed, draws=draws)
+    if alternatives:
+        flags["alternatives"] = _export_alternatives(w, app, code, seed=seed, draws=draws)
 
     cache = None
     if tract_cache is not None and county_bodies:
@@ -1146,6 +1156,27 @@ def _export_budget_grid(w: _Writer, app: Any, code: str, *, seed: int, draws: in
     return True
 
 
+def _export_alternatives(w: _Writer, app: Any, code: str, *, seed: int, draws: int) -> bool:
+    """Save the Alternatives table from the disk cache (``ST/alternatives.json``, compact)."""
+    from visionhousing.api import alternatives as alt
+
+    try:
+        body = alt.payload(_contexts(app).get(code), seed=seed, draws=draws, compute=False)
+    except (FileNotFoundError, KeyError, ValueError, RuntimeError) as err:
+        w.report.notes.append(f"alternatives not saved: {err}")
+        return False
+    if not body:
+        w.report.notes.append(
+            f"alternatives not cached for {code} "
+            "(python -m visionhousing.api.alternatives); left out"
+        )
+        return False
+    data = alt.compact(alt._clean(dict(body)))
+    text = json.dumps(data, allow_nan=False, separators=(",", ":"), ensure_ascii=False)
+    w.save(f"{code}/{alt.STATIC_FILE}", text.encode("utf-8"), "alternatives")
+    return True
+
+
 def _export_switch_ranges(w: _Writer, code: str, *, seed: int, draws: int) -> list[str]:
     """Save each benchmark reform's switch ranges (``ST/switch-ranges/{key}.json``).
 
@@ -1157,7 +1188,9 @@ def _export_switch_ranges(w: _Writer, code: str, *, seed: int, draws: int) -> li
     saved: list[str] = []
     for key in BENCHMARK_PACKAGE:
         try:
-            body = switch_payload(code, key, seed=seed, draws=draws, compute=False)
+            # The app's own context: the pack is read from the folder the app was given.
+            ctx = _contexts(w.call.app).get(code)
+            body = switch_payload(code, key, seed=seed, draws=draws, compute=False, context=ctx)
         except Exception as err:  # a missing pack or cache only leaves it out
             w.report.notes.append(f"switch ranges for {key} not saved: {err}")
             continue

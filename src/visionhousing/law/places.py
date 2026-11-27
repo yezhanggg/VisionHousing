@@ -26,6 +26,17 @@ tracts table (single-family detached homes for the ADU benchmark) to give the
 county-wide share the flat assumption stood in for. Inside a tract that the
 boundary splits, homes of every type are assumed to split like all 2020
 housing units: the block file has no building type.
+
+Places that are not county subdivisions. Wyoming's cities (Laramie, place
+``5645050``) are Census places inside statistical census county divisions, so the
+municipal table cannot find them. The pack's ``tract_places`` table (same
+2020 block assignment, place member; same housing-unit weights) can.
+:func:`place_pieces` gives it in the shape of ``tract_municipalities`` (the
+place code in the ``cousub`` column) and :func:`readings_on_places` rewrites
+place-level readings (7-digit ``geoid``: state + place) to one row per county
+the place touches (``county`` + place), so the code that mixes local values
+into tracts reads both the same way. :func:`place_pieces` is never mixed
+with the municipal table: a tract's pieces add up to 1 in each.
 """
 
 from __future__ import annotations
@@ -36,7 +47,17 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
-__all__ = ["block_place_shares", "county_place_share", "place_tract_shares", "points_in_feature"]
+__all__ = [
+    "block_place_shares",
+    "county_place_share",
+    "place_pieces",
+    "place_tract_shares",
+    "points_in_feature",
+    "readings_on_places",
+]
+
+PLACE_GEOID_DIGITS = 7
+"""A place ``geoid`` is state (2) + place (5) digits; a county subdivision's is 10."""
 
 
 def place_tract_shares(tract_munis: pd.DataFrame, county: str, cousub: str) -> pd.DataFrame:
@@ -173,3 +194,51 @@ def county_place_share(
         "tracts_in_place": float((s > 0).sum()),
         "tracts_split": float(t["geoid"].isin(set(split)).sum()),
     }
+
+
+def place_pieces(tract_places: pd.DataFrame) -> pd.DataFrame:
+    """The pack's ``tract_places`` in the shape of ``tract_municipalities``.
+
+    Returns ``tract``, ``county``, ``cousub`` (holding the 5-digit place code;
+    ``99999`` = outside every place) and ``housing_units_2020``, so a reader
+    of municipal pieces (for example
+    :func:`visionhousing.scenarios.parking.minimum_mix`) keys each piece as
+    county + place. Every tract's pieces still add up to all its 2020 units.
+    """
+    t = tract_places.copy()
+    return pd.DataFrame(
+        {
+            "tract": t["tract"].astype(str),
+            "county": t["county"].astype(str).str.zfill(5),
+            "cousub": t["place"].astype(str).str.zfill(5),
+            "housing_units_2020": pd.to_numeric(t["housing_units_2020"], errors="coerce"),
+        }
+    )
+
+
+def readings_on_places(rows: pd.DataFrame, tract_places: pd.DataFrame) -> pd.DataFrame:
+    """Place-level rows (7-digit ``geoid``) restated per county piece of the place.
+
+    Each row whose ``geoid`` is state + place becomes one row per county the
+    place has a piece in (``geoid`` = county + place, ``county`` = that
+    county), matching the keys of :func:`place_pieces`. Rows of a place with
+    no piece in the table are dropped (it cannot be placed); other rows are
+    returned unchanged.
+    """
+    if rows.empty:
+        return rows.copy()
+    tp = tract_places.assign(
+        county=tract_places["county"].astype(str).str.zfill(5),
+        place=tract_places["place"].astype(str).str.zfill(5),
+    )
+    tp["key"] = tp["county"].str[:2] + tp["place"]
+    counties = tp.groupby("key")["county"].apply(lambda c: sorted(set(c)))
+    out: list[dict[str, Any]] = []
+    for row in rows.to_dict("records"):
+        g = str(row["geoid"])
+        if len(g) != PLACE_GEOID_DIGITS:
+            out.append(row)
+            continue
+        for county in counties.get(g, []):
+            out.append({**row, "geoid": county + g[2:], "county": county})
+    return pd.DataFrame(out, columns=rows.columns).reset_index(drop=True)

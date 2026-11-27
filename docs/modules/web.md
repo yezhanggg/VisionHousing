@@ -124,7 +124,7 @@ Nothing is rounded or dropped. Packing cut Pennsylvania's runs from about 12.5 M
 leaves room for a second state. Files offered as downloads (ledger, sources, report card,
 backtest) are never packed. Options: `--tracts auto|yes|compact|no` (tract profiles; `auto` saves them whole under
 `--tract-budget-mb`, default 12, measured before packing, and **compact** over it; `make export-static` passes `TRACT_BUDGET_MB`, default 4), `--explain auto|yes|no` (each run's explanation; `auto` drops it
-only if the folder would be over the budget), `--tract-cache DIR` (see below), `--comparisons yes|no` (the five comparisons parts; run `visionhousing comparisons --warm --state ST` first, or each part takes minutes on a large state), `--extras` (also save each extra scenario alone, `extra_runs` in the index; without it the extra switches say "Needs the local app (make app)."), `--law-changes yes|no` (default yes: "What this law changes" per reform in `ST/law_changes/KEY.json`, listed under `law_changes` in the index; each file carries the read-next bounds only when `python -m visionhousing.api.law_changes --state ST --read-next` has cached them), `--budget-grid yes|no` (default yes: the ADU budget-and-target grid in `ST/adu-budget-grid.json`, `adu_budget_grid: true` in the index, read from the disk cache only, so run `visionhousing adu-budget-grid --state ST` first; without it the panel says it needs the local app), `--draws`, `--seed`. The cards, the grades and the districts (for a state whose pack holds district outlines, both chambers) are always saved; each is flagged in the index only once all its files are saved. Exporting a second state adds to
+only if the folder would be over the budget), `--tract-cache DIR` (see below), `--comparisons yes|no` (the five comparisons parts; run `visionhousing comparisons --warm --state ST` first, or each part takes minutes on a large state), `--extras` (also save each extra scenario alone, `extra_runs` in the index; without it the extra switches say "Needs the local app (make app)."), `--law-changes yes|no` (default yes: "What this law changes" per reform in `ST/law_changes/KEY.json`, listed under `law_changes` in the index; each file carries the read-next bounds only when `python -m visionhousing.api.law_changes --state ST --read-next` has cached them), `--budget-grid yes|no` (default yes: the ADU budget-and-target grid in `ST/adu-budget-grid.json`, `adu_budget_grid: true` in the index, read from the disk cache only, so run `visionhousing adu-budget-grid --state ST` first; without it the panel says it needs the local app), `--alternatives yes|no` (default yes: the five benchmarks' Alternatives table in `ST/alternatives.json`, compact (P10/P90 numbers and standard errors left out, their text kept), `alternatives: true` in the index, read from the disk cache only, so run `python -m visionhousing.api.alternatives --state ST` first; without it the table says it needs the local app), `--draws`, `--seed`. The cards, the grades and the districts (for a state whose pack holds district outlines, both chambers) are always saved; each is flagged in the index only once all its files are saved. Exporting a second state adds to
 `states.json`.
 
 **Size budget.** The folder is committed for the static host. It must stay within two limits,
@@ -144,7 +144,8 @@ benchmark reform (the baseline's and the state bills' briefs go). Then it saves 
 without their county records, then `--tracts auto` drops the tract profiles, then `--explain auto` drops the
 run explanations. Each benchmark's headline range, citation, coverage and status, the baseline
 card, the accounting records and the reproducibility record sit in the runs and cards, which no
-step before the last one touches. The size table ends with both totals.
+step before the last one touches; the Alternatives table (about 8-9 KB compressed per state) is
+never dropped. The size table ends with both totals.
 
 **Compact tract profiles.** Whole, Pennsylvania's 3,445 tract profiles take about 474 MB
 (about 138 KB each); compact, about 12.0 MB (a 0.72 MB template and 67 county files, the largest,
@@ -211,6 +212,7 @@ fingerprinted `assets/`, and revalidation for `data/`. The root `package.json` o
 | `js/ui/dock.js` | A side panel ("dock"): header, scrolling body, fold into a box (icon, title, key number) with a size morph, and the right panel's resize handle (pointer and arrow keys; width kept in this browser) |
 | `js/ui/charts.js` | Hand-written SVG charts: donut, bars, 100% stack, small range bar, sparkline, rank words, a step chart ("share of modeled draws with at least N", with each share's Monte Carlo standard error) and year columns with a likely-range whisker; each a figure with a spoken summary and a table twin. A chart's source line and method words sit behind "(i) About this chart" (`About`, a native disclosure). `ProfileChart` draws a place profile's `charts` entries |
 | `js/ui/budget-target.js` | The budget-and-target panel (Compare screen, folded) and its demo path; see "Budget and target" below |
+| `js/ui/alternatives.js` | `AlternativesButton({state, reform, title})` on the Reform headline (benchmarks only): one "Alternatives" button that opens a modal side sheet (native `<dialog>`, styles in `css/alternatives.css`) with the compact alternatives table; see "Alternatives at a glance" below |
 | `js/lib/budget.js` | `gridLookup`, the browser twin of the server's budget-grid lookup (no interpolation), and `cellKey` |
 | `js/ui/cycle.js` | The baseline housing-cycle preset (Low / Central / High) as three buttons; written into the link as `preset` |
 | `js/ui/decision.js` | The decision view (Question, Answer, Where and why, What to change, Use it; one line and one visual each), the paired readouts ("How sure": share of modeled draws with at least N and its standard error, share of the baseline, the cost row), "What would narrow the range" (variance shares and the research-agenda sentence) and the binding-constraint card. Reads the run reply and the map reply's `decision` block; each part shows only when its data is there |
@@ -741,6 +743,24 @@ fold, `BudgetDemo`.
 - **Accessibility.** Native inputs with labels, a polite live result line, a table twin for the
   chart, a scrollable table region with a label, distinct flag marks, motion only without reduced
   motion.
+
+## Alternatives at a glance (`js/ui/alternatives.js`)
+
+- **Where.** One "Alternatives" button under the Reform headline numbers, for the five benchmark
+  reforms (also under a hidden transit range). Nothing else on the screen changes: the table
+  opens in a modal side sheet and closes back to the button.
+- **What.** The benchmark's middle and likely range with its scope, then one row per named
+  alternative: title and one-line reason (or why it is not built), homes added (middle, likely
+  range), the paired change from the benchmark, draws below / above, and the status (Built / Not
+  built / Needs the local app). The caption holds the counts and the widest swing; the formula
+  line closes the sheet.
+- **Data.** Live `GET /api/v1/states/ST/alternatives?r=KEY` (asked again on 504 while the server
+  works the table out); static `ST/alternatives.json` only when `ST/index.json` says
+  `alternatives: true`, else "needs the local app". Every number is server text
+  (`src/visionhousing/api/alternatives.py`); the browser does no arithmetic.
+- **Accessibility.** Native button and `<dialog>` (focus moves in, Escape closes, focus returns),
+  a real table with caption and row/column headers inside a labelled, focusable scroll region,
+  a polite loading line, motion only without reduced motion, colour tokens only.
 
 ## Baseline card, headline scope, hearing brief and profile coverage (`js/ui/baseline-card.js`)
 

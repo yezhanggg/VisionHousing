@@ -76,6 +76,19 @@ central-value total exactly.
 
 `ChannelBResult.per_unit` keeps the per-draw baseline homes reached and the saving per unit, and `engine.readouts` turns them into the public cost: revenue given up = fee cut per unit × (baseline homes + added homes), county by county, and cost per added home = revenue given up ÷ added homes, in each draw. A cut applies to every permitted home, so most of the revenue goes to homes that would be built anyway. The state-fee-level variant reruns this module once in its `state` view; the targeted variant sums the same counties' draws within one group of similar counties (no rerun). See [engine.md](engine.md#readouts-from-the-paired-draws-readoutspy).
 
+## Documented local view
+
+`view="local"` (variant `fees_documented_local`) takes fees per unit by county
+and structure type from `local_fees(params, counties)`: the documented city
+schedules where a city's core fee categories are complete and the city is a
+whole county (Philadelphia today), the labelled judgement
+`fees.pa_assumed_fee_per_unit_judgement` elsewhere. The saving is that fee times
+the 50% cut, so it varies by county and type; the fiscal readouts use
+`engine.readouts.local_per_unit` to weight each county's fee by its baseline
+and its added homes. See [fee_schedules.md](fee_schedules.md) and
+[methods/fees.md](../methods/fees.md). The benchmark view never reads the
+schedules.
+
 ## Fiscal screen and the deferral view
 
 `engine.readouts.fiscal_split` splits a cut's money in every draw: waived on homes built anyway, waived on the added homes (the two add up to the revenue given up), fees still paid by the added homes, replacement funding (`fees.replacement_funding_share`, none by default) and the net change. `fee_reform(..., view="deferral")` (variant `fees_deferral`) keeps the fee but moves payment to occupancy: saving per unit = fees x construction-loan rate x deferral months / 12; `engine.readouts.deferral_readouts` gives its public cost (time value and collection loss), the fees the added homes pay, and the net change. Method: [fees](../methods/fees.md#fiscal-screen-who-gives-up-what). Tested in `tests/test_benchmark_variants.py`: the split adds up to the revenue given up; the replacement share scales it; the deferral adds fewer homes than the cut at a smaller public cost; the saving by hand.

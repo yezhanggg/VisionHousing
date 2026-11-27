@@ -50,6 +50,17 @@ Where a state law already guarantees part of what the reform allows, the reform 
 
 Records: `floor_served_share`, `floor_newly_legal_share`, `floor_existing_alternative` (homes not counted because the already-allowed design also pencils) and `floor_freeze_difference`. The parameters of each version are in `assumptions/law/statutory_rights.yaml` (block `missing_middle_application`); the code is `law/rights.py` (`middle_floor_schedule`), `engine/law_floor.py` and the funnel's `floor` argument. The prototype method is not changed by the floor. This replaces the earlier judged Vermont range for `missing_middle.sf_only_zoned_share` (15–50% of lots "not yet legal"), which folded the statute into one share.
 
+### Town bylaws (named variant `vt_missing_middle_town_bylaws`)
+
+The benchmark uses the statewide floor everywhere. The named variant (option `local_rights: town_bylaws`) also reads the Vermont town readings in `assumptions/law/local_readings.yaml`:
+
+- **Which towns.** A town counts when its reading is verified, its `small_multiunit` fact is verified (`require_verified` in `local_readings` of `assumptions/variants.yaml`) and the reading counts from a date on or before the run's as-of date: its effective date, else its `in_force_by` date, else its review date. Drafts, guidance, superseded texts and towns not read never count.
+- **Its level.** For each window year, each listed district is read with the state floor of that year (`rights.state_floor`: the district's own by-right maximum, its served-district statements, the 2028 exception), and the town's level is the smallest over its districts. One district with an unknown answer leaves the whole town on the statewide floor.
+- **Where it applies.** On the part of a tract's lots inside the town (2020 housing units of the tract piece, pack table `tract_municipalities`), "already allowed" becomes `max(state floor comparator, town level)`; the rest of the tract keeps the statewide floor. A town that allows no more than the floor changes nothing. Record `floor_town_bylaw_share` gives the share of eligible lots reached; the run's notes name the towns used and why each other one was not.
+- **Checks (tested).** With no town placed the variant equals the benchmark draw for draw; a town allowing four homes takes the fourplex out on its unserved lots, in proportion to its share.
+
+Since D6 (2026-11-26) the Vermont pack has `tract_municipalities` (2020 block assignment, county subdivisions). Seed 0, 2,000 draws, as-of 2026-11-24: benchmark 4.36 (1.17-16.86), variant 4.36 (1.17-16.86), paired difference 0 (0 to 0; below the benchmark in 4.4% of draws, at most 2.3 homes). Only Barre and Montpelier count on the as-of date; both allow 4 homes by right, so the fourplex there is no longer counted as added. With the readings read on 2026-11-26 (a check, not shipped: Barre, Burlington, Montpelier, Rutland, South Burlington and Winooski, all 4 by right) the variant is 4.32 (1.17-16.44), paired -0.02 (-0.51 to 0).
+
 Limits: how far each town's bylaw has caught up with the statute is not measured.
 
 ### Step 2 · Lot large enough `f`

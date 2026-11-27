@@ -452,6 +452,31 @@ def _sentence(reform: str, rate: Mapping[str, Any], band: Mapping[str, Any] | No
     return f"Our likely range, {ours}, sits within {seen}."
 
 
+def _observed_context(state: Any, run: Any) -> dict[str, Any] | None:
+    """Massachusetts: the state ADU survey beside the ADU rates, as observed context.
+
+    Counts of ADUs approved by the towns that answered, per survey period; never
+    turned into a rate and never compared with the band (no lot count goes with it).
+    ``None`` for every other state.
+    """
+    if str(state or "").upper() != "MA":
+        return None
+    from visionhousing.features.ma_intake import read_survey, survey_context
+    from visionhousing.scenarios.extra_common import _folder
+
+    ctx = getattr(getattr(run, "run_context", None), "state", None)
+    folder = _folder(ctx) if ctx is not None else None
+    if folder is None:
+        try:
+            from visionhousing.engine.context import pack_dir
+
+            folder = pack_dir("MA")
+        except Exception:
+            folder = None
+    got = survey_context(read_survey(folder))
+    return {"label": "Massachusetts ADU survey (observed context, not a rate)", **got}
+
+
 def plausibility(
     run: Any,
     reforms: Sequence[str] | None = None,
@@ -517,6 +542,9 @@ def plausibility(
                          "observed": pts, "sentence": sentence,
                          "axis": _axis(rate, band, pts, settings)})  # fmt: skip
         out[key] = {"measures": rows, "state": "observed"}
+    context = _observed_context(state, run)
+    if context is not None and "adu" in out:
+        out["adu"]["context"] = context
     return {
         "state": state,
         "seed": seed,

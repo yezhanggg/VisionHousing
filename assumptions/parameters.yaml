@@ -662,7 +662,7 @@ parameters:
     status: draft
 
   adu.soft_cost_share:
-    label: "Design, permits and contingency as a share of construction"
+    label: "Design, permit preparation and contingency as a share of construction (fees not included)"
     unit: "share"
     central: 0.20
     low: 0.12
@@ -3674,6 +3674,49 @@ parameters:
     revisit: "Compare connection waits before and after fee cuts in places with capacity-funded tap fees."
     status: draft
 
+  fees.local_schedule_position:
+    label: "Position between the low and high readings of the documented local fee schedules"
+    unit: "share"
+    central: 0.5
+    low: 0.0
+    high: 1.0
+    shape: pert
+    kind: judgement
+    source: []
+    rationale: >-
+      Where a documented fee schedule can be read two ways for a prototype
+      (an ADU filed as a new accessory structure or as a new dwelling; a
+      shared or a new water service; a combined or a separate fire service),
+      assumptions/fee_schedules.yaml keeps both readings. In each draw the
+      documented fee is the low total plus this share of the gap to the high
+      total, for every item at once (so the range is as wide as the two
+      readings allow). 0 = every item at its low reading, 1 = at its high
+      reading. Used only by the variant 'fees_documented_local'.
+    used_by: [fees]
+    revisit: "Replace with each city's actual mix once permit records show which filing path small projects take."
+    status: draft
+
+  fees.local_electrical_cost_share:
+    label: "Electrical work as a share of construction cost (valuation-based electrical permit)"
+    unit: "share"
+    central: 0.10
+    low: 0.07
+    high: 0.14
+    shape: pert
+    kind: judgement
+    source: []
+    rationale: >-
+      Philadelphia prices the electrical permit at $25 for each $1,000 of
+      estimated electrical construction cost (assumptions/fee_schedules.yaml,
+      item phl_li_electrical). The schedule does not say what that cost is, so
+      it is this share of the prototype's construction cost (the ledger's cost
+      per square foot x floor area). Electrical work is commonly about a tenth
+      of the hard cost of a new home or apartment building. Team judgement.
+      Used only by the variant 'fees_documented_local'.
+    used_by: [fees]
+    revisit: "Use the electrical share of permit valuations in the City's permit records."
+    status: draft
+
   parking.voluntary_project_spread:
     label: "Spread of voluntary parking across projects (share of the context average, either side)"
     unit: "share"
@@ -4350,6 +4393,106 @@ parameters:
       a ratio.
     used_by: [adu, pa_hb2186, pa_sb1346]
     revisit: "Display rule only."
+    status: draft
+
+  adu.ma_sf_district_share:
+    label: "Massachusetts: share of single-family lots inside a single-family residential zoning district"
+    unit: "share"
+    central: 0.8
+    low: 0.65
+    high: 0.9
+    shape: pert
+    kind: judgement
+    source: []
+    rationale: >-
+      M.G.L. c. 40A § 3 protects one ADU by right only in a single-family
+      residential zoning district. Most single-family homes stand in such
+      districts; older cities also zone many of them two-family or mixed,
+      where the state right does not reach. Not measured: no statewide zoning
+      map in the pack. Used only by the named variant ma_adu_state_floor.
+    used_by: [adu]
+    revisit: "Replace with a lot count from a statewide zoning-district map when one can be read by script."
+    status: draft
+
+  adu.ma_primary_below_floor_share:
+    label: "Massachusetts: share of single-family primary dwellings under 1,200 sq ft"
+    unit: "share"
+    central: 0.18
+    low: 0.1
+    high: 0.3
+    shape: pert
+    kind: judgement
+    source: []
+    rationale: >-
+      Under c. 40A § 1A an ADU may be capped at half the principal dwelling's
+      gross floor area, so a 600 sq ft ADU is protected only where the house
+      has at least 1,200 sq ft. The pack has no floor-area data (the ACS tables
+      it reads count structures, not square feet); this is team judgement for
+      the share of single-family homes below 1,200 sq ft, wide on purpose. The
+      1,200 sq ft line follows from the statute and the benchmark size and is
+      checked in assumptions/law/statutory_rights.yaml. Used only by the named
+      variant ma_adu_state_floor.
+    used_by: [adu]
+    revisit: "Replace with assessor floor areas (statewide parcel data) or the AHS floor-area distribution for Massachusetts."
+    status: draft
+
+  adu.ma_local_size_allows_benchmark_share:
+    label: "Massachusetts: share of homes under the size floor where the town already allows a 600 sq ft ADU"
+    unit: "share"
+    central: 0.25
+    low: 0.1
+    high: 0.45
+    shape: pert
+    kind: judgement
+    source: []
+    rationale: >-
+      A town may allow more than the state floor; some bylaws allow a fixed
+      size (for example 900 sq ft) whatever the house. On those lots the
+      benchmark's 600 sq ft adds no new right. Team judgement; local bylaws
+      were not read. Used only by the named variant ma_adu_state_floor.
+    used_by: [adu]
+    revisit: "Read the ADU size rule of a sample of Massachusetts bylaws."
+    status: draft
+
+  adu.ma_town_requires_space_share:
+    label: "Massachusetts: share of lots beyond the station distance where the town requires the one ADU parking space"
+    unit: "share"
+    central: 0.5
+    low: 0.3
+    high: 0.7
+    shape: pert
+    kind: judgement
+    source: []
+    rationale: >-
+      Section 3 lets a town require at most one added parking space for an ADU,
+      and none within 0.5 miles of a listed station. Whether a town uses that
+      allowance is in its bylaw, which was not read. Team judgement, wide on
+      purpose. Used only by the named variant ma_adu_state_floor.
+    used_by: [adu]
+    revisit: "Read the ADU parking rule of a sample of Massachusetts bylaws."
+    status: draft
+
+  adu.ma_boston_share_of_suffolk_lots:
+    label: "Massachusetts: Boston's share of Suffolk County single-family lots (used only without a tract-to-town table)"
+    unit: "share"
+    central: 0.7
+    low: 0.55
+    high: 0.85
+    shape: pert
+    kind: judgement
+    source: []
+    rationale: >-
+      Chapter 40A does not cover Boston. Suffolk County is Boston, Chelsea,
+      Revere and Winthrop; Boston holds most of its homes, while Revere and
+      Winthrop hold more than their share of single-family houses. Used for
+      every Suffolk tract only when the pack has no tract_municipalities table;
+      with the table, each tract's measured Boston share of 2020 housing units
+      is used instead. The Massachusetts pack carries the table since
+      2026-11-26 (tract-crosswalk step), so this range is now only the
+      fallback for a pack built without that step. Used only by the named
+      variant ma_adu_state_floor.
+    used_by: [adu]
+    revisit: "Drop once every way of building the Massachusetts pack writes tract_municipalities (the tract-crosswalk step can fail and be skipped)."
     status: draft
 
   market.conventional_home_size_sqft:

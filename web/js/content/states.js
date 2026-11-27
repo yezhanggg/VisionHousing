@@ -21,10 +21,16 @@ export const STATES = [
  */
 export const TESTLAND = ["TL", "Testland (synthetic)"];
 
-export const STATE_CODES = [...STATES.map(([code]) => code), TESTLAND[0]];
+/**
+ * The demo state: a second tiny synthetic state with the hard cases of a decision demo
+ * (tests/fixtures/demo_state). A link may name it (`s=DM`) when an export holds it.
+ */
+export const DEMO_STATE = ["DM", "Demo state (synthetic)"];
+
+export const STATE_CODES = [...STATES.map(([code]) => code), TESTLAND[0], DEMO_STATE[0]];
 
 /** The state's name for a postal code, or the code itself if unknown. */
 export function stateName(code) {
-  const hit = [...STATES, TESTLAND].find(([c]) => c === code);
+  const hit = [...STATES, TESTLAND, DEMO_STATE].find(([c]) => c === code);
   return hit ? hit[1] : code;
 }

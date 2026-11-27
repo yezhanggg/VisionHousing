@@ -114,6 +114,14 @@ variants:
     options:
       minimums: verified
 
+  parking_verified_minimums_bar:
+    reform: parking
+    title: "Parking: verified minimums only where 50% of residents are covered"
+    question: "If verified local minimums above zero replace the 1.5 / 2.0 default only in the counties whose verified rows cover at least half of their residents (the documented hook rule in assumptions/law/hooks.yaml), what does removing them add? Every other county keeps the default; zero minimums act through the county reach factor, as in the benchmark. The run's notes name the counties that pass."
+    overrides: {}
+    options:
+      minimums: verified_bar
+
   parking_baseline_window_pa_2022_2025:
     reform: parking
     title: "Parking reform under the 2022-2025 Pennsylvania baseline window (sensitivity)"
@@ -145,6 +153,14 @@ variants:
     overrides: {}
     options:
       capacity_case: delayed
+
+  fees_documented_local:
+    reform: fees
+    title: "Fee cut from documented local fee schedules (current fees, not the benchmark)"
+    question: "If the cut starts from what fees actually are, using each city's own documented fee schedules where they are complete (Philadelphia today) and the labelled state judgement elsewhere, how many homes does halving them add, and what does it cost? The benchmark's $50,000 is unchanged."
+    overrides: {}
+    options:
+      view: local
 
   fees_deferral:
     reform: fees
@@ -200,6 +216,14 @@ variants:
     options:
       existing_capacity: acre_share
 
+  tod_ma_3a_q_scaled:
+    reform: tod
+    title: "TOD with q x existing 3A capacity subtracted (Massachusetts 3A)"
+    question: "If land already zoned by right under Section 3A were treated like base-zoning land, subtracting only q x the existing modeled capacity (q = tod.baseline_replacement_probability, the chance a site would be rebuilt at today's rules anyway) instead of all of it, how many homes would TOD add?"
+    overrides: {}
+    options:
+      existing_3a_subtract: q_scaled
+
   adu_timing_reliable:
     reform: adu
     title: "ADUs with predictable approval (slow reviews pulled to the median)"
@@ -227,6 +251,34 @@ variants:
       adu.financing_rent_income_share: adu.financing_access_rent_income_share
     options: {}
 
+  # ---------------------------------------------------------------- local readings (Vermont, Wyoming)
+  # Town and city bylaw readings of assumptions/law/local_readings.yaml enter only
+  # through these variants (settings in `local_readings` below). The benchmark
+  # headlines never read them. Only verified readings in force on the run's
+  # as-of date count; a town the pack cannot place on tracts keeps the default.
+  vt_missing_middle_town_bylaws:
+    reform: missing_middle
+    title: "Missing middle in Vermont: town bylaws where they allow more than the state floor"
+    question: "In the Vermont towns whose bylaw was read and verified, if the homes their districts already allow by right (read with the state floor of each year) replace the statewide § 4412 floor as the level already allowed where the bylaw allows more, how many homes does the reform add? Every other lot keeps the statewide floor."
+    overrides: {}
+    options:
+      local_rights: town_bylaws
+  vt_parking_town_bylaws:
+    reform: parking
+    title: "Parking in Vermont: verified town minimums in place of the default"
+    question: "Where a Vermont town's parking minimum was read and verified (and is in force on the run's as-of date), what does removing it add, using that minimum instead of the 1.5 / 2.0 default? Every other place keeps the labelled default."
+    overrides: {}
+    options:
+      minimums: local_readings
+      readings_state: VT
+  wy_parking_local:
+    reform: parking
+    title: "Parking in Wyoming: verified local minimums in place of the default"
+    question: "Where a Wyoming city's parking minimum was read and verified (Laramie) and is in force on the run's as-of date, what does removing it add, using that minimum instead of the 1.5 / 2.0 default? Every other place keeps the labelled default."
+    overrides: {}
+    options:
+      minimums: local_readings
+      readings_state: WY
   # ---------------------------------------------------------------- ADU program budget and timing on a finite stock
   # scenarios/adu_budget.py, docs/methods/adu_levers.md. These runs use the
   # yearly hazard on surviving eligible sites with an application-to-permit lag;
@@ -270,6 +322,39 @@ variants:
       adu.budget_award_amount: adu.budget_award_amount_illustrative
       adu.budget_loan_share: adu.budget_loan_share_loan
     options: {}
+
+  # ---------------------------------------------------------------- Massachusetts ADU state floor
+  # law/ma_adu.py, assumptions/law/statutory_rights.yaml (ma_40a_3_adu,
+  # ma_adu_application). Massachusetts runs only.
+
+  ma_adu_state_floor:
+    reform: adu
+    title: "ADUs in Massachusetts: only the right the benchmark adds to the state ADU law"
+    question: "If the already-legal share comes from the state ADU law itself (c. 40A § 1A size cap of half the house or 900 sq ft, § 3 parking rule near listed stations, single-family districts, Boston outside chapter 40A), tract by tract, instead of the labelled statewide range, how many ADUs does the benchmark add? Only lots where the benchmark gives a right the state law does not count."
+    overrides: {}
+    options:
+      legal: ma_state_floor
+
+  # ---------------------------------------------------------------- Pennsylvania zoning districts
+  # engine/zone_scope.py, assumptions/law/zone_scope.yaml; the pack table
+  # rule_area_weights (law/rule_weights.py). Only the sample tracts change; a pack
+  # without the table gives the benchmark draw for draw.
+
+  adu_zoning_districts:
+    reform: adu
+    title: "ADUs with the zoning-district reading in the sample (Philadelphia, Pittsburgh, Frankstown)"
+    question: "If, in the three sample jurisdictions, the already-legal share comes from their zoning districts (verified code text only: known by right, conditions relaxed, newly eligible, discretionary, unresolved at the statewide range) instead of the benchmark's share, how many ADUs does the benchmark add?"
+    overrides: {}
+    options:
+      legal: zoning_districts
+
+  adu_zoning_districts_guidance:
+    reform: adu
+    title: "ADUs with the zoning-district reading, counting Philadelphia's 2022 ADU checklist (guidance, a sensitivity)"
+    question: "The same zoning-district reading, but also counting the City of Philadelphia's own ADU checklist (guidance, not the code): how many ADUs does the benchmark add?"
+    overrides: {}
+    options:
+      legal: zoning_districts_guidance
 
   # ---------------------------------------------------------------- practical capacity
   # The same reform with its added homes screened for sewer service, FEMA flood
@@ -351,3 +436,39 @@ decomposition:
     lowrise_variant: tod_lowrise
     # Miles from any major stop for the "wider coverage" case (one of 0.25, 0.5, 0.75).
     wider_distance: 0.75
+# Settings of the local-reading variants (read by visionhousing.engine.law_floor).
+# Only facts marked verified, from final bylaw text, feed a number; drafts,
+# guidance and superseded texts never do. A reading counts from its effective
+# date (else in_force_by, else its review date) and only when that is on or
+# before the run's as-of date (assumptions/outcome.yaml).
+local_readings:
+  id: variants.local_readings
+  source_id: vt_wy_local_bylaws
+  crosswalk_source_id: census_baf_2020_mcd
+  weight: >-
+    a tract's lots split among the towns it touches by their 2020 housing units
+    in it (pack table tract_municipalities); a town's reading covers its part
+  missing_middle:
+    states: [VT]
+    # facts that must be verified before a town's district rights are used
+    require_verified: [small_multiunit]
+    # the town's level = the smallest by-right maximum over its listed districts,
+    # each read with rights.state_floor on that year's date; any unknown district
+    # (None) leaves the town on the statewide floor
+  parking:
+    # numbers of the parking fact tried in order (the smallest stated minimum
+    # for the building type comes first, so a range of minimums never overstates)
+    apartment_fields: [residential_min_per_unit_mf_low, residential_min_per_unit_mf_high,
+                       residential_min_per_unit]
+    small_fields: [residential_min_per_unit_mf_low, residential_min_per_unit_mf_high,
+                   residential_min_per_unit]
+    # a parking fact with an open flag (for example "whether a state cap on
+    # residential minimums overrides it was not read") keeps the default
+    skip_flagged: true
+    # places whose generic per-unit figure is the one- and two-family figure,
+    # not the apartment one: their apartments keep the default
+    generic_not_for_apartments:
+      wy_laramie: >-
+        1 space per home is the single- and two-family figure; multi-family is 1.5
+        per unit of more than one bedroom for the first 16 units, then 1, and the
+        bedroom mix is not known

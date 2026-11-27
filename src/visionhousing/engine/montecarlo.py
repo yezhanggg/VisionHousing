@@ -31,6 +31,10 @@ fall below the baseline's P10 and about 10% above its P90.
 
 from __future__ import annotations
 
+from collections.abc import Callable, Iterator
+from contextlib import contextmanager
+from contextvars import ContextVar
+
 import numpy as np
 
 from visionhousing.engine.records import Record
@@ -41,6 +45,7 @@ __all__ = [
     "BASELINE_STREAM",
     "baseline_positions",
     "baseline_scale",
+    "baseline_scale_hook",
     "scale_at",
     "spread_ratios",
 ]
@@ -105,6 +110,25 @@ def baseline_positions(n: int, seed: int) -> np.ndarray:
     return (slots + rng.random(n)) / n
 
 
+ScaleHook = Callable[[np.ndarray, float, float, int], np.ndarray]
+_SCALE_HOOK: ContextVar[ScaleHook | None] = ContextVar("visionhousing_scale_hook", default=None)
+
+
+@contextmanager
+def baseline_scale_hook(hook: ScaleHook) -> Iterator[None]:
+    """Within the block, :func:`baseline_scale` asks ``hook`` for the county multipliers.
+
+    For named sensitivity runs only (``engine.correlated``): ``hook(u, low, high,
+    n_counties)`` gets the run's positions and the state's spread ratios and
+    returns a ``(n_counties, n)`` array. Outside the block nothing changes.
+    """
+    token = _SCALE_HOOK.set(hook)
+    try:
+        yield
+    finally:
+        _SCALE_HOOK.reset(token)
+
+
 def baseline_scale(state: Record, n_counties: int, n: int, seed: int) -> np.ndarray:
     """Return the baseline multiplier per county and draw.
 
@@ -118,5 +142,11 @@ def baseline_scale(state: Record, n_counties: int, n: int, seed: int) -> np.ndar
         Array of shape ``(n_counties, n)``; every county shares the draw's value.
     """
     low, high = spread_ratios(state)
+    hook = _SCALE_HOOK.get()
+    if hook is not None:
+        out = np.asarray(hook(baseline_positions(n, seed), low, high, n_counties), dtype=float)
+        if out.shape != (n_counties, n):
+            raise ValueError(f"scale hook returned shape {out.shape}, want {(n_counties, n)}")
+        return out
     scale = scale_at(baseline_positions(n, seed), low, high)
     return np.broadcast_to(scale, (n_counties, n)).copy()

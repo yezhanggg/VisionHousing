@@ -43,7 +43,10 @@ development tracker, and the ADU survey) are optional. When one was not supplied
 says so: a limits line starting "not supplied" names the file under `data/raw/local/ma/`,
 the JSON row has `not_supplied: true`, and that file's source is left out of the row's
 sources and vintage, so a table built without it never claims its edition. The 3A status
-list built from the atlas alone stays `available`; the ADU survey stays `missing`.
+list built from the atlas alone stays `available`; the ADU survey stays `missing`. When the survey copy is supplied (`data/raw/local/ma/ma_adu_survey.csv` with its
+`.edition.yaml` note), the row is `available`, marked hand-saved with its edition, and one
+limits line gives the observed counts per survey period and the towns that answered
+(`features.ma_intake.survey_context`): context, never a rate.
 
 ## Add-on tables that failed to load
 

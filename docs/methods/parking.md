@@ -147,6 +147,77 @@ number, keeps the default.
 The benchmark headline does not change: verified non-zero minimums enter
 only through this named variant.
 
+## The documented 50% bar (variant `parking_verified_minimums_bar`)
+
+The law hooks let a county use its own read values only when its verified
+rows cover at least half of its residents (`min_coverage` in
+`assumptions/law/hooks.yaml`). The variant `parking_verified_minimums_bar`
+(option `minimums: verified_bar`) applies that same bar to non-zero
+minimums:
+
+- **Where.** Only the counties the parking hook qualifies (the run's notes
+  name them; on 2026-11-26 Fayette, Pike and Warren). Every other county
+  keeps the labelled default, even where some municipalities are read.
+- **Which numbers.** The verified, in-force minimums above zero of those
+  counties' municipalities (`scenarios.parking.bar_minimums`), mixed in as in
+  `parking_verified_minimums` (same weights, same rule, `v` from the default).
+- **Zeros as in the benchmark.** A verified zero is not put in the mix; it
+  keeps working through the county reach factor, exactly as in the
+  benchmark, so nothing is counted twice.
+- **Checks (tested).** With no county over the bar the variant equals the
+  benchmark draw for draw (up to floating-point rounding); only counties over
+  the bar change; zero minimums give the benchmark's reach-factor result.
+
+It is shown beside the benchmark in "Alternatives at a glance"
+(`assumptions/alternatives.yaml`, Pennsylvania only). The benchmark headline
+does not change.
+
+## Vermont and Wyoming local readings (variants `vt_parking_town_bylaws`, `wy_parking_local`)
+
+Vermont and Wyoming have no municipal rule table. Their town and city
+readings (`assumptions/law/local_readings.yaml`) feed the same mix through
+option `minimums: local_readings` and `readings_state` (`VT` or `WY`):
+
+- **Which numbers.** Only a place whose reading is verified and counts from a
+  date on or before the run's as-of date (effective date, else `in_force_by`,
+  else review date), and only its `parking` fact marked verified. A draft fact
+  (Rutland), a fact with an open flag (Essex and Hartford: the state cap on
+  minimums was not checked; `skip_flagged`), a superseded text (Teton County)
+  and a place not read keep the default. Numbers are tried in the order of
+  `apartment_fields` / `small_fields` (smallest stated minimum first);
+  Laramie's apartments keep the default, because its per-home figure is the
+  one- and two-family one (`generic_not_for_apartments`). Settings:
+  `local_readings` in `assumptions/variants.yaml`.
+- **Where.** As in `parking_verified_minimums`: each tract's homes split among
+  its county subdivisions by 2020 housing units (`tract_municipalities`). A
+  reading of a Census place that is not a county subdivision (Laramie, 7-digit
+  `geoid`) is split the same way over the place pieces of `tract_places`
+  (`law/places.py`: `place_pieces`, `readings_on_places`); the two tables are
+  never mixed in one run (a state whose readings in force mix both keeps the
+  places on the default, noted). The county reach factor stays as in the
+  benchmark.
+- **Checks (tested).** In another state, with nothing in force, or with no way
+  to place the places on tracts, the variant equals the benchmark draw for
+  draw (up to floating-point rounding).
+
+Since D6 (2026-11-26) the Vermont pack has `tract_municipalities` and the
+Wyoming pack `tract_places` (see [pack](../modules/pack.md)), so every reading
+in force is placed on tracts. Runs, seed 0, 2,000 draws, P50 (P10-P90), as-of
+2026-11-24:
+
+- `vt_parking_town_bylaws`: benchmark 82.5 (33.6-166.4), variant 82.5
+  (33.7-166.0), paired difference -0.7 (-3.3 to +1.7). Barre and Montpelier (1
+  space per home) sit below the 1.5 / 2.0 default, so their homes avoid fewer
+  spaces; Colchester (1.5) changes little.
+- `wy_parking_local`: 21.2 (8.4-48.0), equal to the benchmark (paired 0):
+  Laramie counts from its review date, 2026-11-26, after the as-of date.
+
+The same runs with the readings read on 2026-11-26 (a check, not shipped):
+Vermont parking 29.3 (11.4-63.1), paired -51.5 (-105.2 to -21.1), mostly
+Burlington's zero minimum (nothing left to remove there); Wyoming 21.2
+(8.3-48.0), paired -0.03 (-0.07 to -0.01): Laramie's 1 space per home in 2-4
+unit buildings is below the default, and its apartments keep the default.
+
 ## Baseline-window sensitivity
 
 **Variant `parking_baseline_window_pa_2022_2025`** (Pennsylvania only) re-runs

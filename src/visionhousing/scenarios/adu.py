@@ -974,6 +974,7 @@ def adu_funnel(
     local_categories: Mapping[str, Mapping[str, float]] | None = None,
     lot_reach: np.ndarray | None = None,
     lot_detail: bool = False,
+    legal_rule: Any | None = None,
 ) -> AduResult:
     """Run the ADU funnel for every tract and every Monte Carlo draw.
 
@@ -1007,6 +1008,17 @@ def adu_funnel(
             Every later stage scales with it.
         lot_detail: Keep the per-lot shares project choice reads
             (:class:`AduLotDetail`). No stage changes.
+        legal_rule: A per-tract already-legal rule with ``ids`` (ledger ids
+            it draws) and ``share(col)`` (draws x tracts), used **in place of**
+            the statewide range and any local rule (Massachusetts variant
+            ``ma_adu_state_floor``, :class:`visionhousing.law.ma_adu.StateFloorRule`).
+            A rule with ``blends_base`` is given the share worked out above as
+            ``base`` and keeps it outside its own tracts (Pennsylvania variants
+            ``adu_zoning_districts`` and ``adu_zoning_districts_guidance``,
+            :class:`visionhousing.engine.zone_scope.DistrictRule`); its optional
+            ``records(lots, legal, col)`` adds records, and ``record_key`` /
+            ``record_name`` / ``record_expression`` / ``source_ids`` name its share record.
+            ``None`` (the benchmark) changes nothing.
 
     Returns:
         An :class:`AduResult`.
@@ -1022,6 +1034,7 @@ def adu_funnel(
     extra = [CONDITIONS_PARAM] if local_categories else []
     extra += [FORM_PARAMS[t] for t in scope.building_types if FORM_PARAMS[t] in ledger]
     extra += [i for i in (CONVERSION_PARAM, *SIZE_PARAMS) if i in ledger]
+    extra += list(legal_rule.ids) if legal_rule is not None else []
     v = sample(ledger, n=draws, seed=seed, ids=[*ids, *dict.fromkeys(extra)])
     col = {k: a[:, None] for k, a in v.items()}  # (draws, 1) columns
     n_tracts = len(tracts)
@@ -1062,6 +1075,10 @@ def adu_funnel(
                 + share["unknown"] * col[LEGAL_PARAM]
             )
             legal[:, mask] = np.clip(cat_legal, 0.0, 1.0)
+    if legal_rule is not None:
+        # A rule that blends (zoning-district variants) keeps the share above outside its tracts.
+        blend = bool(getattr(legal_rule, "blends_base", False))
+        legal = legal_rule.share(col, base=legal) if blend else legal_rule.share(col)
     keep = adj * (1.0 - legal) * inside
     if lot_reach is not None:
         keep = keep * np.clip(np.asarray(lot_reach, dtype=float), 0.0, 1.0)[None, :]
@@ -1181,6 +1198,10 @@ def adu_funnel(
         ids = [*ids, DELAY_PARAM]
     if local_categories:
         ids = [*ids, CONDITIONS_PARAM]
+    if legal_rule is not None:
+        # The rule's ids replace the statewide range's (a rule that still draws it lists it).
+        keep = [i for i in ids if i != LEGAL_PARAM]
+        ids = [*keep, *(i for i in legal_rule.ids if i not in keep)]
     records = _state_records(stages, ledger, fit, scope, ids, population, years)
     work = _work_type_stages(
         fit_by_type, fit_lots, {"fit": fit_lots, "feasible": feasible, "built": built, "net": net},
@@ -1196,6 +1217,24 @@ def adu_funnel(
         records.update(
             _exposure_records(eligible_by_type, counties, local_categories, ledger, records)
         )
+    if legal_rule is not None:
+        lots = sum(np.clip(homes[t], 0, None) for t in scope.building_types) * adj * inside
+        total = lots.sum(axis=1)
+        mean = np.where(total > 0, (lots * legal).sum(axis=1) / np.where(total > 0, total, 1), 0)
+        key = getattr(legal_rule, "record_key", "already_legal_share_state_floor")
+        records[key] = rec.from_draws(
+            getattr(legal_rule, "record_name", "share of reached lots where the benchmark ADU is "
+                    "already legal under the state floor"),
+            mean, "share",
+            expression=getattr(
+                legal_rule, "record_expression",
+                "sum over tracts of lots x legal_rule share / sum of lots, in each draw",
+            ),
+            assumption_ids=list(legal_rule.ids),
+            source_ids=list(getattr(legal_rule, "source_ids", ())),
+        )  # fmt: skip
+        if hasattr(legal_rule, "records"):
+            records.update(legal_rule.records(lots, legal, col))
     return AduResult(
         scope=scope,
         geoids=tracts["geoid"].astype(str).to_numpy(),

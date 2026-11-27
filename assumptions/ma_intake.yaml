@@ -197,6 +197,9 @@ adu_survey:
       answers:
         Mid-year: {cohort: "2026 first half", start: 2026-01-01, end: 2026-06-30}
   no_answer: No response
+  # The municipalities the survey asks (MassGIS town ids 1-351); shares of
+  # towns that answered are taken of this number (features.ma_intake.survey_summary).
+  municipalities: 351
   measures:
     applications: >-
       ADU building-permit applications submitted ("Submitted"). Counts

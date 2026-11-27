@@ -14,7 +14,10 @@ describes every table and column for the pack's data dictionary.
   sources it returns nothing, and the profile sections say "no data".
 - :func:`add_to_pack` adds the tables to a pack that is already built,
   rewriting its data dictionary and manifest so the pack stays consistent.
-  It saves rebuilding the whole pack when only these sources changed.
+  It saves rebuilding the whole pack when only these sources changed, and is
+  safe to re-run after later add-on steps: it changes only the tables it
+  writes (``tract_municipalities`` outside Pennsylvania and ``tract_places``
+  come from the tract-crosswalk add-on step in :mod:`visionhousing.data.pack`).
 
 Each source is fetched on its own. When one fails (a city service is down)
 the others still go in, and the failure is written in the build notes.
@@ -25,7 +28,8 @@ Tables (all tier 2, "local refinement only"):
 table                  one row per                                    places
 ====================== ============================================== ==========
 municipal_planning     county subdivision (municipality) part         PA
-tract_municipalities   tract piece inside one municipality            PA
+tract_municipalities   tract piece inside one municipality            PA, VT, WY, MA
+tract_places           tract piece inside one Census place            VT, WY
 parcels_area           tract, and county                              42101, 42003
 owners_area            tract, and county                              42101, 42003
 owners_deeds_year      year                                           42101
@@ -100,6 +104,16 @@ TABLES: dict[str, dict[str, object]] = {
         "description": "2020 housing units of each tract, split by the municipality of its blocks.",
         "tier": "2",
     },
+    "tract_places": {
+        "key": ["tract", "place"],
+        "sources": ["census_baf_2020_place", "tiger_2020_tabblock"],
+        "description": (
+            "2020 housing units of each tract, split by the Census place (city, town or CDP) of "
+            "its blocks; 99999 = outside every place. For cities that are not county "
+            "subdivisions (Wyoming)."
+        ),
+        "tier": "2",
+    },
     "parcels_area": {
         "key": ["level", "geoid"],
         "sources": [
@@ -155,6 +169,10 @@ see :mod:`visionhousing.law.tables`; Massachusetts tables:
 _COMMON: dict[str, tuple[str, str]] = {
     "county": ("code", "County code (5 digits)"),
     "cousub": ("code", "Census county subdivision code (5 digits, within the county)"),
+    "place": (
+        "code",
+        "Census place code (5 digits, within the state; 99999 = not in any place)",
+    ),
     "tract": ("code", "2020 census tract code (11 digits); empty when not placed in a tract"),
     "geoid": ("code", "County (5 digits) or tract (11 digits) code"),
     "level": ("category", "county or tract"),
@@ -623,6 +641,8 @@ def _source_of(path: Path) -> str | None:
     if folder == "bills" and path.parent.parent.name == "law":
         return path.stem
     if folder == "census":
+        if name.startswith("block_place"):
+            return "census_baf_2020_place"
         return "census_baf_2020_mcd" if name.startswith("block_cousub") else "census_subcounty_pop"
     if folder == "phl":
         return {
@@ -653,87 +673,107 @@ def add_to_pack(
     client: HttpClient | None = None,
     manifest: Path | None = mf.MANIFEST_PATH,
     refresh: bool = False,
+    tables: Iterable[str] | None = None,
+    lock: Callable[[], Any] | None = None,
 ) -> LocalTables:
     """Add the local tables to an already built pack and rewrite its dictionary and manifest.
 
-    The pack's blocks and tract outlines are read from the pack itself. The
-    new tables are written next to the old ones; the data dictionary and the
-    pack manifest (file checksums, pack hash, provenance) are rebuilt from
-    every table now in the folder, the same way the full build writes them.
+    Safe to re-run on a pack that later add-on steps have extended: it
+    changes only the local tables it writes, and leaves every other table,
+    every other file-list entry and every other step's inputs as they were.
+
+    - Tract outlines are read the way the full build reads them (the cached
+      full-detail file, else the pack's simplified boundaries), so a 3A
+      district keeps the centre tract the build gave it.
+    - A table whose new content equals the file in the pack is not rewritten.
+    - Only the inputs of the tables written are replaced in the manifest
+      (matched by source id); inputs other steps recorded (for example the
+      3A capacity step's parcels, station radii and sewer files) are kept.
+    - When nothing changed, no file is touched.
+
+    Args:
+        folder: The pack folder (``data/packs/{STATE}``), rewritten in place.
+        cache: The raw-file cache (``data/raw``).
+        client: HTTP client for a missing cache file.
+        manifest: The download manifest to record any fetch in, or ``None``.
+        refresh: Download again even when the cache has the files.
+        tables: Write only these local tables (for example ``["ma_adu_survey"]``);
+            ``None`` = every local table the state has.
+        lock: Optional context-manager factory held only while files are written.
+
+    Returns:
+        What :func:`fetch_local_tables` read; ``tables`` keeps only the tables
+        that were written (changed or new).
     """
+    import contextlib
+
     from visionhousing.data import pack
 
-    folder = Path(folder)
+    folder, cache = Path(folder), Path(cache)
     state = folder.name.upper()
-    manifest_path = folder / "pack_manifest.json"
-    old = json.loads(manifest_path.read_text(encoding="utf-8"))
+    old = json.loads((folder / "pack_manifest.json").read_text(encoding="utf-8"))
+    fips = str(old.get("state_fips") or pack.to_state_fips(state))
     blocks = pd.read_csv(
         folder / "blocks.csv.gz",
         dtype={"geoid": str, "tract": str},
         usecols=["geoid", "tract", "housing_units"],
     )
-    shapes: list[tuple[str, Mapping[str, Any]]] = []
-    for path in sorted((folder / "boundaries" / "tracts").glob("*.geojson")):
-        for f in json.loads(path.read_text(encoding="utf-8"))["features"]:
-            shapes.append((str(f["properties"]["geoid"]), f["geometry"]))
     local = fetch_local_tables(
         state,
         cache,
         blocks=blocks,
-        tract_shapes=shapes,
+        tract_shapes=pack._tract_shapes(folder, cache, fips),
         client=client,
         manifest=manifest,
         refresh=refresh,
     )
-    for name, frame in local.tables.items():
-        pack._write_gz_csv(
-            pack._tidy_numbers(frame.reset_index(drop=True)), folder / f"{name}.csv.gz"
-        )
-    tables = pack.load_pack(folder)
-    dictionary = pack.build_dictionary(tables, state)
-    (folder / "data_dictionary.json").write_text(pack._json_text(dictionary), encoding="utf-8")
-    files = [
-        f
-        for f in old["files"]
-        if not f["path"].endswith(".csv.gz") and f["path"] != "data_dictionary.json"
-    ]
-    for name, frame in tables.items():
-        path = folder / f"{name}.csv.gz"
-        files.append(
-            {
-                "path": path.name,
-                "bytes": path.stat().st_size,
-                "sha256": pack.sha256_file(path),
-                "rows": len(frame),
-            }
-        )
-    entry = pack._file_entry(folder, "data_dictionary.json")
-    files.append(entry.__dict__)
-    files.sort(key=lambda f: f["path"])
-    import hashlib
-
-    digest = hashlib.sha256()
-    for f in files:
-        digest.update(f"{f['path']}\t{f['sha256']}\n".encode())
-    inputs = [r for r in old.get("inputs", []) if not str(r.get("file", "")).startswith("local/")]
-    for sid, path in local.files:
-        inputs.append(
-            {
-                "source": sid,
-                "file": path.relative_to(cache).as_posix(),
-                "sha256": pack.sha256_file(path),
-                "bytes": path.stat().st_size,
-                "accessed": None,
-            }
-        )
-    inputs.sort(key=lambda r: (r["source"], r["file"]))
-    old.update(
-        {
-            "pack_hash": digest.hexdigest(),
-            "files": files,
-            "inputs": inputs,
-            "provenance": pack._provenance(inputs),
-        }
-    )
-    manifest_path.write_text(pack._json_text(old), encoding="utf-8")
+    wanted = None if tables is None else set(tables)
+    written = {
+        name: frame
+        for name, frame in local.tables.items()
+        if (wanted is None or name in wanted) and _changed(folder / f"{name}.csv.gz", frame)
+    }
+    local.tables = written
+    if not written:
+        return local
+    owned = {str(s) for name in written for s in TABLES.get(name, {}).get("sources", [])}
+    inputs = _changed_inputs([(sid, path) for sid, path in local.files if sid in owned], old, cache)
+    with lock() if lock is not None else contextlib.nullcontext():
+        pack._rewrite(folder, cache, written, inputs)
     return local
+
+
+def _changed(path: Path, frame: pd.DataFrame) -> bool:
+    """True when ``frame``, written as a pack writes it, differs from ``path`` (or is new)."""
+    import gzip
+
+    from visionhousing.data import pack
+
+    if not path.is_file():
+        return True
+    text = pack._tidy_numbers(frame.reset_index(drop=True)).to_csv(index=False, lineterminator="\n")
+    with gzip.open(path, "rt", encoding="utf-8", newline="") as fh:
+        return fh.read() != text
+
+
+def _changed_inputs(
+    files: list[tuple[str, Path]], old: Mapping[str, Any], cache: Path
+) -> list[tuple[str, Path]]:
+    """The input files of every source whose recorded files differ from ``files``.
+
+    A source whose files and checksums are already in the manifest is left out,
+    so its records (and their read dates) stay exactly as they are.
+    """
+    from visionhousing.data import pack
+
+    recorded: dict[str, set[tuple[str, str]]] = {}
+    for r in old.get("inputs", []):
+        recorded.setdefault(str(r.get("source")), set()).add(
+            (str(r.get("file")), str(r.get("sha256")))
+        )
+    now: dict[str, set[tuple[str, str]]] = {}
+    for sid, path in files:
+        if path.exists():
+            rel = path.relative_to(cache).as_posix()
+            now.setdefault(sid, set()).add((rel, pack.sha256_file(path)))
+    return [(sid, path) for sid, path in files if now.get(sid) != recorded.get(sid)]

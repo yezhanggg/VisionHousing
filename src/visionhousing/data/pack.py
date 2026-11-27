@@ -65,6 +65,8 @@ state_law_provisions state code section or bill bearing on a reform    2
 law_provision_version one version of one provision, dated (add-on step)  2
 county_land_use    county: county zoning reach and county plan           2
 muni_zoning_rules  municipality part: ADU, lot, parking rules            2
+zone_rule          reviewed rule by district, overlay, date (PA sample)  2
+rule_area_weights  lots by jurisdiction, zone version, class (PA sample) 2
 ================== ===================================================== ======
 
 The jobs, incentive and safety tables feed the place profile's market
@@ -125,6 +127,7 @@ from visionhousing.features import transit as transit_fx
 from visionhousing.features import transit_walk as walk_fx
 from visionhousing.features import typology as typology_fx
 from visionhousing.law import tables as law_tables
+from visionhousing.law import zone_build as zone_fx
 
 __all__ = [
     "PACK_BUDGET_BYTES",
@@ -137,6 +140,7 @@ __all__ = [
     "assemble_tables",
     "build_dictionary",
     "build_pack",
+    "crosswalk_states",
     "load_inputs",
     "load_pack",
     "report_from_folder",
@@ -288,6 +292,10 @@ TABLES.update(hazard_fx.TABLES)
 """Plus the hazards and land screen (flood zones, land cover, impervious cover, slope): see
 :mod:`visionhousing.features.hazards`. Added by
 :func:`visionhousing.features.hazards_build.add_hazards`."""
+
+TABLES.update(zone_fx.TABLES)
+"""Plus ``zone_rule`` and ``rule_area_weights`` (Pennsylvania's zoning-district pilot sample):
+see :func:`visionhousing.law.zone_build.add_zone_tables`."""
 
 TABLES.update(law_tables.VERSION_TABLE)
 """Plus ``law_provision_version`` (every state; one version of one operative provision, from
@@ -821,6 +829,8 @@ def _describe(table: str, name: str) -> tuple[str, str]:
         return walk_fx.describe(table, name)
     if table in local_src.TABLES:
         return local_src.describe(table, name)
+    if table in zone_fx.TABLES:
+        return zone_fx.describe(table, name)
     if table in law_tables.VERSION_TABLE:
         if name not in law_tables.VERSION_COLUMNS:
             raise ValueError(f"no data-dictionary entry for {table}.{name}")
@@ -1218,8 +1228,16 @@ def _step_ma_capacity(folder: Path, cache: Path, **kw: Any) -> None:
     add_ma_capacity(folder, cache, client=kw.get("client"), manifest=kw.get("manifest"))
 
 
+def _step_crosswalks(folder: Path, cache: Path, **kw: Any) -> None:
+    add_tract_crosswalks(folder, cache, client=kw.get("client"), manifest=kw.get("manifest"))
+
+
 def _step_law_versions(folder: Path, cache: Path, **kw: Any) -> None:
     law_tables.add_provision_versions(folder, cache)
+
+
+def _step_zone_rules(folder: Path, cache: Path, **kw: Any) -> None:
+    zone_fx.add_zone_tables(folder, cache)
 
 
 RETROFITS: tuple[tuple[str, tuple[str, ...], Callable[..., None]], ...] = (
@@ -1234,16 +1252,20 @@ RETROFITS: tuple[tuple[str, tuple[str, ...], Callable[..., None]], ...] = (
         ("mbta_3a_capacity_tract", "mbta_3a_capacity_district", "ma_sewer_estimated_tract"),
         _step_ma_capacity,
     ),
+    ("tract crosswalks", ("tract_municipalities", "tract_places"), _step_crosswalks),
     ("law provision versions", tuple(law_tables.VERSION_TABLE), _step_law_versions),
+    ("zoning districts", tuple(zone_fx.TABLES), _step_zone_rules),
 )
 """The add-on steps a full build runs after writing the pack, in order: name, tables, step.
 
 Each is also its own command (``visionhousing districts``, ``affordability``,
 ``infrastructure``, ``hazards``, ``transit-walk``, ``ma-3a-tracts``, ``ma-capacity``,
-``law-tables``) for refreshing one part of a built pack; ``law-tables`` refreshes
+``tract-crosswalks``, ``law-tables``, ``zone-rules``) for refreshing one part of a built
+pack; ``law-tables`` refreshes
 ``law_provision_version`` in every state. The law lot weights need no step:
 :func:`assemble_tables` fills them. The two 3A steps do nothing in a pack without
-Massachusetts' ``mbta_3a_districts`` table.
+Massachusetts' ``mbta_3a_districts`` table; the zoning-district step does nothing outside
+Pennsylvania (the only state with a pilot sample).
 """
 
 
@@ -1640,6 +1662,110 @@ def add_3a_district_tracts(
     with lock() if lock is not None else contextlib.nullcontext():
         _rewrite(folder, cache, {"mbta_3a_district_tracts": table}, [])
     return table
+
+
+def add_tract_crosswalks(
+    folder: Path,
+    cache: Path,
+    *,
+    client: HttpClient | None = None,
+    manifest: Path | None = mf.MANIFEST_PATH,
+    states: tuple[str, ...] | None = None,
+    lock: Callable[[], Any] | None = None,
+) -> dict[str, pd.DataFrame]:
+    """Add ``tract_municipalities`` and ``tract_places`` to a pack whose towns are read locally.
+
+    Acts in two kinds of state (:func:`crosswalk_states`):
+
+    - a state with places in ``assumptions/law/local_readings.yaml`` (Vermont,
+      Wyoming) gets both tables;
+    - a state in the ``ma_adu_application`` block of
+      ``assumptions/law/statutory_rights.yaml`` (Massachusetts) gets
+      ``tract_municipalities`` only, so the named variant ``ma_adu_state_floor``
+      measures each tract's Boston share (a Massachusetts town is a county
+      subdivision) instead of the judged Suffolk County share.
+
+    For a state with local readings, the named variants place each reading on tracts by
+    2020 housing units, the same method Pennsylvania's build uses
+    (:func:`visionhousing.features.zoning_status.tract_municipalities`): the
+    pack's blocks are joined to the Census Bureau's 2020 block assignment
+    files, county subdivisions (:func:`munstats.fetch_block_subdivisions`)
+    and places (:func:`munstats.fetch_block_places`), and their housing units
+    summed per tract piece. Split tracts keep one row per piece. A Vermont
+    town is a county subdivision; a Wyoming city is a Census place, so
+    ``tract_places`` is written for both. ``tract_municipalities`` is skipped
+    where the zip has no county subdivision member (Wyoming's subdivisions are
+    statistical census county divisions, not governments), and kept as it is
+    in a pack that already has it (Pennsylvania's comes with its local tables).
+
+    Args:
+        folder: The pack folder, rewritten in place (dictionary and manifest too).
+        cache: The raw-file cache (``data/raw``).
+        client: HTTP client.
+        manifest: Download manifest, or ``None``.
+        states: The states to act on (tests; both tables); ``None`` =
+            :func:`crosswalk_states`.
+        lock: Optional context-manager factory held only while files are written.
+
+    Returns:
+        The tables written (empty for any other state).
+    """
+    import contextlib
+
+    from visionhousing.data.sources import munstats
+    from visionhousing.features import zoning_status as zoning_fx
+
+    folder, cache = Path(folder), Path(cache)
+    state = folder.name.upper()
+    if states is None:
+        towns, places = crosswalk_states()
+    else:
+        towns = places = tuple(s.upper() for s in states)
+    if state not in towns and state not in places:
+        return {}
+    blocks_t = pd.read_csv(
+        folder / "blocks.csv.gz",
+        dtype={"geoid": str, "tract": str},
+        usecols=["geoid", "tract", "housing_units"],
+    )
+    fips = to_state_fips(state)
+    written: dict[str, pd.DataFrame] = {}
+    inputs: list[tuple[str, Path]] = []
+    census = cache / "local" / "census"
+    if not (folder / "tract_municipalities.csv.gz").is_file():
+        try:
+            baf = munstats.fetch_block_subdivisions(state, cache, client=client, manifest=manifest)
+        except LookupError:
+            baf = None  # census county divisions only (Wyoming): no municipal table
+        if baf is not None:
+            written["tract_municipalities"] = zoning_fx.tract_municipalities(blocks_t, baf)
+            inputs.append((munstats.BAF_SOURCE, census / f"block_cousub_2020_{fips}.csv.gz"))
+    if state in places:
+        bap = munstats.fetch_block_places(state, cache, client=client, manifest=manifest)
+        written["tract_places"] = zoning_fx.tract_places(blocks_t, bap, munstats.NO_PLACE)
+        inputs.append((munstats.BAF_PLACE_SOURCE, census / f"block_place_2020_{fips}.csv.gz"))
+    if not written:
+        return {}
+    with lock() if lock is not None else contextlib.nullcontext():
+        _rewrite(folder, cache, written, inputs)
+    return written
+
+
+def crosswalk_states() -> tuple[tuple[str, ...], tuple[str, ...]]:
+    """The states the tract-crosswalk step acts on: ``(town table states, place table states)``.
+
+    Both come from the assumption files, not from code: the states with local
+    readings (``assumptions/law/local_readings.yaml``) get both tables; the
+    states of the Massachusetts ADU-rights application
+    (``ma_adu_application.states`` in ``assumptions/law/statutory_rights.yaml``)
+    get the town table too, for the Boston carve-out.
+    """
+    from visionhousing.law.local_readings import load_local_readings
+    from visionhousing.law.ma_adu import application
+
+    places = tuple(sorted({p.state.upper() for p in load_local_readings().places}))
+    rights = tuple(str(s).upper() for s in application().get("states") or ())
+    return tuple(sorted({*places, *rights})), places
 
 
 def _tract_shapes(

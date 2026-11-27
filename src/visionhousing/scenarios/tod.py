@@ -63,7 +63,11 @@ The funnel, one step after another:
    They are different measures, which is why the tool compares the parcels'
    own modeled capacity, not the 15-per-acre floor. The older acre-share
    method (``tod.state_zoned_overlap_share`` x district acres taken out of
-   ``L x d``) remains as variant ``tod_ma_acre_share``.
+   ``L x d``) remains as variant ``tod_ma_acre_share``. Variant
+   ``tod_ma_3a_q_scaled`` (option ``existing_3a_subtract: q_scaled``) treats
+   3A land like base-zoning land: ``max(0, proposed - q x existing)``, with
+   ``q`` the baseline replacement chance; with ``q = 1`` it equals the
+   headline rule (``full``).
 5. **Built** = capacity ``x min(1, h_y x sum of ramp(t))``, with ``h_y`` the
    yearly share of feasible sites permitted (``tod.redevelopment_hazard_annual``)
    and the ramp of ``tod.ramp_first_year_share`` and ``tod.ramp_years_to_full``
@@ -135,6 +139,7 @@ __all__ = [
     "DISTANCES",
     "EXISTING_METHODS",
     "EXISTING_SOURCES",
+    "EXISTING_SUBTRACT",
     "HEADLINE_STAGE",
     "M2_PER_ACRE",
     "NET_STOCK_STAGE",
@@ -146,6 +151,7 @@ __all__ = [
     "TodResult",
     "TodScope",
     "additional_legal_capacity",
+    "by_right_words",
     "decomposition_verdict",
     "distance_suffix",
     "existing_capacity",
@@ -268,6 +274,43 @@ where the pack has ``mbta_3a_capacity_tract``: additional legal capacity =
 max(0, proposed - existing) in gross units on the same land) or ``acre_share``
 (variant ``tod_ma_acre_share``: a share of district acres is taken out of the
 developable land)."""
+EXISTING_SUBTRACT = ("full", "q_scaled")
+"""How much existing 3A capacity comes off the prototype on land already zoned by right:
+``full`` (the headline, the plan formula: max(0, proposed - existing)) or ``q_scaled``
+(variant ``tod_ma_3a_q_scaled``: max(0, proposed - q x existing), as base-zoning land
+subtracts q x today's FAR; q = ``tod.baseline_replacement_probability``)."""
+BY_RIGHT_WORDS: dict[str, dict[str, str]] = {
+    "": {
+        "who": "the state",
+        "land": "by-right parcels in the distance from the pack's by-right capacity table, "
+        "split across tracts by area",
+        "district": "the by-right district",
+        "floor": "",
+        "missing": "row in the by-right capacity table",
+        "capacity": "existing by-right modeled capacity",
+    },
+    "MA": {
+        "who": "Massachusetts",
+        "land": "Section 3A parcels in the distance, atlas F_L_M__ split across tracts by area",
+        "district": "the 3A district",
+        "floor": "3A's 15 homes per acre is a district-wide minimum gross density; the "
+        "prototype is about 105 per acre on one lot: different measures, so the parcels' own "
+        "modeled capacity is compared, not the 15-per-acre floor; the pack cannot tie a tract "
+        "to its town's 3A status. ",
+        "missing": "compliant 3A district in the atlas",
+        "capacity": "existing Section 3A modeled capacity",
+    },
+}
+"""Words for the by-right capacity notes, by state code. The Massachusetts wording
+(Section 3A, the MassGIS atlas field) is used only for MA; any other pack with the
+table (for example the synthetic demo state) gets the generic wording."""
+
+
+def by_right_words(state: str) -> dict[str, str]:
+    """The note words for land already zoned by right near transit, for one state code."""
+    return BY_RIGHT_WORDS.get(str(state).upper(), BY_RIGHT_WORDS[""])
+
+
 EXISTING_COLUMNS = (
     "geoid",
     "capacity_units",
@@ -885,6 +928,7 @@ def tod_funnel(
     extra_cost_per_unit: np.ndarray | None = None,
     land_factor: np.ndarray | None = None,
     existing: ExistingCapacity | None = None,
+    existing_subtract: str = "full",
 ) -> TodResult:
     """Run the TOD funnel for every tract and every Monte Carlo draw.
 
@@ -918,6 +962,10 @@ def tod_funnel(
             (:func:`existing_capacity`), or ``None``. On that land the funnel
             counts the additional legal capacity, max(0, proposed - existing),
             in place of the base-zoning rule. Not used together with ``zoned_m2``.
+        existing_subtract: :data:`EXISTING_SUBTRACT`: ``full`` (the headline)
+            subtracts all of the existing 3A capacity; ``q_scaled`` subtracts
+            ``q x`` it (q = the baseline replacement chance), as base-zoning
+            land does. Equal when q = 1.
 
     Returns:
         A :class:`TodResult`.
@@ -928,6 +976,11 @@ def tod_funnel(
     """
     if existing is not None and zoned_m2 is not None:
         raise ValueError("pass existing capacity or zoned acres, not both")
+    if existing_subtract not in EXISTING_SUBTRACT:
+        raise ValueError(
+            f"existing_subtract must be one of {EXISTING_SUBTRACT}, got {existing_subtract!r}"
+        )
+    q_scaled = existing_subtract == "q_scaled"
     ids = _needed_ids(ledger)
     zoned = zoned_m2 is not None and ZONED_PARAM in ledger
     if zoned:
@@ -991,7 +1044,8 @@ def tod_funnel(
         # Land already zoned by right: additional legal capacity on the same land,
         # max(0, proposed - existing) per m2, in gross homes.
         feasible3 = dev3 * p
-        gain3 = additional_legal_capacity(units_per_m2, e_per_m2)
+        e_sub = q * e_per_m2 if q_scaled else e_per_m2
+        gain3 = additional_legal_capacity(units_per_m2, e_sub)
         gain3 = np.broadcast_to(gain3, feasible_m2.shape)
     feasible0 = feasible_m2 - feasible3
     capacity = feasible0 * gain_far * col["tod.net_floor_share"] / unit_m2
@@ -1050,11 +1104,19 @@ def tod_funnel(
         homes,
         zoned=zoned,
         existing=dev3 is not None,
+        q_scaled=q_scaled,
     )
     if dev3 is not None and existing is not None:
         records.update(
             _existing_records(
-                existing, dev3, units_per_m2, e_per_m2, land_m2, records["capacity"], scope
+                existing,
+                dev3,
+                units_per_m2,
+                e_per_m2,
+                land_m2,
+                records["capacity"],
+                scope,
+                q=q if q_scaled else None,
             )
         )
     if zoned_in is not None:
@@ -1150,6 +1212,7 @@ def _state_records(
     *,
     zoned: bool = False,
     existing: bool = False,
+    q_scaled: bool = False,
 ) -> dict[str, Record]:
     horizon = len(years)
     words = distance_words(scope.distance, scope.walk)
@@ -1187,6 +1250,11 @@ def _state_records(
                 "proposed homes per m2 - existing 3A modeled capacity per m2), in gross homes "
                 "on the same land"
             )
+            if q_scaled:
+                text = text.replace(
+                    "- existing 3A modeled capacity per m2",
+                    "- q x existing 3A modeled capacity per m2",
+                )
         out[stage] = rec.from_draws(
             f"{STAGE_NAMES[stage].format(**fmt)} ({scope.name}, {words})",
             stages[stage].sum(axis=1),
@@ -1229,8 +1297,13 @@ def _existing_records(
     land_m2: np.ndarray,
     capacity: Record,
     scope: TodScope,
+    q: np.ndarray | None = None,
 ) -> dict[str, Record]:
-    """State records of the comparison with capacity already zoned by right (3A)."""
+    """State records of the comparison with capacity already zoned by right (3A).
+
+    ``q`` (draws, 1) is given only under ``existing_subtract: q_scaled``: the
+    additional capacity then subtracts ``q x`` the existing capacity.
+    """
     words = distance_words(scope.distance, scope.walk)
     draws = dev3.shape[0]
     src = list(EXISTING_SOURCES)
@@ -1238,7 +1311,12 @@ def _existing_records(
     z = np.minimum(existing.land_m2, land_m2)
     proposed = dev3 * units_per_m2
     held = dev3 * e_per_m2
-    added = additional_legal_capacity(proposed, held)
+    added = additional_legal_capacity(proposed, held if q is None else q * held)
+    minus = (
+        "existing 3A modeled capacity"
+        if q is None
+        else ("q x existing 3A modeled capacity (q = tod.baseline_replacement_probability)")
+    )
     eligible = float(land_m2.sum())
     resolved = float(land_m2[existing.measured].sum())
     share = resolved / eligible if eligible > 0 else 0.0
@@ -1300,7 +1378,7 @@ def _existing_records(
             added.sum(axis=1),
             "units",
             expression=(
-                "the sum over tracts of max(0, proposed homes - existing 3A modeled capacity) "
+                f"the sum over tracts of max(0, proposed homes - {minus}) "
                 "on the same developable 3A land, in gross homes (diagnostic; the funnel then "
                 "applies feasibility, take-up, absorption and the net-new share)"
             ),

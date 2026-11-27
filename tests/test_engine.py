@@ -18,6 +18,7 @@ from visionhousing.engine.montecarlo import baseline_positions, scale_at
 from visionhousing.engine.registry import REGISTRY, ReformResult
 from visionhousing.ledger import apply_overrides, sample, scenario_ledger
 from visionhousing.scenarios.adu import adu_funnel, scope_from_scenario
+from visionhousing.scenarios.fees import VIEWS as FEE_VIEWS
 from visionhousing.scenarios.fees import baseline_by_type, fee_reform
 
 DRAWS = 500
@@ -159,10 +160,15 @@ def test_user_override_wins_over_the_scenario(ctx):
 
 
 def test_fee_state_view_is_an_option(ctx):
+    """Every fee view in ``scenarios.fees.VIEWS`` runs; a view outside it is refused."""
+    assert FEE_VIEWS == ("benchmark", "state", "deferral", "local")
     res = compute(ctx, {"fees": {"view": "state"}}, draws=100)
     assert res.reforms["fees"].result.detail.view == "state"
+    for view in FEE_VIEWS:
+        out = compute(ctx, {"fees": {"view": view}}, draws=10)
+        assert out.reforms["fees"].result.detail.view == view
     with pytest.raises(ValueError, match="view"):
-        compute(ctx, {"fees": {"view": "local"}}, draws=10)
+        compute(ctx, {"fees": {"view": "regional"}}, draws=10)
 
 
 def test_shared_draws_are_the_reform_draws(ctx, package):

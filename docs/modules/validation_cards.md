@@ -36,6 +36,7 @@ Then, per card:
 
 - **The rule was chosen on the full record.** Each study scores a rule (and the baseline's bias-correction and widening settings) that was picked using all years, including the evaluation years of every fold. The fold timeline flags this overlap. The counts are therefore somewhat favourable.
 - **Present-day place types.** The baseline contest that chose each state's rule describes counties with today's typology and tract mix, not what was known at each start year. County ranges use size classes computed at each start year. Origin-specific typologies are not rebuilt in this release.
+- **Measured, not only disclosed.** A pre-registered nested rolling-origin test re-chooses the rule at each start year from matured cases only, with permit-only place types, and scores it the same way: [validation_nested_selection.md](validation_nested_selection.md).
 - **Different rules.** The state confidence check scores one fixed rule (`last_3_mean`) for every state, not each state's shipped rule; the card names the rule it scored.
 
 ## Pre-registration

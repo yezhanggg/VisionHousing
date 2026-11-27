@@ -122,3 +122,8 @@ walk-up on commercial land, and its home values sit below a starter home's cost.
 the market-sensitivity inputs the tests use, each shows a range above zero.
 Adaptive reuse adds no permits by design (conversions are reported outside the permit
 count) and shows conversions; fee deferral shows a range.
+
+## A second synthetic state
+
+Testland stays byte-identical. The decision-demo checks run on a separate, smaller
+synthetic state with its own generator and seed: see [the demo state](demo_state.md).

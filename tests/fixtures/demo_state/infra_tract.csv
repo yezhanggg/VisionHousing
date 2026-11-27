@@ -1,0 +1,7 @@
+geoid,sewer_status,sewer_share,sewer_known,constraint_share,sewer_source,water_share,epa_share,act537_class
+98001000100,verified,1.0,1.0,0.0,synthetic,,,
+98001000200,verified,1.0,1.0,0.0,synthetic,,,
+98001000300,verified,1.0,1.0,0.0,synthetic,,,
+98003000100,verified,0.805,1.0,0.0,synthetic,,,
+98003000200,verified,0.839,1.0,0.0,synthetic,,,
+98003000300,unknown,,0.0,0.0,,,,

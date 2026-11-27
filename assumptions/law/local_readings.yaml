@@ -1,0 +1,1670 @@
+# Local zoning readings for states without a municipal law table (Vermont, Wyoming).
+#
+# Read by src/visionhousing/law/local_readings.py (rules in its docstring and in
+# docs/modules/law.md, "Vermont and Wyoming local readings"). Pennsylvania's
+# municipal rules are in municipal_rules.yaml instead.
+#
+# - documents: each text read, from the jurisdiction's own site only (never a
+#   commercial code host). sha256 is the SHA-256 of the file as downloaded;
+#   text_sha256 that of its text (visionhousing.law.text.pdf_text, white space
+#   collapsed). Dates are the document's own, as printed; empty = not stated.
+#   version_state: final, superseded (law until valid_until) or draft. kind:
+#   bylaw, or guidance (the town's own explanation; never the law).
+# - places: one per town, city or county. facts: one per topic, each with its
+#   evidence (document, locator, offset in the text or PDF page, and a
+#   verbatim quote of at most 300 characters, white space collapsed).
+#   review: verified only when every quote was found again at its locator in
+#   the saved copy by script (2026-11-26) and the value needs no further
+#   check; draft otherwise (the open check says what); superseded for facts
+#   from a superseded text. A place nobody could read is status: not_read,
+#   with the reason, and has no facts.
+# - districts (Vermont): what is known about a district, in the fields of
+#   visionhousing.law.rights.District; null = not known. Water service is
+#   unknown unless the bylaw itself says a district is served.
+#
+# Unknown stays unknown. Adoption, amendment and effective dates are kept
+# apart; with no effective date a reading counts from its reviewed_on date.
+# These readings enter only named variants (vt_missing_middle_town_bylaws,
+# vt_parking_town_bylaws, wy_parking_local in variants.yaml), never a benchmark
+# headline: the benchmarks read Vermont's state floor (statutory_rights.yaml)
+# and the pack's mapped sewer share, not these rows. A variant places a reading
+# on tracts by 2020 housing units: a town (10-digit geoid) through the pack's
+# tract_municipalities, a Census place (7-digit geoid, Wyoming's cities)
+# through tract_places.
+
+version: 1
+
+documents:
+- doc_id: barre_udo_2024
+  state: VT
+  title: Barre City Unified Development Ordinance (adopted June 25, 2019; effective November 4, 2024)
+  publisher: City of Barre
+  url: https://www.barrecity.org/client_media/files/PPA/Barre%20City%20FINAL%20UDO%20Regulations%20REV%204a%20eff%2011-04-2024%20FINAL.pdf
+  listed_on: https://www.barrecity.org/land-use-and-other-ordinances.html
+  retrieved_on: '2026-11-26'
+  sha256: 598296bf6b2dc661dc8376cbdc7b7ba1a039f11e587ab13b23d87676c712f719
+  text_sha256: 0b6fe494ec21d88b8261685e8aac2b2cec13ed56989d94d9e9bda34d6da9c383
+  text_chars: 509307
+  pages: 209
+  kind: bylaw
+  version_state: final
+  adopted_on: '2019-06-25'
+  amended_through: ''
+  effective_date: '2024-11-04'
+- doc_id: benn_ludr_2024
+  state: VT
+  title: Land Use & Development Regulations (adopted February 23, 2004; last amended June 24, 2024)
+  publisher: Town of Bennington
+  url: https://benningtonvt.org/Document%20Center/Government/Planning%20Documents/BennLUDR_FINAL-optimized.pdf
+  listed_on: https://benningtonvt.org/services/planning___permitting/building___zoning_ordinances.php
+  retrieved_on: '2026-11-26'
+  sha256: f40caa1c491ba7c740315455eca7e6cf72939b55f9639929e14ee8255a8a2bc2
+  text_sha256: ded53235d8d034104aafde4d17a33c13f414a93ca1113a7c494bc522f0b3ad38
+  text_chars: 561260
+  pages: 183
+  kind: bylaw
+  version_state: final
+  adopted_on: '2004-02-23'
+  amended_through: '2024-06-24'
+  effective_date: ''
+- doc_id: btv_cdo_art4_2026
+  state: VT
+  title: 'Comprehensive Development Ordinance, Article 4: Zoning Maps and Districts (Article Last Updated:
+    February 10, 2026)'
+  publisher: City of Burlington
+  url: https://www.burlingtonvt.gov/DocumentCenter/View/6267
+  listed_on: https://www.burlingtonvt.gov/DPI/CDO
+  retrieved_on: '2026-11-26'
+  sha256: de6b388c0789c2bce84002ea839f7115c4d7b61d994d1f67e36cc8666d319e1c
+  text_sha256: e3a1f03530cf873925f5411fcafeba597d231b048896c3a65bc6b9b559c0a935
+  text_chars: 189355
+  pages: 96
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: '2026-02-10'
+  effective_date: ''
+- doc_id: btv_cdo_appa
+  state: VT
+  title: CDO Appendix A - Use Table, All Zoning Districts
+  publisher: City of Burlington
+  url: https://www.burlingtonvt.gov/DocumentCenter/View/2494
+  listed_on: https://www.burlingtonvt.gov/DPI/CDO
+  retrieved_on: '2026-11-26'
+  sha256: d073007073ed593006723e3ed4d41bfba581555fe59ebfef06e4e1e7510a80cd
+  text_sha256: 09c191a46c358e3c2df1a32a17aa1a60b2e398f10c6319fac1f8f06d4cbfde05
+  text_chars: 16067
+  pages: 6
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: ''
+  effective_date: ''
+  note: undated in text; read with Article 4
+- doc_id: btv_cdo_art8_2026
+  state: VT
+  title: 'CDO Article 8: Parking (Article Last Updated: May 12, 2026)'
+  publisher: City of Burlington
+  url: https://www.burlingtonvt.gov/DocumentCenter/View/2491
+  listed_on: https://www.burlingtonvt.gov/DPI/CDO
+  retrieved_on: '2026-11-26'
+  sha256: 9abc47b9daf56ad148dc1565ddd0ffef63de71e17c016c265f4f5d1c1df3961f
+  text_sha256: bb5197e2ee1c47d758d87a3344e798013ecf8db296f201f4ee869b4d7e07481c
+  text_chars: 52987
+  pages: 27
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: '2026-05-12'
+  effective_date: ''
+- doc_id: btv_cdo_art5_2026
+  state: VT
+  title: 'CDO Article 5: Citywide General Regulations (Article Last Updated: February 10, 2026)'
+  publisher: City of Burlington
+  url: https://www.burlingtonvt.gov/DocumentCenter/View/2496
+  listed_on: https://www.burlingtonvt.gov/DPI/CDO
+  retrieved_on: '2026-11-26'
+  sha256: 3bc2eb1d2ddf8b5f04ed348bde36edb15f8cdb14876711467ebbbd798cb33f4b
+  text_sha256: 84e6384a32f043c9882640f4be3dde8bfb88bd81208e3836d815384752e89aca
+  text_chars: 128090
+  pages: 56
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: '2026-02-10'
+  effective_date: ''
+- doc_id: colch_devregs_s47
+  state: VT
+  title: Development Regulations, Supplement 47 (last amended April 2, 2024; effective August 13, 2024)
+  publisher: Town of Colchester
+  url: https://colchestervt.gov/DocumentCenter/View/9703
+  listed_on: https://colchestervt.gov/3222/Plans-Regulations-Resources
+  retrieved_on: '2026-11-26'
+  sha256: 1244dedccd3b9af7dbdb50536bb08f3f44b00fb1a7b4bc2948bd07f2d56e9e59
+  text_sha256: 5850a0df749ccea40523db828522339417ccf11531e5efe51f5ce3ed16765964
+  text_chars: 718222
+  pages: 305
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: '2024-04-02'
+  effective_date: '2024-08-13'
+  note: A separate 'Supplement 48 Table A-1' (DocumentCenter/View/11544) is listed; the URL returned an
+    HTML page, not a PDF, on 2026-11-26, so the S47 table was read
+- doc_id: essex_zr_2023
+  state: VT
+  title: Town of Essex Official Zoning Regulations, effective February 7, 1972, as amended and effective
+    on ... October 9, 2023
+  publisher: Town of Essex
+  url: https://www.essexvt.gov/DocumentCenter/View/11645
+  listed_on: https://www.essexvt.gov/176/Official-Zoning-Subdivision-Regulations
+  retrieved_on: '2026-11-26'
+  sha256: 1db081dd09105d6e586f8779a4122e52157ee45b2767efe0a4dde826b5c71bf9
+  text_sha256: b9133271d0cfbaf9e664881807ab03a73ae95e439f7dcaa8cd96e828b622c594
+  text_chars: 517152
+  pages: 186
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: '2023-10-09'
+  effective_date: '2023-10-09'
+- doc_id: hartford_ch260
+  state: VT
+  title: Code of the Town of Hartford, Chapter 260 Zoning (amended through 10-25-2022; PDF created 2025-08-19)
+  publisher: Town of Hartford
+  url: https://www.hartford-vt.org/DocumentCenter/View/12830
+  listed_on: https://www.hartford-vt.org/2452/Planning-Development
+  retrieved_on: '2026-11-26'
+  sha256: fe29e22ab2c265c2e9b0aee2ca8f97eabeaf5e9cefcad3458aa182c029987d61
+  text_sha256: db957be832fa03738d276a3bc20b0d887feb161d6501fc14400ea33b4435bab0
+  text_chars: 219981
+  pages: 75
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: '2022-10-25'
+  effective_date: ''
+  note: page footers read 10-04-2022; listed as 'CHAPTER 260 SB Adopted 10.4.22_updated 8-19-25'
+- doc_id: hartford_use_matrix_2022
+  state: VT
+  title: Summary of Permitted and Conditional Uses by Zoning District, October 25, 2022
+  publisher: Town of Hartford
+  url: https://www.hartford-vt.org/DocumentCenter/View/8978
+  listed_on: https://www.hartford-vt.org/2452/Planning-Development
+  retrieved_on: '2026-11-26'
+  sha256: 68e292d01e11e3a4e5642e5964b7a24b55e822e8b67e7684141baed067746509
+  text_sha256: b5c29894364b4c066d1d7ca19b861dfa8db47f009bfd65c88190f8d4ed00ad50
+  text_chars: 3030
+  pages: 1
+  kind: guidance
+  version_state: final
+  adopted_on: ''
+  amended_through: ''
+  effective_date: ''
+  note: summary matrix; the chapter's attachments govern
+- doc_id: hartford_adu_sheet_2026
+  state: VT
+  title: Accessory Dwelling Units - Supplemental Information (dated October 2026)
+  publisher: Town of Hartford
+  url: https://www.hartford-vt.org/DocumentCenter/View/13707
+  listed_on: https://www.hartford-vt.org/2452/Planning-Development
+  retrieved_on: '2026-11-26'
+  sha256: 94d53fcf47f179c3f7fc387abc7d9b9522cfa87f0ad334a64544ee470efecb9e
+  text_sha256: eed641527ba9514979ff74e0daa15ee79867ccd88204f27573631cfe9500289f
+  text_chars: 2500
+  pages: 1
+  kind: guidance
+  version_state: final
+  adopted_on: ''
+  amended_through: ''
+  effective_date: ''
+  note: permit guidance sheet, not bylaw text
+- doc_id: milton_udr_2026
+  state: VT
+  title: Town of Milton Unified Development Regulations (adopted September 18, 2017; amended through April
+    6, 2026)
+  publisher: Town of Milton
+  url: https://www.miltonvt.gov/DocumentCenter/View/1334
+  listed_on: https://miltonvt.gov/305/Ordinances-Regulations
+  retrieved_on: '2026-11-26'
+  sha256: 05034aed93d85fd294b660476442330146063bc0c4af3873cec3db57502891e9
+  text_sha256: cbaeda368aae8494f46b568e7092ca1b0996cce7d3aa34474878cd23e95e286b
+  text_chars: 549194
+  pages: 229
+  kind: bylaw
+  version_state: final
+  adopted_on: '2017-09-18'
+  amended_through: '2026-04-06'
+  effective_date: ''
+- doc_id: mpv_udr_2025
+  state: VT
+  title: Unified Development Regulations (adopted January 3, 2018; as amended April 3, 2024; interim amendment
+    adopted July 9, 2025)
+  publisher: City of Montpelier
+  url: https://www.montpelier-vt.org/DocumentCenter/View/10713
+  listed_on: found by web search; DocumentCenter file
+  retrieved_on: '2026-11-26'
+  sha256: c10f4c3bcef384c65ecda3da153cb2666561e3234f48e71e9b23ab3587171cfc
+  text_sha256: 27188e89a865ae23ef273678f5fa69fd7141262533c08ab62213cb638f61a63b
+  text_chars: 571927
+  pages: 217
+  kind: bylaw
+  version_state: final
+  adopted_on: '2018-01-03'
+  amended_through: '2025-07-09'
+  effective_date: '2025-07-09'
+- doc_id: rutland_ldr_2025
+  state: VT
+  title: Land Development Regulations (Title 31 Zoning etc.), adopted by the Board of Aldermen November
+    17, 2025
+  publisher: City of Rutland
+  url: https://www.rutlandcity.org/wp-content/uploads/2026/04/Land-Development-Regulations-Adopted-11-17-25.pdf
+  listed_on: found by web search on rutlandcity.org
+  retrieved_on: '2026-11-26'
+  sha256: e37a00ad507875c1f45f28e7a23f9446f564ca7516f20c83ceb7c16ad86a15b5
+  text_sha256: 096ee417cba6ffd7e1e9cdd838ec23bb64c58ad2fc64168a3b0f248130ab11d8
+  text_chars: 216765
+  pages: 74
+  kind: bylaw
+  version_state: final
+  adopted_on: '2025-11-17'
+  amended_through: ''
+  effective_date: ''
+  note: a 2026 draft (https://www.rutlandcity.org/wp-content/uploads/2026/06/Draft-Land-Development-Regulations-2026-clean.pdf) exists;
+    not read
+- doc_id: sbvt_ldr_2026
+  state: VT
+  title: Land Development Regulations, adopted August 3, 2026
+  publisher: City of South Burlington
+  url: https://www.southburlingtonvt.gov/DocumentCenter/View/5086
+  listed_on: https://www.southburlingtonvt.gov/292/Regulations-Planning-Documents
+  retrieved_on: '2026-11-26'
+  sha256: 7003d2b455fc4bb2a4b41a55c28fd4f0ff7ba89d1ca7ff70ba9a26d851b60759
+  text_sha256: 977ccd6bb6e521f1104f08726e4c223210e84c68bfa51044acd9e155c76258be
+  text_chars: 939075
+  pages: 334
+  kind: bylaw
+  version_state: final
+  adopted_on: '2026-08-03'
+  amended_through: ''
+  effective_date: ''
+- doc_id: wnk_uludr_art2
+  state: VT
+  title: Unified Land Use & Development Regulations, Article II - Zoning Districts
+  publisher: City of Winooski
+  url: https://www.winooskivt.gov/DocumentCenter/View/4828
+  listed_on: DocumentCenter series 4827-4834 (Articles I-..)
+  retrieved_on: '2026-11-26'
+  sha256: f76077588b112e5e6353822ba34d77a3d4985bc93a81432204bbd88b39fd1aff
+  text_sha256: b248d0ebdf3ff1e1712bd756bf7d1a53ee11e88b405fda68544fdade092b5eed
+  text_chars: 20260
+  pages: 7
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: ''
+  effective_date: ''
+  note: no adoption date printed in this article; 2024 Planning Commission memos describe Act 47 conformance
+    amendments - currency unconfirmed
+- doc_id: wnk_uludr_art4
+  state: VT
+  title: 'ULUDR Article IV - General Use Regulations (file title on search: ''06072021'')'
+  publisher: City of Winooski
+  url: https://www.winooskivt.gov/DocumentCenter/View/4830
+  listed_on: DocumentCenter
+  retrieved_on: '2026-11-26'
+  sha256: 8359f97e8645cdd9156d46aa2944315060d9e237e1da7533483b354bdab125d8
+  text_sha256: d66d8c5edd51d64b6adc097065fe0440305159676421934fe1511078c6eb5002
+  text_chars: 119300
+  pages: 37
+  kind: bylaw
+  version_state: final
+  adopted_on: ''
+  amended_through: ''
+  effective_date: ''
+  note: file name suggests 2021-06-07; currency unconfirmed
+- doc_id: laramie_udc_15_10
+  state: WY
+  title: City of Laramie Unified Development Code (Title 15), Chapter 15.10 Use Regulations
+  publisher: City of Laramie
+  url: https://www.cityoflaramie.org/DocumentCenter/View/27293/1510-Use-Regs-04072026
+  listed_on: https://www.cityoflaramie.org/444/Unified-Development-Code
+  retrieved_on: '2026-11-26'
+  sha256: 08f81045552c06f09a25dc2a4786ea2ea6ca9a3b5b87a65100e8c9d261acaf2f
+  kind: bylaw
+  version_state: final
+  note: Page footers read Revised April 7, 2026 (28 pages), Revised November 9, 2026 (18 pages, with the
+    ADU pages) and Revised October 7, 2025 (3 pages); the index link text says 1192023. No adoption or
+    effective date is printed for the ADU subsection, so none is kept.
+- doc_id: laramie_udc_15_14
+  state: WY
+  title: City of Laramie Unified Development Code (Title 15), Chapter 15.14 Development Standards
+  publisher: City of Laramie
+  url: https://www.cityoflaramie.org/DocumentCenter/View/28626/1514-Development-Standards--040726
+  listed_on: https://www.cityoflaramie.org/444/Unified-Development-Code
+  retrieved_on: '2026-11-26'
+  sha256: 504a96bb3661c6449c32c0ecb54b24848f629b39324fcba4367461853703846f
+  kind: bylaw
+  version_state: final
+  note: Page footers read Revised November 11, 2026 (150 pages) and Revised April 7, 2026 (2 pages); the
+    dates may be carried over and are not used.
+- doc_id: laramie_udc_15_28
+  state: WY
+  title: City of Laramie Unified Development Code (Title 15), Chapter 15.28 Definitions
+  publisher: City of Laramie
+  url: https://www.cityoflaramie.org/DocumentCenter/View/27298/1528-Definitions-03042025
+  listed_on: https://www.cityoflaramie.org/444/Unified-Development-Code
+  retrieved_on: '2026-11-26'
+  sha256: 1015464ff6497b2567338cc6e80073358b608ffa2c8afda814a97e202ef997e9
+  kind: bylaw
+  version_state: final
+- doc_id: teton_ldr_20250801
+  state: WY
+  title: Teton County Land Development Regulations, PDF updated on 8/1/2025 (listed as valid until July
+    1, 2026)
+  publisher: Town of Jackson and Teton County joint planning site
+  url: https://jacksontetonplan.com/DocumentCenter/View/932/Teton-County-Land-Development-Regulations-PDF?bidId=
+  listed_on: https://www.jacksontetonplan.com/31/Land-Development-Regulations-LDRs
+  retrieved_on: '2026-11-26'
+  sha256: b560f37ea2bb61c4dc29d8a126e933a77b610a8c9c71d13e354c03443385a4c2
+  kind: bylaw
+  version_state: superseded
+  valid_until: '2026-07-01'
+  note: Listed under Former Versions of the LDRs as "Teton County LDRs in PDF Format (valid until July
+    1, 2026)". The current regulations are posted only on a commercial code host and are not read, so
+    no current rule is known.
+places:
+- place_id: vt_barre_city
+  state: VT
+  name: Barre (city)
+  geoid: '5002303175'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: '2019-06-25'
+  effective_date: '2024-11-04'
+  facts:
+  - topic: adoption
+    value: Effective November 4, 2024
+    review: verified
+    evidence:
+    - doc_id: barre_udo_2024
+      locator: cover
+      quote: Effective November 4, 2024
+      offset: 141
+      page: 1
+  - topic: districts_residential
+    value: UC-3 (P1), MU-1, MU-2, MU-3, R-16, R-12, R-8, R-4, UC-1/UC-2 (5+ only; new 1-2 family prohibited)
+    review: verified
+    evidence:
+    - doc_id: barre_udo_2024
+      locator: Sec. 2115 Use Table
+      quote: Three- or four-family dwelling
+      offset: 104736
+      page: 39
+  - topic: duplex
+    value: Two-family P in MU-1, MU-2, MU-3, R-16, R-12, R-8, R-4; P1 in UC-3; X in UC-1, UC-2
+    review: verified
+    evidence:
+    - doc_id: barre_udo_2024
+      locator: Sec. 2115 (two-family row directly above)
+      quote: Three- or four-family dwelling
+      offset: 104736
+      page: 39
+  - topic: small_multiunit
+    value: Three- or four-family P in UC-2, UC-3, MU-1, MU-2, R-16, R-12, R-8, R-4; X in UC-1, MU-3; a
+      parcel served by city water and sewer may have up to six units irrespective of lot size
+    review: verified
+    evidence:
+    - doc_id: barre_udo_2024
+      locator: Sec. 2115
+      quote: Three- or four-family dwelling
+      offset: 104736
+      page: 39
+    - doc_id: barre_udo_2024
+      locator: Sec. 3002 residential density (4)
+      quote: any parcel served by city water and sewer any be approved for up to six (6) dwelling units
+      offset: 86592
+      page: 30
+  - topic: adu
+    value: one ADU within or appurtenant to a single-family dwelling; local text still says 'on an owner-occupied
+      lot'; exempt from residential parking minimum
+    review: verified
+    evidence:
+    - &id001
+      doc_id: barre_udo_2024
+      locator: Sec. 3202.A(1)
+      quote: Be located within or appurtenant to a single-family dwelling on an owner-occupied lot
+      offset: 306460
+      page: 121
+  - topic: adu_owner_occupancy_text
+    value: 'yes: the local text still names an owner-occupancy condition'
+    review: verified
+    evidence:
+    - *id001
+  - topic: parking
+    value: 1 space per dwelling unit outside UC-1/UC-2; no minimum in UC-1 and UC-2
+    review: verified
+    evidence:
+    - doc_id: barre_udo_2024
+      locator: Sec. 3104.C(1)(a)
+      quote: 'Residential Uses: 1 space per dwelling unit.'
+      offset: 242682
+      page: 90
+    - doc_id: barre_udo_2024
+      locator: Sec. 3104.B(1)(a) UC-1/UC-2
+      quote: There are no minimum off-street parking or loading requirements.
+      offset: 240809
+      page: 89
+    numbers:
+      residential_min_per_unit: 1.0
+  - topic: service
+    value: Six-unit rule applies to parcels served by city water and sewer; no district service map.
+    review: draft
+    evidence: []
+  districts:
+    R-4:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: null
+      required_min_units: 0
+      local_max_units: 4
+- place_id: vt_bennington
+  state: VT
+  name: Bennington (town)
+  geoid: '5000304825'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: '2004-02-23'
+  effective_date: ''
+  facts:
+  - topic: adoption
+    value: Last Amended on June 24, 2024
+    review: verified
+    evidence:
+    - doc_id: benn_ludr_2024
+      locator: cover
+      quote: Last Amended on June 24, 2024
+      offset: 65
+      page: 1
+  - topic: districts_residential
+    value: D (multifamily only), MU-1, MU-2, MR-1, VR, MR-2, RR, RC, AG, IP
+    review: verified
+    evidence:
+    - doc_id: benn_ludr_2024
+      locator: Table 2.1 Town Center districts
+      quote: Single Family & Two Family
+      offset: 32483
+      page: 12
+  - topic: duplex
+    value: 'Town Center: single and two family ZA in MU-1, MU-2, MR-1, VR (not D); two-family allowed
+      in MR-2'
+    review: verified
+    evidence:
+    - doc_id: benn_ludr_2024
+      locator: Table 2.1(B)
+      quote: Single Family & Two Family
+      offset: 32483
+      page: 12
+  - topic: small_multiunit
+    value: Multifamily ZA in D, MU-1, MU-2, MR-1 (not VR); DRB in MR-2; MR-2 lot area per family 6,000
+      sf first unit + 2,000 sf each added unit when connected to municipal water and sewer
+    review: verified
+    evidence:
+    - doc_id: benn_ludr_2024
+      locator: MR-2 (D) dimensional standards header
+      quote: connected to both municipal water & sewer
+      offset: 130862
+      page: 49
+    - doc_id: benn_ludr_2024
+      locator: MR-2 (D)(4)
+      quote: 6,000 sq. ft. first unit; + 2,000 sq. ft. each additional unit
+      offset: 131170
+      page: 49
+  - topic: adu
+    value: one accessory apartment with a single family dwelling in any district; local text requires
+      owner residence, max two occupants, one bedroom, one parking space
+    review: verified
+    evidence:
+    - &id002
+      doc_id: benn_ludr_2024
+      locator: Sec. 4.2(A)(1)
+      quote: the owner shall reside on the property in either the primary or accessory dwelling unit
+      offset: 270519
+      page: 92
+    flag: 2024 text; several conditions may be narrower than 24 V.S.A. 4412(1)(E) as amended; not assessed
+  - topic: adu_owner_occupancy_text
+    value: 'yes: the local text still names an owner-occupancy condition'
+    review: verified
+    evidence:
+    - *id002
+    flag: 2024 text; several conditions may be narrower than 24 V.S.A. 4412(1)(E) as amended; not assessed
+  - topic: parking
+    value: single family 2 per unit; two-family or multi-family 1.5 per unit; accessory apartment 1 additional
+      (Table 3.2); Town Center residences 1 per unit
+    review: verified
+    evidence:
+    - doc_id: benn_ludr_2024
+      locator: Table 3.2 Required Off-Street Parking Spaces
+      quote: Dwelling, Two-Family or Multi-Family
+      offset: 248176
+      page: 85
+    numbers:
+      residential_min_per_unit: 1.5
+  - topic: service
+    value: Dimensional standards differ by connection to municipal water & sewer (MR-2, RR); IP requires
+      new structures to connect; RC restricts municipal sewer connection.
+    review: verified
+    evidence:
+    - doc_id: benn_ludr_2024
+      locator: Table 2.8 IP (7) Water Supply & Sewage Disposal
+      quote: connect to the Bennington municipal wastewater treatment facility and municipal water supply
+      offset: 85348
+      page: 32
+- place_id: vt_brattleboro
+  state: VT
+  name: Brattleboro (town)
+  geoid: '5002507900'
+  status: not_read
+  reviewed_on: '2026-11-26'
+  not_read_reason: 'The town''s Land Use Regulations page (brattleboro.gov/lur, robots allow all) links
+    the regulations only as a Google Drive file. drive.google.com robots.txt allows /file view pages but
+    ends with ''Disallow: /'', which covers the download path; the PDF was not fetched. Facts below are
+    from the town page and state layers only.'
+- place_id: vt_burlington
+  state: VT
+  name: Burlington (city)
+  geoid: '5000710675'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: ''
+  effective_date: ''
+  facts:
+  - topic: districts_residential
+    value: RL, RM, RH, RC, I, NMU, NAC, NAC-R, NAC-CR, FD5/FD6 (Art. 14 form code)
+    review: verified
+    evidence:
+    - doc_id: btv_cdo_art4_2026
+      locator: Sec. 4.3.1(e)
+      quote: A series of four (4) Residential districts
+      offset: 13713
+      page: 7
+    - doc_id: btv_cdo_art4_2026
+      locator: Sec. 4.4.5(a)1, RL purpose
+      quote: single detached dwellings, with or without accessory dwelling units, duplexes, triplexes
+        and quadplex
+      offset: 63884
+      page: 32
+  - topic: duplex
+    value: permitted (Y) in RL, RM, RH, RC, I, NAC-R; NMU only by conversion of an existing single-family
+      home (note 3)
+    review: draft
+    evidence:
+    - doc_id: btv_cdo_appa
+      locator: Appendix A, Residential uses row
+      quote: Attached Dwellings - Duplex
+      offset: 571
+      page: 1
+    - doc_id: btv_cdo_appa
+      locator: Appendix A note 3
+      quote: Duplexes shall only be allowed as a result of a conversion of an existing single family home.
+        New duplexes are prohibited.
+      offset: 11166
+      page: 6
+    check: column reading of Appendix A from layout text; confirm NMU/NAC columns against the PDF
+  - topic: small_multiunit
+    value: Multi-family (3 or more) permitted in RL and RM subject to note 2 (max 4 units per structure,
+      Table 4.4.5-2); permitted in RH, RC (no per-structure cap shown)
+    review: verified
+    evidence:
+    - doc_id: btv_cdo_appa
+      locator: Appendix A note 2
+      quote: Subject to applicable limits on the number of units per structure in Table 4.4.5-2.
+      offset: 11078
+      page: 6
+    - doc_id: btv_cdo_art4_2026
+      locator: Table 4.4.5-2 note 2 (table lists Max Dwelling Units per Structure 4 for RL and RM)
+      quote: Minimum dwelling unit size is 350 sq.ft.
+      offset: 70389
+      page: 35
+    numbers:
+      local_max_units_rl_rm: 4.0
+  - topic: adu
+    value: Sec. 5.4.5 (the ADU section named in Art. 5) is 'Reserved'; an additional unit added to an
+      owner-occupied single detached dwelling (within it or in a detached secondary structure) gets administrative
+      review and impact-fee exemption (Sec. 4.4.5(d)4.D)
+    review: verified
+    evidence:
+    - doc_id: btv_cdo_art5_2026
+      locator: Art. 5 Sec. 5.1.1 (cross-reference to 24 V.S.A. 4412(1)(E))
+      quote: shall be regulated as set forth in Sec. 5.4.5 hereof
+      offset: 7816
+      page: 3
+    - doc_id: btv_cdo_art5_2026
+      locator: Art. 5 table of contents
+      quote: Sec. 5.4.5 Reserved
+      offset: 3399
+      page: 1
+    - &id003
+      doc_id: btv_cdo_art4_2026
+      locator: Sec. 4.4.5(d)4.D
+      quote: Where an existing Principal Structure in any Residential Zoning District contains only an
+        owner-occupied Single Detached Dwelling
+      offset: 89223
+      page: 43
+    flag: Owner-occupied wording is a local review-path condition; the state ADU protection no longer
+      depends on owner occupancy from 2026-07-01 (Act 179, already coded in statutory_rights.yaml). Not
+      a conflict finding; a reviewer should read 4.4.5(d)4.D in full.
+  - topic: adu_owner_occupancy_text
+    value: 'yes: the local text still names an owner-occupancy condition'
+    review: verified
+    evidence:
+    - *id003
+    flag: Owner-occupied wording is a local review-path condition; the state ADU protection no longer
+      depends on owner occupancy from 2026-07-01 (Act 179, already coded in statutory_rights.yaml). Not
+      a conflict finding; a reviewer should read 4.4.5(d)4.D in full.
+  - topic: parking
+    value: no minimum off-street parking for any use, except applications to exceed four unrelated adults
+      per unit
+    review: verified
+    evidence:
+    - doc_id: btv_cdo_art8_2026
+      locator: Sec. 8.1.8
+      quote: minimum off-street spaces are eliminated in all parking districts for all uses
+      offset: 9862
+      page: 5
+    numbers:
+      residential_min_per_unit: 0.0
+  - topic: service
+    value: The CDO text read does not map municipal water or sewer by district.
+    review: draft
+    evidence: []
+  districts:
+    RL:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: null
+      required_min_units: null
+      local_max_units: 4
+    RM:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: null
+      required_min_units: null
+      local_max_units: 4
+  note: 'Open: Read Art. 4 Sec. 4.4.5(d) in full for any minimum-unit requirement; Get an official water
+    service map (Burlington Water Resources) to set municipal_water'
+- place_id: vt_colchester
+  state: VT
+  name: Colchester (town)
+  geoid: '5000714875'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: ''
+  effective_date: '2024-08-13'
+  facts:
+  - topic: adoption
+    value: 'Effective Date: August 13, 2024'
+    review: verified
+    evidence:
+    - doc_id: colch_devregs_s47
+      locator: cover
+      quote: 'Effective Date: August 13, 2024'
+      offset: 86
+      page: 1
+  - topic: districts_residential
+    value: R1, R2, R3, R5, R10, GD1, GD1C, GD2, GD4, LS1, LS2, LS3, LS4, AGR, MHP, AMU
+    review: draft
+    evidence: []
+  - topic: duplex
+    value: 1.210 Duplex P in most residential and GD districts (Table A-1)
+    review: verified
+    evidence:
+    - doc_id: colch_devregs_s47
+      locator: Table A-1 / Art. 3 table
+      quote: 1.200 Duplex Dwelling
+      offset: 116756
+      page: 53
+  - topic: small_multiunit
+    value: 1.310 Multi-unit residence P1 (subject to PUD standards) in R and GD districts; C1 in LS1
+    review: draft
+    evidence:
+    - doc_id: colch_devregs_s47
+      locator: Table A-1 p. 1
+      quote: 1.310 Multi-unit residence
+      offset: 560543
+      page: 222
+    check: superscript 1 = subject to PUD standards; confirm columns on PDF p. 222 and against S48
+  - topic: adu
+    value: one ADU per parcel accessory to a conforming residential use; local text requires owner occupancy
+      and 2+1 parking
+    review: verified
+    evidence:
+    - &id004
+      doc_id: colch_devregs_s47
+      locator: Sec. 2.09-B(1)(a)
+      quote: The owner shall occupy either the principal dwelling or the ADU.
+      offset: 44321
+      page: 20
+  - topic: adu_owner_occupancy_text
+    value: 'yes: the local text still names an owner-occupancy condition'
+    review: verified
+    evidence:
+    - *id004
+  - topic: parking
+    value: single-unit 2 per dwelling; duplex 1.5; multi-unit 1.5; ADU 1 (Table 10-2); no minimum in one
+      form-based district (p. 60)
+    review: verified
+    evidence:
+    - doc_id: colch_devregs_s47
+      locator: Table 10-2
+      quote: Duplex Dwelling 1.5 spaces per dwelling
+      offset: 350653
+      page: 144
+    numbers:
+      residential_min_per_unit: 1.5
+  - topic: service
+    value: 'Dimensional Table A-2 sets lot classes by service: Class I = municipal water and municipal
+      sewer or community septic; Class II = on-site septic. No district map of service.'
+    review: verified
+    evidence:
+    - doc_id: colch_devregs_s47
+      locator: Table A-2 legend, p. 2
+      quote: Class I = Municipal water and either municipal sewer or community septic
+      offset: 584071
+      page: 236
+- place_id: vt_essex
+  state: VT
+  name: Essex (town, outside the City of Essex Junction)
+  geoid: '5000724175'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: ''
+  effective_date: '2023-10-09'
+  facts:
+  - topic: adoption
+    value: October 9, 2023 Effective October 9, 2023
+    review: verified
+    evidence:
+    - doc_id: essex_zr_2023
+      offset: 549
+      page: 1
+      locator: cover, amendment dates and effective date
+      quote: October 9, 2023 Effective October 9, 2023
+  - topic: districts_residential
+    value: AR, R1, R2, R3, RB, CTR, MXD, MXD-C, MXD-PUD, HP-DC, C1
+    review: verified
+    evidence:
+    - doc_id: essex_zr_2023
+      locator: Table 2.1 Summary Use Chart
+      quote: DWELLING/DUPLEX UNIT
+      offset: 28636
+      page: 13
+  - topic: duplex
+    value: P in AR, R1, R2, R3, RB, CTR, MXD, MXD-PUD (note 3), HP-DC, C1 (column reading from text layer)
+    review: verified
+    evidence:
+    - doc_id: essex_zr_2023
+      locator: Table 2.1
+      quote: DWELLING/DUPLEX UNIT
+      offset: 28636
+      page: 13
+  - topic: small_multiunit
+    value: DWELLING/MULTI-UNIT P in R1, R2, R3, RB, CTR, B1 (note 1), MXD, MXD-C, MXD-PUD (note 3), HP-DC;
+      not in AR
+    review: draft
+    evidence:
+    - doc_id: essex_zr_2023
+      locator: Table 2.1
+      quote: DWELLING/MULTI- UNIT
+      offset: 28680
+      page: 13
+    check: confirm columns on PDF p. 13; lot-area-per-unit rules apply
+  - topic: adu
+    value: permitted in any district allowing a single-unit residence; local text requires owner occupancy
+      of one unit and wastewater capacity evidence
+    review: verified
+    evidence:
+    - doc_id: essex_zr_2023
+      locator: Sec. 4.1(A)
+      quote: an accessory dwelling unit as defined in Section 8.1 shall be allowed as a permitted use
+        in any district in which a single-unit residence is allowed
+      offset: 231295
+      page: 85
+    - &id005
+      doc_id: essex_zr_2023
+      locator: Sec. 4.1(A)(2)
+      quote: must be occupied by the owner of the property
+      offset: 231659
+      page: 85
+    flag: Owner-occupancy text predates Act 179 (2026).
+  - topic: adu_owner_occupancy_text
+    value: 'yes: the local text still names an owner-occupancy condition'
+    review: verified
+    evidence:
+    - *id005
+    flag: Owner-occupancy text predates Act 179 (2026).
+  - topic: parking
+    value: 2.3 spaces per dwelling unit; 1.67 per 1-2 bedroom multi-unit; 1 per ADU (Table 3.3)
+    review: verified
+    evidence:
+    - doc_id: essex_zr_2023
+      locator: Table 3.3
+      quote: 2.3 per dwelling unit
+      offset: 177270
+      page: 63
+    flag: 2023 text; whether a state cap on residential parking minimums overrides it was not read here.
+    numbers:
+      residential_min_per_unit: 2.3
+  - topic: service
+    value: 'District purposes tie service to the ''Sewer Core Area'' of the Town''s Sewer Allocation Policy:
+      R2 is inside it; R1 is adjacent but outside (on-site septic, municipal water may be required); AR
+      has no planned water or sewer.'
+    review: verified
+    evidence:
+    - doc_id: essex_zr_2023
+      locator: Sec. 2.3(A) AR
+      quote: extension of public water supply and sewage disposal systems are not planned for this district
+      offset: 39209
+      page: 17
+    - doc_id: essex_zr_2023
+      locator: Sec. 2.4(A) R1
+      quote: Connection to municipal water service may be required.
+      offset: 42256
+      page: 18
+    - doc_id: essex_zr_2023
+      locator: Sec. 2.5(A) R2
+      quote: inside the “Sewer Core Area” as defined in the most recently adopted Town of Essex Sewer
+        Allocation Policy
+      offset: 44683
+      page: 19
+  districts:
+    AR:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: false
+      municipal_sewer: false
+      required_min_units: 0
+      local_max_units: 2
+    R1:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: false
+      required_min_units: 0
+      local_max_units: null
+    R2:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: true
+      required_min_units: 0
+      local_max_units: null
+- place_id: vt_hartford
+  state: VT
+  name: Hartford (town)
+  geoid: '5002732275'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: ''
+  effective_date: ''
+  facts:
+  - topic: districts_residential
+    value: R1-M, R-1, R-2, R-3, VR-1, VR-2, RL-1, RL-3, RL-5, RL-10, FC, and mixed-use/commercial districts
+      per matrix
+    review: draft
+    evidence:
+    - doc_id: hartford_use_matrix_2022
+      locator: matrix title
+      quote: SUMMARY OF PERMITTED AND CONDITIONAL USES BY ZONING DISTRICT, OCTOBER 25, 2022
+      offset: 36
+      page: 1
+    check: rests on guidance, not bylaw text
+  - topic: duplex
+    value: 'Dwelling Unit, Two: P in most residential districts, C in some (R-3, RL-3, RL-5 per matrix
+      columns)'
+    review: draft
+    evidence:
+    - doc_id: hartford_use_matrix_2022
+      locator: matrix row
+      quote: Dwelling Unit, Two
+      offset: 770
+      page: 1
+    check: confirm columns on the matrix PDF; 2022 text predates later state amendments; rests on guidance,
+      not bylaw text
+  - topic: small_multiunit
+    value: 'Dwelling, Multi-Unit: P or C by district; no 3-4 unit class separate from multi-unit'
+    review: draft
+    evidence:
+    - doc_id: hartford_use_matrix_2022
+      locator: matrix row
+      quote: Dwelling, Multi-Unit
+      offset: 821
+      page: 1
+    check: rests on guidance, not bylaw text
+  - topic: adu
+    value: ADU in an existing single-family dwelling or existing accessory structure is permitted; conditional
+      use if a new accessory structure, a height/floor-area increase or larger parking area is involved
+    review: draft
+    evidence:
+    - &id006
+      doc_id: hartford_ch260
+      locator: § 260-41
+      quote: shall be a permitted use. However, conditional use approval is required if the creation of
+        the accessory dwelling unit involves
+      offset: 127630
+      page: 45
+    - doc_id: hartford_adu_sheet_2026
+      locator: ADU supplemental sheet (Oct 2026)
+      quote: 'PARKING: One parking space is required.'
+      offset: 865
+      page: 1
+    check: rests on guidance, not bylaw text
+  - topic: adu_owner_occupancy_text
+    value: no owner-occupancy condition in the section read
+    review: draft
+    evidence:
+    - *id006
+  - topic: parking
+    value: 1- or 2-family and multifamily 2 per unit; accessory apartment 1; mixed-use dwelling 1.5 (§
+      260-24.C(9))
+    review: verified
+    evidence:
+    - doc_id: hartford_ch260
+      locator: § 260-24.C(9)(a)
+      quote: 1- or 2-family dwelling 2 per unit
+      offset: 49875
+      page: 19
+    flag: 2022 text; state parking limits not checked here
+    numbers:
+      residential_min_per_unit: 2.0
+  - topic: service
+    value: 'Lot classes by water/sewage source set minimum area per dwelling unit: class 1 off-lot water
+      and sewage, class 2 off-lot water or sewage, class 3 on-lot both; off-lot service is generally municipal.
+      No district service map in the text.'
+    review: verified
+    evidence:
+    - doc_id: hartford_ch260
+      locator: § 260-19.A class 1
+      quote: Off-lot water supply and sewage disposal
+      offset: 24784
+      page: 9
+    - doc_id: hartford_ch260
+      locator: § 260-19.B
+      quote: Generally, but not exclusively, off-lot water supply and sewage disposal service is provided
+        through municipal facilities.
+      offset: 24912
+      page: 9
+- place_id: vt_milton
+  state: VT
+  name: Milton (town)
+  geoid: '5000745250'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: '2017-09-18'
+  effective_date: ''
+  facts:
+  - topic: adoption
+    value: Amended by the Milton Selectboard on April 6, 2026
+    review: verified
+    evidence:
+    - doc_id: milton_udr_2026
+      locator: cover
+      quote: Amended by the Milton Selectboard on April 6, 2026
+      offset: 341
+      page: 1
+  - topic: districts_residential
+    value: DB1, NC1, NC2, M1, M2, M4R, M5, M6, R1, R2, R3, R4, R5, R6, R7, FC (single-family C)
+    review: draft
+    evidence: []
+  - topic: duplex
+    value: Duplex P in M1, M2, M4R, M5, M6 and some R districts, C in one (Sec. 2123)
+    review: draft
+    evidence:
+    - doc_id: milton_udr_2026
+      locator: district standard, p. 34
+      quote: Any conforming lot with ability to connect to town water and sewer may be converted to a
+        duplex
+      offset: 99560
+      page: 34
+    check: confirm the duplex row columns on PDF p. 74
+  - topic: small_multiunit
+    value: 'Multi-family dwelling P in DB1, NC1, NC2, M1, M2, M4R, M5, M6 (not in R districts per table);
+      note: 5 units per acre permitted where served by public water and sewer'
+    review: verified
+    evidence:
+    - doc_id: milton_udr_2026
+      locator: Sec. 2123 Use Table notes, row (4)
+      quote: 5 units per acre are permitted in areas served by public water and sewer.
+      offset: 168367
+      page: 74
+  - topic: adu
+    value: ADU P in all districts (row 6); Sec. 1110 text still says 'owner-occupied, single-family dwelling'
+    review: verified
+    evidence:
+    - &id007
+      doc_id: milton_udr_2026
+      locator: Sec. 1110.A
+      quote: owner-occupied, single-family dwelling
+      offset: 61758
+      page: 18
+  - topic: adu_owner_occupancy_text
+    value: 'yes: the local text still names an owner-occupancy condition'
+    review: verified
+    evidence:
+    - *id007
+  - topic: parking
+    value: 1 space per dwelling unit for all residential unit sizes (Figure 3-01)
+    review: verified
+    evidence:
+    - doc_id: milton_udr_2026
+      locator: Figure 3-01 Minimum Parking Ratios
+      quote: All 3-bedrooms or more residential units
+      offset: 325048
+      page: 138
+    numbers:
+      residential_min_per_unit: 1.0
+  - topic: service
+    value: The Town has a water service area and a sewer service area; development inside each must connect.
+      Not mapped in the text.
+    review: verified
+    evidence:
+    - doc_id: milton_udr_2026
+      locator: Sec. 3405.E Water and Wastewater Facilities
+      quote: Any subdivision or development within the town’s sewer service area must be connected to
+        the municipal system.
+      offset: 390981
+      page: 164
+- place_id: vt_montpelier
+  state: VT
+  name: Montpelier (city)
+  geoid: '5002346000'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: '2018-01-03'
+  effective_date: '2025-07-09'
+  facts:
+  - topic: adoption
+    value: ADOPTED July 9, 2025 / EFFECTIVE July 9, 2025
+    review: verified
+    evidence:
+    - doc_id: mpv_udr_2025
+      offset: 224
+      page: 1
+      locator: table of contents header
+      quote: ADOPTED July 9, 2025 / EFFECTIVE July 9, 2025
+  - topic: districts_residential
+    value: UC 1, UC 2, UC 3, RIV, EG, WG, MUR, RES 1.5, RES 3, RES 6, RES 9, UR, RL
+    review: verified
+    evidence:
+    - doc_id: mpv_udr_2025
+      locator: Figure 2-15 Use Table, p. 2-35
+      quote: One to four dwelling-units
+      offset: 136947
+      page: 54
+  - topic: duplex
+    value: P in all base districts except MUN (row 'One to four dwelling-units')
+    review: verified
+    evidence:
+    - doc_id: mpv_udr_2025
+      locator: Figure 2-15
+      quote: One to four dwelling-units
+      offset: 136947
+      page: 54
+  - topic: small_multiunit
+    value: 1-4 units P in all base districts except MUN; 5-14 units P except RL and MUN; subject to district
+      density, but a parcel served by city water and sewer may have up to six units regardless of density
+    review: verified
+    evidence:
+    - doc_id: mpv_udr_2025
+      locator: Sec. 3002.C(3)(b)
+      quote: any parcel served by city water and sewer may be approved for up to six dwelling units irrespective
+        of the district density standard
+      offset: 185430
+      page: 73
+  - topic: adu
+    value: one ADU per parcel classified as a single dwelling-unit; ADU not counted for density; no owner-occupancy
+      condition in 3104.A
+    review: verified
+    evidence:
+    - &id008
+      doc_id: mpv_udr_2025
+      locator: Sec. 3104.A
+      quote: Any parcel classified as a single dwelling-unit may have one accessory dwelling unit (ADU)
+      offset: 280913
+      page: 108
+  - topic: adu_owner_occupancy_text
+    value: no owner-occupancy condition in the section read
+    review: verified
+    evidence:
+    - *id008
+  - topic: parking
+    value: minimum 1.0 space per dwelling unit, ADUs included (Figure 3-13); no minimum for senior/affordable
+      units in some cases
+    review: verified
+    evidence:
+    - doc_id: mpv_udr_2025
+      locator: Figure 3-13 Minimum Parking Ratios
+      quote: Residential dwelling units including accessory dwelling units
+      offset: 250508
+      page: 98
+    numbers:
+      residential_min_per_unit: 1.0
+  - topic: service
+    value: District purpose statements say which districts are served by city water and sewer.
+    review: verified
+    evidence:
+    - doc_id: mpv_udr_2025
+      locator: Sec. 2109.A RES 3
+      quote: The land in this district is served by city water and sewer, and a gridded network
+      offset: 102955
+      page: 40
+    - doc_id: mpv_udr_2025
+      locator: Sec. 2110.A RES 6
+      quote: is or could reasonably be served by city water and sewer
+      offset: 111329
+      page: 43
+    - doc_id: mpv_udr_2025
+      locator: Sec. 2111.A RES 9
+      quote: Most of the land in this district is served by city water and sewer.
+      offset: 116410
+      page: 45
+    - doc_id: mpv_udr_2025
+      locator: Sec. 2111.B RES 9 neighborhood
+      quote: City water and sewer is not available throughout the entire neighborhood.
+      offset: 122403
+      page: 46
+    - doc_id: mpv_udr_2025
+      locator: Sec. 2113.A RL
+      quote: Generally, land in this district is not served by city water or sewer
+      offset: 129390
+      page: 50
+  districts:
+    RES 3:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: true
+      municipal_sewer: true
+      required_min_units: 0
+      local_max_units: 4
+    RES 6:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: null
+      required_min_units: 0
+      local_max_units: 4
+    RL:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: false
+      municipal_sewer: false
+      required_min_units: 0
+      local_max_units: 4
+  note: '''local_max_units'' = 4 is the use-table ceiling of the 1-4 row; density (e.g. RES 6: 1 du/6,000
+    sf) and the six-unit served-parcel rule also apply. Purpose statements describe districts in general,
+    not each lot.'
+- place_id: vt_rutland
+  state: VT
+  name: Rutland (city)
+  geoid: '5002161225'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: '2025-11-17'
+  effective_date: ''
+  facts:
+  - topic: adoption
+    value: 'Adopted by the Rutland City Board of Aldermen: November 17, 2025'
+    review: verified
+    evidence:
+    - doc_id: rutland_ldr_2025
+      locator: cover
+      quote: 'Adopted by the Rutland City Board of Aldermen: November 17, 2025'
+      offset: 129
+      page: 1
+  - topic: districts_residential
+    value: SFR, MR-1, MR-2, and other districts in Art. III
+    review: draft
+    evidence: []
+  - topic: duplex
+    value: Two-Unit Dwelling permitted (administrative review) in SFR, MR-1, MR-2
+    review: verified
+    evidence:
+    - doc_id: rutland_ldr_2025
+      locator: § 31-301(C) SFR permitted uses (Two-Unit Dwelling is item 2)
+      quote: Multi-Unit Dwelling (max. four units)
+      offset: 25526
+      page: 11
+  - topic: small_multiunit
+    value: 'SFR: Multi-Unit Dwelling up to four units permitted; MR-1/MR-2: multi-unit permitted, +500
+      sf lot per unit beyond four'
+    review: verified
+    evidence:
+    - doc_id: rutland_ldr_2025
+      locator: § 31-301(C)3
+      quote: Multi-Unit Dwelling (max. four units)
+      offset: 25526
+      page: 11
+  - topic: adu
+    value: one ADU within or appurtenant to a single-unit dwelling permitted; needs wastewater capacity
+      per City DPW; no owner-occupancy condition seen
+    review: verified
+    evidence:
+    - &id009
+      doc_id: rutland_ldr_2025
+      locator: § 31-412(C)
+      quote: One Accessory Dwelling Unit located within or appurtenant to a single-unit dwelling is permitted.
+      offset: 79093
+      page: 32
+    - doc_id: rutland_ldr_2025
+      locator: § 31-412(C)1
+      quote: Must have sufficient wastewater capacity, as determined by Rutland City DPW.
+      offset: 79249
+      page: 32
+  - topic: adu_owner_occupancy_text
+    value: no owner-occupancy condition in the section read
+    review: verified
+    evidence:
+    - *id009
+  - topic: parking
+    value: no residential off-street parking ratio found in Title 31 text (home occupations may get parking
+      conditions)
+    review: draft
+    evidence: []
+    numbers:
+      residential_min_per_unit: null
+  - topic: service
+    value: Text requires connection to the City water and sewage systems for mobile home parks and subdivisions;
+      no district service map.
+    review: draft
+    evidence: []
+  districts:
+    SFR:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: null
+      required_min_units: 0
+      local_max_units: 4
+- place_id: vt_south_burlington
+  state: VT
+  name: South Burlington (city)
+  geoid: '5000766175'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: '2026-08-03'
+  effective_date: ''
+  facts:
+  - topic: adoption
+    value: ADOPTED AUGUST 3, 2026
+    review: verified
+    evidence:
+    - doc_id: sbvt_ldr_2026
+      locator: cover
+      quote: ADOPTED AUGUST 3, 2026
+      offset: 219
+      page: 1
+  - topic: districts_residential
+    value: LSN, MSN, QCP, HSMU, C1-LR, C1-AIR, C1-AUTO, C2, NRP?, City Center FBC transect zones
+    review: verified
+    evidence:
+    - doc_id: sbvt_ldr_2026
+      locator: Art. 4 list
+      quote: 4.01 Low-Scale Neighborhood (LSN) District
+      offset: 205085
+      page: 75
+    - doc_id: sbvt_ldr_2026
+      locator: Sec. 4.01.A LSN purpose
+      quote: types (single-family, duplex, and small-multifamily homes)
+      offset: 205362
+      page: 75
+  - topic: duplex
+    value: P (Duplex (2 units)) in LSN, MSN, QCP and some others per Table C-1
+    review: verified
+    evidence:
+    - doc_id: sbvt_ldr_2026
+      locator: Table C-1 residential rows, p. 316 (Duplex row directly above)
+      quote: Small Multi-Unit Building (3-4 units)
+      offset: 909147
+      page: 316
+  - topic: small_multiunit
+    value: Small Multi-Unit Building (3-4 units) P in residential districts and several commercial districts
+      (Table C-1)
+    review: verified
+    evidence:
+    - doc_id: sbvt_ldr_2026
+      locator: Table C-1
+      quote: Small Multi-Unit Building (3-4 units)
+      offset: 909147
+      page: 316
+  - topic: adu
+    value: one ADU permitted with a single-family dwelling; local text still requires an owner-occupied
+      lot and a wastewater allocation or on-site permit
+    review: verified
+    evidence:
+    - doc_id: sbvt_ldr_2026
+      locator: Sec. 3.11.A
+      quote: One (1) accessory dwelling unit that is clearly subordinate to a single-family dwelling shall
+        be permitted
+      offset: 175095
+      page: 65
+    - &id010
+      doc_id: sbvt_ldr_2026
+      locator: Sec. 3.11.A(1)
+      quote: The lot is owner-occupied.
+      offset: 175329
+      page: 65
+    flag: LDR adopted 2026-08-03 keeps 'The lot is owner-occupied' although Act 179 removed owner occupancy
+      from the 4412(1)(E) protection from 2026-07-01. Report as text, not as a legal finding.
+  - topic: adu_owner_occupancy_text
+    value: 'yes: the local text still names an owner-occupancy condition'
+    review: verified
+    evidence:
+    - *id010
+    flag: LDR adopted 2026-08-03 keeps 'The lot is owner-occupied' although Act 179 removed owner occupancy
+      from the 4412(1)(E) protection from 2026-07-01. Report as text, not as a legal finding.
+  - topic: parking
+    value: 'no minimum except multi-family: 0.75 per studio/1-bed unit, 1.0 per 2+ bed unit (Table 13-1);
+      DRB may reduce'
+    review: verified
+    evidence:
+    - doc_id: sbvt_ldr_2026
+      locator: Sec. 13.02.B(1)
+      quote: there shall be no minimum number of parking spaces
+      offset: 534782
+      page: 186
+    - doc_id: sbvt_ldr_2026
+      locator: Table 13-1
+      quote: Multi-Family Dwelling (2+ bedroom units)
+      offset: 535083
+      page: 186
+    numbers:
+      residential_min_per_unit_sf: 0.0
+      residential_min_per_unit_mf_low: 0.75
+      residential_min_per_unit_mf_high: 1.0
+  - topic: service
+    value: City public Water and Wastewater Service Areas exist; private community/on-site systems are
+      not permitted inside them. The LDR does not map them by district.
+    review: verified
+    evidence:
+    - doc_id: sbvt_ldr_2026
+      locator: Art. 15.A Subdivision Review, B. Potable Water Supply and Wastewater Systems (1)
+      quote: Private community or other onsite systems are not permitted within the City’s public Water
+        and Wastewater Service Areas.
+      offset: 728768
+      page: 251
+  districts:
+    LSN:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: null
+      required_min_units: 0
+      local_max_units: 4
+  note: 'Open: Confirm Table C-1 column alignment on the PDF; Ask DPW for the Water and Wastewater Service
+    Area map named in Art. 15.A'
+- place_id: vt_st_albans_city
+  state: VT
+  name: St. Albans (city)
+  geoid: '5001161675'
+  status: not_read
+  reviewed_on: '2026-11-26'
+  not_read_reason: 'www.stalbansvt.com robots.txt (read 2026-11-26) has the same AI-crawler ''Disallow:
+    /'' block naming ClaudeBot. Treated as a refusal; nothing fetched.'
+- place_id: vt_williston
+  state: VT
+  name: Williston (town)
+  geoid: '5000784475'
+  status: not_read
+  reviewed_on: '2026-11-26'
+  not_read_reason: 'www.town.williston.vt.us robots.txt (read 2026-11-26) names ClaudeBot, GPTBot and
+    other AI crawlers with ''Disallow: /'' under the comment ''AI training crawlers - opt out of model
+    training''. Treated as a refusal for this AI-run fetch; no page or bylaw fetched.'
+- place_id: vt_winooski
+  state: VT
+  name: Winooski (city)
+  geoid: '5000785150'
+  status: verified
+  reviewed_on: '2026-11-26'
+  adopted_on: ''
+  effective_date: ''
+  facts:
+  - topic: districts_residential
+    value: R-A, R-B, R-C, C-1, C-2 (5+ units), DC (5+), Gateway districts (form-based code)
+    review: verified
+    evidence:
+    - doc_id: wnk_uludr_art2
+      locator: Sec. 2.4
+      quote: SECTION 2.4 - LAND USE TABLE
+      offset: 3890
+      page: 2
+  - topic: duplex
+    value: Two Unit Dwelling (attached) P in R-A, R-B, R-C, C-1
+    review: verified
+    evidence:
+    - doc_id: wnk_uludr_art2
+      locator: Sec. 2.4 table
+      quote: SECTION 2.4 - LAND USE TABLE
+      offset: 3890
+      page: 2
+  - topic: small_multiunit
+    value: Multi-Unit Dwelling (3-4 units) P in R-A, R-B, R-C, C-1; 5+ units by Sec. 5.14 in R districts
+    review: verified
+    evidence:
+    - doc_id: wnk_uludr_art2
+      locator: Sec. 2.4 table
+      quote: SECTION 2.4 - LAND USE TABLE
+      offset: 3890
+      page: 2
+  - topic: adu
+    value: P/CU in R-A, R-B, R-C, C-1; one per lot per Sec. 5.1
+    review: draft
+    evidence:
+    - doc_id: wnk_uludr_art2
+      locator: Sec. 2.4 note 2
+      quote: One accessory dwelling consistent with Section 5.1 is permitted per lot.
+      offset: 5767
+      page: 3
+    - doc_id: wnk_uludr_art4
+      locator: Sec. 4.5.A(5)
+      quote: One accessory dwelling per principal single unit dwelling, as a permitted use
+      offset: 28743
+      page: 8
+    check: Sec. 5.1 (Article V) not read
+  - topic: parking
+    value: minimum 1.0 space per dwelling unit, ADU 1.0 (Sec. 4.12 table)
+    review: verified
+    evidence:
+    - doc_id: wnk_uludr_art4
+      locator: Sec. 4.12 Minimum Required Vehicle Parking table, p. 18
+      quote: Accessory Dwelling Unit (ADU)
+      offset: 60361
+      page: 18
+    numbers:
+      residential_min_per_unit: 1.0
+  - topic: service
+    value: not stated in the articles read
+    review: draft
+    evidence: []
+  districts:
+    R-A:
+      year_round_residential: true
+      allows_residential: true
+      municipal_water: null
+      municipal_sewer: null
+      required_min_units: 0
+      local_max_units: 4
+  note: 'Open: Find the currently adopted ULUDR edition and its effective date; Read Article V Sec. 5.1
+    ADU and Sec. 5.14'
+- place_id: wy_laramie
+  state: WY
+  name: Laramie (city)
+  geoid: '5645050'
+  status: verified
+  reviewed_on: '2026-11-26'
+  facts:
+  - topic: unlisted_uses
+    value: 'prohibited: a use not allowed in Table 15.10-1 is prohibited, and a blank cell means the use
+      is prohibited in that district'
+    review: verified
+    evidence:
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 2, § 15.10.000 (intro)
+      page: 2
+      quote: Development or use of a property for any other use not specifically allowed in Table 15.10-1
+        and approved under the appropriate process is prohibited (Ord. 1659 § 1, 2014).
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 2, § 15.10.000.A.3
+      page: 2
+      quote: A blank cell indicates that the use is prohibited in the respective zoning district.
+  - topic: adu
+    value: An accessory dwelling may be attached or detached, one per detached one-unit dwelling lot,
+      and the term applies only in the single-family districts R1, LR and RR
+    review: verified
+    flag: ADUs are an accessory use, not a row of Table 15.10-1; that they are allowed by right rests
+      on § 15.10.030.D.6 ("where accessory dwelling units are allowed as permitted uses") and was not
+      confirmed in a use table.
+    evidence:
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 40, § 15.10.030.D.6.a
+      page: 40
+      quote: The accessory dwelling unit may be attached or detached from the principal structure on the
+        property.
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 40, § 15.10.030.D.6.c
+      page: 40
+      quote: Only one accessory dwelling unit is permitted per detached one-unit dwelling lot
+    - doc_id: laramie_udc_15_28
+      locator: Ch. 15.28 PDF p. 17, definition 125 'Dwelling, Accessory'
+      page: 17
+      quote: The term "accessory dwelling" is only applicable in single-family zoning (R1, LR, RR) districts
+        since there is no distinction between principal and accessory dwellings within multi-family residential
+        zoning (R2, R2M, and R3) districts.
+  - topic: adu_size
+    value: 220 to 1,200 sq ft of floor area; footprint at most the lesser of 40% of the house footprint
+      or 600 sq ft
+    review: verified
+    numbers:
+      adu_min_sf: 220
+      adu_max_sf: 1200
+      adu_max_footprint_sf: 600
+    evidence:
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 40, § 15.10.030.D.6.g
+      page: 40
+      quote: The maximum square footage of an accessory dwelling shall be no more than 1200 square feet.
+        ADUs must have a minimum square footage of 220 square feet.
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 40, § 15.10.030.D.6.f
+      page: 40
+      quote: The building footprint of the accessory dwelling unit may be to 40 percent of the building
+        footprint of the principal dwelling unit or 600 square feet, whichever amount is lesser.
+  - topic: adu_owner_occupancy_text
+    value: no owner-occupancy rule found in the chapters read; every accessory use must be under the same
+      ownership as the principal use (not an occupancy rule)
+    review: verified
+    evidence:
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 35, § 15.10.030.C.4
+      page: 35
+      quote: The principal use and the accessory use shall be under the same ownership.
+  - topic: parking
+    value: 'No added space for an ADU; 1 space per home for single-family and two-family dwellings; multi-family:
+      1.5 per unit of more than one bedroom for the first 16 units, then 1; the DC district is exempt
+      from minimums'
+    review: verified
+    numbers:
+      residential_min_per_unit: 1.0
+      adu_min: 0.0
+    evidence:
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 41, § 15.10.030.D.6.j
+      page: 41
+      quote: No additional on-site parking shall be required for an Accessory Dwelling Unit.
+    - doc_id: laramie_udc_15_14
+      locator: Ch. 15.14 PDF p. 21, Table 15.14.040-3, row 'Dwelling, Two-Family'
+      page: 21
+      quote: Dwelling, Two-Family 1 per DU
+    - doc_id: laramie_udc_15_14
+      locator: Ch. 15.14 PDF p. 21, Table 15.14.040-3 Off-Street Parking Standards, Residential Uses
+      page: 21
+      quote: For all other units containing more than 1 bedroom, the first 16 units requires 1.5 spaces
+        per DU, and for each unit over the first 16 units requires 1 space per unit.
+    - doc_id: laramie_udc_15_14
+      locator: Ch. 15.14 PDF p. 16, § 15.14.040.B.3.a
+      page: 16
+      quote: Properties located within the DC zoning district are exempt from minimum parking requirements
+        unless otherwise provided for in that district.
+  - topic: duplex
+    value: Two-family dwellings permitted only in R2, R2M and R3; blank (so prohibited) in AG, RR, LR
+      and R1
+    review: draft
+    check: district columns read from the PDF text layout of Table 15.10-1; confirm on the rendered page
+    evidence:
+    - doc_id: laramie_udc_15_10
+      locator: Ch. 15.10 PDF p. 4, Table 15.10-1, Residential Uses, row 'Dwelling, Two-Family'
+      page: 4
+      quote: Dwelling, Two-Family P P P
+  - topic: small_multiunit
+    value: Multi-family (more than two units) by right in R2, R2M, R3, NB, B1, B2, DC and C2; conditional
+      in LM, IP, I1 and I2; not in AG, RR, LR or R1
+    review: draft
+    check: district columns read from the PDF text layout of Table 15.10-1; confirm on the rendered page
+    evidence:
+    - doc_id: laramie_udc_15_28
+      locator: Ch. 15.28 PDF p. 17, definition 132
+      page: 17
+      quote: '"Dwelling, multi-family" means a dwelling containing more than two dwelling units.'
+  note: No adoption, publication or effective date is printed for the sections read, so the reading counts
+    from its review date. Impact or tap fees are not in the chapters read (unknown, not zero). Chapters
+    15.08 and 15.12 (districts and lot sizes) were downloaded but not read.
+- place_id: wy_teton_county
+  state: WY
+  name: Teton County (unincorporated)
+  geoid: '56039'
+  level: county
+  status: superseded
+  reviewed_on: '2026-11-26'
+  facts:
+  - topic: unlisted_uses
+    value: prohibited unless a similar-use determination is made (text valid until July 1, 2026; current
+      rule not read)
+    review: superseded
+    evidence:
+    - doc_id: teton_ldr_20250801
+      locator: PDF p. 43, AC-TC zone, subsection C.1 (the same sentence is in each zone section)
+      page: 43
+      quote: Uses that are not listed are prohibited unless a similar use determination is made pursuant
+        to 6.1.2.D.
+  - topic: adu_size
+    value: An accessory residential unit (ARU) accessory to a residential use at most 1,000 sq ft of gross
+      floor area including the basement (NR-1 zone; text valid until July 1, 2026)
+    review: superseded
+    numbers:
+      adu_max_sf: 1000
+    evidence:
+    - doc_id: teton_ldr_20250801
+      locator: PDF p. 30, NR-1 zone, § E.1.a
+      page: 30
+      quote: An ARU accessory to a residential use shall not exceed 1,000 sf of gross floor area including
+        basement floor area.
+  - topic: adu_occupancy
+    value: ARU occupants had to work in Teton County, be family of the main household or be non-paying
+      guests; rentals at least 90 days (text valid until July 1, 2026)
+    review: superseded
+    evidence:
+    - doc_id: teton_ldr_20250801
+      locator: PDF p. 389, § 6.1.11.B.3.b
+      page: 389
+      quote: 'The occupancy of an ARU shall be restricted to persons that meet one of the following standards:
+        i. The occupants shall be employed within Teton County'
+    - doc_id: teton_ldr_20250801
+      locator: PDF p. 389, § 6.1.11.B.3.e
+      page: 389
+      quote: An ARU rental period shall be a minimum of 90 days.
+  note: Facts from the former regulations (valid until July 1, 2026); they show the rule up to that date
+    and are not current law. The current regulations are only on a commercial code host and are not read,
+    so today's rule is unknown. The 2026 housing-mitigation fee calculator and fee schedule were not merged
+    (the saved workbook and fee PDF are not in the scratch copy; fees belong with the fee prototypes).

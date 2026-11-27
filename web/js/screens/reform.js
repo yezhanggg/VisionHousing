@@ -55,6 +55,7 @@ import { LAW_REFORMS, LawCard, LawTable, LawToggle, lawView, ReadNext } from "..
 import { budgetOpen } from "../ui/budget-target.js";
 import { CycleChoice } from "../ui/cycle.js";
 import { HiddenRange, hiddenView, PartialLabel, statusView, StatusTable } from "../ui/tod-status.js";
+import { AlternativesButton } from "../ui/alternatives.js";
 
 const CHOICES = [
   ["", "Range"],
@@ -98,6 +99,7 @@ function Headline({ run, id }) {
           size="lg" text=${hidden.measured.text} /></dd></div>
         <div><dt>Change from baseline</dt><dd><strong>${hidden.not_shown}</strong></dd></div>
       </dl>
+      <${AlternativesButton} state=${run.data?.state} reform=${id} title=${run.data?.reform_results?.[id]?.title || id} />
     <//>`;
   }
   return html`<${Card} id="headline" title="What it adds, alone"
@@ -119,6 +121,7 @@ function Headline({ run, id }) {
       ${verdict && html`<div><dt>Verdict</dt><dd><strong class="verdict-word">${verdict.word}</strong>
         <span class="headline-sub">${verdict.why.text}</span></dd></div>`}
     </dl>`}
+    ${e && html`<${AlternativesButton} state=${run.data?.state} reform=${id} title=${run.data?.reform_results?.[id]?.title || id} />`}
   <//>`;
 }
 

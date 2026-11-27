@@ -20,6 +20,15 @@ file or network access.
   because towns answered different survey waves. A town with no answer for a
   period has no row: unknown is never written as zero.
 
+:func:`survey_summary` and :func:`survey_context` turn that table into the
+observed context the profile, the data report card and the plausibility card
+show: per survey period, the towns that answered (of the state's
+municipalities, ``adu_survey.municipalities`` in ``assumptions/ma_intake.yaml``),
+applications, approvals and certificates of occupancy, detached and attached.
+Every survey period is kept (the 2025 waves and the 2026 mid-year wave). It is
+**evidence only**: never divided into a rate, never an input to a run. Without
+the hand-saved file the context says "not supplied".
+
 Counties come from the Census Bureau's list of county subdivisions (every
 Massachusetts town lies in one county). A town name that cannot be matched is
 kept with an empty county and named in the build notes.
@@ -48,7 +57,10 @@ __all__ = [
     "district_tract_links",
     "districts_table",
     "muni_lookup",
+    "read_survey",
     "status_table",
+    "survey_context",
+    "survey_summary",
 ]
 
 TABLES: dict[str, dict[str, object]] = {
@@ -677,3 +689,128 @@ def adu_survey_table(
     return frame.sort_values(["muni_id", "period_start", "period_end"]).reset_index(
         drop=True
     ), missing
+
+
+# --------------------------------------------------------------------------- survey context
+
+SURVEY_TABLE = "ma_adu_survey"
+"""Pack table name of the ADU survey."""
+
+_SURVEY_SUMS = (
+    "applications",
+    "approvals",
+    "approvals_detached",
+    "approvals_attached",
+    "certificates_of_occupancy",
+)
+
+
+def survey_summary(
+    table: pd.DataFrame | None, *, county: str | None = None, municipalities: int | None = None
+) -> list[dict[str, Any]]:
+    """Per survey period: towns that answered and their counts (observed, not a rate).
+
+    Args:
+        table: The ``ma_adu_survey`` pack table (``None`` or empty gives ``[]``).
+        county: Only the towns of this county (5-digit code); ``None`` = the state.
+        municipalities: The number of municipalities the shares of towns are
+            taken of (the state's; ``None`` leaves the share out).
+
+    Returns:
+        One dict per period, in date order: ``cohort``, ``period_start``,
+        ``period_end``, ``towns`` (towns with a row for that period),
+        ``towns_of`` and ``towns_share`` (when ``municipalities`` is given),
+        the sums of ``applications``, ``approvals`` (detached, attached) and
+        ``certificates_of_occupancy``, and ``as_of`` (the file's edition).
+        A blank count stays out of a sum; a town with no row is not a zero.
+    """
+    keys = ["cohort", "period_start", "period_end"]
+    if table is None or table.empty or not {*keys, "muni_id"} <= set(table.columns):
+        return []
+    frame = table
+    if county is not None and "county" in frame.columns:
+        frame = frame[frame["county"].astype(str) == str(county)]
+    out: list[dict[str, Any]] = []
+    for (cohort, start, end), part in frame.groupby(keys, sort=False):
+        row: dict[str, Any] = {
+            "cohort": str(cohort),
+            "period_start": str(start),
+            "period_end": str(end),
+            "towns": int(part["muni_id"].nunique()),
+        }
+        if municipalities:
+            row["towns_of"] = int(municipalities)
+            row["towns_share"] = row["towns"] / float(municipalities)
+        for col in _SURVEY_SUMS:
+            if col in part.columns:
+                total = pd.to_numeric(part[col], errors="coerce").sum(min_count=1)
+                row[col] = 0 if pd.isna(total) else int(total)
+        as_of = sorted({str(v) for v in part.get("survey_as_of", pd.Series(dtype=str)).dropna()})
+        row["as_of"] = ", ".join(a for a in as_of if a and a != "nan")
+        out.append(row)
+    return sorted(out, key=lambda r: (r["period_start"], r["period_end"]))
+
+
+def read_survey(folder: Any) -> pd.DataFrame | None:
+    """The pack's ``ma_adu_survey`` table from a pack folder, or ``None`` when absent."""
+    from pathlib import Path
+
+    if folder is None:
+        return None
+    for cand in (Path(folder) / f"{SURVEY_TABLE}.csv.gz", Path(folder) / f"{SURVEY_TABLE}.csv"):
+        if cand.is_file():
+            return pd.read_csv(cand, dtype={"county": str, "cousub": str, "muni_id": str})
+    return None
+
+
+def survey_context(
+    table: pd.DataFrame | None,
+    *,
+    county: str | None = None,
+    settings: Mapping[str, Any] | None = None,
+) -> dict[str, Any]:
+    """The ADU survey as observed context, with one plain sentence.
+
+    Returns:
+        ``{state: "observed" | "not_supplied", periods: [...], text, note}``.
+        ``not_supplied`` when the table is absent (the hand-saved file was not
+        supplied); a county with no answering town says so.
+    """
+    from visionhousing.data.sources.ma_intake import load_settings
+
+    spec = (settings or load_settings())["adu_survey"]
+    note = (
+        "Observed context from the state's survey of local building officials (applications, "
+        "approvals = ADU building permits issued, certificates of occupancy). Towns answered "
+        "different survey waves and some did not answer; a town with no answer is unknown, not "
+        "zero. Never a rate and never an input to an estimate."
+    )
+    if table is None:
+        return {
+            "state": "not_supplied",
+            "periods": [],
+            "text": (
+                "not supplied: the state ADU survey is read only from a hand-saved copy "
+                f"(data/raw/local/ma/{spec.get('file', 'ma_adu_survey.csv')}), and none was "
+                "supplied"
+            ),
+            "note": note,
+        }
+    whole = int(spec.get("municipalities") or 0) or None
+    periods = survey_summary(table, county=county, municipalities=None if county else whole)
+    if not periods:
+        return {"state": "observed", "periods": [], "note": note,
+                "text": "no town in this county answered the ADU survey"}  # fmt: skip
+    parts = []
+    for p in periods:
+        towns = f"{p['towns']:,}" + (f" of {p['towns_of']:,}" if "towns_of" in p else "")
+        parts.append(
+            f"{p['cohort']}: {p.get('approvals', 0):,} ADUs approved "
+            f"({p.get('approvals_detached', 0):,} detached, {p.get('approvals_attached', 0):,} "
+            f"attached or interior), {p.get('applications', 0):,} applications, "
+            f"{p.get('certificates_of_occupancy', 0):,} certificates of occupancy, "
+            f"in {towns} town{'s' * (p.get('towns_of', p['towns']) != 1)} that answered"
+        )
+    as_of = ", ".join(sorted({p["as_of"] for p in periods if p.get("as_of")}))
+    text = "; ".join(parts) + (f" (survey file as of {as_of})" if as_of else "")
+    return {"state": "observed", "periods": periods, "text": text, "note": note}
